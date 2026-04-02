@@ -663,7 +663,7 @@ dispatchCalendarReminders(env, { windowsMinutes: number[], toleranceMinutes: num
 ```
 Request → CF Workers Edge
   → requestIdMiddleware (X-Request-Id)
-  → corsMiddleware (iapersonal.app.br, personal-ia-prod.pages.dev)
+  → corsMiddleware (iapersonal.app.br, vfit.pages.dev)
   → secureHeaders
   → rateLimitMiddleware (KV_RATE_LIMIT)
   → authMiddleware (JWT Web Crypto → userId, userType em c.var)

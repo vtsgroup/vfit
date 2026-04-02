@@ -59,15 +59,15 @@
       "Bash(node scripts/cf-deploy.js patch --msg \"fix: header + navbar backdrop-blur transparency for frosted glass effect\")",
       "Bash(node scripts/cf-deploy.js patch --msg \"fix: header + navbar frosted glass — lower opacity \\(0.55\\) for visible backdrop-blur\")",
       "Bash(npx next:*)",
-      "Bash(ls -la /Users/macos/Development/apps/personal-ia-prod/src/app/\\\\\\(public\\\\\\)/)",
-      "Bash(cat /Users/macos/Development/apps/personal-ia-prod/src/app/\\\\\\(public\\\\\\)/layout.tsx)",
-      "Bash(cat /Users/macos/Development/apps/personal-ia-prod/src/app/\\\\\\(public\\\\\\)/page.tsx)",
-      "Bash(cat /Users/macos/Development/apps/personal-ia-prod/src/app/\\\\\\(public\\\\\\)/pricing/page.tsx)",
+      "Bash(ls -la /Users/macos/Development/apps/vfit-production/src/app/\\\\\\(public\\\\\\)/)",
+      "Bash(cat /Users/macos/Development/apps/vfit-production/src/app/\\\\\\(public\\\\\\)/layout.tsx)",
+      "Bash(cat /Users/macos/Development/apps/vfit-production/src/app/\\\\\\(public\\\\\\)/page.tsx)",
+      "Bash(cat /Users/macos/Development/apps/vfit-production/src/app/\\\\\\(public\\\\\\)/pricing/page.tsx)",
       "Bash(npx tsc:*)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000)",
       "Skill(browse)",
       "Skill(browse:*)",
-      "Read(//Users/macos/Development/apps/personal-ia-prod/**)",
+      "Read(//Users/macos/Development/apps/vfit-production/**)",
       "Bash(npm list:*)",
       "mcp__plugin_claude-mem_mcp-search__smart_search",
       "mcp__plugin_claude-mem_mcp-search__search",
@@ -106,11 +106,11 @@
       "Bash(node scripts/cf-deploy.js --allow-no-whatsapp)",
       "Bash(python3 ~/.claude/skills/ui-ux-pro-max/scripts/search.py 'fitness app athletic dark mobile B2C gamification workout' --design-system -p EVOLUIA -f markdown)",
       "Bash(python3 ~/.claude/skills/ui-ux-pro-max/scripts/search.py \"fitness app athletic dark mobile B2C gamification workout\" --design-system -p \"EVOLUIA\")",
-      "Bash(ls /Users/macos/Development/apps/personal-ia-prod/src/app/\\\\\\(app\\\\\\)/perfil/)",
-      "Bash(cat /Users/macos/Development/apps/personal-ia-prod/src/app/\\\\\\(app\\\\\\)/perfil/gamificacao/page.tsx)",
+      "Bash(ls /Users/macos/Development/apps/vfit-production/src/app/\\\\\\(app\\\\\\)/perfil/)",
+      "Bash(cat /Users/macos/Development/apps/vfit-production/src/app/\\\\\\(app\\\\\\)/perfil/gamificacao/page.tsx)",
       "Bash(wrangler whoami:*)",
       "Bash(wrangler logout:*)",
-      "Read(//private/tmp/claude-501/-Users-macos-Development-apps-personal-ia-prod/**)"
+      "Read(//private/tmp/claude-501/-Users-macos-Development-apps-vfit-production/**)"
     ],
     "deny": [
       "Bash(npm run cf:deploy:major)",
@@ -129,8 +129,8 @@
       "Edit(scripts/deploy-pages.js)"
     ],
     "additionalDirectories": [
-      "/Users/macos/Development/apps/personal-ia-prod/.claude",
-      "/Users/macos/Development/apps/personal-ia-prod/.claude/plans"
+      "/Users/macos/Development/apps/vfit-production/.claude",
+      "/Users/macos/Development/apps/vfit-production/.claude/plans"
     ]
   },
   "model": "haiku",

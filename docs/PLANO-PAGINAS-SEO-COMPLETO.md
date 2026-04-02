@@ -691,7 +691,7 @@ Execute o Sprint 1 do plano em docs/PLANO-PAGINAS-SEO-COMPLETO.md.
 Contexto:
 - Projeto: VFIT (Next.js 15, Tailwind v4, Lucide React)
 - Versão atual: v4.4.8
-- Path: /Users/macos/Development/apps/personal-ia-prod
+- Path: /Users/macos/Development/apps/vfit-production
 - Layout atual: (institutional) e (legal) são route groups separados com header/footer inline
 - Objetivo: Criar route group (public) unificado, layout com Navbar+Footer da landing,
   componente PageHero reutilizável, componente Breadcrumbs com JSON-LD

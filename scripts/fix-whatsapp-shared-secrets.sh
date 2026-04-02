@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT_DIR="/Users/macos/Development/apps/personal-ia-prod"
+ROOT_DIR="/Users/macos/Development/apps/vfit-production"
 STORE_ID="88b0ebf0455e437c8d75597ba6aae568"
 CF_ACCOUNT_ID="b0bf95d0fabb322ac3df37bd84ec0c77"
 
