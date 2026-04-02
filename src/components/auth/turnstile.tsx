@@ -27,7 +27,7 @@ declare global {
       execute: (container: string | HTMLElement, options?: Record<string, unknown>) => void
     }
     onTurnstileLoad?: () => void
-    __piaTurnstileOnLoadCallbacks?: Array<() => void>
+    __vfitTurnstileOnLoadCallbacks?: Array<() => void>
   }
 }
 
@@ -65,7 +65,11 @@ export const Turnstile = forwardRef<TurnstileRef, TurnstileProps>(
       },
       execute: () => {
         if (widgetIdRef.current && window.turnstile) {
-          window.turnstile.execute(widgetIdRef.current)
+          try {
+            window.turnstile.execute(widgetIdRef.current)
+          } catch {
+            // Widget may already be executing — safe to ignore
+          }
         }
       },
     }))
@@ -90,9 +94,13 @@ export const Turnstile = forwardRef<TurnstileRef, TurnstileProps>(
       }
     }, [])
 
-    const renderWidget = useCallback((size: 'invisible' | 'normal') => {
+    const renderWidget = useCallback((targetMode: 'invisible' | 'interactive') => {
       if (!TURNSTILE_SITE_KEY || !containerRef.current || !window.turnstile) return
       if (widgetIdRef.current) return
+
+      // Turnstile API accepts: 'normal', 'compact', 'flexible' for size
+      // Invisible behavior is achieved via appearance: 'interaction-only'
+      const size = targetMode === 'invisible' ? 'compact' : 'normal'
 
       widgetIdRef.current = window.turnstile.render(containerRef.current, {
         sitekey: TURNSTILE_SITE_KEY,
@@ -127,7 +135,7 @@ export const Turnstile = forwardRef<TurnstileRef, TurnstileProps>(
             setMode('interactive')
             setTimeout(() => {
               cleanupWidget()
-              renderWidget('normal')
+              renderWidget('interactive')
             }, 300)
           } else {
             // Interactive also failed — notify parent
@@ -139,32 +147,28 @@ export const Turnstile = forwardRef<TurnstileRef, TurnstileProps>(
         retry: 'auto',
         'retry-interval': 5000,
         'refresh-expired': 'auto',
-        appearance: size === 'invisible' ? 'interaction-only' : 'always',
+        appearance: targetMode === 'invisible' ? 'interaction-only' : 'always',
+        execution: targetMode === 'invisible' ? 'execute' : 'render',
       })
-
-      // For invisible mode, auto-execute immediately
-      if (size === 'invisible' && widgetIdRef.current && window.turnstile) {
-        window.turnstile.execute(widgetIdRef.current)
-      }
     }, [onVerify, onExpire, onError, cleanupWidget])
 
     useEffect(() => {
-      const startSize = modeRef.current === 'interactive' ? 'normal' : 'invisible'
-      const initRender = () => renderWidget(startSize)
+      const startMode = modeRef.current === 'interactive' ? 'interactive' : 'invisible'
+      const initRender = () => renderWidget(startMode)
 
       if (window.turnstile) {
         initRender()
         return
       }
 
-      if (!window.__piaTurnstileOnLoadCallbacks) {
-        window.__piaTurnstileOnLoadCallbacks = []
+      if (!window.__vfitTurnstileOnLoadCallbacks) {
+        window.__vfitTurnstileOnLoadCallbacks = []
       }
-      window.__piaTurnstileOnLoadCallbacks.push(initRender)
+      window.__vfitTurnstileOnLoadCallbacks.push(initRender)
 
       window.onTurnstileLoad = () => {
-        const callbacks = window.__piaTurnstileOnLoadCallbacks || []
-        window.__piaTurnstileOnLoadCallbacks = []
+        const callbacks = window.__vfitTurnstileOnLoadCallbacks || []
+        window.__vfitTurnstileOnLoadCallbacks = []
         callbacks.forEach((fn) => {
           try { fn() } catch { /* ignore */ }
         })
@@ -180,9 +184,9 @@ export const Turnstile = forwardRef<TurnstileRef, TurnstileProps>(
 
       return () => {
         try {
-          const list = window.__piaTurnstileOnLoadCallbacks
+          const list = window.__vfitTurnstileOnLoadCallbacks
           if (list) {
-            window.__piaTurnstileOnLoadCallbacks = list.filter((fn) => fn !== initRender)
+            window.__vfitTurnstileOnLoadCallbacks = list.filter((fn) => fn !== initRender)
           }
         } catch { /* noop */ }
 
