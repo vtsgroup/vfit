@@ -1,7 +1,40 @@
 # CLAUDE.md — VFIT
 
-> SaaS para Personal Trainers. Usuários: `personal` (treinador), `student` (aluno), `admin`.
-> Planos: `trial` | `pro` | `max`. Versão atual: ver `package.json`.
+> **v1.0.0** · SaaS para Personal Trainers · Atualizado: 02/04/2026
+> Usuários: `personal` (treinador), `student` (aluno), `admin`.
+> Planos: `trial` | `pro` | `max`. Versão: `lib/version.ts` / `package.json`.
+
+---
+
+## 🔄 Migração Recente (02/04/2026)
+
+> **CONTEXTO CRÍTICO** — O projeto passou por uma migração completa de infraestrutura.
+
+| Item | Antes (legacy) | Agora (produção) |
+|------|----------------|-------------------|
+| **GitHub Repo** | `victor-development/personal-ia` | **`vtsgroup/vfit`** |
+| **GitHub Org** | Pessoal | **VTS Group** |
+| **Workspace local** | `personal-ia-prod/` | **`vfit-production/`** |
+| **CF Worker** | `personal-ia-api` | **`vfit-api`** |
+| **CF Pages** | `personal-ia-prod` | **`vfit`** |
+| **D1 Database** | `personaliai-exercises` | **`vfit-exercises`** |
+| **Hyperdrive** | `personaliai-db` | **`vfit-db`** |
+| **KV Namespaces** | `personaliai-*` | **`vfit-*`** |
+| **R2 Bucket** | `personaliai-media` | **`vfit-media`** |
+| **Auth Storage Key** | `personal-ia-auth` | **`vfit-auth`** (migração automática no login) |
+| **Package name** | `personal-ia` | **`vfit`** |
+
+### O que NÃO mudou
+- **Domínios**: `iapersonal.app.br` (frontend) + `api.iapersonal.app.br` (API) — mantidos
+- **Neon DB**: Mesmo database PostgreSQL, mesma connection string
+- **CF Account**: Mesmo `b0bf95d0fabb322ac3df37bd84ec0c77`
+- **Funcionalidades**: Todas preservadas, zero downtime
+
+### Commits da migração
+1. `966c50ee` — VFIT v1.0.0 Initial release (infraestrutura CF completa)
+2. `89906007` — Complete CF infrastructure migration
+3. `e3c08017` — Rename workspace personal-ia-prod → vfit-production
+4. `55b6dc3b` — Fix: resolve all 42 TypeScript compilation errors
 
 ---
 
@@ -9,15 +42,17 @@
 
 | Camada | Tecnologia |
 |---|---|
-| Frontend | Next.js 15 (App Router) + Tailwind v4 + Zustand v5 + TanStack Query |
-| Backend | Cloudflare Workers + Hono (`workers/`) |
-| Banco principal | Neon PostgreSQL via `lib/db.ts` |
-| Banco exercícios | Cloudflare D1 (`personaliai-exercises` — legacy) |
-| Cache/sessão | Cloudflare KV |
-| Mídia | Cloudflare R2 |
-| Pagamentos | Asaas (gateway brasileiro) |
+| Frontend | Next.js 15.5.14 (App Router, static export) + Tailwind CSS v4 + Zustand v5 + TanStack Query v5 |
+| Backend | Cloudflare Workers + Hono v4 (`workers/`) |
+| Banco principal | Neon PostgreSQL 17 via Hyperdrive (`lib/db.ts`) |
+| Banco exercícios | Cloudflare D1 (`vfit-exercises`) |
+| Cache/sessão | Cloudflare KV (`vfit-sessions`, `vfit-cache`, `vfit-rate-limit`) |
+| Mídia | Cloudflare R2 (`vfit-media`) + CF Stream (vídeos >30s) + CF Image Resizing |
+| Pagamentos | Asaas (PIX/boleto/cartão) — **PRODUÇÃO ATIVA** |
 | E-mail | Resend via `lib/email-resend.ts` |
 | Notificações push | OneSignal via `lib/onesignal.ts` |
+| IA | Replicate API + CF Workers AI (Llama) |
+| Analytics | GA4 + CF Analytics Engine |
 
 ## Arquitetura de pastas
 
@@ -61,16 +96,90 @@ Mais detalhes em `.claude/docs/conventions.md`.
 npm run dev               # Dev frontend (Next.js)
 npm run wrangler:dev      # Dev worker local
 npm run lint              # ESLint
-npm run type-check        # TypeScript (frontend)
-npm run type-check:workers # TypeScript (workers)
+npm run type-check        # TypeScript (frontend + workers)
 npm run test              # Vitest (unit)
 npm run test:e2e          # Playwright (E2E)
 npm run quality:ci        # Gate completo (docs + security + lint + type + test + build)
 npm run cf:deploy         # Deploy OFICIAL (patch) — usa scripts/cf-deploy.js
 npm run cf:deploy:minor   # Deploy minor
+npm run cf:deploy:major   # Deploy major
+npm run cf:deploy:dry     # Simula sem executar
 ```
 
-**NUNCA use `npm run wrangler:deploy` direto** — sempre `cf:deploy` (tem checks).
+**NUNCA use `wrangler deploy` ou `wrangler pages deploy` direto** — sempre `cf:deploy`.
+**NUNCA `git push` sem bump de versão** — o deploy script cuida disso.
+
+## URLs & Infraestrutura
+
+| Item | Valor |
+|------|-------|
+| **Frontend** | `https://iapersonal.app.br` (fallback: `vfit.pages.dev`) |
+| **Backend API** | `https://api.iapersonal.app.br` (fallback: `vfit-api.vd-b0b.workers.dev`) |
+| **GitHub** | `https://github.com/vtsgroup/vfit` |
+| **CF Account** | `b0bf95d0fabb322ac3df37bd84ec0c77` |
+| **GA4** | `G-XGXZ4R6JXH` |
+| **OneSignal** | `3043de4e-d7aa-4fa1-a61b-5abea28d2f47` |
+| **Turnstile** | `0x4AAAAAACbwFTxZJC74DsMB` |
+
+## Regras Críticas (NÃO VIOLAR)
+
+### Neon Driver — SEMPRE `.query()`
+```typescript
+// ❌ await sql(query, params)     → tagged template, não aceita (string, params)
+// ✅ await sql.query(query, params)
+```
+
+### React Query — AUTH GUARD OBRIGATÓRIO
+```typescript
+const isReady = useAuthStore((s) => s.isAuthenticated && s.isHydrated)
+return useQuery({ queryKey: ['x'], queryFn: ..., enabled: isReady })
+```
+
+### Schema PostgreSQL — Colunas corretas
+```
+❌ personals.user_id / students.user_id    → ✅ personals.id = users.id (same PK)
+❌ u.avatar_url                            → ✅ u.profile_photo_url
+❌ a.weight / a.height                     → ✅ a.weight_kg / a.height_cm
+❌ a.body_fat                              → ✅ a.body_fat_percentage
+❌ slug                                    → ✅ public_url_slug
+❌ plan_type / plan_expires_at             → ✅ subscription_plan / subscription_expires_at
+❌ billing_type / fail_reason              → ✅ payment_method / failed_reason
+❌ read (boolean)                          → ✅ read_at (timestamptz)
+```
+
+### Auth Store Types
+```typescript
+type UserType = 'personal' | 'student' | 'admin'  // user.user_type
+type Role = 'user' | 'admin' | 'super_admin'       // user.role
+// ❌ user.type → ✅ user.user_type
+// ❌ user_type === 'super_admin' → ✅ role === 'super_admin'
+```
+
+### Tailwind CSS v4 — Sintaxe Canônica
+```
+❌ bg-gradient-to-r    → ✅ bg-linear-to-r
+❌ bg-white/[0.06]     → ✅ bg-white/6
+❌ bg-[var(--custom)]  → ✅ bg-(--custom)
+❌ flex-shrink-0       → ✅ shrink-0
+```
+
+### Ícones — SEMPRE DSIcon
+```typescript
+// ❌ import { Bell } from 'lucide-react'
+// ✅ import { DSIcon } from '@/components/ui/ds-icon'
+//    <DSIcon name="bell" size={20} />
+```
+
+### Pagamentos — net_amount do Asaas
+```typescript
+// ❌ netAmount = amount - platformFee                    → errado
+// ✅ netAmount = asaasPayment.netValue                   → valor real creditado
+```
+
+### OneSignal — always best-effort
+```typescript
+await notifyPaymentReceived(c.env, { ... }).catch(() => {})  // nunca falhar o endpoint
+```
 
 ## Regras do agente
 
@@ -106,7 +215,7 @@ npm run cf:deploy:minor   # Deploy minor
 
 ### O que é
 
-Um Worker Cloudflare (`personaliai-whatsapp` — legacy) que envia mensagens formatadas via Unipile API para o grupo WhatsApp **"Logs e Docs: VFIT"**. Todas as mensagens vão SEMPRE para o grupo — nunca para pessoas individuais.
+Um Worker Cloudflare (`personaliai-whatsapp`) que envia mensagens formatadas via Unipile API para o grupo WhatsApp **"Logs e Docs: VFIT"**. Todas as mensagens vão SEMPRE para o grupo — nunca para pessoas individuais.
 
 ### Quando enviar (escopo obrigatório)
 
