@@ -115,7 +115,7 @@ export default function SettingsPage() {
       api.patch<{ user: { full_name: string; phone: string | null; profile_photo_url: string | null } }>('/users/me', data),
     onSuccess: (res) => {
       // Sync auth store with backend response to keep user data fresh
-      const u = res.user
+      const u = res.data?.user
       if (u) {
         updateUser({
           full_name: u.full_name,

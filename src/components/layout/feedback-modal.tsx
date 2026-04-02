@@ -219,7 +219,7 @@ export function FeedbackModal({ open, onClose }: FeedbackModalProps) {
                       : 'text-text-muted hover:text-text-primary'
                   )}
                 >
-                  <Plus className="h-3.5 w-3.5" />
+                  <DSIcon name="plus" size={14} />
                   Nova sugestão
                 </button>
                 <button

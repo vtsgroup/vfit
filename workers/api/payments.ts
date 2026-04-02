@@ -835,10 +835,10 @@ payments.post('/link', requireType('personal'), async (c) => {
   const messageTemplate = (parsed.message_template || 'Olá {nome}! Segue o link para pagamento: {link}').trim()
   const formattedAmount = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(parsed.amount)
   const messageText = messageTemplate
-    .replaceAll('{nome}', payer.full_name || 'Aluno')
-    .replaceAll('{link}', invoiceUrl || '')
-    .replaceAll('{valor}', formattedAmount)
-    .replaceAll('{vencimento}', dueDate)
+    .replace(/\{nome\}/g, payer.full_name || 'Aluno')
+    .replace(/\{link\}/g, invoiceUrl || '')
+    .replace(/\{valor\}/g, formattedAmount)
+    .replace(/\{vencimento\}/g, dueDate)
   const whatsappUrl = normalizedPhone
     ? `https://wa.me/${normalizedPhone}?text=${encodeURIComponent(messageText)}`
     : null

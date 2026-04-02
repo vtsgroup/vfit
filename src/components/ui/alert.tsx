@@ -12,7 +12,7 @@ import { cn } from '@/lib/utils'
 
 type AlertVariant = 'info' | 'success' | 'warning' | 'error' | 'neutral' | 'ai'
 
-interface AlertProps {
+export interface AlertProps {
   variant?: AlertVariant
   title?: string
   children: ReactNode

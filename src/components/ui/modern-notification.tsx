@@ -213,7 +213,7 @@ export function NotificationPanel({
             {/* Header */}
             <div className="flex items-center justify-between border-b dark:border-white/6 light:border-slate-200 px-4 py-3">
               <div className="flex items-center gap-2">
-                <Bell className="h-4 w-4 dark:text-white/60 light:text-slate-400" />
+                <DSIcon name="bell" size={16} className="dark:text-white/60 light:text-slate-400" />
                 <h3 className="text-sm font-semibold dark:text-white light:text-slate-900">Notificações</h3>
                 {unread > 0 && (
                   <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-brand-primary px-1.5 text-[10px] font-bold text-black">
@@ -234,7 +234,7 @@ export function NotificationPanel({
                   onClick={onClose}
                   className="rounded-lg p-1 dark:text-white/40 light:text-slate-400 dark:hover:text-white/80 light:hover:text-slate-700 dark:hover:bg-white/5 light:hover:bg-black/5 transition-all"
                 >
-                  <X className="h-4 w-4" />
+                  <DSIcon name="x" size={16} />
                 </button>
               </div>
             </div>
@@ -248,7 +248,7 @@ export function NotificationPanel({
                     animate={{ opacity: 1 }}
                     className="flex flex-col items-center gap-2 py-12 text-center"
                   >
-                    <Bell className="h-8 w-8 dark:text-white/10 light:text-slate-200" />
+                    <DSIcon name="bell" size={32} className="dark:text-white/10 light:text-slate-200" />
                     <p className="text-sm dark:text-white/30 light:text-slate-400">Nenhuma notificação</p>
                   </motion.div>
                 ) : (

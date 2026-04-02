@@ -94,7 +94,7 @@ vfit.get('/workouts', async (c) => {
     [...params, limit, offset]
   )
 
-  return c.json(paginated(workouts, { page, per_page: limit, total }))
+  return c.json(paginated(workouts.rows, { page, per_page: limit, total }))
 })
 
 /**
@@ -382,7 +382,7 @@ vfit.get('/sessions/history', async (c) => {
     [userId, limit, offset]
   )
 
-  return c.json(paginated(sessions, { page, per_page: limit, total }))
+  return c.json(paginated(sessions.rows, { page, per_page: limit, total }))
 })
 
 // ============================================

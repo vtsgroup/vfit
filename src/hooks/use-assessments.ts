@@ -422,8 +422,9 @@ export function useAssessments(params: AssessmentListParams = {}) {
 
 export function useMyAssessments(params: MyAssessmentsParams = {}) {
   const isReady = useAuthStore((s) => {
-    const role = s.user?.user_type
-    const isStudentLike = role === 'student' || role === 'admin' || role === 'super_admin'
+    const userType = s.user?.user_type
+    const role = s.user?.role
+    const isStudentLike = userType === 'student' || userType === 'admin' || role === 'super_admin'
     return s.isAuthenticated && s.isHydrated && isStudentLike
   })
 

@@ -12,7 +12,7 @@ import { cn } from '@/lib/utils'
 
 type CheckboxSize = 'sm' | 'md' | 'lg'
 
-interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'> {
+export interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'> {
   checked?: boolean
   onCheckedChange?: (checked: boolean) => void
   size?: CheckboxSize

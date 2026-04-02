@@ -156,7 +156,7 @@ function FeedbackDetailView({
   if (isLoading || !feedback) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="h-8 w-8 animate-spin text-brand-primary" />
+        <DSIcon name="loader" size={32} className="animate-spin text-brand-primary" />
       </div>
     )
   }

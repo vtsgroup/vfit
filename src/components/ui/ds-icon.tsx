@@ -16,6 +16,7 @@
 //   <DSIcon name="aiBot" size={32} className="text-brand-primary" />
 // ============================================
 
+import type React from 'react'
 import { cn } from '@/lib/utils'
 
 // ─── Icon Names ─────────────────────────────
@@ -62,6 +63,9 @@ export const DS_ICON_NAMES = [
   'apple',
   // Batch 9 — aliases for backward compat
   'close', 'minus', 'trash2', 'edit3', 'barChart3', 'share2',
+  // Batch 11 — missing icons (plans, logs, affiliates, content-generator, assessments)
+  'terminal', 'infinity', 'repeat', 'store', 'headphones',
+  'fileSignature', 'clipboard', 'gem', 'type', 'payments',
 ] as const
 
 export type DSIconName = (typeof DS_ICON_NAMES)[number]
@@ -76,6 +80,8 @@ export interface DSIconProps {
   color?: string
   /** Additional Tailwind classes */
   className?: string
+  /** Inline styles (for animation overrides etc.) */
+  style?: React.CSSProperties
   /** Accessibility label */
   'aria-label'?: string
 }
@@ -278,6 +284,17 @@ const ICON_PATHS: Record<Exclude<DSIconName, 'aiBot'>, string> = {
   edit3: '<path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>',
   barChart3: '<path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M7 16h8"/><path d="M7 11h12"/><path d="M7 6h3"/>',
   share2: '<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/>',
+  // Batch 11 — missing icons
+  terminal: '<polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/>',
+  infinity: '<path d="M12 12c-2-2.67-4-4-6-4a4 4 0 1 0 0 8c2 0 4-1.33 6-4Zm0 0c2 2.67 4 4 6 4a4 4 0 0 0 0-8c-2 0-4 1.33-6 4Z"/>',
+  repeat: '<path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/>',
+  store: '<path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M2 7h20"/><path d="M22 7v3a2 2 0 0 1-2 2a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12a2 2 0 0 1-2-2V7"/>',
+  headphones: '<path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"/>',
+  fileSignature: '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M8 18a2 2 0 0 0 4 0c0-1.38-1.56-2-2-3-.44 1-2 1.62-2 3Z"/><path d="M12.11 15s1.89-2 1.89-3.5A1.5 1.5 0 0 0 12.5 10"/>',
+  clipboard: '<rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>',
+  gem: '<path d="M6 3h12l4 6-10 13L2 9Z"/><path d="M11 3 8 9l4 13 4-13-3-6"/><path d="M2 9h20"/>',
+  type: '<polyline points="4 7 4 4 20 4 20 7"/><line x1="9" x2="15" y1="20" y2="20"/><line x1="12" x2="12" y1="4" y2="20"/>',
+  payments: '<rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/>',
 }
 
 // ─── Special overrides for strokeWidth ──────
@@ -305,6 +322,7 @@ export function DSIcon({
   size,
   color = 'currentColor',
   className,
+  style,
   'aria-label': ariaLabel,
 }: DSIconProps) {
   const resolvedSize = size ?? DEFAULT_SIZE_OVERRIDES[name] ?? 20
@@ -318,6 +336,7 @@ export function DSIcon({
         viewBox="0 0 32 32"
         fill="none"
         className={cn('shrink-0', className)}
+        style={style}
         aria-label={ariaLabel}
         aria-hidden={!ariaLabel}
         role={ariaLabel ? 'img' : undefined}
@@ -348,6 +367,7 @@ export function DSIcon({
       strokeLinecap="round"
       strokeLinejoin="round"
       className={cn('shrink-0', className)}
+      style={style}
       aria-label={ariaLabel}
       aria-hidden={!ariaLabel}
       role={ariaLabel ? 'img' : undefined}

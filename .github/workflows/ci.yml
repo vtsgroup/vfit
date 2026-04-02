@@ -95,5 +95,5 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           npx wrangler pages deploy out \
-            --project-name personal-ia-prod \
+            --project-name vfit \
             --branch pr-${{ github.event.pull_request.number }}

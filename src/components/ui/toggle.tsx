@@ -12,7 +12,7 @@ import { cn } from '@/lib/utils'
 
 type ToggleSize = 'sm' | 'md' | 'lg'
 
-interface ToggleProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'> {
+export interface ToggleProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'> {
   checked?: boolean
   onCheckedChange?: (checked: boolean) => void
   size?: ToggleSize

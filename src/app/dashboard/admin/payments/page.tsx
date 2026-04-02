@@ -307,7 +307,7 @@ export default function AdminPaymentsPage() {
           <AdminPaymentsPageSkeleton />
         ) : payments.length === 0 ? (
           <EmptyStateDS
-            illustration={hasActiveFilters ? 'search' : 'payments'}
+            icon={hasActiveFilters ? 'search' : 'wallet'}
             title={hasActiveFilters ? 'Nenhum pagamento encontrado' : 'Nenhuma cobrança ainda'}
             description={hasActiveFilters ? 'Tente ajustar os filtros ou limpar a busca.' : 'Quando houver cobranças, elas aparecerão aqui.'}
             actionLabel={hasActiveFilters ? 'Limpar filtros' : undefined}
@@ -451,7 +451,7 @@ export default function AdminPaymentsPage() {
               <AdminPaymentsPageSkeleton />
             ) : transfers.length === 0 ? (
               <EmptyStateDS
-                illustration="payments"
+                icon="wallet"
                 title="Nenhum saque PIX"
                 description="Nenhum saque foi solicitado ainda. Quando houver solicitações, elas aparecerão aqui."
               />

@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils'
 
 type TooltipPosition = 'top' | 'bottom' | 'left' | 'right'
 
-interface TooltipProps {
+export interface TooltipProps {
   content: ReactNode
   children: ReactNode
   position?: TooltipPosition

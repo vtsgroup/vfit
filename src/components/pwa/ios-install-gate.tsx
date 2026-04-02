@@ -250,7 +250,7 @@ function IOSFullGate({
             onClick={onDismiss}
             className="absolute right-4 top-4 flex items-center gap-1.5 rounded-full bg-white/5 px-3 py-1.5 text-xs text-zinc-500 transition-colors hover:text-white hover:bg-white/10"
           >
-            <X className="h-3.5 w-3.5" />
+            <DSIcon name="x" size={14} />
             Pular
           </button>
         )}

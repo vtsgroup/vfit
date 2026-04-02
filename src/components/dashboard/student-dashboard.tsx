@@ -93,8 +93,9 @@ export function StudentDashboard() {
 
   // Error handling — graceful: only show error if BOTH profile AND workouts fail
   // Super admin / admin viewing as student won't have a student profile — that's expected
-  const userType = useAuthStore((s) => s.user?.type)
-  const isAdminViewing = userType === 'super_admin' || userType === 'admin'
+  const userType = useAuthStore((s) => s.user?.user_type)
+  const userRole = useAuthStore((s) => s.user?.role)
+  const isAdminViewing = userRole === 'super_admin' || userRole === 'admin' || userType === 'admin'
   const hasCriticalError = !isAdminViewing && profile.isError && workouts.isError
 
   const handleRetryAll = () => {
