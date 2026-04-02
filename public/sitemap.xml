@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- ===== HOME (Landing Page) ===== -->
+  <url>
+    <loc>https://iapersonal.app.br/</loc>
+    <lastmod>2026-03-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- ===== INSTITUCIONAL ===== -->
+  <url>
+    <loc>https://iapersonal.app.br/sobre</loc>
+    <lastmod>2026-03-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://iapersonal.app.br/contato</loc>
+    <lastmod>2026-03-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://iapersonal.app.br/carreiras</loc>
+    <lastmod>2026-03-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://iapersonal.app.br/lgpd</loc>
+    <lastmod>2026-03-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <!-- ===== BLOG ===== -->
+  <url>
+    <loc>https://iapersonal.app.br/blog</loc>
+    <lastmod>2026-03-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://iapersonal.app.br/blog/ia-personal-trainer</loc>
+    <lastmod>2026-03-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://iapersonal.app.br/blog/hero-ia-personal-trainer.webp</image:loc>
+      <image:title>IA para personal trainer: como aplicar no dia a dia</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://iapersonal.app.br/blog/retencao-alunos-personal</loc>
+    <lastmod>2026-03-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://iapersonal.app.br/blog/hero-retencao-alunos.webp</image:loc>
+      <image:title>Retenção de alunos no personal training</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://iapersonal.app.br/blog/cobranca-automatica-personal</loc>
+    <lastmod>2026-03-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://iapersonal.app.br/blog/hero-cobranca-automatica.webp</image:loc>
+      <image:title>Cobrança automática para personal trainer</image:title>
+    </image:image>
+  </url>
+
+  <!-- ===== LEGAL ===== -->
+  <url>
+    <loc>https://iapersonal.app.br/termos</loc>
+    <lastmod>2026-03-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  <url>
+    <loc>https://iapersonal.app.br/privacidade</loc>
+    <lastmod>2026-03-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  <url>
+    <loc>https://iapersonal.app.br/cookies</loc>
+    <lastmod>2026-03-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
+  </url>
+
+  <!-- ===== PRICING ===== -->
+  <url>
+    <loc>https://iapersonal.app.br/pricing</loc>
+    <lastmod>2026-03-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ===== CONTA ===== -->
+  <url>
+    <loc>https://iapersonal.app.br/excluir-conta</loc>
+    <lastmod>2026-03-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
+  </url>
+
+  <!-- /login e /register REMOVIDOS — têm noindex,nofollow no metadata -->
+
+  <!-- ===== STATUS ===== -->
+  <url>
+    <loc>https://iapersonal.app.br/status</loc>
+    <lastmod>2026-03-15</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+</urlset>

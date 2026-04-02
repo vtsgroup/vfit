@@ -1,0 +1,31 @@
+name: Security Sensitive Scan
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  secret-reference-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run sensitive reference audit (block on P0)
+        run: npm run security:audit:ci
+
+      - name: Upload audit artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sensitive-references-audit
+          path: docs/ULTRA-PLANO-MVP-PRODUCAO/SENSITIVE-REFERENCES-AUDIT.generated.md

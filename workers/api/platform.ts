@@ -1,0 +1,205 @@
+/**
+ * workers/api/platform.ts
+ *
+ * Platform Subscription Routes — /api/v1/platform
+ *
+ * Exports: platformRoutes
+ * Endpoints:
+ *   GET  /subscription → current plan info
+ *   POST /checkout     → create Asaas payment for plan upgrade
+ */
+
+import { Hono } from 'hono'
+import { z } from 'zod'
+import { pgQueryOne } from '@lib/db'
+import { BadRequestError, NotFoundError } from '@lib/errors'
+import { success, created } from '@lib/response'
+import { authMiddleware, requireType } from '@workers/middleware/auth'
+import type { AppContext } from '@workers/types'
+import {
+  getOrCreateCustomer,
+  createAsaasPayment,
+  getPixQrCode,
+} from '@lib/asaas'
+
+const platform = new Hono<AppContext>()
+
+// All routes require auth
+platform.use('*', authMiddleware)
+
+// ── Plan prices ──────────────────────────────
+const PLAN_PRICES: Record<string, { monthly: number; annual: number }> = {
+  pro: { monthly: 29.90, annual: 287.04 },
+  profissional: { monthly: 69.90, annual: 671.04 },
+  max: { monthly: 129.90, annual: 1247.04 },
+}
+
+const PLAN_NAMES: Record<string, string> = {
+  trial: 'Grátis',
+  pro: 'Pro',
+  profissional: 'Pro+',
+  max: 'Max',
+}
+
+// ── Schemas ──────────────────────────────────
+const checkoutSchema = z.object({
+  plan_slug: z.enum(['pro', 'profissional', 'max']),
+  billing_cycle: z.enum(['monthly', 'annual']),
+  payment_method: z.enum(['pix', 'credit_card', 'boleto']),
+  cpf: z.string().optional(),
+})
+
+// ══════════════════════════════════════════════
+//  GET /subscription — current plan info
+// ══════════════════════════════════════════════
+platform.get(
+  '/subscription',
+  requireType('personal', 'admin', 'super_admin'),
+  async (c) => {
+    const jwt = c.get('jwtPayload')
+
+    const personal = await pgQueryOne<{
+      subscription_plan: string | null
+      subscription_expires_at: string | null
+    }>(
+      c.env,
+      `SELECT subscription_plan, subscription_expires_at
+       FROM personals WHERE id = $1`,
+      [jwt.sub]
+    )
+
+    if (
+      !personal ||
+      !personal.subscription_plan ||
+      personal.subscription_plan === 'trial'
+    ) {
+      return success({ subscription: null })
+    }
+
+    const now = new Date()
+    const expiresAt = personal.subscription_expires_at
+      ? new Date(personal.subscription_expires_at)
+      : null
+    const isActive = !expiresAt || expiresAt > now
+
+    return success({
+      subscription: {
+        id: `sub_${jwt.sub}`,
+        personal_id: jwt.sub,
+        plan_slug: personal.subscription_plan,
+        billing_cycle: 'monthly' as const,
+        status: isActive ? 'active' : 'past_due',
+        current_period_start: now.toISOString(),
+        current_period_end: personal.subscription_expires_at || now.toISOString(),
+        cancel_at_period_end: false,
+        amount: PLAN_PRICES[personal.subscription_plan]?.monthly ?? 0,
+        payment_method: 'pix' as const,
+        asaas_subscription_id: null,
+        created_at: now.toISOString(),
+      },
+    })
+  }
+)
+
+// ══════════════════════════════════════════════
+//  POST /checkout — create Asaas payment
+// ══════════════════════════════════════════════
+platform.post(
+  '/checkout',
+  requireType('personal', 'admin', 'super_admin'),
+  async (c) => {
+    const body = await c.req.json()
+    const parsed = checkoutSchema.parse(body)
+    const jwt = c.get('jwtPayload')
+
+    // 1. Get user info
+    const user = await pgQueryOne<{
+      id: string
+      full_name: string
+      email: string
+      cpf: string | null
+    }>(c.env, 'SELECT id, full_name, email, cpf FROM users WHERE id = $1', [
+      jwt.sub,
+    ])
+
+    if (!user) throw new NotFoundError('Usuário não encontrado')
+
+    // 2. Resolve CPF (DB or request body)
+    const cpf = user.cpf || parsed.cpf
+    if (!cpf) {
+      throw new BadRequestError(
+        'CPF é obrigatório para pagamento. Atualize seu perfil com o CPF.'
+      )
+    }
+
+    // 3. Calculate amount
+    const prices = PLAN_PRICES[parsed.plan_slug]
+    if (!prices) throw new BadRequestError('Plano inválido')
+    const amount =
+      parsed.billing_cycle === 'monthly' ? prices.monthly : prices.annual
+
+    // 4. Get or create Asaas customer
+    const customer = await getOrCreateCustomer(c.env, {
+      name: user.full_name,
+      email: user.email,
+      cpfCnpj: cpf.replace(/\D/g, ''),
+      externalReference: `platform_${user.id}`,
+    })
+
+    // 5. Map payment method → Asaas billingType
+    const billingTypeMap: Record<string, 'PIX' | 'CREDIT_CARD' | 'BOLETO'> = {
+      pix: 'PIX',
+      credit_card: 'CREDIT_CARD',
+      boleto: 'BOLETO',
+    }
+
+    // 6. Due date: 3 days from now
+    const dueDate = new Date()
+    dueDate.setDate(dueDate.getDate() + 3)
+
+    const planName = PLAN_NAMES[parsed.plan_slug] || parsed.plan_slug
+    const cycleLabel =
+      parsed.billing_cycle === 'monthly' ? 'mensal' : 'anual'
+
+    // 7. Create Asaas payment
+    const payment = await createAsaasPayment(c.env, {
+      customer: customer.id,
+      billingType: billingTypeMap[parsed.payment_method] ?? 'PIX',
+      value: amount,
+      dueDate: dueDate.toISOString().split('T')[0],
+      description: `VFIT — Plano ${planName} (${cycleLabel})`,
+      externalReference: `platform_checkout_${jwt.sub}_${parsed.plan_slug}_${parsed.billing_cycle}`,
+    })
+
+    // 8. Get PIX QR code if applicable
+    let pixQrCode: string | null = null
+    let pixCopyPaste: string | null = null
+
+    if (parsed.payment_method === 'pix' && payment.id) {
+      try {
+        const qr = await getPixQrCode(c.env, payment.id)
+        pixQrCode = qr.encodedImage ?? null
+        pixCopyPaste = qr.payload ?? null
+      } catch {
+        // PIX QR code generation may fail — payment still created
+      }
+    }
+
+    // 9. Return checkout session
+    return created({
+      checkout: {
+        checkout_url: payment.invoiceUrl || '',
+        payment_id: payment.id,
+        plan_slug: parsed.plan_slug,
+        amount,
+        due_date: payment.dueDate,
+        pix_qr_code: pixQrCode,
+        pix_copy_paste: pixCopyPaste,
+        boleto_url: payment.bankSlipUrl || null,
+        status: payment.status,
+      },
+    })
+  }
+)
+
+export { platform as platformRoutes }

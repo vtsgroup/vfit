@@ -1,0 +1,180 @@
+# TODO: migrate to name = "vfit-api" when new Worker is created in CF Dashboard
+name = "personaliai-api"
+main = "workers/index.ts"
+compatibility_date = "2026-02-06"
+compatibility_flags = ["nodejs_compat"]
+tsconfig = "tsconfig.workers.json"
+workers_dev = true
+
+# ============================================
+# Routes (custom domain) — Ativado em 20/02/2026
+# ============================================
+routes = [
+  { pattern = "api.iapersonal.app.br/*", zone_name = "iapersonal.app.br" }
+]
+
+# ============================================
+# Analytics Engine
+# ============================================
+analytics_engine_datasets = [
+  { binding = "ANALYTICS" }
+]
+
+# ============================================
+# Cloudflare Workers AI + AI Gateway
+# Modelos: Llama 3.3 70B, Llama 4 Scout, Llama 3.1 8B
+# Gateway: logs, caching, rate-limiting, analytics
+# Custo: $0 (free tier) para primeiros 10k neurons/dia
+# ============================================
+[ai]
+binding = "AI"
+
+# ============================================
+# D1 Database (Cold Data - Exercise Library)
+# ============================================
+[[d1_databases]]
+binding = "DB"
+database_name = "personaliai-exercises"  # CF real name (legacy — rename via Dashboard when ready)
+database_id = "988c03d5-bf9a-4394-b65a-adebbe0b87e4"
+
+# ============================================
+# Hyperdrive (Hot Data - PostgreSQL via Neon)
+# Connection pooling otimizado pelo Cloudflare edge
+# Criado em 16/02/2026 via: wrangler hyperdrive create personaliai-db (legacy name)
+# ============================================
+[[hyperdrive]]
+binding = "HYPERDRIVE"
+id = "4aa45e1bd72742ec8eab876215cee1a2"
+
+# ============================================
+# KV Namespaces
+# ============================================
+[[kv_namespaces]]
+binding = "KV_CACHE"
+id = "e7147f8855184a4a8f72307756596df4"
+
+[[kv_namespaces]]
+binding = "KV_SESSIONS"
+id = "91d34b6725564de39e8ed891e742e76d"
+
+[[kv_namespaces]]
+binding = "KV_RATE_LIMIT"
+id = "d94c62b1e8f248a6bd1ea6a11e18f09c"
+
+# ============================================
+# R2 Buckets
+# ============================================
+[[r2_buckets]]
+binding = "R2_VIDEOS"
+bucket_name = "personal-ia-videos"  # CF real name (legacy — cannot rename R2 buckets)
+
+[[r2_buckets]]
+binding = "R2_IMAGES"
+bucket_name = "personal-ia-images"  # CF real name (legacy — cannot rename R2 buckets)
+
+# ============================================
+# Cloudflare Stream (Sprint E — exercise videos)
+# Ativar quando configurar Stream no Dashboard
+# ============================================
+# [vars]
+# CF_STREAM_SUBDOMAIN = "customer-xxx"  # Obter do Dashboard > Stream
+# Secrets (via wrangler secret put):
+# CF_STREAM_API_TOKEN
+# CF_STREAM_SIGNING_KEY_ID
+# CF_STREAM_SIGNING_KEY_JWK
+
+# ============================================
+# Cloudflare Image Resizing
+# Habilitado via Dashboard > Speed > Optimization > Image Resizing
+# Funciona automaticamente nos custom domains R2
+# URL: images.iapersonal.app.br/cdn-cgi/image/{params}/{path}
+# ============================================
+
+# ============================================
+# Queues (Producers) — Desabilitado temporariamente
+# Reativar com: wrangler queues create <nome>
+# ============================================
+# [[queues.producers]]
+# binding = "EMAIL_QUEUE"
+# queue = "vfit-email-sender"
+
+# [[queues.producers]]
+# binding = "VIDEO_ENCODE_QUEUE"
+# queue = "vfit-video-encoder"
+
+# [[queues.producers]]
+# binding = "PDF_QUEUE"
+# queue = "vfit-pdf-generator"
+
+# [[queues.producers]]
+# binding = "AI_QUEUE"
+# queue = "vfit-ai-batch"
+
+# ============================================
+# Queues (Consumers) — Desabilitado temporariamente
+# ============================================
+# [[queues.consumers]]
+# queue = "vfit-email-sender"
+# max_batch_size = 10
+# max_batch_timeout = 30
+
+# [[queues.consumers]]
+# queue = "vfit-video-encoder"
+# max_batch_size = 5
+# max_batch_timeout = 60
+
+# [[queues.consumers]]
+# queue = "vfit-pdf-generator"
+# max_batch_size = 5
+# max_batch_timeout = 60
+
+# [[queues.consumers]]
+# queue = "vfit-ai-batch"
+# max_batch_size = 10
+# max_batch_timeout = 30
+
+# ============================================
+# Secrets (set via: wrangler secret put <NAME>)
+# ============================================
+# JWT_SECRET
+# ASAAS_API_KEY
+# STRIPE_SECRET_KEY
+# REPLICATE_API_TOKEN
+# RESEND_API_KEY
+# EMAIL_FROM
+# ONESIGNAL_APP_ID
+# ONESIGNAL_REST_KEY
+# DATABASE_URL
+# NEON_DATABASE_URL (legado temporário)
+# SENTRY_DSN_WORKER
+# SENTRY_ENVIRONMENT
+# SENTRY_RELEASE
+# SENTRY_TRACES_SAMPLE_RATE
+
+# ============================================
+# Cron Triggers — Desabilitados temporariamente (limite conta Free)
+# Reativar em plano pago ou quando implementados
+# ============================================
+# [triggers]
+# crons = [
+#   "0 8 * * *",    # Daily reminders at 8 AM BRT (11 UTC)
+#   "0 */4 * * *",  # Payment checks every 4 hours
+#   "0 2 * * 1",    # Weekly affiliate commission calc (Monday 2 AM)
+#   "0 3 * * *"     # Cache warming at 3 AM
+# ]
+
+# ============================================
+# Limits (requer plano pago)
+# ============================================
+# [limits]
+# cpu_ms = 50
+
+# ============================================
+# Dev Environment — Desabilitado (não utilizado, causava warning de multi-env)
+# Reativar quando houver ambientes separados configurados
+# ============================================
+# [env.dev]
+# name = "vfit-api-dev"
+
+# [env.staging]
+# name = "vfit-api-staging"

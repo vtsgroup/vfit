@@ -1,0 +1,92 @@
+# ============================================
+# Security & SEO Headers — Cloudflare Pages
+# ============================================
+
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
+  # Necessário para captura de fotos na Avaliação (getUserMedia) e geolocation TWA
+  Permissions-Policy: camera=(self), microphone=(), geolocation=(self), interest-cohort=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  Cross-Origin-Opener-Policy: same-origin-allow-popups
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://*.challenges.cloudflare.com https://static.cloudflareinsights.com https://cdn.onesignal.com https://*.onesignal.com https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://*.r2.cloudflarestorage.com https://images.iapersonal.app.br https://*.replicate.delivery https://replicate.delivery https://iapersonal.app.br https://www.google-analytics.com https://www.googletagmanager.com https://lh3.googleusercontent.com https://*.fbcdn.net; connect-src 'self' https://api.iapersonal.app.br https://challenges.cloudflare.com https://*.challenges.cloudflare.com https://static.cloudflareinsights.com https://cloudflareinsights.com https://onesignal.com https://*.onesignal.com https://www.google-analytics.com https://analytics.google.com https://*.google-analytics.com https://*.googletagmanager.com https://accounts.google.com; frame-src https://challenges.cloudflare.com https://*.challenges.cloudflare.com https://accounts.google.com https://www.facebook.com; manifest-src 'self'; worker-src 'self' https://cdn.onesignal.com https://challenges.cloudflare.com https://*.challenges.cloudflare.com; child-src 'self' https://challenges.cloudflare.com https://*.challenges.cloudflare.com; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests
+
+# SEO — Sitemaps correct MIME type
+/sitemap.xml
+  Content-Type: application/xml
+  Cache-Control: public, max-age=3600
+
+/sitemap-blog.xml
+  Content-Type: application/xml
+  Cache-Control: public, max-age=3600
+
+/robots.txt
+  Content-Type: text/plain
+  Cache-Control: public, max-age=3600
+
+/llms.txt
+  Content-Type: text/plain
+  Cache-Control: public, max-age=86400
+
+# TWA — Digital Asset Links (obrigatório para Android TWA)
+/.well-known/assetlinks.json
+  Content-Type: application/json
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=3600
+
+# Dashboard — block indexing (authed pages)
+/dashboard/*
+  X-Robots-Tag: noindex, nofollow
+
+# Manifest — correct MIME type for Chrome PWA installability
+/manifest.json
+  Content-Type: application/manifest+json
+  Cache-Control: no-cache
+  X-Robots-Tag: noindex, nofollow
+
+# Service Worker — no caching
+/sw.js
+  Cache-Control: no-cache, no-store, must-revalidate
+  Service-Worker-Allowed: /
+
+/OneSignalSDKWorker.js
+  Cache-Control: no-cache, no-store, must-revalidate
+  Service-Worker-Allowed: /
+
+/OneSignalSDK.sw.js
+  Cache-Control: no-cache, no-store, must-revalidate
+  Service-Worker-Allowed: /
+
+# Static assets — long cache
+/icons/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/images/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/og/*
+  Cache-Control: public, max-age=86400
+
+# Logo — cache eficiente
+/ia-personal-transparent.png
+  Cache-Control: public, max-age=2592000, immutable
+
+# Next.js static chunks — long cache
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Favicons / Apple touch icon — cache 30d (versionados por ?v= no layout.tsx)
+/favicon.ico
+  Cache-Control: public, max-age=2592000
+
+/favicons/*
+  Cache-Control: public, max-age=2592000
+
+/apple-touch-icon.png
+  Cache-Control: public, max-age=2592000
+
+# OG Image — moderate cache
+/og-image.png
+  Cache-Control: public, max-age=86400

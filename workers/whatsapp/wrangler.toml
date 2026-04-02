@@ -1,0 +1,76 @@
+# =============================================================================
+# VFIT — WhatsApp Gateway Worker (Unipile)
+# =============================================================================
+# Objetivo:
+# - Worker padrão e reutilizável para enviar mensagens WhatsApp via Unipile
+# - Endpoints simples: /health, /chats, /send, /task-notify
+#
+# Deploy:
+#   cd workers/whatsapp
+#   npm install
+#   npx wrangler deploy
+# =============================================================================
+
+name = "personaliai-whatsapp"
+main = "src/index.ts"
+compatibility_date = "2024-12-01"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = true
+
+# =============================================================================
+# CUSTOM DOMAIN
+# =============================================================================
+# Endpoint padrão: https://whatsapp.iapersonal.app.br
+# =============================================================================
+routes = [
+  { pattern = "whatsapp.iapersonal.app.br", zone_name = "iapersonal.app.br", custom_domain = true }
+]
+
+# =============================================================================
+# SECRETS STORE (shared) — opcional (open beta)
+# =============================================================================
+# IMPORTANTE (TOML): isto precisa estar no nível raiz (root), antes de qualquer
+# seção `[table]` / `[[array_table]]`, senão vira campo "Unexpected".
+#
+# Este worker suporta secrets "clássicos" (wrangler secret put) OU Secrets Store.
+# =============================================================================
+
+secrets_store_secrets = [
+  { binding = "SS_UNIPILE_API_KEY", store_id = "88b0ebf0455e437c8d75597ba6aae568", secret_name = "UNIPILE_API_KEY" },
+  { binding = "SS_ADMIN_AUTH_TOKEN", store_id = "88b0ebf0455e437c8d75597ba6aae568", secret_name = "ADMIN_AUTH_TOKEN" },
+  { binding = "SS_UNIPILE_WHATSAPP_ACCOUNT_ID", store_id = "88b0ebf0455e437c8d75597ba6aae568", secret_name = "UNIPILE_WHATSAPP_ACCOUNT_ID" },
+  { binding = "SS_UNIPILE_WHATSAPP_GROUP_CHAT_ID", store_id = "88b0ebf0455e437c8d75597ba6aae568", secret_name = "UNIPILE_WHATSAPP_GROUP_CHAT_ID" },
+  { binding = "SS_UNIPILE_WHATSAPP_GROUP_NAME", store_id = "88b0ebf0455e437c8d75597ba6aae568", secret_name = "UNIPILE_WHATSAPP_GROUP_NAME" }
+]
+
+# =============================================================================
+# PLACEMENT (Smart)
+# =============================================================================
+[placement]
+mode = "smart"
+
+# =============================================================================
+# OBSERVABILITY
+# =============================================================================
+[observability]
+enabled = true
+head_sampling_rate = 1
+
+[observability.logs]
+enabled = true
+invocation_logs = true
+
+# =============================================================================
+# ENVIRONMENT VARIABLES (NÃO secrets)
+# =============================================================================
+[vars]
+UNIPILE_API_URL = "https://api1.unipile.com:13123/api/v1"
+DEFAULT_GROUP_NAME = "Logs e Docs: VFIT"
+ALLOW_FALLBACK_TOKEN = "0"
+
+# NÃO coloque IDs reais aqui no Git.
+# Configure no Dashboard (Worker Settings > Variables) OU via secrets.
+# UNIPILE_WHATSAPP_ACCOUNT_ID = "..."
+# UNIPILE_WHATSAPP_GROUP_CHAT_ID = "..."
+# UNIPILE_WHATSAPP_GROUP_NAME = "..."
+# ALLOW_FALLBACK_TOKEN = "1"  # default

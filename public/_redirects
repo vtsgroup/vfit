@@ -1,0 +1,7 @@
+/manifest.webmanifest /manifest.json 200
+/default-icon /icons/icon-192.png 301
+
+# OneSignal SDK v16 looks for this filename by default
+/OneSignalSDK.sw.js /OneSignalSDKWorker.js 200
+
+/* /index.html 200

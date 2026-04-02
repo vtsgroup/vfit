@@ -1,0 +1,217 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(**/*)",
+      "Bash(npm run dev)",
+      "Bash(npm run build)",
+      "Bash(npm run lint)",
+      "Bash(npm run lint -- *)",
+      "Bash(npm run type-check)",
+      "Bash(npm run type-check:workers)",
+      "Bash(npm run test)",
+      "Bash(npm run test:watch)",
+      "Bash(npm run test:coverage)",
+      "Bash(npm run test:e2e)",
+      "Bash(npm run quality:ci)",
+      "Bash(npm run security:audit)",
+      "Bash(npm run docs:gate)",
+      "Bash(npm run wrangler:dev)",
+      "Bash(npm run cf:deploy)",
+      "Bash(npm run cf:deploy -- *)",
+      "Bash(npm run cf:deploy:minor)",
+      "Bash(npm run cf:deploy:minor -- *)",
+      "Bash(npm run cf:deploy:dry)",
+      "Bash(git status)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git branch *)",
+      "Bash(git stash *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git checkout *)",
+      "Bash(git fetch *)",
+      "Bash(git pull *)",
+      "Bash(git tag *)",
+      "Bash(git merge *)",
+      "Bash(ls *)",
+      "Bash(cat *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(wc *)",
+      "Bash(grep *)",
+      "Bash(find *)",
+      "Bash(echo *)",
+      "Bash(node scripts/update-version.js)",
+      "Bash(node -p *)",
+      "Read(//Users/macos/.claude/skills/gstack/**)",
+      "Bash(./setup)",
+      "Read(//Users/macos/.claude/skills/**)",
+      "Bash(gh pr:*)",
+      "Bash(~/.claude/skills/gstack/bin/gstack-update-check)",
+      "Bash(npx vitest:*)",
+      "Bash(git check-ignore:*)",
+      "Read(//Users/macos/.claude/**)",
+      "Bash(python3 -m json.tool)",
+      "Bash(for skill:*)",
+      "Bash(do ln:*)",
+      "Skill(plan-eng-review)",
+      "Skill(plan-eng-review:*)",
+      "Bash(node scripts/cf-deploy.js patch --msg \"fix: header + navbar backdrop-blur transparency for frosted glass effect\")",
+      "Bash(node scripts/cf-deploy.js patch --msg \"fix: header + navbar frosted glass — lower opacity \\(0.55\\) for visible backdrop-blur\")",
+      "Bash(npx next:*)",
+      "Bash(ls -la /Users/macos/Development/apps/personal-ia-prod/src/app/\\\\\\(public\\\\\\)/)",
+      "Bash(cat /Users/macos/Development/apps/personal-ia-prod/src/app/\\\\\\(public\\\\\\)/layout.tsx)",
+      "Bash(cat /Users/macos/Development/apps/personal-ia-prod/src/app/\\\\\\(public\\\\\\)/page.tsx)",
+      "Bash(cat /Users/macos/Development/apps/personal-ia-prod/src/app/\\\\\\(public\\\\\\)/pricing/page.tsx)",
+      "Bash(npx tsc:*)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000)",
+      "Skill(browse)",
+      "Skill(browse:*)",
+      "Read(//Users/macos/Development/apps/personal-ia-prod/**)",
+      "Bash(npm list:*)",
+      "mcp__plugin_claude-mem_mcp-search__smart_search",
+      "mcp__plugin_claude-mem_mcp-search__search",
+      "mcp__plugin_claude-mem_mcp-search__get_observations",
+      "Bash(curl -s http://localhost:37777/api/health)",
+      "Bash(du -sh .claude/skills/ .claude/docs/SKILLS*)",
+      "Bash(wrangler --version)",
+      "Bash(python3 ~/.claude/skills/ui-ux-pro-max/scripts/search.py \"fitness SaaS B2B personal trainer health wellness premium mobile-native\" --design-system -p \"IA + PERSONAL\" -f markdown)",
+      "Bash(node scripts/cf-deploy.js --help)",
+      "Bash(wait)",
+      "Bash(node scripts/cf-deploy.js patch --no-bump --allow-no-whatsapp)",
+      "Skill(gstack)",
+      "Skill(gstack:*)",
+      "Bash(node scripts/cf-deploy.js patch --allow-no-whatsapp --no-bump)",
+      "Bash(node scripts/cf-deploy.js patch --allow-no-whatsapp)",
+      "Bash(node scripts/whatsapp-task.mjs start --task-id \"DEPLOY-2026-03-25-AM2\" --title \"Deploy v6.7.2 — Secondary button fix: slate gradient + DemoBtn tokens\" --priority \"MÉDIA\" --actor \"Developer Agent\" --why \"secondary button visual inconsistency between DemoBtn showcase and real Button component\" --expected \"DemoBtn secondary gradient matches real Button in both light and dark mode\")",
+      "Bash(python3 ~/.claude/skills/ui-ux-pro-max/scripts/search.py 'fitness personal trainer SaaS dashboard ultra modern glassmorphism dark' --design-system -p IA+PERSONAL -f markdown)",
+      "Bash(python3 ~/.claude/skills/ui-ux-pro-max/scripts/search.py \"fitness SaaS dashboard glassmorphism dark modern\" --design-system -p \"IA+PERSONAL\")",
+      "Bash(node scripts/whatsapp-task.mjs start --task-id \"SPRINT-DS-PHASE1-2026-03-25-PM\" --title \"Deploy Design System v8.0 — Syne+DM Sans, tonal glass, motion, AI page\" --priority \"ALTA\" --actor \"Developer Agent\" --why \"Athletic Luxury Dark redesign — typography, motion system, showcase, componentes polidos\" --expected \"DS v8.0 em produção com Syne/DM Sans, tonal glass tokens, motion system e AI page melhorada\")",
+      "Bash(NODE_OPTIONS=\"--max-old-space-size=4096\" npx next build)",
+      "Bash(nvm list:*)",
+      "Read(//Users/macos/.nvm/versions/**)",
+      "Bash(brew list:*)",
+      "Read(//opt/homebrew/opt/**)",
+      "Bash(/opt/homebrew/opt/node@20/bin/node --version)",
+      "Bash(PATH=\"/opt/homebrew/opt/node@20/bin:$PATH\" node --version)",
+      "Bash(PATH=\"/opt/homebrew/opt/node@20/bin:$PATH\" npx next build)",
+      "Bash(npm view:*)",
+      "Bash(python3 -c \"import json,sys; versions=[v for v in json.load\\(sys.stdin\\) if v.startswith\\(''''15.''''\\)]; print\\(''''\\\\n''''.join\\(versions[-10:]\\)\\)\")",
+      "Bash(npm install:*)",
+      "Bash(gh repo:*)",
+      "Skill(update-config)",
+      "Skill(update-config:*)",
+      "Skill(deploy)",
+      "Skill(deploy:*)",
+      "Bash(node scripts/cf-deploy.js --allow-no-whatsapp)",
+      "Bash(python3 ~/.claude/skills/ui-ux-pro-max/scripts/search.py 'fitness app athletic dark mobile B2C gamification workout' --design-system -p EVOLUIA -f markdown)",
+      "Bash(python3 ~/.claude/skills/ui-ux-pro-max/scripts/search.py \"fitness app athletic dark mobile B2C gamification workout\" --design-system -p \"EVOLUIA\")",
+      "Bash(ls /Users/macos/Development/apps/personal-ia-prod/src/app/\\\\\\(app\\\\\\)/perfil/)",
+      "Bash(cat /Users/macos/Development/apps/personal-ia-prod/src/app/\\\\\\(app\\\\\\)/perfil/gamificacao/page.tsx)",
+      "Bash(wrangler whoami:*)",
+      "Bash(wrangler logout:*)",
+      "Read(//private/tmp/claude-501/-Users-macos-Development-apps-personal-ia-prod/**)"
+    ],
+    "deny": [
+      "Bash(npm run cf:deploy:major)",
+      "Bash(npm run wrangler:deploy)",
+      "Bash(git push --force *)",
+      "Bash(git push -f *)",
+      "Bash(rm -rf *)",
+      "Bash(rm -f .env*)",
+      "Write(.env)",
+      "Write(.env.local)",
+      "Write(.env.*)",
+      "Read(.env.local)",
+      "Edit(.github/workflows/**)",
+      "Write(.github/workflows/**)",
+      "Edit(scripts/cf-deploy.js)",
+      "Edit(scripts/deploy-pages.js)"
+    ],
+    "additionalDirectories": [
+      "/Users/macos/Development/apps/personal-ia-prod/.claude",
+      "/Users/macos/Development/apps/personal-ia-prod/.claude/plans"
+    ]
+  },
+  "model": "haiku",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "printf '{\"systemMessage\": \"✅ EVOLUIA Session Initialized\\\\n\\\\n📊 Contexto carregado:\\\\n  • Branch: %s\\\\n  • Último commit: %s\\\\n  • Arquivos modificados: %s\\\\n\\\\n🎯 Estratégia: Haiku 100%% (70%% menos tokens)\\\\n⚡ Fast mode: ON | Effort level: HIGH\\\\n\\\\n💾 Memory: MEMORY.md + session-state.md sincronizados\\\\n🔍 Carregando contexto com mem-search...\"}' \"$(git branch --show-current 2>/dev/null)\" \"$(git log --oneline -1 2>/dev/null | head -c 60)\" \"$(git diff --name-only HEAD 2>/dev/null | head -3 | tr '\\\\n' ', ')\"",
+            "timeout": 5,
+            "statusMessage": "Carregando contexto EVOLUIA..."
+          },
+          {
+            "type": "command",
+            "command": "echo '{\"skill\": \"claude-mem:mem-search\", \"args\": \"EVOLUIA blockers decision recent:7d\"}' || true",
+            "timeout": 10,
+            "statusMessage": "Buscando contexto em claude-mem (recent:7d)..."
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "BRANCH=$(git branch --show-current 2>/dev/null); if [ \"$BRANCH\" = \"main\" ]; then echo '{\"continue\": false, \"stopReason\": \"🔴 Bloqueado: não edite diretamente na branch main. Crie uma feature branch: git checkout -b feat/descricao\"}'; exit 1; fi",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write(src/**/*.ts)|Write(src/**/*.tsx)|Edit(src/**/*.ts)|Edit(src/**/*.tsx)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -n \"$CLAUDE_FILE_PATH\" ] && npx prettier --write \"$CLAUDE_FILE_PATH\" 2>/dev/null || true",
+            "timeout": 15
+          }
+        ]
+      },
+      {
+        "matcher": "Bash(git commit:*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '{\"systemMessage\": \"💾 Commit realizado! Lembre-se: atualize .claude/session-state.md com:\\\\n  • Task completada\\\\n  • Timestamp\\\\n  • Se foi decisão importante → crie memory file (use /remember)\"}' 2>/dev/null || true",
+            "timeout": 3,
+            "statusMessage": "Lembrando atualização de session-state.md..."
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '{\"systemMessage\": \"📊 SESSÃO ENCERRADA\\\\n\\\\n🎯 Checklist final:\\\\n  [ ] Atualizar .claude/session-state.md (task + timestamp)\\\\n  [ ] Se importante: /remember para memory persistent\\\\n  [ ] Verificar tokens: https://console.anthropic.com/usage\\\\n\\\\n💡 Dica: próxima sessão carrega contexto auto (SessionStart hook)\\\\n✅ Economia: ~70%% menos tokens com Haiku + mem-search\"}' || true",
+            "timeout": 3
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "PROMPT=\"${CLAUDE_PROMPT_TEXT}\"; if echo \"$PROMPT\" | grep -qiE '(plano|arquitetura|roadmap|design de sistema|decision tree|strategy)'; then echo '{\"systemMessage\": \"🔵 DETECTADO: TASK ARQUITETURAL\\\\n💡 Sugestão: /opus\\\\n(Qualidade de design crítica — recomendado)\"}'; elif echo \"$PROMPT\" | grep -qiE '(debug|trace|race condition|incompatibilidade|investigar|bloqueador)'; then echo '{\"systemMessage\": \"🟡 DETECTADO: DEBUGGING COMPLEXO\\\\n💡 Sugestão: /sonnet\\\\n(Análise integrada mais eficiente)\"}'; elif echo \"$PROMPT\" | grep -qiE '(review-pr|paranóico|security audit|code review)'; then echo '{\"systemMessage\": \"🔴 DETECTADO: REVIEW CRÍTICO\\\\n💡 Sugestão: /opus\\\\n(Review paranóico — máxima qualidade)\"}'; elif echo \"$PROMPT\" | grep -qiE '(worker.*frontend|múltiplos domínios|integração|multi-domain)'; then echo '{\"systemMessage\": \"🟠 DETECTADO: FEATURE MULTI-DOMÍNIO\\\\n💡 Sugestão: Haiku + /mem-search recent:3d\\\\n(Contexto anterior como fallback)\"}'; fi",
+            "timeout": 2,
+            "statusMessage": "Analisando complexidade da task..."
+          }
+        ]
+      }
+    ]
+  },
+  "effortLevel": "high",
+  "fastMode": true
+}

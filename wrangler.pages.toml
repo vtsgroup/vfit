@@ -1,0 +1,4 @@
+# TODO: migrate to name = "vfit" when new Pages project is created in CF Dashboard
+name = "evoluia"
+pages_build_output_dir = "out"
+compatibility_date = "2026-02-06"

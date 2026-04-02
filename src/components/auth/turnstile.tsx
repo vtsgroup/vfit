@@ -1,0 +1,201 @@
+/**
+ * src/components/auth/turnstile.tsx
+ *
+ * Turnstile — Cloudflare anti-bot
+ *
+ * Exports: TurnstileRef, Turnstile
+ * Hooks: useEffect, useRef, useCallback, useImperativeHandle, useState
+ * Features: 'use client'
+ */
+
+// ============================================
+// Turnstile — Cloudflare anti-bot
+// Strategy: invisible-first → fallback to interactive on failure
+// 95%+ users never see anything. Bots are blocked.
+// ============================================
+
+'use client'
+
+import { useEffect, useRef, useCallback, useImperativeHandle, forwardRef, useState } from 'react'
+
+declare global {
+  interface Window {
+    turnstile?: {
+      render: (container: string | HTMLElement, options: Record<string, unknown>) => string
+      reset: (widgetId: string) => void
+      remove: (widgetId: string) => void
+      execute: (container: string | HTMLElement, options?: Record<string, unknown>) => void
+    }
+    onTurnstileLoad?: () => void
+    __piaTurnstileOnLoadCallbacks?: Array<() => void>
+  }
+}
+
+export interface TurnstileRef {
+  reset: () => void
+  execute: () => void
+}
+
+interface TurnstileProps {
+  onVerify: (token: string) => void
+  onExpire?: () => void
+  onError?: () => void
+}
+
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '0x4AAAAAACbwFTxZJC74DsMB'
+
+// How many invisible failures before escalating to interactive
+const INVISIBLE_MAX_RETRIES = 2
+
+export const Turnstile = forwardRef<TurnstileRef, TurnstileProps>(
+  function Turnstile({ onVerify, onExpire, onError }, ref) {
+    const containerRef = useRef<HTMLDivElement>(null)
+    const widgetIdRef = useRef<string | null>(null)
+    const retryCountRef = useRef(0)
+    const [mode, setMode] = useState<'invisible' | 'interactive'>('invisible')
+    const modeRef = useRef<'invisible' | 'interactive'>('invisible')
+
+    // Expose reset + execute to parent via ref
+    useImperativeHandle(ref, () => ({
+      reset: () => {
+        retryCountRef.current = 0
+        if (widgetIdRef.current && window.turnstile) {
+          window.turnstile.reset(widgetIdRef.current)
+        }
+      },
+      execute: () => {
+        if (widgetIdRef.current && window.turnstile) {
+          window.turnstile.execute(widgetIdRef.current)
+        }
+      },
+    }))
+
+    useEffect(() => {
+      if (!TURNSTILE_SITE_KEY) {
+        console.warn('[Turnstile] NEXT_PUBLIC_TURNSTILE_SITE_KEY não configurada')
+      }
+    }, [])
+
+    const cleanupWidget = useCallback(() => {
+      try {
+        if (widgetIdRef.current && window.turnstile) {
+          window.turnstile.remove(widgetIdRef.current)
+          widgetIdRef.current = null
+        }
+        if (containerRef.current) {
+          containerRef.current.innerHTML = ''
+        }
+      } catch {
+        // noop
+      }
+    }, [])
+
+    const renderWidget = useCallback((size: 'invisible' | 'normal') => {
+      if (!TURNSTILE_SITE_KEY || !containerRef.current || !window.turnstile) return
+      if (widgetIdRef.current) return
+
+      widgetIdRef.current = window.turnstile.render(containerRef.current, {
+        sitekey: TURNSTILE_SITE_KEY,
+        callback: (token: string) => {
+          onVerify(token)
+        },
+        'expired-callback': () => {
+          onExpire?.()
+          // Auto-reset to get fresh token
+          setTimeout(() => {
+            if (widgetIdRef.current && window.turnstile) {
+              window.turnstile.reset(widgetIdRef.current)
+            }
+          }, 500)
+        },
+        'error-callback': (errorCode: string) => {
+          const attempt = retryCountRef.current + 1
+          console.warn(`[Turnstile] Error: ${errorCode} (mode=${modeRef.current}, attempt ${attempt})`)
+
+          if (modeRef.current === 'invisible' && retryCountRef.current < INVISIBLE_MAX_RETRIES) {
+            // Retry invisible with backoff
+            retryCountRef.current++
+            setTimeout(() => {
+              cleanupWidget()
+              renderWidget('invisible')
+            }, 800 * retryCountRef.current)
+          } else if (modeRef.current === 'invisible') {
+            // Invisible exhausted → escalate to interactive checkbox
+            console.warn('[Turnstile] Invisible failed — escalating to interactive mode')
+            retryCountRef.current = 0
+            modeRef.current = 'interactive'
+            setMode('interactive')
+            setTimeout(() => {
+              cleanupWidget()
+              renderWidget('normal')
+            }, 300)
+          } else {
+            // Interactive also failed — notify parent
+            onError?.()
+          }
+        },
+        theme: 'auto',
+        size,
+        retry: 'auto',
+        'retry-interval': 5000,
+        'refresh-expired': 'auto',
+        appearance: size === 'invisible' ? 'interaction-only' : 'always',
+      })
+
+      // For invisible mode, auto-execute immediately
+      if (size === 'invisible' && widgetIdRef.current && window.turnstile) {
+        window.turnstile.execute(widgetIdRef.current)
+      }
+    }, [onVerify, onExpire, onError, cleanupWidget])
+
+    useEffect(() => {
+      const startSize = modeRef.current === 'interactive' ? 'normal' : 'invisible'
+      const initRender = () => renderWidget(startSize)
+
+      if (window.turnstile) {
+        initRender()
+        return
+      }
+
+      if (!window.__piaTurnstileOnLoadCallbacks) {
+        window.__piaTurnstileOnLoadCallbacks = []
+      }
+      window.__piaTurnstileOnLoadCallbacks.push(initRender)
+
+      window.onTurnstileLoad = () => {
+        const callbacks = window.__piaTurnstileOnLoadCallbacks || []
+        window.__piaTurnstileOnLoadCallbacks = []
+        callbacks.forEach((fn) => {
+          try { fn() } catch { /* ignore */ }
+        })
+      }
+
+      if (!document.getElementById('turnstile-script')) {
+        const script = document.createElement('script')
+        script.id = 'turnstile-script'
+        script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileLoad'
+        script.async = true
+        document.head.appendChild(script)
+      }
+
+      return () => {
+        try {
+          const list = window.__piaTurnstileOnLoadCallbacks
+          if (list) {
+            window.__piaTurnstileOnLoadCallbacks = list.filter((fn) => fn !== initRender)
+          }
+        } catch { /* noop */ }
+
+        cleanupWidget()
+      }
+    }, [renderWidget, cleanupWidget])
+
+    // Invisible mode: container is empty (0px). Interactive: shows the checkbox.
+    return (
+      <div
+        ref={containerRef}
+        className={mode === 'invisible' ? '' : 'flex justify-center animate-blur-in'}
+      />
+    )
+  }
+)

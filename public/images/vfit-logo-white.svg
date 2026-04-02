@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 64" fill="none">
+  <!-- EVOLUIA Logo (white variant for dark backgrounds) -->
+  
+  <!-- Dumbbell Icon -->
+  <g transform="translate(0, 8)">
+    <rect x="2" y="8" width="8" height="32" rx="3" fill="#22C55E"/>
+    <rect x="12" y="12" width="6" height="24" rx="2" fill="#22C55E" opacity="0.8"/>
+    <rect x="18" y="21" width="24" height="6" rx="2" fill="#22C55E" opacity="0.6"/>
+    <rect x="42" y="12" width="6" height="24" rx="2" fill="#22C55E" opacity="0.8"/>
+    <rect x="50" y="8" width="8" height="32" rx="3" fill="#22C55E"/>
+  </g>
+  
+  <!-- EVOLU text (white) -->
+  <text x="72" y="44" font-family="'DM Sans', 'Inter', -apple-system, sans-serif" font-weight="800" font-size="40" fill="#FFFFFF" letter-spacing="-1">
+    EVOLU
+  </text>
+  
+  <!-- IA text (brand green) -->
+  <text x="225" y="44" font-family="'DM Sans', 'Inter', -apple-system, sans-serif" font-weight="800" font-size="40" fill="#22C55E" letter-spacing="-1">
+    IA
+  </text>
+</svg>

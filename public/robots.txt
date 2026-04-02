@@ -1,0 +1,68 @@
+# VFIT — robots.txt
+# Atualizado: Março 2026
+
+# === Buscadores tradicionais ===
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# === Crawlers de IA (GEO) ===
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: GoogleOther
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+# === Controle de bots de auditoria ===
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10
+
+# === Bloqueio de bots ruidosos ===
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+# === Regra geral ===
+User-agent: *
+Allow: /
+Disallow: /manifest.json
+Disallow: /manifest.webmanifest
+Disallow: /sw.js
+Disallow: /OneSignalSDKWorker.js
+Disallow: /dashboard/
+Disallow: /api/
+
+# === Sitemaps ===
+Sitemap: https://iapersonal.app.br/sitemap.xml
+Sitemap: https://iapersonal.app.br/sitemap-blog.xml

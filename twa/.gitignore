@@ -1,0 +1,26 @@
+# Android project (gerado pelo Bubblewrap)
+android/
+
+# Keystore e senhas
+keystore/*.jks
+keystore/*.keystore
+keystore/.env
+
+# Build outputs
+dist/
+*.apk
+*.aab
+*.zip
+
+# Node
+node_modules/
+
+# Ícones gerados (regeneráveis)
+icons/generated/
+
+# Env
+.env
+.env.local
+
+# Bubblewrap temp
+twa-manifest.json

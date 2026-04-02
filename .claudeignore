@@ -1,0 +1,85 @@
+# === Dependências ===
+node_modules/
+.pnpm-store/
+
+# === Build outputs ===
+dist/
+build/
+.next/
+out/
+.vercel/
+.wrangler/
+
+# === Cache e temp ===
+.cache/
+.turbo/
+*.tsbuildinfo
+.eslintcache
+.prettiercache
+
+# === Logs ===
+logs/
+*.log
+npm-debug.log*
+
+# === IDE e SO ===
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# === Ambiente (segurança) ===
+.env
+.env.local
+.env.production
+.env.*
+!.env.example
+
+# === Gerados / minificados ===
+coverage/
+__snapshots__/
+*.min.js
+*.min.css
+*.map
+*.chunk.*
+tsconfig.tsbuildinfo
+
+# === Assets binários ===
+public/images/
+public/fonts/
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.ico
+*.webp
+*.woff
+*.woff2
+*.ttf
+*.eot
+*.mp4
+*.mp3
+*.pdf
+
+# === Lock files ===
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# === Backups e dados ===
+backups/
+.venv/
+twa/
+test-results/
+playwright-report/
+
+# === Docs de planejamento (grandes, não relevantes para código) ===
+docs/archive/
+docs/ULTRA-PLANO-MVP-PRODUCAO/_archive/
+docs/ULTRA-PLANO-MVP-PRODUCAO/MVP-SEO/
+
+# === Session files do Claude ===
+.claude/backups/
+.claude/session-state.md
+.claude/*.session

@@ -1,0 +1,24 @@
+{
+  "name": "vfit-twa",
+  "version": "1.0.0",
+  "description": "TWA build pipeline — VFIT (iapersonal.app.br)",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "setup": "bash scripts/setup.sh",
+    "icons": "node scripts/generate-icons.js",
+    "assetlinks": "node scripts/gen-assetlinks.js",
+    "init": "bubblewrap init --manifest=https://iapersonal.app.br/manifest.json",
+    "build": "bash scripts/build.sh",
+    "build:debug": "bubblewrap build --skipSigning",
+    "validate": "bash scripts/validate.sh",
+    "update": "bubblewrap update",
+    "doctor": "bubblewrap doctor"
+  },
+  "dependencies": {
+    "sharp": "^0.33.5"
+  },
+  "devDependencies": {
+    "dotenv": "^16.4.5"
+  }
+}
