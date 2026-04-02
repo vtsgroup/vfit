@@ -116,7 +116,6 @@ function isAllowedOrigin(origin: string): boolean {
   const allowedOrigins = new Set([
     'https://iapersonal.app.br',
     'https://vfit.pages.dev',
-    'https://personal-ia-prod.pages.dev', // legacy
     'http://localhost:3000',
     'http://127.0.0.1:3000',
   ])

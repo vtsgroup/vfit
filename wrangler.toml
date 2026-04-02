@@ -1,5 +1,4 @@
-# TODO: migrate to name = "vfit-api" when new Worker is created in CF Dashboard
-name = "personaliai-api"
+name = "vfit-api"
 main = "workers/index.ts"
 compatibility_date = "2026-02-06"
 compatibility_flags = ["nodejs_compat"]
@@ -34,13 +33,13 @@ binding = "AI"
 # ============================================
 [[d1_databases]]
 binding = "DB"
-database_name = "personaliai-exercises"  # CF real name (legacy — rename via Dashboard when ready)
-database_id = "988c03d5-bf9a-4394-b65a-adebbe0b87e4"
+database_name = "vfit-exercises"
+database_id = "cca37216-849a-47ce-a183-a62990a0ff1b"
 
 # ============================================
 # Hyperdrive (Hot Data - PostgreSQL via Neon)
 # Connection pooling otimizado pelo Cloudflare edge
-# Criado em 16/02/2026 via: wrangler hyperdrive create personaliai-db (legacy name)
+# Config: vfit-db → Neon PostgreSQL sa-east-1
 # ============================================
 [[hyperdrive]]
 binding = "HYPERDRIVE"
@@ -66,11 +65,11 @@ id = "d94c62b1e8f248a6bd1ea6a11e18f09c"
 # ============================================
 [[r2_buckets]]
 binding = "R2_VIDEOS"
-bucket_name = "personal-ia-videos"  # CF real name (legacy — cannot rename R2 buckets)
+bucket_name = "personal-ia-videos"  # R2 buckets cannot be renamed
 
 [[r2_buckets]]
 binding = "R2_IMAGES"
-bucket_name = "personal-ia-images"  # CF real name (legacy — cannot rename R2 buckets)
+bucket_name = "personal-ia-images"  # R2 buckets cannot be renamed
 
 # ============================================
 # Cloudflare Stream (Sprint E — exercise videos)
@@ -145,7 +144,7 @@ bucket_name = "personal-ia-images"  # CF real name (legacy — cannot rename R2 
 # ONESIGNAL_APP_ID
 # ONESIGNAL_REST_KEY
 # DATABASE_URL
-# NEON_DATABASE_URL (legado temporário)
+# NEON_DATABASE_URL
 # SENTRY_DSN_WORKER
 # SENTRY_ENVIRONMENT
 # SENTRY_RELEASE

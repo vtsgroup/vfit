@@ -46,7 +46,7 @@ interface Env {
 
 type Json = Record<string, unknown>;
 
-const WORKER_NAME = 'personaliai-whatsapp'; // legacy CF worker name
+const WORKER_NAME = 'vfit-whatsapp';
 const WORKER_VERSION = '1.0.0';
 
 function normalizeSecret(val: unknown): string | null {

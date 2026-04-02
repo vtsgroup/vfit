@@ -1,6 +1,6 @@
 # VFIT — Copilot Instructions
 
-> **v7.0 UPDATED** · SaaS para Personal Trainers · 02/04/2026
+> **v8.0 UPDATED** · SaaS para Personal Trainers · 02/04/2026
 
 ---
 
@@ -235,7 +235,7 @@ Dark:  superfície → shadow zinc-800 (#27272a) — funciona universal
 
 | Item | Valor |
 |------|-------|
-| Frontend | `https://iapersonal.app.br` (fallback: `personal-ia-prod.pages.dev`) |
+| Frontend | `https://iapersonal.app.br` (fallback: `vfit.pages.dev`) |
 | Backend API | `https://api.iapersonal.app.br` (fallback: `vfit-api.vd-b0b.workers.dev`) |
 | Neon DB | `NEON_DATABASE_URL (via secret manager)` |
 | psql local | `/opt/homebrew/opt/libpq/bin/psql "CONNECTION_STRING_ACIMA"` |
@@ -548,7 +548,7 @@ node scripts/cf-deploy.js patch --skip-pages --msg "API only"
 ### ⚙️ Manutenção de Dependências
 
 **Wrangler (Cloudflare Workers CLI)**
-- Versão atual: **4.75.0** (atualizado 18/03/2026)
+- Versão atual: **4.79.0** (atualizado 02/04/2026)
 - **🔴 OBRIGATÓRIO:** Antes de QUALQUER deploy, verificar se há atualização:
   ```bash
   wrangler --version  # se output mostra "update available", atualizar imediatamente

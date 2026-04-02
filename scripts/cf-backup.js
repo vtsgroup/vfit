@@ -15,8 +15,8 @@ const timestamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
 const backupPath = path.join(BACKUP_DIR, timestamp);
 
 // Recursos Cloudflare
-const D1_DB_NAME = "personaliai-exercises"; // legacy CF D1 name
-const D1_DB_ID = "988c03d5-bf9a-4394-b65a-adebbe0b87e4";
+const D1_DB_NAME = "vfit-exercises";
+const D1_DB_ID = "cca37216-849a-47ce-a183-a62990a0ff1b";
 const KV_NAMESPACES = [
   { name: "KV_CACHE", id: "e7147f8855184a4a8f72307756596df4" },
   { name: "KV_SESSIONS", id: "91d34b6725564de39e8ed891e742e76d" },

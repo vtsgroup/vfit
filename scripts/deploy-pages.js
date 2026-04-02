@@ -7,7 +7,7 @@ try {
   const outDir = `${process.cwd()}/out`;
   // Deploy static export to Pages
   execSync(
-    `cd /tmp && npx wrangler pages deploy "${outDir}" --project-name=personal-ia-prod --branch=main`, // legacy CF project name — rename in Dashboard when ready
+    `cd /tmp && npx wrangler pages deploy "${outDir}" --project-name=vfit --branch=main`,
     { stdio: "inherit" }
   );
 

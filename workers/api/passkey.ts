@@ -162,13 +162,11 @@ passkey.post('/passkey/register/complete', authMiddleware, async (c) => {
     const allowedOrigins = new Set([
       'https://iapersonal.app.br',
       'https://vfit.pages.dev',
-      'https://personal-ia-prod.pages.dev', // legacy
       origin,
     ])
     const allowedRPIDs = new Set([
       'iapersonal.app.br',
       'vfit.pages.dev',
-      'personal-ia-prod.pages.dev', // legacy
       rpID,
     ])
 
@@ -340,13 +338,11 @@ passkey.post('/passkey/login/complete', async (c) => {
   const allowedOrigins = new Set([
     'https://iapersonal.app.br',
     'https://vfit.pages.dev',
-    'https://personal-ia-prod.pages.dev', // legacy
     origin,
   ])
   const allowedRPIDs = new Set([
     'iapersonal.app.br',
     'vfit.pages.dev',
-    'personal-ia-prod.pages.dev', // legacy
     rpID,
   ])
 

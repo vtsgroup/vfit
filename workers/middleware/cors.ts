@@ -19,10 +19,7 @@ import type { MiddlewareHandler } from 'hono'
 // Origens exatas permitidas
 const ALLOWED_ORIGINS = new Set([
   'https://iapersonal.app.br',
-  'https://vfit.pages.dev',           // new Pages project (future)
-  'https://evoluia.pages.dev',        // current Pages project
-  'https://personaliai.pages.dev',    // legacy Pages (backward compat)
-  'https://personal-ia-prod.pages.dev', // legacy fallback
+  'https://vfit.pages.dev',
 ])
 
 /**
@@ -37,9 +34,6 @@ function isAllowedOrigin(origin: string | undefined | null): string | null {
 
   // Cloudflare Pages preview deployments (*.pages.dev)
   if (origin.endsWith('.vfit.pages.dev')) return origin
-  if (origin.endsWith('.evoluia.pages.dev')) return origin
-  if (origin.endsWith('.personaliai.pages.dev')) return origin   // legacy CF project
-  if (origin.endsWith('.personal-ia-prod.pages.dev')) return origin // legacy CF project
 
   // Localhost para desenvolvimento
   if (origin.startsWith('http://localhost:')) return origin

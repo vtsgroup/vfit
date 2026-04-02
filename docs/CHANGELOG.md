@@ -5,6 +5,38 @@
 
 ---
 
+## [v1.0.0] — 02/04/2026 — VFIT v1.0.0 Fresh Start — Infrastructure Migration
+
+### 🏗️ Infrastructure Migration (Complete)
+- **GitHub**: Novo repositório `victor-development/vfit` — orphan branch sem histórico
+- **Worker API**: `personaliai-api` → `vfit-api` — deployed + 24 secrets migrados
+- **Worker WhatsApp**: `personaliai-whatsapp` → `vfit-whatsapp` — deployed + custom domain movido
+- **Pages**: `personal-ia-prod` / `evoluia` → `vfit` — deployed + custom domain `iapersonal.app.br` movido
+- **D1**: `personaliai-exercises` → `vfit-exercises` (id: `cca37216-849a-47ce-a183-a62990a0ff1b`) — dados migrados
+- **Hyperdrive**: `personaliai-db` → `vfit-db` (mesmo id: `4aa45e1bd72742ec8eab876215cee1a2`)
+- **DNS**: CNAME `iapersonal.app.br` → `vfit.pages.dev`
+
+### 🧹 Cleanup
+- Workers antigos deletados: `personaliai-api`, `personaliai-api-dev`, `personaliai-whatsapp`
+- Pages antigo deletado: `personalia-descontinuado`
+- D1 antigo deletado: `personaliai-exercises`
+- 12+ arquivos de código atualizados: wrangler configs, CORS, auth, passkey, deploy scripts, queues
+
+### 📊 Validação
+- Frontend: `vfit.pages.dev` ✅ | `iapersonal.app.br` ✅
+- API: `api.iapersonal.app.br/health` ✅ (D1 ok, KV ok, R2v ok, R2i ok)
+- WhatsApp: `whatsapp.iapersonal.app.br/health` ✅ (worker: vfit-whatsapp)
+- Auth: 401 sem token ✅ (JWT_SECRET configurado)
+
+---
+
+## [Pre-v1.0.0] — Histórico anterior
+
+> Todo o histórico anterior a v1.0.0 foi removido no fresh start.
+> O repositório antigo (`vts-development/personal-ia`) contém o histórico completo.
+
+---
+
 ## [v7.0.0] — 07/04/2026 — VFIT v1 Rebranding + Features B2C
 
 ### 🔄 Rebranding VFIT → VFIT (FASE 1)

@@ -253,7 +253,7 @@ try {
   // 4. Deploy Pages (cd /tmp evita que wrangler detecte wrangler.toml do Workers)
   if (!skipPages) {
     const outDir = `${process.cwd()}/out`;
-    const pagesCmd = `cd /tmp && CLOUDFLARE_ACCOUNT_ID=b0bf95d0fabb322ac3df37bd84ec0c77 npx wrangler pages deploy "${outDir}" --project-name=personal-ia-prod --commit-dirty=true --branch=main`; // legacy CF project name — rename in Dashboard when ready
+    const pagesCmd = `cd /tmp && CLOUDFLARE_ACCOUNT_ID=b0bf95d0fabb322ac3df37bd84ec0c77 npx wrangler pages deploy "${outDir}" --project-name=vfit --commit-dirty=true --branch=main`;
     const maxAttempts = 3;
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
       try {

@@ -756,9 +756,8 @@ async function handleQueue(
 
   for (const message of batch.messages) {
     try {
-      // TODO: rename queues to vfit-* when CF Queue migration is done
       switch (queueName) {
-        case 'personaliai-email-sender': // legacy CF queue name
+        case 'vfit-email-sender':
           if (!env.RESEND_API_KEY) {
             console.warn('[Queue] RESEND_API_KEY missing, skipping email')
             break
@@ -771,12 +770,12 @@ async function handleQueue(
           )
           break
 
-        case 'personaliai-video-encoder': // legacy CF queue name
+        case 'vfit-video-encoder':
           // TODO: LOTE 07 - Video encoding
           console.log('[Queue] Video message received')
           break
 
-        case 'personaliai-pdf-generator': // legacy CF queue name
+        case 'vfit-pdf-generator':
           // PDF generation (Assessment)
           console.log('[Queue] PDF message received')
 
@@ -817,7 +816,7 @@ async function handleQueue(
           }
           break
 
-        case 'personaliai-ai-batch': // legacy CF queue name
+        case 'vfit-ai-batch':
           // TODO: LOTE 09 - AI batch processing
           console.log('[Queue] AI batch message received')
           break

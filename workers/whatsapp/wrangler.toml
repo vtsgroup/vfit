@@ -11,7 +11,7 @@
 #   npx wrangler deploy
 # =============================================================================
 
-name = "personaliai-whatsapp"
+name = "vfit-whatsapp"
 main = "src/index.ts"
 compatibility_date = "2024-12-01"
 compatibility_flags = ["nodejs_compat"]
