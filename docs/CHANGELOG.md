@@ -5,6 +5,38 @@
 
 ---
 
+## [v1.1.0] — 03/04/2026 — Sprint TWA + Onboarding + D1 Sync + Visual Polish
+
+### 🚀 Phase 1 — TWA Smart Entry
+- TWA `startUrl` alterado de `/dashboard` para `/welcome`
+- Welcome page agora redireciona automaticamente para `/dashboard` se usuário autenticado
+- Suporte a UTM params para tracking de origem TWA/Play Store
+
+### 🛠️ Phase 2 — Onboarding Fix (POST /plans/generate)
+- **Root cause corrigida:** Onboarding store armazenava campos como `null`, Zod `.default()` só funciona com `undefined`
+- Payload defaults adicionados: `days_per_week`, `session_duration`, `target_muscles`, `injuries`, `preferred_time`
+- Zod schema resiliente: `.default()` em todos enums, `.coerce` para números, `.nullable().transform()` em arrays
+- JSON parsing robusto: 3 estratégias (direct parse → markdown code block → greedy brace match)
+- Loading screen UX: glow orb animado, step counter ("Passo 3/5"), tempo estimado
+
+### 💾 Phase 3 — D1 Sync
+- Nova migration: `0005_user_workouts_cache.sql` — tabela para cache offline de treinos
+- D1 INSERT em POST `/save` e `/regenerate` com pattern best-effort (nunca bloqueia request principal)
+- `migrations_dir` configurado no `wrangler.toml` para tracking correto de migrations D1
+
+### 🎨 Phase 4 — Visual Polish
+- Logout buttons (header, sidebar, mobile-nav) → `<Button variant="ghost-danger">` (DS v3, Rule 14)
+- Zero imports diretos de lucide-react em layout (DSIcon only)
+- Zero sintaxe legacy Tailwind v4 (`bg-gradient-to-*`, `bg-[#hex]`, `flex-shrink`)
+- Sidebar lint fix: `text-[20px]` → `text-display-heading`
+
+### 📊 Validação
+- Type-check: ✅ (frontend `tsconfig.json` + workers `tsconfig.workers.json`)
+- Lint: ✅ (0 novos erros, 5 pré-existentes em arquivos não modificados)
+- D1 migration: ✅ (aplicada remoto, tabela `user_workouts_cache` confirmada)
+
+---
+
 ## [v1.0.0] — 02/04/2026 — VFIT v1.0.0 Fresh Start — Infrastructure Migration
 
 ### 🏗️ Infrastructure Migration (Complete)
