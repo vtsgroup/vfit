@@ -107,7 +107,7 @@ type Role = 'user' | 'admin' | 'super_admin'       // user.role
 
 - Para qualquer bloco de QA final, go/no-go ou preparação de deploy: executar `npm run smoke:auth:local`
 - `SMOKE_PERSONAL_TOKEN` + `SMOKE_STUDENT_TOKEN` devem estar válidos no `.env.local`
-- Evidência obrigatória em `docs/ULTRA-PLANO-MVP-PRODUCAO/AUTH-SMOKE.generated.md`
+- Evidência obrigatória em `.claude/docs/archive/legacy-plans/AUTH-SMOKE.generated.md`
 - Se houver `failed` no smoke autenticado: **deploy bloqueado** até correção
 
 ---
@@ -244,7 +244,7 @@ npm install -g wrangler@latest && wrangler --version
 ## 19. Documentação Pós-Deploy
 
 Após CADA deploy, atualizar **na mesma sessão**:
-1. `docs/CHANGELOG.md` — entry com data + mudanças
+1. `.claude/docs/CHANGELOG.md` — entry com data + mudanças
 2. Arquivo relevante — backend→`BACKEND.md`, migration→schema docs
 3. Este arquivo — se regras mudaram
 

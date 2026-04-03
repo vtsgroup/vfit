@@ -1,6 +1,6 @@
 # CLAUDE.md — VFIT
 
-> **v1.0.2** · SaaS para Personal Trainers · 02/04/2026
+> **v1.1.0** · SaaS para Personal Trainers · 03/04/2026
 > Usuários: `personal` (treinador), `student` (aluno), `admin`.
 > Planos: `trial` | `pro` | `max`. Versão: `lib/version.ts` / `package.json`.
 
@@ -13,23 +13,22 @@
 | Arquivo | Conteúdo |
 |---------|----------|
 | `.claude/docs/RULES.md` | **19 regras críticas — NÃO VIOLAR** |
-| `.claude/docs/STACK.md` | Stack, URLs, credenciais, mapa rápido do projeto |
+| `.claude/docs/STACK.md` | Stack, URLs, credenciais, infra CF, mapa rápido |
 | `.claude/docs/CONVENTIONS.md` | Imports, TypeScript, CSS/Tailwind v4, auth guard |
-| `.claude/docs/DEPLOY.md` | Deploy pipeline, WhatsApp operacional, smoke auth |
-| `.claude/docs/DESIGN-SYSTEM.md` | Cores WCAG, Button, DSIcon, tokens CSS |
-| `.claude/docs/BACKEND-MAP.md` | Endpoints, schemas, DB helpers |
-| `.claude/docs/MIGRATION-CONTEXT.md` | Migração personal-ia → vfit (02/04/2026) |
+| `.claude/docs/DEPLOY.md` | Deploy pipeline, CF operations, WhatsApp, smoke auth |
+| `.claude/docs/DESIGN-SYSTEM.md` | Cores WCAG, contrastes, Button, DSIcon, tokens CSS |
+| `.claude/docs/BACKEND.md` | Todos os ~150 endpoints + schemas + DB helpers |
+| `.claude/docs/CHANGELOG.md` | Histórico de deploys e mudanças |
 
 ## 📚 Docs Detalhados (referência expandida)
 
 | Doc | Conteúdo |
 |-----|----------|
-| `docs/BACKEND.md` | Todos os ~150 endpoints completos |
-| `docs/ASAAS-INTEGRATION.md` | API de pagamentos Asaas |
-| `docs/INFRAESTRUTURA-CF.md` | Bindings Cloudflare completos |
-| `docs/WHATSAPP-GATEWAY.md` | Gateway WhatsApp completo |
-| `docs/DESIGN-SYSTEM-COLORS.md` | Paleta completa com contrastes |
-| `docs/INDEX.md` | Índice de toda documentação |
+| `.claude/docs/ASAAS-INTEGRATION.md` | API de pagamentos Asaas |
+| `.claude/docs/WHATSAPP-GATEWAY.md` | Gateway WhatsApp completo |
+| `.claude/docs/TWA-DOCUMENTATION.md` | TWA: keystore, SHA-256, Play Store |
+| `.claude/docs/MEDIA-STRATEGY.md` | R2 vs Stream vs Images vs Pages |
+| `.claude/docs/PWA-MEGA-PLAN.md` | Service Worker, manifest, offline |
 
 ## 🎯 Prioridades
 

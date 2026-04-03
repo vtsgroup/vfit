@@ -16,7 +16,7 @@
  *   4. CONVENTIONS.md
  *   5. DEPLOY.md
  *   6. DESIGN-SYSTEM.md
- *   7. BACKEND-MAP.md
+ *   7. BACKEND.md (includes backend map)
  */
 
 import { readFileSync, writeFileSync, existsSync } from 'fs';
@@ -37,7 +37,6 @@ const FILES_ORDER = [
   'CONVENTIONS.md',
   'DEPLOY.md',
   'DESIGN-SYSTEM.md',
-  'BACKEND-MAP.md',
 ];
 
 const HEADER = `# VFIT — Copilot Instructions

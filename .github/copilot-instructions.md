@@ -66,7 +66,7 @@
 ### Checklist Antes de Modelos Premium
 
 - "Qual arquivo / componente exato?"
-- "A resposta já está em `docs/`?"
+- "A resposta já está em `.claude/docs/`?"
 - "GPT-5 mini já tentou e falhou?"
 - "O erro tem stack trace legível?"
 
@@ -195,7 +195,7 @@ type Role = 'user' | 'admin' | 'super_admin'       // user.role
 
 - Para qualquer bloco de QA final, go/no-go ou preparação de deploy: executar `npm run smoke:auth:local`
 - `SMOKE_PERSONAL_TOKEN` + `SMOKE_STUDENT_TOKEN` devem estar válidos no `.env.local`
-- Evidência obrigatória em `docs/ULTRA-PLANO-MVP-PRODUCAO/AUTH-SMOKE.generated.md`
+- Evidência obrigatória em `.claude/docs/archive/legacy-plans/AUTH-SMOKE.generated.md`
 - Se houver `failed` no smoke autenticado: **deploy bloqueado** até correção
 
 ---
@@ -332,7 +332,7 @@ npm install -g wrangler@latest && wrangler --version
 ## 19. Documentação Pós-Deploy
 
 Após CADA deploy, atualizar **na mesma sessão**:
-1. `docs/CHANGELOG.md` — entry com data + mudanças
+1. `.claude/docs/CHANGELOG.md` — entry com data + mudanças
 2. Arquivo relevante — backend→`BACKEND.md`, migration→schema docs
 3. Este arquivo — se regras mudaram
 
@@ -401,10 +401,10 @@ Após CADA deploy, atualizar **na mesma sessão**:
 | Onde está o deploy script? | `scripts/cf-deploy.js` → `npm run cf:deploy` |
 | Onde estão os testes? | `tests/` (133 unit tests, Vitest) |
 | Onde está o manifest PWA? | `public/manifest.json` + `public/sw.js` |
-| Onde está o TWA? | `twa/` (build pipeline, keystore, scripts) · `docs/TWA-DOCUMENTATION.md` |
+| Onde está o TWA? | `twa/` (build pipeline, keystore, scripts) · `.claude/docs/TWA-DOCUMENTATION.md` |
 | Onde está o assetlinks? | `public/.well-known/assetlinks.json` |
 | Onde estão as constantes? | `config/constants.ts` (PLANS, FEES, BADGES, RATE_LIMITS, CACHE_TTL) |
-| Onde está a estratégia de mídia? | `docs/MEDIA-STRATEGY.md` |
+| Onde está a estratégia de mídia? | `.claude/docs/MEDIA-STRATEGY.md` |
 
 ---
 
@@ -465,7 +465,7 @@ lib/                        # Código compartilhado worker (db, email, cache)
 config/                     # Constantes, planos, equipamentos
 scripts/                    # Scripts operacionais (deploy, migrações)
 migrations/                 # SQL migrations (hyperdrive/ + d1/)
-docs/                       # Documentação detalhada
+.claude/docs/               # Documentação detalhada
 ```
 
 ---
@@ -485,7 +485,7 @@ docs/                       # Documentação detalhada
 
 **O que NÃO mudou:** Domínios (`iapersonal.app.br`), Neon DB, CF Account, funcionalidades.
 
-> Ver `.claude/docs/MIGRATION-CONTEXT.md` para detalhes completos.
+> Migração concluída. Detalhes históricos em `.claude/docs/archive/`.
 
 ---
 
@@ -493,17 +493,248 @@ docs/                       # Documentação detalhada
 
 | Doc | Conteúdo |
 |-----|----------|
-| `docs/BACKEND.md` | Todos os ~150 endpoints, tabelas de rotas completas |
-| `docs/DESIGN-SYSTEM-COLORS.md` | Paleta completa, contrastes WCAG |
-| `docs/ASAAS-INTEGRATION.md` | API Asaas completa, webhooks |
-| `docs/INFRAESTRUTURA-CF.md` | Bindings, secrets, IDs CF completos |
-| `docs/CF-OPERATIONS.md` | Deploy, backup, scripts |
-| `docs/MEDIA-STRATEGY.md` | R2 vs Stream vs Images vs Pages |
-| `docs/PWA-MEGA-PLAN.md` | Service Worker, manifest, offline |
-| `docs/TWA-DOCUMENTATION.md` | TWA completo: keystore, SHA-256, Play Store |
-| `docs/CHANGELOG.md` | Histórico de deploys e mudanças |
-| `docs/WHATSAPP-GATEWAY.md` | Gateway WhatsApp completo |
-| `docs/INDEX.md` | Índice completo de toda documentação |
+| `.claude/docs/BACKEND.md` | Todos os ~150 endpoints, tabelas de rotas completas |
+| `.claude/docs/DESIGN-SYSTEM.md` | Paleta completa, contrastes WCAG, componentes |
+| `.claude/docs/ASAAS-INTEGRATION.md` | API Asaas completa, webhooks |
+| `.claude/docs/STACK.md` | Bindings, secrets, IDs CF, infraestrutura |
+| `.claude/docs/DEPLOY.md` | Deploy, backup, scripts, operações |
+| `.claude/docs/MEDIA-STRATEGY.md` | R2 vs Stream vs Images vs Pages |
+| `.claude/docs/PWA-MEGA-PLAN.md` | Service Worker, manifest, offline |
+| `.claude/docs/TWA-DOCUMENTATION.md` | TWA completo: keystore, SHA-256, Play Store |
+| `.claude/docs/CHANGELOG.md` | Histórico de deploys e mudanças |
+| `.claude/docs/WHATSAPP-GATEWAY.md` | Gateway WhatsApp completo |
+| `.claude/docs/INDEX.md` | Índice completo de toda documentação |
+# 🔑 INFRAESTRUTURA CLOUDFLARE - IDs & Recursos
+
+> ⚠️ Este arquivo contém IDs de produção. NÃO commitar secrets/tokens.
+> Última atualização: 2026-02-22
+
+---
+
+## 📋 Conta Cloudflare
+
+| Campo | Valor |
+|-------|-------|
+| **Account Name** | victor.pt @ vts dev |
+| **Account ID** | `b0bf95d0fabb322ac3df37bd84ec0c77` |
+| **Email** | vts@victor.pt |
+| **Auth Method** | OAuth Token (via `wrangler login`) |
+
+---
+
+## 🗄️ D1 Database (Cold Data)
+
+| Campo | Valor |
+|-------|-------|
+| **Name** | `vfiti-exercises` |
+| **Database ID** | `988c03d5-bf9a-4394-b65a-adebbe0b87e4` |
+| **Region** | ENAM (Eastern North America) |
+| **Binding** | `DB` |
+| **Uso** | Exercise library, templates, muscle groups, series types |
+
+---
+
+## 📦 KV Namespaces
+
+### KV_CACHE (Cache geral)
+| Campo | Valor |
+|-------|-------|
+| **Title** | `KV_CACHE` |
+| **ID** | `e7147f8855184a4a8f72307756596df4` |
+| **Binding** | `KV_CACHE` |
+| **Uso** | Cache de dados, profiles, exercises |
+
+### KV_SESSIONS (Sessões de auth)
+| Campo | Valor |
+|-------|-------|
+| **Title** | `KV_SESSIONS` |
+| **ID** | `91d34b6725564de39e8ed891e742e76d` |
+| **Binding** | `KV_SESSIONS` |
+| **Uso** | JWT sessions, refresh tokens, TTL 24h |
+
+### KV_RATE_LIMIT (Rate limiting)
+| Campo | Valor |
+|-------|-------|
+| **Title** | `KV_RATE_LIMIT` |
+| **ID** | `d94c62b1e8f248a6bd1ea6a11e18f09c` |
+| **Binding** | `KV_RATE_LIMIT` |
+| **Uso** | Contadores de rate limit por IP/rota |
+
+---
+
+## 🪣 R2 Buckets
+
+### R2_VIDEOS
+| Campo | Valor |
+|-------|-------|
+| **Bucket Name** | `personal-ia-videos` |
+| **Binding** | `R2_VIDEOS` |
+| **Custom Domain** | `videos.iapersonal.app.br` |
+| **Storage Class** | Standard |
+| **Uso** | Vídeos de exercícios (vertical 9:16 + horizontal 16:9) |
+
+### R2_IMAGES
+| Campo | Valor |
+|-------|-------|
+| **Bucket Name** | `personal-ia-images` |
+| **Binding** | `R2_IMAGES` |
+| **Custom Domain** | `images.iapersonal.app.br` |
+| **Storage Class** | Standard |
+| **Uso** | Fotos de avaliações, profile photos, logos, PDFs |
+
+---
+
+## 📮 Queues (a criar quando deploy do Worker)
+
+| Queue | Binding | Uso |
+|-------|---------|-----|
+| `vfiti-email-sender` | `EMAIL_QUEUE` | Envio de emails |
+| `vfiti-video-encoder` | `VIDEO_ENCODE_QUEUE` | Encoding de vídeos |
+| `vfiti-pdf-generator` | `PDF_QUEUE` | Geração de PDFs |
+| `vfiti-ai-batch` | `AI_QUEUE` | Batch de requests IA |
+
+> ⚠️ Queues são criados automaticamente no primeiro deploy do Worker.
+
+---
+
+## 🔗 Hyperdrive
+
+| Campo | Valor |
+|-------|-------|
+| **Name** | `vfiti-db` |
+| **Binding** | `HYPERDRIVE` |
+| **Connection** | PostgreSQL via Neon |
+| **Status** | ⚠️ **Configurado mas BYPASSED** |
+| **Motivo** | `neon()` HTTP driver é incompatível com Hyperdrive TCP (causa HTTP 530 error 1016) |
+| **Solução atual** | `lib/db.ts` usa `NEON_DATABASE_URL` diretamente (HTTP) |
+| **Solução futura** | Migrar de `neon()` para `Pool` de `@neondatabase/serverless` (suporta TCP) |
+
+> ⚠️ Hyperdrive está comentado no `wrangler.toml`. Reativar somente após migrar para `Pool`.
+
+---
+
+## 📊 Analytics Engine
+
+| Campo | Valor |
+|-------|-------|
+| **Binding** | `ANALYTICS` |
+| **Uso** | Tracking de eventos (AI usage, payments, workouts) |
+
+> Auto-criado no primeiro deploy do Worker.
+
+---
+
+## 🔐 Secrets (todos ✅ configurados via `wrangler secret put`)
+
+| Secret | Status | Descrição |
+|--------|--------|-----------|
+| `JWT_SECRET` | ✅ Configurado | Chave para assinar JWT access tokens (HMAC-SHA256) |
+| `JWT_REFRESH_SECRET` | ✅ Configurado | Chave para refresh tokens |
+| `NEON_DATABASE_URL` | ✅ Configurado | Connection string PostgreSQL Neon (sa-east-1) |
+| `ASAAS_API_KEY` | ✅ **Produção** | API key Asaas (prefixo `$aact_` = produção, `$aact_hmlg_` = sandbox) |
+| `ASAAS_WEBHOOK_TOKEN` | ✅ Configurado | Token forte (64 hex chars) para validar webhooks |
+| `STRIPE_SECRET_KEY` | ✅ Configurado | Gateway de pagamento secundário |
+| `REPLICATE_API_TOKEN` | ✅ Configurado | Token da API Replicate (IA) |
+| `RESEND_API_KEY` | ✅ Configurado | Email transacional via Resend |
+| `ONESIGNAL_APP_ID` | ✅ Configurado | `3043de4e-d7aa-4fa1-a61b-5abea28d2f47` |
+| `ONESIGNAL_REST_API_KEY` | ✅ Configurado | REST API key OneSignal (push) |
+| `TURNSTILE_SECRET_KEY` | ✅ **Produção** | Cloudflare Turnstile captcha (bypass REMOVIDO 14/02/2026) |
+| `GOOGLE_CLIENT_ID` | ✅ Configurado | OAuth Google |
+| `GOOGLE_CLIENT_SECRET` | ✅ Configurado | OAuth Google |
+
+> ℹ️ Total: **13 secrets** configurados. Facebook OAuth removido (não implementado).
+
+---
+
+## 🌐 Domínios
+
+| Domínio | Serviço | Status |
+|---------|---------|--------|
+| `iapersonal.app.br` | Cloudflare Pages (frontend) | ✅ Ativo |
+| `vfit.pages.dev` | Cloudflare Pages (fallback) | ✅ Ativo |
+| `vfiti-api.vd-b0b.workers.dev` | Cloudflare Workers (backend fallback) | ✅ Ativo |
+| `api.iapersonal.app.br` | Custom domain Workers (backend) | ✅ Ativo |
+| `videos.iapersonal.app.br` | R2 Public Access (vídeos) | ⬜ Pendente |
+| `images.iapersonal.app.br` | R2 Public Access (imagens) | ⬜ Pendente |
+| `stream.iapersonal.app.br` | CF Stream (video adaptive) | ⬜ Futuro (Sprint E) |
+
+---
+
+## 📹 Cloudflare Stream (Futuro — Sprint E)
+
+| Campo | Valor |
+|-------|-------|
+| **Status** | ⬜ A configurar |
+| **Uso** | Vídeos de exercícios >30s com adaptive bitrate (HLS/DASH) |
+| **Pricing** | $5/1000 min storage + $1/1000 min viewed |
+| **Setup** | Dashboard > Stream > Enable + criar API token |
+| **Secret** | `CF_STREAM_API_TOKEN` (a criar) |
+
+> Vídeos curtos (≤30s, ≤10MB) ficam em R2. Stream só para vídeos longos que precisam de qualidade adaptativa.
+
+---
+
+## 🖼️ Cloudflare Image Resizing (Futuro)
+
+| Campo | Valor |
+|-------|-------|
+| **Status** | ⬜ A habilitar |
+| **Uso** | Otimização on-the-fly de imagens R2 (resize, WebP/AVIF) |
+| **URL Pattern** | `images.iapersonal.app.br/cdn-cgi/image/width=300,quality=80/path/to/image.jpg` |
+| **Pricing** | $0.50/1000 transformations únicas |
+| **Setup** | Dashboard > Speed > Optimization > Image Resizing > Enable |
+
+> Estratégia completa: ver `.claude/docs/MEDIA-STRATEGY.md`
+
+---
+
+## 📝 Comandos Úteis
+
+### Revogar token Wrangler sem exposição
+
+> Procedimento padrão quando houver suspeita de vazamento de credencial.
+
+```bash
+# 1) Encerrar sessão local (pode retornar erro se já estiver deslogado)
+npx wrangler logout || true
+
+# 2) Apagar credencial local antiga
+rm -f ~/.wrangler/config/default.toml
+
+# 3) Fazer login novamente (manual, via browser OAuth)
+npx wrangler login
+
+# 4) Validar autenticação sem imprimir token
+npx wrangler whoami
+```
+
+Regras rápidas:
+- Nunca usar `cat ~/.wrangler/config/default.toml` em terminal/log compartilhado.
+- Nunca exportar token (`export CF_TOKEN=...`) em shell persistente.
+- Nunca logar header `Authorization`.
+
+```bash
+# Verificar conta
+npx wrangler whoami
+
+# Listar recursos
+npx wrangler d1 list
+npx wrangler kv namespace list
+npx wrangler r2 bucket list
+
+# Aplicar migrations D1
+npx wrangler d1 execute vfiti-exercises --remote --file=migrations/d1/0001_initial_schema.sql
+
+# Criar Hyperdrive (quando tiver Neon)
+npx wrangler hyperdrive create vfiti-db --connection-string="$NEON_DATABASE_URL"
+
+# Configurar secrets
+npx wrangler secret put JWT_SECRET
+npx wrangler secret put REPLICATE_API_TOKEN
+
+# Deploy
+npx wrangler deploy
+```
 
 ---
 
@@ -631,7 +862,7 @@ return useQuery({
 
 **❌ NUNCA:**
 - Re-ler arquivos já lidos na conversa — o contexto persiste
-- Re-explorar o projeto — `docs/` tem tudo documentado
+- Re-explorar o projeto — `.claude/docs/` tem tudo documentado
 - `semantic_search` amplo — use `grep_search` com regex preciso
 - Ler arquivo inteiro — use `startLine` / `endLine`
 - Edições sequenciais uma a uma — agrupe com `multi_replace_string_in_file`
@@ -639,7 +870,7 @@ return useQuery({
 **✅ SEMPRE:**
 - Reutilizar contexto da conversa antes de qualquer tool call
 - Confirmar escopo exato antes de abrir múltiplos arquivos
-- Referenciar `docs/` sem re-ler
+- Referenciar `.claude/docs/` sem re-ler
 
 ---
 
@@ -710,14 +941,14 @@ npx wrangler tail --format=pretty
 
 - Para qualquer QA final ou go/no-go: executar `npm run smoke:auth:local`
 - `SMOKE_PERSONAL_TOKEN` + `SMOKE_STUDENT_TOKEN` devem estar válidos no `.env.local`
-- Evidência em `docs/ULTRA-PLANO-MVP-PRODUCAO/AUTH-SMOKE.generated.md`
+- Evidência em `.claude/docs/archive/legacy-plans/AUTH-SMOKE.generated.md`
 - Se houver `failed`: **deploy bloqueado** até correção
 
 ---
 
 ## WhatsApp Operacional — REGRA OBRIGATÓRIA
 
-> **Documentação completa:** `docs/WHATSAPP-GATEWAY.md`
+> **Documentação completa:** `.claude/docs/WHATSAPP-GATEWAY.md`
 
 ### Quando enviar (escopo)
 
@@ -795,9 +1026,357 @@ WHATSAPP_NOTIFY_TOKEN=<ADMIN_AUTH_TOKEN>
 
 Após CADA deploy, atualizar **na mesma sessão**:
 
-1. `docs/CHANGELOG.md` — entry com data + mudanças
-2. Arquivo relevante (backend→`BACKEND.md`, migration→schema docs)
+1. `.claude/docs/CHANGELOG.md` — entry com data + mudanças
+2. Arquivo relevante (backend→`.claude/docs/BACKEND.md`, migration→schema docs)
 3. `.claude/docs/RULES.md` — se regras mudaram
+# Operações Cloudflare — VFIT
+
+> Guia de comandos para backup, deploy e manutenção do ambiente Cloudflare.
+> Atualizado em 26/02/2026
+
+---
+
+## 📋 Comandos Disponíveis
+
+| Comando | Descrição |
+|---------|-----------|
+| `npm run cf:backup` | Backup de D1, KV e migrations |
+| `npm run cf:deploy` | Deploy completo (patch: 1.0.0 → 1.0.1) |
+| `npm run cf:deploy:minor` | Deploy com bump minor (1.0.0 → 1.1.0) |
+| `npm run cf:deploy:major` | Deploy com bump major (1.0.0 → 2.0.0) |
+| `npm run cf:deploy:dry` | Dry-run — simula deploy sem executar |
+| `npm run cf:pages` | Deploy somente Pages (sem versão) |
+| `npm run wrangler:deploy` | Deploy somente Workers |
+| `npm run db:migrate:d1` | Aplicar migrations D1 |
+| `npm run ops:slo:baseline` | Gerar baseline SLO/SLA inicial |
+| `npm run ops:load:baseline` | Executar baseline de carga (cenários públicos) |
+| `npm run ops:neon:drill` | Gerar runbook/evidência de backup+restore Neon |
+| `npm run ops:web:audit` | Auditoria de headers e postura web de segurança |
+
+---
+
+## 🗂️ cf:backup
+
+Faz backup dos dados do Cloudflare para o diretório local `backups/`.
+
+### O que é salvo
+
+| Recurso | Formato | Detalhes |
+|---------|---------|----------|
+| **D1 Database** | JSON por tabela | Tabelas de aplicação detectadas dinamicamente no D1 remoto |
+| **D1 Schema** | SQL | DDL completo (`_schema.sql`) |
+| **KV Keys** | JSON | Lista de chaves de cada namespace |
+| **Migrations** | SQL | Cópia dos arquivos `migrations/d1/` e `migrations/hyperdrive/` |
+| **Metadados** | JSON | Versão, timestamp, IDs dos recursos |
+
+### Uso
+
+```bash
+npm run cf:backup
+```
+
+> Observação: o backup D1 usa `--remote` para consultar o banco Cloudflare remoto.
+
+### Estrutura de saída
+
+```
+backups/
+└── 2025-02-07T14-30-00/
+    ├── backup-meta.json
+    ├── d1/
+    │   ├── _schema.sql
+    │   ├── muscle_groups.json
+    │   ├── exercises.json
+    │   ├── workout_templates.json
+    │   ├── series_types.json
+    │   └── equipment_types.json
+    ├── kv/
+    │   ├── KV_CACHE_keys.json
+    │   ├── KV_SESSIONS_keys.json
+    │   └── KV_RATE_LIMIT_keys.json
+    └── migrations/
+        ├── d1/
+        └── hyperdrive/
+```
+
+### Recursos Cloudflare
+
+| Recurso | Nome / ID |
+|---------|-----------|
+| D1 Database | `vfiti-exercises` — `988c03d5-bf9a-4394-b65a-adebbe0b87e4` |
+| KV Cache | `e7147f8855184a4a8f72307756596df4` |
+| KV Sessions | `91d34b6725564de39e8ed891e742e76d` |
+| KV Rate Limit | `d94c62b1e8f248a6bd1ea6a11e18f09c` |
+| R2 Videos | `personal-ia-videos` |
+| R2 Images | `personal-ia-images` |
+
+---
+
+## 📈 Baseline Operacional (S97-S98)
+
+Conjunto de comandos para gerar evidências de monitoramento, performance e continuidade.
+
+### Execução rápida
+
+```bash
+npm run ops:slo:baseline
+npm run ops:load:baseline
+npm run ops:neon:drill
+npm run ops:web:audit
+```
+
+### Artefatos gerados
+
+- `.claude/docs/archive/legacy-plans/SLO-SLA-BASELINE.generated.md`
+- `.claude/docs/archive/legacy-plans/LOAD-TEST-BASELINE.generated.md`
+- `.claude/docs/archive/legacy-plans/NEON-BACKUP-RESTORE-DRILL.generated.md`
+- `.claude/docs/archive/legacy-plans/WEB-SECURITY-AUDIT.generated.md`
+
+### Interpretação operacional mínima
+
+- `ops:slo:baseline`: define metas iniciais e error budget para API/Auth/Payments.
+- `ops:load:baseline`: estabelece referência p50/p95/p99 para comparação futura.
+- `ops:neon:drill`: formaliza trilha de restore com critérios de aceite (RTO/RPO).
+- `ops:web:audit`: valida headers críticos (CSP, HSTS, CORS e hardening).
+
+---
+
+## 👁️ Observabilidade (S97-R2)
+
+### Sentry — variáveis mínimas
+
+Frontend (`.env.local`):
+
+```bash
+NEXT_PUBLIC_SENTRY_DSN=<dsn-frontend>
+NEXT_PUBLIC_SENTRY_ENVIRONMENT=production
+NEXT_PUBLIC_SENTRY_RELEASE=<version>
+NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE=0
+```
+
+Worker (secret manager):
+
+```bash
+echo "<dsn-worker>" | npx wrangler secret put SENTRY_DSN_WORKER --env=""
+echo "production" | npx wrangler secret put SENTRY_ENVIRONMENT --env=""
+echo "<version>" | npx wrangler secret put SENTRY_RELEASE --env=""
+echo "0" | npx wrangler secret put SENTRY_TRACES_SAMPLE_RATE --env=""
+```
+
+### Uptime monitor externo (runbook curto)
+
+Monitores mínimos recomendados:
+
+1. `https://api.iapersonal.app.br/health` (intervalo 1 min)
+2. `https://iapersonal.app.br` (intervalo 1 min)
+
+Alertas:
+
+- Trigger: 2 falhas consecutivas
+- Canal: email operacional + grupo técnico
+- Escalonamento P0: indisponibilidade > 5 min
+
+---
+
+## 🚀 cf:deploy
+
+Pipeline completo de deploy que executa em sequência:
+
+```
+Bump Versão → Update Files → Type Check → Lint → Build → Deploy Pages → Deploy Workers → Git Tag
+```
+
+### Uso
+
+```bash
+# Deploy padrão (patch: 1.0.0 → 1.0.1)
+npm run cf:deploy
+
+# Deploy minor (1.0.0 → 1.1.0)
+npm run cf:deploy:minor
+
+# Deploy major (1.0.0 → 2.0.0)
+npm run cf:deploy:major
+
+# Dry-run (simula tudo sem executar)
+npm run cf:deploy:dry
+```
+
+### Opções avançadas (via node direto)
+
+```bash
+# Deploy somente Pages (sem Workers)
+node scripts/cf-deploy.js patch --skip-workers
+
+# Deploy somente Workers (sem Pages)
+node scripts/cf-deploy.js minor --skip-pages
+
+# Dry-run major
+node scripts/cf-deploy.js major --dry-run
+
+# Deploy (inclui WhatsApp gateway worker)
+node scripts/cf-deploy.js patch --include-whatsapp
+```
+
+### Notificações automáticas no WhatsApp (deploy pipeline)
+
+Quando configurado, o deploy pipeline envia mensagens `start/end` via gateway.
+
+Variáveis de ambiente (local/CI):
+
+- `WHATSAPP_NOTIFY_URL` (ex.: https://whatsapp.iapersonal.app.br/task-notify)
+- `WHATSAPP_NOTIFY_TOKEN` (Bearer = `ADMIN_AUTH_TOKEN` do gateway)
+- `WHATSAPP_GROUP_NAME` (opcional; fallback)
+- `WHATSAPP_LINK_URL` (opcional; ex.: https://iapersonal.app.br)
+- `WHATSAPP_ACTOR_LABEL` (opcional)
+
+Regras obrigatórias do formato estão em: `.claude/docs/WHATSAPP-GATEWAY.md`
+
+### Pipeline detalhado
+
+| Etapa | Comando | Obrigatório |
+|-------|---------|-------------|
+| 1. Bump versão | `npm version {type}` | ✅ |
+| 2. Update version files | `update-version.js` → `manifest.json` + `lib/version.ts` | ✅ |
+| 3. Type check | `tsc --noEmit` | ✅ |
+| 4. Lint | `eslint src/` | ⚠️ Opcional |
+| 5. Build | `next build` | ✅ |
+| 6. Deploy Pages | `wrangler pages deploy` → `vfit` | ✅* |
+| 7. Deploy Workers | `wrangler deploy` | ⚠️ Opcional |
+| 8. Git tag | `git tag v{version}` + commit | ⚠️ Opcional |
+
+\* Pode ser pulado com `--skip-pages`
+
+### Versionamento
+
+O sistema usa [SemVer](https://semver.org/):
+
+- **Patch** (1.0.**X**): Bug fixes, ajustes pequenos
+- **Minor** (1.**X**.0): Novas features, melhorias
+- **Major** (**X**.0.0): Breaking changes, redesigns
+
+Arquivos atualizados automaticamente a cada deploy:
+- `package.json` → campo `version`
+- `public/manifest.json` → campo `version` (PWA)
+- `lib/version.ts` → constantes `APP_VERSION`, `BUILD_DATE`, `BUILD_NUMBER`
+
+---
+
+## 🔄 Fluxo recomendado
+
+### Deploy de rotina (bug fixes)
+
+```bash
+npm run cf:backup      # Backup antes
+npm run cf:deploy      # Patch automático
+git push --follow-tags # Push com tags
+```
+
+### Deploy de feature
+
+```bash
+npm run cf:backup
+npm run cf:deploy:minor
+git push --follow-tags
+```
+
+### Antes de mudanças no banco
+
+```bash
+npm run cf:backup                    # Backup OBRIGATÓRIO
+npm run db:migrate:d1                # Aplicar migration
+npm run cf:deploy:minor              # Deploy
+```
+
+---
+
+## 🏗️ Infraestrutura
+
+### Pages (Frontend)
+- **Projeto**: `vfit`
+- **URL**: https://vfit.pages.dev
+- **Branch**: `main`
+- **Output**: `out/` (Next.js static export)
+
+### Workers (Backend API)
+- **Nome**: `vfiti-api` (definido no `wrangler.toml`)
+- **URL**: https://api.iapersonal.app.br
+- **Bindings ativos**: D1, KV×3, R2×2, Analytics Engine
+- **Bindings inativos**: Hyperdrive (bypassed — neon() HTTP incompatível com TCP), Queues×4, Crons×4 (free plan)
+
+### Conta Cloudflare
+- **Account ID**: `b0bf95d0fabb322ac3df37bd84ec0c77`
+- **Email**: `vts@victor.pt`
+
+---
+
+## ⚠️ Troubleshooting
+
+### "Wrangler not authenticated"
+```bash
+npx wrangler login
+```
+
+### Revogar token Wrangler com segurança (sem expor)
+
+> Use este fluxo sempre que houver suspeita de exposição de credencial.
+
+1. **Encerrar sessão local atual**
+```bash
+npx wrangler logout
+```
+
+2. **Revogar sessão/token no painel Cloudflare**
+- Cloudflare Dashboard → Profile → **API Tokens / Connected Applications**
+- Revogue a sessão/token relacionado ao Wrangler CLI
+
+3. **Limpar credenciais locais antigas**
+```bash
+rm -f ~/.wrangler/config/default.toml
+```
+
+4. **Autenticar novamente com OAuth**
+```bash
+npx wrangler login
+```
+
+5. **Validar sem imprimir token**
+```bash
+npx wrangler whoami
+```
+
+#### Regras operacionais para não vazar token
+
+- **Nunca** usar `cat ~/.wrangler/config/default.toml` em terminal compartilhado/gravado.
+- **Nunca** exportar token em variável shell (`export CF_TOKEN=...`).
+- **Nunca** registrar header `Authorization` em logs.
+- Preferir comandos do Wrangler já autenticado (sem manipular token manualmente).
+- Se precisar automação por API, usar token de curta duração e revogar ao final.
+
+### Build falha no type-check
+```bash
+npm run type-check    # Ver erros
+# Corrigir e tentar novamente
+npm run cf:deploy
+```
+
+### Deploy Pages falha
+```bash
+# Verificar se o projeto existe
+npx wrangler pages project list
+
+# Deploy manual
+npm run build
+npm run cf:pages
+```
+
+### Restaurar backup D1
+```bash
+# Usar o arquivo SQL do schema
+npx wrangler d1 execute vfiti-exercises --file=backups/<timestamp>/d1/_schema.sql
+
+# Importar dados (precisa converter JSON → INSERT statements)
+```
 
 ---
 
@@ -947,125 +1526,494 @@ Componente wrapper que centraliza todos os ícones. Nunca importar lucide/heroic
 ## Doc Detalhado
 
 Para paleta completa, contrastes exaustivos e regras de manutenção:
-→ `docs/DESIGN-SYSTEM-COLORS.md`
+→ Ver seção "Cores & Contraste" abaixo (merged)
 
 Para design system v3 spec:
-→ `docs/design-system/vfit-design-system-v3-docs.md`
+→ `.claude/docs/design-system/vfit-design-system-v3-docs.md`
+# 🎨 Design System — Cores & Contraste (Data-Driven)
+
+> **v3.0** · Atualizado em 18/03/2026 · Auditado via WCAG 2.1 contrast ratio
+> **Fonte**: `src/app/globals.css` + `src/components/ui/button.tsx` + `src/components/ui/avatar-plan-badge.tsx`
+> **Referência rápida** para criar combinações perfeitas e manter consistência visual.
 
 ---
 
-# Backend Map — VFIT
+## 📐 Padrões WCAG 2.1
 
-> Resumo dos endpoints e schemas. Para referência completa, ver `docs/BACKEND.md`.
+| Nível | Ratio mínimo | Uso |
+|-------|:------------:|-----|
+| **AAA** ✅ | ≥ 7.0:1 | Texto body · máxima legibilidade |
+| **AA** ✅ | ≥ 4.5:1 | Texto normal · mínimo aceitável |
+| **AA-lg** ⚠️ | ≥ 3.0:1 | Texto ≥18px bold ou ≥24px · ícones · bordas UI |
+| **FAIL** ❌ | < 3.0:1 | Não usar para texto · apenas decoração |
+
+> **Regra do projeto**: Texto body → mínimo AA (4.5:1). Títulos grandes/ícones → mínimo AA-lg (3.0:1). Botões com bg colorido → texto no botão mínimo AA (4.5:1).
 
 ---
 
-## Arquitetura
+## 🌙 Paleta Completa
+
+### Backgrounds
+
+| Token | Light | Dark | Uso |
+|-------|-------|------|-----|
+| `bg-primary` | `#ffffff` | `#050A12` | Fundo principal da página |
+| `bg-secondary` | `#F8FAFB` | `#0B1221` | Cards, seções alternadas |
+| `bg-tertiary` | `#F1F4F6` | `#111B2E` | Inputs, áreas recuadas |
+| `bg-page` | `#F5F7FA` | `#050A12` | Área de conteúdo (alias) |
+| `bg-elevated` | — | `#080E1A` | Camada elevada (modais, popovers) |
+| `bg-surface-1` | — | `#0B1221` | Superfície nível 1 |
+| `bg-surface-2` | — | `#111B2E` | Superfície nível 2 |
+| `bg-surface-3` | — | `#182640` | Superfície nível 3 (mais clara) |
+| `kpi-dark` | `#F8FAFC` | `#0E1525` | Cards KPI hero |
+
+### Textos
+
+| Token | Light | Dark | vs bg-primary Light | vs bg-primary Dark |
+|-------|-------|------|:-------------------:|:------------------:|
+| `text-primary` | `#0F172A` | `#F0F4F8` | **17.85:1** AAA ✅ | **17.95:1** AAA ✅ |
+| `text-secondary` | `#475569` | `#94A3B8` | **7.58:1** AAA ✅ | **7.74:1** AAA ✅ |
+| `text-muted` | `#94A3B8` | `#64748B` | **2.56:1** FAIL ❌ | **4.17:1** AA-lg ⚠️ |
+
+> ⚠️ **`text-muted` em light mode** tem apenas 2.56:1 — usar **apenas** para texto decorativo, placeholders, captions ≥14px. NUNCA para texto informativo crítico.
+
+### Brand
+
+| Token | Hex | vs Dark bg | vs Light bg | Uso |
+|-------|-----|:----------:|:-----------:|-----|
+| `brand-primary` | `#22C55E` | **8.71:1** AAA ✅ | **2.28:1** FAIL ❌ | Botão CTA, ícones, badges |
+| `brand-primary-hover` | `#4ADE80` | — | — | Hover do brand-primary |
+| `brand-accent` | `#84CC16` | **10.07:1** AAA ✅ | — | Destaque secundário |
+| `brand-mint` | `#86EFAC` | **14.17:1** AAA ✅ | — | Gradientes, glow |
+| `brand-deep` | `#166534` | — | — | Shadow 3D do primary |
+| `brand-glow` | `rgba(34,197,94,0.30)` | — | — | Glow effects |
+
+> ⚠️ **`brand-primary` em light mode** tem apenas 2.28:1 vs branco — funciona como **cor de superfície** (botão) mas **NÃO** como texto sobre fundo branco. Para texto verde em light mode, use `brand-deep` (#166534, 8.04:1 vs branco).
+
+### Status
+
+| Token | Hex | on Dark bg | on Light bg | Texto branco sobre | Nota |
+|-------|-----|:----------:|:-----------:|:------------------:|------|
+| `success` | `#10B981` | **7.82:1** AAA ✅ | **2.54:1** FAIL ❌ | **2.54:1** FAIL ❌ | ⚠️ Light: usar como bg com texto escuro |
+| `warning` | `#F59E0B` | **9.24:1** AAA ✅ | **2.15:1** FAIL ❌ | **2.15:1** FAIL ❌ | ⚠️ Light: usar como bg com texto escuro |
+| `error` | `#EF4444` | **5.27:1** AA ✅ | **3.76:1** AA-lg ⚠️ | **3.76:1** AA-lg ⚠️ | Texto branco OK apenas ≥18px bold |
+| `info` | `#3B82F6` | **5.39:1** AA ✅ | **3.68:1** AA-lg ⚠️ | **3.68:1** AA-lg ⚠️ | Similar ao error |
+| `ai` | `#8B5CF6` | **4.68:1** AA ✅ | **4.23:1** AA-lg ⚠️ | **4.23:1** AA-lg ⚠️ | Borderline — preferir texto escuro |
+| `whatsapp` | `#25D366` | **10.0:1** AAA ✅ | **1.98:1** FAIL ❌ | **1.98:1** FAIL ❌ | Light: sempre texto escuro |
+
+> **Regra**: Cores de status como `success`, `warning`, `whatsapp` **em light mode** devem ser usadas como **background com texto escuro** (#0F172A), nunca como texto sobre branco.
+
+### Sidebar
+
+| Combo | Ratio | Grade |
+|-------|:-----:|:-----:|
+| Texto branco ON sidebar-bg (dark `#102A20`) | **15.28:1** | AAA ✅ |
+| Brand dot ON sidebar-bg (dark) | **6.71:1** | AA ✅ |
+| Texto ativo ON sidebar-active (dark `#1A3B2E`) | **11.12:1** | AAA ✅ |
+| Texto ON sidebar-bg (light `#ffffff`) | **7.58:1** | AAA ✅ |
+| Texto ativo ON sidebar-active (light `#F0FDF4`) | **17.05:1** | AAA ✅ |
+
+---
+
+## 🔘 Botões — Análise Completa
+
+### Hierarquia Visual (por importância)
+
+| # | Variant | Light bg | Dark bg | Propósito |
+|---|---------|----------|---------|-----------|
+| 1 | `primary` | `#22C55E` (brand) | `#22C55E` | CTA principal — ação primária |
+| 2 | `secondary` | `#d4d4d8` (zinc-300) | `#52525b` (zinc-600) | Ação secundária forte |
+| 3 | `outline` | `#e4e4e7` (zinc-200) | `#71717a` (zinc-500) | Ação terciária / cancelar |
+| 4 | `ghost` | transparent | transparent | Ação contextual mínima |
+| 5 | `danger` | `#EF4444` | `#EF4444` | Ação destrutiva |
+| 6 | `workout` | emerald gradient | emerald gradient | Contextual — treinos |
+| 7 | `assessment` | violet gradient | violet gradient | Contextual — avaliações |
+| 8 | `payment` | amber gradient | amber gradient | Contextual — pagamentos |
+
+### Por que Zinc? (Pesquisa de Design Systems)
+
+**Análise de subtom RGB** das escalas de cinza Tailwind:
+| Scale | 300 subtom | 600 subtom | Compatibilidade com verde |
+|-------|:----------:|:----------:|:-------------------------:|
+| **slate** | AZUL (+11) | AZUL (+18) | ❌ Compete com brand verde |
+| **gray** | AZUL (+5) | AZUL (+13) | ⚠️ Leve competição |
+| **zinc** | NEUTRO (+4) | AZUL (+6) | ✅ Mínima interferência |
+| **neutral** | NEUTRO (0) | NEUTRO (0) | ✅ Ultra-neutro, mas "flat" |
+| **stone** | NEUTRO → QUENTE | VERMELHO (+6) | ❌ Tom quente ≠ tech/fitness |
+
+**Referências reais:**
+- **Apple HIG**: System Gray usa subtom azul mínimo (+3 RGB) — `zinc` é o match mais próximo
+- **Material Design 3**: Usa "surface container" levemente tinted pela cor primária — para marca verde, neutro funciona melhor
+- **Conclusão**: `zinc` → equilíbrio perfeito entre neutralidade (não compete com verde) e personalidade (não parece "flat")
+
+**Para ambos os modos**: Mesma escala (zinc), tons diferentes:
+- Light mode: `zinc-300` (#d4d4d8) / `zinc-200` (#e4e4e7)
+- Dark mode: `zinc-600` (#52525b) / `zinc-500` (#71717a)
+- Shadow 3D: `zinc-400` (#a1a1aa) light / `zinc-800` (#27272a) dark
+
+### Contraste Detalhado
+
+| Variant | Mode | Btn bg | vs Page bg | Text vs Btn | Text Grade | 3D Shadow depth |
+|---------|------|--------|:----------:|:-----------:|:----------:|:---------------:|
+| **primary** | light | `#22C55E` | 2.28:1 | **8.73:1** | AAA ✅ | 3.13:1 |
+| | dark | `#22C55E` | 8.71:1 | **8.73:1** | AAA ✅ | 3.13:1 |
+| **secondary** | light | `#d4d4d8` (zinc-300) | 1.48:1 | **12.08:1** | AAA ✅ | 1.34:1 |
+| | dark | `#52525b` (zinc-600) | 2.57:1 | **6.99:1** | AA ✅ | 2.66:1 |
+| **outline** | light | `#e4e4e7` (zinc-200) | 1.23:1 | **13.62:1** | AAA ✅ | 1.52:1 |
+| | dark | `#71717a` (zinc-500) | 4.10:1 | **4.37:1** | AA-lg ⚠️ | 1.60:1 |
+| **danger** | light | `#EF4444` | 3.76:1 | **3.76:1** | AA-lg ⚠️ | 2.21:1 |
+| | dark | `#EF4444` | 5.27:1 | **3.76:1** | AA-lg ⚠️ | 2.21:1 |
+| **workout** | light | `#34d399` | 1.92:1 | 1.92:1 | FAIL ❌ | 4.0:1 |
+| | dark | `#34d399` | 10.32:1 | 1.92:1 | FAIL ❌ | 4.0:1 |
+| **assessment** | light | `#a78bfa` | 2.72:1 | 2.72:1 | FAIL ❌ | 4.03:1 |
+| | dark | `#a78bfa` | 7.29:1 | 2.72:1 | FAIL ❌ | 4.03:1 |
+| **payment** | light | `#fbbf24` | 1.67:1 | 1.67:1 | FAIL ❌ | 4.25:1 |
+| | dark | `#fbbf24` | 11.88:1 | 1.67:1 | FAIL ❌ | 4.25:1 |
+
+> **Nota**: `workout`, `assessment`, `payment` usam texto branco sobre cores vibrantes — o contraste texto/bg é baixo (design choice para impacto visual). Compensado pelo tamanho grande (font-bold, ≥14px) e alta saturação da cor. Para texto small nesses botões, usar texto escuro.
+
+### Shadow 3D — Cores de Profundidade
+
+| Variant | Shadow color | vs Btn bg | Efeito |
+|---------|-------------|:---------:|--------|
+| primary | `#166534` | 3.13:1 | Forte — profundidade clara |
+| secondary (light) | `#94a3b8` | 1.73:1 | Sutil — coerente com tom neutro |
+| secondary (dark) | `#1e293b` | 2.96:1 | Médio — visível no dark |
+| outline (light) | `#94a3b8` | 2.08:1 | Sutil |
+| outline (dark) | `#1e293b` | 1.86:1 | Sutil |
+| danger | `#991B1B` | 2.21:1 | Médio |
+| workout | `#065F46` | 4.0:1 | Forte |
+| assessment | `#4C1D95` | 4.03:1 | Forte |
+| payment | `#92400E` | 4.25:1 | Forte |
+
+---
+
+## 📊 Slate Scale — Referência Rápida
+
+A escala Slate é a base dos botões neutros. Tabela de contraste para decisões rápidas:
+
+| Tom | Hex | vs Branco | vs `#050A12` | vs slate-700 | vs slate-100 |
+|-----|-----|:---------:|:------------:|:------------:|:------------:|
+| **slate-100** | `#f1f5f9` | 1.10:1 | **18.11:1** | **9.45:1** | 1.0:1 |
+| **slate-200** | `#e2e8f0` | 1.23:1 | **16.09:1** | **8.40:1** | 1.13:1 |
+| **slate-300** | `#cbd5e1` | 1.48:1 | **13.36:1** | **6.97:1** | 1.36:1 |
+| **slate-400** | `#94a3b8` | 2.56:1 | **7.74:1** | 4.04:1 | 2.34:1 |
+| **slate-500** | `#64748b` | **4.76:1** | **4.17:1** | 2.18:1 | **4.34:1** |
+| **slate-600** | `#475569` | **7.58:1** | 2.62:1 | 1.37:1 | **6.92:1** |
+| **slate-700** | `#334155` | **10.35:1** | 1.92:1 | 1.0:1 | **9.45:1** |
+| **slate-800** | `#1e293b` | **14.63:1** | 1.36:1 | 1.41:1 | **13.35:1** |
+| **slate-900** | `#0f172a` | **17.85:1** | 1.11:1 | 1.72:1 | **16.30:1** |
+
+### Fórmula de Escolha de Slate
+
+**Light mode** (fundo branco `#ffffff`):
+- Botão surface: **slate-200 a slate-300** (visível sem ser pesado)
+- Texto sobre botão: **slate-600 a slate-700** (AA+ garantido)
+- Texto body: **slate-700+** para AA, **slate-900** para AAA
+
+**Dark mode** (fundo `#050A12`):
+- Botão surface: **slate-500 a slate-600** (destaque suficiente 2.6–4.2:1)
+- Texto sobre botão: **slate-100** (6.9–4.3:1 = AA)
+- Texto body: **slate-200+** para AAA
+
+---
+
+## 🏗️ Dark Mode — Camadas de Profundidade
+
+| Camada | Hex | Contraste com anterior | Uso |
+|--------|-----|:----------------------:|-----|
+| 0 — bg-primary | `#050A12` | — (base) | Fundo da página |
+| 1 — bg-elevated | `#080E1A` | 1.03:1 | Modais, drawers |
+| 2 — bg-surface-1 | `#0B1221` | 1.03:1 | Cards nível 1 |
+| 3 — bg-surface-2 | `#111B2E` | 1.09:1 | Cards nível 2, inputs |
+| 4 — bg-surface-3 | `#182640` | 1.14:1 | Áreas destacadas, hovers |
+
+> Os deltas são sutis (1.03–1.14:1) — é proposital para o estilo "midnight pulse". A distinção vem de: (1) bordas glass `rgba(255,255,255,0.08)`, (2) shadows `shadow-surface`, (3) gradientes sutis. NÃO depender apenas da cor de fundo para separar camadas.
+
+---
+
+## ⚠️ Problemas Conhecidos & Decisões
+
+### 1. `text-muted` em Light Mode = 2.56:1 (FAIL)
+**Decisão**: Aceito como design choice. Usado APENAS para:
+- Placeholders de input
+- Timestamps e metadata decorativa
+- Captions em texto ≥14px
+- **NUNCA** para labels de formulário, mensagens de erro, ou texto informativo
+
+### 2. Status colors em Light Mode (success/warning/whatsapp < 3:1)
+**Decisão**: Essas cores são usadas como **superfícies** (badges, pills) com texto escuro (#0F172A), não como texto sobre branco. Em dark mode funcionam perfeitamente como texto.
+
+### 3. Botões coloridos (workout/assessment/payment) — texto branco FAIL
+**Decisão**: Texto branco sobre cores vibrantes é uma escolha de impacto visual. Os botões são sempre ≥14px bold (tamanho grande), o que reduz o requisito para AA-lg (3:1). A alta saturação cromática compensa perceptualmente.
+
+### 4. Brand-primary como texto em light mode = 2.28:1 (FAIL)
+**Regra**: NUNCA usar `text-brand-primary` para texto sobre fundo branco. Usar `text-green-700` (#15803d, 4.67:1 AA ✅) ou `brand-deep` (#166534, 8.04:1 AAA ✅).
+
+---
+
+## 🧮 Combinações Seguras — Quick Reference
+
+### Texto sobre fundos (mínimo AA 4.5:1)
+
+| Fundo (Light) | Texto seguro |
+|----------------|-------------|
+| `#ffffff` (bg-primary) | `#0F172A` (17.85:1) · `#475569` (7.58:1) · `#334155` (10.35:1) |
+| `#F8FAFB` (bg-secondary) | `#0F172A` (17.05:1) · `#475569` (7.24:1) |
+| `#F5F7FA` (bg-page) | `#0F172A` (16.63:1) · `#475569` (7.06:1) |
+| `#cbd5e1` (btn secondary) | `#334155` (6.97:1) · `#475569` (5.10:1) |
+| `#e2e8f0` (btn outline) | `#334155` (8.40:1) · `#475569` (6.15:1) |
+
+| Fundo (Dark) | Texto seguro |
+|--------------|-------------|
+| `#050A12` (bg-primary) | `#F0F4F8` (17.95:1) · `#94A3B8` (7.74:1) · `#e2e8f0` (16.09:1) |
+| `#0B1221` (bg-secondary) | `#F0F4F8` (16.92:1) · `#94A3B8` (7.30:1) |
+| `#111B2E` (bg-tertiary) | `#F0F4F8` (15.57:1) · `#94A3B8` (6.71:1) |
+| `#475569` (btn secondary) | `#f1f5f9` (6.92:1) · `#F0F4F8` (6.15:1) |
+| `#64748b` (btn outline) | `#f1f5f9` (4.34:1) · `#F0F4F8` (3.86:1) |
+
+### Cores sobre fundos escuros (para ícones/badges, mín AA-lg 3:1)
+
+| Cor | vs `#050A12` | Grade |
+|-----|:------------:|:-----:|
+| `#22C55E` brand-primary | 8.71:1 | AAA ✅ |
+| `#10B981` success | 7.82:1 | AAA ✅ |
+| `#F59E0B` warning | 9.24:1 | AAA ✅ |
+| `#EF4444` error | 5.27:1 | AA ✅ |
+| `#3B82F6` info | 5.39:1 | AA ✅ |
+| `#8B5CF6` ai | 4.68:1 | AA ✅ |
+| `#25D366` whatsapp | 10.0:1 | AAA ✅ |
+
+### Cores sobre fundos claros (para ícones/badges, mín AA-lg 3:1)
+
+| Cor | vs `#ffffff` | Grade | Alternativa segura |
+|-----|:------------:|:-----:|-------------------|
+| `#22C55E` brand | 2.28:1 | FAIL ❌ | Use `#15803d` green-700 (4.67:1 AA ✅) |
+| `#10B981` success | 2.54:1 | FAIL ❌ | Use `#047857` emerald-700 (5.47:1 AA ✅) |
+| `#F59E0B` warning | 2.15:1 | FAIL ❌ | Use `#B45309` amber-700 (4.86:1 AA ✅) |
+| `#EF4444` error | 3.76:1 | AA-lg ⚠️ | Use `#B91C1C` red-700 (6.05:1 AA ✅) |
+| `#3B82F6` info | 3.68:1 | AA-lg ⚠️ | Use `#1D4ED8` blue-700 (6.50:1 AA ✅) |
+| `#8B5CF6` ai | 4.23:1 | AA-lg ⚠️ | OK para ícones grandes; texto use `#6D28D9` violet-700 (6.95:1) |
+| `#25D366` whatsapp | 1.98:1 | FAIL ❌ | Use `#15803d` green-700 (4.67:1 AA ✅) |
+
+---
+
+## 🎯 Regras para Manutenção
+
+### Ao criar novos componentes:
+
+1. **Verificar contraste texto/fundo** — mínimo 4.5:1 (AA) para texto normal
+2. **Verificar contraste superfície/fundo** — botões precisam ≥1.3:1 em light, ≥2.5:1 em dark
+3. **Shadow 3D** — cor do shadow deve ser ≥1.5:1 mais escura que a superfície
+4. **Testar ambos os modos** — SEMPRE light E dark. Cores vibrantes geralmente só funcionam em um
+5. **Usar scale Zinc** para neutros — tom neutro sem competir com verde da marca
+
+### Ao escolher cores:
 
 ```
-workers/
-├── index.ts          # Entry point Hono — registra todas as rotas
-├── api/
-│   ├── auth.ts       # Login, register, refresh, logout, password reset
-│   ├── users.ts      # Profile, settings, avatar, subscription
-│   ├── personals.ts  # Personal trainer management
-│   ├── students.ts   # Student management, invites
-│   ├── workouts.ts   # Workout CRUD, templates, sharing
-│   ├── exercises.ts  # Exercise library (D1)
-│   ├── assessments.ts # Body assessments, measurements
-│   ├── payments.ts   # Asaas integration (~2200 linhas, 22 endpoints)
-│   ├── chat.ts       # Real-time chat
-│   ├── content.ts    # AI content generation
-│   ├── notifications.ts # Push notification management
-│   ├── admin.ts      # Admin panel endpoints
-│   ├── public.ts     # Public pages, SEO
-│   ├── media.ts      # R2 upload/download
-│   ├── webhooks.ts   # Asaas/Stripe webhooks
-│   └── ...           # 17 sub-routers total
-├── middleware/
-│   ├── auth.ts       # JWT validation, requireType
-│   ├── cors.ts       # CORS headers
-│   └── rate-limit.ts # Rate limiting via KV
-└── schemas/          # Zod validation schemas
+Light mode: fundo claro → texto escuro → status como superfície
+Dark mode:  fundo escuro → texto claro → status como texto direto
+```
+
+### Hierarquia de botões (respeitando contraste):
+
+```
+primary (verde 3D) > secondary (zinc-300/600 3D) > outline (zinc-200/500 3D) > ghost (transparente)
+```
+
+### Fórmula para shadow 3D sólido:
+
+```
+Regra: shadow-color ≈ 2 tons mais escuro que a superfície na escala Zinc
+Light: superfície zinc-300 → shadow zinc-400 (#a1a1aa)
+Dark:  superfície zinc-600 → shadow zinc-800 (#27272a)
 ```
 
 ---
 
-## Padrão de Response
+## 📝 Formulários — Selects & Inputs
 
-```typescript
-// Sucesso
-success(data)                    // 200 { success: true, data }
-created(data)                    // 201 { success: true, data }
-noContent()                      // 204
-paginated(data, total, page, limit) // 200 { success: true, data, pagination }
+### Estilos Globais (globals.css)
 
-// Erro
-throw new BadRequestError('msg')   // 400
-throw new UnauthorizedError('msg') // 401
-throw new ForbiddenError('msg')    // 403
-throw new NotFoundError('msg')     // 404
-throw new ConflictError('msg')     // 409
-throw new RateLimitError('msg')    // 429
-```
+Todos os `<select>`, `<input>` e `<textarea>` recebem estilos consistentes via CSS global:
 
----
+| Propriedade | Light | Dark |
+|-------------|-------|------|
+| Background | `#ffffff` (branco) | `var(--color-bg-surface-1)` (#0B1221) |
+| Border | `#E2E8F0` (slate-200) | `rgba(255,255,255,0.10)` |
+| Text | `var(--color-text-primary)` | `var(--color-text-primary)` |
+| Focus border | `rgba(34,197,94,0.5)` | `rgba(34,197,94,0.5)` |
+| Focus ring | `0 0 0 3px rgba(34,197,94,0.12)` | `0 0 0 3px rgba(34,197,94,0.12)` |
+| Border radius | `0.75rem` (12px) | `0.75rem` (12px) |
 
-## DB Helpers
+> **Dark mode inputs**: Usam `bg-surface-1` (#0B1221) — 1 nível acima do bg da página (#050A12) — para diferenciar o input do fundo sem ser jarring.
 
-```typescript
-import { pgQuery, pgQueryOne, pgQueryCount, generateId } from '@lib/db'
+### Select Arrow
 
-// Query múltiplas rows
-const users = await pgQuery<User>(sql, 'SELECT * FROM users WHERE active = $1', [true])
-
-// Query uma row (ou null)
-const user = await pgQueryOne<User>(sql, 'SELECT * FROM users WHERE id = $1', [id])
-
-// Count
-const total = await pgQueryCount(sql, 'SELECT COUNT(*) FROM users WHERE active = $1', [true])
-
-// Generate ID
-const id = generateId() // nanoid
-```
+Custom SVG arrow via `background-image` — cor `#94A3B8` (text-secondary) para ambos os modos.
 
 ---
 
-## Tabelas Principais (Neon PostgreSQL)
+## 🔒 Modais — Z-Index & Scroll Lock
 
-| Tabela | Descrição | Relações |
-|--------|-----------|----------|
-| `users` | Todos os usuários | PK compartilhado com `personals`/`students` |
-| `personals` | Dados do personal trainer | `personals.id = users.id` |
-| `students` | Dados do aluno | `students.id = users.id` |
-| `workouts` | Treinos criados | `personal_id → personals.id` |
-| `workout_exercises` | Exercícios do treino | `workout_id → workouts.id` |
-| `assessments` | Avaliações físicas | `student_id, personal_id` |
-| `payments` | Pagamentos Asaas | `personal_id, student_id` |
-| `chat_messages` | Mensagens do chat | `sender_id, receiver_id` |
-| `notifications` | Notificações push | `user_id → users.id` |
-| `sessions` | Sessões de auth | KV (não tabela) |
+### Hierarquia de Z-Index
 
-> **⚠️ Colunas corretas** — ver regra §9 em `RULES.md`.
+| Nível | z-index | Uso |
+|-------|:-------:|-----|
+| Base content | 0-10 | Click-away overlays, menus dropdown |
+| Mobile nav backdrop | 40 | Overlay escuro do menu mobile |
+| Mobile nav bar | 45 | Barra de navegação inferior |
+| **Standard modals** | **50** | Edição, confirmação, detalhes |
+| Calendar/crop modals | 60 | Modais sobre modais |
+| PWA overlays | 9998-10000 | Install banners, gates |
+| Splash screen | 9999 | Tela de loading inicial |
 
----
+### Scroll Lock (useScrollLock)
 
-## Auth Flow
+Hook `src/hooks/use-scroll-lock.ts` — previne scroll do body quando modais estão abertos:
+- Usa `position: fixed` no body (preserva posição do scroll)
+- Suporta modais aninhados via counter
+- Restaura scroll position ao fechar
 
-```
-POST /api/v1/auth/register → create user + personal/student + session → tokens
-POST /api/v1/auth/login    → verify password → create session → tokens
-POST /api/v1/auth/refresh  → verify refresh token → new access token
-POST /api/v1/auth/logout   → delete session from KV
-```
-
-- Access token: 1h TTL (HMAC-SHA256)
-- Refresh token: 30d TTL
-- Sessions: KV (`vfit-sessions`)
-- Passwords: bcryptjs cost 12
+**Aplicado em**: admin/personals, admin/users, admin/payments, exercises, feedback-modal, calendar, workouts/create, photo-upload, passkey-prompt
 
 ---
 
-## Referência Completa
+## 🔧 Script de Auditoria
 
-→ `docs/BACKEND.md` — Todos os ~150 endpoints com métodos, params e responses
+Para re-auditar após mudanças, rodar:
+
+```bash
+python3 -c "
+# Cole o script Python do audit aqui
+# Ou execute: python3 scripts/audit-colors.py
+"
+```
+
+> **Atualizar este doc** sempre que: mudar `globals.css`, alterar button.tsx, criar novo componente com cores, ou durante sprints de UI/polish.
+
+---
+
+## 👤 AvatarWithPlanBadge — Componente DS Premium
+
+> **Desde v5.8.5** · `src/components/ui/avatar-plan-badge.tsx`
+
+Componente que combina Avatar + indicador de plano como overlay premium. Substitui o antigo `PlanBadge` standalone (que ocupava espaço horizontal no header).
+
+### Design (v3 — Border-based, SVG Icons)
+
+```
+  ┌──────────┐
+  │   •      │  ← Dot verde ativo (top-right, animate-pulse)
+  │ ┌──────┐ │
+  │ │Avatar│ │  ← Border colorida real (border-2, border-box)
+  │ └──────┘ │      Sizing preciso: sm=36px = ds3-action-btn
+  │  [⚡Pro] │  ← Badge centralizado (SVG filled icon + label)
+  └──────────┘
+```
+
+### Sizing Pixel-Perfect (Material Design 3)
+
+O container usa `border` real (não `ring`) para sizing preciso via `border-box`:
+
+| Size | Avatar | Container | Border | Total | Match |
+|------|--------|-----------|--------|------:|-------|
+| `sm` | 32px (h-8) | 36px (h-9 w-9) | border-2 (2px×2) | **36px** | = ds3-action-btn ✓ |
+| `md` | 40px (h-10) | 44px (h-11 w-11) | border-2 (2px×2) | **44px** | — |
+| `lg` | 48px (h-12) | 52px (h-13 w-13) | border-2 (2px×2) | **52px** | — |
+| `xl` | 64px (h-16) | 68px (h-17 w-17) | border-2 (2px×2) | **68px** | — |
+
+> **Fórmula:** Container = Avatar + (border-width × 2). Border é `border-box`, consumida dentro do container.
+> **Alinhamento:** `sm` = 36px = `ds3-action-btn` (36×36) — pixel-perfect no header.
+
+### Ícones SVG Filled
+
+Todos os ícones são **SVG filled inline** (`fill="currentColor"`, viewBox `0 0 12 12`). Zero emojis.
+
+| Plano | Ícone | Descrição | SVG Path |
+|-------|:-----:|-----------|----------|
+| trial | ✦ sparkle | 4-pointed sparkle preenchido | `M6 0L7.5 4.5L12 6L...` |
+| pro | ⚡ bolt | Raio/lightning bolt preenchido | `M7 0L3 7h3l-1 5...` |
+| profissional | ★ star | Estrela 5 pontas preenchida | `M6 .5l1.76 3.57...` |
+| max | 👑 crown | Coroa preenchida com base | `M1 8l1.5-5L5.5 6...` |
+
+### Configuração por Plano
+
+| Slug DB | Nome Display | Ícone SVG | Border | Badge BG | Glow |
+|---------|:------------|:---------:|--------|----------|------|
+| `trial` | **Grátis** | sparkle | zinc-300 / zinc-600 | zinc-600 | — |
+| `pro` | **Pro** | bolt | emerald-400 / emerald-500 | emerald-600 | `0_0_6px rgba(34,197,94,0.3)` |
+| `profissional` | **Pro+** | star | violet-400 / violet-500 | violet-600 | `0_0_6px rgba(139,92,246,0.3)` |
+| `max` | **Max** | crown | amber-400 / amber-500 | gradient amber→orange | `0_0_8px rgba(245,158,11,0.35)` |
+
+### Props
+
+| Prop | Tipo | Default | Descrição |
+|------|------|---------|-----------|
+| `src` | `string \| null` | — | URL da foto do avatar |
+| `name` | `string` | — | Nome para initials fallback |
+| `size` | `'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` | Tamanho do avatar + badge |
+| `showActiveDot` | `boolean` | `true` | Dot verde animado top-right |
+| `linkToPlans` | `boolean` | `false` | Wrapa com Link para `/dashboard/plans` |
+| `planOverride` | `string` | — | Forçar slug do plano (para previews) |
+| `hideBadge` | `boolean` | `false` | Ocultar badge de plano |
+
+### Badge Details por Tamanho
+
+| Size | Badge text | Badge padding | Icon size | Dot size | Dot border |
+|------|-----------|--------------|-----------|----------|-----------|
+| `sm` | 5.5px | px-1 py-px | 7×7px | 8×8px | border (1px) |
+| `md` | 6.5px | px-1.5 py-px | 8×8px | 10×10px | border-[1.5px] |
+| `lg` | 7.5px | px-1.5 py-0.5 | 10×10px | 12×12px | border-2 |
+| `xl` | 9px | px-2 py-0.5 | 12×12px | 14×14px | border-2 |
+
+### Uso
+
+```tsx
+import { AvatarWithPlanBadge } from '@/components/ui/avatar-plan-badge'
+
+// Header — user pill com badge + link para upgrade (36px = ds3-action-btn)
+<AvatarWithPlanBadge src={user?.avatar_url} name={user?.full_name} size="sm" linkToPlans />
+
+// Sidebar — card de info com badge
+<AvatarWithPlanBadge src={user.avatar_url} name={user.full_name} size="md" linkToPlans />
+
+// Sem dot verde
+<AvatarWithPlanBadge src={user.avatar_url} name={user.full_name} showActiveDot={false} />
+
+// Preview forçando plano
+<AvatarWithPlanBadge src={user.avatar_url} name={user.full_name} planOverride="max" />
+```
+
+### Integração atual
+
+| Local | Size | linkToPlans | Notas |
+|-------|------|:-----------:|-------|
+| Header desktop (user pill) | `sm` | ✅ | 36px — alinhado com ds3-action-btn |
+| Header mobile | `sm` | ✅ | 36px — alinhado com bell/hamburger |
+| Sidebar user card | `md` | ✅ | 44px — glassmorphism card |
+| Mobile drawer | `md` | ✅ | 44px — badge overlay no drawer |
+
+### Histórico de Versões
+
+| Versão | Data | Mudanças |
+|--------|------|----------|
+| v1 | v5.8.4 | Ring overlay no avatar, emojis como ícones |
+| v2 | v5.8.5 | Ring + badge centralizado + dot + glow |
+| **v3** | **v5.8.6** | **Border real (não ring) para sizing preciso, SVG filled icons, sm=36px=ds3-action-btn** |
+
+### Nomenclatura de Planos — Canônica (v5.8.5+)
+
+| Slug DB | Display Name | Tier (UI) | Preço | Alunos |
+|---------|:------------|:--------:|------:|--------|
+| `trial` | **Grátis** | GRÁTIS | R$ 0 | 5 |
+| `pro` | **Pro** | PRO | R$ 29,90/mês | Ilimitados |
+| `profissional` | **Pro+** | PRO+ | R$ 69,90/mês | Ilimitados |
+| `max` | **Max** | MAX | R$ 129,90/mês | Ilimitados |
+
+> ⚠️ **Regra**: NUNCA usar "Essencial", "Trainer", "Trial", "Free", "Profissional" como display name. Os nomes canônicos são **Grátis, Pro, Pro+, Max**.
+> O slug no banco de dados permanece `trial`, `pro`, `profissional`, `max` (sem alterar schema).
+
+---
+
+*Última auditoria: 18/03/2026 — Todas as combinações verificadas com WCAG 2.1 contrast ratio algorithm.*

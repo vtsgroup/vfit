@@ -122,7 +122,7 @@ return useQuery({
 
 **❌ NUNCA:**
 - Re-ler arquivos já lidos na conversa — o contexto persiste
-- Re-explorar o projeto — `docs/` tem tudo documentado
+- Re-explorar o projeto — `.claude/docs/` tem tudo documentado
 - `semantic_search` amplo — use `grep_search` com regex preciso
 - Ler arquivo inteiro — use `startLine` / `endLine`
 - Edições sequenciais uma a uma — agrupe com `multi_replace_string_in_file`
@@ -130,4 +130,4 @@ return useQuery({
 **✅ SEMPRE:**
 - Reutilizar contexto da conversa antes de qualquer tool call
 - Confirmar escopo exato antes de abrir múltiplos arquivos
-- Referenciar `docs/` sem re-ler
+- Referenciar `.claude/docs/` sem re-ler

@@ -55,7 +55,7 @@
 ### Checklist Antes de Modelos Premium
 
 - "Qual arquivo / componente exato?"
-- "A resposta já está em `docs/`?"
+- "A resposta já está em `.claude/docs/`?"
 - "GPT-5 mini já tentou e falhou?"
 - "O erro tem stack trace legível?"
 
