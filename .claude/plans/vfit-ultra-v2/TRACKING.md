@@ -2,7 +2,7 @@
 
 > Status em tempo real de cada sprint e task.
 > ⬜ = Pendente · 🔄 = Em progresso · ✅ = Concluído · ❌ = Bloqueado
-> **Última atualização:** 03/04/2026 — v1.2.5
+> **Última atualização:** 03/04/2026 — v1.2.6
 
 ---
 
@@ -204,3 +204,4 @@
 | v1.2.3 | S2: Pricing Unification | 03/04/2026 | `4d72eeed` | 11 |
 | v1.2.4 | S3: Dynamic D1 Config | 03/04/2026 | `ce88a080` | 6 |
 | v1.2.5 | S3b: Onboarding Perfect | 03/04/2026 | `e8ce2960` | 24 |
+| v1.2.6 | Docs: Regra 20 & Tracking | 03/04/2026 | `115994cf` | 4 |

@@ -5,6 +5,20 @@
 
 ---
 
+## [v1.2.6] — 03/04/2026 — Docs: Regra 20 & Tracking Obrigatório
+
+### 📝 Documentação
+- **Regra 20** no RULES.md — Documentação & Tracking obrigatório:
+  - Toda documentação DEVE estar em `.claude/docs/`
+  - Todo plano DEVE ter `TRACKING.md` com checkbox list
+  - Marcar progresso em tempo real (antes/depois de cada task)
+  - Ao final de cada sessão: CHANGELOG + TRACKING atualizados
+- **CONVENTIONS.md** — Regras 8-10 do agente: documentar sempre, tracking real-time
+- **TRACKING.md** — S3b marcado como ✅ (45/136 = 33%)
+- **copilot-instructions.md** — Regenerado com 2053 linhas, novas regras incluídas
+
+---
+
 ## [v1.2.5] — 03/04/2026 — Sprint S3b: Onboarding Perfect
 
 ### 🎨 Emoji → DSIcon (17 step components + 6 pages + 3 paywall)
