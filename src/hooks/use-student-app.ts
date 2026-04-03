@@ -160,6 +160,7 @@ export function useStudentProfile() {
       return res.data
     },
     enabled: isReady,
+    ...APP_QUERY_CACHE.detail,
   })
 }
 
@@ -177,6 +178,7 @@ export function useStudentWorkouts(params: { page?: number; per_page?: number } 
       return res.data
     },
     enabled: isReady,
+    ...APP_QUERY_CACHE.list,
   })
 }
 
@@ -194,6 +196,7 @@ export function useStudentPayments(params: { page?: number; per_page?: number } 
       return res.data
     },
     enabled: isReady,
+    ...APP_QUERY_CACHE.list,
   })
 }
 
@@ -211,6 +214,7 @@ export function useStudentAssessments(params: { page?: number; per_page?: number
       return res.data
     },
     enabled: isReady,
+    ...APP_QUERY_CACHE.list,
   })
 }
 

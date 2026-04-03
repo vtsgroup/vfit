@@ -224,15 +224,60 @@ payments.post('/webhooks/asaas', async (c) => {
 })
 
 payments.post('/webhooks/stripe', async (c) => {
-  // Verificar Stripe signature
+  // Verificar Stripe signature (HMAC-SHA256 via Web Crypto)
   const signature = c.req.header('stripe-signature')
   if (!signature) {
     return c.json({ error: 'Missing signature' }, 400)
   }
 
-  // TODO: Verificar assinatura com STRIPE_WEBHOOK_SECRET
-  // Por agora, aceitar e processar
-  const body = await c.req.json()
+  const webhookSecret = c.env.STRIPE_WEBHOOK_SECRET
+  if (!webhookSecret) {
+    console.error('[Webhook Stripe] STRIPE_WEBHOOK_SECRET not configured')
+    return c.json({ error: 'Webhook not configured' }, 500)
+  }
+
+  // Parse Stripe signature header: t=timestamp,v1=signature
+  const parts = Object.fromEntries(
+    signature.split(',').map((part) => {
+      const [key, ...rest] = part.split('=')
+      return [key, rest.join('=')]
+    })
+  )
+  const timestamp = parts.t
+  const sigHash = parts.v1
+  if (!timestamp || !sigHash) {
+    return c.json({ error: 'Invalid signature format' }, 400)
+  }
+
+  // Reject if timestamp is older than 5 minutes (replay protection)
+  const tolerance = 300 // 5 minutes
+  const timestampAge = Math.floor(Date.now() / 1000) - Number(timestamp)
+  if (timestampAge > tolerance) {
+    return c.json({ error: 'Timestamp too old' }, 400)
+  }
+
+  // Verify HMAC-SHA256: sign(timestamp + '.' + rawBody) with webhook secret
+  const rawBody = await c.req.text()
+  const signedPayload = `${timestamp}.${rawBody}`
+
+  const key = await crypto.subtle.importKey(
+    'raw',
+    new TextEncoder().encode(webhookSecret),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign']
+  )
+  const sig = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(signedPayload))
+  const expectedSig = Array.from(new Uint8Array(sig))
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('')
+
+  if (expectedSig !== sigHash) {
+    console.error('[Webhook Stripe] Invalid signature')
+    return c.json({ error: 'Invalid signature' }, 401)
+  }
+
+  const body = JSON.parse(rawBody)
 
   try {
     const eventType = body.type as string

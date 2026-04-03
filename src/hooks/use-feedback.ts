@@ -114,7 +114,7 @@ export function useMyFeedback(page = 1) {
     },
     enabled: isReady,
     ...APP_QUERY_CACHE.list,
-    refetchInterval: isReady ? 30_000 : false, // Poll every 30s for new replies
+    refetchInterval: isReady ? 120_000 : false, // Poll every 2min for new feedback
   })
 }
 
@@ -130,7 +130,7 @@ export function useFeedbackDetail(id: string | null) {
     },
     enabled: isReady && !!id,
     ...APP_QUERY_CACHE.detail,
-    refetchInterval: isReady && id ? 10_000 : false, // Poll every 10s for new replies
+    refetchInterval: isReady && id ? 60_000 : false, // Poll every 60s for new replies
   })
 }
 
@@ -194,7 +194,7 @@ export function useAdminFeedback(params: { page?: number; status?: string; categ
     },
     enabled: isReady,
     ...APP_QUERY_CACHE.list,
-    refetchInterval: isReady ? 30_000 : false,
+    refetchInterval: isReady ? 120_000 : false, // Poll every 2min
   })
 }
 
@@ -210,7 +210,7 @@ export function useAdminFeedbackDetail(id: string | null) {
     },
     enabled: isReady && !!id,
     ...APP_QUERY_CACHE.detail,
-    refetchInterval: isReady && id ? 10_000 : false,
+    refetchInterval: isReady && id ? 60_000 : false, // Poll every 60s
   })
 }
 

@@ -7,6 +7,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { api } from '@/lib/api-client'
 import { useAuthStore } from '@/stores/auth-store'
+import { APP_QUERY_CACHE } from '@/lib/query-cache-policy'
 
 export interface WorkoutTemplate {
   id: string
@@ -49,6 +50,7 @@ export function useWorkoutTemplateDetail(id: string | null) {
       return res.data
     },
     enabled: isReady && !!id,
+    ...APP_QUERY_CACHE.detail,
   })
 }
 

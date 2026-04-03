@@ -4,6 +4,9 @@
  * Exercises Library — React Query hooks
  *
  * Exports: useExercises, useMuscleGroups, Exercise, MuscleGroup
+ *
+ * NOTE: No auth guard needed — these are PUBLIC endpoints serving cold data from D1.
+ * The backend routes /exercises and /muscle-groups do NOT require authMiddleware.
  */
 
 import { useQuery } from '@tanstack/react-query'

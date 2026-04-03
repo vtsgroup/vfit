@@ -323,7 +323,7 @@ function IOSFullGate({
             </h2>
             <p className="mt-1 text-sm text-zinc-500">Leva menos de 10 segundos</p>
 
-            <div className="mt-8 w-full max-w-[320px] space-y-4">
+            <div className="mt-8 w-full max-w-80 space-y-4">
               {/* Step 1 */}
               <div className="relative flex items-start gap-4 rounded-2xl bg-white/4 border border-white/6 p-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/10 text-blue-400 shrink-0">
@@ -398,7 +398,7 @@ function IOSFullGate({
               <span className="text-[11px]">O ícone □↑ fica na barra inferior do Safari</span>
             </div>
 
-            <div className="mt-6 flex gap-3 w-full max-w-[320px]">
+            <div className="mt-6 flex gap-3 w-full max-w-80">
               <button
                 onClick={() => setStep(0)}
                 className="flex-1 rounded-xl bg-white/6 border border-white/8 py-3 text-[13px] font-medium text-zinc-400 transition-all hover:bg-white/10"

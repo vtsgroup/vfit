@@ -195,11 +195,11 @@ export function dsVar(name: string): string {
 /** Common DS v2 surface styles as className */
 export const surfaces = {
   /** Primary card surface — glass bg + border + shadow */
-  card: 'bg-(--ds-surface) backdrop-blur-[var(--ds-backdrop)] border border-(--ds-border) rounded-2xl shadow-(--ds-card-shadow) hover:shadow-(--ds-card-shadow-hover) hover:-translate-y-1 transition-all duration-300',
+  card: 'bg-(--ds-surface) backdrop-blur-(--ds-backdrop) border border-(--ds-border) rounded-2xl shadow-(--ds-card-shadow) hover:shadow-(--ds-card-shadow-hover) hover:-translate-y-1 transition-all duration-300',
   /** Static card — no hover */
-  cardStatic: 'bg-(--ds-surface) backdrop-blur-[var(--ds-backdrop)] border border-(--ds-border) rounded-2xl shadow-(--ds-card-shadow)',
+  cardStatic: 'bg-(--ds-surface) backdrop-blur-(--ds-backdrop) border border-(--ds-border) rounded-2xl shadow-(--ds-card-shadow)',
   /** Elevated surface */
   elevated: 'bg-(--ds-surface-elevated) backdrop-blur-[20px] border border-(--ds-border) rounded-2xl',
   /** Glass overlay */
-  glass: 'bg-(--ds-glass) backdrop-blur-[var(--ds-backdrop)] border border-(--ds-border)',
+  glass: 'bg-(--ds-glass) backdrop-blur-(--ds-backdrop) border border-(--ds-border)',
 } as const

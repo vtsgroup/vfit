@@ -280,6 +280,7 @@ export function useWorkout(id: string) {
       return res.data
     },
     enabled: isReady && !!id,
+    ...APP_QUERY_CACHE.detail,
   })
 }
 
@@ -379,6 +380,7 @@ export function useMyTemplateWorkouts(params: { page?: number; search?: string }
       return res.data
     },
     enabled: isReady,
+    ...APP_QUERY_CACHE.list,
   })
 }
 

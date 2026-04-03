@@ -427,6 +427,7 @@ export function useAdminUser(id: string) {
       return res.data
     },
     enabled: isReady && !!id,
+    ...APP_QUERY_CACHE.detail,
   })
 }
 
@@ -451,6 +452,7 @@ export function useAdminPersonals(params: {
       return res.data
     },
     enabled: isReady,
+    ...APP_QUERY_CACHE.list,
   })
 }
 
@@ -479,6 +481,7 @@ export function useAdminPayments(params: {
       return res.data
     },
     enabled: isReady,
+    ...APP_QUERY_CACHE.list,
   })
 }
 
@@ -493,6 +496,7 @@ export function useAdminSubscriptions(params: { page?: number } = {}) {
       return res.data
     },
     enabled: isReady,
+    ...APP_QUERY_CACHE.list,
   })
 }
 
@@ -507,6 +511,7 @@ export function useAdminAffiliates(params: { page?: number } = {}) {
       return res.data
     },
     enabled: isReady,
+    ...APP_QUERY_CACHE.list,
   })
 }
 
@@ -521,6 +526,7 @@ export function useAdminTransfers(params: { page?: number } = {}) {
       return res.data
     },
     enabled: isReady,
+    ...APP_QUERY_CACHE.list,
   })
 }
 
@@ -653,6 +659,7 @@ export function useAdminWorkouts(params: {
       return res.data
     },
     enabled: isReady,
+    ...APP_QUERY_CACHE.list,
   })
 }
 
@@ -720,6 +727,7 @@ export function useAdminAssessments(params: {
       return res.data
     },
     enabled: isReady,
+    ...APP_QUERY_CACHE.list,
   })
 }
 
@@ -770,6 +778,7 @@ export function useAdminStudents(params: {
       return res.data
     },
     enabled: isReady,
+    ...APP_QUERY_CACHE.list,
   })
 }
 

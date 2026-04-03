@@ -283,7 +283,7 @@ export function Navbar() {
                 {item.dropdown && activeDropdown === item.label && (
                   <div className="absolute top-full left-0 pt-2 z-50">
                     <div
-                      className="min-w-[320px] rounded-2xl border border-white/8 p-2 shadow-[0_24px_80px_rgba(0,0,0,0.6),0_0_0_1px_rgba(255,255,255,0.04)_inset]"
+                      className="min-w-80 rounded-2xl border border-white/8 p-2 shadow-[0_24px_80px_rgba(0,0,0,0.6),0_0_0_1px_rgba(255,255,255,0.04)_inset]"
                       style={{
                         background: 'rgba(10, 22, 40, 0.85)',
                         backdropFilter: 'blur(40px) saturate(180%)',

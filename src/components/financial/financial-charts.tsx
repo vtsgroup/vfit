@@ -53,7 +53,7 @@ export function RevenueComboChart({
         <CardHeader>
           <CardTitle>Receita diária (30 dias)</CardTitle>
         </CardHeader>
-        <CardContent className="h-[280px]">
+        <CardContent className="h-70">
           <ResponsiveContainer width="100%" height="100%">
             <ComposedChart data={dailyCompact}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.2)" />
@@ -72,7 +72,7 @@ export function RevenueComboChart({
         <CardHeader>
           <CardTitle>Receita mensal (12 meses)</CardTitle>
         </CardHeader>
-        <CardContent className="h-[280px]">
+        <CardContent className="h-70">
           <ResponsiveContainer width="100%" height="100%">
             <ComposedChart data={monthlyCompact}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.2)" />
@@ -107,7 +107,7 @@ export function MethodPieChart({
         <CardTitle>Receita por método de pagamento</CardTitle>
       </CardHeader>
       <CardContent className="grid gap-4 lg:grid-cols-2">
-        <div className="h-[260px]">
+        <div className="h-65">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie data={data} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={90} label>

@@ -91,7 +91,7 @@ export function TrainingHeatmap({ data, loading = false }: TrainingHeatmapProps)
           >
             ◀
           </button>
-          <span className="min-w-[72px] text-center text-sm font-medium text-text-primary">
+          <span className="min-w-18 text-center text-sm font-medium text-text-primary">
             {MONTH_NAMES[month - 1]}/{year}
           </span>
           <button
