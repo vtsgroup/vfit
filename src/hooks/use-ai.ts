@@ -16,6 +16,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { api } from '@/lib/api-client'
 import { useAuthStore } from '@/stores/auth-store'
 import { APP_QUERY_CACHE } from '@/lib/query-cache-policy'
+import { withRetry, retryPresets } from '@/lib/retry'
 
 // ============================================
 // Types
@@ -109,7 +110,10 @@ export function useGenerateWorkout() {
       days_per_week?: number
       split_type?: 'abc' | 'upper_lower' | 'push_pull_legs' | 'full_body' | 'auto'
       extra_instructions?: string
-    }) => api.post<AIWorkoutResult>('/ai/workout/generate', data).then((r) => r.data),
+    }) => withRetry(
+      () => api.post<AIWorkoutResult>('/ai/workout/generate', data).then((r) => r.data),
+      retryPresets.ai,
+    ),
   })
 }
 
@@ -118,7 +122,10 @@ export function useAIAssistant() {
     mutationFn: (data: {
       question: string
       context_type?: 'general' | 'students' | 'billing' | 'workouts'
-    }) => api.post<AIAssistantResult>('/ai/assistant', data).then((r) => r.data),
+    }) => withRetry(
+      () => api.post<AIAssistantResult>('/ai/assistant', data).then((r) => r.data),
+      retryPresets.ai,
+    ),
   })
 }
 
@@ -127,7 +134,10 @@ export function useGenerateContent() {
     mutationFn: (data: {
       type: 'instagram_post' | 'story' | 'bio' | 'email' | 'promotion'
       topic: string
-    }) => api.post<AIContentResult>('/ai/content/generate', data).then((r) => r.data),
+    }) => withRetry(
+      () => api.post<AIContentResult>('/ai/content/generate', data).then((r) => r.data),
+      retryPresets.ai,
+    ),
   })
 }
 
@@ -137,20 +147,29 @@ export function useComparePhotos() {
       before_url: string
       after_url: string
       assessment_id?: string
-    }) => api.post<AIPhotoResult>('/ai/photos/compare', data).then((r) => r.data),
+    }) => withRetry(
+      () => api.post<AIPhotoResult>('/ai/photos/compare', data).then((r) => r.data),
+      retryPresets.ai,
+    ),
   })
 }
 
 export function useSmartBilling() {
   return useMutation({
     mutationFn: (data?: { limit?: number }) =>
-      api.post<AIBillingResult>('/ai/billing/smart', data || {}).then((r) => r.data),
+      withRetry(
+        () => api.post<AIBillingResult>('/ai/billing/smart', data || {}).then((r) => r.data),
+        retryPresets.ai,
+      ),
   })
 }
 
 export function useAnalyzeSentiment() {
   return useMutation({
     mutationFn: (data: { feedback: string }) =>
-      api.post<{ analysis: unknown; model_used: string }>('/ai/sentiment/analyze', data).then((r) => r.data),
+      withRetry(
+        () => api.post<{ analysis: unknown; model_used: string }>('/ai/sentiment/analyze', data).then((r) => r.data),
+        retryPresets.ai,
+      ),
   })
 }

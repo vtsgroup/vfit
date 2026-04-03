@@ -258,10 +258,11 @@ function PersonalWorkoutsView() {
           }
         />
 
-        {/* Quick Actions — 3D style cards with floating icons */}
+        {/* Quick Actions — 3D style cards with floating icons + stagger entrance */}
         <div className="grid gap-3 sm:grid-cols-3">
           <Link
             href="/dashboard/workouts/exercises/create"
+            style={{ animation: 'stagger-fade-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) 100ms both' }}
             className="group relative flex min-h-14 items-center gap-3 overflow-hidden rounded-2xl border border-emerald-500/30 bg-linear-to-r from-emerald-500/15 to-emerald-600/5 px-4 py-4 text-sm font-bold text-text-primary shadow-[0_4px_16px_rgba(16,185,129,0.15),inset_0_1px_0_rgba(255,255,255,0.08)] transition-all hover:shadow-[0_6px_24px_rgba(16,185,129,0.25),inset_0_1px_0_rgba(255,255,255,0.12)] hover:-translate-y-1 active:translate-y-0 active:shadow-[0_2px_8px_rgba(16,185,129,0.1)]"
           >
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-500/20 shadow-[inset_0_-2px_4px_rgba(0,0,0,0.1),0_1px_2px_rgba(16,185,129,0.2)] animate-[float_3s_ease-in-out_infinite]">
@@ -273,6 +274,7 @@ function PersonalWorkoutsView() {
 
           <Link
             href="/dashboard/workouts/exercises/library"
+            style={{ animation: 'stagger-fade-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) 180ms both' }}
             className="group relative flex min-h-14 items-center gap-3 overflow-hidden rounded-2xl border border-blue-500/30 bg-linear-to-r from-blue-500/15 to-blue-600/5 px-4 py-4 text-sm font-bold text-text-primary shadow-[0_4px_16px_rgba(59,130,246,0.15),inset_0_1px_0_rgba(255,255,255,0.08)] transition-all hover:shadow-[0_6px_24px_rgba(59,130,246,0.25),inset_0_1px_0_rgba(255,255,255,0.12)] hover:-translate-y-1 active:translate-y-0 active:shadow-[0_2px_8px_rgba(59,130,246,0.1)]"
           >
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-500/20 shadow-[inset_0_-2px_4px_rgba(0,0,0,0.1),0_1px_2px_rgba(59,130,246,0.2)] animate-[float_3s_ease-in-out_0.5s_infinite]">
@@ -284,6 +286,7 @@ function PersonalWorkoutsView() {
 
           <Link
             href="/dashboard/workouts/media/library"
+            style={{ animation: 'stagger-fade-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) 260ms both' }}
             className="group relative flex min-h-14 items-center gap-3 overflow-hidden rounded-2xl border border-purple-500/30 bg-linear-to-r from-purple-500/15 to-purple-600/5 px-4 py-4 text-sm font-bold text-text-primary shadow-[0_4px_16px_rgba(168,85,247,0.15),inset_0_1px_0_rgba(255,255,255,0.08)] transition-all hover:shadow-[0_6px_24px_rgba(168,85,247,0.25),inset_0_1px_0_rgba(255,255,255,0.12)] hover:-translate-y-1 active:translate-y-0 active:shadow-[0_2px_8px_rgba(168,85,247,0.1)]"
           >
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-purple-500/20 shadow-[inset_0_-2px_4px_rgba(0,0,0,0.1),0_1px_2px_rgba(168,85,247,0.2)] animate-[float_3s_ease-in-out_1s_infinite]">

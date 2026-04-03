@@ -415,7 +415,7 @@ function PlanCard({
                 </span>
               </div>
             ) : isUpgrade ? (
-              <Button variant={plan.premium ? 'payment' : 'primary'} className="w-full" size="lg" onClick={() => onSelect(plan.slug)}>
+              <Button variant={plan.premium ? 'gradient' : 'primary'} className="w-full" size="lg" onClick={() => onSelect(plan.slug)}>
                 <DSIcon name="zap" size={16} />
                 {isFree ? 'Começar grátis' : 'Fazer upgrade'}
               </Button>
