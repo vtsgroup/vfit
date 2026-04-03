@@ -132,4 +132,122 @@ app.get('/:id', async (c) => {
   return success(row)
 })
 
+// ── POST /from-onboarding — Create assessment from onboarding data ──
+app.post('/from-onboarding', async (c) => {
+  const userId = c.get('userId')
+  const env = c.env
+
+  // Get onboarding data
+  const onboarding = await pgQueryOne<{
+    gender: string
+    age: number
+    height_cm: number
+    weight_kg: number
+    target_weight_kg: number | null
+    goal: string
+    experience_level: string
+    training_frequency: string
+  }>(env,
+    `SELECT gender, age, height_cm, weight_kg, target_weight_kg, goal,
+            experience_level, training_frequency
+     FROM user_onboarding WHERE user_id = $1 LIMIT 1`,
+    [userId]
+  )
+
+  if (!onboarding) {
+    throw new BadRequestError('Onboarding não encontrado. Complete o questionário primeiro.')
+  }
+
+  // Map onboarding training_frequency to activity_level
+  const activityMap: Record<string, string> = {
+    '1-2': 'light',
+    '3-4': 'moderate',
+    '5-6': 'active',
+    '7': 'very_active',
+  }
+  const activityLevel = activityMap[onboarding.training_frequency] || 'moderate'
+
+  // Calculate BMI
+  const heightM = onboarding.height_cm / 100
+  const bmi = +(onboarding.weight_kg / (heightM * heightM)).toFixed(1)
+  let bmiCategory = 'Normal'
+  if (bmi < 18.5) bmiCategory = 'Abaixo do peso'
+  else if (bmi < 25) bmiCategory = 'Normal'
+  else if (bmi < 30) bmiCategory = 'Sobrepeso'
+  else if (bmi < 35) bmiCategory = 'Obesidade Grau I'
+  else if (bmi < 40) bmiCategory = 'Obesidade Grau II'
+  else bmiCategory = 'Obesidade Grau III'
+
+  // Body fat estimate via BMI (Deurenberg formula)
+  const isMale = onboarding.gender === 'male' || onboarding.gender === 'masculino'
+  const sexFactor = isMale ? 1 : 0
+  const bodyFat = +(1.2 * bmi + 0.23 * onboarding.age - 10.8 * sexFactor - 5.4).toFixed(1)
+
+  // Calculate nutrition targets (Mifflin-St Jeor)
+  let bmr: number
+  if (isMale) {
+    bmr = 10 * onboarding.weight_kg + 6.25 * onboarding.height_cm - 5 * onboarding.age + 5
+  } else {
+    bmr = 10 * onboarding.weight_kg + 6.25 * onboarding.height_cm - 5 * onboarding.age - 161
+  }
+
+  const activityMultiplier: Record<string, number> = {
+    sedentary: 1.2, light: 1.375, moderate: 1.55, active: 1.725, very_active: 1.9,
+  }
+  const tdee = Math.round(bmr * (activityMultiplier[activityLevel] || 1.55))
+
+  // Adjust calories based on goal
+  const goalMap: Record<string, string> = {
+    lose_weight: 'lose_weight', perder_peso: 'lose_weight', emagrecer: 'lose_weight',
+    gain_muscle: 'gain_muscle', ganhar_musculo: 'gain_muscle', hipertrofia: 'gain_muscle',
+    maintain: 'maintain', manter: 'maintain', improve_health: 'maintain', saude: 'maintain',
+  }
+  const normalizedGoal = goalMap[onboarding.goal] || 'maintain'
+  let targetCalories = tdee
+  if (normalizedGoal === 'lose_weight') targetCalories = Math.round(tdee * 0.8)
+  else if (normalizedGoal === 'gain_muscle') targetCalories = Math.round(tdee * 1.15)
+
+  // Macro distribution
+  const proteinGrams = Math.round(onboarding.weight_kg * (normalizedGoal === 'gain_muscle' ? 2.0 : 1.6))
+  const fatGrams = Math.round((targetCalories * 0.25) / 9)
+  const carbGrams = Math.round((targetCalories - proteinGrams * 4 - fatGrams * 9) / 4)
+
+  // Create self-assessment
+  const id = generateId()
+  await pgQuery(env,
+    `INSERT INTO self_assessments (id, user_id, weight_kg, height_cm, bmi, bmi_category,
+      body_fat_percentage, activity_level, goal, notes, created_at)
+     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10, NOW())
+     ON CONFLICT DO NOTHING`,
+    [id, userId, onboarding.weight_kg, onboarding.height_cm, bmi, bmiCategory,
+     bodyFat, activityLevel, onboarding.goal, 'Criado automaticamente do onboarding']
+  )
+
+  // Store nutrition targets in users table
+  await pgQuery(env,
+    `UPDATE users SET
+       target_weight_kg = COALESCE($1, target_weight_kg),
+       body_fat_percent = $2,
+       updated_at = NOW()
+     WHERE id = $3`,
+    [onboarding.target_weight_kg, bodyFat, userId]
+  )
+
+  return created({
+    assessment_id: id,
+    bmi,
+    bmi_category: bmiCategory,
+    body_fat_percentage: bodyFat,
+    nutrition_targets: {
+      bmr,
+      tdee,
+      target_calories: targetCalories,
+      protein_grams: proteinGrams,
+      carbs_grams: carbGrams,
+      fat_grams: fatGrams,
+      goal: normalizedGoal,
+    },
+  })
+})
+
 export { app as selfAssessmentsRoutes }

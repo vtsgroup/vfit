@@ -2,18 +2,19 @@
  * src/app/(app)/perfil/assinatura/page.tsx
  *
  * Minha Assinatura — plano atual, upgrade, cancelar
- * Sprint 25 — Subscription Management
+ * Sprint S4 — B2C Payment Infrastructure
  */
 
 'use client'
 
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
 import { hapticLight } from '@/lib/haptics'
 import { VFIT_PLANS } from '@config/constants'
-import { formatBRL, getB2CMonthlyEquivalent, getB2CAnnualSavingsPercent } from '@lib/pricing'
+import { formatBRL, getB2CMonthlyEquivalent } from '@lib/pricing'
+import { useSubscriptionStatus, useVfitCheckout, useCancelSubscription } from '@/hooks/use-vfit-checkout'
 
 type Plan = 'free' | 'premium' | 'premium_annual'
 
@@ -40,11 +41,58 @@ const PLAN_DISPLAY: Record<Plan, { name: string; price: string; priceDetail: str
 
 export default function AssinaturaPage() {
   const router = useRouter()
-  const [currentPlan] = useState<Plan>('free') // TODO: fetch from API
-  const [selectedPlan, setSelectedPlan] = useState<Plan>('premium_annual')
-  const [showCancel, setShowCancel] = useState(false)
+  const { data: subStatus, isLoading } = useSubscriptionStatus()
+  const checkout = useVfitCheckout()
+  const cancelSub = useCancelSubscription()
 
-  const isPremium = currentPlan !== 'free'
+  const currentPlan: Plan = (subStatus?.plan_type as Plan) || 'free'
+  const [selectedPlan, setSelectedPlan] = useState<'premium' | 'premium_annual'>('premium_annual')
+  const [showCancel, setShowCancel] = useState(false)
+  const [cpf, setCpf] = useState('')
+  const [pixData, setPixData] = useState<{ qr_code_base64: string; copy_paste: string } | null>(null)
+  const [copied, setCopied] = useState(false)
+
+  const isPremium = subStatus?.is_premium ?? false
+
+  const handleCheckout = useCallback(async () => {
+    if (!cpf || cpf.replace(/\D/g, '').length < 11) return
+    hapticLight()
+    try {
+      const result = await checkout.mutateAsync({ plan: selectedPlan, cpf })
+      if (result) {
+        setPixData({
+          qr_code_base64: result.pix.qr_code_base64,
+          copy_paste: result.pix.copy_paste,
+        })
+      }
+    } catch {
+      // Error handled by mutation
+    }
+  }, [cpf, selectedPlan, checkout])
+
+  const handleCopy = useCallback(() => {
+    if (pixData?.copy_paste) {
+      navigator.clipboard.writeText(pixData.copy_paste)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    }
+  }, [pixData])
+
+  const handleCancel = useCallback(async () => {
+    hapticLight()
+    await cancelSub.mutateAsync()
+    setShowCancel(false)
+  }, [cancelSub])
+
+  if (isLoading) {
+    return (
+      <div className="mx-auto max-w-lg px-4 pt-4 pb-24">
+        <div className="flex items-center justify-center py-20">
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-brand-primary border-t-transparent" />
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="mx-auto max-w-lg px-4 pt-4 pb-24">
@@ -74,7 +122,9 @@ export default function AssinaturaPage() {
           <div>
             <p className="text-[15px] font-bold text-white">{PLAN_DISPLAY[currentPlan].name}</p>
             <p className="text-[11px] text-zinc-500">
-              {isPremium ? 'Ativo · Renova em 15/04/2026' : 'Conta gratuita'}
+              {isPremium && subStatus?.renews_at
+                ? `Ativo · Renova em ${new Date(subStatus.renews_at).toLocaleDateString('pt-BR')}`
+                : 'Conta gratuita'}
             </p>
           </div>
         </div>
@@ -88,14 +138,43 @@ export default function AssinaturaPage() {
         </div>
       </div>
 
+      {/* PIX QR Code Display */}
+      {pixData && (
+        <div className="mb-6 rounded-2xl border border-brand-primary/30 bg-white/3 p-5">
+          <h2 className="mb-3 text-center text-[15px] font-bold text-white">
+            <DSIcon name="qrcode" size={18} className="mr-2 inline text-brand-primary" />
+            Pague via PIX
+          </h2>
+          <div className="mb-4 flex justify-center">
+            <img
+              src={`data:image/png;base64,${pixData.qr_code_base64}`}
+              alt="QR Code PIX"
+              className="h-48 w-48 rounded-xl bg-white p-2"
+            />
+          </div>
+          <Button
+            variant="secondary"
+            size="sm"
+            className="w-full"
+            onClick={handleCopy}
+          >
+            <DSIcon name={copied ? 'check' : 'copy'} size={16} />
+            {copied ? 'Copiado!' : 'Copiar código PIX'}
+          </Button>
+          <p className="mt-2 text-center text-[10px] text-zinc-600">
+            Após o pagamento, sua assinatura será ativada automaticamente
+          </p>
+        </div>
+      )}
+
       {/* Upgrade section (only for free users) */}
-      {!isPremium && (
+      {!isPremium && !pixData && (
         <>
           <h2 className="mb-3 text-[13px] font-bold uppercase tracking-wider text-zinc-500">
             Upgrade para Premium
           </h2>
 
-          <div className="mb-6 space-y-3">
+          <div className="mb-4 space-y-3">
             {(['premium', 'premium_annual'] as const).map((plan) => {
               const p = PLAN_DISPLAY[plan]
               const isSelected = selectedPlan === plan
@@ -137,12 +216,29 @@ export default function AssinaturaPage() {
             })}
           </div>
 
-          <Button className="w-full mb-4">
+          {/* CPF Input */}
+          <div className="mb-4">
+            <input
+              type="text"
+              placeholder="CPF (obrigatório para PIX)"
+              value={cpf}
+              onChange={(e) => setCpf(e.target.value.replace(/\D/g, '').replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4'))}
+              maxLength={14}
+              className="w-full rounded-xl border border-white/10 bg-white/3 px-4 py-3 text-[14px] text-white placeholder:text-zinc-600"
+            />
+          </div>
+
+          <Button
+            className="mb-4 w-full"
+            loading={checkout.isPending}
+            onClick={handleCheckout}
+            disabled={!cpf || cpf.replace(/\D/g, '').length < 11}
+          >
             <DSIcon name="crown" size={18} />
             Assinar {PLAN_DISPLAY[selectedPlan].name}
           </Button>
           <p className="text-center text-[10px] text-zinc-600">
-            Cancele a qualquer momento · Pagamento seguro via PIX ou cartão
+            Cancele a qualquer momento · Pagamento seguro via PIX
           </p>
         </>
       )}
@@ -153,7 +249,7 @@ export default function AssinaturaPage() {
           {!showCancel ? (
             <button
               onClick={() => setShowCancel(true)}
-              className="text-[12px] text-zinc-600 hover:text-red-400 transition-colors"
+              className="text-[12px] text-zinc-600 transition-colors hover:text-red-400"
             >
               Cancelar assinatura
             </button>
@@ -173,7 +269,13 @@ export default function AssinaturaPage() {
                 >
                   Voltar
                 </Button>
-                <Button variant="danger" size="sm" className="flex-1">
+                <Button
+                  variant="danger"
+                  size="sm"
+                  className="flex-1"
+                  loading={cancelSub.isPending}
+                  onClick={handleCancel}
+                >
                   Confirmar cancelamento
                 </Button>
               </div>

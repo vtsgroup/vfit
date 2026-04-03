@@ -46,7 +46,7 @@ import {
   ForbiddenError,
 } from '@lib/errors'
 import { FEES } from '@config/constants'
-import { notifyEvent, notifyPaymentReceived, notifyPaymentOverdue } from '@lib/onesignal'
+import { notify, notifyEvent, notifyPaymentReceived, notifyPaymentOverdue } from '@lib/onesignal'
 import {
   getOrCreateCustomer,
   createAsaasPayment,
@@ -146,6 +146,65 @@ payments.post('/webhooks/asaas', async (c) => {
     )
 
     if (rows.length === 0) {
+      // Check if B2C VFIT subscription payment
+      const extRef = paymentData.externalReference as string | undefined
+      if (extRef?.startsWith('vfit_sub_')) {
+        const subId = extRef.replace('vfit_sub_', '')
+        const now = new Date().toISOString()
+
+        if (['CONFIRMED', 'RECEIVED'].includes(event)) {
+          // Activate B2C subscription
+          const { rows: subRows } = await pgQuery<{ user_id: string; plan_type: string; billing_cycle: string }>(
+            c.env,
+            'SELECT user_id, plan_type, billing_cycle FROM vfit_subscriptions WHERE id = $1 LIMIT 1',
+            [subId]
+          )
+          if (subRows.length > 0) {
+            const sub = subRows[0]
+            const renewsAt = new Date()
+            renewsAt.setDate(renewsAt.getDate() + (sub.billing_cycle === 'annual' ? 365 : 30))
+
+            await pgQuery(c.env, `
+              UPDATE vfit_subscriptions
+              SET asaas_subscription_id = $1, started_at = $2, renews_at = $3, updated_at = $2
+              WHERE id = $4
+            `, [paymentData.id, now, renewsAt.toISOString(), subId])
+
+            await pgQuery(c.env, `
+              UPDATE users
+              SET subscription_plan = $1, subscription_started_at = $2, subscription_renews_at = $3
+              WHERE id = $4
+            `, [sub.plan_type, now, renewsAt.toISOString(), sub.user_id])
+
+            // Push notification: subscription activated
+            await notify(c.env, sub.user_id, {
+              type: 'subscription',
+              title: '🎉 Premium Ativado!',
+              message: `Seu plano ${sub.plan_type === 'premium_annual' ? 'Premium Anual' : 'Premium'} foi ativado com sucesso!`,
+              link: '/perfil/assinatura',
+            }).catch(() => {})
+
+            console.log(`[Webhook B2C] Subscription ${subId} activated for user ${sub.user_id} (${sub.plan_type})`)
+          }
+        } else if (['REFUNDED', 'DELETED'].includes(event)) {
+          const { rows: subRows } = await pgQuery<{ user_id: string }>(
+            c.env,
+            'SELECT user_id FROM vfit_subscriptions WHERE id = $1 LIMIT 1',
+            [subId]
+          )
+          await pgQuery(c.env, `
+            UPDATE vfit_subscriptions SET canceled_at = $1, updated_at = $1 WHERE id = $2
+          `, [now, subId])
+          if (subRows.length > 0) {
+            await pgQuery(c.env, `
+              UPDATE users SET subscription_plan = 'free', subscription_canceled_at = $1 WHERE id = $2
+            `, [now, subRows[0].user_id])
+          }
+          console.log(`[Webhook B2C] Subscription ${subId} canceled/refunded`)
+        }
+        return c.json({ received: true })
+      }
+
       console.log(`[Webhook Asaas] Payment not found: ${paymentData.id}`)
       return c.json({ received: true })
     }

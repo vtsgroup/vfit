@@ -35,7 +35,7 @@ export function saveReferralCode(code: string): void {
     const elapsed = Date.now() - existing.timestamp
     const threeDaysMs = COOKIE_DAYS * 24 * 60 * 60 * 1000
     if (elapsed < threeDaysMs) {
-      console.log(`[Referral] Cookie protegido: ${existing.code} (${Math.round((threeDaysMs - elapsed) / 3600000)}h restantes)`)
+      if (process.env.NODE_ENV === 'development') console.log(`[Referral] Cookie protegido: ${existing.code}`)
       return
     }
   }
@@ -50,7 +50,7 @@ export function saveReferralCode(code: string): void {
     localStorage.setItem(COOKIE_NAME, JSON.stringify(data))
   } catch { /* ignore */ }
 
-  console.log(`[Referral] Cookie salvo: ${code} (expira em ${COOKIE_DAYS} dias)`)
+  if (process.env.NODE_ENV === 'development') console.log(`[Referral] Cookie salvo: ${code}`)
 }
 
 /**

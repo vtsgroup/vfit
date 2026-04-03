@@ -46,7 +46,6 @@ export default function OnboardingNotificationsPage() {
         const permission = await Notification.requestPermission()
         if (permission === 'granted') {
           // OneSignal will handle the rest
-          console.log('[Notifications] Permission granted')
         }
       }
     } catch {

@@ -313,6 +313,10 @@ export const RATE_LIMITS: Record<string, { max: number; windowSeconds: number }>
   '/api/v1/auth/reset-password': { max: 5, windowSeconds: 900 },   // 5 por 15 min — reset
   '/api/v1/payments': { max: 10, windowSeconds: 60 },              // 10 por minuto
   '/api/v1/ai': { max: 20, windowSeconds: 60 },                    // 20 por minuto
+  '/api/v1/subscription/checkout': { max: 3, windowSeconds: 3600 }, // 3 por hora — B2C checkout
+  '/api/v1/subscription/cancel': { max: 3, windowSeconds: 3600 },  // 3 por hora — B2C cancel
+  '/api/v1/self-assessments/from-onboarding': { max: 5, windowSeconds: 3600 }, // 5 por hora — auto-avaliação
+  '/api/v1/plans/generate': { max: 10, windowSeconds: 3600 },      // 10 por hora — geração AI
   default: { max: 100, windowSeconds: 60 },                        // 100 por minuto
 }
 

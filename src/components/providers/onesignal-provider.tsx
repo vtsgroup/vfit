@@ -124,7 +124,6 @@ export function OneSignalProvider({ children }: { children: React.ReactNode }) {
           // Store reference ONLY after successful init
           _sdkInstance = OneSignal
           setSdkReady(true)
-          console.log('[OneSignal] SDK initialized successfully')
         } catch (err) {
           _sdkInstance = null
           console.error('[OneSignal] Init error (login/tags disabled):', err)
@@ -156,6 +155,7 @@ export function OneSignalProvider({ children }: { children: React.ReactNode }) {
           // Set tags for segmentation
           const tags: Record<string, string> = {
             user_type: user.user_type,
+            app: 'vfit',
           }
 
           if (user.user_type === 'student' && studentProfile?.personal_id) {
@@ -166,14 +166,26 @@ export function OneSignalProvider({ children }: { children: React.ReactNode }) {
             tags.plan_type = personalProfile.plan_type
           }
 
+          // B2C subscription tag (fetch async, best-effort)
+          if (user.user_type === 'student') {
+            try {
+              const res = await fetch('/api/v1/subscription/status', {
+                headers: { 'Authorization': `Bearer ${document.cookie.match(/access_token=([^;]+)/)?.[1] || ''}` },
+              })
+              if (res.ok) {
+                const data = await res.json() as { data?: { plan?: string; is_premium?: boolean } }
+                tags.subscription_plan = data.data?.plan || 'free'
+                tags.is_premium = data.data?.is_premium ? 'true' : 'false'
+              }
+            } catch { /* best-effort */ }
+          }
+
           await sdk.User.addTags(tags)
-          console.log('[OneSignal] User synced:', user.id, tags)
         } else {
           // User logged out
           if (loginRef.current) {
             loginRef.current = null
             await sdk.logout()
-            console.log('[OneSignal] User logged out')
           }
         }
       } catch (err) {
@@ -229,7 +241,6 @@ export function useOneSignal() {
 
     try {
       await sdk.User.PushSubscription.optOut()
-      console.log('[OneSignal] User opted out')
     } catch (err) {
       console.error('[OneSignal] OptOut error:', err)
     }

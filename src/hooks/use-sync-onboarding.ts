@@ -53,7 +53,6 @@ export function useSyncOnboarding() {
         })
         .then(() => {
           localStorage.removeItem(STORAGE_KEY)
-          console.log('[Onboarding] Synced to backend and cleared localStorage')
         })
         .catch((err) => {
           console.warn('[Onboarding] Sync failed, will retry:', err)

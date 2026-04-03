@@ -30,6 +30,24 @@ plans.post('/generate', async (c) => {
   const body = await c.req.json()
   const input = generatePlanInputSchema.parse(body)
 
+  // Free plan limit: 1 plan per month (skip check if no auth)
+  const userId = c.get('jwtPayload')?.sub
+  if (userId) {
+    const user = await pgQueryOne<{ subscription_plan: string }>(c.env,
+      'SELECT subscription_plan FROM users WHERE id = $1', [userId]
+    )
+    const isPremium = user?.subscription_plan && user.subscription_plan !== 'free'
+    if (!isPremium) {
+      const count = await pgQueryOne<{ count: string }>(c.env, `
+        SELECT COUNT(*) as count FROM workout_plans
+        WHERE user_id = $1 AND created_at >= date_trunc('month', NOW())
+      `, [userId])
+      if (parseInt(count?.count || '0') >= 1) {
+        throw new BadRequestError('Limite gratuito atingido. Assine o Premium para planos ilimitados.')
+      }
+    }
+  }
+
   let plan: GeneratedPlan
   let source: 'ai' | 'fallback' = 'ai'
 
@@ -624,6 +642,55 @@ plans.delete('/:planId/days/:dayId/exercises/:exerciseId', authMiddleware, async
   )
 
   return success({ deleted: true })
+})
+
+// ============================================
+// GET /history — Plan history for user
+// ============================================
+plans.get('/history', authMiddleware, async (c) => {
+  const userId = c.get('jwtPayload').sub
+  const limit = Math.min(parseInt(c.req.query('limit') || '10'), 50)
+
+  const { rows } = await pgQuery(c.env, `
+    SELECT wp.id, wp.name, wp.goal, wp.experience_level, wp.days_per_week,
+           wp.status, wp.created_at, wp.updated_at,
+           (SELECT COUNT(*) FROM workout_plan_days wpd WHERE wpd.plan_id = wp.id) as total_days
+    FROM workout_plans wp
+    WHERE wp.user_id = $1
+    ORDER BY wp.created_at DESC
+    LIMIT $2
+  `, [userId, limit])
+
+  return success(rows)
+})
+
+// ============================================
+// GET /limits — Check user plan generation limits
+// ============================================
+plans.get('/limits', authMiddleware, async (c) => {
+  const userId = c.get('jwtPayload').sub
+
+  // Check subscription
+  const user = await pgQueryOne<{ subscription_plan: string }>(c.env,
+    'SELECT subscription_plan FROM users WHERE id = $1', [userId]
+  )
+  const isPremium = user?.subscription_plan && user.subscription_plan !== 'free'
+
+  // Count plans generated this month
+  const count = await pgQueryOne<{ count: string }>(c.env, `
+    SELECT COUNT(*) as count FROM workout_plans
+    WHERE user_id = $1 AND created_at >= date_trunc('month', NOW())
+  `, [userId])
+
+  const plansThisMonth = parseInt(count?.count || '0')
+  const maxPlans = isPremium ? -1 : 1
+
+  return success({
+    plans_this_month: plansThisMonth,
+    max_plans: maxPlans,
+    is_premium: !!isPremium,
+    can_generate: isPremium || plansThisMonth < 1,
+  })
 })
 
 export { plans as plansRoutes }

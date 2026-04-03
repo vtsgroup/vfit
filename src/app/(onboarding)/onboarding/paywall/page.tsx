@@ -30,7 +30,6 @@ export default function OnboardingPaywallPage() {
       setLoading(true)
       try {
         // TODO Sprint 10.10: Chamar POST /api/v1/subscriptions/create com plan.id
-        console.log('[Paywall] Selected plan:', plan.id)
         // Salvar plano selecionado para pegar após signup
         sessionStorage.setItem('vfit_selected_plan', plan.id)
         router.push(`/login?from=onboarding&plan=${plan.id}`)

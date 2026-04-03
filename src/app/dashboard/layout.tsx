@@ -26,6 +26,7 @@ import { IOSInstallGate } from '@/components/pwa/ios-install-gate'
 import { RoutePrefetch } from '@/components/cache/route-prefetch'
 import { DashboardAuthGate } from '@/components/auth/dashboard-auth-gate'
 import { SplashOrchestrator } from '@/components/layout/splash-orchestrator'
+import { ErrorBoundary } from '@/components/ui/error-boundary'
 import { NO_INDEX_ROBOTS } from '@/lib/seo'
 
 export const metadata: Metadata = {
@@ -47,7 +48,9 @@ export default function DashboardRootLayout({
         <DashboardAuthGate>
           <PwaInstallProvider>
             <DashboardLayout>
-              {children}
+              <ErrorBoundary>
+                {children}
+              </ErrorBoundary>
               <PasskeyPrompt />
               <IOSInstallGate />
               <RoutePrefetch />

@@ -51,8 +51,6 @@ export function ServiceWorkerRegistration() {
             scope: '/',
           }))
 
-        console.log('[SW] Ready:', reg.scope)
-
         // Revalidação silenciosa inicial (best-effort)
         void sendMessage('REVALIDATE_SHELL')
 

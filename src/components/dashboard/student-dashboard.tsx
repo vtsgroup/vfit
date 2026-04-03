@@ -44,6 +44,7 @@ import {
   type StudentPaymentItem,
 } from '@/hooks/use-student-app'
 import { useWorkout } from '@/hooks/use-workouts'
+import { useSubscriptionStatus } from '@/hooks/use-vfit-checkout'
 
 export function StudentDashboard() {
   const user = useAuthStore((s) => s.user)
@@ -56,6 +57,7 @@ export function StudentDashboard() {
   const evolution = useStudentEvolution()
   const badges = useStudentBadges()
   const heatmap = useStudentTrainingHeatmap(new Date().getFullYear())
+  const subscription = useSubscriptionStatus()
 
   const pendingPayments = (payments.data?.payments ?? []).filter((p) => p.status === 'pending')
   const activeWorkout = workouts.data?.workouts?.find((w) => w.status === 'active')
@@ -139,6 +141,22 @@ export function StudentDashboard() {
       {/* Push notification prompt */}
       <PushNotificationPrompt />
 
+      {/* B2C Subscription Status — upgrade CTA for free users */}
+      {subscription.data && !subscription.data.is_premium && (
+        <Link href="/perfil/assinatura">
+          <div className="flex items-center gap-3 rounded-2xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-all hover:border-brand-primary/40">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-primary/15">
+              <DSIcon name="crown" size={20} className="text-brand-primary" />
+            </div>
+            <div className="flex-1">
+              <p className="text-[13px] font-bold text-white">Desbloqueie o Premium</p>
+              <p className="text-[11px] text-zinc-500">Planos ilimitados por IA, chat e mais</p>
+            </div>
+            <DSIcon name="chevronRight" size={18} className="text-zinc-600" />
+          </div>
+        </Link>
+      )}
+
       {/* ── Error state — return early if critical data failed ── */}
       {hasCriticalError && (
         <div className="flex flex-col items-center gap-4 rounded-2xl border border-amber-500/20 bg-amber-500/5 py-8 px-6 text-center backdrop-blur-sm">
@@ -192,11 +210,23 @@ export function StudentDashboard() {
           </div>
         </div>
       ) : (
-        <EmptyStateCard
-          icon="dumbbell"
-          title="Nenhum treino ainda"
-          description="Seu personal irá criar treinos para você em breve. Fique de olho!"
-        />
+        <div className="flex flex-col items-center gap-4 rounded-2xl border border-white/5 bg-white/2 py-8 px-6 text-center">
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-500/10">
+            <DSIcon name="dumbbell" size={28} className="text-emerald-400/80" />
+          </div>
+          <div>
+            <p className="font-bold text-text-primary">Nenhum treino ainda</p>
+            <p className="mt-1 max-w-sm text-sm text-text-secondary">
+              Gere seu primeiro plano de treino personalizado com inteligência artificial!
+            </p>
+          </div>
+          <Link href="/plano">
+            <Button variant="workout" size="md" className="gap-2">
+              <DSIcon name="sparkles" size={18} />
+              Gerar Plano com IA
+            </Button>
+          </Link>
+        </div>
       )}
 
       {/* ── 3. ALERTAS URGENTES (pagamentos + avaliação) ────── */}

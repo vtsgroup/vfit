@@ -13,6 +13,7 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { StudentHeader } from '@/components/navigation/student-header'
 import { BottomNavigation } from '@/components/navigation/bottom-navigation'
+import { ErrorBoundary } from '@/components/ui/error-boundary'
 import { useAuthStore } from '@/stores/auth-store'
 
 /**
@@ -85,7 +86,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
       {/* Main content — padding bottom for nav bar + safe area */}
       <main className="pb-20">
-        {children}
+        <ErrorBoundary>
+          {children}
+        </ErrorBoundary>
       </main>
 
       {/* Bottom Navigation */}

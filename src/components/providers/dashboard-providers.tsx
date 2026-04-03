@@ -20,17 +20,19 @@ import { AuthProvider } from './auth-provider'
 import { OneSignalProvider } from './onesignal-provider'
 import { QueryWarmup } from '@/components/cache/query-warmup'
 import { CacheEventListener } from '@/components/cache/cache-event-listener'
-import { MotionConfig } from 'framer-motion'
+import { LazyMotion, domAnimation, MotionConfig } from 'framer-motion'
 
 export function DashboardProviders({ children }: { children: React.ReactNode }) {
   return (
     <AuthProvider>
       <OneSignalProvider>
-        <MotionConfig reducedMotion="user">
-          <CacheEventListener />
-          <QueryWarmup />
-          {children}
-        </MotionConfig>
+        <LazyMotion features={domAnimation} strict>
+          <MotionConfig reducedMotion="user">
+            <CacheEventListener />
+            <QueryWarmup />
+            {children}
+          </MotionConfig>
+        </LazyMotion>
       </OneSignalProvider>
     </AuthProvider>
   )
