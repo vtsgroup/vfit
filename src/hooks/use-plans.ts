@@ -9,6 +9,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { api } from '@/lib/api-client'
 import { useAuthStore } from '@/stores/auth-store'
+import { toast } from '@/stores/app-store'
 
 // ─── Types ───
 
@@ -119,6 +120,9 @@ export function useSavePlan() {
       const res = await api.post<{ plan_id: string }>('/plans/save', data)
       return res.data
     },
+    onError: (err: Error) => {
+      toast.error(err.message || 'Erro ao salvar plano')
+    },
   })
 }
 
@@ -147,6 +151,9 @@ export function useUpdatePlanSettings() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['plans', 'current'] })
     },
+    onError: (err: Error) => {
+      toast.error(err.message || 'Erro ao atualizar configurações')
+    },
   })
 }
 
@@ -163,6 +170,9 @@ export function useRegeneratePlan() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['plans', 'current'] })
+    },
+    onError: (err: Error) => {
+      toast.error(err.message || 'Erro ao regenerar plano')
     },
   })
 }

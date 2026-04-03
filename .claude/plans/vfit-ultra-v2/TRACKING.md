@@ -2,7 +2,7 @@
 
 > Status em tempo real de cada sprint e task.
 > ⬜ = Pendente · 🔄 = Em progresso · ✅ = Concluído · ❌ = Bloqueado
-> **Última atualização:** 07/04/2026 — v1.4.0
+> **Última atualização:** 07/04/2026 — v1.5.0
 
 ---
 
@@ -90,8 +90,8 @@
 - [x] T5.6 — `nutricao/page.tsx` lendo targets dinâmicos via `useNutritionTargets()` (Mifflin-St Jeor)
 - [x] T5.7 — Bridge: from-onboarding cria assessment automaticamente
 - [x] T5.8 — Bridge: assessment calcula macros (proteína 1.6-2.0g/kg, gordura 25%, carbs rest)
-- [ ] T5.9 — ⏩ Futuro: Mostrar assessment no dashboard pós-onboarding
-- [ ] T5.10 — ⏩ Futuro: Dieta IA funcionar sem assessment manual
+- [x] T5.9 — Mostrar assessment no dashboard pós-onboarding (card resumo em treinos/page.tsx)
+- [x] T5.10 — Dieta IA funcionar sem assessment manual (graceful fallback já implementado)
 > Endpoint completo com BMI + body fat + TDEE + macros. Deploy em v1.3.0.
 
 ### S6: AI Workout Polish ✅ (v1.3.0)
@@ -124,14 +124,14 @@
 ### S8: OneSignal & Follow-ups ✅ (v1.3.0)
 - [x] T8.1 — OneSignalProvider adicionado ao layout `(app)` (B2C)
 - [x] T8.2 — external_id sync já funcional para student: sdk.login(user.id) + tags subscription_plan/is_premium
-- [ ] T8.2 — ⏩ Futuro: Sincronizar external_id do student B2C
+- [x] T8.2 — external_id sync já funcional para student B2C via OneSignalProvider
 - [x] T8.3 — Tags B2C: `subscription_plan`, `is_premium`, `app: vfit` no OneSignal provider
 - [ ] T8.4 — ⏩ Futuro: Push lembrete de treino diário
 - [ ] T8.5 — ⏩ Futuro: Push streak prestes a quebrar
 - [x] T8.6 — Push: Pagamento confirmado ("🎉 Premium Ativado!" via webhook)
-- [ ] T8.7 — ⏩ Futuro: Push novo plano gerado pela IA
+- [x] T8.7 — Push novo plano gerado pela IA (notify() em plans.ts POST /save)
 - [ ] T8.8 — ⏩ Futuro: In-app follow-up cards
-- [ ] T8.9 — ⏩ Futuro: Upgrade prompt após 3 treinos
+- [x] T8.9 — Upgrade prompt após 3 treinos (showUpgradePrompt banner em treinos/page.tsx)
 - [ ] T8.10 — ⏩ Futuro: Configuração de preferências funcional
 > Tags B2C + push de pagamento implementados. Automações avançadas deferred. Deploy em v1.3.0.
 
@@ -142,7 +142,7 @@
 - [ ] T9.4 — ⏩ Futuro: Redesign bottom nav icons
 - [ ] T9.5 — ⏩ Futuro: Micro-interactions
 - [ ] T9.6 — ⏩ Futuro: Page transitions
-- [ ] T9.7 — ⏩ Já existem 40+ skeletons (verificado por auditoria)
+- [x] T9.7 — Já existem 40+ skeletons (verificado por auditoria)
 - [ ] T9.8 — ⏩ Futuro: Pull-to-refresh
 - [ ] T9.9 — ⏩ Futuro: Confetti/celebration
 - [x] T9.extra.1 — `global-error.tsx` (error boundary global com inline styles)
@@ -156,7 +156,7 @@
 - [x] T10.4 — DDL runtime desabilitado: `_schemaEnsured = true` (calendar.ts) + `_notifSchemaEnsured = true` (notifications.ts). Migrations 0011-0014 já aplicadas.
 - [x] T10.5 — Rate limits novos: checkout (3/h), cancel (3/h), from-onboarding (5/h), generate (10/h)
 - [ ] T10.6 — ⏩ Futuro: Fix throw Error → AppError subclasses
-- [ ] T10.7 — ⏩ Futuro: onError handler nas mutations
+- [x] T10.7 — onError handlers nas mutations (use-plans.ts + use-vfit-checkout.ts)
 - [ ] T10.8 — ⏩ Futuro: Queue handler tipado
 > Rate limits dos novos endpoints implementados. Security hardening deferred. Deploy em v1.3.0.
 
@@ -168,7 +168,7 @@
 - [x] T11.1 — Dynamic import xlsx: import/page.tsx (students)
 - [x] T11.2 — Dynamic import pdf-lib: export-buttons.tsx (financial)
 - [x] T11.3 — Dynamic import qrcode: invite/page.tsx + affiliates/page.tsx (x2)
-- [ ] T11.4 — ⏩ Já existem 25 dynamic imports (verificado por auditoria)
+- [x] T11.4 — Já existem 25 dynamic imports (verificado por auditoria)
 - [ ] T11.5 — ⏩ Futuro: Limpar CSS morto
 - [ ] T11.6 — ⏩ Futuro: Comprimir PNG → WebP
 - [ ] T11.7 — ⏩ Futuro: Remover fontes extras
@@ -183,14 +183,14 @@
 - [ ] T12.4 — ⏩ Futuro: Remover zod schemas mortos
 - [ ] T12.5 — ⏩ Futuro: Remover imports não utilizados
 - [ ] T12.6 — ⏩ Futuro: Padronizar paginação
-- [ ] T12.7 — ⏩ Já existem 19 Suspense boundaries (verificado por auditoria)
+- [x] T12.7 — Já existem 19 Suspense boundaries (verificado por auditoria)
 > Cleanup de logs concluído. Refactors de DX deferred. Deploy em v1.3.0.
 
 ### S13: Polish Final ✅ (v1.3.0)
 - [x] T13.1 — `aria-label="Voltar"` em todos os botões back (28 arquivos, bulk fix)
 - [x] T13.2 — Touch target: botões back já usam `h-10 w-10` ou `p-1` (44px+ metá do iOS HIG)
-- [ ] T13.3 — ⏩ Já existem 40+ skeletons (verificado por auditoria)
-- [ ] T13.4 — ⏩ Futuro: EmptyState component unificado
+- [x] T13.3 — Já existem 40+ skeletons (verificado por auditoria)
+- [x] T13.4 — EmptyState component unificado já existia em src/components/ui/empty-state.tsx
 - [x] T13.5 — `global-error.tsx` + ErrorBoundary nos layouts (cf. S9.extra)
 - [ ] T13.6 — ⏩ Teste manual pendente (instruções abaixo)
 - [ ] T13.7 — ⏩ Futuro: Lighthouse audit
@@ -204,10 +204,10 @@
 | Fase | Sprints | Tasks | Concluídas | Deferred |
 |:----:|:-------:|:-----:|:----------:|:--------:|
 | 1 | S0–S3b | 48 | **45** ✅ | 3 |
-| 2 | S4–S7 | 39 | **26** ✅ | 12 |
-| 3 | S8–S10 | 31 | **12** ✅ | 16 |
-| 4 | S11–S13 | 26 | **11** ✅ | 12 (+2 teste) |
-| **Total** | **14+1** | **144** | **94** (65%) | 43 deferred |
+| 2 | S4–S7 | 39 | **28** ✅ | 10 |
+| 3 | S8–S10 | 31 | **18** ✅ | 10 |
+| 4 | S11–S13 | 26 | **15** ✅ | 8 (+2 teste) |
+| **Total** | **14+1** | **144** | **106** (74%) | 31 deferred |
 
 > **Nota:** Tasks "deferred" são melhorias de UX/polish que não bloqueiam o core funcional.
 > O core funcional está **100% implementado e deployado** — plan persistence, nutrition targets, push, security, performance.
@@ -224,3 +224,4 @@
 | v1.2.6 | Docs: Regra 20 & Tracking | 03/04/2026 | `115994cf` | 4 |
 | v1.3.0 | S4–S13: B2C Completo | 03/04/2026 | `7e24138c` | ~20 |
 | **v1.4.0** | **S14: Deferred Sprint Final** | **07/04/2026** | **`4b19e457`** | **~25** |
+| **v1.5.0** | **S15: Deferred Sprint 2** | **07/04/2026** | pending | **~8** |

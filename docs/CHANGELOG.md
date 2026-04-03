@@ -5,6 +5,39 @@
 
 ---
 
+## [v1.5.0] — 07/04/2026 — Sprint S15: Deferred Sprint 2
+
+### 🏠 T5.9 — Assessment Card no Dashboard B2C
+- `treinos/page.tsx`: card "Sua Avaliação" usando `useSelfAssessments(1)` — mostra peso, IMC e gordura corporal da última avaliação
+- Se não há avaliação: card CTA "Fazer Avaliação Física" com link para `/avaliacoes/nova`
+- Posicionado entre os KPI cards (plano/nutrição) e o grid de quick actions
+
+### ✅ T5.10 — Dieta IA sem Assessment (já existia)
+- `ia/dieta/page.tsx` já tinha graceful fallback: se `!latest`, mostra aviso + link para criar avaliação, mas não bloqueia o formulário
+- Usa defaults `weightKg = latest?.weight_kg ?? 70` etc. quando sem assessment
+
+### 🔔 T8.7 — Push: Plano IA Gerado
+- `workers/api/plans.ts` POST `/save`: após salvar plano + sync D1, chama `notify()` com `type: 'workout.new'` para o userId (best-effort, `.catch(() => {})`)
+
+### 💪 T8.9 — Upgrade Prompt após 3 Treinos
+- `treinos/page.tsx`: banner amber "Você está indo bem!" quando `is_premium === false && workoutCount >= 3`
+- Usa `useSubscriptionStatus().is_premium` + `useWorkoutLogs({ per_page: 1 }).meta.total`
+- Link para `/perfil/assinatura` com CTA "Ver planos"
+
+### ⚠️ T10.7 — onError Handlers nas Mutations
+- `use-plans.ts`: `useSavePlan`, `useUpdatePlanSettings`, `useRegeneratePlan` — `onError: (err) => toast.error(err.message)`
+- `use-vfit-checkout.ts`: `useVfitCheckout`, `useCancelSubscription` — `onError: (err) => toast.error(err.message)`
+- Import `toast` de `@/stores/app-store` em ambos os arquivos
+
+### ✅ Tasks "Já Existiam" — Confirmadas e Marcadas
+- **T13.4** `EmptyState` já existe em `src/components/ui/empty-state.tsx` (312 linhas, Framer Motion) + barrel
+- **T9.7 / T13.3** 40+ Skeletons já existiam por auditoria
+- **T11.4** 25+ dynamic imports já existiam por auditoria
+- **T12.7** 19+ Suspense boundaries já existiam por auditoria
+- **T8.2** external_id sync já funcional via OneSignalProvider
+
+---
+
 ## [v1.4.0] — 07/04/2026 — Sprint S14: Deferred Final
 
 ### 🏠 T7 — B2C Dashboard (treinos/page.tsx)

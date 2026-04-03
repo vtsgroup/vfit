@@ -20,6 +20,7 @@ import { generatePlanInputSchema, generatedPlanSchema } from '@workers/schemas/p
 import type { GeneratedPlan } from '@workers/schemas/plan-generation'
 import { getDefaultPlan } from '@config/default-plans'
 import { authMiddleware } from '@workers/middleware/auth'
+import { notify } from '@lib/onesignal'
 
 const plans = new Hono<AppContext>()
 
@@ -241,6 +242,14 @@ plans.post('/save', async (c) => {
     // D1 is cache — do NOT fail the request if sync fails
     console.warn(`[D1] Failed to sync workout ${planId}:`, err)
   }
+
+  // T8.7 — Push: novo plano gerado pela IA (best-effort)
+  await notify(c.env, userId, {
+    type: 'workout.new',
+    title: '🏋️ Seu plano está pronto!',
+    message: `"${plan.plan_name}" foi gerado com sucesso. Hora de começar!`,
+    link: '/plano',
+  }).catch(() => {})
 
   return created({ plan_id: planId })
 })

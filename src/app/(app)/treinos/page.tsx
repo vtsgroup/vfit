@@ -21,6 +21,9 @@ import {
 import { hapticLight } from '@/lib/haptics'
 import { useCurrentPlan } from '@/hooks/use-plans'
 import { useMealsToday, useNutritionTargets } from '@/hooks/use-vfit-nutrition'
+import { useSelfAssessments, getBMIColor } from '@/hooks/use-self-assessments'
+import { useWorkoutLogs } from '@/hooks/use-workouts'
+import { useSubscriptionStatus } from '@/hooks/use-vfit-checkout'
 
 const DIFFICULTY_FILTERS = [
   { value: '', label: 'Todos' },
@@ -99,6 +102,17 @@ export default function TreinosPage() {
   const { data: mealsData } = useMealsToday()
   const { data: targets = { calories: 2000, protein: 150, carbs: 250, fat: 65 } } =
     useNutritionTargets()
+
+  // T5.9 — Assessment summary for post-onboarding card
+  const { data: assessments } = useSelfAssessments(1)
+  const latestAssessment = assessments?.[0]
+
+  // T8.9 — Upgrade prompt after 3 workouts
+  const { data: subscription } = useSubscriptionStatus()
+  const isFree = !subscription?.is_premium
+  const { data: logsData } = useWorkoutLogs({ per_page: 1 })
+  const workoutCount = logsData?.meta?.total ?? 0
+  const showUpgradePrompt = isFree && workoutCount >= 3
 
   // Treino de hoje — map current_day to plan day
   const todayDay = useMemo(() => {
@@ -202,6 +216,66 @@ export default function TreinosPage() {
         </Link>
       </div>
 
+      {/* T5.9 — Assessment summary card (pós-onboarding) */}
+      {latestAssessment ? (
+        <Link href="/avaliacoes" className="mb-5 block">
+          <div className="glass-card rounded-2xl p-4">
+            <div className="mb-3 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-violet-500/15">
+                  <DSIcon name="clipboardList" size={14} className="text-violet-400" />
+                </div>
+                <span className="text-[11px] font-bold uppercase tracking-wider text-violet-400">
+                  Sua Avaliação
+                </span>
+              </div>
+              <DSIcon name="chevronRight" size={14} className="text-text-muted" />
+            </div>
+            <div className="grid grid-cols-3 gap-2 text-center">
+              <div>
+                <p className="text-[16px] font-bold text-text-primary">
+                  {latestAssessment.weight_kg}
+                  <span className="ml-0.5 text-[10px] font-normal text-text-muted">kg</span>
+                </p>
+                <p className="text-[10px] text-text-muted">Peso</p>
+              </div>
+              <div>
+                <p className={`text-[16px] font-bold ${getBMIColor(latestAssessment.bmi)}`}>
+                  {latestAssessment.bmi}
+                </p>
+                <p className="text-[10px] text-text-muted">IMC</p>
+              </div>
+              <div>
+                <p className="text-[16px] font-bold text-text-primary">
+                  {latestAssessment.body_fat_percentage != null
+                    ? `${latestAssessment.body_fat_percentage}%`
+                    : '—'}
+                </p>
+                <p className="text-[10px] text-text-muted">Gordura</p>
+              </div>
+            </div>
+            {latestAssessment.bmi_category && (
+              <p className="mt-2 text-center text-[11px] text-text-muted">
+                {latestAssessment.bmi_category}
+              </p>
+            )}
+          </div>
+        </Link>
+      ) : (
+        <Link href="/avaliacoes/nova" className="mb-5 block">
+          <div className="glass-card flex items-center gap-3 rounded-2xl p-4">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-500/10">
+              <DSIcon name="clipboardList" size={20} className="text-violet-400" />
+            </div>
+            <div className="flex-1">
+              <p className="text-[13px] font-bold text-text-primary">Fazer Avaliação Física</p>
+              <p className="text-[11px] text-text-muted">Acompanhe seu progresso corporal</p>
+            </div>
+            <DSIcon name="chevronRight" size={14} className="text-text-muted" />
+          </div>
+        </Link>
+      )}
+
       {/* Quick actions */}
       <div className="mb-5 grid grid-cols-2 gap-3">
         <Link
@@ -226,6 +300,31 @@ export default function TreinosPage() {
           <p className="text-[11px] text-text-muted">Treino atual ativo</p>
         </Link>
       </div>
+
+      {/* T8.9 — Upgrade prompt após 3 treinos no free */}
+      {showUpgradePrompt && (
+        <Link href="/perfil/assinatura" className="mb-5 block">
+          <div className="glass-card rounded-2xl border border-amber-400/20 bg-linear-to-br from-amber-400/8 to-transparent p-4">
+            <div className="mb-2 flex items-center gap-2">
+              <DSIcon name="sparkles" size={16} className="text-amber-400" />
+              <span className="text-[11px] font-bold uppercase tracking-wider text-amber-400">
+                Parabéns! {workoutCount} treinos concluídos
+              </span>
+            </div>
+            <p className="mb-3 text-[13px] font-semibold text-text-primary">
+              Você está indo bem! Desbloqueie planos ilimitados com o Premium.
+            </p>
+            <div className="flex items-center justify-between">
+              <span className="text-[12px] text-text-muted">
+                A partir de R$ 29,90/mês
+              </span>
+              <span className="rounded-xl bg-amber-400 px-3 py-1.5 text-[12px] font-bold text-black">
+                Ver planos
+              </span>
+            </div>
+          </div>
+        </Link>
+      )}
 
       {/* Templates section */}
       <div className="mb-4 flex items-center justify-between">

@@ -8,6 +8,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '@/lib/api-client'
 import { useAuthStore } from '@/stores/auth-store'
+import { toast } from '@/stores/app-store'
 
 // ============================================
 // Types
@@ -80,6 +81,9 @@ export function useVfitCheckout() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['subscription-status'] })
     },
+    onError: (err: Error) => {
+      toast.error(err.message || 'Erro ao processar pagamento')
+    },
   })
 }
 
@@ -95,6 +99,9 @@ export function useCancelSubscription() {
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['subscription-status'] })
+    },
+    onError: (err: Error) => {
+      toast.error(err.message || 'Erro ao cancelar assinatura')
     },
   })
 }
