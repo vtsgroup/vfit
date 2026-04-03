@@ -12,50 +12,36 @@ import { useRouter } from 'next/navigation'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
 import { hapticLight } from '@/lib/haptics'
+import { VFIT_PLANS } from '@config/constants'
+import { formatBRL, getB2CMonthlyEquivalent, getB2CAnnualSavingsPercent } from '@lib/pricing'
 
-type Plan = 'free' | 'mensal' | 'anual'
+type Plan = 'free' | 'premium' | 'premium_annual'
 
-const PLANS: Record<Plan, { name: string; price: string; priceDetail: string; features: string[] }> = {
+const PLAN_DISPLAY: Record<Plan, { name: string; price: string; priceDetail: string; features: string[] }> = {
   free: {
-    name: 'Básico',
+    name: VFIT_PLANS.free.name,
     price: 'Grátis',
     priceDetail: '',
-    features: [
-      'Treino gerado por IA (1/semana)',
-      'Acompanhamento básico de progresso',
-      'Biblioteca de exercícios',
-    ],
+    features: VFIT_PLANS.free.features as unknown as string[],
   },
-  mensal: {
-    name: 'Premium Mensal',
-    price: 'R$ 29,90',
+  premium: {
+    name: VFIT_PLANS.premium.name,
+    price: formatBRL(VFIT_PLANS.premium.price_brl),
     priceDetail: '/mês',
-    features: [
-      'Treinos ilimitados por IA',
-      'Progresso completo + gráficos',
-      'Avaliações físicas',
-      'Compartilhar progresso',
-      'Sem anúncios',
-      'Suporte prioritário',
-    ],
+    features: VFIT_PLANS.premium.features as unknown as string[],
   },
-  anual: {
-    name: 'Premium Anual',
-    price: 'R$ 19,90',
-    priceDetail: '/mês (R$ 238,80/ano)',
-    features: [
-      'Tudo do Mensal',
-      '33% de desconto',
-      'Acesso antecipado a novidades',
-      'Badge exclusivo Premium',
-    ],
+  premium_annual: {
+    name: VFIT_PLANS.premium_annual.name,
+    price: formatBRL(getB2CMonthlyEquivalent('premium_annual')),
+    priceDetail: `/mês (${formatBRL(VFIT_PLANS.premium_annual.price_brl)}/ano)`,
+    features: VFIT_PLANS.premium_annual.features as unknown as string[],
   },
 }
 
 export default function AssinaturaPage() {
   const router = useRouter()
   const [currentPlan] = useState<Plan>('free') // TODO: fetch from API
-  const [selectedPlan, setSelectedPlan] = useState<Plan>('anual')
+  const [selectedPlan, setSelectedPlan] = useState<Plan>('premium_annual')
   const [showCancel, setShowCancel] = useState(false)
 
   const isPremium = currentPlan !== 'free'
@@ -86,14 +72,14 @@ export default function AssinaturaPage() {
             <DSIcon name={isPremium ? 'crown' : 'user'} size={22} />
           </div>
           <div>
-            <p className="text-[15px] font-bold text-white">{PLANS[currentPlan].name}</p>
+            <p className="text-[15px] font-bold text-white">{PLAN_DISPLAY[currentPlan].name}</p>
             <p className="text-[11px] text-zinc-500">
               {isPremium ? 'Ativo · Renova em 15/04/2026' : 'Conta gratuita'}
             </p>
           </div>
         </div>
         <div className="space-y-1.5">
-          {PLANS[currentPlan].features.map((f) => (
+          {PLAN_DISPLAY[currentPlan].features.map((f) => (
             <div key={f} className="flex items-center gap-2">
               <DSIcon name="check" size={14} className="shrink-0 text-brand-primary" />
               <span className="text-[12px] text-zinc-400">{f}</span>
@@ -110,10 +96,10 @@ export default function AssinaturaPage() {
           </h2>
 
           <div className="mb-6 space-y-3">
-            {(['mensal', 'anual'] as const).map((plan) => {
-              const p = PLANS[plan]
+            {(['premium', 'premium_annual'] as const).map((plan) => {
+              const p = PLAN_DISPLAY[plan]
               const isSelected = selectedPlan === plan
-              const isBest = plan === 'anual'
+              const isBest = plan === 'premium_annual'
               return (
                 <button
                   key={plan}
@@ -153,7 +139,7 @@ export default function AssinaturaPage() {
 
           <Button className="w-full mb-4">
             <DSIcon name="crown" size={18} />
-            Assinar {PLANS[selectedPlan].name}
+            Assinar {PLAN_DISPLAY[selectedPlan].name}
           </Button>
           <p className="text-center text-[10px] text-zinc-600">
             Cancele a qualquer momento · Pagamento seguro via PIX ou cartão

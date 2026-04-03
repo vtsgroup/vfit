@@ -18,6 +18,7 @@ import { buildSeoMetadata } from '@/lib/seo'
 import { PageHero } from '@/components/shared/page-hero'
 import { FAQ_PRICING } from '@/data/faqs'
 import { PricingSection } from '@/components/pricing/pricing-section'
+import { PLANS } from '@config/constants'
 import { Button } from '@/components/ui/button'
 
 // Perf: FaqInline é below-the-fold → lazy load para reduzir JS inicial
@@ -86,7 +87,7 @@ export default function PricingPage() {
                   review: { '@type': 'Review', author: { '@type': 'Person', name: 'Fernanda Oliveira' }, datePublished: '2026-02-10', reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' }, reviewBody: 'Melhor custo-benefício. Automação de cobranças e treinos economiza horas do meu dia.' },
                   offers: {
                     '@type': 'Offer',
-                    price: '29.90',
+                    price: String(PLANS.pro.price_brl),
                     priceCurrency: 'BRL',
                     priceValidUntil: '2026-12-31',
                     availability: 'https://schema.org/InStock',
@@ -107,7 +108,7 @@ export default function PricingPage() {
                   review: { '@type': 'Review', author: { '@type': 'Person', name: 'Ricardo Santos' }, datePublished: '2026-02-25', reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' }, reviewBody: 'Contratos e NFs integrados facilitaram muito a gestão financeira do meu studio.' },
                   offers: {
                     '@type': 'Offer',
-                    price: '69.90',
+                    price: String(PLANS.profissional.price_brl),
                     priceCurrency: 'BRL',
                     priceValidUntil: '2026-12-31',
                     availability: 'https://schema.org/InStock',
@@ -128,7 +129,7 @@ export default function PricingPage() {
                   review: { '@type': 'Review', author: { '@type': 'Person', name: 'Carla Ribeiro' }, datePublished: '2026-03-05', reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' }, reviewBody: 'White-label perfeito. Meus alunos acessam pelo meu domínio, com minha marca.' },
                   offers: {
                     '@type': 'Offer',
-                    price: '129.90',
+                    price: String(PLANS.max.price_brl),
                     priceCurrency: 'BRL',
                     priceValidUntil: '2026-12-31',
                     availability: 'https://schema.org/InStock',

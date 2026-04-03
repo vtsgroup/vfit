@@ -16,6 +16,8 @@ import { IntersectionReveal } from '@/components/ui/intersection-reveal'
 import { trackLandingEvent } from '@/lib/landing-analytics'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
+import { PLANS as PLAN_CONSTANTS } from '@config/constants'
+import { getAnnualPrice, formatPrice, formatPriceInteger, formatPriceCents } from '@/data/pricing-plans'
 
 // ============================================
 // Pricing Section — Koyeb-Inspired DARK Design
@@ -59,7 +61,7 @@ const PLANS: Plan[] = [
     tier: 'GRÁTIS',
     name: 'Grátis',
     icon: 'spark',
-    monthlyPrice: 0,
+    monthlyPrice: PLAN_CONSTANTS.trial.price_brl,
     description: 'Para quem está começando. Tudo que você precisa para gerenciar seus primeiros alunos.',
     features: [
       { text: '5 alunos ativos' },
@@ -77,7 +79,7 @@ const PLANS: Plan[] = [
     tier: 'PRO',
     name: 'Pro',
     icon: 'bolt',
-    monthlyPrice: 29.90,
+    monthlyPrice: PLAN_CONSTANTS.pro.price_brl,
     description: 'Para personal trainers que querem escalar. Alunos ilimitados e automação completa.',
     features: [
       { text: 'Alunos ilimitados', highlight: true },
@@ -97,7 +99,7 @@ const PLANS: Plan[] = [
     tier: 'PRO+',
     name: 'Pro+',
     icon: 'briefcase',
-    monthlyPrice: 69.90,
+    monthlyPrice: PLAN_CONSTANTS.profissional.price_brl,
     description: 'Para quem quer profissionalizar. Contratos, invoices e NFs em um único app.',
     features: [
       { text: 'Tudo do Pro +' },
@@ -116,7 +118,7 @@ const PLANS: Plan[] = [
     tier: 'MAX',
     name: 'Max',
     icon: 'crown',
-    monthlyPrice: 129.90,
+    monthlyPrice: PLAN_CONSTANTS.max.price_brl,
     description: 'Experiência premium completa. Sua marca, seu domínio, zero menção ao VFIT.',
     features: [
       { text: 'Tudo do Pro+ +' },
@@ -131,27 +133,6 @@ const PLANS: Plan[] = [
     comparison: 'Mobitrainer e Nexur cobram R$ 149,90+ com menos recursos',
   },
 ]
-
-function getAnnualPrice(monthlyPrice: number): number {
-  if (monthlyPrice === 0) return 0
-  return Math.round(monthlyPrice * 0.8 * 100) / 100
-}
-
-function formatPrice(value: number): string {
-  if (value === 0) return '0'
-  return value.toFixed(2).replace('.', ',')
-}
-
-function formatPriceInteger(value: number): string {
-  if (value === 0) return '0'
-  return Math.floor(value).toString()
-}
-
-function formatPriceCents(value: number): string {
-  if (value === 0) return ''
-  const cents = Math.round((value % 1) * 100)
-  return cents > 0 ? `,${cents.toString().padStart(2, '0')}` : ''
-}
 
 const PLAN_ICONS: Record<Plan['icon'], 'sparkles' | 'zap' | 'briefcase' | 'crown'> = {
   spark: 'sparkles',

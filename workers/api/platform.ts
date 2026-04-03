@@ -21,24 +21,26 @@ import {
   createAsaasPayment,
   getPixQrCode,
 } from '@lib/asaas'
+import { getB2BPrices } from '@lib/pricing'
+import { PLANS } from '@config/constants'
 
 const platform = new Hono<AppContext>()
 
 // All routes require auth
 platform.use('*', authMiddleware)
 
-// ── Plan prices ──────────────────────────────
+// ── Plan prices (derived from config/constants.ts via lib/pricing.ts) ──
 const PLAN_PRICES: Record<string, { monthly: number; annual: number }> = {
-  pro: { monthly: 29.90, annual: 287.04 },
-  profissional: { monthly: 69.90, annual: 671.04 },
-  max: { monthly: 129.90, annual: 1247.04 },
+  pro: getB2BPrices('pro'),
+  profissional: getB2BPrices('profissional'),
+  max: getB2BPrices('max'),
 }
 
 const PLAN_NAMES: Record<string, string> = {
-  trial: 'Grátis',
-  pro: 'Pro',
-  profissional: 'Pro+',
-  max: 'Max',
+  trial: PLANS.trial.name,
+  pro: PLANS.pro.name,
+  profissional: PLANS.profissional.name,
+  max: PLANS.max.name,
 }
 
 // ── Schemas ──────────────────────────────────

@@ -17,6 +17,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '@/lib/api-client'
 import { useAuthStore } from '@/stores/auth-store'
 import { toast } from '@/stores/app-store'
+import { PLANS } from '@config/constants'
+import { getB2BPrices } from '@lib/pricing'
 
 /* ─── Types ─── */
 export type PlatformPlanSlug = 'trial' | 'pro' | 'profissional' | 'max'
@@ -54,19 +56,19 @@ export interface CheckoutSession {
   boleto_url?: string
 }
 
-/* ─── Plan metadata ─── */
+/* ─── Plan metadata (derived from config/constants.ts) ─── */
 export const PLAN_PRICES: Record<PlatformPlanSlug, { monthly: number; annual: number }> = {
-  trial: { monthly: 0, annual: 0 },
-  pro: { monthly: 29.90, annual: 287.04 },
-  profissional: { monthly: 69.90, annual: 671.04 },
-  max: { monthly: 129.90, annual: 1247.04 },
+  trial: getB2BPrices('trial'),
+  pro: getB2BPrices('pro'),
+  profissional: getB2BPrices('profissional'),
+  max: getB2BPrices('max'),
 }
 
 export const PLAN_NAMES: Record<PlatformPlanSlug, string> = {
-  trial: 'Grátis',
-  pro: 'Pro',
-  profissional: 'Pro+',
-  max: 'Max',
+  trial: PLANS.trial.name,
+  pro: PLANS.pro.name,
+  profissional: PLANS.profissional.name,
+  max: PLANS.max.name,
 }
 
 export const PLAN_ORDER: PlatformPlanSlug[] = ['trial', 'pro', 'profissional', 'max']

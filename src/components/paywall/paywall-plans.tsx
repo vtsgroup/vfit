@@ -12,6 +12,8 @@
 import { useState } from 'react'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
+import { VFIT_PLANS } from '@config/constants'
+import { getB2CMonthlyEquivalent, getB2CAnnualSavingsPercent } from '@lib/pricing'
 
 export interface PaywallPlan {
   id: 'monthly' | 'annual'
@@ -29,9 +31,9 @@ const PLANS: PaywallPlan[] = [
   {
     id: 'monthly',
     name: 'Mensal',
-    price: 14.90,
+    price: VFIT_PLANS.premium.price_brl,
     period: '/mês',
-    pricePerMonth: 14.90,
+    pricePerMonth: VFIT_PLANS.premium.price_brl,
     features: [
       'Planos de treino ilimitados com IA',
       'Biblioteca completa de exercícios',
@@ -42,11 +44,11 @@ const PLANS: PaywallPlan[] = [
   {
     id: 'annual',
     name: 'Anual',
-    price: 89.90,
-    originalPrice: 178.80,
+    price: VFIT_PLANS.premium_annual.price_brl,
+    originalPrice: VFIT_PLANS.premium.price_brl * 12,
     period: '/ano',
-    pricePerMonth: 7.49,
-    savings: 'Economize 50%',
+    pricePerMonth: getB2CMonthlyEquivalent('premium_annual'),
+    savings: `Economize ${getB2CAnnualSavingsPercent()}%`,
     popular: true,
     features: [
       'Tudo do plano mensal',

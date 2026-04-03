@@ -24,6 +24,8 @@ import { AuthGuard } from '@/components/auth'
 import { useAuthStore } from '@/stores/auth-store'
 import { useEffectiveUserView } from '@/hooks/use-effective-user-view'
 import { usePlanSimulationStore } from '@/stores/plan-simulation-store'
+import { PLANS as PLAN_CONSTANTS } from '@config/constants'
+import { ANNUAL_DISCOUNT_B2B } from '@lib/pricing'
 
 /* ─────────────────────────────────────────────
    Plan Data
@@ -56,7 +58,7 @@ const PLANS: DashboardPlan[] = [
     slug: 'trial',
     name: 'Grátis',
     tier: 'STARTER',
-    monthlyPrice: 0,
+    monthlyPrice: PLAN_CONSTANTS.trial.price_brl,
     description: 'Comece sem compromisso',
     icon: 'user',
     accentColor: 'text-zinc-400',
@@ -77,7 +79,7 @@ const PLANS: DashboardPlan[] = [
     slug: 'pro',
     name: 'Pro',
     tier: 'PRO',
-    monthlyPrice: 29.90,
+    monthlyPrice: PLAN_CONSTANTS.pro.price_brl,
     description: 'Escale com IA e automação',
     icon: 'rocket',
     accentColor: 'text-emerald-400',
@@ -100,7 +102,7 @@ const PLANS: DashboardPlan[] = [
     slug: 'profissional',
     name: 'Pro+',
     tier: 'PRO+',
-    monthlyPrice: 69.90,
+    monthlyPrice: PLAN_CONSTANTS.profissional.price_brl,
     description: 'Destaque-se no mercado',
     icon: 'star',
     accentColor: 'text-violet-400',
@@ -123,7 +125,7 @@ const PLANS: DashboardPlan[] = [
     slug: 'max',
     name: 'Max',
     tier: 'ENTERPRISE',
-    monthlyPrice: 129.90,
+    monthlyPrice: PLAN_CONSTANTS.max.price_brl,
     description: 'Seu app, sua marca',
     icon: 'crown',
     accentColor: 'text-amber-400',
@@ -179,7 +181,7 @@ const COMPARISON: ComparisonRow[] = [
 /* ─── Helpers ─── */
 function getAnnualPrice(monthly: number): number {
   if (monthly === 0) return 0
-  return Math.round(monthly * 0.8 * 100) / 100
+  return Math.round(monthly * (1 - ANNUAL_DISCOUNT_B2B) * 100) / 100
 }
 
 function formatPrice(value: number): { integer: string; cents: string } {

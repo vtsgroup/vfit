@@ -12,6 +12,7 @@
 import { DSIcon } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
 import { CountdownTimer } from '@/components/ui/countdown-timer'
+import { VFIT_PLANS } from '@config/constants'
 
 interface PaywallDiscountProps {
   layer: 2 | 3
@@ -26,9 +27,9 @@ const LAYER_CONFIG = {
     discount: '20%',
     title: 'Espere! Oferta Especial 🎁',
     subtitle: 'Ganhe 20% de desconto no plano anual',
-    price: 71.90,
-    originalPrice: 89.90,
-    pricePerMonth: 5.99,
+    price: Math.round(VFIT_PLANS.premium_annual.price_brl * 0.80 * 100) / 100,
+    originalPrice: VFIT_PLANS.premium_annual.price_brl,
+    pricePerMonth: Math.round((VFIT_PLANS.premium_annual.price_brl * 0.80 / 12) * 100) / 100,
     badge: '20% OFF',
     badgeColor: 'bg-amber-500',
   },
@@ -36,9 +37,9 @@ const LAYER_CONFIG = {
     discount: '40%',
     title: '🔥 Nossa MELHOR Oferta!',
     subtitle: '40% OFF — Exclusivo agora, não voltará!',
-    price: 53.90,
-    originalPrice: 89.90,
-    pricePerMonth: 4.49,
+    price: Math.round(VFIT_PLANS.premium_annual.price_brl * 0.60 * 100) / 100,
+    originalPrice: VFIT_PLANS.premium_annual.price_brl,
+    pricePerMonth: Math.round((VFIT_PLANS.premium_annual.price_brl * 0.60 / 12) * 100) / 100,
     badge: '40% OFF',
     badgeColor: 'bg-red-500',
   },

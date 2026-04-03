@@ -13,6 +13,8 @@
 //   WebSiteSchema — schema do site com sitelinks search
 //   FaqPageSchema — schema de FAQ para rich results
 //   BlogSchema — schema de blog para Google News
+import { PLANS } from '@config/constants'
+
 type JsonLdProps = {
   data: Record<string, unknown>
 }
@@ -37,29 +39,29 @@ export function SoftwareApplicationSchema() {
     offers: [
       {
         '@type': 'Offer',
-        name: 'Essencial',
-        price: '0',
+        name: 'Grátis',
+        price: String(PLANS.trial.price_brl),
         priceCurrency: 'BRL',
         description: 'Grátis para até 5 alunos, inclui gamificação básica e Pix',
       },
       {
         '@type': 'Offer',
-        name: 'Trainer',
-        price: '29.90',
+        name: 'Pro',
+        price: String(PLANS.pro.price_brl),
         priceCurrency: 'BRL',
         description: 'Alunos ilimitados + Pix automático',
       },
       {
         '@type': 'Offer',
-        name: 'Profissional',
-        price: '59.90',
+        name: 'Pro+',
+        price: String(PLANS.profissional.price_brl),
         priceCurrency: 'BRL',
         description: 'NF eletrônica + contratos digitais',
       },
       {
         '@type': 'Offer',
-        name: 'MAX',
-        price: '129.90',
+        name: 'Max',
+        price: String(PLANS.max.price_brl),
         priceCurrency: 'BRL',
         description: 'White-label + e-mail profissional + marketplace',
       },

@@ -14,6 +14,9 @@
 //   getAnnualPrice(plan) → number — preço anual com desconto
 //   formatPriceInteger(n) → string — parte inteira do preço
 //   formatPriceCents(n) → string — centavos do preço
+import { PLANS } from '@config/constants'
+import { ANNUAL_DISCOUNT_B2B } from '@lib/pricing'
+
 /* ─── Pricing Plans — Dados Centralizados ─── */
 
 export interface PlanFeature {
@@ -34,10 +37,10 @@ export interface PricingPlan {
   badge?: string
 }
 
-/* 20% desconto no anual */
+/* Desconto anual — via ANNUAL_DISCOUNT_B2B (single source of truth) */
 export function getAnnualPrice(monthly: number): number {
   if (monthly === 0) return 0
-  return Math.round(monthly * 0.8 * 100) / 100
+  return Math.round(monthly * (1 - ANNUAL_DISCOUNT_B2B) * 100) / 100
 }
 
 export function formatPrice(value: number): string {
@@ -61,7 +64,7 @@ export const PRICING_PLANS: PricingPlan[] = [
     slug: 'essencial',
     tier: 'GRÁTIS',
     name: 'Grátis',
-    monthlyPrice: 0,
+    monthlyPrice: PLANS.trial.price_brl,
     description: 'Para quem está começando. Tudo que você precisa para gerenciar seus primeiros alunos.',
     features: [
       { text: '5 alunos ativos', included: true },
@@ -78,7 +81,7 @@ export const PRICING_PLANS: PricingPlan[] = [
     slug: 'pro',
     tier: 'PRO',
     name: 'Pro',
-    monthlyPrice: 29.90,
+    monthlyPrice: PLANS.pro.price_brl,
     description: 'Para personal trainers que querem escalar. Alunos ilimitados e automação completa.',
     features: [
       { text: 'Alunos ilimitados', included: true },
@@ -97,7 +100,7 @@ export const PRICING_PLANS: PricingPlan[] = [
     slug: 'pro-plus',
     tier: 'PRO+',
     name: 'Pro+',
-    monthlyPrice: 69.90,
+    monthlyPrice: PLANS.profissional.price_brl,
     description: 'Para quem quer profissionalizar. Contratos, invoices e NFs em um único app.',
     features: [
       { text: 'Tudo do Pro +', included: true },
@@ -115,7 +118,7 @@ export const PRICING_PLANS: PricingPlan[] = [
     slug: 'max',
     tier: 'MAX',
     name: 'Max',
-    monthlyPrice: 129.90,
+    monthlyPrice: PLANS.max.price_brl,
     description: 'Experiência premium completa. Sua marca, seu domínio, zero menção ao VFIT.',
     features: [
       { text: 'Tudo do Pro+ +', included: true },
