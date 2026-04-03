@@ -5,6 +5,43 @@
 
 ---
 
+## [v1.4.0] — 07/04/2026 — Sprint S14: Deferred Final
+
+### 🏠 T7 — B2C Dashboard (treinos/page.tsx)
+- **T7.3** Card "Treino de Hoje" no topo da tela de treinos — lê `useCurrentPlan().days[current_day]` com nome do dia, grupos musculares, duração e n° exercícios
+- **T7.4** KPI card "Plano Atual" — dia atual / total_days com % de progresso
+- **T7.5** Progress ring SVG inline — verde #10B981 para plano, amber #F59E0B para nutrição
+- **T7.6** KPI card "Nutrição Hoje" — `useMealsToday()` + `useNutritionTargets()` com kcal e macros P/C
+- **T7.8** Redirect automático: se `user_type === 'personal'` no layout `(app)`, redireciona para `/dashboard`
+
+### 🥗 T5.6 — Nutrition Targets Dinâmicos
+- Hook `useNutritionTargets()` em `use-vfit-nutrition.ts` — calcula Mifflin-St Jeor client-side a partir dos dados do onboarding
+- `nutricao/page.tsx` usa targets dinâmicos em vez de `{ calories: 2000, protein: 150, ... }` hardcoded
+
+### 💾 T6 — Plan Persistence
+- `plano/page.tsx`: auto-save effect — lê `vfit_plan` do sessionStorage → `useSavePlan()` → DB → `queryClient.invalidateQueries(['plans', 'current'])`
+
+### 🔔 T8.1 — OneSignal B2C
+- `OneSignalProvider` adicionado ao `(app)/layout.tsx` (antes só estava em `dashboard`)
+- Students B2C agora recebem `sdk.login(user.id)` + tags `subscription_plan` / `is_premium`
+
+### 🔒 T10 — Security Hardening
+- **T10.1** Specialties literal sanitization em `auth.ts` L276: `.replace(/[\\"\x00-\x1f]/g, '')`
+- **T10.2** Confirmado: todos /ai/* já cobertos por `ai.use('*', authMiddleware)` em ai.ts L55
+- **T10.3** Webhook idempotency em `payments.ts`: `SELECT id FROM affiliate_commissions WHERE payment_id` antes de inserir
+- **T10.4** DDL runtime desabilitado: `_schemaEnsured = true` (calendar.ts) + `_notifSchemaEnsured = true` (notifications.ts) — migrations 0011-0014 já aplicadas
+
+### ⚡ T11 — Performance: Dynamic Imports
+- **T11.1** `xlsx` → dynamic import em `students/import/page.tsx`
+- **T11.2** `pdf-lib` → dynamic import em `financial/export-buttons.tsx`
+- **T11.3** `qrcode` → dynamic import em `students/invite/page.tsx` + `affiliates/page.tsx`
+
+### ♿ T13.1-T13.2 — Acessibilidade
+- `aria-label="Voltar"` adicionado em todos os botões back do app B2C (28 arquivos, bulk fix via sed + Python)
+- Touch targets: botões back já usam `h-10 w-10` ou `p-1` (44px meta do iOS HIG)
+
+---
+
 ## [v1.3.0] — Sprint S4–S13 — B2C Completo + Otimizações
 
 ### 💳 S4 — Pagamento B2C (PIX)

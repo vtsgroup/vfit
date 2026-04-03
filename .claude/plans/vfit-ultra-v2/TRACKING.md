@@ -223,4 +223,4 @@
 | v1.2.5 | S3b: Onboarding Perfect | 03/04/2026 | `e8ce2960` | 24 |
 | v1.2.6 | Docs: Regra 20 & Tracking | 03/04/2026 | `115994cf` | 4 |
 | v1.3.0 | S4–S13: B2C Completo | 03/04/2026 | `7e24138c` | ~20 |
-| **v1.4.0** | **S14: Deferred Sprint Final** | **07/04/2026** | **pending** | **~25** |
+| **v1.4.0** | **S14: Deferred Sprint Final** | **07/04/2026** | **`4b19e457`** | **~25** |
