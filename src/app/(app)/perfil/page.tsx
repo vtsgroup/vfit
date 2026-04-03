@@ -30,7 +30,7 @@ export default function PerfilPage() {
     <div className="mx-auto max-w-lg px-4 pt-6 pb-24">
       {/* Profile header */}
       <div className="mb-5 flex items-center gap-4">
-        <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-brand-primary/10 text-brand-primary">
+        <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-white/8 text-brand-primary">
           {user?.avatar_url ? (
             <Image
               src={user.avatar_url}
@@ -68,9 +68,9 @@ export default function PerfilPage() {
       {!isPremium && (
         <Link
           href="/perfil/assinatura"
-          className="mb-5 flex items-center gap-3 rounded-2xl border border-brand-primary/30 bg-brand-primary/5 p-4 transition-all hover:bg-brand-primary/10"
+          className="mb-5 flex items-center gap-3 rounded-2xl border border-white/8 bg-white/3 p-4 transition-all hover:bg-white/5"
         >
-          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-primary/15">
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/8">
             <DSIcon name="crown" size={22} className="text-brand-primary" />
           </div>
           <div className="flex-1">

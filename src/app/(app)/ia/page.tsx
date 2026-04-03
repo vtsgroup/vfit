@@ -67,7 +67,7 @@ export default function IAHubPage() {
                   className={cn(
                     'flex h-11 w-11 items-center justify-center rounded-full transition-colors',
                     option.isAvailable
-                      ? 'bg-brand-primary/12 text-brand-primary group-hover:bg-brand-primary/20'
+                      ? 'bg-white/8 text-brand-primary group-hover:bg-white/12'
                       : 'bg-bg-tertiary text-text-muted'
                   )}
                 >
@@ -101,7 +101,7 @@ export default function IAHubPage() {
         {/* ═══ Seção 2: Dicas Fitness ═══ */}
         <section>
           {/* Dica do Dia — destaque */}
-          <div className="rounded-2xl bg-linear-to-br from-brand-primary/15 to-emerald-400/5 p-4 mb-4">
+          <div className="rounded-2xl border border-white/8 bg-white/3 p-4 mb-4">
             <p className="mb-1 text-xs font-semibold text-brand-primary">
               💡 Dica do Dia
             </p>

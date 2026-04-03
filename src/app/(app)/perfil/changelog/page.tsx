@@ -73,7 +73,7 @@ export default function ChangelogPage() {
 
       <div className="space-y-6 px-4 pt-2">
         {/* Versão atual */}
-        <div className="rounded-xl bg-linear-to-br from-brand-primary/15 to-emerald-400/5 p-4 text-center">
+        <div className="rounded-xl border border-white/8 bg-white/3 p-4 text-center">
           <p className="text-xs font-medium text-brand-primary">
             Versão Atual
           </p>

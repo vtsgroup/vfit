@@ -50,7 +50,7 @@ export default function GamificacaoPage() {
         {profile && (
           <>
             {/* Hero card */}
-            <div className="flex flex-col items-center rounded-2xl bg-linear-to-br from-brand-primary/10 to-emerald-400/5 p-6">
+            <div className="flex flex-col items-center rounded-2xl border border-white/8 bg-white/3 p-6">
               <span className="text-5xl">{getLevelEmoji(profile.level)}</span>
               <h2 className="mt-2 text-xl font-bold text-text-primary">
                 Nível {profile.level}
@@ -125,7 +125,7 @@ function StatCard({
 }) {
   return (
     <div className="flex items-center gap-3 rounded-xl bg-bg-secondary p-3">
-      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-primary/10">
+      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/8">
         <DSIcon
           name={icon as DSIconName}
           className="h-5 w-5 text-brand-primary"

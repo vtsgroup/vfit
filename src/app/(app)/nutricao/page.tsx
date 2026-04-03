@@ -209,7 +209,7 @@ export default function NutricaoPage() {
 
           {meals.length === 0 && !isLoading ? (
             <div className="flex flex-col items-center gap-3 rounded-2xl bg-bg-secondary py-10 text-center">
-              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-brand-primary/10">
+              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/8">
                 <DSIcon name="plus" size={24} className="text-brand-primary" />
               </div>
               <p className="text-sm text-text-secondary">
@@ -272,7 +272,7 @@ export default function NutricaoPage() {
           href="/ia/dieta"
           className="flex items-center gap-3 rounded-2xl bg-bg-secondary p-4 transition-colors hover:bg-bg-tertiary"
         >
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-primary/12">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/8">
             <DSIcon name="sparkles" size={20} className="text-brand-primary" />
           </div>
           <div className="flex-1">

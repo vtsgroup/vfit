@@ -87,7 +87,7 @@ export default function LembretesPage() {
         <div className="flex items-center gap-3">
           <div className={cn(
             'flex h-10 w-10 items-center justify-center rounded-xl',
-            settings.enabled ? 'bg-brand-primary/20' : 'bg-white/5'
+            settings.enabled ? 'bg-white/10' : 'bg-white/5'
           )}>
             <DSIcon
               name="bell"

@@ -67,7 +67,7 @@ export default function AvaliacoesPage() {
       {/* Empty */}
       {!isLoading && (!assessments || assessments.length === 0) && (
         <div className="flex flex-col items-center gap-4 py-16 text-center">
-          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-primary/10">
+          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/8">
             <DSIcon name="clipboardList" size={32} className="text-brand-primary" />
           </div>
           <h2 className="text-[16px] font-bold text-white">Nenhuma avaliação ainda</h2>
@@ -97,7 +97,7 @@ export default function AvaliacoesPage() {
                 href={`/avaliacoes/${a.id}`}
                 className={`block rounded-2xl border p-4 transition-all hover:border-white/10 ${
                   isFirst
-                    ? 'border-brand-primary/20 bg-brand-primary/3'
+                    ? 'border-white/10 bg-white/3'
                     : 'border-white/5 bg-white/2'
                 }`}
               >

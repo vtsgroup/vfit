@@ -25,7 +25,7 @@ export default function SocialPage() {
 
       {/* Coming soon */}
       <div className="flex flex-1 flex-col items-center justify-center gap-4 px-8">
-        <div className="flex h-20 w-20 items-center justify-center rounded-full bg-brand-primary/10">
+        <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white/8">
           <span className="text-4xl">🏆</span>
         </div>
         <h2 className="text-xl font-bold text-text-primary">Em Breve</h2>

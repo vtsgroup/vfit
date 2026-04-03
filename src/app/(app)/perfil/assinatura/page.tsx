@@ -76,7 +76,7 @@ export default function AssinaturaPage() {
       {/* Current plan status */}
       <div className={`mb-6 rounded-2xl border p-5 ${
         isPremium
-          ? 'border-brand-primary/30 bg-brand-primary/5'
+          ? 'border-brand-primary/30 bg-white/3'
           : 'border-white/5 bg-white/2'
       }`}>
         <div className="mb-3 flex items-center gap-3">
@@ -123,7 +123,7 @@ export default function AssinaturaPage() {
                   }}
                   className={`relative w-full rounded-2xl border p-4 text-left transition-all ${
                     isSelected
-                      ? 'border-brand-primary/50 bg-brand-primary/5'
+                      ? 'border-brand-primary/50 bg-white/3'
                       : 'border-white/5 bg-white/2 hover:border-white/10'
                   }`}
                 >

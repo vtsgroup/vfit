@@ -17,7 +17,7 @@ interface KPICardProps {
   iconBg?: string
 }
 
-export function KPICard({ icon, label, value, unit, color = 'text-brand-primary', iconBg = 'bg-brand-primary/10' }: KPICardProps) {
+export function KPICard({ icon, label, value, unit, color = 'text-brand-primary', iconBg = 'bg-white/8' }: KPICardProps) {
   return (
     <div className="flex flex-col items-center gap-2 rounded-2xl border border-white/6 bg-white/3 p-4">
       <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${iconBg}`}>

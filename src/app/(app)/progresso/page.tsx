@@ -57,10 +57,10 @@ export default function ProgressoPage() {
       </div>
 
       {/* Streak card */}
-      <div className="mb-5 rounded-2xl border border-brand-primary/20 bg-brand-primary/5 p-4">
+      <div className="mb-5 rounded-2xl border border-white/8 bg-white/3 p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-primary/10">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/8">
               <DSIcon name="flame" size={24} className="text-brand-primary" />
             </div>
             <div>
@@ -129,7 +129,7 @@ export default function ProgressoPage() {
       {/* Empty state */}
       {!loadingSummary && !hasData && (
         <div className="flex flex-col items-center justify-center rounded-3xl border border-white/6 bg-white/2 p-8 text-center">
-          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-primary/10">
+          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/8">
             <DSIcon name="barChart" size={28} className="text-brand-primary" />
           </div>
           <h2 className="text-base font-bold text-white">Comece a treinar</h2>

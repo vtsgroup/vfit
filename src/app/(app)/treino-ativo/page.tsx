@@ -267,7 +267,7 @@ export default function TreinoAtivoPage() {
               <div
                 key={s.id}
                 className={`grid grid-cols-[48px_1fr_1fr_48px] items-center border-t border-border-primary px-3 py-2.5 transition-colors ${
-                  s.completed ? 'bg-brand-primary/5' : 'bg-bg-secondary'
+                  s.completed ? 'bg-white/3' : 'bg-bg-secondary'
                 }`}
               >
                 {/* Set number / warmup */}

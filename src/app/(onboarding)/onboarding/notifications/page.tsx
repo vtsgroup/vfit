@@ -66,7 +66,7 @@ export default function OnboardingNotificationsPage() {
       <div className="flex flex-1 flex-col items-center justify-center">
         <div className="mx-auto w-full max-w-sm space-y-8 text-center">
           {/* ─── Bell icon ─── */}
-          <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-brand-primary/10">
+          <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-white/8">
             <DSIcon name="bell" className="h-12 w-12 text-brand-primary" />
           </div>
 

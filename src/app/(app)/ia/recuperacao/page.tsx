@@ -26,7 +26,7 @@ export default function RecuperacaoIAPage() {
       </header>
 
       <div className="flex flex-1 flex-col items-center justify-center px-6 text-center">
-        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-brand-primary/12 mb-4">
+        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white/8 mb-4">
           <DSIcon name="moon" size={32} className="text-brand-primary" />
         </div>
         <h2 className="text-xl font-bold text-text-primary mb-2">Em breve!</h2>

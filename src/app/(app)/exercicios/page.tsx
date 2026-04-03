@@ -284,7 +284,7 @@ function MuscleTabContent({
               onClick={() => onSelect(mg.id)}
               className="flex items-center gap-3 rounded-2xl border border-white/6 bg-white/3 p-3 text-left transition-all hover:bg-white/6 active:scale-[0.97]"
             >
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-primary/10 text-xl">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/8 text-xl">
                 {MUSCLE_EMOJI[mg.id] || '💪'}
               </div>
               <div className="min-w-0 flex-1">

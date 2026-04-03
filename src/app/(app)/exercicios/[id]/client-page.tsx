@@ -245,7 +245,7 @@ function TargetTab({ exercise }: { exercise: import('@/hooks/use-exercises').Exe
           Músculo Primário
         </h3>
         <div className="flex items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-primary/10 text-2xl">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/8 text-2xl">
             {MUSCLE_EMOJI[exercise.muscle_group_id] || '💪'}
           </div>
           <div>
@@ -347,7 +347,7 @@ function InstructionsTab({
         <div className="space-y-3">
           {instructions.map((step, i) => (
             <div key={i} className="flex gap-3">
-              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-primary/10 text-[12px] font-bold text-brand-primary">
+              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/8 text-[12px] font-bold text-brand-primary">
                 {i + 1}
               </div>
               <p className="flex-1 text-[13px] text-zinc-300 leading-relaxed pt-0.5">

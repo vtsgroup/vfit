@@ -140,7 +140,7 @@ export default function CorporalPage() {
             </>
           ) : (
             <div className="flex flex-col items-center justify-center rounded-3xl border border-white/6 bg-white/2 p-8 text-center">
-              <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-primary/10">
+              <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/8">
                 <DSIcon name="ruler" size={24} className="text-brand-primary" />
               </div>
               <h2 className="text-base font-bold text-white">Registre sua primeira medição</h2>

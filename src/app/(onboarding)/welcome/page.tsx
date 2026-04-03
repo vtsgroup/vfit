@@ -67,7 +67,7 @@ export default function WelcomePage() {
             mounted ? 'translate-y-0 opacity-100' : '-translate-y-4 opacity-0'
           }`}
         >
-          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-primary/15 backdrop-blur-sm">
+          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-sm">
             <DSIcon name="sparkles" className="h-8 w-8 text-brand-primary" />
           </div>
           <h1

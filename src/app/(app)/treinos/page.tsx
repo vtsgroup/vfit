@@ -39,9 +39,9 @@ export default function TreinosPage() {
       <div className="mb-5 grid grid-cols-2 gap-3">
         <Link
           href="/plano"
-          className="group flex flex-col gap-2 rounded-2xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-all hover:bg-brand-primary/10"
+          className="group flex flex-col gap-2 rounded-2xl border border-white/8 bg-white/3 p-4 transition-all hover:bg-white/5"
         >
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-primary/15">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-primary/12">
             <DSIcon name="sparkles" size={20} className="text-brand-primary" />
           </div>
           <p className="text-[13px] font-bold text-white">Criar com IA</p>

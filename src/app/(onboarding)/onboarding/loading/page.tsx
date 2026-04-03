@@ -145,8 +145,8 @@ export default function OnboardingLoadingPage() {
     <div className="flex min-h-dvh flex-col items-center justify-center bg-bg-primary px-6">
       {/* ─── Pulsing orb with glow effect ─── */}
       <div className="relative mb-10">
-        <div className="absolute inset-0 h-32 w-32 animate-pulse rounded-full bg-brand-primary/20 blur-3xl" />
-        <div className="relative flex h-32 w-32 items-center justify-center rounded-full border border-brand-primary/20 bg-brand-primary/5">
+        <div className="absolute inset-0 h-32 w-32 animate-pulse rounded-full bg-blue-500/20 blur-3xl" />
+        <div className="relative flex h-32 w-32 items-center justify-center rounded-full border border-white/10 bg-white/5">
           <span className="text-5xl transition-all duration-500" key={phase.emoji}>
             {phase.emoji}
           </span>

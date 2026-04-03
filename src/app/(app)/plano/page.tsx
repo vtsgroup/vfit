@@ -72,7 +72,7 @@ export default function PlanoPage() {
           <h1 className="text-2xl font-black text-text-primary">Meu Plano</h1>
         </div>
         <div className="flex flex-col items-center justify-center rounded-3xl border border-border-primary bg-bg-secondary p-8 text-center">
-          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-primary/10">
+          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/8">
             <DSIcon name="sparkles" size={28} className="text-brand-primary" />
           </div>
           <h2 className="text-base font-bold text-text-primary">Nenhum plano ativo</h2>

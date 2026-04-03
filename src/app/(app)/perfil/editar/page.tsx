@@ -56,7 +56,7 @@ export default function EditarPerfilPage() {
 
       {/* Avatar */}
       <div className="mb-8 flex flex-col items-center gap-3">
-        <div className="relative flex h-24 w-24 items-center justify-center rounded-3xl bg-brand-primary/10 text-brand-primary">
+        <div className="relative flex h-24 w-24 items-center justify-center rounded-3xl bg-white/8 text-brand-primary">
           {user?.avatar_url ? (
             <Image
               src={user.avatar_url}

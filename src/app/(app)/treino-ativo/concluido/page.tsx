@@ -76,7 +76,7 @@ export default function TreinoConcluido() {
     <div className="mx-auto max-w-lg px-4 pb-32 pt-8">
       {/* ─── Trophy ─── */}
       <div className="mb-6 flex flex-col items-center text-center">
-        <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-3xl bg-brand-primary/10">
+        <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-3xl bg-white/8">
           <span className="text-4xl">🏆</span>
         </div>
         <h1 className="text-2xl font-black text-text-primary">Treino Concluído!</h1>

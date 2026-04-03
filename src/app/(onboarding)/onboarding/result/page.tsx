@@ -145,7 +145,7 @@ export default function OnboardingResultPage() {
   return (
     <div className="min-h-dvh bg-bg-primary pb-32">
       {/* ─── Header ─── */}
-      <div className="relative overflow-hidden bg-linear-to-b from-brand-primary/15 to-transparent px-6 pt-14 pb-8">
+      <div className="relative overflow-hidden bg-linear-to-b from-white/5 to-transparent px-6 pt-14 pb-8">
         <div className="mx-auto max-w-md">
           <div className="mb-1 text-sm font-medium text-brand-primary">
             ✨ Seu plano está pronto!
@@ -159,7 +159,7 @@ export default function OnboardingResultPage() {
 
           {/* ─── Goal badge ─── */}
           {data.goal && (
-            <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-brand-primary/10 px-3 py-1">
+            <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-white/8 px-3 py-1">
               <DSIcon name="target" className="h-3.5 w-3.5 text-brand-primary" />
               <span className="text-xs font-medium text-brand-primary">
                 {GOAL_LABELS[data.goal] || data.goal}
@@ -213,7 +213,7 @@ export default function OnboardingResultPage() {
             .map((day) => (
               <div key={day.day_number} className="space-y-2">
                 <div className="mb-3 flex items-center gap-2">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-primary/10">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/8">
                     <span className="text-sm font-bold text-brand-primary">{day.day_number}</span>
                   </div>
                   <div>
