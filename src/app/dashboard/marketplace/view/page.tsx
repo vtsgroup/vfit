@@ -14,6 +14,7 @@
 
 'use client'
 
+import { useState } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -22,6 +23,7 @@ import { cn } from '@/lib/utils'
 import { AuthGuard } from '@/components/auth'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import { MarketplaceDetailSkeleton } from '@/components/ui/page-skeletons'
 import { useAuthStore } from '@/stores/auth-store'
 import {
@@ -60,6 +62,7 @@ export default function ViewPlanPage() {
   const plan = data?.plan
   const isOwner = plan && user && plan.created_by === user.id
   const icon = plan ? (categoryIcons[plan.category] || '') : ''
+  const [confirmDelete, setConfirmDelete] = useState(false)
 
   if (isLoading) {
     return (
@@ -105,8 +108,13 @@ export default function ViewPlanPage() {
 
   function handleDelete() {
     if (!plan) return
-    if (!confirm('Tem certeza que deseja remover este plano?')) return
+    setConfirmDelete(true)
+  }
+
+  function executeDelete() {
+    if (!plan) return
     deletePlan.mutate(plan.id)
+    setConfirmDelete(false)
   }
 
   function handleBuy() {
@@ -309,6 +317,17 @@ export default function ViewPlanPage() {
             </div>
           </div>
         )}
+
+        <ConfirmDialog
+          open={confirmDelete}
+          onClose={() => setConfirmDelete(false)}
+          onConfirm={executeDelete}
+          variant="danger"
+          title="Remover plano"
+          description="Tem certeza que deseja remover este plano? Esta ação não pode ser desfeita."
+          confirmText="Remover"
+          loading={deletePlan.isPending}
+        />
       </div>
     </AuthGuard>
   )

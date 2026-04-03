@@ -23,6 +23,7 @@ import { Badge } from '@/components/ui/badge'
 import { EmptyStateDS } from '@/components/ui/empty-state-ds'
 import { StyledSelect } from '@/components/ui/styled-select'
 import { MD3Input } from '@/components/ui/md3-input'
+import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import { AdminFeedbackPageSkeleton } from '@/components/ui/page-skeletons'
 import {
   useAdminFeedback,
@@ -127,6 +128,7 @@ function FeedbackDetailView({
   const adminReply = useAdminReply()
   const isSuperAdmin = useAuthStore((s) => s.user?.role === 'super_admin')
   const [replyText, setReplyText] = useState('')
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
 
@@ -199,12 +201,7 @@ function FeedbackDetailView({
         </div>
         {isSuperAdmin && (
           <button
-            onClick={() => {
-              if (confirm('Deletar esta sugestão e todas as respostas?')) {
-                deleteFeedback.mutate(feedbackId)
-                onBack()
-              }
-            }}
+            onClick={() => setConfirmDeleteOpen(true)}
             className="rounded-lg p-1.5 text-text-muted hover:bg-error/10 hover:text-error"
             title="Deletar"
           >
@@ -317,6 +314,21 @@ function FeedbackDetailView({
           </p>
         </div>
       </div>
+
+      <ConfirmDialog
+        open={confirmDeleteOpen}
+        onClose={() => setConfirmDeleteOpen(false)}
+        onConfirm={() => {
+          deleteFeedback.mutate(feedbackId)
+          setConfirmDeleteOpen(false)
+          onBack()
+        }}
+        variant="danger"
+        title="Deletar sugestão"
+        description="Deletar esta sugestão e todas as respostas? Esta ação não pode ser desfeita."
+        confirmText="Deletar"
+        loading={deleteFeedback.isPending}
+      />
     </div>
   )
 }

@@ -21,6 +21,7 @@ import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { StyledSelect } from '@/components/ui/styled-select'
+import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import { toast } from '@/stores/app-store'
 import { useAuthStore } from '@/stores/auth-store'
 import {
@@ -149,6 +150,7 @@ export function CalendarWeekly() {
   const [selected, setSelected] = useState<CalendarEvent | null>(null)
   const [createOpen, setCreateOpen] = useState(false)
   const [editOpen, setEditOpen] = useState(false)
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false)
 
   useScrollLock(!!selected || createOpen || editOpen)
 
@@ -558,10 +560,7 @@ export function CalendarWeekly() {
                   disabled={readOnly || deleteEvent.isPending}
                   onClick={() => {
                     if (readOnly) return
-                    if (!confirm('Excluir este agendamento?')) return
-                    deleteEvent.mutate(undefined, {
-                      onSuccess: () => setSelected(null),
-                    })
+                    setConfirmDeleteOpen(true)
                   }}
                 >
                   <DSIcon name="trash" size={16} />
@@ -572,6 +571,25 @@ export function CalendarWeekly() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Confirm delete */}
+      <ConfirmDialog
+        open={confirmDeleteOpen}
+        onClose={() => setConfirmDeleteOpen(false)}
+        onConfirm={() => {
+          deleteEvent.mutate(undefined, {
+            onSuccess: () => {
+              setSelected(null)
+              setConfirmDeleteOpen(false)
+            },
+          })
+        }}
+        variant="danger"
+        title="Excluir agendamento"
+        description="Tem certeza que deseja excluir este agendamento? Esta ação não pode ser desfeita."
+        confirmText="Excluir"
+        loading={deleteEvent.isPending}
+      />
 
       {/* Create/Edit modal */}
       {!readOnly && (
