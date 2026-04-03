@@ -5,6 +5,33 @@
 
 ---
 
+## [v1.2.0] — 03/04/2026 — UX Modernization: Retry, Animations, Button Variants
+
+### 🏗️ Infraestrutura UX
+- **`src/lib/retry.ts`** — Exponential backoff with jitter: `withRetry()` + 4 presets (`ai`: 3×/2s/15s, `payment`: 2×/1s/4s, `query`: 3×/500ms/3s, `sync`: 4×/1s/10s). Suporta AbortSignal e prefers-reduced-motion
+- **`src/hooks/use-stagger-animation.ts`** — Hook CSS-only para animar listas em sequência via IntersectionObserver. Exporta constantes SPRING_EASING, EASE_OUT, ANIMATION_TIMING
+- **`src/hooks/use-reduced-motion.ts`** — Hook reativo para prefers-reduced-motion com MediaQuery listener
+- **`src/hooks/use-api-retry.ts`** — React hook wrapper para withRetry com auto-cleanup via AbortController
+
+### 🎨 Design System
+- **Button:** 3 variantes novas: `soft` (ação secundária em cards), `gradient` (emerald→teal→cyan, CTAs premium/AI), `glass` (glassmorphism overlays)
+- **Button:** Tamanho `icon-lg` (56×56px, rounded-2xl)
+
+### ⚡ Integrações em Componentes
+- **AI Hooks:** 6 mutations protegidas com `withRetry(retryPresets.ai)` — useGenerateWorkout, useAIAssistant, useGenerateContent, useComparePhotos, useSmartBilling, useAnalyzeSentiment
+- **Workouts Quick Actions:** Stagger entrance animation nos 3 cards (delays 100/180/260ms)
+- **Plans CTA:** Plano Max usa variante `gradient` em vez de `payment` para diferenciação visual premium
+
+### 📚 Documentação
+- Unificação completa: 13 docs migrados de `docs/` para `.claude/docs/`
+- 14+ docs obsoletos arquivados em `.claude/docs/archive/`
+- Merges: CF-OPERATIONS→DEPLOY, DESIGN-SYSTEM-COLORS→DESIGN-SYSTEM, INFRAESTRUTURA→STACK, BACKEND-MAP→BACKEND
+- INDEX.md criado com mapa completo de documentação
+- 19 referências residuais a `docs/` corrigidas em 7 arquivos
+- `.github/copilot-instructions.md` regenerado (2020 linhas)
+
+---
+
 ## [v1.1.0] — 03/04/2026 — Sprint TWA + Onboarding + D1 Sync + Visual Polish
 
 ### 🚀 Phase 1 — TWA Smart Entry
