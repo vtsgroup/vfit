@@ -2,7 +2,7 @@
 
 > Status em tempo real de cada sprint e task.
 > ⬜ = Pendente · 🔄 = Em progresso · ✅ = Concluído · ❌ = Bloqueado
-> **Última atualização:** 03/04/2026 — v1.2.4
+> **Última atualização:** 03/04/2026 — v1.2.5
 
 ---
 
@@ -53,15 +53,16 @@
 - [x] T3.extra.7 — TypeScript check 0 erros + deploy
 > **6 arquivos** novos/modificados. D1: 3 tabelas, 28 registros seed. Deploy em v1.2.4.
 
-### S3 Original: Onboarding Perfect ⬜ (renumerado → S3b)
-- [ ] T3.1 — Substituir emojis do loading por SVG animados
-- [ ] T3.2 — Persistir dados do onboarding no DB (não só sessionStorage)
-- [ ] T3.3 — Corrigir redirect pós-paywall (skip → treinos, subscribe → checkout)
-- [ ] T3.4 — Usar preços de VFIT_PLANS no paywall
-- [ ] T3.5 — Implementar flow "continuar gratuitamente" funcional
-- [ ] T3.6 — Melhorar steps motivacionais (SVG illustrations)
-- [ ] T3.7 — Salvar onboarding como perfil B2C no backend
-- [ ] T3.8 — Auto-trigger assessment + nutrition após onboarding
+### S3b: Onboarding Perfect ✅ (v1.2.5 — commit `e8ce2960`)
+- [x] T3.1 — Substituir TODOS os emojis por DSIcon (17 steps + 6 pages + 3 paywall = 24 arquivos)
+- [x] T3.2 — Persistir dados do onboarding no DB via `useSyncOnboarding` hook + POST `/onboarding`
+- [x] T3.3 — Corrigir redirect pós-paywall (todos `/plano` → `/login?from=onboarding&plan=X`)
+- [x] T3.4 — Paywall já usa VFIT_PLANS + pricing helpers (confirmado, sem mudanças)
+- [x] T3.5 — Flow "continuar gratuitamente" → `/login?from=onboarding&plan=free`
+- [ ] T3.6 — ⏩ Deferred → S9 (precisa custom SVG illustrations)
+- [ ] T3.7 — ⏩ Deferred → S5 (precisa tabela B2C student no backend)
+- [ ] T3.8 — ⏩ Deferred → S5 (precisa assessment backend)
+> **24 arquivos** modificados (269 inserções / 180 deleções) + 1 hook novo. Deploy em v1.2.5.
 
 ---
 
@@ -188,11 +189,11 @@
 
 | Fase | Sprints | Tasks | Concluídas |
 |:----:|:-------:|:-----:|:----------:|
-| 1 | S0–S3 | 33 + 7 extra | **40/40** ✅ |
-| 2 | S3b–S7 | 8 + 37 | 0/45 |
+| 1 | S0–S3b | 33 + 7 extra + 5 S3b | **45/48** ✅ (3 deferred) |
+| 2 | S4–S7 | 37 | 0/37 |
 | 3 | S8–S10 | 28 | 0/28 |
 | 4 | S11–S13 | 23 | 0/23 |
-| **Total** | **14+1** | **136** | **40** (29%) |
+| **Total** | **14+1** | **136** | **45** (33%) |
 
 ### Deploys realizados
 
@@ -202,3 +203,4 @@
 | v1.2.2 | S1: Navbar & Header | 03/04/2026 | `f4f85d3b` | 16 |
 | v1.2.3 | S2: Pricing Unification | 03/04/2026 | `4d72eeed` | 11 |
 | v1.2.4 | S3: Dynamic D1 Config | 03/04/2026 | `ce88a080` | 6 |
+| v1.2.5 | S3b: Onboarding Perfect | 03/04/2026 | `e8ce2960` | 24 |

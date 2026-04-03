@@ -340,6 +340,36 @@ Após CADA deploy, atualizar **na mesma sessão**:
 
 ---
 
+## 20. Documentação & Tracking — OBRIGATÓRIO
+
+### Documentação centralizada em `.claude/docs/`
+- **TODA** documentação técnica, operacional e de design DEVE estar em `.claude/docs/`
+- Arquivos de referência: RULES, STACK, CONVENTIONS, DEPLOY, DESIGN-SYSTEM, BACKEND, CHANGELOG
+- Documentação auxiliar/histórica → `.claude/docs/archive/`
+- Após criar/editar docs, rodar `node scripts/sync-ai-docs.mjs` para atualizar `.github/copilot-instructions.md`
+
+### Planos com Tracking obrigatório
+- **TODO plano** de trabalho (sprint, feature, migration) DEVE ter um `TRACKING.md`
+- Localização: `.claude/plans/<nome-do-plano>/TRACKING.md`
+- Formato: checkbox list `- [x]` / `- [ ]` com ID de task (T1.1, T2.3, etc.)
+- Contagem de progresso no final: `45/136 (33%)`
+- Tabela de deploys com versão, sprint, data, commit, nº arquivos
+
+### Marcar progresso em tempo real
+- **ANTES** de começar uma task → marcar como `🔄 Em progresso`
+- **APÓS** completar uma task → marcar como `✅ Concluído` com `[x]`
+- **Se bloqueada** → marcar `❌ Bloqueado` com motivo
+- **Se adiada** → marcar `⏩ Deferred → SX` com destino
+- **NUNCA** deixar task sem status atualizado ao final de uma sessão
+- Atualizar `Última atualização` no topo do TRACKING com versão atual
+
+### Ao final de CADA sessão
+1. Verificar que TRACKING.md reflete estado real de TODAS as tasks tocadas
+2. CHANGELOG.md atualizado com versão + mudanças
+3. Commit docs junto com código (ou em commit separado antes do deploy)
+
+---
+
 ## O que NUNCA fazer
 
 - Não commitar direto na `main`. Sempre feature branch.
@@ -855,6 +885,9 @@ return useQuery({
 5. Use `multi_replace_string_in_file` para edições em batch.
 6. `grep_search` com regex antes de `semantic_search`.
 7. Paralelizar tools independentes na mesma chamada.
+8. **Documentar SEMPRE** — toda mudança reflete em `.claude/docs/` e TRACKING.md.
+9. **Tracking em tempo real** — marcar task in-progress ANTES, done DEPOIS. Nunca deixar desatualizado.
+10. Ao final de sessão: CHANGELOG + TRACKING + docs relevantes DEVEM estar atualizados.
 
 ---
 

@@ -115,6 +115,9 @@ return useQuery({
 5. Use `multi_replace_string_in_file` para edições em batch.
 6. `grep_search` com regex antes de `semantic_search`.
 7. Paralelizar tools independentes na mesma chamada.
+8. **Documentar SEMPRE** — toda mudança reflete em `.claude/docs/` e TRACKING.md.
+9. **Tracking em tempo real** — marcar task in-progress ANTES, done DEPOIS. Nunca deixar desatualizado.
+10. Ao final de sessão: CHANGELOG + TRACKING + docs relevantes DEVEM estar atualizados.
 
 ---
 
