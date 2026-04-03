@@ -363,6 +363,12 @@ Após CADA deploy, atualizar **na mesma sessão**:
 - **NUNCA** deixar task sem status atualizado ao final de uma sessão
 - Atualizar `Última atualização` no topo do TRACKING com versão atual
 
+### 🔴 TRACKING.md — ATUALIZAÇÃO OBRIGATÓRIA
+- **APÓS CADA DEPLOY**: Atualizar TRACKING.md com tasks concluídas, contagem, e nova linha na tabela de deploys
+- **APÓS CADA SESSÃO**: Mesmo sem deploy, garantir que TRACKING reflete estado real
+- **NUNCA** encerrar sessão ou deploy sem TRACKING atualizado — esta é a fonte de verdade do projeto
+- Se o agente esquecer: o usuário DEVE cobrar e o agente DEVE corrigir imediatamente
+
 ### Ao final de CADA sessão
 1. Verificar que TRACKING.md reflete estado real de TODAS as tasks tocadas
 2. CHANGELOG.md atualizado com versão + mudanças
