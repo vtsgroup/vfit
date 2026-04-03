@@ -60,8 +60,8 @@ function detectPlatform(): Platform {
   if (isAndroid) return 'android'
 
   // Desktop detection
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const isChromium = !!(window as any).chrome || /chrome|chromium|edg|opr|brave/i.test(ua)
+  interface ChromiumWindow extends Window { chrome?: unknown }
+  const isChromium = !!(window as ChromiumWindow).chrome || /chrome|chromium|edg|opr|brave/i.test(ua)
   const isSafari = /^((?!chrome|android|chromium).)*safari/i.test(ua)
   const isFirefox = /firefox/i.test(ua)
 

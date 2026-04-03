@@ -69,7 +69,7 @@ export function OnboardingWizard() {
   if (!onboarding) {
     return (
       <EmptyState
-        illustration="generic"
+        illustration="onboarding"
         title="Não foi possível carregar o onboarding"
         description="Atualize a página para tentar novamente."
       />

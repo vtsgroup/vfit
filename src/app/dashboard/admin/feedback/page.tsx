@@ -17,6 +17,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
+import { Pagination } from '@/components/ui/pagination'
 import { cn } from '@/lib/utils'
 import { AuthGuard } from '@/components/auth'
 import { Badge } from '@/components/ui/badge'
@@ -462,29 +463,7 @@ export default function AdminFeedbackPage() {
         )}
 
         {/* Pagination */}
-        {meta.total_pages > 1 && (
-          <div className="flex items-center justify-between">
-            <p className="text-xs text-text-muted">
-              Página {meta.page} de {meta.total_pages} · {meta.total} sugestões
-            </p>
-            <div className="flex gap-1">
-              <button
-                onClick={() => setPage((p) => Math.max(1, p - 1))}
-                disabled={page <= 1}
-                className="rounded-lg p-2 text-text-muted hover:bg-bg-tertiary disabled:opacity-30"
-              >
-                <DSIcon name="chevronLeft" size={16} />
-              </button>
-              <button
-                onClick={() => setPage((p) => Math.min(meta.total_pages, p + 1))}
-                disabled={page >= meta.total_pages}
-                className="rounded-lg p-2 text-text-muted hover:bg-bg-tertiary disabled:opacity-30"
-              >
-                <DSIcon name="chevronRight" size={16} />
-              </button>
-            </div>
-          </div>
-        )}
+        <Pagination page={page} totalPages={meta.total_pages} total={meta.total} itemLabel="sugestões" onPrev={() => setPage(p => Math.max(1, p - 1))} onNext={() => setPage(p => Math.min(meta.total_pages, p + 1))} />
       </div>
     </AuthGuard>
   )

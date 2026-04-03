@@ -203,13 +203,13 @@ export function PwaDebugPanel() {
     }, 200)
 
     // Get related apps
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const w = window as any
+    interface PwaWindow extends Window { __pwaRelatedApps?: unknown; __pwaDebugLog?: string[] }
+    const w = window as PwaWindow
     if (w.__pwaRelatedApps) {
       setRelatedApps(JSON.stringify(w.__pwaRelatedApps))
     } else if ('getInstalledRelatedApps' in navigator) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (navigator as any).getInstalledRelatedApps().then((apps: unknown[]) => {
+      type InstalledAppsNavigator = Navigator & { getInstalledRelatedApps: () => Promise<unknown[]> }
+      ;(navigator as InstalledAppsNavigator).getInstalledRelatedApps().then((apps: unknown[]) => {
         setRelatedApps(apps.length > 0 ? JSON.stringify(apps) : '[] (none)')
       }).catch(() => setRelatedApps('error'))
     } else {

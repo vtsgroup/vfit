@@ -46,6 +46,7 @@ interface ExercisePlan {
   reps: string
   rest: string
   notes: string
+  [key: string]: string | number
 }
 
 const emptyExercise: ExercisePlan = { name: '', sets: 3, reps: '12', rest: '60s', notes: '' }
@@ -126,8 +127,7 @@ export default function CreatePlanPage() {
   ) {
     const updated = [...weeks]
     const ex = updated[weekIdx].days[dayIdx].exercises[exIdx]
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ;(ex as any)[field] = value
+    ex[field] = value
     setWeeks(updated)
   }
 

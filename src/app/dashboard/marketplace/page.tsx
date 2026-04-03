@@ -18,6 +18,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { DSIcon } from '@/components/ui/ds-icon'
+import { Pagination } from '@/components/ui/pagination'
 import { cn } from '@/lib/utils'
 import { AuthGuard } from '@/components/auth'
 import { Button } from '@/components/ui/button'
@@ -222,32 +223,7 @@ export default function MarketplacePage() {
             </div>
 
             {/* Pagination */}
-            {meta && meta.total_pages > 1 && (
-              <div className="flex items-center justify-between rounded-xl border border-border-dark bg-bg-dark-secondary px-4 py-3">
-                <span className="text-xs text-text-muted">
-                  {meta.total} plano{meta.total !== 1 ? 's' : ''} encontrado{meta.total !== 1 ? 's' : ''}
-                </span>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => setPage(Math.max(1, page - 1))}
-                    disabled={page <= 1}
-                    className="rounded-lg p-1.5 text-text-muted transition hover:bg-bg-tertiary hover:text-text-primary disabled:opacity-40"
-                  >
-                    <DSIcon name="chevronLeft" size={16} />
-                  </button>
-                  <span className="text-xs text-text-secondary">
-                    {page} / {meta.total_pages}
-                  </span>
-                  <button
-                    onClick={() => setPage(Math.min(meta.total_pages, page + 1))}
-                    disabled={page >= meta.total_pages}
-                    className="rounded-lg p-1.5 text-text-muted transition hover:bg-bg-tertiary hover:text-text-primary disabled:opacity-40"
-                  >
-                    <DSIcon name="chevronRight" size={16} />
-                  </button>
-                </div>
-              </div>
-            )}
+            {meta && <Pagination page={page} totalPages={meta.total_pages} total={meta.total} itemLabel="planos" onPrev={() => setPage(p => Math.max(1, p - 1))} onNext={() => setPage(p => Math.min(meta.total_pages, p + 1))} />}
           </>
         )}
       </div>

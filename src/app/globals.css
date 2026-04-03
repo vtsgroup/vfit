@@ -119,7 +119,7 @@
   --color-info: #3B82F6;
 
   /* Font */
-  --font-sans: var(--font-dm-sans), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
 
   /* Shadows */
   --shadow-card: 0 2px 4px rgba(0, 0, 0, 0.30), 0 1px 2px rgba(0, 0, 0, 0.20);
@@ -366,7 +366,6 @@
   /* Typography — Display + Body font families (ds- prefix avoids Tailwind utility conflicts) */
   --font-ds-display: var(--font-syne), 'Syne', sans-serif;
   --font-ds-body: var(--font-dm-sans), 'DM Sans', sans-serif;
-  --font-ds-ui: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 
   /* Type Scale — Display (Syne) */
   --text-display-hero: clamp(2.5rem, 6vw, 4rem);

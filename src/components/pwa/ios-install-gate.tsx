@@ -42,6 +42,11 @@ const MAX_FULL_GATE_VISITS = 3
 
 // ─── Detection helpers ────────────────────────────────────────────────
 
+// iOS Safari exposes `navigator.standalone` (non-standard)
+interface SafariNavigator extends Navigator {
+  readonly standalone?: boolean
+}
+
 function isIOS(): boolean {
   if (typeof navigator === 'undefined') return false
   const ua = navigator.userAgent.toLowerCase()
@@ -55,8 +60,7 @@ function isStandalone(): boolean {
   if (typeof window === 'undefined') return false
   return (
     window.matchMedia('(display-mode: standalone)').matches ||
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (window.navigator as any).standalone === true
+    (window.navigator as SafariNavigator).standalone === true
   )
 }
 

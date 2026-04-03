@@ -23,6 +23,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { SlidingTabs } from '@/components/ui/sliding-tabs'
 import { EmptyState, SkeletonList } from '@/components/ui'
+import { Pagination } from '@/components/ui/pagination'
 import { AffiliatesPageSkeleton } from '@/components/ui/page-skeletons'
 import { GlassCard, CardContent as GlassCardContent } from '@/components/ui/glass-card'
 import { MD3Input } from '@/components/ui/md3-input'
@@ -647,17 +648,7 @@ function ReferralsTab() {
         </div>
       ))}
 
-      {meta && meta.total_pages > 1 && (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>
-            <DSIcon name="chevronLeft" size={16} />
-          </Button>
-          <span className="text-sm text-text-muted tabular-nums">{page} / {meta.total_pages}</span>
-          <Button variant="outline" size="sm" disabled={page >= meta.total_pages} onClick={() => setPage((p) => p + 1)}>
-            <DSIcon name="chevronRight" size={16} />
-          </Button>
-        </div>
-      )}
+      {meta && <Pagination page={page} totalPages={meta.total_pages} onPrev={() => setPage(p => p - 1)} onNext={() => setPage(p => p + 1)} />}
     </div>
   )
 }
@@ -717,17 +708,7 @@ function CommissionsTab() {
         </div>
       ))}
 
-      {meta && meta.total_pages > 1 && (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>
-            <DSIcon name="chevronLeft" size={16} />
-          </Button>
-          <span className="text-sm text-text-muted tabular-nums">{page} / {meta.total_pages}</span>
-          <Button variant="outline" size="sm" disabled={page >= meta.total_pages} onClick={() => setPage((p) => p + 1)}>
-            <DSIcon name="chevronRight" size={16} />
-          </Button>
-        </div>
-      )}
+      {meta && <Pagination page={page} totalPages={meta.total_pages} onPrev={() => setPage(p => p - 1)} onNext={() => setPage(p => p + 1)} />}
     </div>
   )
 }

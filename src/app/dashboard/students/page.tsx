@@ -28,6 +28,7 @@ import { useAuthStore } from '@/stores/auth-store'
 import { useEffectiveUserView } from '@/hooks/use-effective-user-view'
 import { AuthGuard } from '@/components/auth'
 import { Button } from '@/components/ui/button'
+import { Pagination } from '@/components/ui/pagination'
 import { StyledSelect } from '@/components/ui/styled-select'
 import { EmptyState } from '@/components/ui/empty-state'
 import { PageHeader } from '@/components/ui/page-header'
@@ -266,35 +267,7 @@ export default function StudentsPage() {
         )}
 
         {/* Pagination */}
-        {meta && meta.total_pages > 1 && (
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-sm text-text-muted">
-              Página {meta.page} de {meta.total_pages}
-            </p>
-            <div className="flex w-full gap-2 sm:w-auto">
-              <Button
-                variant="outline"
-                size="sm"
-                className="min-h-11 flex-1 sm:flex-none"
-                disabled={meta.page <= 1}
-                onClick={() => setPage(meta.page - 1)}
-              >
-                <DSIcon name="chevronLeft" size={16} />
-                Anterior
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="min-h-11 flex-1 sm:flex-none"
-                disabled={meta.page >= meta.total_pages}
-                onClick={() => setPage(meta.page + 1)}
-              >
-                Próxima
-                <DSIcon name="chevronRight" size={16} />
-              </Button>
-            </div>
-          </div>
-        )}
+        {meta && <Pagination page={meta.page} totalPages={meta.total_pages} onPrev={() => setPage(meta.page - 1)} onNext={() => setPage(meta.page + 1)} />}
       </div>
     </AuthGuard>
   )

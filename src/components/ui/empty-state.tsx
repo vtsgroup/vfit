@@ -22,7 +22,7 @@ import { Button } from './button'
 
 interface EmptyStateProps {
   icon?: DSIconName
-  illustration?: 'students' | 'workouts' | 'payments' | 'notifications' | 'assessments' | 'search' | 'marketplace' | 'generic'
+  illustration?: 'students' | 'workouts' | 'payments' | 'notifications' | 'assessments' | 'search' | 'marketplace' | 'onboarding' | 'generic'
   title: string
   description?: string
   actionLabel?: string
@@ -173,6 +173,29 @@ function EmptyIllustration({ type, className }: { type: string; className?: stri
           <path d="M78 78l16 16" stroke="currentColor" className="text-brand-primary/22" strokeWidth="3" strokeLinecap="round" />
           {/* Question */}
           <text x="62" y="68" textAnchor="middle" fill="currentColor" className="text-brand-primary/12" fontSize="20" fontWeight="bold">?</text>
+        </svg>
+      )
+
+    case 'onboarding':
+      return (
+        <svg className={baseClass} width="140" height="140" viewBox="0 0 140 140" fill="none">
+          <defs>
+            <radialGradient id="ob-glow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="var(--color-brand-primary)" stopOpacity="0.14" />
+              <stop offset="100%" stopColor="var(--color-brand-primary)" stopOpacity="0" />
+            </radialGradient>
+          </defs>
+          <circle cx="70" cy="70" r="66" fill="url(#ob-glow)" />
+          {/* Trophy cup */}
+          <path d="M52 38h36v22c0 10-8 18-18 18s-18-8-18-18V38z" fill="currentColor" className="text-brand-primary/12" />
+          <path d="M52 50H38c0 8 6 14 14 14" stroke="currentColor" className="text-brand-primary/20" strokeWidth="2.5" strokeLinecap="round" />
+          <path d="M88 50h14c0 8-6 14-14 14" stroke="currentColor" className="text-brand-primary/20" strokeWidth="2.5" strokeLinecap="round" />
+          <rect x="60" y="78" width="20" height="6" rx="3" fill="currentColor" className="text-brand-primary/18" />
+          <rect x="50" y="84" width="40" height="5" rx="2.5" fill="currentColor" className="text-brand-primary/14" />
+          {/* Sparkles */}
+          <path d="M70 44l1.8 5.2 5.2 1.8-5.2 1.8-1.8 5.2-1.8-5.2-5.2-1.8 5.2-1.8z" fill="currentColor" className="text-brand-primary/35" />
+          <path d="M96 30l1.2 3.5 3.5 1.2-3.5 1.2-1.2 3.5-1.2-3.5-3.5-1.2 3.5-1.2z" fill="currentColor" className="text-brand-primary/20" />
+          <path d="M44 34l1 2.8 2.8 1-2.8 1-1 2.8-1-2.8-2.8-1 2.8-1z" fill="currentColor" className="text-brand-primary/14" />
         </svg>
       )
 

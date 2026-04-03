@@ -14,7 +14,7 @@
 //   RootLayout — root layout da aplicação
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
-import { Inter, Syne, DM_Sans } from "next/font/google";
+import { Syne, DM_Sans } from "next/font/google";
 import { DeferredGA4 } from "@/components/analytics/deferred-ga4";
 import { Providers } from "@/components/providers";
 import { DeferredComponents } from "@/components/layout/deferred-components";
@@ -26,12 +26,6 @@ import "./globals.css";
 import { APP_VERSION } from "../../lib/version";
 
 const ICONS_REV = "20260226-real";
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  display: "swap",
-});
 
 const syne = Syne({
   variable: "--font-syne",
@@ -224,7 +218,7 @@ export default function RootLayout({
           `}
         </Script>
       </head>
-      <body className={`${inter.variable} ${syne.variable} ${dmSans.variable} font-sans antialiased`}>
+      <body className={`${syne.variable} ${dmSans.variable} font-sans antialiased`}>
         <SoftwareApplicationSchema />
         <OrganizationSchema />
         <WebSiteSchema />

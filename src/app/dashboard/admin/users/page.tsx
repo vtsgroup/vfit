@@ -21,6 +21,7 @@ import { DSIcon } from '@/components/ui/ds-icon'
 import { cn } from '@/lib/utils'
 import { AuthGuard } from '@/components/auth'
 import { Button } from '@/components/ui/button'
+import { Pagination } from '@/components/ui/pagination'
 import { Badge } from '@/components/ui/badge'
 import { ActionIconButton } from '@/components/ui/action-icon-button'
 import { Modal } from '@/components/ui/modal'
@@ -270,20 +271,7 @@ export default function AdminUsersPage() {
         )}
 
         {/* Pagination */}
-        {meta && meta.total_pages > 1 && (
-          <div className="flex items-center justify-between">
-            <p className="text-sm text-text-muted">{meta.total} usuários</p>
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => setPage(p => p - 1)}>
-                <DSIcon name="chevronLeft" size={16} />
-              </Button>
-              <span className="flex items-center px-3 text-sm text-text-muted">{page}/{meta.total_pages}</span>
-              <Button variant="outline" size="sm" disabled={page >= meta.total_pages} onClick={() => setPage(p => p + 1)}>
-                <DSIcon name="chevronRight" size={16} />
-              </Button>
-            </div>
-          </div>
-        )}
+        {meta && <Pagination page={page} totalPages={meta.total_pages} total={meta.total} itemLabel="usuários" onPrev={() => setPage(p => p - 1)} onNext={() => setPage(p => p + 1)} />}
 
         {/* Edit Modal */}
         {editingUser && (
