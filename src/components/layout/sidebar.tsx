@@ -20,6 +20,7 @@ import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { cn, getShortName } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { useAppStore } from '@/stores/app-store'
 import { useAuthStore } from '@/stores/auth-store'
@@ -95,7 +96,7 @@ export function Sidebar() {
               >
                 <span className="inline-flex h-4.5 w-4.5 items-center justify-center rounded-full border-[1.5px] border-white/55 bg-white/6 text-[12px] font-extrabold text-white/80 leading-none shrink-0">+</span>
                 <span
-                  className="text-[20px] text-white tracking-[0.05em]"
+                  className="text-display-heading text-white tracking-[0.05em]"
                   style={{ fontWeight: 900, lineHeight: '28px' }}
                 >
                   PERSONAL
@@ -225,16 +226,19 @@ export function Sidebar() {
         )}
 
         {/* Logout */}
-        <button
+        <Button
+          variant="ghost-danger"
+          size={collapsed ? 'icon' : 'md'}
           onClick={logout}
+          aria-label="Sair da conta"
           className={cn(
-            'flex w-full items-center gap-3 rounded-xl px-3 py-2 text-[13px] text-white/45 transition-all hover:bg-red-500/10 hover:text-red-400 active:scale-[0.98]',
+            'w-full justify-start',
             collapsed && 'justify-center'
           )}
         >
           <DSIcon name="logout" size={16} className="shrink-0" />
           {!collapsed && <span>Sair</span>}
-        </button>
+        </Button>
 
         {/* Collapse toggle */}
         <button

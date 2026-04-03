@@ -110,7 +110,8 @@
       "Bash(cat /Users/macos/Development/apps/vfit-production/src/app/\\\\\\(app\\\\\\)/perfil/gamificacao/page.tsx)",
       "Bash(wrangler whoami:*)",
       "Bash(wrangler logout:*)",
-      "Read(//private/tmp/claude-501/-Users-macos-Development-apps-vfit-production/**)"
+      "Read(//private/tmp/claude-501/-Users-macos-Development-apps-vfit-production/**)",
+      "Bash(python3 scripts/search.py \"fitness saas dark navy mobile pwa dashboard\" --design-system -p \"VFIT\")"
     ],
     "deny": [
       "Bash(npm run cf:deploy:major)",

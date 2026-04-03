@@ -21,6 +21,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { DSIcon } from '@/components/ui/ds-icon'
+import { Button } from '@/components/ui/button'
 import { cn, getShortName } from '@/lib/utils'
 import { useAppStore } from '@/stores/app-store'
 import { useAuthStore } from '@/stores/auth-store'
@@ -988,12 +989,15 @@ export function MobileDrawer() {
                 <DSIcon name="messageSquareHeart" size={16} />
                 Sugestões & Melhorias
               </button>
-              <button
+              <Button
+                variant="ghost-danger"
                 onClick={() => { logout(); setOpen(false) }}
-                className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm text-white/50 hover:bg-red-500/10 hover:text-red-400"
+                className="w-full justify-start gap-3 px-3"
+                aria-label="Sair da conta"
               >
+                <DSIcon name="logout" size={16} />
                 Sair da conta
-              </button>
+              </Button>
             </div>
           </motion.div>
         </>

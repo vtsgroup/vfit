@@ -12,19 +12,19 @@ import { z } from 'zod'
 // INPUT — Dados do onboarding para gerar plano
 // ============================================
 export const generatePlanInputSchema = z.object({
-  gender: z.enum(['male', 'female', 'other', 'prefer_not_say']),
-  experience_level: z.enum(['beginner', 'intermediate', 'advanced']),
-  training_frequency: z.enum(['regularly', 'inconsistently', 'never']),
-  goal: z.enum(['lose_weight', 'gain_muscle', 'tone', 'health', 'strength', 'flexibility']),
-  training_location: z.enum(['gym_large', 'gym_small', 'home', 'bodyweight', 'outdoor']),
-  target_muscles: z.array(z.string()).default([]),
-  age: z.number().int().min(13).max(100),
-  height_cm: z.number().min(100).max(250),
-  weight_kg: z.number().min(30).max(300),
-  target_weight_kg: z.number().min(30).max(300).optional(),
-  days_per_week: z.number().int().min(1).max(7).default(3),
+  gender: z.enum(['male', 'female', 'other', 'prefer_not_say']).default('prefer_not_say'),
+  experience_level: z.enum(['beginner', 'intermediate', 'advanced']).default('beginner'),
+  training_frequency: z.enum(['regularly', 'inconsistently', 'never']).default('never'),
+  goal: z.enum(['lose_weight', 'gain_muscle', 'tone', 'health', 'strength', 'flexibility']).default('health'),
+  training_location: z.enum(['gym_large', 'gym_small', 'home', 'bodyweight', 'outdoor']).default('gym_large'),
+  target_muscles: z.array(z.string()).nullable().default([]).transform((v) => v ?? []),
+  age: z.coerce.number().int().min(13).max(100).default(25),
+  height_cm: z.coerce.number().min(100).max(250).default(170),
+  weight_kg: z.coerce.number().min(30).max(300).default(70),
+  target_weight_kg: z.coerce.number().min(30).max(300).optional(),
+  days_per_week: z.coerce.number().int().min(1).max(7).default(3),
   session_duration: z.enum(['quick_15', 'short_30', 'medium_45', 'long_60']).default('medium_45'),
-  injuries: z.array(z.string()).default([]),
+  injuries: z.array(z.string()).nullable().default([]).transform((v) => v ?? []),
   preferred_time: z.enum(['morning', 'afternoon', 'evening', 'any']).default('any'),
 })
 

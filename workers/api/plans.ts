@@ -66,12 +66,37 @@ plans.post('/generate', async (c) => {
 
     // Extrair JSON da resposta (pode vir com markdown wrappers)
     const raw = result.response
-    const jsonMatch = raw.match(/\{[\s\S]*\}/)
-    if (!jsonMatch) {
-      throw new Error('IA não retornou JSON válido')
+    let parsed: unknown
+
+    // Strategy 1: Direct JSON parse
+    try {
+      parsed = JSON.parse(raw)
+    } catch {
+      // Strategy 2: Extract from markdown code block ```json ... ```
+      const codeBlockMatch = raw.match(/```(?:json)?\s*([\s\S]*?)```/)
+      if (codeBlockMatch) {
+        try {
+          parsed = JSON.parse(codeBlockMatch[1].trim())
+        } catch {
+          // Strategy 3: Greedy brace extraction
+          const braceMatch = raw.match(/\{[\s\S]*\}/)
+          if (braceMatch) {
+            parsed = JSON.parse(braceMatch[0])
+          } else {
+            throw new Error('IA não retornou JSON válido')
+          }
+        }
+      } else {
+        // Strategy 3: Greedy brace extraction (no code block found)
+        const braceMatch = raw.match(/\{[\s\S]*\}/)
+        if (braceMatch) {
+          parsed = JSON.parse(braceMatch[0])
+        } else {
+          throw new Error('IA não retornou JSON válido')
+        }
+      }
     }
 
-    const parsed = JSON.parse(jsonMatch[0])
     plan = generatedPlanSchema.parse(parsed)
 
   } catch (err) {
@@ -162,6 +187,39 @@ plans.post('/save', async (c) => {
         [generateId(), dayId, ex.name, ex.muscle_group, ex.sets, ex.reps, ex.rest_seconds, ex.weight_suggestion_kg || null, ex.notes || null, i, now]
       )
     }
+  }
+
+  // D1 Sync: Replicate workout to D1 for offline/PWA access (best-effort)
+  try {
+    if (c.env.DB) {
+      const planData = {
+        id: planId,
+        name: plan.plan_name,
+        description: plan.description,
+        days: plan.days,
+        stats: {
+          total_exercises: plan.days.reduce((s, d) => s + d.exercises.length, 0),
+          created_at: now,
+        },
+      }
+
+      await c.env.DB.prepare(
+        `INSERT OR REPLACE INTO user_workouts_cache (id, user_id, name, data, synced_at, created_at)
+         VALUES (?, ?, ?, ?, ?, ?)`
+      ).bind(
+        planId,
+        userId,
+        plan.plan_name,
+        JSON.stringify(planData),
+        Date.now(),
+        Math.floor(new Date(now).getTime())
+      ).run()
+
+      console.log(`[D1] Synced workout ${planId} for user ${userId}`)
+    }
+  } catch (err) {
+    // D1 is cache — do NOT fail the request if sync fails
+    console.warn(`[D1] Failed to sync workout ${planId}:`, err)
   }
 
   return created({ plan_id: planId })
@@ -440,6 +498,37 @@ plans.post('/regenerate', authMiddleware, async (c) => {
         ]
       )
     }
+  }
+
+  // D1 Sync: Replicate regenerated workout to D1 (best-effort)
+  try {
+    if (c.env.DB) {
+      const planData = {
+        id: newPlanId,
+        name: generatedPlan.plan_name,
+        days: generatedPlan.days,
+        stats: {
+          total_exercises: generatedPlan.days.reduce((s, d) => s + d.exercises.length, 0),
+          regenerated: true,
+        },
+      }
+
+      await c.env.DB.prepare(
+        `INSERT OR REPLACE INTO user_workouts_cache (id, user_id, name, data, synced_at, created_at)
+         VALUES (?, ?, ?, ?, ?, ?)`
+      ).bind(
+        newPlanId,
+        userId,
+        generatedPlan.plan_name,
+        JSON.stringify(planData),
+        Date.now(),
+        Date.now()
+      ).run()
+
+      console.log(`[D1] Synced regenerated workout ${newPlanId} for user ${userId}`)
+    }
+  } catch (err) {
+    console.warn(`[D1] Failed to sync regenerated workout ${newPlanId}:`, err)
   }
 
   return created({ plan_id: newPlanId, plan_name: generatedPlan.plan_name })

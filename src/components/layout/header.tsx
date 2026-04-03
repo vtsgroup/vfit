@@ -21,6 +21,7 @@ import { useState, useEffect } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { cn, getShortName } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
 import { DSIcon } from '@/components/ui/ds-icon'
 import type { DSIconName } from '@/components/ui/ds-icon'
 import { useAppStore } from '@/stores/app-store'
@@ -259,13 +260,16 @@ export function Header() {
           </div>
 
           {/* Logout — desktop only */}
-          <button
+          <Button
+            variant="ghost-danger"
+            size="icon"
             onClick={logout}
-            className="ds3-action-btn hidden lg:flex hover:text-error! hover:border-error/20!"
             title="Sair"
+            aria-label="Sair da conta"
+            className="hidden lg:flex"
           >
             <DSIcon name="logout" size={16} />
-          </button>
+          </Button>
 
           {/* Mobile: avatar with plan badge overlay */}
           <div className="lg:hidden shrink-0">

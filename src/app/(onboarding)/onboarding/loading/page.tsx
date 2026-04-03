@@ -76,15 +76,15 @@ export default function OnboardingLoadingPage() {
         training_frequency: data.training_frequency || 'never',
         goal: data.goal || 'health',
         training_location: data.training_location || 'gym_large',
-        target_muscles: data.target_muscles,
+        target_muscles: data.target_muscles?.length ? data.target_muscles : [],
         age: data.age || 25,
         height_cm: data.height_cm || 170,
         weight_kg: data.weight_kg || 70,
         target_weight_kg: data.target_weight_kg || data.weight_kg || 70,
-        days_per_week: data.days_per_week,
-        session_duration: data.session_duration,
-        injuries: data.injuries,
-        preferred_time: data.preferred_time,
+        days_per_week: data.days_per_week || 3,
+        session_duration: data.session_duration || 'medium_45',
+        injuries: data.injuries?.length ? data.injuries : [],
+        preferred_time: data.preferred_time || 'any',
       }
 
       const result = await api.post<{
@@ -143,10 +143,10 @@ export default function OnboardingLoadingPage() {
 
   return (
     <div className="flex min-h-dvh flex-col items-center justify-center bg-bg-primary px-6">
-      {/* ─── Pulsing orb ─── */}
+      {/* ─── Pulsing orb with glow effect ─── */}
       <div className="relative mb-10">
-        <div className="h-32 w-32 animate-pulse rounded-full bg-brand-primary/20" />
-        <div className="absolute inset-0 flex items-center justify-center">
+        <div className="absolute inset-0 h-32 w-32 animate-pulse rounded-full bg-brand-primary/20 blur-3xl" />
+        <div className="relative flex h-32 w-32 items-center justify-center rounded-full border border-brand-primary/20 bg-brand-primary/5">
           <span className="text-5xl transition-all duration-500" key={phase.emoji}>
             {phase.emoji}
           </span>
@@ -161,23 +161,23 @@ export default function OnboardingLoadingPage() {
         {phase.label}
       </h2>
 
-      {/* ─── Progress bar ─── */}
-      <div className="w-full max-w-xs">
-        <div className="h-2 overflow-hidden rounded-full bg-bg-tertiary">
+      {/* ─── Progress bar with step counter ─── */}
+      <div className="w-full max-w-xs space-y-3">
+        <div className="relative h-1.5 overflow-hidden rounded-full bg-bg-tertiary">
           <div
             className="h-full rounded-full bg-brand-primary transition-all duration-300 ease-out"
             style={{ width: `${progress}%` }}
           />
         </div>
-        <p className="mt-2 text-center text-xs text-text-muted">
-          {Math.round(progress)}%
-        </p>
+        <div className="flex items-center justify-between text-xs text-text-muted">
+          <span>Passo {currentPhase + 1}/{PHASES.length}</span>
+          <span>{Math.round(progress)}%</span>
+        </div>
       </div>
 
-      {/* ─── Fun fact ─── */}
+      {/* ─── Time estimate ─── */}
       <p className="mt-12 max-w-xs text-center text-xs text-text-secondary">
-        💡 Nosso algoritmo analisa mais de 500 variáveis para criar o treino
-        perfeito para o seu perfil.
+        ⏱️ Tempo estimado: 30-45 segundos
       </p>
     </div>
   )
