@@ -30,14 +30,6 @@ export default function IAHubPage() {
 
   return (
     <div className="flex min-h-screen flex-col bg-bg-primary pb-24">
-      {/* Header */}
-      <header className="sticky top-0 z-30 flex items-center gap-3 bg-bg-primary/80 px-4 py-3 backdrop-blur-lg">
-        <div className="flex items-center gap-2">
-          <DSIcon name="sparkles" className="h-5 w-5 text-brand-primary" />
-          <h1 className="text-lg font-bold text-text-primary">IA & Dicas</h1>
-        </div>
-      </header>
-
       <div className="space-y-6 px-4 pt-2">
         {/* ═══ Seção 1: Consultas IA ═══ */}
         <section>

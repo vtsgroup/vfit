@@ -3,7 +3,7 @@
  *
  * Layout — VFIT B2C App
  *
- * Wrapper com BottomNavigation para todas as rotas B2C.
+ * Wrapper com StudentHeader (sticky top) + BottomNavigation para todas as rotas B2C.
  * Requer autenticação (redireciona para /login se não autenticado).
  */
 
@@ -11,6 +11,7 @@
 
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { StudentHeader } from '@/components/navigation/student-header'
 import { BottomNavigation } from '@/components/navigation/bottom-navigation'
 import { useAuthStore } from '@/stores/auth-store'
 
@@ -79,6 +80,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="vfit-theme min-h-screen bg-bg-dark">
+      {/* Sticky Header */}
+      <StudentHeader />
+
       {/* Main content — padding bottom for nav bar + safe area */}
       <main className="pb-20">
         {children}

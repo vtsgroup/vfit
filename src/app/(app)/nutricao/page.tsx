@@ -98,21 +98,17 @@ export default function NutricaoPage() {
 
   return (
     <div className="flex min-h-screen flex-col bg-bg-primary pb-24">
-      {/* Header */}
-      <header className="sticky top-0 z-30 flex items-center justify-between bg-bg-primary/80 px-4 py-3 backdrop-blur-lg">
-        <div className="flex items-center gap-2">
-          <DSIcon name="apple" className="h-5 w-5 text-brand-primary" />
-          <h1 className="text-lg font-bold text-text-primary">Nutrição</h1>
-        </div>
-        <button
-          onClick={() => setShowSearch(true)}
-          className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-primary/12 text-brand-primary transition-colors hover:bg-brand-primary/20"
-        >
-          <DSIcon name="plus" size={18} />
-        </button>
-      </header>
-
       <div className="space-y-5 px-4 pt-1">
+        {/* Action button — add food */}
+        <div className="flex justify-end">
+          <button
+            onClick={() => setShowSearch(true)}
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-primary/12 text-brand-primary transition-colors hover:bg-brand-primary/20"
+          >
+            <DSIcon name="plus" size={18} />
+          </button>
+        </div>
+
         {/* ═══ Date Navigation ═══ */}
         <div className="flex items-center justify-between">
           <button

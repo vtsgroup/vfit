@@ -103,7 +103,7 @@ export default function AjustesPlanoPage() {
   return (
     <div className="mx-auto max-w-lg pb-32">
       {/* ─── Header ─── */}
-      <div className="sticky top-0 z-20 border-b border-border-primary bg-bg-primary/80 px-4 py-3 backdrop-blur-xl">
+      <div className="sticky top-14 z-20 border-b border-border-primary bg-bg-primary/80 px-4 py-3 backdrop-blur-xl">
         <div className="flex items-center justify-between">
           <button
             type="button"
