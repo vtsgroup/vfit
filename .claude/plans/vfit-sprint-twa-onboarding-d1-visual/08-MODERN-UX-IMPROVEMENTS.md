@@ -31,7 +31,7 @@ Target (v1.1.0):  Moderno, refined, premium feel
   {/* Hero orb: scale + glow effect */}
   <div className="relative mb-10">
     <div className="absolute inset-0 h-32 w-32 animate-pulse rounded-full bg-brand-primary blur-3xl opacity-30" />
-    <div className="relative h-32 w-32 rounded-full bg-gradient-to-br from-brand-primary/20 to-brand-primary/5 flex items-center justify-center border border-brand-primary/30">
+    <div className="relative h-32 w-32 rounded-full bg-linear-to-br from-brand-primary/20 to-brand-primary/5 flex items-center justify-center border border-brand-primary/30">
       <span className="text-5xl transition-all duration-300 scale-in-fade" key={phase.emoji}>
         {phase.emoji}
       </span>
@@ -49,7 +49,7 @@ Target (v1.1.0):  Moderno, refined, premium feel
   <div className="w-full max-w-xs space-y-3">
     <div className="relative h-1 overflow-hidden rounded-full bg-bg-tertiary">
       <motion.div
-        className="h-full rounded-full bg-gradient-to-r from-brand-primary via-brand-primary/80 to-brand-primary/60"
+        className="h-full rounded-full bg-linear-to-rrom-brand-primary via-brand-primary/80 to-brand-primary/60"
         layoutId="progress-bar"
         animate={{ width: `${progress}%` }}
         transition={{ type: 'spring', damping: 30, stiffness: 100 }}

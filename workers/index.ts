@@ -84,6 +84,7 @@ import { workoutTemplatesRoutes } from './api/templates'
 import { gamificationRoutes } from './api/gamification'
 import { challengesRoutes } from './api/challenges'
 import { vfitRoutes } from './api/vfit'
+import { configRoutes } from './api/config'
 
 // ============================================
 // APP INIT
@@ -472,6 +473,7 @@ app.route('/api/v1/workout-templates', workoutTemplatesRoutes)
 app.route('/api/v1/gamification', gamificationRoutes)
 app.route('/api/v1/challenges', challengesRoutes)
 app.route('/api/v1/vfit', vfitRoutes)
+app.route('/api/v1/config', configRoutes)
 
 // ============================================
 // PROTECTED ROUTES (requerem auth — generic)

@@ -415,12 +415,13 @@ export default function AdminDashboardPage() {
         </div>
 
         {/* Quick Links */}
-        <div className={cn('grid gap-3 sm:grid-cols-2', isSuperAdmin ? 'lg:grid-cols-5' : 'lg:grid-cols-3')}>
+        <div className={cn('grid gap-3 sm:grid-cols-2', isSuperAdmin ? 'lg:grid-cols-3' : 'lg:grid-cols-3')}>
           <QuickLink href="/dashboard/admin/users" icon="users" label="Gerenciar Usuários" desc={isSuperAdmin ? 'Editar, bônus, deletar' : 'Visualizar contas'} />
           <QuickLink href="/dashboard/admin/personals" icon="userCheck" label="Gerenciar Personals" desc="Planos, CREF, config" />
           <QuickLink href="/dashboard/admin/payments" icon="creditCard" label="Pagamentos" desc="Criar cobrança, ver tudo" />
           {isSuperAdmin && <QuickLink href="/dashboard/payments/withdraw" icon="dollar" label="Saques PIX" desc="Transferências e saldo" />}
           {isSuperAdmin && <QuickLink href="/dashboard/admin/smoke" icon="key" label="Smoke Tokens" desc="Gerar tokens p/ smoke" />}
+          {isSuperAdmin && <QuickLink href="/dashboard/admin/config" icon="settings" label="Configuração" desc="Planos, preços, taxas" />}
         </div>
       </div>
     </AuthGuard>

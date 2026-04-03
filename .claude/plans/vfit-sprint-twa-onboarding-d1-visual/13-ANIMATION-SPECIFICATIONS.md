@@ -177,7 +177,7 @@ const easings = {
 ```typescript
 <motion.div className="relative h-1 overflow-hidden rounded-full bg-bg-tertiary">
   <motion.div
-    className="h-full bg-gradient-to-r from-brand-primary to-brand-primary/60"
+    className="h-full bg-linear-to-r from-brand-primary to-brand-primary/60"
     animate={{ width: `${progress}%` }}
     transition={{
       type: 'spring',
@@ -550,7 +550,7 @@ const easings = {
       }}
     >
       <div className="flex items-start gap-3 rounded-lg bg-error/10 p-4 border border-error/30">
-        <AlertCircle size={20} className="text-error flex-shrink-0 mt-0.5" />
+        <AlertCircle size={20} className="text-error shrink-0 mt-0.5" />
         <div className="flex-1">
           <p className="font-medium text-error">{error.title}</p>
           <p className="text-sm text-error/80 mt-1">{error.message}</p>
@@ -606,7 +606,7 @@ const easings = {
 
 ```typescript
 <motion.div
-  className="h-4 rounded bg-gradient-to-r from-bg-tertiary via-bg-secondary to-bg-tertiary"
+  className="h-4 rounded bg-linear-to-r from-bg-tertiary via-bg-secondary to-bg-tertiary"
   animate={{
     backgroundPosition: ['0% 0%', '100% 0%', '0% 0%'],
   }}
