@@ -16,8 +16,8 @@
 import { forwardRef, useCallback, useRef, type ButtonHTMLAttributes, type MouseEvent } from 'react'
 import { cn } from '@/lib/utils'
 
-type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'ghost-danger' | 'danger' | 'warning' | 'workout' | 'assessment' | 'payment'
-type ButtonSize = 'sm' | 'md' | 'lg' | 'icon'
+type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'ghost-danger' | 'danger' | 'warning' | 'workout' | 'assessment' | 'payment' | 'soft' | 'gradient' | 'glass'
+type ButtonSize = 'sm' | 'md' | 'lg' | 'icon' | 'icon-lg'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant
@@ -170,6 +170,53 @@ const variantStyles: Record<ButtonVariant, string> = {
     'active:shadow-[0_1px_0_0_#92400E,0_2px_8px_-2px_rgba(245,158,11,0.3),inset_0_2px_6px_rgba(0,0,0,0.15)]',
     'focus-visible:ring-amber-400/40',
   ].join(' '),
+
+  // ── New Modern Variants ────────────────────
+  // Soft: muted background, no 3D depth — for secondary actions in cards
+  soft: [
+    'bg-emerald-50 text-emerald-700 font-semibold',
+    'border border-emerald-200/60',
+    'shadow-sm',
+    'hover:bg-emerald-100 hover:border-emerald-300/60 hover:shadow',
+    'active:scale-[0.97] active:bg-emerald-150',
+    // Dark mode
+    'dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800/40',
+    'dark:hover:bg-emerald-900/50 dark:hover:border-emerald-700/50',
+    'dark:active:bg-emerald-900/60',
+    'focus-visible:ring-emerald-400/30',
+  ].join(' '),
+
+  // Gradient: vibrant multi-color gradient — for premium/AI CTAs
+  gradient: [
+    'bg-linear-to-r from-emerald-500 via-teal-500 to-cyan-500',
+    'text-white font-bold',
+    '[text-shadow:0_1px_2px_rgba(0,0,0,0.2)]',
+    'border border-t-white/20 border-x-transparent border-b-black/10',
+    'shadow-[0_4px_0_0_#065F46,0_6px_24px_-4px_rgba(20,184,166,0.5),inset_0_1px_0_rgba(255,255,255,0.2)]',
+    'hover:-translate-y-0.5',
+    'hover:shadow-[0_6px_0_0_#065F46,0_10px_32px_-4px_rgba(20,184,166,0.6),0_0_60px_-10px_rgba(20,184,166,0.25),inset_0_1px_0_rgba(255,255,255,0.25)]',
+    'hover:brightness-105',
+    'active:translate-y-[3px] active:scale-[0.98]',
+    'active:shadow-[0_1px_0_0_#065F46,0_2px_8px_-2px_rgba(20,184,166,0.3),inset_0_2px_6px_rgba(0,0,0,0.15)]',
+    'active:brightness-95',
+    'focus-visible:ring-teal-400/40',
+  ].join(' '),
+
+  // Glass: glassmorphism — for overlays and floating actions
+  glass: [
+    'bg-white/10 backdrop-blur-xl text-white font-semibold',
+    'border border-white/15',
+    'shadow-[0_4px_16px_-4px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.12)]',
+    'hover:bg-white/15 hover:border-white/25',
+    'hover:shadow-[0_6px_24px_-4px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,255,255,0.18)]',
+    'active:scale-[0.97] active:bg-white/8',
+    'active:shadow-[0_2px_8px_-2px_rgba(0,0,0,0.25),inset_0_2px_4px_rgba(0,0,0,0.1)]',
+    // Light mode: inverted glass
+    'max-sm:text-inherit',
+    'light:bg-black/5 light:text-slate-800 light:border-black/10',
+    'light:hover:bg-black/8 light:hover:border-black/15',
+    'focus-visible:ring-white/30',
+  ].join(' '),
 }
 
 const sizeStyles: Record<ButtonSize, string> = {
@@ -177,6 +224,7 @@ const sizeStyles: Record<ButtonSize, string> = {
   md: 'h-12 px-5 text-sm gap-2 rounded-2xl',
   lg: 'h-14 px-7 text-base gap-2.5 rounded-2xl',
   icon: 'h-11 w-11 rounded-xl',
+  'icon-lg': 'h-14 w-14 rounded-2xl',
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -207,7 +255,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       onClick?.(e)
     }, [ripple, onClick])
 
-    const isFlat = variant === 'ghost' || variant === 'ghost-danger'
+    const isFlat = variant === 'ghost' || variant === 'ghost-danger' || variant === 'soft'
 
     return (
       <button
