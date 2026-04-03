@@ -5,6 +5,80 @@
 
 ---
 
+## [v1.2.4] — 03/04/2026 — Sprint 3: Dynamic D1 Config
+
+### 🗄️ D1 — Configuração Dinâmica
+- **Migration `0006_platform_config.sql`** — 3 novas tabelas no D1:
+  - `platform_plans_b2b` — 4 planos (trial, pro, profissional, max) com preços, features, limites
+  - `platform_plans_b2c` — 3 planos (free, premium, premium_annual) com features, limits JSON
+  - `platform_config` — 21 configs key-value (fees, XP, rate limits, cache TTLs) por categoria
+- Seed data completo: 28 registros (4 B2B + 3 B2C + 4 fees + 6 XP + 6 rate limits + 5 cache)
+
+### ⚡ API — 7 endpoints novos (`/api/v1/config/*`)
+- `GET /config/plans/b2b` — Planos B2B ativos (público, cached KV 1h)
+- `GET /config/plans/b2c` — Planos B2C ativos (público, cached KV 1h)
+- `GET /config/config/:category` — Config por categoria (público, cached KV 1h)
+- `GET /config/config/all` — Todas configs agrupadas (super_admin only)
+- `PUT /config/plans/b2b/:slug` — Atualizar plano B2B (super_admin only)
+- `PUT /config/plans/b2c/:slug` — Atualizar plano B2C (super_admin only)
+- `PUT /config/config/:key` — Atualizar config value (super_admin only)
+- Cache KV com invalidação automática em mutations
+
+### 🎨 Frontend
+- **`src/hooks/use-platform-config.ts`** — 6 hooks React Query:
+  - `useDynamicPlansB2B()`, `useDynamicPlansB2C()`, `useDynamicConfig(cat)` — públicos com fallback estático
+  - `useAllConfig()`, `useUpdatePlanB2B()`, `useUpdatePlanB2C()`, `useUpdateConfig()` — admin mutations
+- **`/dashboard/admin/config`** — UI admin com 6 tabs (B2B, B2C, Taxas, Gamificação, Rate Limits, Cache)
+  - Edição inline por card, Toggle ativo/inativo, JSON editor para rate limits
+  - GlassCard com cores por tier (zinc/emerald/violet/amber)
+- QuickLink "Configuração" adicionado no admin dashboard
+
+### 📊 Arquivos
+- 4 novos: migration SQL, API config.ts, hooks use-platform-config.ts, admin config page
+- 2 modificados: workers/index.ts (registro rota), admin/page.tsx (QuickLink)
+
+---
+
+## [v1.2.3] — 03/04/2026 — Sprint 2: Pricing Unification
+
+### 💰 Single Source of Truth para Preços
+- **`lib/pricing.ts`** — Módulo centralizado: `getB2BPrices()`, `getB2CPrices()`, `formatBRL()`, `ANNUAL_DISCOUNT_B2B`
+- Todos os 10 consumers migrados de hardcoded para `PLANS.*.price_brl` / `VFIT_PLANS.*.price_brl`
+- Fix: `json-ld.tsx` tinha preço errado do Pro+ (59.90 em vez de 69.90)
+- Fix: `getAnnualPrice()` usava `* 0.8` → agora usa `* (1 - ANNUAL_DISCOUNT_B2B)`
+
+### 📊 Arquivos (11 total, 175+/112-)
+- Novos: `lib/pricing.ts`
+- Modificados: `pricing-plans.ts`, `pricing-koyeb.tsx`, `json-ld.tsx`, `pricing/page.tsx`, `dashboard/plans/page.tsx`, `perfil/assinatura/page.tsx`, `paywall-plans.tsx`, `paywall-discount.tsx`, `use-platform-subscription.ts`, `workers/api/platform.ts`
+
+---
+
+## [v1.2.2] — 03/04/2026 — Sprint 1: StudentHeader + BottomNav Premium SVG
+
+### 🎨 Navegação Student B2C
+- **`StudentHeader`** — Header sticky com avatar, título dinâmico da página, botão de notificações
+- **`BottomNavigation` redesign** — Ícones SVG custom dual-state (outline quando inativo, filled quando ativo)
+- Ícone IA premium (sparkles customizado)
+- Safe-area insets para PWA/TWA
+- Integrado no layout `(app)` com detecção admin→student
+
+### 📊 Arquivos: 16 modificados
+
+---
+
+## [v1.2.1] — 03/04/2026 — Sprint 0: Navy Glass Theme
+
+### 🎨 Fundação Visual
+- **27 arquivos** auditados e corrigidos: `bg-green-*` / `bg-emerald-*` em cards → `bg-surface-1/2` navy glass
+- Quick-action cards do student dashboard: verde → navy + borda glass
+- Stats cards: fundo verde → navy com acentos emerald em ícones/números
+- Empty states padronizados: fundo navy, ícone SVG, sem emojis
+- Documentação de palette decisions no DESIGN-SYSTEM.md
+
+### 📊 Arquivos: 27 modificados
+
+---
+
 ## [v1.2.0] — 03/04/2026 — UX Modernization: Retry, Animations, Button Variants
 
 ### 🏗️ Infraestrutura UX

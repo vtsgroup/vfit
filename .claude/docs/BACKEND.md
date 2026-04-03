@@ -111,6 +111,9 @@ config/
 | `GET` | `/api/v1/invitations/:token/info` | Dados do personal para página de cadastro via convite (full_name, photo, cref, specialties, student_name) |
 | `GET` | `/api/v1/assessments/share/:token` | Avaliação compartilhada via token público (mínimo 32 chars) |
 | `POST` | `/api/v1/cpf/lookup` | Consulta nome por CPF + data nascimento (rate limit: 5/min por IP; LGPD-compliant) |
+| `GET` | `/api/v1/config/plans/b2b` | Planos B2B ativos (D1, cached KV 1h) |
+| `GET` | `/api/v1/config/plans/b2c` | Planos B2C ativos (D1, cached KV 1h) |
+| `GET` | `/api/v1/config/config/:category` | Config por categoria (D1, cached KV 1h) |
 
 ### Auth (`/api/v1/auth`) — 15 endpoints
 

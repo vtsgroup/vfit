@@ -2,41 +2,58 @@
 
 > Status em tempo real de cada sprint e task.
 > ⬜ = Pendente · 🔄 = Em progresso · ✅ = Concluído · ❌ = Bloqueado
+> **Última atualização:** 03/04/2026 — v1.2.4
 
 ---
 
 ## Fase 1 — Fundação
 
-### S0: Visual Foundation
-- [ ] T0.1 — Auditar todas as ocorrências de `bg-green`, `bg-emerald` fora de botões/badges
-- [ ] T0.2 — Redefinir CSS vars de fundo: cards B2C usam `bg-surface-1/2` navy
-- [ ] T0.3 — Substituir fundos verdes de cards por navy + borda glass
-- [ ] T0.4 — Atualizar quick-action cards do student dashboard (verde → navy glass)
-- [ ] T0.5 — Atualizar stats cards do student dashboard
-- [ ] T0.6 — Padronizar empty states: fundo navy, ícone SVG, sem emojis
-- [ ] T0.7 — Documentar palette decision no DESIGN-SYSTEM.md
+### S0: Visual Foundation ✅ (v1.2.1 — commit `565b2e48`)
+- [x] T0.1 — Auditar todas as ocorrências de `bg-green`, `bg-emerald` fora de botões/badges
+- [x] T0.2 — Redefinir CSS vars de fundo: cards B2C usam `bg-surface-1/2` navy
+- [x] T0.3 — Substituir fundos verdes de cards por navy + borda glass
+- [x] T0.4 — Atualizar quick-action cards do student dashboard (verde → navy glass)
+- [x] T0.5 — Atualizar stats cards do student dashboard
+- [x] T0.6 — Padronizar empty states: fundo navy, ícone SVG, sem emojis
+- [x] T0.7 — Documentar palette decision no DESIGN-SYSTEM.md
+> **27 arquivos** modificados. Deploy em v1.2.1.
 
-### S1: Navbar & Header
-- [ ] T1.1 — Criar `StudentHeader` (sticky top, avatar, notifs, título da página)
-- [ ] T1.2 — Redesign `BottomNavigation` com SVG custom dual-state (outline/filled)
-- [ ] T1.3 — Criar ícone IA premium (sparkles customizado ou brain SVG)
-- [ ] T1.4 — Adicionar FAB ou quick-action no navbar se necessário
-- [ ] T1.5 — Safe-area insets no novo header
-- [ ] T1.6 — Integrar no layout `(app)`
-- [ ] T1.7 — Testar admin→student view com novo layout
+### S1: Navbar & Header ✅ (v1.2.2 — commit `f4f85d3b`)
+- [x] T1.1 — Criar `StudentHeader` (sticky top, avatar, notifs, título da página)
+- [x] T1.2 — Redesign `BottomNavigation` com SVG custom dual-state (outline/filled)
+- [x] T1.3 — Criar ícone IA premium (sparkles customizado ou brain SVG)
+- [x] T1.4 — Adicionar FAB ou quick-action no navbar se necessário
+- [x] T1.5 — Safe-area insets no novo header
+- [x] T1.6 — Integrar no layout `(app)`
+- [x] T1.7 — Testar admin→student view com novo layout
+> **16 arquivos** modificados. Deploy em v1.2.2.
 
-### S2: Pricing Unification
-- [ ] T2.1 — Definir preços finais B2C em `config/constants.ts` VFIT_PLANS
-- [ ] T2.2 — Remover hardcoded prices de `perfil/assinatura/page.tsx`
-- [ ] T2.3 — Remover hardcoded prices de `paywall-plans.tsx`
-- [ ] T2.4 — Remover PLAN_PRICES duplicado de `use-platform-checkout.ts`
-- [ ] T2.5 — Remover PLAN_PRICES duplicado de `workers/api/platform.ts`
-- [ ] T2.6 — Criar helper `getPlanPrice(slug, billing)` centralizado
-- [ ] T2.7 — Atualizar paywall para ler de VFIT_PLANS
-- [ ] T2.8 — Atualizar subscription page para ler de VFIT_PLANS
-- [ ] T2.9 — Verificar consistência frontend ↔ backend
+### S2: Pricing Unification ✅ (v1.2.3 — commit `4d72eeed`)
+- [x] T2.1 — Definir preços finais B2C em `config/constants.ts` VFIT_PLANS
+- [x] T2.2 — Remover hardcoded prices de `perfil/assinatura/page.tsx`
+- [x] T2.3 — Remover hardcoded prices de `paywall-plans.tsx`
+- [x] T2.4 — Remover PLAN_PRICES duplicado de `use-platform-checkout.ts`
+- [x] T2.5 — Remover PLAN_PRICES duplicado de `workers/api/platform.ts`
+- [x] T2.6 — Criar helper `getPlanPrice(slug, billing)` centralizado
+- [x] T2.7 — Atualizar paywall para ler de VFIT_PLANS
+- [x] T2.8 — Atualizar subscription page para ler de VFIT_PLANS
+- [x] T2.9 — Verificar consistência frontend ↔ backend
+> **11 arquivos** (lib/pricing.ts + 10 consumers). 175 inserções / 112 remoções. Deploy em v1.2.3.
 
-### S3: Onboarding Perfect
+### S3: Dynamic D1 Config ✅ (v1.2.4 — commit `ce88a080`)
+> ⚠️ Sprint NÃO estava no plano original — foi criado como extensão do S2.
+> Escopo: tornar TODOS os preços e configs dinâmicos via D1, gerenciáveis pelo super_admin.
+
+- [x] T3.extra.1 — Migration D1 `0006_platform_config.sql` (3 tabelas + seed completo)
+- [x] T3.extra.2 — API CRUD `workers/api/config.ts` (7 endpoints: 3 públicos + 4 admin)
+- [x] T3.extra.3 — React Query hooks `use-platform-config.ts` (6 hooks com fallback estático)
+- [x] T3.extra.4 — Admin Config Page `/dashboard/admin/config` (6 tabs: B2B, B2C, Fees, XP, Rate Limits, Cache)
+- [x] T3.extra.5 — QuickLink "Configuração" no admin dashboard
+- [x] T3.extra.6 — Aplicar migration D1 remota (87 rows seed)
+- [x] T3.extra.7 — TypeScript check 0 erros + deploy
+> **6 arquivos** novos/modificados. D1: 3 tabelas, 28 registros seed. Deploy em v1.2.4.
+
+### S3 Original: Onboarding Perfect ⬜ (renumerado → S3b)
 - [ ] T3.1 — Substituir emojis do loading por SVG animados
 - [ ] T3.2 — Persistir dados do onboarding no DB (não só sessionStorage)
 - [ ] T3.3 — Corrigir redirect pós-paywall (skip → treinos, subscribe → checkout)
@@ -169,10 +186,19 @@
 
 ## Contagem
 
-| Fase | Sprints | Tasks |
-|:----:|:-------:|:-----:|
-| 1 | S0–S3 | 33 |
-| 2 | S4–S7 | 37 |
-| 3 | S8–S10 | 28 |
-| 4 | S11–S13 | 23 |
-| **Total** | **14** | **121** |
+| Fase | Sprints | Tasks | Concluídas |
+|:----:|:-------:|:-----:|:----------:|
+| 1 | S0–S3 | 33 + 7 extra | **40/40** ✅ |
+| 2 | S3b–S7 | 8 + 37 | 0/45 |
+| 3 | S8–S10 | 28 | 0/28 |
+| 4 | S11–S13 | 23 | 0/23 |
+| **Total** | **14+1** | **136** | **40** (29%) |
+
+### Deploys realizados
+
+| Versão | Sprint | Data | Commit | Arquivos |
+|--------|--------|------|--------|----------|
+| v1.2.1 | S0: Visual Foundation | 03/04/2026 | `565b2e48` | 27 |
+| v1.2.2 | S1: Navbar & Header | 03/04/2026 | `f4f85d3b` | 16 |
+| v1.2.3 | S2: Pricing Unification | 03/04/2026 | `4d72eeed` | 11 |
+| v1.2.4 | S3: Dynamic D1 Config | 03/04/2026 | `ce88a080` | 6 |
