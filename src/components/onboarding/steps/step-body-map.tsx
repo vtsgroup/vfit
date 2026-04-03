@@ -9,25 +9,25 @@
 'use client'
 
 import { useCallback } from 'react'
-import { DSIcon } from '@/components/ui/ds-icon'
+import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 import { useOnboardingStore } from '@/stores/onboarding-store'
 
 type MuscleGroup = {
   id: string
   label: string
-  emoji: string
+  icon: DSIconName
 }
 
 const MUSCLE_GROUPS: MuscleGroup[] = [
-  { id: 'chest', label: 'Peito', emoji: '🫁' },
-  { id: 'back', label: 'Costas', emoji: '🔙' },
-  { id: 'shoulders', label: 'Ombros', emoji: '💪' },
-  { id: 'arms', label: 'Braços', emoji: '💪' },
-  { id: 'abs', label: 'Abdômen', emoji: '🎯' },
-  { id: 'glutes', label: 'Glúteos', emoji: '🍑' },
-  { id: 'legs', label: 'Pernas', emoji: '🦵' },
-  { id: 'calves', label: 'Panturrilha', emoji: '🦶' },
-  { id: 'full_body', label: 'Corpo todo', emoji: '⚡' },
+  { id: 'chest', label: 'Peito', icon: 'heart' },
+  { id: 'back', label: 'Costas', icon: 'shield' },
+  { id: 'shoulders', label: 'Ombros', icon: 'trendingUp' },
+  { id: 'arms', label: 'Braços', icon: 'dumbbell' },
+  { id: 'abs', label: 'Abdômen', icon: 'target' },
+  { id: 'glutes', label: 'Glúteos', icon: 'flame' },
+  { id: 'legs', label: 'Pernas', icon: 'footprints' },
+  { id: 'calves', label: 'Panturrilha', icon: 'activity' },
+  { id: 'full_body', label: 'Corpo todo', icon: 'zap' },
 ]
 
 export function StepBodyMap() {
@@ -77,7 +77,7 @@ export function StepBodyMap() {
                   : 'border-white/10 bg-white/4 hover:border-white/20 hover:bg-white/6'
               }`}
             >
-              <span className="text-base">{group.emoji}</span>
+              <DSIcon name={group.icon} className={`h-4 w-4 transition-colors ${isSelected ? 'text-brand-primary' : 'text-white/50'}`} />
               <span
                 className={`text-sm font-medium transition-colors ${
                   isSelected ? 'text-white' : 'text-white/70'

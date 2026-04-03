@@ -11,15 +11,15 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
-import { DSIcon } from '@/components/ui/ds-icon'
+import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 import { useAuthStore } from '@/stores/auth-store'
 import { useOnboardingStore } from '@/stores/onboarding-store'
 
-const FEATURES = [
-  { icon: '🎯', text: 'Plano personalizado por IA' },
-  { icon: '📊', text: 'Progresso em tempo real' },
-  { icon: '🏆', text: 'Gamificação + Streaks' },
-  { icon: '⚡', text: 'Treinos de 15 a 60 min' },
+const FEATURES: { icon: DSIconName; text: string }[] = [
+  { icon: 'target', text: 'Plano personalizado por IA' },
+  { icon: 'chart', text: 'Progresso em tempo real' },
+  { icon: 'trophy', text: 'Gamificação + Streaks' },
+  { icon: 'zap', text: 'Treinos de 15 a 60 min' },
 ]
 
 export default function WelcomePage() {
@@ -103,7 +103,7 @@ export default function WelcomePage() {
                 transition: 'opacity 0.5s, transform 0.5s',
               }}
             >
-              <span className="text-xl">{f.icon}</span>
+              <DSIcon name={f.icon} className="h-5 w-5 shrink-0 text-brand-primary" />
               <span className="text-sm font-medium text-white/90">{f.text}</span>
             </div>
           ))}

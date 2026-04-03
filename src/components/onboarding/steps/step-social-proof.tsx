@@ -8,26 +8,29 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { DSIcon } from '@/components/ui/ds-icon'
+import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 
-const REVIEWS = [
+const REVIEWS: { name: string; rating: number; text: string; badgeIcon: DSIconName; badgeText: string }[] = [
   {
     name: 'Lucas M.',
     rating: 5,
     text: 'Em 4 semanas já vi diferença no espelho. O plano é muito melhor que qualquer genérico.',
-    badge: '💪 4 semanas',
+    badgeIcon: 'dumbbell',
+    badgeText: '4 semanas',
   },
   {
     name: 'Ana P.',
     rating: 5,
     text: 'Nunca tinha conseguido manter uma rotina. A gamificação do VFIT me motivou demais!',
-    badge: '🔥 60 dias streak',
+    badgeIcon: 'flame',
+    badgeText: '60 dias streak',
   },
   {
     name: 'Rafael S.',
     rating: 5,
     text: 'O treino de 30 minutos é perfeito para minha rotina. Resultados reais em pouco tempo.',
-    badge: '⚡ 30 min/dia',
+    badgeIcon: 'zap',
+    badgeText: '30 min/dia',
   },
 ]
 
@@ -115,8 +118,9 @@ export function StepSocialProof() {
         <p className="text-sm text-white/70 leading-relaxed">
           &ldquo;{review.text}&rdquo;
         </p>
-        <span className="mt-2 inline-block rounded-full bg-white/6 px-2.5 py-1 text-[11px] text-white/50">
-          {review.badge}
+        <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-white/6 px-2.5 py-1 text-[11px] text-white/50">
+          <DSIcon name={review.badgeIcon} className="h-3 w-3 text-brand-primary" />
+          {review.badgeText}
         </span>
 
         {/* Dot indicators */}

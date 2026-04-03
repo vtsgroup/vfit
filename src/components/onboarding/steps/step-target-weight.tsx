@@ -8,6 +8,7 @@
 'use client'
 
 import { useCallback, useMemo, useState } from 'react'
+import { DSIcon } from '@/components/ui/ds-icon'
 import { useOnboardingStore } from '@/stores/onboarding-store'
 
 export function StepTargetWeight() {
@@ -117,8 +118,9 @@ export function StepTargetWeight() {
           )}
 
           {estimatedWeeks === 0 && (
-            <p className="text-center text-xs text-white/50">
-              ✅ Meta muito próxima do peso atual — foco em manutenção!
+            <p className="flex items-center justify-center gap-1.5 text-center text-xs text-white/50">
+              <DSIcon name="checkCircle" className="h-4 w-4 text-brand-primary shrink-0" />
+              Meta muito próxima do peso atual — foco em manutenção!
             </p>
           )}
         </div>

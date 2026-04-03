@@ -25,7 +25,7 @@ interface PaywallDiscountProps {
 const LAYER_CONFIG = {
   2: {
     discount: '20%',
-    title: 'Espere! Oferta Especial 🎁',
+    title: 'Espere! Oferta Especial',
     subtitle: 'Ganhe 20% de desconto no plano anual',
     price: Math.round(VFIT_PLANS.premium_annual.price_brl * 0.80 * 100) / 100,
     originalPrice: VFIT_PLANS.premium_annual.price_brl,
@@ -35,7 +35,7 @@ const LAYER_CONFIG = {
   },
   3: {
     discount: '40%',
-    title: '🔥 Nossa MELHOR Oferta!',
+    title: 'Nossa MELHOR Oferta!',
     subtitle: '40% OFF — Exclusivo agora, não voltará!',
     price: Math.round(VFIT_PLANS.premium_annual.price_brl * 0.60 * 100) / 100,
     originalPrice: VFIT_PLANS.premium_annual.price_brl,
@@ -138,8 +138,10 @@ export function PaywallDiscount({
       </button>
 
       <div className="mx-auto w-full max-w-sm text-center">
-        {/* Fire animation */}
-        <div className="mb-4 text-6xl">🔥</div>
+        {/* Fire icon */}
+        <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-red-500/10">
+          <DSIcon name="flame" className="h-10 w-10 text-red-400" />
+        </div>
 
         {/* Badge */}
         <div className="mb-4 inline-block">
@@ -199,7 +201,8 @@ export function PaywallDiscount({
           loading={loading}
           onClick={onAccept}
         >
-          🔥 Quero {config.discount} OFF Agora
+          <DSIcon name="flame" className="h-4 w-4" />
+          Quero {config.discount} OFF Agora
         </Button>
 
         <button

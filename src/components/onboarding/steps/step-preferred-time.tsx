@@ -7,7 +7,7 @@
 
 'use client'
 
-import { DSIcon } from '@/components/ui/ds-icon'
+import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 import { useOnboardingStore } from '@/stores/onboarding-store'
 import type { OnboardingData } from '@/stores/onboarding-store'
 
@@ -15,7 +15,7 @@ type TimeOption = {
   value: NonNullable<OnboardingData['preferred_time']>
   label: string
   subtitle: string
-  emoji: string
+  icon: DSIconName
 }
 
 const TIME_OPTIONS: TimeOption[] = [
@@ -23,25 +23,25 @@ const TIME_OPTIONS: TimeOption[] = [
     value: 'morning',
     label: 'Manhã',
     subtitle: '6h - 12h · Mais energia e foco',
-    emoji: '🌅',
+    icon: 'sun',
   },
   {
     value: 'afternoon',
     label: 'Tarde',
     subtitle: '12h - 18h · Pico de performance muscular',
-    emoji: '☀️',
+    icon: 'zap',
   },
   {
     value: 'evening',
     label: 'Noite',
     subtitle: '18h - 22h · Alívio do estresse do dia',
-    emoji: '🌙',
+    icon: 'moon',
   },
   {
     value: 'any',
     label: 'Tanto faz',
     subtitle: 'Flexível — treino quando der',
-    emoji: '🔄',
+    icon: 'refresh',
   },
 ]
 
@@ -63,11 +63,11 @@ export function StepPreferredTime() {
             }`}
           >
             <div
-              className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/6 text-2xl transition-all duration-300 ${
+              className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/6 transition-all duration-300 ${
                 isSelected ? 'scale-110 bg-brand-primary/15' : 'group-hover:scale-105'
               }`}
             >
-              {opt.emoji}
+              <DSIcon name={opt.icon} className={`h-6 w-6 transition-colors ${isSelected ? 'text-brand-primary' : 'text-white/60'}`} />
             </div>
 
             <div className="flex-1">

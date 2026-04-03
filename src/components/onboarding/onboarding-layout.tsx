@@ -10,6 +10,7 @@
 
 import { useCallback, useEffect, useState, type ReactNode } from 'react'
 import { useRouter } from 'next/navigation'
+import { Button } from '@/components/ui/button'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { useOnboardingStore } from '@/stores/onboarding-store'
 
@@ -157,17 +158,14 @@ export function OnboardingStepLayout({
       {/* ─── Footer: continue button ─── */}
       {!hideFooter && (
         <div className="safe-area-bottom px-6 pb-6 pt-4">
-          <button
+          <Button
+            size="lg"
+            className="w-full"
             onClick={handleContinue}
             disabled={!canContinue}
-            className={`w-full rounded-2xl py-4 text-base font-bold transition-all duration-300 ${
-              canContinue
-                ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/25 active:scale-[0.98]'
-                : 'bg-white/6 text-white/25 cursor-not-allowed'
-            }`}
           >
             {continueLabel}
-          </button>
+          </Button>
         </div>
       )}
     </div>

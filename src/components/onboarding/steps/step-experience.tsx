@@ -16,7 +16,6 @@ type ExperienceOption = {
   label: string
   subtitle: string
   icon: DSIconName
-  emoji: string
 }
 
 const EXPERIENCE_OPTIONS: ExperienceOption[] = [
@@ -25,21 +24,18 @@ const EXPERIENCE_OPTIONS: ExperienceOption[] = [
     label: 'Iniciante',
     subtitle: 'Nunca treinei ou treino há menos de 6 meses',
     icon: 'target',
-    emoji: '🌱',
   },
   {
     value: 'intermediate',
     label: 'Intermediário',
     subtitle: 'Treino regularmente há mais de 6 meses',
     icon: 'trendingUp',
-    emoji: '💪',
   },
   {
     value: 'advanced',
     label: 'Avançado',
     subtitle: 'Treino há mais de 2 anos com experiência sólida',
     icon: 'award',
-    emoji: '🏆',
   },
 ]
 
@@ -60,13 +56,13 @@ export function StepExperience() {
                 : 'border-white/8 bg-white/4 hover:border-white/15 hover:bg-white/6'
             }`}
           >
-            {/* Emoji */}
+            {/* Icon */}
             <div
-              className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/6 text-2xl transition-all duration-300 ${
+              className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/6 transition-all duration-300 ${
                 isSelected ? 'scale-110 bg-brand-primary/15' : 'group-hover:scale-105'
               }`}
             >
-              {opt.emoji}
+              <DSIcon name={opt.icon} className={`h-6 w-6 transition-colors ${isSelected ? 'text-brand-primary' : 'text-white/60'}`} />
             </div>
 
             {/* Text */}

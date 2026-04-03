@@ -8,6 +8,7 @@
 'use client'
 
 import { useCallback, useState } from 'react'
+import { DSIcon } from '@/components/ui/ds-icon'
 import { useOnboardingStore } from '@/stores/onboarding-store'
 
 export function StepAge() {
@@ -58,17 +59,21 @@ export function StepAge() {
 
       {/* Age group feedback */}
       {age && (
-        <div className="rounded-xl border border-white/8 bg-white/4 px-5 py-3 text-center">
+        <div className="flex items-center gap-2.5 rounded-xl border border-white/8 bg-white/4 px-5 py-3">
+          <DSIcon
+            name={age < 18 ? 'star' : age < 30 ? 'dumbbell' : age < 45 ? 'target' : age < 60 ? 'zap' : 'trophy'}
+            className="h-5 w-5 shrink-0 text-brand-primary"
+          />
           <p className="text-sm text-white/70">
             {age < 18
-              ? '🌟 Adaptamos o treino para jovens atletas'
+              ? 'Adaptamos o treino para jovens atletas'
               : age < 30
-                ? '💪 Fase ideal para ganhos máximos'
+                ? 'Fase ideal para ganhos máximos'
                 : age < 45
-                  ? '🎯 Foco em performance e manutenção'
+                  ? 'Foco em performance e manutenção'
                   : age < 60
-                    ? '⚡ Treino adaptado para longevidade'
-                    : '🏆 Exercícios seguros e eficientes'}
+                    ? 'Treino adaptado para longevidade'
+                    : 'Exercícios seguros e eficientes'}
           </p>
         </div>
       )}

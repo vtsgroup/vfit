@@ -8,19 +8,25 @@
 'use client'
 
 import { useCallback } from 'react'
-import { DSIcon } from '@/components/ui/ds-icon'
+import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 import { useOnboardingStore } from '@/stores/onboarding-store'
 
-const INJURY_OPTIONS = [
-  { id: 'knee', label: 'Joelho', emoji: '🦵' },
-  { id: 'shoulder', label: 'Ombro', emoji: '💪' },
-  { id: 'back_lower', label: 'Lombar', emoji: '🔙' },
-  { id: 'back_upper', label: 'Coluna', emoji: '🦴' },
-  { id: 'wrist', label: 'Pulso', emoji: '✋' },
-  { id: 'ankle', label: 'Tornozelo', emoji: '🦶' },
-  { id: 'hip', label: 'Quadril', emoji: '🦿' },
-  { id: 'neck', label: 'Pescoço', emoji: '🧣' },
-  { id: 'none', label: 'Nenhuma', emoji: '✅' },
+type InjuryOption = {
+  id: string
+  label: string
+  icon: DSIconName
+}
+
+const INJURY_OPTIONS: InjuryOption[] = [
+  { id: 'knee', label: 'Joelho', icon: 'footprints' },
+  { id: 'shoulder', label: 'Ombro', icon: 'trendingUp' },
+  { id: 'back_lower', label: 'Lombar', icon: 'activity' },
+  { id: 'back_upper', label: 'Coluna', icon: 'shield' },
+  { id: 'wrist', label: 'Pulso', icon: 'penLine' },
+  { id: 'ankle', label: 'Tornozelo', icon: 'footprints' },
+  { id: 'hip', label: 'Quadril', icon: 'activity' },
+  { id: 'neck', label: 'Pescoço', icon: 'user' },
+  { id: 'none', label: 'Nenhuma', icon: 'checkCircle' },
 ]
 
 export function StepInjuries() {
@@ -64,7 +70,7 @@ export function StepInjuries() {
                   : 'border-white/10 bg-white/4 hover:border-white/20 hover:bg-white/6'
               }`}
             >
-              <span className="text-base">{opt.emoji}</span>
+              <DSIcon name={opt.icon} className={`h-4 w-4 transition-colors ${isSelected ? (opt.id === 'none' ? 'text-brand-primary' : 'text-orange-400') : 'text-white/50'}`} />
               <span
                 className={`text-sm font-medium transition-colors ${
                   isSelected ? 'text-white' : 'text-white/70'

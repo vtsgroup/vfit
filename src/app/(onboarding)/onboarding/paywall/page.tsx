@@ -30,10 +30,10 @@ export default function OnboardingPaywallPage() {
       setLoading(true)
       try {
         // TODO Sprint 10.10: Chamar POST /api/v1/subscriptions/create com plan.id
-        // Por enquanto, redirect para a app com flag
         console.log('[Paywall] Selected plan:', plan.id)
-        await new Promise((r) => setTimeout(r, 1000)) // simular loading
-        router.push('/plano?subscribed=1')
+        // Salvar plano selecionado para pegar após signup
+        sessionStorage.setItem('vfit_selected_plan', plan.id)
+        router.push(`/login?from=onboarding&plan=${plan.id}`)
       } catch {
         setLoading(false)
       }
@@ -45,9 +45,8 @@ export default function OnboardingPaywallPage() {
   const handleDiscountAccept = useCallback(async () => {
     setLoading(true)
     try {
-      // TODO: Criar assinatura com desconto
-      await new Promise((r) => setTimeout(r, 1000))
-      router.push('/plano?subscribed=1')
+      sessionStorage.setItem('vfit_selected_plan', 'premium')
+      router.push('/login?from=onboarding&plan=premium')
     } catch {
       setLoading(false)
     }
@@ -71,7 +70,7 @@ export default function OnboardingPaywallPage() {
   }, [])
 
   const handleLeave = useCallback(() => {
-    router.push('/plano')
+    router.push('/login?from=onboarding&plan=free')
   }, [router])
 
   return (

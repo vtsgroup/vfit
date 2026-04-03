@@ -15,14 +15,15 @@ import { useRouter } from 'next/navigation'
 import { useOnboardingStore } from '@/stores/onboarding-store'
 import { api } from '@/lib/api-client'
 import { Button } from '@/components/ui/button'
+import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 
 // ─── Fases do loading ───
-const PHASES = [
-  { label: 'Analisando seu perfil...', emoji: '🔍', duration: 2000 },
-  { label: 'Selecionando exercícios ideais...', emoji: '🏋️', duration: 2500 },
-  { label: 'Montando seu plano personalizado...', emoji: '📋', duration: 2000 },
-  { label: 'Otimizando para resultados máximos...', emoji: '⚡', duration: 1500 },
-  { label: 'Quase pronto!', emoji: '✨', duration: 1000 },
+const PHASES: { label: string; icon: DSIconName; duration: number }[] = [
+  { label: 'Analisando seu perfil...', icon: 'search', duration: 2000 },
+  { label: 'Selecionando exercícios ideais...', icon: 'dumbbell', duration: 2500 },
+  { label: 'Montando seu plano personalizado...', icon: 'clipboardList', duration: 2000 },
+  { label: 'Otimizando para resultados máximos...', icon: 'zap', duration: 1500 },
+  { label: 'Quase pronto!', icon: 'sparkles', duration: 1000 },
 ]
 
 export default function OnboardingLoadingPage() {
@@ -120,7 +121,9 @@ export default function OnboardingLoadingPage() {
   if (error) {
     return (
       <div className="flex min-h-dvh flex-col items-center justify-center bg-bg-primary px-6 text-center">
-        <div className="mb-6 text-6xl">😅</div>
+        <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-white/8">
+          <DSIcon name="alertTriangle" className="h-10 w-10 text-yellow-400" />
+        </div>
         <h2 className="mb-2 text-xl font-bold text-text-primary">
           {error}
         </h2>
@@ -147,9 +150,7 @@ export default function OnboardingLoadingPage() {
       <div className="relative mb-10">
         <div className="absolute inset-0 h-32 w-32 animate-pulse rounded-full bg-blue-500/20 blur-3xl" />
         <div className="relative flex h-32 w-32 items-center justify-center rounded-full border border-white/10 bg-white/5">
-          <span className="text-5xl transition-all duration-500" key={phase.emoji}>
-            {phase.emoji}
-          </span>
+          <DSIcon name={phase.icon} className="h-14 w-14 text-brand-primary transition-all duration-500" key={phase.icon} />
         </div>
       </div>
 
@@ -176,8 +177,9 @@ export default function OnboardingLoadingPage() {
       </div>
 
       {/* ─── Time estimate ─── */}
-      <p className="mt-12 max-w-xs text-center text-xs text-text-secondary">
-        ⏱️ Tempo estimado: 30-45 segundos
+      <p className="mt-12 flex max-w-xs items-center justify-center gap-1.5 text-center text-xs text-text-secondary">
+        <DSIcon name="clock" className="h-3.5 w-3.5" />
+        Tempo estimado: 30-45 segundos
       </p>
     </div>
   )

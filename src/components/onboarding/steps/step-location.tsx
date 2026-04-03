@@ -16,7 +16,6 @@ type LocationOption = {
   label: string
   subtitle: string
   icon: DSIconName
-  emoji: string
 }
 
 const LOCATION_OPTIONS: LocationOption[] = [
@@ -25,35 +24,30 @@ const LOCATION_OPTIONS: LocationOption[] = [
     label: 'Academia completa',
     subtitle: 'Com todos os equipamentos e máquinas',
     icon: 'dumbbell',
-    emoji: '🏋️',
   },
   {
     value: 'gym_small',
     label: 'Academia pequena',
     subtitle: 'Equipamentos básicos (halteres, barra, cabos)',
-    icon: 'home',
-    emoji: '💪',
+    icon: 'dumbbell',
   },
   {
     value: 'home',
     label: 'Em casa',
     subtitle: 'Com alguns equipamentos (halteres, faixas)',
     icon: 'home',
-    emoji: '🏠',
   },
   {
     value: 'bodyweight',
     label: 'Peso corporal',
     subtitle: 'Sem nenhum equipamento, apenas corpo',
     icon: 'user',
-    emoji: '🤸',
   },
   {
     value: 'outdoor',
     label: 'Ao ar livre',
     subtitle: 'Parques, praças, trilhas',
     icon: 'sun',
-    emoji: '🌳',
   },
 ]
 
@@ -74,13 +68,13 @@ export function StepLocation() {
                 : 'border-white/8 bg-white/4 hover:border-white/15 hover:bg-white/6'
             }`}
           >
-            {/* Emoji */}
+            {/* Icon */}
             <div
-              className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/6 text-2xl transition-all duration-300 ${
+              className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/6 transition-all duration-300 ${
                 isSelected ? 'scale-110 bg-brand-primary/15' : 'group-hover:scale-105'
               }`}
             >
-              {opt.emoji}
+              <DSIcon name={opt.icon} className={`h-6 w-6 transition-colors ${isSelected ? 'text-brand-primary' : 'text-white/60'}`} />
             </div>
 
             {/* Text */}

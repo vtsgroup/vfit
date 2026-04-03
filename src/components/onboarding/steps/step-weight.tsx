@@ -8,6 +8,7 @@
 'use client'
 
 import { useCallback, useMemo, useState } from 'react'
+import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 import { useOnboardingStore } from '@/stores/onboarding-store'
 
 // ============================================
@@ -16,7 +17,7 @@ import { useOnboardingStore } from '@/stores/onboarding-store'
 
 type BMICategory = {
   label: string
-  emoji: string
+  icon: DSIconName
   message: string
   color: string
 }
@@ -25,7 +26,7 @@ function getBMICategory(bmi: number): BMICategory {
   if (bmi < 18.5) {
     return {
       label: 'Abaixo do peso',
-      emoji: '🍃',
+      icon: 'wind',
       message: 'Vamos montar um plano focado em ganho saudável',
       color: 'text-blue-400',
     }
@@ -33,7 +34,7 @@ function getBMICategory(bmi: number): BMICategory {
   if (bmi < 25) {
     return {
       label: 'Peso normal',
-      emoji: '✅',
+      icon: 'checkCircle',
       message: 'Ótimo ponto de partida para qualquer objetivo',
       color: 'text-brand-primary',
     }
@@ -41,14 +42,14 @@ function getBMICategory(bmi: number): BMICategory {
   if (bmi < 30) {
     return {
       label: 'Sobrepeso',
-      emoji: '💪',
+      icon: 'dumbbell',
       message: 'Com consistência, resultados vêm rápido',
       color: 'text-yellow-400',
     }
   }
   return {
     label: 'Obesidade',
-    emoji: '🎯',
+    icon: 'target',
     message: 'Cada treino é uma vitória — vamos juntos',
     color: 'text-orange-400',
   }
@@ -117,7 +118,7 @@ export function StepWeight() {
           {/* BMI value */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="text-2xl">{bmiInfo.emoji}</span>
+              <DSIcon name={bmiInfo.icon} className={`h-6 w-6 ${bmiInfo.color}`} />
               <div>
                 <p className="text-xs text-white/40">Seu IMC</p>
                 <p className={`text-xl font-bold ${bmiInfo.color}`}>

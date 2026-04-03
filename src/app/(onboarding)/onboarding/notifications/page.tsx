@@ -9,27 +9,27 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { DSIcon } from '@/components/ui/ds-icon'
+import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
 
-const BENEFITS = [
+const BENEFITS: { icon: DSIconName; title: string; desc: string }[] = [
   {
-    icon: '🔔',
+    icon: 'bell',
     title: 'Lembretes de treino',
     desc: 'Nunca mais pule um dia',
   },
   {
-    icon: '📊',
+    icon: 'chart',
     title: 'Progresso semanal',
     desc: 'Acompanhe sua evolução',
   },
   {
-    icon: '🎉',
+    icon: 'trophy',
     title: 'Conquistas e recordes',
     desc: 'Celebre suas vitórias',
   },
   {
-    icon: '💡',
+    icon: 'lightbulb',
     title: 'Dicas personalizadas',
     desc: 'Conteúdo exclusivo para você',
   },
@@ -87,7 +87,7 @@ export default function OnboardingNotificationsPage() {
                 key={b.title}
                 className="flex items-center gap-3 rounded-xl border border-border-primary bg-bg-secondary p-3"
               >
-                <span className="text-2xl">{b.icon}</span>
+                <DSIcon name={b.icon} className="h-6 w-6 shrink-0 text-brand-primary" />
                 <div>
                   <p className="text-sm font-medium text-text-primary">{b.title}</p>
                   <p className="text-xs text-text-muted">{b.desc}</p>

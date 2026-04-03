@@ -11,7 +11,7 @@
 
 import { useEffect, useState, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
-import { DSIcon } from '@/components/ui/ds-icon'
+import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
 import { useOnboardingStore } from '@/stores/onboarding-store'
 
@@ -60,17 +60,17 @@ const GOAL_LABELS: Record<string, string> = {
   flexibility: 'Flexibilidade',
 }
 
-const MUSCLE_EMOJI: Record<string, string> = {
-  chest: '🫁',
-  back: '🔙',
-  legs: '🦵',
-  shoulders: '💪',
-  biceps: '💪',
-  triceps: '💪',
-  core: '🧘',
-  glutes: '🍑',
-  cardio: '❤️',
-  calves: '🦶',
+const MUSCLE_ICON: Record<string, DSIconName> = {
+  chest: 'heart',
+  back: 'shield',
+  legs: 'footprints',
+  shoulders: 'trendingUp',
+  biceps: 'dumbbell',
+  triceps: 'dumbbell',
+  core: 'target',
+  glutes: 'flame',
+  cardio: 'activity',
+  calves: 'footprints',
 }
 
 export default function OnboardingResultPage() {
@@ -99,22 +99,22 @@ export default function OnboardingResultPage() {
     if (!result) return []
     return [
       {
-        icon: '📅',
+        icon: 'calendar' as DSIconName,
         value: `${result.stats.total_days}x`,
         label: 'por semana',
       },
       {
-        icon: '🏋️',
+        icon: 'dumbbell' as DSIconName,
         value: String(result.stats.total_exercises),
         label: 'exercícios',
       },
       {
-        icon: '⏱️',
+        icon: 'clock' as DSIconName,
         value: `${result.stats.session_duration_minutes}min`,
         label: 'por sessão',
       },
       {
-        icon: '🔥',
+        icon: 'flame' as DSIconName,
         value: `${result.stats.estimated_weekly_calories}`,
         label: 'kcal/semana',
       },
@@ -126,7 +126,9 @@ export default function OnboardingResultPage() {
   if (!result) {
     return (
       <div className="flex min-h-dvh flex-col items-center justify-center bg-bg-primary px-6 text-center">
-        <div className="mb-6 text-5xl">🤔</div>
+        <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-white/8">
+          <DSIcon name="helpCircle" className="h-10 w-10 text-white/40" />
+        </div>
         <h2 className="mb-2 text-xl font-bold text-text-primary">
           Nenhum plano encontrado
         </h2>
@@ -147,8 +149,9 @@ export default function OnboardingResultPage() {
       {/* ─── Header ─── */}
       <div className="relative overflow-hidden bg-linear-to-b from-white/5 to-transparent px-6 pt-14 pb-8">
         <div className="mx-auto max-w-md">
-          <div className="mb-1 text-sm font-medium text-brand-primary">
-            ✨ Seu plano está pronto!
+          <div className="mb-1 flex items-center gap-1.5 text-sm font-medium text-brand-primary">
+            <DSIcon name="sparkles" className="h-4 w-4" />
+            Seu plano está pronto!
           </div>
           <h1 className="mb-2 text-2xl font-bold text-text-primary">
             {plan.plan_name}
@@ -177,7 +180,7 @@ export default function OnboardingResultPage() {
               key={stat.label}
               className="flex flex-col items-center rounded-2xl border border-border-primary bg-bg-secondary p-3"
             >
-              <span className="text-lg">{stat.icon}</span>
+              <DSIcon name={stat.icon} className="h-5 w-5 text-brand-primary" />
               <span className="mt-1 text-lg font-bold text-text-primary">{stat.value}</span>
               <span className="text-[10px] text-text-muted">{stat.label}</span>
             </div>
@@ -227,9 +230,10 @@ export default function OnboardingResultPage() {
                     key={`${day.day_number}-${i}`}
                     className="flex items-center gap-3 rounded-xl border border-border-primary bg-bg-secondary p-3"
                   >
-                    <span className="text-lg">
-                      {MUSCLE_EMOJI[ex.muscle_group] || '🏋️'}
-                    </span>
+                    <DSIcon
+                      name={MUSCLE_ICON[ex.muscle_group] || 'dumbbell'}
+                      className="h-5 w-5 shrink-0 text-brand-primary"
+                    />
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-medium text-text-primary">
                         {ex.name}
@@ -246,8 +250,9 @@ export default function OnboardingResultPage() {
                 {/* Exercise notes */}
                 {day.exercises.some((ex) => ex.notes) && (
                   <div className="mt-2 rounded-xl bg-amber-500/5 p-3">
-                    <p className="mb-1 text-xs font-medium text-amber-600 dark:text-amber-400">
-                      💡 Dicas
+                    <p className="mb-1 flex items-center gap-1 text-xs font-medium text-amber-600 dark:text-amber-400">
+                      <DSIcon name="lightbulb" className="h-3.5 w-3.5" />
+                      Dicas
                     </p>
                     {day.exercises
                       .filter((ex) => ex.notes)
@@ -264,8 +269,9 @@ export default function OnboardingResultPage() {
 
         {/* ─── Estimated results ─── */}
         <div className="rounded-2xl border border-brand-primary/20 bg-brand-primary/5 p-4">
-          <h4 className="mb-3 text-sm font-semibold text-text-primary">
-            🎯 Resultados Estimados em 4 Semanas
+          <h4 className="mb-3 flex items-center gap-1.5 text-sm font-semibold text-text-primary">
+            <DSIcon name="target" className="h-4 w-4 text-brand-primary" />
+            Resultados Estimados em 4 Semanas
           </h4>
           <div className="space-y-2">
             <div className="flex items-center justify-between">
@@ -306,7 +312,7 @@ export default function OnboardingResultPage() {
           <button
             onClick={() => {
               markCompleted()
-              router.push('/plano')
+              router.push('/login?from=onboarding&plan=free')
             }}
             className="w-full py-2 text-center text-xs text-text-muted hover:text-text-secondary"
           >

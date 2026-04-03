@@ -8,17 +8,17 @@
 'use client'
 
 import { useCallback } from 'react'
-import { DSIcon } from '@/components/ui/ds-icon'
+import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 import { useOnboardingStore } from '@/stores/onboarding-store'
 
-const DAY_MESSAGES: Record<number, string> = {
-  1: '🌱 Perfeito para começar — consistência é tudo',
-  2: '💡 Bom equilíbrio entre descanso e treino',
-  3: '🎯 Recomendado para a maioria das pessoas',
-  4: '💪 Ótimo para resultados acelerados',
-  5: '🔥 Excelente para avançados',
-  6: '⚡ Intenso — inclua descanso ativo',
-  7: '🏆 Atleta nato — cuidado com overtraining',
+const DAY_MESSAGES: Record<number, { icon: DSIconName; text: string }> = {
+  1: { icon: 'target', text: 'Perfeito para começar — consistência é tudo' },
+  2: { icon: 'lightbulb', text: 'Bom equilíbrio entre descanso e treino' },
+  3: { icon: 'target', text: 'Recomendado para a maioria das pessoas' },
+  4: { icon: 'dumbbell', text: 'Ótimo para resultados acelerados' },
+  5: { icon: 'flame', text: 'Excelente para avançados' },
+  6: { icon: 'zap', text: 'Intenso — inclua descanso ativo' },
+  7: { icon: 'trophy', text: 'Atleta nato — cuidado com overtraining' },
 }
 
 export function StepDaysPerWeek() {
@@ -84,9 +84,10 @@ export function StepDaysPerWeek() {
       </div>
 
       {/* Message */}
-      <div className="rounded-xl border border-white/8 bg-white/4 px-5 py-3 text-center">
+      <div className="flex items-center gap-2.5 rounded-xl border border-white/8 bg-white/4 px-5 py-3">
+        <DSIcon name={(DAY_MESSAGES[days] || DAY_MESSAGES[3]).icon} className="h-5 w-5 shrink-0 text-brand-primary" />
         <p className="text-sm text-white/60">
-          {DAY_MESSAGES[days] || DAY_MESSAGES[3]}
+          {(DAY_MESSAGES[days] || DAY_MESSAGES[3]).text}
         </p>
       </div>
     </div>

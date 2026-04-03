@@ -17,12 +17,16 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/stores/auth-store'
+import { useSyncOnboarding } from '@/hooks/use-sync-onboarding'
 
 export function DashboardAuthGate({ children }: { children: React.ReactNode }) {
   const router = useRouter()
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
   const isHydrated = useAuthStore((s) => s.isHydrated)
   const userType = useAuthStore((s) => s.user?.user_type)
+
+  // Sincronizar dados do onboarding quiz com backend (se pendentes)
+  useSyncOnboarding()
 
   useEffect(() => {
     if (!isHydrated) return

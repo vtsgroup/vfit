@@ -149,7 +149,7 @@ const STEPS: StepConfig[] = [
     title: 'Estamos prontos!',
     component: StepReady,
     isValid: () => true,
-    continueLabel: '🚀 Criar Meu Plano',
+    continueLabel: 'Criar Meu Plano',
   },
 ]
 

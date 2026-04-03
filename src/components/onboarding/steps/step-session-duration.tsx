@@ -7,7 +7,7 @@
 
 'use client'
 
-import { DSIcon } from '@/components/ui/ds-icon'
+import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 import { useOnboardingStore } from '@/stores/onboarding-store'
 import type { OnboardingData } from '@/stores/onboarding-store'
 
@@ -16,7 +16,7 @@ type DurationOption = {
   label: string
   time: string
   subtitle: string
-  emoji: string
+  icon: DSIconName
 }
 
 const DURATION_OPTIONS: DurationOption[] = [
@@ -25,28 +25,28 @@ const DURATION_OPTIONS: DurationOption[] = [
     label: 'Rápido',
     time: '~15 min',
     subtitle: 'Treinos express para dias corridos',
-    emoji: '⚡',
+    icon: 'zap',
   },
   {
     value: 'short_30',
     label: 'Curto',
     time: '~30 min',
     subtitle: 'Eficiente e focado — ideal para iniciantes',
-    emoji: '🎯',
+    icon: 'target',
   },
   {
     value: 'medium_45',
     label: 'Médio',
     time: '~45 min',
     subtitle: 'Equilíbrio perfeito entre tempo e resultado',
-    emoji: '💪',
+    icon: 'dumbbell',
   },
   {
     value: 'long_60',
     label: 'Longo',
     time: '~60 min',
     subtitle: 'Treino completo para máximos resultados',
-    emoji: '🔥',
+    icon: 'flame',
   },
 ]
 
@@ -68,11 +68,11 @@ export function StepSessionDuration() {
             }`}
           >
             <div
-              className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/6 text-2xl transition-all duration-300 ${
+              className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/6 transition-all duration-300 ${
                 isSelected ? 'scale-110 bg-brand-primary/15' : 'group-hover:scale-105'
               }`}
             >
-              {opt.emoji}
+              <DSIcon name={opt.icon} className={`h-6 w-6 transition-colors ${isSelected ? 'text-brand-primary' : 'text-white/60'}`} />
             </div>
 
             <div className="flex-1">

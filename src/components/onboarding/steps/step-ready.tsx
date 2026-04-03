@@ -8,13 +8,13 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { DSIcon } from '@/components/ui/ds-icon'
+import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 
-const PLAN_FEATURES = [
-  { icon: '🎯', text: 'Personalizado para seu objetivo' },
-  { icon: '📅', text: 'Adaptado à sua rotina' },
-  { icon: '🛡️', text: 'Respeita suas limitações' },
-  { icon: '📈', text: 'Progressão inteligente' },
+const PLAN_FEATURES: { icon: DSIconName; text: string }[] = [
+  { icon: 'target', text: 'Personalizado para seu objetivo' },
+  { icon: 'calendar', text: 'Adaptado à sua rotina' },
+  { icon: 'shieldCheck', text: 'Respeita suas limitações' },
+  { icon: 'trendingUp', text: 'Progressão inteligente' },
 ]
 
 export function StepReady() {
@@ -70,7 +70,7 @@ export function StepReady() {
               transition: `opacity 0.4s ${500 + i * 100}ms, transform 0.4s ${500 + i * 100}ms`,
             }}
           >
-            <span className="text-lg">{f.icon}</span>
+            <DSIcon name={f.icon} className="h-5 w-5 shrink-0 text-brand-primary" />
             <span className="text-sm font-medium text-white/80">{f.text}</span>
           </div>
         ))}

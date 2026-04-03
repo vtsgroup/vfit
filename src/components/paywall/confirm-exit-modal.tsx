@@ -31,8 +31,10 @@ export function ConfirmExitModal({ onStay, onLeave }: ConfirmExitModalProps) {
 
       {/* Modal */}
       <div className="relative z-10 w-full max-w-sm rounded-3xl bg-bg-primary p-6">
-        {/* Sad emoji */}
-        <div className="mb-4 text-center text-5xl">😢</div>
+        {/* Icon */}
+        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-white/8">
+          <DSIcon name="frown" className="h-8 w-8 text-white/40" />
+        </div>
 
         <h2 className="mb-2 text-center text-xl font-bold text-text-primary">
           Tem certeza?
