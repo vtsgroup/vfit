@@ -35,6 +35,7 @@ binding = "AI"
 binding = "DB"
 database_name = "vfit-exercises"
 database_id = "cca37216-849a-47ce-a183-a62990a0ff1b"
+migrations_dir = "migrations/d1"
 
 # ============================================
 # Hyperdrive (Hot Data - PostgreSQL via Neon)
