@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { DSIcon } from '@/components/ui/ds-icon'
+import { useAuthStore } from '@/stores/auth-store'
 import { useOnboardingStore } from '@/stores/onboarding-store'
 
 const FEATURES = [
@@ -24,7 +25,15 @@ const FEATURES = [
 export default function WelcomePage() {
   const router = useRouter()
   const { reset } = useOnboardingStore()
+  const { isAuthenticated, isHydrated } = useAuthStore()
   const [mounted, setMounted] = useState(false)
+
+  // TWA smart entry: redirect authenticated users to dashboard
+  useEffect(() => {
+    if (isHydrated && isAuthenticated) {
+      router.replace('/dashboard')
+    }
+  }, [isHydrated, isAuthenticated, router])
 
   useEffect(() => {
     setMounted(true)
