@@ -5,6 +5,31 @@
 
 ---
 
+## [v1.2.5] — 03/04/2026 — Sprint S3b: Onboarding Perfect
+
+### 🎨 Emoji → DSIcon (17 step components + 6 pages + 3 paywall)
+- **Todos** os emojis inline (🎯💪🔥⚡🏆🌟📊📅 etc.) substituídos por `<DSIcon>` com ícones SVG
+- 17 step components: experience, frequency, location, session-duration, preferred-time, body-map, injuries, age, weight, target-weight, days-per-week, ready, social-proof, motivational + 3 info steps
+- 6 páginas onboarding: welcome, onboarding, loading, result, notifications, paywall
+- 3 paywall components: paywall-discount (🔥→flame), confirm-exit-modal (😢→frown), paywall-plans (já ok)
+- Layout footer: `<button>` nativo → `<Button size="lg">` do Design System
+
+### 🔄 Sync Onboarding Backend
+- **Novo hook `useSyncOnboarding`** — detecta dados pendentes no localStorage após login
+- POST `/onboarding` com quiz completo, limpa localStorage após sucesso
+- Integrado no `DashboardAuthGate` — sync automático sem ação do usuário
+
+### 🔗 Paywall → Login Redirect
+- Todos os redirects `/plano` (dead end para não-autenticados) → `/login?from=onboarding&plan=X`
+- Plano selecionado salvo em `sessionStorage` para persistir durante auth
+- "Continuar gratuitamente" → `/login?from=onboarding&plan=free`
+
+### 📊 Arquivos
+- 24 modificados, 269 inserções, 180 deleções
+- 1 novo: `src/hooks/use-sync-onboarding.ts`
+
+---
+
 ## [v1.2.4] — 03/04/2026 — Sprint 3: Dynamic D1 Config
 
 ### 🗄️ D1 — Configuração Dinâmica
