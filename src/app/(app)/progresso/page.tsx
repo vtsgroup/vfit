@@ -52,29 +52,29 @@ export default function ProgressoPage() {
     <div className="mx-auto max-w-lg px-4 pt-6 pb-24">
       {/* Header */}
       <div className="mb-5">
-        <h1 className="text-2xl font-black text-white leading-tight">Progresso</h1>
-        <p className="mt-1 text-[13px] text-zinc-500">Acompanhe sua evolução</p>
+        <h1 className="text-2xl font-black text-text-primary leading-tight">Progresso</h1>
+        <p className="mt-1 text-[13px] text-text-muted">Acompanhe sua evolução</p>
       </div>
 
       {/* Streak card */}
-      <div className="mb-5 rounded-2xl border border-white/8 bg-white/3 p-4">
+      <div className="glass-card mb-5 rounded-2xl p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/8">
               <DSIcon name="flame" size={24} className="text-brand-primary" />
             </div>
             <div>
-              <p className="text-xl font-black text-white">{streak?.current_streak || 0} dias</p>
-              <p className="text-[11px] text-zinc-500">Sequência atual</p>
+              <p className="text-xl font-black text-text-primary">{streak?.current_streak || 0} dias</p>
+              <p className="text-[11px] text-text-muted">Sequência atual</p>
             </div>
           </div>
           {(streak?.best_streak || 0) > 0 && (
             <div className="text-right">
-              <p className="text-[13px] font-bold text-zinc-400">
+              <p className="text-[13px] font-bold text-text-secondary">
                 <DSIcon name="trophy" size={12} className="mr-1 inline text-amber-500" />
                 {streak?.best_streak}
               </p>
-              <p className="text-[10px] text-zinc-600">Melhor</p>
+              <p className="text-[10px] text-text-muted">Melhor</p>
             </div>
           )}
         </div>
@@ -89,7 +89,7 @@ export default function ProgressoPage() {
             className={`flex-1 rounded-lg px-3 py-2 text-[12px] font-semibold transition-all ${
               period === p.key
                 ? 'bg-brand-primary/20 text-brand-primary'
-                : 'text-zinc-500 hover:text-zinc-300'
+                : 'text-text-muted hover:text-text-secondary'
             }`}
           >
             {p.label}
@@ -104,9 +104,9 @@ export default function ProgressoPage() {
             onClick={() => setOffset(o => o + 1)}
             className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
           >
-            <DSIcon name="chevronLeft" size={16} className="text-zinc-400" />
+            <DSIcon name="chevronLeft" size={16} className="text-text-secondary" />
           </button>
-          <p className="text-[13px] font-medium text-zinc-400">
+          <p className="text-[13px] font-medium text-text-secondary">
             {summary?.label || '...'}
           </p>
           <button
@@ -114,7 +114,7 @@ export default function ProgressoPage() {
             disabled={offset === 0}
             className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/5 hover:bg-white/10 transition-colors disabled:opacity-30"
           >
-            <DSIcon name="chevronRight" size={16} className="text-zinc-400" />
+            <DSIcon name="chevronRight" size={16} className="text-text-secondary" />
           </button>
         </div>
       )}
@@ -128,12 +128,12 @@ export default function ProgressoPage() {
 
       {/* Empty state */}
       {!loadingSummary && !hasData && (
-        <div className="flex flex-col items-center justify-center rounded-3xl border border-white/6 bg-white/2 p-8 text-center">
+        <div className="glass-card flex flex-col items-center justify-center rounded-3xl p-8 text-center">
           <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/8">
             <DSIcon name="barChart" size={28} className="text-brand-primary" />
           </div>
-          <h2 className="text-base font-bold text-white">Comece a treinar</h2>
-          <p className="mt-2 text-[13px] text-zinc-500 max-w-xs">
+          <h2 className="text-base font-bold text-text-primary">Comece a treinar</h2>
+          <p className="mt-2 text-[13px] text-text-muted max-w-xs">
             Seus gráficos de evolução, recordes pessoais e streak aparecerão aqui após seus primeiros treinos.
           </p>
         </div>
@@ -194,19 +194,19 @@ export default function ProgressoPage() {
           {['week', 'month'].includes(period) && !loadingChart && chartWorkouts.length > 0 && (
             <div className="space-y-4">
               {/* Treinos chart */}
-              <div className="rounded-2xl border border-white/6 bg-white/3 p-4">
+              <div className="glass-card rounded-2xl p-4">
                 <div className="mb-3 flex items-center gap-2">
                   <DSIcon name="barChart" size={14} className="text-brand-primary" />
-                  <span className="text-[12px] font-semibold text-zinc-400">Treinos</span>
+                  <span className="text-[12px] font-semibold text-text-secondary">Treinos</span>
                 </div>
                 <MiniBarChart data={chartWorkouts} color="#22C55E" height={100} />
               </div>
 
               {/* Volume chart */}
-              <div className="rounded-2xl border border-white/6 bg-white/3 p-4">
+              <div className="glass-card rounded-2xl p-4">
                 <div className="mb-3 flex items-center gap-2">
                   <DSIcon name="trendingUp" size={14} className="text-amber-400" />
-                  <span className="text-[12px] font-semibold text-zinc-400">Volume (kg)</span>
+                  <span className="text-[12px] font-semibold text-text-secondary">Volume (kg)</span>
                 </div>
                 <MiniBarChart data={chartVolume} color="#F59E0B" height={100} />
               </div>

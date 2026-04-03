@@ -44,14 +44,14 @@ export default function PerfilPage() {
           )}
         </div>
         <div className="min-w-0 flex-1">
-          <h1 className="truncate text-lg font-black text-white">
+          <h1 className="truncate text-lg font-black text-text-primary">
             {user?.full_name || 'Visitante'}
           </h1>
-          <p className="text-[12px] text-zinc-500">{user?.email || 'Sem conta'}</p>
+          <p className="text-[12px] text-text-muted">{user?.email || 'Sem conta'}</p>
           <span className={`mt-1 inline-block rounded-full px-2 py-0.5 text-[10px] font-semibold ${
             isPremium
               ? 'bg-brand-primary/15 text-brand-primary'
-              : 'bg-zinc-800 text-zinc-400'
+              : 'bg-white/8 text-text-muted'
           }`}>
             {isPremium ? '⭐ PREMIUM' : 'CONTA BÁSICA'}
           </span>
@@ -60,7 +60,7 @@ export default function PerfilPage() {
           href="/perfil/editar"
           className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5"
         >
-          <DSIcon name="edit3" size={18} className="text-zinc-400" />
+          <DSIcon name="edit3" size={18} className="text-text-secondary" />
         </Link>
       </div>
 
@@ -68,14 +68,14 @@ export default function PerfilPage() {
       {!isPremium && (
         <Link
           href="/perfil/assinatura"
-          className="mb-5 flex items-center gap-3 rounded-2xl border border-white/8 bg-white/3 p-4 transition-all hover:bg-white/5"
+          className="glass-card mb-5 flex items-center gap-3 rounded-2xl p-4 transition-all hover:border-brand-primary/20"
         >
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/8">
             <DSIcon name="crown" size={22} className="text-brand-primary" />
           </div>
           <div className="flex-1">
-            <p className="text-[14px] font-bold text-white">Ative sua conta Premium</p>
-            <p className="text-[11px] text-zinc-500">Planos sem anúncios, IA ilimitada e mais</p>
+            <p className="text-[14px] font-bold text-text-primary">Ative sua conta Premium</p>
+            <p className="text-[11px] text-text-muted">Planos sem anúncios, IA ilimitada e mais</p>
           </div>
           <DSIcon name="chevronRight" size={16} className="text-brand-primary" />
         </Link>
@@ -118,21 +118,21 @@ export default function PerfilPage() {
 
       {/* Delete account */}
       <button
-        className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-zinc-600 hover:text-red-400 hover:bg-red-400/5 transition-all"
+        className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-text-muted hover:text-red-400 hover:bg-red-400/5 transition-all"
       >
         <DSIcon name="trash2" size={18} />
         <span className="text-[12px] font-medium">Excluir minha conta</span>
       </button>
 
       {/* Version */}
-      <p className="mt-6 text-center text-[10px] text-zinc-700">VFIT v6.7.7</p>
+      <p className="mt-6 text-center text-[10px] text-text-muted">VFIT v6.7.7</p>
     </div>
   )
 }
 
 function SectionTitle({ title }: { title: string }) {
   return (
-    <p className="mb-2 px-1 text-[11px] font-bold uppercase tracking-wider text-zinc-600">{title}</p>
+    <p className="mb-2 px-1 text-[11px] font-bold uppercase tracking-wider text-text-muted">{title}</p>
   )
 }
 
@@ -150,14 +150,14 @@ function MenuItem({
   return (
     <Link
       href={href}
-      className="flex items-center gap-3 rounded-xl px-3 py-3 text-zinc-400 hover:bg-white/4 hover:text-white transition-all"
+      className="flex items-center gap-3 rounded-xl px-3 py-3 text-text-secondary hover:bg-white/4 hover:text-text-primary transition-all"
     >
       <DSIcon name={icon} size={20} />
       <div className="flex-1 min-w-0">
-        <span className="text-[14px] font-medium text-zinc-300">{label}</span>
-        {subtitle && <p className="text-[11px] text-zinc-600">{subtitle}</p>}
+        <span className="text-[14px] font-medium text-text-secondary">{label}</span>
+        {subtitle && <p className="text-[11px] text-text-muted">{subtitle}</p>}
       </div>
-      <DSIcon name="chevronRight" size={16} className="text-zinc-700" />
+      <DSIcon name="chevronRight" size={16} className="text-text-muted" />
     </Link>
   )
 }

@@ -80,7 +80,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   }, [isHydrated, isAuthenticated, router])
 
   return (
-    <div className="vfit-theme min-h-screen bg-bg-dark">
+    <div className="min-h-screen bg-bg-primary">
       {/* Sticky Header */}
       <StudentHeader />
 

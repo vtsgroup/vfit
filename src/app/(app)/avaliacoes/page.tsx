@@ -46,9 +46,9 @@ export default function AvaliacoesPage() {
           onClick={() => router.back()}
           className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5"
         >
-          <DSIcon name="arrowLeft" size={20} className="text-zinc-400" />
+          <DSIcon name="arrowLeft" size={20} className="text-text-secondary" />
         </button>
-        <h1 className="flex-1 text-lg font-bold text-white">Avaliações Físicas</h1>
+        <h1 className="flex-1 text-lg font-bold text-text-primary">Avaliações Físicas</h1>
         <Link href="/avaliacoes/nova">
           <Button size="sm">
             <DSIcon name="plus" size={16} />
@@ -60,7 +60,7 @@ export default function AvaliacoesPage() {
       {/* Loading */}
       {isLoading && (
         <div className="flex items-center justify-center py-20">
-          <DSIcon name="loader" size={24} className="animate-spin text-zinc-500" />
+          <DSIcon name="loader" size={24} className="animate-spin text-text-muted" />
         </div>
       )}
 
@@ -70,8 +70,8 @@ export default function AvaliacoesPage() {
           <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/8">
             <DSIcon name="clipboardList" size={32} className="text-brand-primary" />
           </div>
-          <h2 className="text-[16px] font-bold text-white">Nenhuma avaliação ainda</h2>
-          <p className="max-w-65 text-[13px] text-zinc-500">
+          <h2 className="text-[16px] font-bold text-text-primary">Nenhuma avaliação ainda</h2>
+          <p className="max-w-65 text-[13px] text-text-muted">
             Faça sua primeira auto-avaliação para acompanhar sua evolução corporal.
           </p>
           <Link href="/avaliacoes/nova">
@@ -95,10 +95,10 @@ export default function AvaliacoesPage() {
               <Link
                 key={a.id}
                 href={`/avaliacoes/${a.id}`}
-                className={`block rounded-2xl border p-4 transition-all hover:border-white/10 ${
+                className={`glass-card block rounded-2xl p-4 transition-all hover:border-white/12 ${
                   isFirst
-                    ? 'border-white/10 bg-white/3'
-                    : 'border-white/5 bg-white/2'
+                    ? 'border-brand-primary/15'
+                    : ''
                 }`}
               >
                 <div className="mb-2 flex items-center justify-between">
@@ -108,31 +108,31 @@ export default function AvaliacoesPage() {
                         MAIS RECENTE
                       </span>
                     )}
-                    <span className="text-[12px] text-zinc-500">
+                    <span className="text-[12px] text-text-muted">
                       {date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
                     </span>
                   </div>
-                  <DSIcon name="chevronRight" size={16} className="text-zinc-600" />
+                  <DSIcon name="chevronRight" size={16} className="text-text-muted" />
                 </div>
 
                 <div className="grid grid-cols-3 gap-3">
                   <div>
-                    <p className="text-[11px] text-zinc-600">Peso</p>
-                    <p className="text-[16px] font-bold text-white">
-                      {a.weight_kg}<span className="text-[11px] text-zinc-500"> kg</span>
+                    <p className="text-[11px] text-text-muted">Peso</p>
+                    <p className="text-[16px] font-bold text-text-primary">
+                      {a.weight_kg}<span className="text-[11px] text-text-muted"> kg</span>
                       {prev && <DeltaBadge current={a.weight_kg} previous={prev.weight_kg} unit="kg" />}
                     </p>
                   </div>
                   <div>
-                    <p className="text-[11px] text-zinc-600">IMC</p>
+                    <p className="text-[11px] text-text-muted">IMC</p>
                     <p className={`text-[16px] font-bold ${getBMIColor(a.bmi)}`}>
                       {a.bmi}
                       {prev && <DeltaBadge current={a.bmi} previous={prev.bmi} unit="" />}
                     </p>
                   </div>
                   <div>
-                    <p className="text-[11px] text-zinc-600">Gordura</p>
-                    <p className="text-[16px] font-bold text-white">
+                    <p className="text-[11px] text-text-muted">Gordura</p>
+                    <p className="text-[16px] font-bold text-text-primary">
                       {a.body_fat_percentage ? `${a.body_fat_percentage}%` : '—'}
                       {prev && a.body_fat_percentage && prev.body_fat_percentage && (
                         <DeltaBadge current={a.body_fat_percentage} previous={prev.body_fat_percentage} unit="%" invert />
@@ -142,7 +142,7 @@ export default function AvaliacoesPage() {
                 </div>
 
                 {a.bmi_category && (
-                  <p className="mt-2 text-[11px] text-zinc-500">{a.bmi_category}</p>
+                  <p className="mt-2 text-[11px] text-text-muted">{a.bmi_category}</p>
                 )}
               </Link>
             )

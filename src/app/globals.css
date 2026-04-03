@@ -76,13 +76,13 @@
   --color-kpi-dark: #0E1525;
   --color-kpi-text: #FFFFFF;
 
-  /* Background — True Black / Charcoal */
+  /* Background — Midnight Pulse (unified) */
   --color-bg-primary: #050A12;
   --color-bg-secondary: #0B1221;
   --color-bg-tertiary: #111B2E;
-  --color-bg-dark: #09090B;
-  --color-bg-dark-secondary: #111113;
-  --color-bg-dark-tertiary: #18181B;
+  --color-bg-dark: #050A12;
+  --color-bg-dark-secondary: #0B1221;
+  --color-bg-dark-tertiary: #111B2E;
 
   /* Landing page light sections (used inside dark wrapper) */
   --color-bg-landing-light: #F8F8F8;

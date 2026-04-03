@@ -92,7 +92,7 @@ export function OnboardingStepLayout({
   }, [canContinue, onContinue])
 
   return (
-    <div className="flex min-h-dvh flex-col bg-bg-dark">
+    <div className="flex min-h-dvh flex-col bg-bg-primary">
       {/* ─── Header: back + progress ─── */}
       <div className="safe-area-top px-5 pt-4">
         <div className="mb-4 flex items-center justify-between">

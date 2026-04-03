@@ -71,12 +71,14 @@ plans.post('/generate', async (c) => {
     })
 
     // Chamar IA com fallback automático
+    // Scale max_tokens by days_per_week to prevent truncation of larger plans
+    const dynamicMaxTokens = Math.min(2048 + (input.days_per_week * 1024), 8192)
     const result = await callWorkersAIWithFallback(
       c.env,
       '@cf/meta/llama-4-scout-17b-16e-instruct',
       prompt,
       {
-        max_tokens: 4096,
+        max_tokens: dynamicMaxTokens,
         temperature: 0.6,
         fallbackModel: '@cf/meta/llama-3.3-70b-instruct-fp8-fast',
       }
@@ -446,12 +448,13 @@ plans.post('/regenerate', authMiddleware, async (c) => {
   let generatedPlan: GeneratedPlan | null = null
 
   try {
+    const regenMaxTokens = Math.min(2048 + ((profile.training_frequency || 3) * 1024), 8192)
     const aiResult = await callWorkersAIWithFallback(
       c.env,
       '@cf/meta/llama-4-scout-17b-16e-instruct',
       prompt,
       {
-        max_tokens: 4096,
+        max_tokens: regenMaxTokens,
         temperature: 0.6,
         fallbackModel: '@cf/meta/llama-3.3-70b-instruct-fp8-fast',
       }
