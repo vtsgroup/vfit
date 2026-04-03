@@ -20,6 +20,7 @@ import {
   useMealsToday,
   useFoodSearch,
   useLogMeal,
+  useNutritionTargets,
   MEAL_TYPE_LABELS,
   MEAL_TYPE_ICONS,
   formatMacro,
@@ -57,6 +58,7 @@ export default function NutricaoPage() {
 
   const { data: dailyData, isLoading } = useMealsToday(selectedDate)
   const { data: foods, isLoading: searchLoading } = useFoodSearch(searchQuery)
+  const { data: targets = { calories: 2000, protein: 150, carbs: 250, fat: 65 } } = useNutritionTargets()
   const logMeal = useLogMeal()
 
   const totals = dailyData?.totals ?? { calories: 0, protein: 0, carbs: 0, fat: 0 }
@@ -72,9 +74,6 @@ export default function NutricaoPage() {
     }
     return map
   }, [meals])
-
-  // Metas padrão (pode vir de AI profile futuramente)
-  const targets = { calories: 2000, protein: 150, carbs: 250, fat: 65 }
 
   function handleLogMeal() {
     if (!selectedFood) return

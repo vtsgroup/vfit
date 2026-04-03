@@ -96,7 +96,7 @@ export default function ContatoPage() {
           <a
             key={ch.title}
             href={ch.href}
-            className="group rounded-2xl border border-white/8 bg-white/3 p-6 transition-all duration-300 hover:border-brand-primary/25 hover:shadow-[0_0_30px_rgba(34,197,94,0.06)] backdrop-blur-sm"
+            className="group rounded-2xl border border-white/8 bg-white/3 p-6 transition-all duration-300 hover:border-brand-primary/25 hover:shadow-[0_0_30px_rgba(16,185,129,0.06)] backdrop-blur-sm"
           >
             <div className="flex items-start gap-4">
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary transition-all duration-300 group-hover:scale-110 group-hover:-rotate-6">

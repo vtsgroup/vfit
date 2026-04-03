@@ -83,7 +83,7 @@ export function Sidebar() {
             src="/images/logo-transparent-96.webp"
             alt="VFIT"
             className="h-7 w-auto shrink-0"
-            style={{ filter: 'drop-shadow(0 0 8px rgba(34,197,94,0.35))' }}
+            style={{ filter: 'drop-shadow(0 0 8px rgba(16,185,129,0.35))' }}
           />
           {/* Expanded: + badge + PERSONAL text */}
           <AnimatePresence>
@@ -308,7 +308,7 @@ function SidebarItem({
         {isActive && (
           <motion.div
             layoutId="sidebar-active-pill"
-            className="absolute inset-0 rounded-xl bg-brand-primary/10 border border-brand-primary/25 shadow-[0_0_24px_rgba(34,197,94,0.12),inset_0_1px_0_rgba(34,197,94,0.08)]"
+            className="absolute inset-0 rounded-xl bg-brand-primary/10 border border-brand-primary/25 shadow-[0_0_24px_rgba(16,185,129,0.12),inset_0_1px_0_rgba(16,185,129,0.08)]"
             transition={{ type: 'spring', stiffness: 350, damping: 30 }}
           />
         )}
@@ -318,7 +318,7 @@ function SidebarItem({
           className={cn(
             'relative shrink-0 z-10 transition-all duration-200',
             isActive
-              ? 'text-brand-primary scale-110 drop-shadow-[0_0_6px_rgba(34,197,94,0.5)]'
+              ? 'text-brand-primary scale-110 drop-shadow-[0_0_6px_rgba(16,185,129,0.5)]'
               : cn(sectionColor, 'group-hover:scale-110 group-hover:drop-shadow-[0_0_5px_rgba(255,255,255,0.15)]')
           )}
         />
@@ -344,7 +344,7 @@ function SidebarItem({
 
         {/* Active left accent bar with glow */}
         {isActive && (
-          <span className="absolute left-0 top-1/2 -translate-y-1/2 h-6 w-0.75 rounded-r-full bg-brand-primary shadow-[0_0_12px_rgba(34,197,94,0.5),0_0_4px_rgba(34,197,94,0.8)] animate-[sidebar-accent-breathe_3s_ease-in-out_infinite]" />
+          <span className="absolute left-0 top-1/2 -translate-y-1/2 h-6 w-0.75 rounded-r-full bg-brand-primary shadow-[0_0_12px_rgba(16,185,129,0.5),0_0_4px_rgba(16,185,129,0.8)] animate-[sidebar-accent-breathe_3s_ease-in-out_infinite]" />
         )}
       </Link>
     </li>

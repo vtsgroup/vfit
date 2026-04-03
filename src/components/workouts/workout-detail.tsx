@@ -237,7 +237,7 @@ export default function WorkoutDetailClient({ id }: { id: string }) {
                       onClick={handleShareWhatsApp}
                       className="flex w-full items-center gap-2 px-3 py-2 text-sm text-text-primary hover:bg-bg-primary"
                     >
-                      <DSIcon name="externalLink" size={16} className="text-green-500" /> Enviar via WhatsApp
+                      <DSIcon name="externalLink" size={16} className="text-emerald-500" /> Enviar via WhatsApp
                     </button>
                     <button
                       onClick={() => { exportWorkout.mutate(id); setShowMenu(false) }}

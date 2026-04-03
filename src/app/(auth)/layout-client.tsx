@@ -133,8 +133,8 @@ function AnimatedAuthLogo({ size = 'large' }: { size?: 'large' | 'small' }) {
             style={{
               opacity: showIA ? 1 : 0,
               transform: showIA ? 'translateY(0) scale(1)' : 'translateY(6px) scale(0.5)',
-              color: '#22C55E',
-              textShadow: showIA ? '0 0 20px rgba(34,197,94,0.5)' : 'none',
+              color: '#10B981',
+              textShadow: showIA ? '0 0 20px rgba(16,185,129,0.5)' : 'none',
             }}
           >
             IA
@@ -191,7 +191,7 @@ function CinematicBackground() {
       <div
         className="absolute inset-0 opacity-40"
         style={{
-          background: 'radial-gradient(ellipse 120% 60% at 20% 80%, rgba(34,197,94,0.18) 0%, transparent 60%)',
+          background: 'radial-gradient(ellipse 120% 60% at 20% 80%, rgba(16,185,129,0.18) 0%, transparent 60%)',
           animation: 'auroraDrift1 25s ease-in-out infinite alternate',
         }}
       />
@@ -219,7 +219,7 @@ function CinematicBackground() {
         className="absolute inset-0 opacity-25"
         style={{
           background: `
-            radial-gradient(circle at 15% 25%, rgba(34,197,94,0.12) 0%, transparent 40%),
+            radial-gradient(circle at 15% 25%, rgba(16,185,129,0.12) 0%, transparent 40%),
             radial-gradient(circle at 85% 75%, rgba(16,185,129,0.10) 0%, transparent 35%),
             radial-gradient(circle at 50% 10%, rgba(52,211,153,0.08) 0%, transparent 45%)
           `,
@@ -284,7 +284,7 @@ function TestimonialCarousel() {
         >
           {[...AUTH_TESTIMONIALS, ...AUTH_TESTIMONIALS].map((t, i) => (
             <div key={i} className="shrink-0 w-65 xl:w-70">
-              <div className="h-45 flex flex-col rounded-2xl bg-white p-4 shadow-[0_4px_20px_rgba(34,197,94,0.10),0_1px_6px_rgba(0,0,0,0.06)] transition-shadow duration-300 hover:shadow-[0_8px_30px_rgba(34,197,94,0.22)]">
+              <div className="h-45 flex flex-col rounded-2xl bg-white p-4 shadow-[0_4px_20px_rgba(16,185,129,0.10),0_1px_6px_rgba(0,0,0,0.06)] transition-shadow duration-300 hover:shadow-[0_8px_30px_rgba(16,185,129,0.22)]">
                 {/* Stars + rating */}
                 <div className="flex items-center gap-1.5 mb-2">
                   <div className="flex gap-0.5">
@@ -401,7 +401,7 @@ export function AuthLayoutClient({ children }: { children: ReactNode }) {
           <div
             className="absolute inset-0 opacity-[0.03]"
             style={{
-              backgroundImage: 'linear-gradient(rgba(34,197,94,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(34,197,94,0.3) 1px, transparent 1px)',
+              backgroundImage: 'linear-gradient(rgba(16,185,129,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(16,185,129,0.3) 1px, transparent 1px)',
               backgroundSize: '80px 80px',
               animation: 'authGridScroll 20s linear infinite',
             }}
@@ -435,7 +435,7 @@ export function AuthLayoutClient({ children }: { children: ReactNode }) {
                 style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', fontWeight: 900, letterSpacing: '-0.03em' }}
               >
                 Treinos, alunos e{' '}
-                <span className="text-transparent bg-clip-text bg-linear-to-r from-brand-primary via-[#4ADE80] to-[#A3E635]">
+                <span className="text-transparent bg-clip-text bg-linear-to-r from-brand-primary via-[#34D399] to-[#A3E635]">
                   cobranças
                 </span>
               </h2>

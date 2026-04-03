@@ -13,7 +13,6 @@
 'use client'
 
 import { useState } from 'react'
-import { PDFDocument, StandardFonts } from 'pdf-lib'
 import { Button } from '@/components/ui/button'
 import { StyledSelect } from '@/components/ui/styled-select'
 import { api } from '@/lib/api-client'
@@ -141,6 +140,7 @@ async function buildFinancialPdf(
   pending: FinancialDashboardPending,
   period: ExportPeriod
 ): Promise<Blob> {
+  const { PDFDocument, StandardFonts } = await import('pdf-lib')
   const pdfDoc = await PDFDocument.create()
   const page = pdfDoc.addPage([595, 842])
   const font = await pdfDoc.embedFont(StandardFonts.Helvetica)

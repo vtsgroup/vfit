@@ -118,7 +118,7 @@ export function RadioItem({
           'group relative flex cursor-pointer items-start gap-3 rounded-xl p-4',
           'border transition-all duration-200',
           isSelected
-            ? 'border-brand-primary/40 bg-brand-primary/8 shadow-[0_0_20px_rgba(34,197,94,0.08)] light:border-brand-primary/30 light:bg-brand-primary/6 light:shadow-[0_0_16px_rgba(34,197,94,0.06)]'
+            ? 'border-brand-primary/40 bg-brand-primary/8 shadow-[0_0_20px_rgba(16,185,129,0.08)] light:border-brand-primary/30 light:bg-brand-primary/6 light:shadow-[0_0_16px_rgba(16,185,129,0.06)]'
             : 'border-white/8 bg-white/3 hover:border-white/14 hover:bg-white/5 light:border-slate-200 light:bg-slate-50/60 light:hover:border-slate-300 light:hover:bg-white',
           isDisabled && 'cursor-not-allowed opacity-50',
           className
@@ -184,7 +184,7 @@ function RadioDot({ size, selected }: { size: RadioSize; selected: boolean }) {
         'border-2 transition-all duration-200 ease-bounce',
         s.outer,
         selected
-          ? 'border-brand-primary bg-brand-primary shadow-[0_0_8px_rgba(34,197,94,0.3)]'
+          ? 'border-brand-primary bg-brand-primary shadow-[0_0_8px_rgba(16,185,129,0.3)]'
           : 'border-zinc-500/50 group-hover:border-brand-primary-hover/60 light:border-slate-300 light:group-hover:border-brand-primary/50'
       )}
     >

@@ -207,7 +207,7 @@ export function NotificationPanel({
             className={cn(
               'fixed right-4 top-16 z-999 w-95 max-h-[70vh] overflow-hidden',
               'rounded-2xl border dark:border-white/10 light:border-slate-200 bg-bg-secondary/95 backdrop-blur-2xl',
-              'shadow-[0_20px_60px_rgba(0,0,0,0.5),0_0_40px_rgba(34,197,94,0.05)]'
+              'shadow-[0_20px_60px_rgba(0,0,0,0.5),0_0_40px_rgba(16,185,129,0.05)]'
             )}
           >
             {/* Header */}

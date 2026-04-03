@@ -14,6 +14,7 @@ import { useRouter } from 'next/navigation'
 import { StudentHeader } from '@/components/navigation/student-header'
 import { BottomNavigation } from '@/components/navigation/bottom-navigation'
 import { ErrorBoundary } from '@/components/ui/error-boundary'
+import { OneSignalProvider } from '@/components/providers/onesignal-provider'
 import { useAuthStore } from '@/stores/auth-store'
 
 /**
@@ -65,34 +66,41 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
   const isHydrated = useAuthStore((s) => s.isHydrated)
+  const userType = useAuthStore((s) => s.user?.user_type)
 
   // Migrate legacy keys before any reads
   useEffect(() => { migrateLocalStorageKeys() }, [])
 
   useEffect(() => {
-    if (isHydrated && !isAuthenticated) {
+    if (!isHydrated) return
+    if (!isAuthenticated) {
       // Check for guest mode
       const isGuest = typeof window !== 'undefined' && localStorage.getItem('vfit_guest_mode') === 'true'
-      if (!isGuest) {
-        router.replace('/welcome')
-      }
+      if (!isGuest) router.replace('/welcome')
+      return
     }
-  }, [isHydrated, isAuthenticated, router])
+    // T7.8 — Personal trainers should use the B2B dashboard, not the B2C app
+    if (userType === 'personal') {
+      router.replace('/dashboard')
+    }
+  }, [isHydrated, isAuthenticated, userType, router])
 
   return (
-    <div className="min-h-screen bg-bg-primary">
-      {/* Sticky Header */}
-      <StudentHeader />
+    <OneSignalProvider>
+      <div className="min-h-screen bg-bg-primary">
+        {/* Sticky Header */}
+        <StudentHeader />
 
-      {/* Main content — padding bottom for nav bar + safe area */}
-      <main className="pb-20">
-        <ErrorBoundary>
-          {children}
-        </ErrorBoundary>
-      </main>
+        {/* Main content — padding bottom for nav bar + safe area */}
+        <main className="pb-20">
+          <ErrorBoundary>
+            {children}
+          </ErrorBoundary>
+        </main>
 
-      {/* Bottom Navigation */}
-      <BottomNavigation />
-    </div>
+        {/* Bottom Navigation */}
+        <BottomNavigation />
+      </div>
+    </OneSignalProvider>
   )
 }

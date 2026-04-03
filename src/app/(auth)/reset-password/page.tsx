@@ -224,7 +224,7 @@ function ResetPasswordInner() {
               </div>
               <Link
                 href="/login"
-                className="w-full group relative flex items-center justify-center gap-2.5 rounded-2xl bg-linear-to-b from-brand-primary to-[#1ea84e] py-4 text-[14px] font-black text-bg-dark uppercase tracking-wider transition-all duration-200 shadow-[0_5px_0_0_#166534,0_8px_20px_rgba(0,0,0,0.35)] hover:-translate-y-0.5 hover:shadow-[0_7px_0_0_#166534,0_10px_28px_rgba(34,197,94,0.2)] active:translate-y-1 active:shadow-[0_2px_0_0_#166534,0_3px_8px_rgba(0,0,0,0.3)]"
+                className="w-full group relative flex items-center justify-center gap-2.5 rounded-2xl bg-linear-to-b from-brand-primary to-[#1ea84e] py-4 text-[14px] font-black text-bg-dark uppercase tracking-wider transition-all duration-200 shadow-[0_5px_0_0_#065F46,0_8px_20px_rgba(0,0,0,0.35)] hover:-translate-y-0.5 hover:shadow-[0_7px_0_0_#065F46,0_10px_28px_rgba(16,185,129,0.2)] active:translate-y-1 active:shadow-[0_2px_0_0_#065F46,0_3px_8px_rgba(0,0,0,0.3)]"
                 style={headingFont}
               >
                 <div className="absolute inset-0 rounded-2xl overflow-hidden">

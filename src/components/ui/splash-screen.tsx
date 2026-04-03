@@ -105,7 +105,7 @@ export function SplashScreen({ isReady }: { isReady?: boolean }) {
         <div
           className="absolute inset-0 opacity-50"
           style={{
-            background: 'radial-gradient(ellipse 130% 70% at 30% 70%, rgba(34,197,94,0.15) 0%, transparent 55%)',
+            background: 'radial-gradient(ellipse 130% 70% at 30% 70%, rgba(16,185,129,0.15) 0%, transparent 55%)',
             animation: 'splashAurora1 18s ease-in-out infinite alternate',
           }}
         />
@@ -134,7 +134,7 @@ export function SplashScreen({ isReady }: { isReady?: boolean }) {
               : 'h-125 w-125 opacity-100'
           )}
           style={{
-            background: 'radial-gradient(circle, rgba(34,197,94,0.12) 0%, rgba(34,197,94,0.04) 40%, transparent 65%)',
+            background: 'radial-gradient(circle, rgba(16,185,129,0.12) 0%, rgba(16,185,129,0.04) 40%, transparent 65%)',
           }}
         />
 
@@ -203,7 +203,7 @@ export function SplashScreen({ isReady }: { isReady?: boolean }) {
               style={{
                 width: '100px',
                 height: '100px',
-                background: 'radial-gradient(circle, rgba(34,197,94,0.45) 0%, rgba(34,197,94,0.12) 40%, transparent 65%)',
+                background: 'radial-gradient(circle, rgba(16,185,129,0.45) 0%, rgba(16,185,129,0.12) 40%, transparent 65%)',
                 animation: allTyped ? 'splashLogoGlow 3s ease-in-out infinite' : 'none',
                 opacity: allTyped ? 1 : 0.4,
                 transition: 'opacity 0.8s ease',
@@ -217,7 +217,7 @@ export function SplashScreen({ isReady }: { isReady?: boolean }) {
               className="relative z-10 w-auto"
               style={{
                 height: 'clamp(38px, 9.5vw, 56px)',
-                filter: 'drop-shadow(0 0 20px rgba(34,197,94,0.55))',
+                filter: 'drop-shadow(0 0 20px rgba(16,185,129,0.55))',
               }}
             />
           </div>
@@ -274,8 +274,8 @@ export function SplashScreen({ isReady }: { isReady?: boolean }) {
               style={{
                 opacity: allTyped ? 1 : 0,
                 transform: allTyped ? 'translateY(0) scale(1)' : 'translateY(8px) scale(0.8)',
-                color: '#22C55E',
-                textShadow: allTyped ? '0 0 20px rgba(34,197,94,0.5)' : 'none',
+                color: '#10B981',
+                textShadow: allTyped ? '0 0 20px rgba(16,185,129,0.5)' : 'none',
               }}
             >
               IA

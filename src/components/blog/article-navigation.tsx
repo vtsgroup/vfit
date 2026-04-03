@@ -26,7 +26,7 @@ export function ArticleNavigation({ prev, next }: ArticleNavigationProps) {
       {prev ? (
         <Link
           href={`/blog/${prev.slug}`}
-          className="group rounded-2xl border border-white/8 bg-white/3 p-5 backdrop-blur-sm transition-all duration-300 hover:border-brand-primary/20 hover:bg-brand-primary/3 hover:shadow-[0_0_24px_rgba(34,197,94,0.06)]"
+          className="group rounded-2xl border border-white/8 bg-white/3 p-5 backdrop-blur-sm transition-all duration-300 hover:border-brand-primary/20 hover:bg-brand-primary/3 hover:shadow-[0_0_24px_rgba(16,185,129,0.06)]"
         >
           <span className="flex items-center gap-1 text-xs text-zinc-500 mb-2">
             <DSIcon name="arrowLeft" size={12} />
@@ -42,7 +42,7 @@ export function ArticleNavigation({ prev, next }: ArticleNavigationProps) {
       {next ? (
         <Link
           href={`/blog/${next.slug}`}
-          className="group rounded-2xl border border-white/8 bg-white/3 p-5 text-right backdrop-blur-sm transition-all duration-300 hover:border-brand-primary/20 hover:bg-brand-primary/3 hover:shadow-[0_0_24px_rgba(34,197,94,0.06)]"
+          className="group rounded-2xl border border-white/8 bg-white/3 p-5 text-right backdrop-blur-sm transition-all duration-300 hover:border-brand-primary/20 hover:bg-brand-primary/3 hover:shadow-[0_0_24px_rgba(16,185,129,0.06)]"
         >
           <span className="flex items-center justify-end gap-1 text-xs text-zinc-500 mb-2">
             Próximo artigo

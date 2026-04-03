@@ -85,7 +85,7 @@ const PLANS: DashboardPlan[] = [
     accentColor: 'text-emerald-400',
     accentBg: 'bg-emerald-500/10',
     accentBorder: 'border-emerald-500/20',
-    accentGlow: 'shadow-[0_0_60px_rgba(34,197,94,0.08)]',
+    accentGlow: 'shadow-[0_0_60px_rgba(16,185,129,0.08)]',
     maxStudents: 'Ilimitados',
     popular: true,
     features: [
@@ -757,7 +757,7 @@ export default function PlansPage() {
 
         {/* ─── Hero ─── */}
         <section className="relative text-center pt-2">
-          <div className="absolute inset-x-0 -top-10 h-60 bg-[radial-gradient(ellipse_at_50%_0%,rgba(34,197,94,0.05),transparent_70%)] pointer-events-none" />
+          <div className="absolute inset-x-0 -top-10 h-60 bg-[radial-gradient(ellipse_at_50%_0%,rgba(16,185,129,0.05),transparent_70%)] pointer-events-none" />
           <Reveal>
             <div className="relative space-y-4">
               <div className="inline-flex items-center gap-2 rounded-full border border-brand-primary/15 bg-brand-primary/5 px-4 py-1.5 text-xs font-bold text-brand-primary">
@@ -808,7 +808,7 @@ export default function PlansPage() {
         {/* ─── Bottom CTA ─── */}
         <Reveal delay={400}>
           <div className="relative overflow-hidden rounded-3xl border border-border-light bg-bg-secondary p-8 text-center max-w-lg mx-auto">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_100%,rgba(34,197,94,0.04),transparent_70%)] pointer-events-none" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_100%,rgba(16,185,129,0.04),transparent_70%)] pointer-events-none" />
             <div className="relative space-y-4">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-primary/8 border border-brand-primary/10 mx-auto">
                 <DSIcon name="messageCircle" size={22} className="text-brand-primary" />

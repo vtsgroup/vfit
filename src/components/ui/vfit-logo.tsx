@@ -56,7 +56,7 @@ export function VfitLogo({
         }}
       >
         <span style={{ color: textColor || 'currentColor' }}>EVOLU</span>
-        <span style={{ color: '#22C55E' }}>IA</span>
+        <span style={{ color: '#10B981' }}>IA</span>
       </span>
     </span>
   )
@@ -73,13 +73,13 @@ function DumbbellIcon({ size = 24 }: { size?: number }) {
       aria-hidden="true"
     >
       {/* Left plates */}
-      <rect x="1" y="6" width="3.5" height="12" rx="1.5" fill="#22C55E" />
-      <rect x="5.5" y="7.5" width="2.5" height="9" rx="1" fill="#22C55E" opacity="0.85" />
+      <rect x="1" y="6" width="3.5" height="12" rx="1.5" fill="#10B981" />
+      <rect x="5.5" y="7.5" width="2.5" height="9" rx="1" fill="#10B981" opacity="0.85" />
       {/* Bar */}
-      <rect x="8" y="10.5" width="8" height="3" rx="1" fill="#22C55E" opacity="0.6" />
+      <rect x="8" y="10.5" width="8" height="3" rx="1" fill="#10B981" opacity="0.6" />
       {/* Right plates */}
-      <rect x="16" y="7.5" width="2.5" height="9" rx="1" fill="#22C55E" opacity="0.85" />
-      <rect x="19.5" y="6" width="3.5" height="12" rx="1.5" fill="#22C55E" />
+      <rect x="16" y="7.5" width="2.5" height="9" rx="1" fill="#10B981" opacity="0.85" />
+      <rect x="19.5" y="6" width="3.5" height="12" rx="1.5" fill="#10B981" />
     </svg>
   )
 }

@@ -66,7 +66,7 @@ export function SlidingTabs({ tabs, activeTab, onChange, className }: SlidingTab
         className={cn(
           'absolute bottom-1 top-1 rounded-[10px]',
           'bg-linear-to-b from-brand-primary-hover to-brand-primary',
-          'shadow-[0_2px_0_#047857,0_4px_8px_rgba(34,197,94,0.25)]',
+          'shadow-[0_2px_0_#047857,0_4px_8px_rgba(16,185,129,0.25)]',
           'transition-all duration-300 ease-out-expo'
         )}
         style={{ left: indicator.left, width: indicator.width }}

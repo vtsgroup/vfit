@@ -65,6 +65,7 @@ export default function TemaPage() {
       {/* Header */}
       <div className="mb-6 flex items-center gap-3">
         <button
+          aria-label="Voltar"
           onClick={() => router.back()}
           className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5"
         >

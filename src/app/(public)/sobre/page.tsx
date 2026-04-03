@@ -97,7 +97,7 @@ export default function SobrePage() {
         {STATS.map((stat) => (
           <div
             key={stat.label}
-            className="group rounded-2xl border border-white/8 bg-white/3 p-6 text-center transition-all duration-300 hover:border-brand-primary/25 hover:shadow-[0_0_24px_rgba(34,197,94,0.06)] backdrop-blur-sm"
+            className="group rounded-2xl border border-white/8 bg-white/3 p-6 text-center transition-all duration-300 hover:border-brand-primary/25 hover:shadow-[0_0_24px_rgba(16,185,129,0.06)] backdrop-blur-sm"
           >
             <p className="text-3xl font-bold text-brand-primary transition-transform duration-300 group-hover:scale-110">{stat.value}</p>
             <p className="mt-1 text-sm text-zinc-500">{stat.label}</p>
@@ -134,7 +134,7 @@ export default function SobrePage() {
           {VALUES.map((value) => (
             <div
               key={value.title}
-              className="group rounded-2xl border border-white/8 bg-white/3 p-6 transition-all duration-300 hover:border-brand-primary/25 hover:shadow-[0_0_30px_rgba(34,197,94,0.06)]"
+              className="group rounded-2xl border border-white/8 bg-white/3 p-6 transition-all duration-300 hover:border-brand-primary/25 hover:shadow-[0_0_30px_rgba(16,185,129,0.06)]"
             >
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary transition-all duration-300 group-hover:bg-brand-primary/20 group-hover:scale-110 group-hover:-rotate-6">
                 <DSIcon name={value.icon} />
@@ -150,7 +150,7 @@ export default function SobrePage() {
       <FaqInline items={FAQ_SOBRE} />
 
       {/* CTA */}
-      <section className="text-center rounded-2xl border border-brand-primary/25 bg-brand-primary/3 p-8 sm:p-12 backdrop-blur-sm shadow-[0_0_30px_rgba(34,197,94,0.04)]">
+      <section className="text-center rounded-2xl border border-brand-primary/25 bg-brand-primary/3 p-8 sm:p-12 backdrop-blur-sm shadow-[0_0_30px_rgba(16,185,129,0.04)]">
         <h2 className="text-2xl font-bold text-white mb-4">Pronto para transformar sua carreira?</h2>
         <p className="text-zinc-400 mb-8 max-w-lg mx-auto">
           Junte-se a centenas de personal trainers que já estão usando IA para

@@ -58,7 +58,7 @@ export function Toggle({
           s.track,
           s.padding,
           checked
-            ? 'bg-linear-to-r from-brand-primary to-brand-primary-hover shadow-[inset_0_2px_4px_rgba(0,0,0,0.15),0_0_12px_rgba(34,197,94,0.3)]'
+            ? 'bg-linear-to-r from-brand-primary to-brand-primary-hover shadow-[inset_0_2px_4px_rgba(0,0,0,0.15),0_0_12px_rgba(16,185,129,0.3)]'
             : 'bg-zinc-600/60 shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)]'
         )}
       >

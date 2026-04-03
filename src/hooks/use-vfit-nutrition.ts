@@ -161,3 +161,69 @@ export const MEAL_TYPE_ORDER: MealType[] = [
 export function formatMacro(value: number): string {
   return value >= 10 ? Math.round(value).toString() : value.toFixed(1)
 }
+
+// ── Nutrition Targets from Onboarding ─────────────────
+
+interface OnboardingData {
+  gender: string
+  age: number
+  height_cm: number
+  weight_kg: number
+  goal: string
+  training_frequency: string
+}
+
+export interface NutritionTargets {
+  calories: number
+  protein: number
+  carbs: number
+  fat: number
+}
+
+const DEFAULT_TARGETS: NutritionTargets = { calories: 2000, protein: 150, carbs: 250, fat: 65 }
+
+function calcTargets(o: OnboardingData): NutritionTargets {
+  const isMale = o.gender === 'male' || o.gender === 'masculino'
+  const bmr = isMale
+    ? 10 * o.weight_kg + 6.25 * o.height_cm - 5 * o.age + 5
+    : 10 * o.weight_kg + 6.25 * o.height_cm - 5 * o.age - 161
+
+  const freqToActivity: Record<string, number> = {
+    never: 1.2, '1-2': 1.375, '3-4': 1.55, '5-6': 1.725, '7': 1.9,
+  }
+  const tdee = Math.round(bmr * (freqToActivity[o.training_frequency] || 1.55))
+
+  const goalMap: Record<string, string> = {
+    lose_weight: 'lose', perder_peso: 'lose', emagrecer: 'lose',
+    gain_muscle: 'gain', ganhar_musculo: 'gain', hipertrofia: 'gain',
+  }
+  const g = goalMap[o.goal] || 'maintain'
+  const cals = g === 'lose' ? Math.round(tdee * 0.8) : g === 'gain' ? Math.round(tdee * 1.15) : tdee
+
+  const protein = Math.round(o.weight_kg * (g === 'gain' ? 2.0 : 1.6))
+  const fat = Math.round((cals * 0.25) / 9)
+  const carbs = Math.round((cals - protein * 4 - fat * 9) / 4)
+
+  return { calories: cals, protein, carbs, fat }
+}
+
+/**
+ * Calcula metas nutricionais do usuário com base nos dados do onboarding.
+ * Usa a mesma fórmula Mifflin-St Jeor do backend (self-assessments.ts).
+ * Fallback para metas padrão se onboarding não encontrado.
+ */
+export function useNutritionTargets() {
+  const isReady = useAuthStore((s) => s.isAuthenticated && s.isHydrated)
+
+  return useQuery<NutritionTargets>({
+    queryKey: ['nutrition-targets'],
+    queryFn: async () => {
+      const res = await api.get<{ completed: boolean; data: OnboardingData | null }>('/onboarding')
+      if (!res.data?.data) return DEFAULT_TARGETS
+      return calcTargets(res.data.data)
+    },
+    enabled: isReady,
+    staleTime: 30 * 60 * 1000, // 30 min — dados raramente mudam
+    placeholderData: DEFAULT_TARGETS,
+  })
+}

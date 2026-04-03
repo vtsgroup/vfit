@@ -145,7 +145,7 @@ export function ConversationList({
                   )}
                   {/* Unread badge */}
                   {conversation.unread_count > 0 && (
-                    <div className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-brand-primary shadow-[0_0_6px_rgba(34,197,94,0.4)]">
+                    <div className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-brand-primary shadow-[0_0_6px_rgba(16,185,129,0.4)]">
                       <span className="text-[10px] font-bold text-bg-dark">
                         {conversation.unread_count > 9 ? '9+' : conversation.unread_count}
                       </span>

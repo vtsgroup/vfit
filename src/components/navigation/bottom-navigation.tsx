@@ -32,6 +32,13 @@ interface Tab {
   icon: (active: boolean) => ReactNode
 }
 
+interface Tab {
+  label: string
+  href: string
+  icon: (active: boolean) => ReactNode
+  isFab?: boolean
+}
+
 const tabs: Tab[] = [
   {
     label: 'Treinos',
@@ -46,7 +53,8 @@ const tabs: Tab[] = [
   {
     label: 'IA',
     href: '/ia',
-    icon: (active) => <IconSparkles active={active} size={22} />,
+    isFab: true,
+    icon: (active) => <IconSparkles active={active} size={26} />,
   },
   {
     label: 'Avaliações',
@@ -91,6 +99,46 @@ export function BottomNavigation({ notificationCount = 0 }: BottomNavigationProp
           const isActive = pathname === tab.href || pathname.startsWith(`${tab.href}/`)
           const isPerfil = tab.href === '/perfil'
 
+          // ─── IA FAB — botão verde redondo destacado ───
+          if (tab.isFab) {
+            return (
+              <Link
+                key={tab.href}
+                href={tab.href}
+                role="tab"
+                aria-selected={isActive}
+                aria-label={tab.label}
+                className="relative flex flex-1 flex-col items-center justify-start pt-0"
+                onClick={() => {
+                  if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+                    navigator.vibrate(10)
+                  }
+                }}
+              >
+                {/* FAB circle — sobe acima da nav bar */}
+                <div
+                  className={cn(
+                    'relative -mt-5 flex h-14 w-14 items-center justify-center rounded-full shadow-[0_4px_20px_rgba(16,185,129,0.45)] transition-all duration-200 active:scale-95',
+                    isActive
+                      ? 'bg-linear-to-br from-emerald-400 via-emerald-500 to-emerald-600 shadow-[0_4px_24px_rgba(16,185,129,0.6)]'
+                      : 'bg-linear-to-br from-emerald-400 via-emerald-500 to-emerald-600'
+                  )}
+                >
+                  {tab.icon(true)}
+                </div>
+                <span
+                  className={cn(
+                    'mt-0.5 text-[10px] font-semibold leading-none transition-all duration-200',
+                    isActive ? 'text-brand-primary' : 'text-zinc-600'
+                  )}
+                >
+                  {tab.label}
+                </span>
+              </Link>
+            )
+          }
+
+          // ─── Tab normal ───
           return (
             <Link
               key={tab.href}
@@ -105,7 +153,6 @@ export function BottomNavigation({ notificationCount = 0 }: BottomNavigationProp
                   : 'text-zinc-600 hover:text-zinc-400 active:text-zinc-300'
               )}
               onClick={() => {
-                // Haptic feedback for TWA
                 if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
                   navigator.vibrate(10)
                 }
@@ -119,14 +166,9 @@ export function BottomNavigation({ notificationCount = 0 }: BottomNavigationProp
                 )}
               />
 
-              {/* Icon — SVG dual-state (outline/filled) */}
+              {/* Icon */}
               <div className="relative">
-                <div
-                  className={cn(
-                    'transition-transform duration-200',
-                    isActive && 'scale-110'
-                  )}
-                >
+                <div className={cn('transition-transform duration-200', isActive && 'scale-110')}>
                   {tab.icon(isActive)}
                 </div>
 

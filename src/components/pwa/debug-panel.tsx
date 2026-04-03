@@ -448,7 +448,7 @@ function Row({
       <span className="text-zinc-500 shrink-0">{label}</span>
       <span
         className={`text-right ${small ? 'text-[9px] max-w-55' : ''} truncate ${
-          ok === true ? 'text-green-400' : ok === false ? 'text-red-400' : 'text-zinc-300'
+          ok === true ? 'text-emerald-400' : ok === false ? 'text-red-400' : 'text-zinc-300'
         }`}
       >
         {value}

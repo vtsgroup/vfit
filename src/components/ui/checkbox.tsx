@@ -63,7 +63,7 @@ export function Checkbox({
           'active:scale-90',
           s.box,
           isActive
-            ? 'bg-linear-to-br from-brand-primary-hover to-brand-primary border-transparent shadow-[0_2px_4px_rgba(34,197,94,0.3),inset_0_1px_0_rgba(255,255,255,0.2)]'
+            ? 'bg-linear-to-br from-brand-primary-hover to-brand-primary border-transparent shadow-[0_2px_4px_rgba(16,185,129,0.3),inset_0_1px_0_rgba(255,255,255,0.2)]'
             : cn(
                 'border-2 bg-transparent',
                 error

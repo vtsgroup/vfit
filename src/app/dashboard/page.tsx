@@ -155,7 +155,7 @@ export default function DashboardPage() {
       <GlassCard variant="glow" padding="lg" radius="2xl">
         {/* Athletic mesh background — deep green gradients */}
         <div className="pointer-events-none absolute inset-0 rounded-[inherit] overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_10%_30%,rgba(34,197,94,0.12)_0%,transparent_55%),radial-gradient(ellipse_50%_40%_at_85%_70%,rgba(132,204,22,0.07)_0%,transparent_50%),radial-gradient(ellipse_40%_30%_at_50%_100%,rgba(74,222,128,0.05)_0%,transparent_40%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_10%_30%,rgba(16,185,129,0.12)_0%,transparent_55%),radial-gradient(ellipse_50%_40%_at_85%_70%,rgba(132,204,22,0.07)_0%,transparent_50%),radial-gradient(ellipse_40%_30%_at_50%_100%,rgba(52,211,153,0.05)_0%,transparent_40%)]" />
         </div>
         {/* Top edge specular */}
         <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-brand-primary/25 to-transparent" />
@@ -163,7 +163,7 @@ export default function DashboardPage() {
         <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-4">
             {/* Icon — brand glow */}
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-brand-primary/10 border border-brand-primary/20 shadow-[0_0_24px_rgba(34,197,94,0.2)] transition-all duration-300 hover:scale-105 hover:shadow-[0_0_32px_rgba(34,197,94,0.35)]">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-brand-primary/10 border border-brand-primary/20 shadow-[0_0_24px_rgba(16,185,129,0.2)] transition-all duration-300 hover:scale-105 hover:shadow-[0_0_32px_rgba(16,185,129,0.35)]">
               <DSIcon name="activity" size={22} className="text-brand-primary" />
             </div>
             <div>

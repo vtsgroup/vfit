@@ -199,7 +199,7 @@ export default function ProgressoPage() {
                   <DSIcon name="barChart" size={14} className="text-brand-primary" />
                   <span className="text-[12px] font-semibold text-text-secondary">Treinos</span>
                 </div>
-                <MiniBarChart data={chartWorkouts} color="#22C55E" height={100} />
+                <MiniBarChart data={chartWorkouts} color="#10B981" height={100} />
               </div>
 
               {/* Volume chart */}

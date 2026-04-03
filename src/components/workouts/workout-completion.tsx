@@ -39,7 +39,7 @@ interface Particle {
 }
 
 const CONFETTI_COLORS = [
-  '#22C55E', '#10B981', '#06B6D4', '#8B5CF6',
+  '#10B981', '#10B981', '#06B6D4', '#8B5CF6',
   '#F59E0B', '#EF4444', '#EC4899', '#3B82F6',
   '#14B8A6', '#F97316',
 ]

@@ -12,7 +12,7 @@ interface MiniBarChartProps {
   height?: number
 }
 
-export function MiniBarChart({ data, color = '#22C55E', height = 120 }: MiniBarChartProps) {
+export function MiniBarChart({ data, color = '#10B981', height = 120 }: MiniBarChartProps) {
   const maxVal = Math.max(...data.map(d => d.value), 1)
   const barWidth = Math.floor(100 / data.length) - 2
   const gap = 1

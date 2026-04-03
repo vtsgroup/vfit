@@ -106,6 +106,7 @@ export default function AjustesPlanoPage() {
       <div className="sticky top-14 z-20 border-b border-border-primary bg-bg-primary/80 px-4 py-3 backdrop-blur-xl">
         <div className="flex items-center justify-between">
           <button
+            aria-label="Voltar"
             type="button"
             onClick={() => router.back()}
             className="flex h-9 w-9 items-center justify-center rounded-xl text-text-muted hover:text-text-primary transition-colors"

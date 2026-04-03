@@ -212,7 +212,7 @@ export function CommandPalette() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="fixed bottom-20 right-3 z-40 hidden items-center gap-2 rounded-xl border dark:border-white/10 light:border-slate-200 dark:bg-white/5 light:bg-white/80 px-3 py-2 text-xs text-text-muted shadow-lg backdrop-blur-xl transition-all duration-200 hover:border-brand-primary/30 dark:hover:bg-white/8 light:hover:bg-white hover:shadow-[0_0_24px_rgba(34,197,94,0.1)] lg:flex"
+        className="fixed bottom-20 right-3 z-40 hidden items-center gap-2 rounded-xl border dark:border-white/10 light:border-slate-200 dark:bg-white/5 light:bg-white/80 px-3 py-2 text-xs text-text-muted shadow-lg backdrop-blur-xl transition-all duration-200 hover:border-brand-primary/30 dark:hover:bg-white/8 light:hover:bg-white hover:shadow-[0_0_24px_rgba(16,185,129,0.1)] lg:flex"
       >
         <DSIcon name="command" size={14} />
         <span className="font-mono">⌘K</span>
@@ -236,7 +236,7 @@ export function CommandPalette() {
               initial="hidden"
               animate="visible"
               exit="exit"
-              className="relative w-full max-w-xl overflow-hidden rounded-2xl border dark:border-white/8 light:border-slate-200 bg-bg-secondary/95 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.6),0_0_0_1px_rgba(255,255,255,0.04),0_0_80px_-20px_rgba(34,197,94,0.06)] backdrop-blur-3xl"
+              className="relative w-full max-w-xl overflow-hidden rounded-2xl border dark:border-white/8 light:border-slate-200 bg-bg-secondary/95 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.6),0_0_0_1px_rgba(255,255,255,0.04),0_0_80px_-20px_rgba(16,185,129,0.06)] backdrop-blur-3xl"
               onClick={(event) => event.stopPropagation()}
             >
               {/* Top edge glow */}
@@ -314,7 +314,7 @@ export function CommandPalette() {
                             className={cn(
                               'group relative w-full rounded-xl px-3 py-2.5 text-left transition-all duration-150',
                               idx === activeIndex
-                                ? 'bg-brand-primary/10 shadow-[inset_0_0_0_1px_rgba(34,197,94,0.15),0_0_20px_-8px_rgba(34,197,94,0.12)]'
+                                ? 'bg-brand-primary/10 shadow-[inset_0_0_0_1px_rgba(16,185,129,0.15),0_0_20px_-8px_rgba(16,185,129,0.12)]'
                                 : 'dark:hover:bg-white/3 light:hover:bg-slate-50'
                             )}
                           >

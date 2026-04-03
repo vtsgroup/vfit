@@ -70,7 +70,7 @@ export function WeeklyProgressRing({
           />
           <defs>
             <linearGradient id="ring-progress" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#22C55E" />
+              <stop offset="0%" stopColor="#10B981" />
               <stop offset="100%" stopColor="#3DFC94" />
             </linearGradient>
             <linearGradient id="ring-complete" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -177,7 +177,7 @@ export function StreakRing({
               <stop offset="100%" stopColor="#EF4444" />
             </linearGradient>
             <linearGradient id="streak-normal" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#22C55E" />
+              <stop offset="0%" stopColor="#10B981" />
               <stop offset="100%" stopColor="#10B981" />
             </linearGradient>
           </defs>

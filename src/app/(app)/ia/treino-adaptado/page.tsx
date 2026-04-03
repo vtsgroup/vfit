@@ -16,7 +16,7 @@ export default function TreinoAdaptadoIAPage() {
   return (
     <div className="flex min-h-screen flex-col bg-bg-primary pb-24">
       <header className="sticky top-14 z-20 flex items-center gap-3 bg-bg-primary/80 px-4 py-3 backdrop-blur-lg">
-        <button onClick={() => router.back()} className="p-1">
+        <button aria-label="Voltar" onClick={() => router.back()} className="p-1">
           <DSIcon name="arrowLeft" className="h-5 w-5 text-text-primary" />
         </button>
         <div className="flex items-center gap-2">
@@ -34,6 +34,7 @@ export default function TreinoAdaptadoIAPage() {
           A IA vai adaptar seu treino conforme sua avaliação física e progressão.
         </p>
         <button
+          aria-label="Voltar"
           onClick={() => router.back()}
           className="mt-6 rounded-xl bg-bg-secondary px-6 py-2.5 text-sm font-semibold text-text-primary transition-colors hover:bg-bg-tertiary"
         >

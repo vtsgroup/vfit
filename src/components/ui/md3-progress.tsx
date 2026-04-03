@@ -223,8 +223,8 @@ export function StepProgress({ steps, currentStep, className }: StepProgressProp
             {/* Step circle */}
             <div className={cn(
               'flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold transition-all duration-300',
-              isCompleted && 'bg-brand-primary text-white shadow-[0_0_12px_rgba(34,197,94,0.2)]',
-              isCurrent && 'bg-brand-primary/15 text-brand-primary border-2 border-brand-primary shadow-[0_0_16px_rgba(34,197,94,0.15)]',
+              isCompleted && 'bg-brand-primary text-white shadow-[0_0_12px_rgba(16,185,129,0.2)]',
+              isCurrent && 'bg-brand-primary/15 text-brand-primary border-2 border-brand-primary shadow-[0_0_16px_rgba(16,185,129,0.15)]',
               !isCompleted && !isCurrent && 'bg-(--surface-container) text-(--on-surface-variant) border border-(--outline-variant)'
             )}>
               {isCompleted ? (

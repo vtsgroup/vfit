@@ -34,7 +34,7 @@ export default function TreinoTemplatePage() {
     return (
       <div className="flex flex-col items-center gap-3 py-32">
         <p className="text-zinc-500">Template não encontrado</p>
-        <button onClick={() => router.back()} className="text-brand-primary text-[13px]">
+        <button aria-label="Voltar" onClick={() => router.back()} className="text-brand-primary text-[13px]">
           Voltar
         </button>
       </div>
@@ -46,6 +46,7 @@ export default function TreinoTemplatePage() {
       {/* Header */}
       <div className="mb-2 flex items-center gap-3">
         <button
+          aria-label="Voltar"
           onClick={() => router.back()}
           className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5"
         >

@@ -144,7 +144,7 @@ export function PasskeyPrompt() {
                 <div className="absolute inset-0 mx-auto h-20 w-20 animate-ping rounded-full bg-brand-primary/15 duration-2000" style={{ animationDuration: '3s' }} />
                 {/* Icon container */}
                 <div className="relative mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-linear-to-br from-brand-primary/20 to-emerald-500/10 ring-2 ring-brand-primary/20">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-full bg-linear-to-br from-brand-primary to-emerald-400 shadow-[0_0_30px_rgba(34,197,94,0.3)]">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-full bg-linear-to-br from-brand-primary to-emerald-400 shadow-[0_0_30px_rgba(16,185,129,0.3)]">
                     <DSIcon name="fingerprint" size={28} className="text-white drop-shadow-sm" />
                   </div>
                 </div>
@@ -194,7 +194,7 @@ export function PasskeyPrompt() {
                 <button
                   onClick={handleRegister}
                   disabled={registerPasskey.isPending}
-                  className="group relative w-full overflow-hidden rounded-2xl bg-linear-to-r from-brand-primary to-emerald-400 p-px font-bold shadow-[0_0_20px_rgba(34,197,94,0.25)] transition-all hover:shadow-[0_0_30px_rgba(34,197,94,0.4)] active:scale-[0.98] disabled:opacity-60"
+                  className="group relative w-full overflow-hidden rounded-2xl bg-linear-to-r from-brand-primary to-emerald-400 p-px font-bold shadow-[0_0_20px_rgba(16,185,129,0.25)] transition-all hover:shadow-[0_0_30px_rgba(16,185,129,0.4)] active:scale-[0.98] disabled:opacity-60"
                 >
                   <span className="flex w-full items-center justify-center gap-2 rounded-[15px] bg-linear-to-r from-brand-primary to-emerald-400 px-6 py-3 text-sm font-bold text-white">
                     {registerPasskey.isPending ? (

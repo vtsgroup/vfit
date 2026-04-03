@@ -160,8 +160,8 @@ export function ExerciseProgressionChart({ exerciseId, className }: ExerciseProg
           <AreaChart data={chartData} margin={{ top: 5, right: 5, left: -15, bottom: 0 }}>
             <defs>
               <linearGradient id={`progressGrad-${exerciseId}`} x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#22C55E" stopOpacity={0.3} />
-                <stop offset="100%" stopColor="#22C55E" stopOpacity={0} />
+                <stop offset="0%" stopColor="#10B981" stopOpacity={0.3} />
+                <stop offset="100%" stopColor="#10B981" stopOpacity={0} />
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
@@ -192,11 +192,11 @@ export function ExerciseProgressionChart({ exerciseId, className }: ExerciseProg
             <Area
               type="monotone"
               dataKey="load"
-              stroke="#22C55E"
+              stroke="#10B981"
               strokeWidth={2}
               fill={`url(#progressGrad-${exerciseId})`}
-              dot={{ r: 3, fill: '#22C55E', strokeWidth: 0 }}
-              activeDot={{ r: 5, fill: '#22C55E', stroke: '#fff', strokeWidth: 2 }}
+              dot={{ r: 3, fill: '#10B981', strokeWidth: 0 }}
+              activeDot={{ r: 5, fill: '#10B981', stroke: '#fff', strokeWidth: 2 }}
             />
           </AreaChart>
         </ResponsiveContainer>

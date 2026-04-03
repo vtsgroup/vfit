@@ -67,7 +67,7 @@ export function PageHero({ title, subtitle, badge, breadcrumbs }: PageHeroProps)
           <IntersectionReveal animation="fade-in" delay={50}>
             <div className="mt-6">
               <span
-                className="inline-block rounded-md border border-brand-primary/25 bg-brand-primary/8 px-3 py-1 text-[10px] text-brand-primary uppercase shadow-[0_0_12px_rgba(34,197,94,0.08)]"
+                className="inline-block rounded-md border border-brand-primary/25 bg-brand-primary/8 px-3 py-1 text-[10px] text-brand-primary uppercase shadow-[0_0_12px_rgba(16,185,129,0.08)]"
                 style={monoLabel}
               >
                 {badge}

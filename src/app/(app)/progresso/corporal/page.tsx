@@ -45,6 +45,7 @@ export default function CorporalPage() {
       {/* Header */}
       <div className="mb-5 flex items-center gap-3">
         <button
+          aria-label="Voltar"
           onClick={() => router.back()}
           className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5"
         >
@@ -130,7 +131,7 @@ export default function CorporalPage() {
                     <DSIcon name="trendingUp" size={14} className="text-brand-primary" />
                     <span className="text-[12px] font-semibold text-zinc-400">Evolução de peso</span>
                   </div>
-                  <MiniBarChart data={weightChart} color="#22C55E" height={100} />
+                  <MiniBarChart data={weightChart} color="#10B981" height={100} />
                 </div>
               )}
 

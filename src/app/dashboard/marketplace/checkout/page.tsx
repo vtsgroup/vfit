@@ -56,7 +56,7 @@ function PaymentMethodCard({
       className={cn(
         'relative flex items-center gap-4 rounded-2xl border p-4 text-left transition-all duration-300',
         selected
-          ? 'border-brand-primary/40 bg-brand-primary/5 shadow-[0_0_20px_rgba(34,197,94,0.08)] ring-1 ring-brand-primary/20'
+          ? 'border-brand-primary/40 bg-brand-primary/5 shadow-[0_0_20px_rgba(16,185,129,0.08)] ring-1 ring-brand-primary/20'
           : 'border-border-light bg-bg-secondary/50 hover:bg-bg-secondary/80 hover:border-border-light/80'
       )}
     >

@@ -454,7 +454,7 @@ function AIPageContent() {
   // ══════════════════════════════════════════
   const inputBar = (
     <div className="mx-auto w-full max-w-3xl">
-      <div className="relative rounded-2xl bg-bg-secondary/50 shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_4px_24px_-4px_rgba(0,0,0,0.2)] backdrop-blur-xl transition-all duration-300 focus-within:shadow-[0_0_0_1px_rgba(34,197,94,0.2),0_4px_32px_-4px_rgba(34,197,94,0.08)]">
+      <div className="relative rounded-2xl bg-bg-secondary/50 shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_4px_24px_-4px_rgba(0,0,0,0.2)] backdrop-blur-xl transition-all duration-300 focus-within:shadow-[0_0_0_1px_rgba(16,185,129,0.2),0_4px_32px_-4px_rgba(16,185,129,0.08)]">
         <textarea
           ref={viewMode === 'welcome' ? inputRef : chatInputRef}
           value={input}
@@ -506,7 +506,7 @@ function AIPageContent() {
       <div className="flex min-h-[calc(100vh-8rem)] flex-col">
         {/* Atmospheric mesh background */}
         <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_15%_40%,rgba(139,92,246,0.08)_0%,transparent_60%),radial-gradient(ellipse_50%_40%_at_85%_15%,rgba(34,197,94,0.06)_0%,transparent_55%),radial-gradient(ellipse_40%_30%_at_50%_90%,rgba(59,130,246,0.04)_0%,transparent_45%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_15%_40%,rgba(139,92,246,0.08)_0%,transparent_60%),radial-gradient(ellipse_50%_40%_at_85%_15%,rgba(16,185,129,0.06)_0%,transparent_55%),radial-gradient(ellipse_40%_30%_at_50%_90%,rgba(59,130,246,0.04)_0%,transparent_45%)]" />
         </div>
 
         <div className="flex flex-1 flex-col items-center justify-center px-4 pb-6">

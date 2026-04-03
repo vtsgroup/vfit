@@ -1,13 +1,16 @@
 /**
  * src/app/(app)/treinos/page.tsx
  *
- * Sprint 30 — Tab Treinos: Explorar & Templates
- * Cards: Criar Rápido (IA), Meu Plano, Templates filtráveis
+ * Sprint 30 — Tab Treinos: Dashboard B2C + Explorar & Templates
+ * T7.3: Card "Treino de Hoje" — lê plano ativo (useCurrentPlan)
+ * T7.4: Mini KPIs — dia atual, progresso do plano
+ * T7.5: Progress ring do plano
+ * T7.6: Card nutrição resumo (useMealsToday + useNutritionTargets)
  */
 
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import { DSIcon } from '@/components/ui/ds-icon'
 import {
@@ -16,6 +19,8 @@ import {
   getDifficultyColor,
 } from '@/hooks/use-workout-templates'
 import { hapticLight } from '@/lib/haptics'
+import { useCurrentPlan } from '@/hooks/use-plans'
+import { useMealsToday, useNutritionTargets } from '@/hooks/use-vfit-nutrition'
 
 const DIFFICULTY_FILTERS = [
   { value: '', label: 'Todos' },
@@ -24,16 +29,178 @@ const DIFFICULTY_FILTERS = [
   { value: 'advanced', label: 'Avançado' },
 ]
 
+// ── T7.5 — Progress Ring SVG ──────────────────────────
+function ProgressRing({
+  value,
+  max,
+  size = 52,
+  stroke = 5,
+  color = '#10B981',
+  children,
+}: {
+  value: number
+  max: number
+  size?: number
+  stroke?: number
+  color?: string
+  children?: React.ReactNode
+}) {
+  const radius = (size - stroke * 2) / 2
+  const circumference = 2 * Math.PI * radius
+  const pct = max > 0 ? Math.min(value / max, 1) : 0
+  const dashOffset = circumference * (1 - pct)
+
+  return (
+    <div className="relative shrink-0" style={{ width: size, height: size }}>
+      <svg
+        width={size}
+        height={size}
+        viewBox={`0 0 ${size} ${size}`}
+        className="absolute inset-0 -rotate-90"
+      >
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="none"
+          stroke="rgba(255,255,255,0.07)"
+          strokeWidth={stroke}
+        />
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="none"
+          stroke={color}
+          strokeWidth={stroke}
+          strokeDasharray={`${circumference} ${circumference}`}
+          strokeDashoffset={dashOffset}
+          strokeLinecap="round"
+          style={{ transition: 'stroke-dashoffset 0.6s ease' }}
+        />
+      </svg>
+      <div className="absolute inset-0 flex items-center justify-center">
+        {children}
+      </div>
+    </div>
+  )
+}
+
 export default function TreinosPage() {
   const [difficulty, setDifficulty] = useState('')
   const { data: templates, isLoading } = useWorkoutTemplates(
     difficulty ? { difficulty } : undefined
   )
 
+  // T7.3-T7.5 — Current plan data
+  const { data: plan } = useCurrentPlan()
+
+  // T7.6 — Nutrition today
+  const { data: mealsData } = useMealsToday()
+  const { data: targets = { calories: 2000, protein: 150, carbs: 250, fat: 65 } } =
+    useNutritionTargets()
+
+  // Treino de hoje — map current_day to plan day
+  const todayDay = useMemo(() => {
+    if (!plan?.days?.length) return null
+    const dayIdx = plan.days.findIndex((d) => d.day_number === plan.current_day)
+    if (dayIdx >= 0) return plan.days[dayIdx]
+    return plan.days[(plan.current_day - 1) % plan.days.length] ?? plan.days[0]
+  }, [plan])
+
+  const totals = mealsData?.totals ?? { calories: 0, protein: 0, carbs: 0, fat: 0 }
+  const planPct = plan && plan.total_days > 0 ? Math.round((plan.current_day / plan.total_days) * 100) : 0
+  const calPct = targets.calories > 0 ? Math.round((totals.calories / targets.calories) * 100) : 0
+
   return (
     <div className="mx-auto max-w-lg px-4 pt-6 pb-24">
       <h1 className="mb-1 text-xl font-black text-text-primary">Treinos</h1>
       <p className="mb-5 text-[13px] text-text-muted">Recursos personalizados para você</p>
+
+      {/* T7.3 — Card "Treino de Hoje" */}
+      {todayDay && (
+        <Link href="/plano" className="mb-4 block" onClick={() => hapticLight()}>
+          <div className="glass-card rounded-2xl border border-brand-primary/20 bg-linear-to-br from-brand-primary/8 to-transparent p-4">
+            <div className="mb-2 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-primary/15">
+                  <DSIcon name="dumbbell" size={14} className="text-brand-primary" />
+                </div>
+                <span className="text-[11px] font-bold uppercase tracking-wider text-brand-primary">
+                  Treino de Hoje · Dia {plan?.current_day}
+                </span>
+              </div>
+              <DSIcon name="chevronRight" size={14} className="text-text-muted" />
+            </div>
+            <p className="mb-1.5 text-[15px] font-bold text-text-primary">{todayDay.name}</p>
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[12px] text-text-secondary">
+              {todayDay.muscle_groups.length > 0 && (
+                <span>{todayDay.muscle_groups.slice(0, 3).join(' · ')}</span>
+              )}
+              {todayDay.muscle_groups.length > 0 && <span className="text-text-muted">·</span>}
+              <span>{todayDay.estimated_duration_min}min</span>
+              <span className="text-text-muted">·</span>
+              <span>{todayDay.exercises.length} exercícios</span>
+            </div>
+          </div>
+        </Link>
+      )}
+
+      {/* T7.4 + T7.5 + T7.6 — KPI cards (plano + nutrição) */}
+      <div className="mb-5 grid grid-cols-2 gap-3">
+        {/* T7.5 — Plano progress ring */}
+        <Link href="/plano" className="glass-card block rounded-2xl p-3">
+          <p className="mb-2.5 text-[10px] font-bold uppercase tracking-wider text-text-muted">
+            Plano Atual
+          </p>
+          {plan ? (
+            <div className="flex items-center gap-3">
+              <ProgressRing value={plan.current_day} max={plan.total_days} size={52} stroke={5} color="#10B981">
+                <span className="text-[10px] font-bold text-text-primary">{planPct}%</span>
+              </ProgressRing>
+              <div className="min-w-0">
+                <p className="text-[13px] font-bold text-text-primary">
+                  Dia {plan.current_day}
+                  <span className="font-normal text-text-muted">/{plan.total_days}</span>
+                </p>
+                <p className="truncate text-[11px] text-text-muted">{plan.name}</p>
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2 py-1">
+              <DSIcon name="sparkles" size={16} className="text-brand-primary" />
+              <p className="text-[12px] text-text-muted">Gere seu plano</p>
+            </div>
+          )}
+        </Link>
+
+        {/* T7.6 — Nutrição hoje */}
+        <Link href="/nutricao" className="glass-card block rounded-2xl p-3">
+          <p className="mb-2.5 text-[10px] font-bold uppercase tracking-wider text-text-muted">
+            Nutrição Hoje
+          </p>
+          <div className="flex items-center gap-3">
+            <ProgressRing
+              value={totals.calories}
+              max={targets.calories || 2000}
+              size={52}
+              stroke={5}
+              color="#F59E0B"
+            >
+              <span className="text-[10px] font-bold text-text-primary">{calPct}%</span>
+            </ProgressRing>
+            <div className="min-w-0">
+              <p className="text-[13px] font-bold text-text-primary">
+                {Math.round(totals.calories)}
+                <span className="font-normal text-[10px] text-text-muted">kcal</span>
+              </p>
+              <p className="text-[11px] text-text-muted">
+                P:{Math.round(totals.protein)}g · C:{Math.round(totals.carbs)}g
+              </p>
+            </div>
+          </div>
+        </Link>
+      </div>
 
       {/* Quick actions */}
       <div className="mb-5 grid grid-cols-2 gap-3">

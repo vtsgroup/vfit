@@ -48,7 +48,7 @@ export default function EditarPerfilPage() {
     <div className="mx-auto max-w-lg px-4 pt-4 pb-24">
       {/* Header */}
       <div className="mb-6 flex items-center gap-3">
-        <button onClick={() => router.back()} className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5">
+        <button aria-label="Voltar" onClick={() => router.back()} className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5">
           <DSIcon name="arrowLeft" size={20} className="text-zinc-400" />
         </button>
         <h1 className="text-lg font-bold text-white">Editar perfil</h1>

@@ -65,7 +65,7 @@ export function getDifficultyLabel(d: string): string {
 
 export function getDifficultyColor(d: string): string {
   switch (d) {
-    case 'beginner': return 'text-green-400 bg-green-400/10'
+    case 'beginner': return 'text-emerald-400 bg-emerald-400/10'
     case 'intermediate': return 'text-yellow-400 bg-yellow-400/10'
     case 'advanced': return 'text-red-400 bg-red-400/10'
     default: return 'text-zinc-400 bg-zinc-400/10'

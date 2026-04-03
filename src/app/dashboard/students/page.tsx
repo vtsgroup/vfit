@@ -156,7 +156,7 @@ export default function StudentsPage() {
             >
               <DSIcon name="filter" size={16} />
               {(statusFilter || paymentFilter) && (
-                <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-brand-primary shadow-[0_0_6px_rgba(34,197,94,0.5)] ring-2 ring-bg-page" />
+                <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-brand-primary shadow-[0_0_6px_rgba(16,185,129,0.5)] ring-2 ring-bg-page" />
               )}
             </Button>
           </div>

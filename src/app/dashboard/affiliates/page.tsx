@@ -16,7 +16,6 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import QRCodeLib from 'qrcode'
 import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 import { cn } from '@/lib/utils'
 import { AuthGuard } from '@/components/auth'
@@ -126,7 +125,7 @@ export default function AffiliatesPage() {
 
             <div className="relative z-10 mx-auto max-w-2xl text-center">
               {/* Animated icon */}
-              <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-3xl bg-linear-to-br from-brand-primary/15 to-emerald-500/10 shadow-[0_0_40px_rgba(34,197,94,0.12)] ring-1 ring-brand-primary/20">
+              <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-3xl bg-linear-to-br from-brand-primary/15 to-emerald-500/10 shadow-[0_0_40px_rgba(16,185,129,0.12)] ring-1 ring-brand-primary/20">
                 <DSIcon name="gift" size={36} className="text-brand-primary" />
               </div>
 
@@ -232,7 +231,7 @@ function AffiliateDashboardView() {
       const link = linkData?.referral_link
       if (!link) { setQrDataUrl(''); return }
       try {
-        const dataUrl = await QRCodeLib.toDataURL(link, {
+        const dataUrl = await (await import('qrcode')).default.toDataURL(link, {
           margin: 1,
           width: 340,
           color: { dark: '#0a0f0a', light: '#ffffff' },
@@ -424,7 +423,7 @@ function AffiliateDashboardView() {
                     Baixar QR
                   </Button>
                   <Button variant="outline" size="sm" onClick={shareWhatsApp}>
-                    <DSIcon name="messageCircle" size={14} className="text-green-500" />
+                    <DSIcon name="messageCircle" size={14} className="text-emerald-500" />
                     WhatsApp
                   </Button>
                   <Button variant="outline" size="sm" onClick={copyLink}>
@@ -464,7 +463,7 @@ function AffiliateDashboardView() {
 
 const accentMap = {
   emerald: { bg: 'bg-emerald-500/10', text: 'text-emerald-400', ring: 'ring-emerald-500/10' },
-  green: { bg: 'bg-green-500/10', text: 'text-green-400', ring: 'ring-green-500/10' },
+  green: { bg: 'bg-emerald-500/10', text: 'text-emerald-400', ring: 'ring-emerald-500/10' },
   amber: { bg: 'bg-amber-500/10', text: 'text-amber-400', ring: 'ring-amber-500/10' },
   blue: { bg: 'bg-blue-500/10', text: 'text-blue-400', ring: 'ring-blue-500/10' },
 }
@@ -571,12 +570,12 @@ function OverviewTab({ commissions }: { commissions: { id: string; amount: numbe
           <div className="flex items-center gap-3">
             <div className={cn(
               'flex h-9 w-9 shrink-0 items-center justify-center rounded-xl',
-              c.status === 'paid' ? 'bg-green-500/10' : 'bg-amber-500/10',
+              c.status === 'paid' ? 'bg-emerald-500/10' : 'bg-amber-500/10',
             )}>
               <DSIcon
                 name={c.status === 'paid' ? 'checkCircle2' : 'clock'}
                 size={16}
-                className={c.status === 'paid' ? 'text-green-400' : 'text-amber-400'}
+                className={c.status === 'paid' ? 'text-emerald-400' : 'text-amber-400'}
               />
             </div>
             <div>
@@ -639,7 +638,7 @@ function ReferralsTab() {
           </div>
           <div className="text-right flex items-center gap-3">
             <div>
-              <p className="text-sm font-bold tabular-nums text-green-400">{formatCurrency(r.total_commission_earned)}</p>
+              <p className="text-sm font-bold tabular-nums text-emerald-400">{formatCurrency(r.total_commission_earned)}</p>
             </div>
             <Badge variant={r.status === 'active' ? 'success' : r.status === 'churned' ? 'error' : 'warning'}>
               {r.status === 'active' ? 'Ativo' : r.status === 'churned' ? 'Inativo' : 'Pendente'}
@@ -694,12 +693,12 @@ function CommissionsTab() {
           <div className="flex items-center gap-3">
             <div className={cn(
               'flex h-9 w-9 shrink-0 items-center justify-center rounded-xl',
-              c.status === 'paid' ? 'bg-green-500/10' : 'bg-amber-500/10',
+              c.status === 'paid' ? 'bg-emerald-500/10' : 'bg-amber-500/10',
             )}>
               <DSIcon
                 name={c.status === 'paid' ? 'checkCircle2' : 'clock'}
                 size={16}
-                className={c.status === 'paid' ? 'text-green-400' : 'text-amber-400'}
+                className={c.status === 'paid' ? 'text-emerald-400' : 'text-amber-400'}
               />
             </div>
             <div>

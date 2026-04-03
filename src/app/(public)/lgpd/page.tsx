@@ -65,7 +65,7 @@ export default function LgpdPage() {
           {RIGHTS.map((right) => (
             <div
               key={right.title}
-              className="group rounded-2xl border border-white/8 bg-white/3 p-6 transition-all duration-300 hover:border-brand-primary/25 hover:shadow-[0_0_30px_rgba(34,197,94,0.06)]"
+              className="group rounded-2xl border border-white/8 bg-white/3 p-6 transition-all duration-300 hover:border-brand-primary/25 hover:shadow-[0_0_30px_rgba(16,185,129,0.06)]"
             >
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary mb-4 transition-all duration-300 group-hover:scale-110 group-hover:-rotate-6">
                 <DSIcon name={right.icon} size={20} />

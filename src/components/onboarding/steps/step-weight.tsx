@@ -135,7 +135,7 @@ export function StepWeight() {
           <div className="space-y-1">
             <div className="relative h-2 w-full overflow-hidden rounded-full bg-white/10">
               <div
-                className="absolute top-0 left-0 h-full rounded-full bg-linear-to-r from-blue-400 via-green-400 to-orange-400"
+                className="absolute top-0 left-0 h-full rounded-full bg-linear-to-r from-blue-400 via-emerald-400 to-orange-400"
                 style={{ width: '100%' }}
               />
               {/* Indicator */}

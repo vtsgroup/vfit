@@ -42,7 +42,7 @@ export function ArticleShare({ title, slug }: ArticleShareProps) {
         href={`https://wa.me/?text=${encodedTitle}%20${encodedUrl}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/8 bg-white/3 text-zinc-400 transition-all duration-300 hover:border-green-500/30 hover:text-green-400 hover:shadow-[0_0_12px_rgba(34,197,94,0.12)]"
+        className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/8 bg-white/3 text-zinc-400 transition-all duration-300 hover:border-emerald-500/30 hover:text-emerald-400 hover:shadow-[0_0_12px_rgba(16,185,129,0.12)]"
         aria-label="Compartilhar no WhatsApp"
       >
         <DSIcon name="message" size={14} />
@@ -74,7 +74,7 @@ export function ArticleShare({ title, slug }: ArticleShareProps) {
 
       <button
         onClick={handleCopy}
-        className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/8 bg-white/3 text-zinc-400 transition-all duration-300 hover:border-brand-primary/30 hover:text-brand-primary hover:shadow-[0_0_12px_rgba(34,197,94,0.12)]"
+        className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/8 bg-white/3 text-zinc-400 transition-all duration-300 hover:border-brand-primary/30 hover:text-brand-primary hover:shadow-[0_0_12px_rgba(16,185,129,0.12)]"
         aria-label="Copiar link"
       >
         <DSIcon name="link" size={14} />

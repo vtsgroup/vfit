@@ -61,7 +61,7 @@ const PLAN_CONFIGS: Record<string, PlanConfig> = {
     containerClass: 'border-brand-primary/25 bg-brand-primary/5 hover:bg-brand-primary/10',
     iconClass: 'bg-brand-primary/15 text-brand-primary',
     textClass: 'text-brand-primary',
-    glow: 'shadow-[0_0_12px_rgba(34,197,94,0.1)]',
+    glow: 'shadow-[0_0_12px_rgba(16,185,129,0.1)]',
     pulseColor: 'bg-emerald-400',
     canUpgrade: true,
     sidebarContainer: 'border-emerald-500/15 bg-emerald-500/5 hover:bg-emerald-500/10',

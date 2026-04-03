@@ -20,7 +20,6 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { DSIcon } from '@/components/ui/ds-icon'
 import Papa from 'papaparse'
-import * as XLSX from 'xlsx'
 import { AuthGuard } from '@/components/auth'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -149,8 +148,9 @@ export default function ImportStudentsPage() {
       })
     } else if (ext === 'xlsx' || ext === 'xls') {
       const reader = new FileReader()
-      reader.onload = (e) => {
+      reader.onload = async (e) => {
         try {
+          const XLSX = await import('xlsx')
           const workbook = XLSX.read(e.target?.result, { type: 'binary' })
           const sheetName = workbook.SheetNames[0]
           const sheet = workbook.Sheets[sheetName]

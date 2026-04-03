@@ -247,8 +247,8 @@ export function Footer() {
           {/* Status indicator */}
           <div className="flex items-center gap-1.5 text-white/60 sm:gap-2">
             <span className="relative flex h-1.5 w-1.5 sm:h-2 sm:w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
-              <span className="relative inline-flex h-full w-full rounded-full bg-green-500" />
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex h-full w-full rounded-full bg-emerald-500" />
             </span>
             <span className="text-[9px] uppercase sm:text-[10px]" style={monoLabel}><span className="hidden sm:inline">Sistemas </span>Online</span>
           </div>
@@ -278,7 +278,7 @@ export function Footer() {
             aria-label="Voltar ao topo"
           >
             VOLTAR AO TOPO
-            <span className="flex h-8 w-8 items-center justify-center rounded-xl border border-white/10 bg-white/4 transition-all duration-200 group-hover:border-brand-primary/40 group-hover:bg-brand-primary/10 group-hover:shadow-[0_0_12px_rgba(34,197,94,0.15)]">
+            <span className="flex h-8 w-8 items-center justify-center rounded-xl border border-white/10 bg-white/4 transition-all duration-200 group-hover:border-brand-primary/40 group-hover:bg-brand-primary/10 group-hover:shadow-[0_0_12px_rgba(16,185,129,0.15)]">
               <DSIcon name="arrowUp" size={14} />
             </span>
           </button>

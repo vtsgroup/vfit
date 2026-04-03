@@ -319,7 +319,7 @@ export function CalendarWeekly() {
                 className={cn(
                   'relative h-9 rounded-lg px-4 text-sm font-bold transition-all duration-200',
                   view === 'weekly'
-                    ? 'bg-brand-primary text-bg-dark shadow-[0_2px_0_0_#166534,0_4px_12px_rgba(34,197,94,0.25)] -translate-y-px'
+                    ? 'bg-brand-primary text-bg-dark shadow-[0_2px_0_0_#065F46,0_4px_12px_rgba(16,185,129,0.25)] -translate-y-px'
                     : 'text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200'
                 )}
               >
@@ -331,7 +331,7 @@ export function CalendarWeekly() {
                 className={cn(
                   'relative h-9 rounded-lg px-4 text-sm font-bold transition-all duration-200',
                   view === 'daily'
-                    ? 'bg-brand-primary text-bg-dark shadow-[0_2px_0_0_#166534,0_4px_12px_rgba(34,197,94,0.25)] -translate-y-px'
+                    ? 'bg-brand-primary text-bg-dark shadow-[0_2px_0_0_#065F46,0_4px_12px_rgba(16,185,129,0.25)] -translate-y-px'
                     : 'text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200'
                 )}
               >

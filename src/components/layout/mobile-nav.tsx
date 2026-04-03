@@ -634,9 +634,9 @@ export function MobileBottomNav() {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.04, type: 'spring', damping: 25, stiffness: 300 }}
                       onClick={() => handleQuickAction(action)}
-                      className="flex flex-col items-center gap-2 rounded-xl border-none bg-transparent px-2 py-3.5 transition-all duration-300 hover:bg-brand-primary/8 hover:shadow-[0_8px_22px_rgba(34,197,94,0.12)] active:scale-[0.95]"
+                      className="flex flex-col items-center gap-2 rounded-xl border-none bg-transparent px-2 py-3.5 transition-all duration-300 hover:bg-brand-primary/8 hover:shadow-[0_8px_22px_rgba(16,185,129,0.12)] active:scale-[0.95]"
                     >
-                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-brand-primary/12 text-brand-primary shadow-[0_2px_8px_rgba(34,197,94,0.12)] border border-brand-primary/15">
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-brand-primary/12 text-brand-primary shadow-[0_2px_8px_rgba(16,185,129,0.12)] border border-brand-primary/15">
                         {action.icon}
                       </div>
                       <span className="text-center text-[11px] font-semibold leading-tight text-text-primary">
@@ -859,7 +859,7 @@ export function MobileDrawer() {
                   src="/images/logo-transparent-96.webp"
                   alt="VFIT"
                   className="h-6 w-auto"
-                  style={{ filter: 'drop-shadow(0 0 8px rgba(34,197,94,0.35))' }}
+                  style={{ filter: 'drop-shadow(0 0 8px rgba(16,185,129,0.35))' }}
                 />
                 <span className="ml-2 inline-flex h-4 w-4 items-center justify-center rounded-full border-[1.5px] border-white/55 bg-white/6 text-[10px] font-extrabold text-white/80 leading-none shrink-0">+</span>
                 <span className="ml-1.5 text-[16px] text-white tracking-[0.05em]" style={{ fontWeight: 900, lineHeight: '24px' }}>PERSONAL</span>
@@ -895,14 +895,14 @@ export function MobileDrawer() {
                             className={cn(
                               'group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-[13px] font-medium transition-all duration-200',
                               isActive
-                                ? 'bg-brand-primary/10 border border-brand-primary/25 text-white font-semibold shadow-[0_0_20px_rgba(34,197,94,0.1),inset_0_1px_0_rgba(34,197,94,0.08)]'
+                                ? 'bg-brand-primary/10 border border-brand-primary/25 text-white font-semibold shadow-[0_0_20px_rgba(16,185,129,0.1),inset_0_1px_0_rgba(16,185,129,0.08)]'
                                 : 'text-white/50 hover:bg-white/6 hover:text-white/85 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] hover:translate-x-0.5 active:scale-[0.97] active:bg-white/3'
                             )}
                           >
                             {isActive && (
-                              <span className="absolute left-0 top-1/2 -translate-y-1/2 h-6 w-0.75 rounded-r-full bg-brand-primary shadow-[0_0_12px_rgba(34,197,94,0.5),0_0_4px_rgba(34,197,94,0.8)] animate-[sidebar-accent-breathe_3s_ease-in-out_infinite]" />
+                              <span className="absolute left-0 top-1/2 -translate-y-1/2 h-6 w-0.75 rounded-r-full bg-brand-primary shadow-[0_0_12px_rgba(16,185,129,0.5),0_0_4px_rgba(16,185,129,0.8)] animate-[sidebar-accent-breathe_3s_ease-in-out_infinite]" />
                             )}
-                            <DSIcon name={item.icon} size={18} className={cn('shrink-0 transition-all duration-200', isActive ? 'text-brand-primary scale-110 drop-shadow-[0_0_6px_rgba(34,197,94,0.5)]' : cn(sectionColor, 'group-hover:scale-110 group-hover:drop-shadow-[0_0_5px_rgba(255,255,255,0.15)]'))} />
+                            <DSIcon name={item.icon} size={18} className={cn('shrink-0 transition-all duration-200', isActive ? 'text-brand-primary scale-110 drop-shadow-[0_0_6px_rgba(16,185,129,0.5)]' : cn(sectionColor, 'group-hover:scale-110 group-hover:drop-shadow-[0_0_5px_rgba(255,255,255,0.15)]'))} />
                             {item.label}
                             {item.badge && (
                               <span className="ml-auto rounded-md bg-brand-primary/20 border border-brand-primary/30 px-1.5 py-0.5 text-[10px] font-bold text-brand-primary"

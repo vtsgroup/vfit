@@ -45,7 +45,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               'placeholder:text-text-muted/60 light:placeholder:text-slate-400',
               'transition-all duration-200 ease-out',
               'focus-visible:outline-none focus-visible:border-brand-primary/40',
-              'focus-visible:shadow-[0_0_0_3px_rgba(34,197,94,0.12),0_0_16px_rgba(34,197,94,0.08)]',
+              'focus-visible:shadow-[0_0_0_3px_rgba(16,185,129,0.12),0_0_16px_rgba(16,185,129,0.08)]',
               'disabled:cursor-not-allowed disabled:opacity-50',
               error
                 ? 'border-error/60 focus-visible:border-error focus-visible:shadow-[0_0_0_3px_rgba(239,68,68,0.12),0_0_16px_rgba(239,68,68,0.08)]'

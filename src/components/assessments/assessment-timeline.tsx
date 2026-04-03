@@ -96,7 +96,7 @@ export function AssessmentTimeline({
                 className={cn(
                   'relative z-10 flex h-5 w-5 items-center justify-center rounded-full border-2 transition-colors',
                   isFirst
-                    ? 'border-brand-primary bg-brand-primary shadow-[0_0_8px_rgba(34,197,94,0.4)]'
+                    ? 'border-brand-primary bg-brand-primary shadow-[0_0_8px_rgba(16,185,129,0.4)]'
                     : 'border-white/20 bg-surface-elevated group-hover:border-brand-primary/50'
                 )}
               >

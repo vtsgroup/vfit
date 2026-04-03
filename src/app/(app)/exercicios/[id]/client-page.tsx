@@ -27,7 +27,7 @@ const DETAIL_TABS: { id: DetailTab; label: string; icon: string }[] = [
 ]
 
 const DIFFICULTY_MAP: Record<string, { label: string; color: string }> = {
-  beginner: { label: 'Iniciante', color: 'bg-green-500/15 text-green-400 border-green-500/20' },
+  beginner: { label: 'Iniciante', color: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/20' },
   intermediate: { label: 'Intermediário', color: 'bg-amber-500/15 text-amber-400 border-amber-500/20' },
   advanced: { label: 'Avançado', color: 'bg-red-500/15 text-red-400 border-red-500/20' },
 }
@@ -109,6 +109,7 @@ export default function ExerciseDetailPage() {
     return (
       <div className="mx-auto max-w-lg px-4 pt-6">
         <button
+          aria-label="Voltar"
           type="button"
           onClick={() => router.back()}
           className="mb-6 flex items-center gap-1 text-[13px] text-brand-primary"
@@ -133,6 +134,7 @@ export default function ExerciseDetailPage() {
       {/* Header with back + favorite */}
       <div className="mb-4 flex items-center justify-between">
         <button
+          aria-label="Voltar"
           type="button"
           onClick={() => router.back()}
           className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/8 bg-white/3 text-zinc-400 hover:text-white transition-all"

@@ -33,7 +33,7 @@ export function ArticleRelated({ posts }: ArticleRelatedProps) {
           <Link
             key={post.slug}
             href={`/blog/${post.slug}`}
-            className="group flex gap-4 rounded-xl bg-white/3 p-3 transition-all duration-300 hover:bg-white/6 hover:shadow-[0_0_20px_rgba(34,197,94,0.04)]"
+            className="group flex gap-4 rounded-xl bg-white/3 p-3 transition-all duration-300 hover:bg-white/6 hover:shadow-[0_0_20px_rgba(16,185,129,0.04)]"
           >
             <div className="relative h-16 w-24 shrink-0 overflow-hidden rounded-lg">
               <Image

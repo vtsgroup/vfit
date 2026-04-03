@@ -30,7 +30,7 @@ function Shimmer({ className, style }: { className?: string; style?: React.CSSPr
       <div
         className="absolute inset-0"
         style={{
-          background: 'linear-gradient(90deg, transparent 0%, rgba(34,197,94,0.06) 40%, rgba(74,222,128,0.10) 50%, rgba(34,197,94,0.06) 60%, transparent 100%)',
+          background: 'linear-gradient(90deg, transparent 0%, rgba(16,185,129,0.06) 40%, rgba(52,211,153,0.10) 50%, rgba(16,185,129,0.06) 60%, transparent 100%)',
           backgroundSize: '200% 100%',
           animation: 'shimmer 2s linear infinite',
         }}

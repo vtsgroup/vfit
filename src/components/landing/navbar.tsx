@@ -95,7 +95,7 @@ function AnimatedLogo() {
           width={40}
           height={32}
           className="h-8 w-auto transition-transform duration-300 group-hover:scale-110 sm:h-7"
-          style={{ filter: 'drop-shadow(0 0 8px rgba(34,197,94,0.35))' }}
+          style={{ filter: 'drop-shadow(0 0 8px rgba(16,185,129,0.35))' }}
           priority
         />
 
@@ -108,13 +108,13 @@ function AnimatedLogo() {
             width: '22px',
             height: '22px',
             borderRadius: '50%',
-            border: '1.5px solid rgba(34,197,94,0.6)',
-            background: 'rgba(34,197,94,0.08)',
+            border: '1.5px solid rgba(16,185,129,0.6)',
+            background: 'rgba(16,185,129,0.08)',
             fontSize: '13px',
             fontWeight: 800,
-            color: 'rgba(34,197,94,0.9)',
+            color: 'rgba(16,185,129,0.9)',
             lineHeight: 1,
-            boxShadow: '0 0 10px rgba(34,197,94,0.15)',
+            boxShadow: '0 0 10px rgba(16,185,129,0.15)',
           }}
         >
           +
@@ -150,8 +150,8 @@ function AnimatedLogo() {
             style={{
               opacity: showIA ? 1 : 0,
               transform: showIA ? 'translateY(0) scale(1)' : 'translateY(4px) scale(0.8)',
-              color: '#22C55E',
-              textShadow: showIA ? '0 0 12px rgba(34,197,94,0.4)' : 'none',
+              color: '#10B981',
+              textShadow: showIA ? '0 0 12px rgba(16,185,129,0.4)' : 'none',
             }}
           >
             IA
@@ -241,7 +241,7 @@ export function Navbar() {
         <nav className="mx-auto max-w-7xl flex items-center justify-between px-5 py-3 lg:px-6">
 
           {/* ===== Left: Animated Logo ===== */}
-          <div className={`transition-all duration-500 ${scrolled ? 'drop-shadow-[0_0_8px_rgba(34,197,94,0.25)]' : ''}`}>
+          <div className={`transition-all duration-500 ${scrolled ? 'drop-shadow-[0_0_8px_rgba(16,185,129,0.25)]' : ''}`}>
             <AnimatedLogo />
           </div>
 
@@ -307,7 +307,7 @@ export function Navbar() {
                           onClick={() => setActiveDropdown(null)}
                           className="flex items-start gap-3 rounded-xl px-3.5 py-3 transition-all duration-150 hover:bg-white/6 group"
                         >
-                          <div className="mt-0.5 shrink-0 flex h-9 w-9 items-center justify-center rounded-xl bg-white/4 ring-1 ring-white/8 transition-all duration-200 group-hover:bg-brand-primary/10 group-hover:ring-brand-primary/25 group-hover:shadow-[0_0_16px_rgba(34,197,94,0.15)]">
+                          <div className="mt-0.5 shrink-0 flex h-9 w-9 items-center justify-center rounded-xl bg-white/4 ring-1 ring-white/8 transition-all duration-200 group-hover:bg-brand-primary/10 group-hover:ring-brand-primary/25 group-hover:shadow-[0_0_16px_rgba(16,185,129,0.15)]">
                             <DSIcon name={sub.icon} size={16} className="text-white/40 transition-colors group-hover:text-brand-primary" />
                           </div>
                           <div className="flex-1">
@@ -376,7 +376,7 @@ export function Navbar() {
                   cta: 'entrar_mobile_header',
                 })
               }
-              className="group relative inline-flex h-8 items-center gap-1.5 rounded-xl border border-white/15 bg-white/8 px-3.5 text-[11px] font-bold uppercase tracking-wider text-white/90 backdrop-blur-sm transition-all duration-200 active:scale-95 hover:border-brand-primary/40 hover:bg-brand-primary/10 hover:text-white hover:shadow-[0_0_16px_rgba(34,197,94,0.15)]"
+              className="group relative inline-flex h-8 items-center gap-1.5 rounded-xl border border-white/15 bg-white/8 px-3.5 text-[11px] font-bold uppercase tracking-wider text-white/90 backdrop-blur-sm transition-all duration-200 active:scale-95 hover:border-brand-primary/40 hover:bg-brand-primary/10 hover:text-white hover:shadow-[0_0_16px_rgba(16,185,129,0.15)]"
               style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08)' }}
             >
               <DSIcon name="logIn" size={13} className="text-brand-primary/70 transition-colors duration-200 group-hover:text-brand-primary" />
@@ -454,7 +454,7 @@ export function Navbar() {
               width={32}
               height={26}
               className="h-6 w-auto"
-              style={{ filter: 'drop-shadow(0 0 6px rgba(34,197,94,0.3))' }}
+              style={{ filter: 'drop-shadow(0 0 6px rgba(16,185,129,0.3))' }}
             />
             <span className="text-sm font-bold text-white/80">VFIT</span>
           </Link>

@@ -54,6 +54,7 @@ export default function ExerciseProgressPage() {
       {/* Header */}
       <div className="mb-5 flex items-center gap-3">
         <button
+          aria-label="Voltar"
           onClick={() => router.back()}
           className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5"
         >
@@ -131,7 +132,7 @@ export default function ExerciseProgressPage() {
               </div>
               <MiniBarChart
                 data={weightChartData.slice(-14)}
-                color="#22C55E"
+                color="#10B981"
                 height={110}
               />
             </div>

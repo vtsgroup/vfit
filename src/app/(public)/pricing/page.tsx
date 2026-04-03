@@ -158,15 +158,15 @@ export default function PricingPage() {
       <div className="mx-auto max-w-6xl space-y-20 px-6 pb-24">
         {/* Trust badges */}
         <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-zinc-400">
-          <div className="group flex items-center gap-2 rounded-xl border border-white/8 bg-white/3 px-4 py-2.5 backdrop-blur-sm transition-all duration-300 hover:border-brand-primary/20 hover:shadow-[0_0_16px_rgba(34,197,94,0.06)]">
+          <div className="group flex items-center gap-2 rounded-xl border border-white/8 bg-white/3 px-4 py-2.5 backdrop-blur-sm transition-all duration-300 hover:border-brand-primary/20 hover:shadow-[0_0_16px_rgba(16,185,129,0.06)]">
             <DSIcon name="shield" size={16} className="text-emerald-400 transition-transform duration-300 group-hover:scale-110" />
             <span>Sem cartão de crédito</span>
           </div>
-          <div className="group flex items-center gap-2 rounded-xl border border-white/8 bg-white/3 px-4 py-2.5 backdrop-blur-sm transition-all duration-300 hover:border-brand-primary/20 hover:shadow-[0_0_16px_rgba(34,197,94,0.06)]">
+          <div className="group flex items-center gap-2 rounded-xl border border-white/8 bg-white/3 px-4 py-2.5 backdrop-blur-sm transition-all duration-300 hover:border-brand-primary/20 hover:shadow-[0_0_16px_rgba(16,185,129,0.06)]">
             <DSIcon name="creditCard" size={16} className="text-emerald-400 transition-transform duration-300 group-hover:scale-110" />
             <span>Cancele quando quiser</span>
           </div>
-          <div className="group flex items-center gap-2 rounded-xl border border-white/8 bg-white/3 px-4 py-2.5 backdrop-blur-sm transition-all duration-300 hover:border-brand-primary/20 hover:shadow-[0_0_16px_rgba(34,197,94,0.06)]">
+          <div className="group flex items-center gap-2 rounded-xl border border-white/8 bg-white/3 px-4 py-2.5 backdrop-blur-sm transition-all duration-300 hover:border-brand-primary/20 hover:shadow-[0_0_16px_rgba(16,185,129,0.06)]">
             <DSIcon name="flame" size={16} className="text-emerald-400 transition-transform duration-300 group-hover:scale-110" />
             <span>Setup em 2 minutos</span>
           </div>

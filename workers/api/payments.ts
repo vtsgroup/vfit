@@ -2731,6 +2731,14 @@ async function calculateAffiliateCommission(
  * Processar comissão quando pagamento é confirmado
  */
 async function processAffiliateCommission(env: Bindings, payment: PaymentRow): Promise<void> {
+  // T10.3 — Idempotência: pular se comissão já foi registrada para este pagamento
+  const { rows: existingComm } = await pgQuery<{ id: string }>(
+    env,
+    'SELECT id FROM affiliate_commissions WHERE payment_id = $1 LIMIT 1',
+    [payment.id]
+  )
+  if (existingComm.length > 0) return
+
   const { rows: referralRows } = await pgQuery<{
     id: string; affiliate_id: string; commission_percentage: number
   }>(

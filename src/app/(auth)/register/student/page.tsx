@@ -267,13 +267,13 @@ export default function RegisterStudentPage() {
           <div className="relative overflow-hidden h-48 sm:h-52 lg:h-52 xl:h-56">
             {/* Background layers */}
             <div className="absolute inset-0 bg-linear-to-br from-[#020810] via-[#071a12] to-[#051020]" />
-            <div className="absolute inset-0 opacity-40" style={{ background: 'radial-gradient(ellipse 80% 70% at 30% 80%, rgba(34,197,94,0.25) 0%, transparent 60%)' }} />
+            <div className="absolute inset-0 opacity-40" style={{ background: 'radial-gradient(ellipse 80% 70% at 30% 80%, rgba(16,185,129,0.25) 0%, transparent 60%)' }} />
             <div className="absolute inset-0 opacity-20" style={{ background: 'radial-gradient(ellipse 60% 60% at 80% 20%, rgba(56,189,248,0.15) 0%, transparent 55%)' }} />
 
             {/* Grid */}
             <div
               className="absolute inset-0 opacity-[0.04]"
-              style={{ backgroundImage: 'linear-gradient(rgba(34,197,94,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(34,197,94,0.4) 1px, transparent 1px)', backgroundSize: '60px 60px' }}
+              style={{ backgroundImage: 'linear-gradient(rgba(16,185,129,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(16,185,129,0.4) 1px, transparent 1px)', backgroundSize: '60px 60px' }}
             />
 
             {/* Particles */}
@@ -294,7 +294,7 @@ export default function RegisterStudentPage() {
             <div className="relative z-10 flex items-start justify-center pt-6 sm:pt-8 h-full lg:hidden">
               <Link href="/" className="flex items-center gap-2 group">
                 <span
-                  className="text-[36px] sm:text-[42px] text-white drop-shadow-[0_2px_16px_rgba(34,197,94,0.4)]"
+                  className="text-[36px] sm:text-[42px] text-white drop-shadow-[0_2px_16px_rgba(16,185,129,0.4)]"
                   style={{ fontFamily: 'Inter, sans-serif', fontWeight: 900, letterSpacing: '-0.03em' }}
                 >
                   PERSONAL
@@ -305,7 +305,7 @@ export default function RegisterStudentPage() {
                   width={56}
                   height={44}
                   className="w-auto transition-transform duration-300 group-hover:scale-110"
-                  style={{ height: '44px', filter: 'drop-shadow(0 0 20px rgba(34,197,94,0.7))' }}
+                  style={{ height: '44px', filter: 'drop-shadow(0 0 20px rgba(16,185,129,0.7))' }}
                   priority
                 />
               </Link>
@@ -321,8 +321,8 @@ export default function RegisterStudentPage() {
               <div className="flex items-end gap-4" style={{ animation: 'slideUp 0.6s ease-out' }}>
                 {/* Photo — overlapping cover, vivid green */}
                 <div className="relative shrink-0">
-                  <div className="absolute -inset-2.5 rounded-2xl bg-linear-to-br from-emerald-400/45 via-green-400/30 to-emerald-400/45 blur-xl opacity-90 animate-pulse" />
-                  <div className="relative h-26 w-26 rounded-2xl bg-linear-to-br from-emerald-400 via-green-400 to-emerald-500 p-0.75 shadow-[0_0_50px_rgba(34,197,94,0.5)] ring-[3px] ring-[#0b1120]">
+                  <div className="absolute -inset-2.5 rounded-2xl bg-linear-to-br from-emerald-400/45 via-emerald-400/30 to-emerald-400/45 blur-xl opacity-90 animate-pulse" />
+                  <div className="relative h-26 w-26 rounded-2xl bg-linear-to-br from-emerald-400 via-emerald-400 to-emerald-500 p-0.75 shadow-[0_0_50px_rgba(16,185,129,0.5)] ring-[3px] ring-[#0b1120]">
                     <div className="h-full w-full rounded-lg overflow-hidden bg-[#0a1628]">
                       {(() => {
                         const photoUrl = normalizePhotoUrl(personalInfo.personal_photo)
@@ -337,7 +337,7 @@ export default function RegisterStudentPage() {
                           )
                         }
                         return (
-                          <div className="flex h-full w-full items-center justify-center bg-linear-to-br from-emerald-500/20 to-green-500/10">
+                          <div className="flex h-full w-full items-center justify-center bg-linear-to-br from-emerald-500/20 to-emerald-500/10">
                             <span className="text-2xl font-black text-emerald-400">
                               {personalInfo.personal_name.split(' ').map(w => w[0]).slice(0, 2).join('')}
                             </span>

@@ -48,7 +48,7 @@ export function SignaturePad({ onSign, onCancel, personalName, cref, isSigning }
     ctx.scale(2, 2)
 
     // Style
-    ctx.strokeStyle = '#22C55E'
+    ctx.strokeStyle = '#10B981'
     ctx.lineWidth = 2.5
     ctx.lineCap = 'round'
     ctx.lineJoin = 'round'
@@ -62,7 +62,7 @@ export function SignaturePad({ onSign, onCancel, personalName, cref, isSigning }
     ctx.stroke()
 
     // Reset stroke style
-    ctx.strokeStyle = '#22C55E'
+    ctx.strokeStyle = '#10B981'
     ctx.lineWidth = 2.5
   }, [])
 
@@ -122,7 +122,7 @@ export function SignaturePad({ onSign, onCancel, personalName, cref, isSigning }
     ctx.lineTo(rect.width - 20, rect.height - 30)
     ctx.stroke()
 
-    ctx.strokeStyle = '#22C55E'
+    ctx.strokeStyle = '#10B981'
     ctx.lineWidth = 2.5
     setHasSignature(false)
   }

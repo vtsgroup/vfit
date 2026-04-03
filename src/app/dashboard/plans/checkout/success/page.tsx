@@ -218,7 +218,7 @@ function CardSuccess({ planName, amount }: {
     <div className="space-y-6 max-w-md mx-auto text-center">
       {/* Success animation */}
       <div>
-        <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-3xl bg-brand-primary/10 shadow-[0_0_40px_rgba(34,197,94,0.15)]">
+        <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-3xl bg-brand-primary/10 shadow-[0_0_40px_rgba(16,185,129,0.15)]">
           <DSIcon name="check" size={36} className="text-brand-primary" />
         </div>
         <h1 className="text-2xl font-black text-text-primary tracking-tight">

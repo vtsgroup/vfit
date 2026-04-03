@@ -52,7 +52,7 @@ export function FilterPills({ options, selected, onChange, className }: FilterPi
             className={cn(
               'inline-flex cursor-pointer items-center gap-1.5 rounded-[10px] border-[1.5px] px-4.5 py-2 text-[13px] font-semibold transition-all duration-200 ease-out-expo select-none',
               isActive
-                ? 'border-brand-deep bg-linear-to-b from-brand-primary-hover to-brand-primary text-white shadow-[0_2px_0_#047857,0_4px_8px_rgba(34,197,94,0.25)] [text-shadow:0_1px_2px_rgba(0,0,0,0.15)]'
+                ? 'border-brand-deep bg-linear-to-b from-brand-primary-hover to-brand-primary text-white shadow-[0_2px_0_#047857,0_4px_8px_rgba(16,185,129,0.25)] [text-shadow:0_1px_2px_rgba(0,0,0,0.15)]'
                 : 'border-border-light bg-bg-secondary/88 text-text-secondary shadow-[0_2px_0_rgba(255,255,255,0.06),0_4px_8px_rgba(0,0,0,0.04)] hover:-translate-y-px hover:border-border-light hover:text-brand-primary hover:shadow-[0_3px_0_rgba(255,255,255,0.08),0_6px_12px_rgba(0,0,0,0.06)] active:translate-y-0.5 active:shadow-[0_0px_0_rgba(255,255,255,0.06)]'
             )}
           >

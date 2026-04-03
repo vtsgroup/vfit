@@ -8,12 +8,14 @@
 
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
+import { useQueryClient } from '@tanstack/react-query'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
-import { useCurrentPlan } from '@/hooks/use-plans'
+import { useCurrentPlan, useSavePlan } from '@/hooks/use-plans'
 import type { PlanDay } from '@/hooks/use-plans'
+import { useAuthStore } from '@/stores/auth-store'
 
 const MUSCLE_EMOJI: Record<string, string> = {
   chest: '🫁',
@@ -37,8 +39,45 @@ function getGreeting(): string {
 
 export default function PlanoPage() {
   const router = useRouter()
+  const queryClient = useQueryClient()
+  const isReady = useAuthStore((s) => s.isAuthenticated && s.isHydrated)
   const { data: plan, isLoading, error } = useCurrentPlan()
   const [activeDay, setActiveDay] = useState(1)
+  const savePlan = useSavePlan()
+  const hasSavedPending = useRef(false)
+
+  // ─── T6: Auto-save plan from sessionStorage (post-onboarding) ───
+  // When user completes onboarding, the generated plan sits in sessionStorage.
+  // As soon as they're authenticated and /plans/current returns empty, we save it.
+  useEffect(() => {
+    if (!isReady || isLoading || plan || hasSavedPending.current) return
+
+    const stored = sessionStorage.getItem('vfit_plan')
+    if (!stored) return
+
+    try {
+      const planData = JSON.parse(stored) as { plan: Record<string, unknown> }
+      if (!planData?.plan) return
+
+      hasSavedPending.current = true
+      savePlan.mutate(
+        { plan: planData.plan },
+        {
+          onSuccess: () => {
+            sessionStorage.removeItem('vfit_plan')
+            queryClient.invalidateQueries({ queryKey: ['plans', 'current'] })
+          },
+          onError: () => {
+            // allow retry on next render
+            hasSavedPending.current = false
+          },
+        }
+      )
+    } catch {
+      // malformed JSON — discard
+      sessionStorage.removeItem('vfit_plan')
+    }
+  }, [isReady, isLoading, plan, savePlan, queryClient])
 
   // Dia ativo
   const currentDay: PlanDay | undefined = useMemo(() => {

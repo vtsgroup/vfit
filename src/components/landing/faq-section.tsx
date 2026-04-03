@@ -105,7 +105,7 @@ function AccordionItem({ item, isOpen, toggle, index }: { item: FaqItem; isOpen:
   return (
     <div className={`rounded-xl transition-all duration-300 ${
       isOpen
-        ? 'bg-brand-primary/4 ring-1 ring-brand-primary/15 shadow-[0_0_20px_rgba(34,197,94,0.06)]'
+        ? 'bg-brand-primary/4 ring-1 ring-brand-primary/15 shadow-[0_0_20px_rgba(16,185,129,0.06)]'
         : 'hover:bg-gray-50'
     } ${index > 0 ? 'mt-2' : ''}`}>
       <button
@@ -118,7 +118,7 @@ function AccordionItem({ item, isOpen, toggle, index }: { item: FaqItem; isOpen:
         {/* Number indicator */}
         <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-[10px] font-bold transition-all duration-300 ${
           isOpen
-            ? 'bg-brand-primary/10 text-brand-primary shadow-[0_0_12px_rgba(34,197,94,0.12)]'
+            ? 'bg-brand-primary/10 text-brand-primary shadow-[0_0_12px_rgba(16,185,129,0.12)]'
             : 'bg-gray-100 text-gray-400'
         }`} style={monoLabel}>
           {String(index + 1).padStart(2, '0')}
@@ -143,7 +143,7 @@ function AccordionItem({ item, isOpen, toggle, index }: { item: FaqItem; isOpen:
 
         {/* Toggle icon */}
         <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border transition-all duration-300 ${
-          isOpen ? 'border-brand-primary bg-brand-primary text-gray-900 shadow-[0_0_12px_rgba(34,197,94,0.3)]' : 'border-gray-300 text-gray-400'
+          isOpen ? 'border-brand-primary bg-brand-primary text-gray-900 shadow-[0_0_12px_rgba(16,185,129,0.3)]' : 'border-gray-300 text-gray-400'
         }`}>
           <DSIcon name="plus" size={14} className={isOpen ? 'rotate-45 transition-transform duration-300' : 'transition-transform duration-300'} />
         </span>

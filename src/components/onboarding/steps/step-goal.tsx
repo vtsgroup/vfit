@@ -39,7 +39,7 @@ const GOAL_OPTIONS: GoalOption[] = [
     label: 'Definir corpo',
     subtitle: 'Tonificar e marcar músculos',
     icon: 'sparkles',
-    color: 'from-emerald-500/20 to-green-500/5',
+    color: 'from-emerald-500/20 to-emerald-500/5',
   },
   {
     value: 'health',

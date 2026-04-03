@@ -93,7 +93,7 @@ export default function RegisterPage() {
           {/* Personal Trainer Card — 3D with green accent */}
           <Link
             href={`/register/personal${refQuery}`}
-            className="group relative block rounded-2xl bg-linear-to-b from-[#0F1A2E] to-[#0B1322] border border-white/6 p-6 transition-all duration-300 shadow-[0_4px_0_0_#166534,0_6px_20px_rgba(0,0,0,0.3)] hover:-translate-y-1 hover:shadow-[0_6px_0_0_#166534,0_10px_30px_rgba(34,197,94,0.15)] active:translate-y-0.5 active:shadow-[0_2px_0_0_#166534,0_3px_8px_rgba(0,0,0,0.3)]"
+            className="group relative block rounded-2xl bg-linear-to-b from-[#0F1A2E] to-[#0B1322] border border-white/6 p-6 transition-all duration-300 shadow-[0_4px_0_0_#065F46,0_6px_20px_rgba(0,0,0,0.3)] hover:-translate-y-1 hover:shadow-[0_6px_0_0_#065F46,0_10px_30px_rgba(16,185,129,0.15)] active:translate-y-0.5 active:shadow-[0_2px_0_0_#065F46,0_3px_8px_rgba(0,0,0,0.3)]"
           >
             {/* Shine effect */}
             <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
@@ -103,7 +103,7 @@ export default function RegisterPage() {
             <div className="relative z-10">
               {/* Icon + Title + Arrow */}
               <div className="flex items-center gap-4 mb-4">
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-linear-to-br from-brand-primary to-[#16A34A] shadow-[0_4px_12px_rgba(34,197,94,0.3)]">
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-linear-to-br from-brand-primary to-[#16A34A] shadow-[0_4px_12px_rgba(16,185,129,0.3)]">
                   <DSIcon name="dumbbell" size={28} className="text-white" />
                 </div>
                 <div className="flex-1">

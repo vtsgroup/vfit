@@ -552,7 +552,7 @@ function StudentHeroCard({
     <div className="relative overflow-hidden rounded-2xl border border-emerald-500/15 bg-[#050A12]">
       {/* Aurora background */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_120%_80%_at_0%_100%,rgba(34,197,94,0.13)_0%,transparent_55%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_120%_80%_at_0%_100%,rgba(16,185,129,0.13)_0%,transparent_55%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_100%_0%,rgba(52,211,153,0.08)_0%,transparent_50%)]" />
         {/* Top specular */}
         <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-emerald-500/25 to-transparent" />
@@ -668,7 +668,7 @@ const ACCENT_CONFIG: Record<AccentColor, { border: string; bg: string; iconBg: s
     iconBg: 'bg-emerald-500/15',
     icon: 'text-emerald-400',
     text: 'text-emerald-300',
-    glow: 'shadow-[0_0_16px_rgba(34,197,94,0.18)]',
+    glow: 'shadow-[0_0_16px_rgba(16,185,129,0.18)]',
   },
   violet: {
     border: 'border-violet-500/25',

@@ -87,7 +87,7 @@ function XPBar({ xp, maxXp }: { xp: number; maxXp: number }) {
 function RankRow({ entry, maxXp }: { entry: RankEntry; maxXp: number }) {
   return (
     <div className={`flex items-center gap-3 px-4 py-3 transition-colors duration-200 hover:bg-white/2 sm:gap-4 sm:px-6 sm:py-3.5 ${
-      entry.pos === 1 ? 'bg-brand-primary/3 shadow-[inset_0_0_20px_rgba(34,197,94,0.06)]' : ''
+      entry.pos === 1 ? 'bg-brand-primary/3 shadow-[inset_0_0_20px_rgba(16,185,129,0.06)]' : ''
     }`}>
       <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-black ${
         entry.pos === 1 ? 'bg-brand-primary/20 text-brand-primary' :
@@ -216,7 +216,7 @@ export function GamificationSection() {
               {gameBadges.map((badge, i) => (
                 <div
                   key={badge.label}
-                  className="group flex flex-col items-center gap-2 rounded-xl border border-white/8 bg-white/3 px-3 py-4 text-center transition-all duration-300 hover:border-brand-primary/30 hover:bg-brand-primary/5 hover:shadow-[0_0_20px_rgba(34,197,94,0.08)] hover:scale-105 sm:flex-row sm:items-center sm:gap-2.5 sm:px-4 sm:py-2.5 sm:text-left lg:px-5 lg:py-3"
+                  className="group flex flex-col items-center gap-2 rounded-xl border border-white/8 bg-white/3 px-3 py-4 text-center transition-all duration-300 hover:border-brand-primary/30 hover:bg-brand-primary/5 hover:shadow-[0_0_20px_rgba(16,185,129,0.08)] hover:scale-105 sm:flex-row sm:items-center sm:gap-2.5 sm:px-4 sm:py-2.5 sm:text-left lg:px-5 lg:py-3"
                   style={{ animationDelay: `${i * 80}ms` }}
                 >
                   <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-brand-primary/10 transition-all duration-200 group-hover:bg-brand-primary/20">

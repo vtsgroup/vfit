@@ -16,6 +16,27 @@ interface NavIconProps {
 }
 
 // ============================================
+// Home — Início
+// ============================================
+export function IconHome({ active, className, size = 24 }: NavIconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      className={cn('transition-all duration-200', className)}
+    >
+      {active ? (
+        <path d="M3 10.5L12 3l9 7.5V20a1 1 0 01-1 1h-5v-6h-6v6H4a1 1 0 01-1-1V10.5z" fill="currentColor" />
+      ) : (
+        <path d="M3 10.5L12 3l9 7.5V20a1 1 0 01-1 1h-5v-6h-6v6H4a1 1 0 01-1-1V10.5z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+      )}
+    </svg>
+  )
+}
+
+// ============================================
 // Dumbbell — Treinos
 // ============================================
 export function IconDumbbell({ active, className, size = 24 }: NavIconProps) {

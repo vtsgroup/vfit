@@ -205,8 +205,8 @@ export function PricingKoyeb() {
         className="pointer-events-none absolute inset-0"
         style={{
           backgroundImage: `
-            linear-gradient(rgba(34,197,94,0.06) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(34,197,94,0.06) 1px, transparent 1px)
+            linear-gradient(rgba(16,185,129,0.06) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(16,185,129,0.06) 1px, transparent 1px)
           `,
           backgroundSize: '64px 64px',
         }}
@@ -216,8 +216,8 @@ export function PricingKoyeb() {
         className="pointer-events-none absolute inset-0 opacity-[0.02]"
         style={{
           backgroundImage: `
-            linear-gradient(45deg, rgba(34,197,94,0.15) 1px, transparent 1px),
-            linear-gradient(-45deg, rgba(34,197,94,0.15) 1px, transparent 1px)
+            linear-gradient(45deg, rgba(16,185,129,0.15) 1px, transparent 1px),
+            linear-gradient(-45deg, rgba(16,185,129,0.15) 1px, transparent 1px)
           `,
           backgroundSize: '128px 128px',
         }}
@@ -280,7 +280,7 @@ export function PricingKoyeb() {
               <div
                 className={`h-6 w-6 rounded-full transition-all duration-300 ${
                   isAnnual
-                    ? 'translate-x-5 bg-brand-primary shadow-[0_0_12px_rgba(34,197,94,0.5)]'
+                    ? 'translate-x-5 bg-brand-primary shadow-[0_0_12px_rgba(16,185,129,0.5)]'
                     : 'translate-x-0 bg-white/60'
                 }`}
               />
@@ -336,7 +336,7 @@ export function PricingKoyeb() {
                   }}
                   className={`group relative flex h-full flex-col border backdrop-blur-md transition-all duration-300 ${
                     plan.popular
-                      ? 'z-80 rounded-3xl border-2 border-brand-primary/70 bg-bg-surface-1/95 shadow-[0_0_45px_rgba(34,197,94,0.16)] lg:scale-[1.03]'
+                      ? 'z-80 rounded-3xl border-2 border-brand-primary/70 bg-bg-surface-1/95 shadow-[0_0_45px_rgba(16,185,129,0.16)] lg:scale-[1.03]'
                       : 'z-10 rounded-2xl border-white/8 bg-bg-base/92 hover:border-white/14 hover:shadow-[0_10px_30px_rgba(3,8,16,0.45)] lg:rounded-none'
                   } ${
                     plan.popular
@@ -349,13 +349,13 @@ export function PricingKoyeb() {
                   }`}
                 >
                   <div className="pointer-events-none absolute inset-0 rounded-[inherit] bg-linear-to-br from-white/5 via-transparent to-brand-primary/6" />
-                  <div className="pointer-events-none absolute inset-0 rounded-[inherit] opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{ background: 'radial-gradient(400px circle at var(--spotlight-x, 50%) var(--spotlight-y, 50%), rgba(34,197,94,0.07), transparent 60%)' }} />
+                  <div className="pointer-events-none absolute inset-0 rounded-[inherit] opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{ background: 'radial-gradient(400px circle at var(--spotlight-x, 50%) var(--spotlight-y, 50%), rgba(16,185,129,0.07), transparent 60%)' }} />
                   {plan.popular && <div className="pointer-events-none absolute inset-0 rounded-[inherit] ring-1 ring-brand-primary/40" />}
 
                   {/* Popular badge */}
                   {plan.popular && (
                     <div className="absolute -top-3 right-6 z-40">
-                      <div className="flex items-center gap-1.5 rounded-full bg-brand-primary px-3 py-1 shadow-[0_4px_12px_rgba(34,197,94,0.4)]">
+                      <div className="flex items-center gap-1.5 rounded-full bg-brand-primary px-3 py-1 shadow-[0_4px_12px_rgba(16,185,129,0.4)]">
                         <DSIcon name="star" size={12} className="text-bg-base" />
                         <span className="text-[10px] font-black uppercase tracking-wider text-bg-base">
                           {plan.badge}
@@ -524,7 +524,7 @@ export function PricingKoyeb() {
               aria-label={`Ver plano ${plan.name}`}
               className={`rounded-full transition-all duration-300 ${
                 activeCard === i
-                  ? 'h-2.5 w-7 bg-brand-primary shadow-[0_0_8px_rgba(34,197,94,0.4)]'
+                  ? 'h-2.5 w-7 bg-brand-primary shadow-[0_0_8px_rgba(16,185,129,0.4)]'
                   : 'h-2.5 w-2.5 bg-white/15 hover:bg-white/25'
               }`}
             />
@@ -548,21 +548,21 @@ export function PricingKoyeb() {
               <div className="pointer-events-none absolute -inset-px rounded-2xl bg-linear-to-br from-brand-primary/30 via-transparent to-white/16 opacity-60" />
               {/* Koyeb-style circuit decoration */}
               <svg className="pointer-events-none absolute right-0 top-0 h-full w-1/2 opacity-[0.12]" viewBox="0 0 200 150" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M120 0v40h80" stroke="#22C55E" strokeWidth="1" />
-                <path d="M160 0v70h40" stroke="#22C55E" strokeWidth="0.5" />
-                <path d="M140 30h60" stroke="#22C55E" strokeWidth="0.5" />
-                <path d="M100 60h100" stroke="#22C55E" strokeWidth="0.5" />
-                <path d="M180 0v150" stroke="#22C55E" strokeWidth="0.5" />
-                <path d="M130 80l30-30" stroke="#22C55E" strokeWidth="0.5" />
-                <path d="M150 100h50" stroke="#22C55E" strokeWidth="0.5" />
-                <circle cx="120" cy="40" r="2" fill="#22C55E" />
-                <circle cx="160" cy="70" r="2" fill="#22C55E" />
-                <circle cx="140" cy="30" r="1.5" fill="#22C55E" />
-                <circle cx="180" cy="100" r="1.5" fill="#22C55E" />
+                <path d="M120 0v40h80" stroke="#10B981" strokeWidth="1" />
+                <path d="M160 0v70h40" stroke="#10B981" strokeWidth="0.5" />
+                <path d="M140 30h60" stroke="#10B981" strokeWidth="0.5" />
+                <path d="M100 60h100" stroke="#10B981" strokeWidth="0.5" />
+                <path d="M180 0v150" stroke="#10B981" strokeWidth="0.5" />
+                <path d="M130 80l30-30" stroke="#10B981" strokeWidth="0.5" />
+                <path d="M150 100h50" stroke="#10B981" strokeWidth="0.5" />
+                <circle cx="120" cy="40" r="2" fill="#10B981" />
+                <circle cx="160" cy="70" r="2" fill="#10B981" />
+                <circle cx="140" cy="30" r="1.5" fill="#10B981" />
+                <circle cx="180" cy="100" r="1.5" fill="#10B981" />
                 {/* Dot matrix pattern */}
                 {Array.from({length: 8}).map((_, row) =>
                   Array.from({length: 6}).map((_, col) => (
-                    <circle key={`${row}-${col}`} cx={110 + col * 14} cy={20 + row * 16} r="0.8" fill="#22C55E" opacity={(row + col) % 2 === 0 ? 0.55 : 0.2} />
+                    <circle key={`${row}-${col}`} cx={110 + col * 14} cy={20 + row * 16} r="0.8" fill="#10B981" opacity={(row + col) % 2 === 0 ? 0.55 : 0.2} />
                   ))
                 )}
               </svg>
@@ -609,15 +609,15 @@ export function PricingKoyeb() {
               <div className="pointer-events-none absolute -inset-px rounded-2xl bg-linear-to-br from-white/20 via-transparent to-brand-primary/20 opacity-60" />
               {/* Koyeb-style circuit decoration */}
               <svg className="pointer-events-none absolute right-0 top-0 h-full w-1/2 opacity-[0.08]" viewBox="0 0 200 150" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M100 0v50h100" stroke="#22C55E" strokeWidth="1" />
-                <path d="M130 30h70" stroke="#22C55E" strokeWidth="0.5" />
-                <path d="M150 0v80" stroke="#22C55E" strokeWidth="0.5" />
-                <path d="M170 50v100" stroke="#22C55E" strokeWidth="0.5" />
-                <path d="M110 70l40 40" stroke="#22C55E" strokeWidth="0.5" />
-                <path d="M120 120h80" stroke="#22C55E" strokeWidth="0.5" />
-                <circle cx="100" cy="50" r="2" fill="#22C55E" />
-                <circle cx="150" cy="80" r="1.5" fill="#22C55E" />
-                <circle cx="170" cy="50" r="1.5" fill="#22C55E" />
+                <path d="M100 0v50h100" stroke="#10B981" strokeWidth="1" />
+                <path d="M130 30h70" stroke="#10B981" strokeWidth="0.5" />
+                <path d="M150 0v80" stroke="#10B981" strokeWidth="0.5" />
+                <path d="M170 50v100" stroke="#10B981" strokeWidth="0.5" />
+                <path d="M110 70l40 40" stroke="#10B981" strokeWidth="0.5" />
+                <path d="M120 120h80" stroke="#10B981" strokeWidth="0.5" />
+                <circle cx="100" cy="50" r="2" fill="#10B981" />
+                <circle cx="150" cy="80" r="1.5" fill="#10B981" />
+                <circle cx="170" cy="50" r="1.5" fill="#10B981" />
               </svg>
 
               <div className="relative">

@@ -33,7 +33,11 @@ const notifications = new Hono<AppContext>()
 
 notifications.use('*', authMiddleware)
 
+// T10.4 — Schema garantido via migrations 0011-0014 (DDL runtime desabilitado)
+let _notifSchemaEnsured = true
+
 async function ensureNotificationPreferencesColumns(env: AppContext['Bindings']) {
+  if (_notifSchemaEnsured) return
   // Best-effort: keep endpoints working even if migrations weren't applied yet.
   try {
     await pgQuery(

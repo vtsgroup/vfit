@@ -211,6 +211,7 @@ export default function EditarPlanoClientPage() {
     return (
       <div className="mx-auto max-w-lg px-4 pt-6">
         <button
+          aria-label="Voltar"
           type="button"
           onClick={() => router.back()}
           className="mb-4 flex items-center gap-1 text-[13px] text-brand-primary"
@@ -235,6 +236,7 @@ export default function EditarPlanoClientPage() {
       <div className="mb-5 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <button
+            aria-label="Voltar"
             type="button"
             onClick={() => router.back()}
             className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/8 bg-white/3 text-zinc-400 hover:text-white transition-all"

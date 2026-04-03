@@ -20,7 +20,6 @@ import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
 import { DSIcon } from '@/components/ui/ds-icon'
 import type { DSIconName } from '@/components/ui/ds-icon'
-import QRCodeLib from 'qrcode'
 import { useAffiliateLink } from '@/hooks/use-affiliates'
 import {
   useInviteStudent,
@@ -176,7 +175,7 @@ export default function InviteStudentPage() {
         return
       }
       try {
-        const dataUrl = await QRCodeLib.toDataURL(effectiveLink, {
+        const dataUrl = await (await import('qrcode')).default.toDataURL(effectiveLink, {
           margin: 1,
           width: 340,
           color: { dark: '#0a0f0a', light: '#ffffff' },
@@ -202,7 +201,7 @@ export default function InviteStudentPage() {
         return
       }
       try {
-        const dataUrl = await QRCodeLib.toDataURL(link, {
+        const dataUrl = await (await import('qrcode')).default.toDataURL(link, {
           margin: 1,
           width: 340,
           color: { dark: '#0a0f0a', light: '#ffffff' },
@@ -591,7 +590,7 @@ export default function InviteStudentPage() {
 
                     <div className="grid grid-cols-2 gap-2">
                       <Button variant="outline" onClick={shareWhatsApp} className="gap-2">
-                        <DSIcon name="messageCircle" size={16} className="text-green-500" />
+                        <DSIcon name="messageCircle" size={16} className="text-emerald-500" />
                         WhatsApp
                       </Button>
                       <Button variant="outline" onClick={copyInviteLink} className="gap-2">
@@ -770,7 +769,7 @@ export default function InviteStudentPage() {
                 </p>
                 <div className="grid grid-cols-2 gap-2">
                   <Button variant="outline" onClick={shareWhatsApp} className="gap-2">
-                    <DSIcon name="messageCircle" size={16} className="text-green-500" />
+                    <DSIcon name="messageCircle" size={16} className="text-emerald-500" />
                     WhatsApp
                   </Button>
                   <Button variant="outline" onClick={copyInviteLink} className="gap-2">

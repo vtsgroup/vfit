@@ -49,7 +49,7 @@ const BADGE_CONFIGS: Record<string, PlanBadgeConfig> = {
     borderColorClass: 'border-emerald-400 dark:border-emerald-500',
     bgClass: 'bg-emerald-600',
     textClass: 'text-white',
-    glowClass: 'shadow-[0_0_6px_rgba(34,197,94,0.3)]',
+    glowClass: 'shadow-[0_0_6px_rgba(16,185,129,0.3)]',
     canUpgrade: true,
   },
   profissional: {

@@ -36,7 +36,7 @@ interface StatsCardProps {
 const colorMap = {
   primary: {
     icon: 'bg-brand-primary/12 text-brand-primary',
-    iconGlow: 'shadow-[0_0_20px_rgba(34,197,94,0.2)]',
+    iconGlow: 'shadow-[0_0_20px_rgba(16,185,129,0.2)]',
     gradient: 'from-brand-primary/6 via-transparent to-transparent',
     border: 'hover:border-brand-primary/20',
     trendPositive: 'text-brand-primary',

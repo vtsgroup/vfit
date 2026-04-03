@@ -28,7 +28,7 @@ export function CategoryFilter({ categories, selected, onChange }: CategoryFilte
         onClick={() => onChange(null)}
         className={`rounded-full border px-4 py-1.5 text-xs font-medium transition-all duration-300 ${
           selected === null
-            ? 'border-brand-primary bg-brand-primary/10 text-brand-primary shadow-[0_0_12px_rgba(34,197,94,0.15)]'
+            ? 'border-brand-primary bg-brand-primary/10 text-brand-primary shadow-[0_0_12px_rgba(16,185,129,0.15)]'
             : 'border-white/8 text-zinc-400 hover:border-white/15 hover:text-zinc-200'
         }`}
       >
@@ -40,7 +40,7 @@ export function CategoryFilter({ categories, selected, onChange }: CategoryFilte
           onClick={() => onChange(cat)}
           className={`rounded-full border px-4 py-1.5 text-xs font-medium transition-all duration-300 ${
             selected === cat
-              ? 'border-brand-primary bg-brand-primary/10 text-brand-primary shadow-[0_0_12px_rgba(34,197,94,0.15)]'
+              ? 'border-brand-primary bg-brand-primary/10 text-brand-primary shadow-[0_0_12px_rgba(16,185,129,0.15)]'
               : 'border-white/8 text-zinc-400 hover:border-white/15 hover:text-zinc-200'
           }`}
         >

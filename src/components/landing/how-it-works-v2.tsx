@@ -261,7 +261,7 @@ function TestimonialCard({ t }: { t: Testimonial }) {
   const parts = t.text.split(t.highlight)
 
   return (
-    <div className="group relative flex h-60 w-80 shrink-0 flex-col overflow-hidden rounded-3xl border border-gray-200 bg-white p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-all duration-300 hover:shadow-[0_20px_50px_rgba(34,197,94,0.15)] hover:-translate-y-3 cursor-pointer sm:h-80 sm:w-96 sm:p-7 lg:w-105">
+    <div className="group relative flex h-60 w-80 shrink-0 flex-col overflow-hidden rounded-3xl border border-gray-200 bg-white p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-all duration-300 hover:shadow-[0_20px_50px_rgba(16,185,129,0.15)] hover:-translate-y-3 cursor-pointer sm:h-80 sm:w-96 sm:p-7 lg:w-105">
       {/* Quote watermark */}
       <svg className="pointer-events-none absolute -right-2 -top-2 h-16 w-16 text-brand-primary/4 transition-all duration-300 group-hover:text-brand-primary/8 sm:h-24 sm:w-24" fill="currentColor" viewBox="0 0 24 24">
         <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10H14.017zM0 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151C7.546 6.068 5.983 8.789 5.983 11h4v10H0z" />
@@ -363,7 +363,7 @@ export function HowItWorksV2() {
             }}
           >
             QUEM USA,{' '}
-            <span className="bg-linear-to-r from-brand-primary via-[#4ADE80] to-brand-accent bg-clip-text text-transparent">RECOMENDA</span>
+            <span className="bg-linear-to-r from-brand-primary via-[#34D399] to-brand-accent bg-clip-text text-transparent">RECOMENDA</span>
           </h2>
         </IntersectionReveal>
 

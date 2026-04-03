@@ -165,7 +165,7 @@ export function MD3Tabs({
                 sizeClasses[size],
                 fullWidth && 'flex-1',
                 isActive
-                  ? 'bg-brand-primary/12 text-brand-primary border border-brand-primary/20 shadow-[0_0_12px_rgba(34,197,94,0.08)]'
+                  ? 'bg-brand-primary/12 text-brand-primary border border-brand-primary/20 shadow-[0_0_12px_rgba(16,185,129,0.08)]'
                   : 'bg-(--surface-container-low) text-(--on-surface-variant) border border-(--outline-variant) hover:bg-(--surface-container) hover:text-(--on-surface) hover:border-(--outline)'
               )}
             >

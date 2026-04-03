@@ -34,7 +34,7 @@ interface InfoCardProps {
 }
 
 const iconColors = {
-  primary: 'bg-brand-primary/12 text-brand-primary shadow-[0_0_12px_rgba(34,197,94,0.15)]',
+  primary: 'bg-brand-primary/12 text-brand-primary shadow-[0_0_12px_rgba(16,185,129,0.15)]',
   success: 'bg-emerald-500/12 text-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.15)]',
   warning: 'bg-amber-500/12 text-amber-400 shadow-[0_0_12px_rgba(245,158,11,0.15)]',
   error: 'bg-red-500/12 text-red-400 shadow-[0_0_12px_rgba(239,68,68,0.15)]',

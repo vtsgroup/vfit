@@ -27,21 +27,21 @@
    ============================================ */
 
 @theme {
-  /* Brand Colors — matched to logo gradient (lime→emerald) */
-  --color-brand-primary: #22C55E;
-  --color-brand-primary-hover: #4ADE80;
+  /* Brand Colors — emerald-500 (aligned with DS Showcase) */
+  --color-brand-primary: #10B981;
+  --color-brand-primary-hover: #34D399;
   --color-brand-secondary: #09090B;
   /* Accent — lime energy (logo left/bright side) */
   --color-brand-accent: #84CC16;
   --color-brand-accent-hover: #A3E635;
 
   /* Brand gradient + glow helpers */
-  --color-brand-mint: #86EFAC;
+  --color-brand-mint: #6EE7B7;
   --color-brand-lime: #A3E635;
-  --color-brand-deep: #166534;
-  --color-brand-glow: rgba(34, 197, 94, 0.30);
-  --color-brand-glow-weak: rgba(34, 197, 94, 0.12);
-  --color-brand-ring: rgba(34, 197, 94, 0.24);
+  --color-brand-deep: #065F46;
+  --color-brand-glow: rgba(16, 185, 129, 0.30);
+  --color-brand-glow-weak: rgba(16, 185, 129, 0.12);
+  --color-brand-ring: rgba(16, 185, 129, 0.24);
 
   /* Midnight Pulse Foundation */
   --color-bg-base: #050A12;
@@ -58,19 +58,19 @@
   --color-text-secondary-cool: #94A3B8;
   --color-text-muted-cool: #64748B;
 
-  --gradient-hero: radial-gradient(ellipse at 20% 50%, rgba(34,197,94,0.10) 0%, transparent 60%),
+  --gradient-hero: radial-gradient(ellipse at 20% 50%, rgba(16,185,129,0.10) 0%, transparent 60%),
                    radial-gradient(ellipse at 80% 20%, rgba(132,204,22,0.07) 0%, transparent 50%),
                    radial-gradient(ellipse at 50% 100%, rgba(56,189,248,0.04) 0%, transparent 40%);
-  --gradient-cta: linear-gradient(135deg, #22C55E 0%, #4ADE80 100%);
-  --gradient-cta-hover: linear-gradient(135deg, #4ADE80 0%, #86EFAC 100%);
-  --gradient-text: linear-gradient(135deg, #22C55E 0%, #4ADE80 50%, #A3E635 100%);
+  --gradient-cta: linear-gradient(135deg, #10B981 0%, #34D399 100%);
+  --gradient-cta-hover: linear-gradient(135deg, #34D399 0%, #6EE7B7 100%);
+  --gradient-text: linear-gradient(135deg, #10B981 0%, #34D399 50%, #A3E635 100%);
 
   /* Redesign (Premium Sidebar + KPI Hero) */
   --color-sidebar-bg: #102A20;
   --color-sidebar-active: #1A3B2E;
   --color-sidebar-text: rgba(255, 255, 255, 0.78);
   --color-sidebar-text-active: #FFFFFF;
-  --color-sidebar-dot: #4ADE80;
+  --color-sidebar-dot: #34D399;
 
   --color-bg-page: #050A12;
   --color-kpi-dark: #0E1525;
@@ -95,12 +95,12 @@
   --color-glass-border-light: rgba(255, 255, 255, 0.06);
 
   /* Navbar glass (dark default) */
-  --nav-glass-bg: linear-gradient(135deg, rgba(74,222,128,0.07) 0%, rgba(17,17,19,0.94) 25%, rgba(17,17,19,0.96) 75%, rgba(74,222,128,0.034) 100%);
-  --nav-glass-border: rgba(74, 222, 128, 0.12);
-  --nav-glass-shadow: 0 -2px 20px rgba(0,0,0,0.25), 0 0 24px rgba(74,222,128,0.05), inset 0 1px 0 rgba(255,255,255,0.04);
+  --nav-glass-bg: linear-gradient(135deg, rgba(52,211,153,0.07) 0%, rgba(17,17,19,0.94) 25%, rgba(17,17,19,0.96) 75%, rgba(52,211,153,0.034) 100%);
+  --nav-glass-border: rgba(52, 211, 153, 0.12);
+  --nav-glass-shadow: 0 -2px 20px rgba(0,0,0,0.25), 0 0 24px rgba(52,211,153,0.05), inset 0 1px 0 rgba(255,255,255,0.04);
   --nav-blur-ultra-bg: linear-gradient(180deg, rgba(14, 16, 18, 0.72) 0%, rgba(14, 16, 18, 0.58) 100%);
-  --nav-blur-ultra-border: rgba(74, 222, 128, 0.16);
-  --nav-blur-ultra-shadow: 0 12px 38px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 0 28px rgba(74, 222, 128, 0.08);
+  --nav-blur-ultra-border: rgba(52, 211, 153, 0.16);
+  --nav-blur-ultra-shadow: 0 12px 38px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 0 28px rgba(52, 211, 153, 0.08);
 
   /* Text */
   --color-text-primary: #F0F4F8;
@@ -227,9 +227,9 @@
 
   /* ===== MD3 + Apple Surface System ===== */
   /* Surface tint overlay — brand color layered for elevation */
-  --surface-tint: rgba(34, 197, 94, 0.04);
-  --surface-tint-hover: rgba(34, 197, 94, 0.08);
-  --surface-tint-active: rgba(34, 197, 94, 0.12);
+  --surface-tint: rgba(16, 185, 129, 0.04);
+  --surface-tint-hover: rgba(16, 185, 129, 0.08);
+  --surface-tint-active: rgba(16, 185, 129, 0.12);
 
   /* MD3 State Layer (on interactive surfaces) */
   --state-hover: rgba(255, 255, 255, 0.08);
@@ -267,7 +267,7 @@
   --press-scale: 0.97;
   --hover-lift: -3px;
   --hover-lift-sm: -2px;
-  --focus-ring: 0 0 0 3px rgba(34, 197, 94, 0.24);
+  --focus-ring: 0 0 0 3px rgba(16, 185, 129, 0.24);
   --focus-ring-offset: 0 0 0 2px var(--color-bg-primary);
 
   /* Animations */
@@ -375,9 +375,9 @@
   --text-display-stat: clamp(2rem, 4vw, 3rem);
 
   /* Tonal Glass Surfaces — brand-colored glass for semantic cards */
-  --ds-glass-green: rgba(34, 197, 94, 0.06);
-  --ds-glass-green-border: rgba(34, 197, 94, 0.14);
-  --ds-glass-green-glow: rgba(34, 197, 94, 0.08);
+  --ds-glass-green: rgba(16, 185, 129, 0.06);
+  --ds-glass-green-border: rgba(16, 185, 129, 0.14);
+  --ds-glass-green-glow: rgba(16, 185, 129, 0.08);
   --ds-glass-amber: rgba(245, 158, 11, 0.06);
   --ds-glass-amber-border: rgba(245, 158, 11, 0.14);
   --ds-glass-blue: rgba(59, 130, 246, 0.06);
@@ -388,14 +388,14 @@
   --ds-glass-red-border: rgba(239, 68, 68, 0.14);
 
   /* Gradient Mesh Backgrounds */
-  --ds-mesh-primary: radial-gradient(ellipse 70% 50% at 15% 40%, rgba(34,197,94,0.10) 0%, transparent 60%),
+  --ds-mesh-primary: radial-gradient(ellipse 70% 50% at 15% 40%, rgba(16,185,129,0.10) 0%, transparent 60%),
                      radial-gradient(ellipse 50% 40% at 85% 15%, rgba(132,204,22,0.07) 0%, transparent 55%),
                      radial-gradient(ellipse 40% 30% at 50% 95%, rgba(59,130,246,0.04) 0%, transparent 45%);
-  --ds-mesh-subtle: radial-gradient(ellipse 60% 40% at 20% 50%, rgba(34,197,94,0.06) 0%, transparent 55%),
+  --ds-mesh-subtle: radial-gradient(ellipse 60% 40% at 20% 50%, rgba(16,185,129,0.06) 0%, transparent 55%),
                     radial-gradient(ellipse 40% 30% at 80% 20%, rgba(132,204,22,0.04) 0%, transparent 50%);
-  --ds-mesh-athletic: radial-gradient(ellipse 80% 60% at 10% 30%, rgba(34,197,94,0.12) 0%, transparent 55%),
+  --ds-mesh-athletic: radial-gradient(ellipse 80% 60% at 10% 30%, rgba(16,185,129,0.12) 0%, transparent 55%),
                       radial-gradient(ellipse 60% 50% at 90% 70%, rgba(132,204,22,0.08) 0%, transparent 50%),
-                      radial-gradient(ellipse 50% 40% at 50% 100%, rgba(74,222,128,0.05) 0%, transparent 40%);
+                      radial-gradient(ellipse 50% 40% at 50% 100%, rgba(52,211,153,0.05) 0%, transparent 40%);
 
   /* Motion Tokens — unified animation language */
   --ds-motion-instant: 80ms;
@@ -418,18 +418,18 @@
 
   /* Atmosphere — noise + gradient overlays */
   --ds-noise-opacity: 0.025;
-  --ds-surface-shine: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 50%, rgba(34,197,94,0.03) 100%);
-  --ds-surface-shine-strong: linear-gradient(135deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0) 40%, rgba(34,197,94,0.05) 100%);
+  --ds-surface-shine: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 50%, rgba(16,185,129,0.03) 100%);
+  --ds-surface-shine-strong: linear-gradient(135deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0) 40%, rgba(16,185,129,0.05) 100%);
 
   /* Stats / KPI tokens */
-  --ds-stat-color-revenue: #22C55E;
+  --ds-stat-color-revenue: #10B981;
   --ds-stat-color-students: #3B82F6;
   --ds-stat-color-sessions: #A855F7;
   --ds-stat-color-payments: #F59E0B;
 
   /* Tonal card shadows (colored ambient) */
-  --ds-shadow-green: 0 4px 24px rgba(34,197,94,0.12), 0 1px 3px rgba(0,0,0,0.2);
-  --ds-shadow-green-hover: 0 8px 32px rgba(34,197,94,0.20), 0 2px 8px rgba(0,0,0,0.25);
+  --ds-shadow-green: 0 4px 24px rgba(16,185,129,0.12), 0 1px 3px rgba(0,0,0,0.2);
+  --ds-shadow-green-hover: 0 8px 32px rgba(16,185,129,0.20), 0 2px 8px rgba(0,0,0,0.25);
   --ds-shadow-blue: 0 4px 24px rgba(59,130,246,0.12), 0 1px 3px rgba(0,0,0,0.2);
   --ds-shadow-amber: 0 4px 24px rgba(245,158,11,0.12), 0 1px 3px rgba(0,0,0,0.2);
   --ds-shadow-purple: 0 4px 24px rgba(139,92,246,0.12), 0 1px 3px rgba(0,0,0,0.2);

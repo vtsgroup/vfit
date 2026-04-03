@@ -68,7 +68,7 @@ export function EmptyStateDS({
       {/* Icon container — mesh glow + bounce */}
       <div className="relative mb-5">
         <div className="absolute inset-0 rounded-full bg-brand-primary/8 blur-xl" />
-        <div className="relative flex h-16 w-16 animate-gentle-bounce items-center justify-center rounded-[20px] border border-brand-primary/15 bg-brand-primary/8 shadow-[0_0_24px_rgba(34,197,94,0.15)] dark:bg-brand-primary/10 dark:shadow-[0_0_32px_rgba(34,197,94,0.18)]">
+        <div className="relative flex h-16 w-16 animate-gentle-bounce items-center justify-center rounded-[20px] border border-brand-primary/15 bg-brand-primary/8 shadow-[0_0_24px_rgba(16,185,129,0.15)] dark:bg-brand-primary/10 dark:shadow-[0_0_32px_rgba(16,185,129,0.18)]">
           <DSIcon
             name={icon}
             size={iconSize}

@@ -69,7 +69,7 @@ export function FilterChip({
         active
           ? cn(
               'border-brand-primary/30 bg-brand-primary/10 text-brand-primary',
-              'shadow-[0_0_12px_rgba(34,197,94,0.1)]'
+              'shadow-[0_0_12px_rgba(16,185,129,0.1)]'
             )
           : 'dark:border-white/10 light:border-slate-200 dark:bg-white/3 light:bg-slate-100 dark:text-white/60 light:text-slate-500 dark:hover:bg-white/6 light:hover:bg-slate-200 dark:hover:text-white/80 light:hover:text-slate-700'
       )}

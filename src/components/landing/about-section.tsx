@@ -180,7 +180,7 @@ export function AboutSection() {
           <div className="flex flex-col gap-8">
             {/* Equipe */}
             <IntersectionReveal animation="fade-in" delay={250}>
-              <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 transition-all duration-300 hover:border-brand-primary/30 hover:shadow-[0_0_30px_rgba(34,197,94,0.08)] sm:p-8">
+              <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 transition-all duration-300 hover:border-brand-primary/30 hover:shadow-[0_0_30px_rgba(16,185,129,0.08)] sm:p-8">
                 <h3 className="mb-6 text-xs text-gray-400 uppercase" style={monoLabel}>
                   EQUIPE
                 </h3>
@@ -211,7 +211,7 @@ export function AboutSection() {
 
             {/* Tech stack */}
             <IntersectionReveal animation="fade-in" delay={350}>
-              <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 transition-all duration-300 hover:border-brand-primary/30 hover:shadow-[0_0_30px_rgba(34,197,94,0.08)] sm:p-8">
+              <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 transition-all duration-300 hover:border-brand-primary/30 hover:shadow-[0_0_30px_rgba(16,185,129,0.08)] sm:p-8">
                 <h3 className="mb-6 text-xs text-gray-400 uppercase" style={monoLabel}>
                   NOSSA STACK
                 </h3>

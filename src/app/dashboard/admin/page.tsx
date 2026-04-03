@@ -262,7 +262,7 @@ export default function AdminDashboardPage() {
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
           <MetricCard icon="users" label="Total Usuários" value={String(o?.total_users ?? 0)} accent="from-brand-primary to-emerald-600" />
           <MetricCard icon="userCheck" label="Personals" value={String(o?.total_personals ?? 0)} accent="from-blue-500 to-cyan-500" />
-          <MetricCard icon="users" label="Alunos" value={String(o?.total_students ?? 0)} accent="from-emerald-500 to-green-500" />
+          <MetricCard icon="users" label="Alunos" value={String(o?.total_students ?? 0)} accent="from-emerald-500 to-emerald-500" />
           <MetricCard icon="refresh" label="Assinaturas" value={String(o?.active_subscriptions ?? 0)} accent="from-amber-500 to-orange-500" />
           <MetricCard icon="calendar" label="Novos (30d)" value={String(o?.new_signups_30d ?? 0)} accent="from-violet-500 to-purple-500" />
         </div>

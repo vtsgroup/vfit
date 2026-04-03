@@ -16,7 +16,7 @@ import type { Exercise } from '@/hooks/use-exercises'
 // ============================================
 
 const DIFFICULTY_MAP: Record<string, { label: string; color: string }> = {
-  beginner: { label: 'Iniciante', color: 'bg-green-500/15 text-green-400' },
+  beginner: { label: 'Iniciante', color: 'bg-emerald-500/15 text-emerald-400' },
   intermediate: { label: 'Intermediário', color: 'bg-amber-500/15 text-amber-400' },
   advanced: { label: 'Avançado', color: 'bg-red-500/15 text-red-400' },
 }

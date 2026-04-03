@@ -67,7 +67,7 @@ export function FaqInline({ items, title = 'Perguntas Frequentes', schema = true
 
           return (
             <div key={i} className={`rounded-xl transition-all duration-300 ${
-              isOpen ? 'bg-brand-primary/4 ring-1 ring-brand-primary/15 shadow-[0_0_20px_rgba(34,197,94,0.06)]' : 'hover:bg-white/2'
+              isOpen ? 'bg-brand-primary/4 ring-1 ring-brand-primary/15 shadow-[0_0_20px_rgba(16,185,129,0.06)]' : 'hover:bg-white/2'
             }`}>
               <button
                 onClick={() => toggle(i)}
@@ -76,7 +76,7 @@ export function FaqInline({ items, title = 'Perguntas Frequentes', schema = true
                 {/* Number indicator */}
                 <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-[10px] font-bold transition-all duration-300 ${
                   isOpen
-                    ? 'bg-brand-primary/15 text-brand-primary shadow-[0_0_12px_rgba(34,197,94,0.15)]'
+                    ? 'bg-brand-primary/15 text-brand-primary shadow-[0_0_12px_rgba(16,185,129,0.15)]'
                     : 'bg-white/5 text-white/30'
                 }`} style={{ fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace' }}>
                   {String(i + 1).padStart(2, '0')}
@@ -88,7 +88,7 @@ export function FaqInline({ items, title = 'Perguntas Frequentes', schema = true
                 <span
                   className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border transition-all duration-300 ${
                     isOpen
-                      ? 'border-brand-primary bg-brand-primary text-white shadow-[0_0_12px_rgba(34,197,94,0.3)]'
+                      ? 'border-brand-primary bg-brand-primary text-white shadow-[0_0_12px_rgba(16,185,129,0.3)]'
                       : 'border-white/10 text-zinc-400'
                   }`}
                 >

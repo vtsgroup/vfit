@@ -213,7 +213,7 @@ export function ImageComparisonSlider({
 
       ctx.fillStyle = 'rgba(0,0,0,0.55)'
       ctx.fillRect(24, size - 92, size - 48, 60)
-      ctx.fillStyle = '#22C55E'
+      ctx.fillStyle = '#10B981'
       ctx.font = 'bold 24px Arial'
       ctx.fillText('VFIT • Estimativa IA (didática)', 40, size - 54)
 

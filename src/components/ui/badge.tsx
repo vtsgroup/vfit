@@ -31,7 +31,7 @@ const variantStyles: Record<BadgeVariant, string> = {
   error: 'bg-error/10 text-error border-error/15 backdrop-blur-sm shadow-[0_0_12px_rgba(239,68,68,0.1)]',
   info: 'bg-info/10 text-info border-info/15 backdrop-blur-sm shadow-[0_0_12px_rgba(59,130,246,0.1)]',
   outline: 'border border-border-light bg-transparent text-text-secondary backdrop-blur-sm',
-  premium: 'bg-linear-to-r from-brand-primary/15 to-brand-accent/15 text-brand-accent border-brand-primary/20 backdrop-blur-sm shadow-[0_0_16px_rgba(34,197,94,0.12)]',
+  premium: 'bg-linear-to-r from-brand-primary/15 to-brand-accent/15 text-brand-accent border-brand-primary/20 backdrop-blur-sm shadow-[0_0_16px_rgba(16,185,129,0.12)]',
   // DS v2 Role Badges — gradient backgrounds with accent colors
   aluno: 'bg-linear-to-r from-blue-100 to-blue-50 text-blue-600 border-blue-500/15 dark:from-blue-900/30 dark:to-blue-800/20 dark:text-blue-400 dark:border-blue-400/20',
   personal: 'bg-linear-to-r from-emerald-100 to-emerald-50 text-emerald-700 border-emerald-500/20 dark:from-emerald-900/30 dark:to-emerald-800/20 dark:text-emerald-400 dark:border-emerald-400/20',

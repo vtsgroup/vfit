@@ -71,7 +71,8 @@ export function computeRecurringOffset(baseMs: number, i: number, freq: 'daily' 
   return target.getTime()
 }
 
-let _schemaEnsured = false
+// T10.4 — Schema garantido via migration 0012_calendar_events.sql (DDL runtime desabilitado)
+let _schemaEnsured = true
 
 async function ensureCalendarSchema(env: AppContext['Bindings']) {
   if (_schemaEnsured) return

@@ -273,7 +273,11 @@ auth.post('/register/personal', async (c) => {
   // 2) Insert personal profile
   try {
     // Specialties: convert JS array to PostgreSQL text array literal
-    const specialtiesLiteral = `{${(parsed.specialties || []).map((s: string) => `"${s}"`).join(',')}}`
+    // Escape any double-quotes/backslashes inside values to prevent array literal injection
+    const specialtiesLiteral = `{${(parsed.specialties || []).map((s: string) => {
+      const safe = s.replace(/[\\"\x00-\x1f]/g, '') // strip quotes, backslashes, control chars
+      return `"${safe}"`
+    }).join(',')}}`
     await pgExecute(c.env, `
       INSERT INTO personals (id, cref, cref_state, specialties, referral_code, subscription_plan, subscription_status, trial_ends_at, created_at, updated_at)
       VALUES ($1, $2, $3, $4::TEXT[], $5, 'trial', 'trial', $6, $7, $7)

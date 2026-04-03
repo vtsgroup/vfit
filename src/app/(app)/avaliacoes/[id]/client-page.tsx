@@ -35,7 +35,7 @@ export default function AvaliacaoDetalhePage() {
     return (
       <div className="flex flex-col items-center gap-3 py-32">
         <p className="text-zinc-500">Avaliação não encontrada</p>
-        <button onClick={() => router.back()} className="text-brand-primary text-[13px]">Voltar</button>
+        <button aria-label="Voltar" onClick={() => router.back()} className="text-brand-primary text-[13px]">Voltar</button>
       </div>
     )
   }
@@ -61,6 +61,7 @@ export default function AvaliacaoDetalhePage() {
       {/* Header */}
       <div className="mb-5 flex items-center gap-3">
         <button
+          aria-label="Voltar"
           onClick={() => router.back()}
           className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5"
         >
@@ -204,7 +205,7 @@ function BMIBar({ bmi }: { bmi: number }) {
     <div className="relative mt-3">
       <div className="flex h-2 overflow-hidden rounded-full">
         <div className="flex-1 bg-blue-500/30" />
-        <div className="flex-1 bg-green-500/30" />
+        <div className="flex-1 bg-emerald-500/30" />
         <div className="flex-1 bg-yellow-500/30" />
         <div className="flex-1 bg-red-500/30" />
       </div>

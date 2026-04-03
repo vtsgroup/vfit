@@ -86,7 +86,7 @@ export function Hero() {
       <div
         className="absolute inset-0"
         style={{
-          background: 'linear-gradient(135deg, rgba(5,10,18,0.85) 0%, rgba(5,10,18,0.50) 40%, rgba(34,197,94,0.08) 70%, rgba(5,10,18,0.70) 100%)',
+          background: 'linear-gradient(135deg, rgba(5,10,18,0.85) 0%, rgba(5,10,18,0.50) 40%, rgba(16,185,129,0.08) 70%, rgba(5,10,18,0.70) 100%)',
         }}
       />
 
@@ -130,7 +130,7 @@ export function Hero() {
           width: '600px',
           height: '600px',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(34,197,94,0.08) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(16,185,129,0.08) 0%, transparent 70%)',
           filter: 'blur(60px)',
         }}
       />
@@ -252,7 +252,7 @@ export function Hero() {
 
         {/* ===== STATS BAR — glass card with animated border ===== */}
         <IntersectionReveal animation="fade-in" delay={500}>
-          <div className="relative mt-20 rounded-2xl p-px" style={{ background: 'conic-gradient(from var(--border-angle), transparent 40%, rgba(34,197,94,0.4) 50%, transparent 60%)', animation: 'borderRotate 4s linear infinite' }}>
+          <div className="relative mt-20 rounded-2xl p-px" style={{ background: 'conic-gradient(from var(--border-angle), transparent 40%, rgba(16,185,129,0.4) 50%, transparent 60%)', animation: 'borderRotate 4s linear infinite' }}>
           <div
             className="rounded-2xl border border-white/6 p-1"
             style={{

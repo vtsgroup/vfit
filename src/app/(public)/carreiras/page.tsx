@@ -123,7 +123,7 @@ export default function CarreirasPage() {
         {BENEFITS.map((b) => (
           <div
             key={b.title}
-            className="group rounded-2xl border border-white/8 bg-white/3 p-5 text-center transition-all duration-300 hover:border-brand-primary/25 hover:shadow-[0_0_24px_rgba(34,197,94,0.06)] backdrop-blur-sm"
+            className="group rounded-2xl border border-white/8 bg-white/3 p-5 text-center transition-all duration-300 hover:border-brand-primary/25 hover:shadow-[0_0_24px_rgba(16,185,129,0.06)] backdrop-blur-sm"
           >
             <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary mb-3 transition-all duration-300 group-hover:scale-110 group-hover:-rotate-6">
               <DSIcon name={b.icon} />
@@ -141,7 +141,7 @@ export default function CarreirasPage() {
           {OPENINGS.map((job) => (
             <div
               key={job.title}
-              className="group rounded-2xl border border-white/8 bg-white/3 p-6 transition-all duration-300 hover:border-brand-primary/25 hover:shadow-[0_0_30px_rgba(34,197,94,0.06)]"
+              className="group rounded-2xl border border-white/8 bg-white/3 p-6 transition-all duration-300 hover:border-brand-primary/25 hover:shadow-[0_0_30px_rgba(16,185,129,0.06)]"
             >
               <div className="flex items-start gap-4">
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary">
@@ -178,7 +178,7 @@ export default function CarreirasPage() {
       <FaqInline items={FAQ_CARREIRAS} />
 
       {/* CTA */}
-      <section className="text-center rounded-2xl border border-brand-primary/25 bg-brand-primary/3 p-8 backdrop-blur-sm shadow-[0_0_30px_rgba(34,197,94,0.04)]">
+      <section className="text-center rounded-2xl border border-brand-primary/25 bg-brand-primary/3 p-8 backdrop-blur-sm shadow-[0_0_30px_rgba(16,185,129,0.04)]">
         <h2 className="text-xl font-bold text-white mb-4">Não encontrou sua vaga?</h2>
         <p className="text-zinc-400 mb-6 max-w-lg mx-auto">
           Envie seu currículo mesmo assim! Estamos sempre em busca de talentos
