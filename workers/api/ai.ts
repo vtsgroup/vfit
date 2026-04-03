@@ -40,7 +40,7 @@ import {
 } from '@workers/schemas/ai'
 import { pgQuery, generateId } from '@lib/db'
 import { success, created } from '@lib/response'
-import { AppError, NotFoundError, BadRequestError, ForbiddenError } from '@lib/errors'
+import { AppError, NotFoundError, BadRequestError, ForbiddenError, InternalError } from '@lib/errors'
 import { enqueueWithRetry } from '@lib/queue'
 import { selectModel, selectWorkersAIModel, AI_MODELS } from '@config/ai-models'
 import type { AITaskType, AIComplexity } from '@config/ai-models'
@@ -617,7 +617,7 @@ async function callReplicate(
     if (!response.ok) {
       const error = await response.text()
       console.error(`[Replicate] Error ${response.status}:`, error)
-      throw new Error(`Replicate API error: ${response.status}`)
+      throw new InternalError(`Replicate API error: ${response.status}`)
     }
 
     const data = await response.json() as { output?: unknown; status?: string }

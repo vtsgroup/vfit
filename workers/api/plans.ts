@@ -13,7 +13,7 @@ import { Hono } from 'hono'
 import type { AppContext } from '@workers/types'
 import { pgQuery, pgQueryOne, generateId } from '@lib/db'
 import { success, created } from '@lib/response'
-import { BadRequestError, NotFoundError } from '@lib/errors'
+import { BadRequestError, NotFoundError, InternalError } from '@lib/errors'
 import { callWorkersAIWithFallback } from '@lib/workers-ai'
 import { PROMPTS } from '@lib/ai-prompts'
 import { generatePlanInputSchema, generatedPlanSchema } from '@workers/schemas/plan-generation'
@@ -104,7 +104,7 @@ plans.post('/generate', async (c) => {
           if (braceMatch) {
             parsed = JSON.parse(braceMatch[0])
           } else {
-            throw new Error('IA não retornou JSON válido')
+            throw new InternalError('IA não retornou JSON válido')
           }
         }
       } else {
@@ -113,7 +113,7 @@ plans.post('/generate', async (c) => {
         if (braceMatch) {
           parsed = JSON.parse(braceMatch[0])
         } else {
-          throw new Error('IA não retornou JSON válido')
+          throw new InternalError('IA não retornou JSON válido')
         }
       }
     }

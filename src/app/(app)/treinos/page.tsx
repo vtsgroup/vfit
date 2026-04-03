@@ -10,7 +10,7 @@
 
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, memo } from 'react'
 import Link from 'next/link'
 import { DSIcon } from '@/components/ui/ds-icon'
 import {
@@ -32,8 +32,8 @@ const DIFFICULTY_FILTERS = [
   { value: 'advanced', label: 'Avançado' },
 ]
 
-// ── T7.5 — Progress Ring SVG ──────────────────────────
-function ProgressRing({
+// ── T7.5 — Progress Ring SVG (T11.8: memo) ──────────────────────────
+const ProgressRing = memo(function ProgressRing({
   value,
   max,
   size = 52,
@@ -87,7 +87,7 @@ function ProgressRing({
       </div>
     </div>
   )
-}
+})
 
 export default function TreinosPage() {
   const [difficulty, setDifficulty] = useState('')
@@ -127,7 +127,7 @@ export default function TreinosPage() {
   const calPct = targets.calories > 0 ? Math.round((totals.calories / targets.calories) * 100) : 0
 
   return (
-    <div className="mx-auto max-w-lg px-4 pt-6 pb-24">
+    <div className="mx-auto max-w-lg animate-in fade-in-0 slide-in-from-bottom-2 duration-300 px-4 pt-6 pb-24">
       <h1 className="mb-1 text-xl font-black text-text-primary">Treinos</h1>
       <p className="mb-5 text-[13px] text-text-muted">Recursos personalizados para você</p>
 

@@ -5,6 +5,55 @@
 
 ---
 
+## [v1.6.0] — 07/04/2026 — Sprint S16: Deferred Sprint 3 (92% tasks)
+
+### 🔥 T9.9 — Confetti no Treino Concluído
+- `treino-ativo/concluido/page.tsx`: confetti CSS puro (72 peças, 7 cores, 3.5s), zero dependências extras
+- Componentes `Confetti` + `ConfettiPiece` com `@keyframes confettiFall`
+
+### 💬 T8.8 — Follow-up Card Motivacional
+- `treino-ativo/concluido/page.tsx`: card "Continue a sequência! 🔥" com mensagem motivacional após conclusão de treino
+
+### 🔔 T8.4 — Cron Lembrete de Treino Diário
+- `workers/index.ts`: `sendDailyWorkoutReminders()` — cron `'0 9 * * *'` (9h BRT)
+- Query: alunos com push+workout ativo que NÃO treinaram hoje → push `workout.reminder`
+
+### 🔔 T8.5 — Cron Streak Warning
+- `workers/index.ts`: `sendStreakWarnings()` — cron `'0 18 * * *'` (18h BRT)
+- Query: alunos com streak ≥ 2 dias que NÃO treinaram hoje → push `streak.warning`
+
+### ⚙️ T8.10 — Lembretes Wireau à API
+- `perfil/lembretes/page.tsx`: usa `useNotificationPreferences` + `useUpdateNotificationPreferences`
+- Toggle "Ativar Lembretes" sincroniza `push_enabled` + `workout_enabled` com backend
+- Dias/horário continuam em localStorage (backend não tem granularidade de dias)
+
+### 🎨 T9.5/T9.6 — Micro-interactions + Page Transitions
+- `treinos/page.tsx` e `treino-ativo/concluido/page.tsx`: `animate-in fade-in-0 slide-in-from-bottom-2 duration-300`
+
+### ↕️ T9.8 — Pull-to-Refresh Hook
+- Novo `src/hooks/use-pull-to-refresh.ts`: detecta gesto touch (threshold 72px), damping suave, suporte a disabled/refresing
+
+### ⚡ T10.6 — InternalError em Workers
+- `workers/api/assessments.ts` (9×): `throw new Error(...)` → `throw new InternalError(...)`
+- `workers/api/plans.ts` (2×): idem
+- `workers/api/ai.ts` (1×): idem
+- Todos os erros de AI/Replicate/Claude agora retornam 500 estruturado via AppError handler
+
+### 🔷 T10.8 — Queue Handler Tipado
+- `workers/index.ts`: interface `PdfJobPayload` — elimina `(message.body as any)` × 4 no PDF handler
+
+### ⚡ T11.8 — React.memo
+- `treinos/page.tsx`: `ProgressRing` com memo
+- `treino-ativo/concluido/page.tsx`: `StatCard` + `ConfettiPiece` com memo
+
+### ✅ T3.7/T3.8/T12.4/T12.5 — Verificações
+- T3.7: tabela B2C student confirmada (users.user_type='student') — backend S5 ✅
+- T3.8: assessment backend confirmado (self-assessments.ts) — backend S5 ✅
+- T12.4: workers/schemas auditados — sem schemas mortos
+- T12.5: `tsc --noEmit` + `eslint` — 0 erros, 0 warnings
+
+---
+
 ## [v1.5.0] — 07/04/2026 — Sprint S15: Deferred Sprint 2
 
 ### 🏠 T5.9 — Assessment Card no Dashboard B2C

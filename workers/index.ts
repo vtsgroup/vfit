@@ -43,7 +43,7 @@ import { error } from '@lib/response'
 import { APP_CONFIG } from '@config/constants'
 import { pgQuery, generateId } from '@lib/db'
 import { fetchAssessmentPdfData, generateAndStoreAssessmentPdf } from '@lib/assessment-pdf'
-import { notifyEvent } from '@lib/onesignal'
+import { notifyEvent, notify } from '@lib/onesignal'
 import { dispatchCalendarReminders } from '@lib/calendar-reminders'
 import { handleXPExpiration } from './cron/xp-expiration'
 import { captureWorkerException } from '@lib/sentry-worker'
@@ -691,9 +691,106 @@ async function handleScheduled(
       )
       break
 
+    case '0 9 * * *':
+      // T8.4 — Daily workout reminder at 9 AM BRT (12 UTC)
+      ctx.waitUntil(
+        sendDailyWorkoutReminders(env)
+          .then((r) => console.log(`[Cron] Workout reminders sent: ${r}`))
+          .catch((err) => {
+            console.error('[Cron] Workout reminders failed:', err)
+            captureWorkerException(env, err, { source: 'cron.workout_reminder', cron: cronExpression })
+          })
+      )
+      break
+
+    case '0 18 * * *':
+      // T8.5 — Streak warning at 6 PM BRT (21 UTC)
+      ctx.waitUntil(
+        sendStreakWarnings(env)
+          .then((r) => console.log(`[Cron] Streak warnings sent: ${r}`))
+          .catch((err) => {
+            console.error('[Cron] Streak warnings failed:', err)
+            captureWorkerException(env, err, { source: 'cron.streak_warning', cron: cronExpression })
+          })
+      )
+      break
+
     default:
       console.warn(`[Cron] Unknown cron expression: ${cronExpression}`)
   }
+}
+
+/**
+ * T8.4 — Envia lembrete de treino diário para alunos com push ativo
+ * que ainda não registraram treino hoje.
+ */
+async function sendDailyWorkoutReminders(env: AppContext['Bindings']): Promise<number> {
+  const today = new Date().toISOString().split('T')[0] // YYYY-MM-DD
+
+  const result = await pgQuery<{ id: string }>(env, `
+    SELECT u.id
+    FROM users u
+    JOIN notification_preferences np ON np.user_id = u.id
+    WHERE u.user_type = 'student'
+      AND np.push_enabled = TRUE
+      AND np.workout_enabled = TRUE
+      AND NOT EXISTS (
+        SELECT 1 FROM workout_logs wl
+        WHERE wl.student_id = u.id
+          AND wl.created_at::date = $1::date
+      )
+    LIMIT 500
+  `, [today])
+
+  let sent = 0
+  for (const row of result.rows) {
+    await notify(env, row.id, {
+      type: 'workout.reminder',
+      title: '🏋️ Hora do treino!',
+      message: 'Você ainda não treinou hoje. Mantenha sua sequência!',
+      link: '/treinos',
+    }).catch(() => {})
+    sent++
+  }
+  return sent
+}
+
+/**
+ * T8.5 — Avisa alunos com streak ativo que ainda não treinaram hoje
+ * (risco de quebrar a sequência).
+ */
+async function sendStreakWarnings(env: AppContext['Bindings']): Promise<number> {
+  const today = new Date().toISOString().split('T')[0]
+
+  // Alunos com streak >= 2 dias e que NÃO treinaram hoje
+  const result = await pgQuery<{ id: string; streak: number }>(env, `
+    SELECT u.id, COALESCE(xs.current_streak, 0) as streak
+    FROM users u
+    JOIN xp_stats xs ON xs.user_id = u.id
+    JOIN notification_preferences np ON np.user_id = u.id
+    WHERE u.user_type = 'student'
+      AND xs.current_streak >= 2
+      AND np.push_enabled = TRUE
+      AND np.workout_enabled = TRUE
+      AND NOT EXISTS (
+        SELECT 1 FROM workout_logs wl
+        WHERE wl.student_id = u.id
+          AND wl.created_at::date = $1::date
+      )
+    LIMIT 500
+  `, [today])
+
+  let sent = 0
+  for (const row of result.rows) {
+    await notify(env, row.id, {
+      type: 'streak.warning',
+      title: `🔥 ${row.streak} dias de sequência em risco!`,
+      message: 'Treine hoje para não perder sua sequência. Você consegue!',
+      link: '/treinos',
+    }).catch(() => {})
+    sent++
+  }
+  return sent
 }
 
 /**
@@ -745,6 +842,15 @@ async function warmCache(env: AppContext['Bindings']): Promise<void> {
 }
 
 // ============================================
+// QUEUE CONSUMER — Payload types
+// ============================================
+interface PdfJobPayload {
+  type: 'assessment_pdf'
+  assessment_id: string
+  queued_at?: string
+}
+
+// ============================================
 // QUEUE CONSUMER
 // ============================================
 async function handleQueue(
@@ -786,18 +892,18 @@ async function handleQueue(
             break
           }
 
-          if ((message.body as any).type !== 'assessment_pdf') {
-            console.warn('[Queue] PDF tipo desconhecido:', (message.body as any).type)
+          if ((message.body as PdfJobPayload).type !== 'assessment_pdf') {
+            console.warn('[Queue] PDF tipo desconhecido:', (message.body as PdfJobPayload).type)
             break
           }
 
-          if (!(message.body as any).assessment_id) {
+          if (!(message.body as PdfJobPayload).assessment_id) {
             console.warn('[Queue] assessment_id ausente no PDF job')
             break
           }
 
           try {
-            const assessmentId = String((message.body as any).assessment_id)
+            const assessmentId = String((message.body as PdfJobPayload).assessment_id)
             await generateAndStoreAssessmentPdf(env as any, assessmentId)
 
             // Notificar aluno (best-effort)

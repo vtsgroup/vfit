@@ -2,16 +2,63 @@
  * src/app/(app)/treino-ativo/concluido/page.tsx
  *
  * Tela de conclusão do treino — Resumo + Records + XP
+ * T8.8: Follow-up motivacional | T9.9: Confetti CSS
  */
 
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, memo } from 'react'
 import { useRouter } from 'next/navigation'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
 import { useActiveWorkoutStore } from '@/stores/active-workout-store'
 import { hapticSuccess } from '@/lib/haptics'
+
+// ─── Confetti (T9.9) ─────────────────────────
+const CONFETTI_COLORS = ['#22C55E', '#4ADE80', '#F59E0B', '#3B82F6', '#8B5CF6', '#EC4899', '#EF4444']
+
+const ConfettiPiece = memo(function ConfettiPiece({
+  color, left, delay, duration, size,
+}: { color: string; left: string; delay: string; duration: string; size: number }) {
+  return (
+    <div
+      className="absolute top-0 rounded-sm opacity-0"
+      style={{
+        left, width: size, height: size * 1.4, backgroundColor: color,
+        animationName: 'confettiFall', animationDuration: duration,
+        animationDelay: delay, animationTimingFunction: 'linear',
+        animationFillMode: 'forwards',
+      }}
+    />
+  )
+})
+
+function Confetti({ show }: { show: boolean }) {
+  const pieces = useMemo(() =>
+    Array.from({ length: 72 }, (_, i) => ({
+      color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
+      left: `${(i / 72) * 100 + Math.sin(i * 0.9) * 1.5}%`,
+      delay: `${(i % 14) * 0.07}s`,
+      duration: `${1.5 + (i % 9) * 0.14}s`,
+      size: 6 + (i % 4) * 2,
+    }))
+  , [])
+
+  if (!show) return null
+
+  return (
+    <>
+      <style>{`@keyframes confettiFall {
+        0%   { transform: translateY(-8px) rotate(0deg); opacity: 1; }
+        80%  { opacity: 1; }
+        100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+      }`}</style>
+      <div className="pointer-events-none fixed inset-0 z-50 overflow-hidden">
+        {pieces.map((p, i) => <ConfettiPiece key={i} {...p} />)}
+      </div>
+    </>
+  )
+}
 
 function formatDuration(seconds: number): string {
   const h = Math.floor(seconds / 3600)
@@ -25,10 +72,13 @@ export default function TreinoConcluido() {
   const workout = useActiveWorkoutStore((s) => s.workout)
   const cancelWorkout = useActiveWorkoutStore((s) => s.cancelWorkout)
   const [records] = useState<Array<{ exercise_name: string; weight_kg: number }>>([])
+  const [showConfetti, setShowConfetti] = useState(true)
 
-  // Haptic on mount
+  // Haptic + confetti on mount
   useEffect(() => {
     hapticSuccess()
+    const t = setTimeout(() => setShowConfetti(false), 3500)
+    return () => clearTimeout(t)
   }, [])
 
   const summary = useMemo(() => {
@@ -73,7 +123,10 @@ export default function TreinoConcluido() {
   }
 
   return (
-    <div className="mx-auto max-w-lg px-4 pb-32 pt-8">
+    <div className="mx-auto max-w-lg animate-in fade-in-0 slide-in-from-bottom-2 duration-300 px-4 pb-32 pt-8">
+      {/* Confetti (T9.9) */}
+      <Confetti show={showConfetti} />
+
       {/* ─── Trophy ─── */}
       <div className="mb-6 flex flex-col items-center text-center">
         <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-3xl bg-white/8">
@@ -118,6 +171,22 @@ export default function TreinoConcluido() {
         </div>
       )}
 
+      {/* ─── Follow-up card (T8.8) ─── */}
+      <div className="mt-6 rounded-2xl border border-brand-primary/20 bg-brand-primary/5 p-4">
+        <div className="flex items-start gap-3">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-primary/15">
+            <DSIcon name="zap" size={18} className="text-brand-primary" />
+          </div>
+          <div>
+            <p className="text-sm font-bold text-text-primary">Continue a sequência! 🔥</p>
+            <p className="mt-0.5 text-xs leading-relaxed text-text-secondary">
+              Descanse bem, hidrate-se e volte amanhã mais forte.
+              A consistência é o maior superpoder de quem treina.
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* ─── CTA ─── */}
       <div className="mt-8 space-y-3">
         <Button
@@ -136,7 +205,7 @@ export default function TreinoConcluido() {
   )
 }
 
-function StatCard({ emoji, label, value }: { emoji: string; label: string; value: string }) {
+const StatCard = memo(function StatCard({ emoji, label, value }: { emoji: string; label: string; value: string }) {
   return (
     <div className="flex flex-col items-center gap-1 rounded-2xl border border-border-primary bg-bg-secondary p-4 text-center">
       <span className="text-xl">{emoji}</span>
@@ -144,4 +213,4 @@ function StatCard({ emoji, label, value }: { emoji: string; label: string; value
       <span className="text-[10px] font-medium text-text-muted">{label}</span>
     </div>
   )
-}
+})

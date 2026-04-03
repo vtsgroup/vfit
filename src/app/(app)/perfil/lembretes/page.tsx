@@ -2,7 +2,7 @@
  * src/app/(app)/perfil/lembretes/page.tsx
  *
  * Lembretes de treino — dias da semana + horário
- * Persistência via localStorage (futuramente notificações push)
+ * T8.10: Persistência via API de notification preferences + localStorage fallback
  */
 
 'use client'
@@ -12,6 +12,10 @@ import { useRouter } from 'next/navigation'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { cn } from '@/lib/utils'
 import { hapticLight, hapticSuccess } from '@/lib/haptics'
+import {
+  useNotificationPreferences,
+  useUpdateNotificationPreferences,
+} from '@/hooks/use-notification-preferences'
 
 const STORAGE_KEY = 'vfit_reminders'
 
@@ -41,16 +45,47 @@ export default function LembretesPage() {
   const router = useRouter()
   const [settings, setSettings] = useState<ReminderSettings>(DEFAULT)
 
+  // T8.10: API de preferências de notificação
+  const { data: prefsData } = useNotificationPreferences()
+  const updatePrefs = useUpdateNotificationPreferences()
+
+  // Sincronizar enabled com a API quando carregar
+  useEffect(() => {
+    if (prefsData?.preferences) {
+      const apiEnabled = prefsData.preferences.push_enabled && prefsData.preferences.workout_enabled
+      setSettings((prev) => ({ ...prev, enabled: apiEnabled }))
+    }
+  }, [prefsData])
+
+  // Carregar dias/horário do localStorage
   useEffect(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY)
-      if (saved) setSettings(JSON.parse(saved))
+      if (saved) {
+        const parsed = JSON.parse(saved) as ReminderSettings
+        setSettings((prev) => ({
+          ...prev,
+          days: parsed.days ?? prev.days,
+          time: parsed.time ?? prev.time,
+        }))
+      }
     } catch { /* ignore */ }
   }, [])
 
   const save = (next: ReminderSettings) => {
     setSettings(next)
     localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
+  }
+
+  const toggleEnabled = () => {
+    hapticLight()
+    const newEnabled = !settings.enabled
+    save({ ...settings, enabled: newEnabled })
+    // Sincronizar com API
+    updatePrefs.mutate({
+      push_enabled: newEnabled,
+      workout_enabled: newEnabled,
+    })
   }
 
   const toggleDay = (day: string) => {
@@ -104,10 +139,7 @@ export default function LembretesPage() {
           </div>
         </div>
         <button
-          onClick={() => {
-            hapticLight()
-            save({ ...settings, enabled: !settings.enabled })
-          }}
+          onClick={toggleEnabled}
           className={cn(
             'h-7 w-12 rounded-full transition-colors',
             settings.enabled ? 'bg-brand-primary' : 'bg-zinc-700'

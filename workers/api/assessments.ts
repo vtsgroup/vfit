@@ -42,6 +42,7 @@ import {
   NotFoundError,
   BadRequestError,
   ForbiddenError,
+  InternalError,
 } from '@lib/errors'
 import { notify, notifyEvent } from '@lib/onesignal'
 import { sendEmail } from '@lib/email'
@@ -1586,7 +1587,7 @@ async function generateAssessmentFeedback(
     })
 
     if (!response.ok) {
-      throw new Error(`Claude API error: ${response.status}`)
+      throw new InternalError(`Claude API error: ${response.status}`)
     }
 
     const data = (await response.json()) as { output?: string[] | string }
@@ -1714,19 +1715,19 @@ async function editPhotoWithNanoBanana(
       data = JSON.parse(responseText) as NanoPrediction
       break
     } catch {
-      throw new Error(`Invalid JSON from Replicate: ${responseText.substring(0, 200)}`)
+      throw new InternalError(`Invalid JSON from Replicate: ${responseText.substring(0, 200)}`)
     }
   }
 
   if (!data) {
-    throw new Error(`Nano Banana API error: ${responseStatus} — ${responseText.substring(0, 200)}`)
+    throw new InternalError(`Nano Banana API error: ${responseStatus} — ${responseText.substring(0, 200)}`)
   }
 
   // Se o status ainda é "processing", fazer polling
   if (data.status === 'processing' || data.status === 'starting') {
     // Esperar e tentar de novo (máximo 3 tentativas de 10s)
     if (!data.id) {
-      throw new Error('Replicate prediction id ausente para polling')
+      throw new InternalError('Replicate prediction id ausente para polling')
     }
     const predictionUrl = `https://api.replicate.com/v1/predictions/${data.id}`
     for (let i = 0; i < 6; i++) {
@@ -1738,19 +1739,19 @@ async function editPhotoWithNanoBanana(
       console.log(`[Nano Banana] Poll ${i + 1}: status=${data.status}`)
       if (data.status === 'succeeded') break
       if (data.status === 'failed' || data.status === 'canceled') {
-        throw new Error(`Nano Banana ${data.status}: ${data.error || 'unknown'}`)
+        throw new InternalError(`Nano Banana ${data.status}: ${data.error || 'unknown'}`)
       }
     }
   }
 
   if (data.error) {
-    throw new Error(`Nano Banana error: ${data.error}`)
+    throw new InternalError(`Nano Banana error: ${data.error}`)
   }
 
   const outputUrl = extractImageUrlFromOutput(data.output)
   if (outputUrl) return outputUrl
 
-  throw new Error('Invalid response from Nano Banana')
+  throw new InternalError('Invalid response from Nano Banana')
 }
 
 function parsePhotos(photos: unknown): Array<{ type: string; url: string; order: number }> {
@@ -1832,13 +1833,13 @@ async function getNanoBananaVersion(token: string): Promise<string> {
 
   if (!resp.ok) {
     const txt = await resp.text()
-    throw new Error(`Falha ao obter versão do nano-banana: ${resp.status} ${txt.slice(0, 160)}`)
+    throw new InternalError(`Falha ao obter versão do nano-banana: ${resp.status} ${txt.slice(0, 160)}`)
   }
 
   const data = await resp.json() as { latest_version?: { id?: string } }
   const versionId = data.latest_version?.id
   if (!versionId) {
-    throw new Error('Nano Banana sem latest_version na API Replicate')
+    throw new InternalError('Nano Banana sem latest_version na API Replicate')
   }
 
   nanoBananaVersionCache = versionId
