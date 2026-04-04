@@ -25,7 +25,7 @@ import "./globals.css";
 
 import { APP_VERSION } from "../../lib/version";
 
-const ICONS_REV = "20260226-real";
+const ICONS_REV = "20260404-v4";
 
 const syne = Syne({
   variable: "--font-syne",

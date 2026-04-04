@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>VFIT — Icon Concepts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased;background:#0C0C0D;color:#E8EAF0;font-family:'Inter',sans-serif}
+body{min-height:100vh}
+
+/* ─ PAGE ─ */
+.wrap{max-width:1080px;margin-inline:auto;padding:56px 24px 96px}
+
+/* ─ TOP BAR ─ */
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:64px}
+.brand-pill{display:flex;align-items:center;gap:10px}
+.brand-pill svg{display:block}
+.brand-name{font-size:15px;font-weight:700;letter-spacing:-.3px}
+.brand-sub{font-size:11px;color:#5A5F6E;letter-spacing:.04em;font-weight:500}
+.badge{background:#1A1C22;border:1px solid #2A2D36;border-radius:100px;
+  padding:6px 14px;font-size:11px;color:#5A5F6E;letter-spacing:.05em}
+
+/* ─ SECTION LABEL ─ */
+.sec-lbl{font-size:10.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  color:#3A3F50;margin-bottom:24px;display:flex;align-items:center;gap:12px}
+.sec-lbl::after{content:'';flex:1;height:1px;background:#1E2028}
+
+/* ─ CONCEPT CARDS ─ */
+.concepts{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px}
+@media(max-width:700px){.concepts{grid-template-columns:1fr;gap:12px}}
+.concept-card{border-radius:24px;border:1px solid #1E2028;overflow:hidden;cursor:pointer;
+  transition:border-color 220ms ease,transform 220ms ease;position:relative}
+.concept-card:hover{border-color:#2E3240;transform:translateY(-2px)}
+.concept-card.active{border-color:#2ECD70}
+
+.c-hero{padding:44px 0 36px;display:flex;align-items:center;justify-content:center;position:relative}
+.c-hero svg{position:relative;z-index:1}
+
+/* glow halos under icons */
+.glow-vib{background:radial-gradient(ellipse 80% 70% at 50% 55%,rgba(58,219,110,.1),transparent),#0C0C0D}
+.glow-dark{background:radial-gradient(ellipse 75% 65% at 50% 55%,rgba(46,205,112,.09),transparent),#0C0C0D}
+.glow-prem{background:radial-gradient(ellipse 70% 60% at 50% 55%,rgba(100,220,140,.07),transparent),#0C0C0D}
+
+.c-foot{padding:18px 22px 22px;background:#0C0C0D;border-top:1px solid #1A1C22}
+.c-title{font-size:13px;font-weight:700;letter-spacing:-.2px;margin-bottom:4px}
+.c-desc{font-size:11.5px;color:#4A5060;line-height:1.6}
+.c-pick{display:inline-flex;align-items:center;gap:6px;margin-top:12px;
+  background:#1A1C22;border:1px solid #252830;border-radius:100px;
+  padding:6px 14px;font-size:11px;color:#3A3F50;
+  transition:all 220ms ease;cursor:pointer}
+.concept-card.active .c-pick{background:rgba(46,205,112,.12);border-color:rgba(46,205,112,.3);color:#2ECD70}
+.c-pick:hover{border-color:#3A3F50;color:#8A9AAE}
+
+/* ─ DETAIL AREA ─ */
+.detail{background:#0E1014;border:1px solid #1E2028;border-radius:24px;
+  padding:40px;margin-bottom:16px}
+
+/* SIZE SHELF */
+.shelf{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;margin-bottom:40px}
+.sz-item{display:flex;flex-direction:column;align-items:center;gap:8px;
+  background:#0C0C0D;border:1px solid #1A1C22;border-radius:14px;padding:18px 14px;
+  transition:border-color 220ms ease}
+.sz-item:hover{border-color:#2E3240}
+.sz-lbl{font-size:9.5px;color:#3A4050;text-align:center;line-height:1.6}
+
+/* LOCKUPS */
+.lockups{display:flex;flex-direction:column;gap:10px}
+.lk{border-radius:16px;padding:28px 36px;display:flex;align-items:center;justify-content:center}
+.lk-dark{background:#07080A;border:1px solid #1A1C22}
+.lk-mid{background:#131417;border:1px solid #1E2028}
+.lk-white{background:#F7F8FA;border:1px solid #E8EAF0}
+
+/* PHONE MOCKUP */
+.phone-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:40px}
+@media(max-width:600px){.phone-grid{grid-template-columns:1fr}}
+.phone-frame{background:#0A0A0C;border-radius:20px;border:1px solid #1E2028;
+  padding:28px 28px 24px;display:flex;flex-direction:column;gap:12px}
+.phone-title{font-size:10px;color:#3A4050;text-align:center;letter-spacing:.06em;
+  text-transform:uppercase;margin-bottom:4px}
+.app-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.app-slot{display:flex;flex-direction:column;align-items:center;gap:5px}
+.app-name{font-size:8.5px;color:#5A6070;text-align:center}
+.phone-notif{background:#1A1C22;border-radius:14px;padding:13px 16px;
+  display:flex;align-items:center;gap:12px}
+.notif-icon{width:36px;height:36px;border-radius:10px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center}
+.notif-text{flex:1}
+.notif-title{font-size:11px;font-weight:600;color:#D0D4E0}
+.notif-sub{font-size:10px;color:#5A6070;margin-top:2px}
+
+/* CODE PANEL */
+.code-wrap{background:#07080A;border:1px solid #161820;border-radius:16px;
+  padding:22px;position:relative;overflow:hidden}
+.code-wrap pre{font-family:'SF Mono','Fira Code',monospace;font-size:11.5px;
+  line-height:1.8;color:#64748B;overflow-x:auto;white-space:pre}
+.code-wrap pre .kw{color:#2ECD70}
+.code-wrap pre .str{color:#7FC4A8}
+.code-wrap pre .cm{color:#3A4050}
+.cp-btn{position:absolute;top:14px;right:14px;background:#1A1C22;border:1px solid #252830;
+  border-radius:8px;padding:5px 13px;color:#5A6070;font-size:11px;cursor:pointer;
+  font-family:'Inter',sans-serif;transition:all 220ms ease}
+.cp-btn:hover{border-color:#3A3F50;color:#8A9AAE}
+
+/* ─ DL FOOTER ─ */
+.dl-bar{background:#0E1014;border:1px solid #1E2028;border-radius:20px;
+  padding:26px 32px;display:flex;align-items:center;justify-content:space-between;
+  gap:20px;flex-wrap:wrap}
+.dl-info h3{font-size:15px;font-weight:700;letter-spacing:-.3px}
+.dl-info p{font-size:12px;color:#4A5060;margin-top:4px}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap}
+.btn-primary{border:none;border-radius:100px;padding:12px 28px;
+  font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;
+  transition:opacity 200ms,transform 200ms}
+.btn-primary:hover{opacity:.88;transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:#8A9AAE;border:1px solid #252830;
+  border-radius:100px;padding:12px 24px;font-size:13px;
+  cursor:pointer;transition:all 220ms ease;font-family:'Inter',sans-serif}
+.btn-ghost:hover{border-color:#3A3F50;color:#C0C8D8}
+
+/* ANIM */
+@keyframes draw{from{stroke-dashoffset:500}to{stroke-dashoffset:0}}
+@keyframes in-up{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+@keyframes glow-pulse{0%,100%{opacity:1}50%{opacity:.6}}
+.animated .arm1{stroke-dasharray:500;stroke-dashoffset:500;animation:draw 1s cubic-bezier(.16,1,.3,1) forwards}
+.animated .arm2{stroke-dasharray:500;stroke-dashoffset:500;animation:draw .9s cubic-bezier(.16,1,.3,1) .35s forwards}
+.animated .txt{opacity:0;animation:in-up .4s ease .9s forwards}
+
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="brand-pill">
+    <svg width="30" height="30" viewBox="0 0 200 200" fill="none">
+      <defs><linearGradient id="tp-g" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#3DDB6E"/><stop offset="100%" stop-color="#076B2A"/>
+      </linearGradient></defs>
+      <rect width="200" height="200" rx="44" fill="url(#tp-g)"/>
+      <polyline points="36,42 100,158 164,42" fill="none" stroke="white" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div><div class="brand-name">VFIT</div><div class="brand-sub">Brand Concepts</div></div>
+  </div>
+  <span class="badge">3 Conceitos · 2026</span>
+</div>
+
+<!-- CONCEPT CARDS -->
+<p class="sec-lbl">Escolha o conceito</p>
+<div class="concepts">
+
+  <!-- A: VIBRANTE -->
+  <div class="concept-card active" id="card-A" onclick="pick('A')">
+    <div class="c-hero glow-vib">
+      <!-- THE ICON — Vibrant Green Gradient -->
+      <svg width="130" height="130" viewBox="0 0 200 200" fill="none" id="main-icon-A">
+        <defs>
+          <linearGradient id="A-bg" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#56EF85"/>
+            <stop offset="38%" stop-color="#22C55E"/>
+            <stop offset="100%" stop-color="#065F2C"/>
+          </linearGradient>
+          <radialGradient id="A-hl" cx="33%" cy="28%" r="54%">
+            <stop offset="0%" stop-color="rgba(255,255,255,.30)"/>
+            <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+          </radialGradient>
+          <filter id="A-sh">
+            <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="rgba(0,60,20,.55)"/>
+          </filter>
+          <filter id="A-inner">
+            <feComposite in="SourceGraphic" in2="SourceGraphic" operator="over"/>
+          </filter>
+        </defs>
+        <!-- Background -->
+        <rect width="200" height="200" rx="46" fill="url(#A-bg)"/>
+        <!-- Specular highlight -->
+        <rect width="200" height="200" rx="46" fill="url(#A-hl)"/>
+        <!-- Inner border (glass feel) -->
+        <rect x="1" y="1" width="198" height="198" rx="45.5" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="1.5"/>
+        <!-- V Mark — clean, bold, centered -->
+        <g filter="url(#A-sh)">
+          <polyline points="32,38 100,162 168,38"
+            fill="none" stroke="white"
+            stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+      </svg>
+    </div>
+    <div class="c-foot">
+      <div class="c-title">Vibrante</div>
+      <div class="c-desc">Verde gradiente vivo. App Store-ready. Strava / Nike energy.</div>
+      <div class="c-pick" onclick="pick('A')"><span>●</span> Selecionar</div>
+    </div>
+  </div>
+
+  <!-- B: NOTURNO -->
+  <div class="concept-card" id="card-B" onclick="pick('B')">
+    <div class="c-hero glow-dark">
+      <svg width="130" height="130" viewBox="0 0 200 200" fill="none" id="main-icon-B">
+        <defs>
+          <linearGradient id="B-bg" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#0F1C14"/>
+            <stop offset="55%" stop-color="#0A1210"/>
+            <stop offset="100%" stop-color="#060809"/>
+          </linearGradient>
+          <linearGradient id="B-v" x1="32" y1="38" x2="100" y2="162" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#78FFAA"/>
+            <stop offset="50%" stop-color="#22C55E"/>
+            <stop offset="100%" stop-color="#0D8F40"/>
+          </linearGradient>
+          <radialGradient id="B-aura" cx="50%" cy="58%" r="45%">
+            <stop offset="0%" stop-color="rgba(34,197,94,.14)"/>
+            <stop offset="100%" stop-color="rgba(34,197,94,0)"/>
+          </radialGradient>
+          <filter id="B-gw">
+            <feGaussianBlur stdDeviation="7" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <rect width="200" height="200" rx="46" fill="url(#B-bg)"/>
+        <!-- Aura behind V -->
+        <rect width="200" height="200" rx="46" fill="url(#B-aura)"/>
+        <!-- Subtle border -->
+        <rect x="1" y="1" width="198" height="198" rx="45.5" fill="none" stroke="rgba(34,197,94,.12)" stroke-width="1.5"/>
+        <!-- V with glow -->
+        <polyline points="32,38 100,162 168,38" fill="none" stroke="url(#B-v)" stroke-width="23" stroke-linecap="round" stroke-linejoin="round" filter="url(#B-gw)"/>
+        <!-- FIT ghost text -->
+        <text x="100" y="188" font-family="'Inter',sans-serif" font-size="11" font-weight="800" letter-spacing="10" fill="rgba(34,197,94,.18)" text-anchor="middle">FIT</text>
+      </svg>
+    </div>
+    <div class="c-foot">
+      <div class="c-title">Noturno</div>
+      <div class="c-desc">Fundo escuro premium. V verde neon com glow. "FIT" fantasma.</div>
+      <div class="c-pick" onclick="pick('B')"><span>●</span> Selecionar</div>
+    </div>
+  </div>
+
+  <!-- C: ATIVO -->
+  <div class="concept-card" id="card-C" onclick="pick('C')">
+    <div class="c-hero glow-prem">
+      <svg width="130" height="130" viewBox="0 0 200 200" fill="none" id="main-icon-C">
+        <defs>
+          <linearGradient id="C-bg" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#14201A"/>
+            <stop offset="60%" stop-color="#0C1610"/>
+            <stop offset="100%" stop-color="#070C08"/>
+          </linearGradient>
+          <linearGradient id="C-v" x1="32" y1="38" x2="100" y2="150" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#ECFDF5"/>
+            <stop offset="40%" stop-color="#4ADE80"/>
+            <stop offset="100%" stop-color="#16A34A"/>
+          </linearGradient>
+          <linearGradient id="C-accent" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#22C55E" stop-opacity=".35"/>
+            <stop offset="100%" stop-color="#065F2C" stop-opacity="0"/>
+          </linearGradient>
+          <filter id="C-gw">
+            <feGaussianBlur stdDeviation="5" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <rect width="200" height="200" rx="46" fill="url(#C-bg)"/>
+        <!-- Top-left accent -->
+        <rect width="200" height="200" rx="46" fill="url(#C-accent)"/>
+        <!-- Corner detail — tiny dot accent like Spark -->
+        <circle cx="164" cy="38" r="6" fill="#22C55E" opacity=".7"/>
+        <!-- V -->
+        <polyline points="32,44 100,156 168,44" fill="none" stroke="url(#C-v)" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" filter="url(#C-gw)"/>
+        <!-- FIT badge below -->
+        <rect x="74" y="168" width="52" height="16" rx="8" fill="rgba(34,197,94,.12)"/>
+        <text x="100" y="180" font-family="'Inter',sans-serif" font-size="9.5" font-weight="700" letter-spacing="3.5" fill="rgba(74,222,128,.55)" text-anchor="middle">FIT</text>
+      </svg>
+    </div>
+    <div class="c-foot">
+      <div class="c-title">Ativo</div>
+      <div class="c-desc">Dark refinado + FIT badge + ponto accent. Sofisticado.</div>
+      <div class="c-pick" onclick="pick('C')"><span>●</span> Selecionar</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ────────────────────────────────────────────
+  DETAIL PANELS — one per concept, hidden/shown
+──────────────────────────────────────────── -->
+
+<!-- VIBRANTE DETAIL -->
+<div id="detail-A" class="detail">
+  <p class="sec-lbl" style="margin-bottom:32px">Conceito A — Vibrante · Todos os tamanhos</p>
+
+  <!-- PHONE MOCKUP -->
+  <div class="phone-grid" style="margin-bottom:36px">
+    <div class="phone-frame">
+      <div class="phone-title">Home Screen</div>
+      <div class="app-grid">
+        <!-- VFIT icon prominent -->
+        <div class="app-slot">
+          <svg width="56" height="56" viewBox="0 0 200 200" fill="none">
+            <defs><linearGradient id="Am1" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#56EF85"/><stop offset="100%" stop-color="#065F2C"/>
+            </linearGradient></defs>
+            <rect width="200" height="200" rx="44" fill="url(#Am1)"/>
+            <polyline points="32,38 100,162 168,38" fill="none" stroke="white" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg><span class="app-name">VFIT</span>
+        </div>
+        <!-- placeholder apps -->
+        <div class="app-slot"><div style="width:56px;height:56px;border-radius:16px;background:#1A1C22"></div><span class="app-name">Música</span></div>
+        <div class="app-slot"><div style="width:56px;height:56px;border-radius:16px;background:#1A1C22"></div><span class="app-name">Maps</span></div>
+        <div class="app-slot"><div style="width:56px;height:56px;border-radius:16px;background:#1A1C22"></div><span class="app-name">Saúde</span></div>
+        <div class="app-slot"><div style="width:56px;height:56px;border-radius:16px;background:#161820"></div><span class="app-name">Fotos</span></div>
+        <div class="app-slot"><div style="width:56px;height:56px;border-radius:16px;background:#161820"></div><span class="app-name">Mail</span></div>
+        <div class="app-slot"><div style="width:56px;height:56px;border-radius:16px;background:#161820"></div><span class="app-name">Relógio</span></div>
+        <div class="app-slot"><div style="width:56px;height:56px;border-radius:16px;background:#161820"></div><span class="app-name">Safari</span></div>
+      </div>
+    </div>
+    <div class="phone-frame">
+      <div class="phone-title">Notificação</div>
+      <div class="phone-notif">
+        <div class="notif-icon">
+          <svg width="36" height="36" viewBox="0 0 200 200" fill="none">
+            <defs><linearGradient id="An1" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#56EF85"/><stop offset="100%" stop-color="#065F2C"/>
+            </linearGradient></defs>
+            <rect width="200" height="200" rx="44" fill="url(#An1)"/>
+            <polyline points="32,38 100,162 168,38" fill="none" stroke="white" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="notif-text">
+          <div class="notif-title">Hora do treino! 💪</div>
+          <div class="notif-sub">Seu plano de hoje está esperando</div>
+        </div>
+      </div>
+      <!-- Notification badge demo -->
+      <div style="display:flex;align-items:center;gap:14px;margin-top:14px">
+        <div style="position:relative;display:inline-block">
+          <svg width="52" height="52" viewBox="0 0 200 200" fill="none">
+            <defs><linearGradient id="Ab1" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#56EF85"/><stop offset="100%" stop-color="#065F2C"/>
+            </linearGradient></defs>
+            <rect width="200" height="200" rx="44" fill="url(#Ab1)"/>
+            <polyline points="32,38 100,162 168,38" fill="none" stroke="white" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div style="position:absolute;top:-4px;right:-4px;width:20px;height:20px;
+            background:#FF3B30;border-radius:50%;border:2px solid #0A0A0C;
+            display:flex;align-items:center;justify-content:center;
+            font-size:8.5px;font-weight:800;color:#fff">3</div>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:600;color:#D0D4E0">VFIT com badge</div>
+          <div style="font-size:10px;color:#5A6070;margin-top:2px">Notificações ativas</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ALL SIZES -->
+  <p class="sec-lbl">Tamanhos</p>
+  <div class="shelf">
+    <div class="sz-item"><svg width="80" height="80" viewBox="0 0 200 200" fill="none">
+      <defs><linearGradient id="As1" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#56EF85"/><stop offset="100%" stop-color="#065F2C"/>
+      </linearGradient><radialGradient id="As1h" cx="33%" cy="28%" r="54%">
+        <stop offset="0%" stop-color="rgba(255,255,255,.28)"/><stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+      </radialGradient></defs>
+      <rect width="200" height="200" rx="46" fill="url(#As1)"/>
+      <rect width="200" height="200" rx="46" fill="url(#As1h)"/>
+      <polyline points="32,38 100,162 168,38" fill="none" stroke="white" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg><span class="sz-lbl">1024px<br/>macOS/Web</span></div>
+
+    <div class="sz-item"><svg width="64" height="64" viewBox="0 0 200 200" fill="none">
+      <defs><linearGradient id="As2" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#3DDB6E"/><stop offset="100%" stop-color="#065F2C"/>
+      </linearGradient></defs>
+      <rect width="200" height="200" rx="46" fill="url(#As2)"/>
+      <polyline points="32,38 100,162 168,38" fill="none" stroke="white" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg><span class="sz-lbl">512px<br/>App Store</span></div>
+
+    <div class="sz-item"><svg width="52" height="52" viewBox="0 0 200 200" fill="none">
+      <defs><linearGradient id="As3" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#3DDB6E"/><stop offset="100%" stop-color="#076B2A"/>
+      </linearGradient></defs>
+      <rect width="200" height="200" rx="46" fill="url(#As3)"/>
+      <polyline points="32,38 100,162 168,38" fill="none" stroke="white" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg><span class="sz-lbl">256px<br/>iPhone</span></div>
+
+    <div class="sz-item"><svg width="44" height="44" viewBox="0 0 200 200" fill="none">
+      <defs><linearGradient id="As4" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#2EBD60"/><stop offset="100%" stop-color="#076B2A"/>
+      </linearGradient></defs>
+      <rect width="200" height="200" rx="46" fill="url(#As4)"/>
+      <polyline points="32,38 100,162 168,38" fill="none" stroke="white" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg><span class="sz-lbl">192px<br/>Android</span></div>
+
+    <div class="sz-item"><svg width="36" height="36" viewBox="0 0 200 200" fill="none">
+      <defs><linearGradient id="As5" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#3DDB6E"/><stop offset="100%" stop-color="#0A8030"/>
+      </linearGradient></defs>
+      <rect width="200" height="200" rx="46" fill="url(#As5)"/>
+      <polyline points="32,38 100,162 168,38" fill="none" stroke="white" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg><span class="sz-lbl">60px<br/>Notif</span></div>
+
+    <div class="sz-item"><svg width="28" height="28" viewBox="0 0 200 200" fill="none">
+      <defs><linearGradient id="As6" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#22C55E"/><stop offset="100%" stop-color="#076B2A"/>
+      </linearGradient></defs>
+      <rect width="200" height="200" rx="46" fill="url(#As6)"/>
+      <polyline points="38,44 100,156 162,44" fill="none" stroke="white" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg><span class="sz-lbl">32px<br/>Favicon</span></div>
+
+    <div class="sz-item"><svg width="48" height="48" viewBox="0 0 200 200" fill="none">
+      <defs><linearGradient id="As7" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#56EF85"/><stop offset="100%" stop-color="#065F2C"/>
+      </linearGradient></defs>
+      <circle cx="100" cy="100" r="100" fill="url(#As7)"/>
+      <polyline points="32,38 100,162 168,38" fill="none" stroke="white" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg><span class="sz-lbl">Watch<br/>Circular</span></div>
+
+    <div class="sz-item" style="background:#F5F6FA">
+      <svg width="44" height="44" viewBox="0 0 200 200" fill="none">
+        <polyline points="32,38 100,162 168,38" fill="none" stroke="#16A34A" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg><span class="sz-lbl" style="color:#9AA0B0">Mono<br/>Claro</span>
+    </div>
+  </div>
+
+  <!-- HORIZONTAL LOCKUPS -->
+  <p class="sec-lbl" style="margin-top:36px">Logo Horizontal</p>
+  <div class="lockups">
+    <div class="lk lk-dark">
+      <svg width="320" height="68" viewBox="0 0 320 68" fill="none">
+        <defs><linearGradient id="Alh1" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#56EF85"/><stop offset="100%" stop-color="#065F2C"/>
+        </linearGradient></defs>
+        <rect width="64" height="64" rx="15" fill="url(#Alh1)"/>
+        <polyline points="10.5,13 32,55.5 53.5,13" fill="none" stroke="white" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="80" y="50" font-family="'Inter',sans-serif" font-size="44" font-weight="900" letter-spacing="-2.5" fill="white">V</text>
+        <text x="120" y="50" font-family="'Inter',sans-serif" font-size="44" font-weight="300" letter-spacing="-1.5" fill="rgba(255,255,255,.35)">FIT</text>
+      </svg>
+    </div>
+    <div class="lk lk-white">
+      <svg width="320" height="68" viewBox="0 0 320 68" fill="none">
+        <defs><linearGradient id="Alh2" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#3DDB6E"/><stop offset="100%" stop-color="#076B2A"/>
+        </linearGradient></defs>
+        <rect width="64" height="64" rx="15" fill="url(#Alh2)"/>
+        <polyline points="10.5,13 32,55.5 53.5,13" fill="none" stroke="white" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="80" y="50" font-family="'Inter',sans-serif" font-size="44" font-weight="900" letter-spacing="-2.5" fill="#0A1A0E">V</text>
+        <text x="120" y="50" font-family="'Inter',sans-serif" font-size="44" font-weight="300" letter-spacing="-1.5" fill="rgba(10,26,14,.35)">FIT</text>
+      </svg>
+    </div>
+    <div class="lk lk-mid">
+      <svg width="200" height="56" viewBox="0 0 200 56" fill="none">
+        <defs><linearGradient id="Alh3" x1="0" y1="0" x2="200" y2="0" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#56EF85"/><stop offset="100%" stop-color="#22C55E"/>
+        </linearGradient></defs>
+        <text x="0" y="46" font-family="'Inter',sans-serif" font-size="48" font-weight="900" letter-spacing="-3" fill="url(#Alh3)">VFIT</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- SVG CODE -->
+  <p class="sec-lbl" style="margin-top:36px">Código SVG — Ícone Principal</p>
+  <div class="code-wrap">
+    <button class="cp-btn" onclick="copyCode('A')">Copiar</button>
+    <pre id="code-A">&lt;<span class="kw">svg</span> width=<span class="str">"512"</span> height=<span class="str">"512"</span> viewBox=<span class="str">"0 0 200 200"</span>
+  fill=<span class="str">"none"</span> xmlns=<span class="str">"http://www.w3.org/2000/svg"</span>&gt;
+  &lt;<span class="kw">defs</span>&gt;
+    &lt;<span class="kw">linearGradient</span> id=<span class="str">"bg"</span> x1=<span class="str">"0"</span> y1=<span class="str">"0"</span> x2=<span class="str">"200"</span> y2=<span class="str">"200"</span>
+      gradientUnits=<span class="str">"userSpaceOnUse"</span>&gt;
+      &lt;<span class="kw">stop</span> offset=<span class="str">"0%"</span>   stop-color=<span class="str">"#56EF85"</span>/&gt;
+      &lt;<span class="kw">stop</span> offset=<span class="str">"38%"</span>  stop-color=<span class="str">"#22C55E"</span>/&gt;
+      &lt;<span class="kw">stop</span> offset=<span class="str">"100%"</span> stop-color=<span class="str">"#065F2C"</span>/&gt;
+    &lt;/<span class="kw">linearGradient</span>&gt;
+    &lt;<span class="kw">radialGradient</span> id=<span class="str">"hl"</span> cx=<span class="str">"33%"</span> cy=<span class="str">"28%"</span> r=<span class="str">"54%"</span>&gt;
+      &lt;<span class="kw">stop</span> offset=<span class="str">"0%"</span>   stop-color=<span class="str">"rgba(255,255,255,.30)"</span>/&gt;
+      &lt;<span class="kw">stop</span> offset=<span class="str">"100%"</span> stop-color=<span class="str">"rgba(255,255,255,0)"</span>/&gt;
+    &lt;/<span class="kw">radialGradient</span>&gt;
+    &lt;<span class="kw">filter</span> id=<span class="str">"sh"</span>&gt;
+      &lt;<span class="kw">feDropShadow</span> dx=<span class="str">"0"</span> dy=<span class="str">"10"</span> stdDeviation=<span class="str">"14"</span>
+        flood-color=<span class="str">"rgba(0,60,20,.55)"</span>/&gt;
+    &lt;/<span class="kw">filter</span>&gt;
+  &lt;/<span class="kw">defs</span>&gt;
+  &lt;<span class="kw">rect</span> width=<span class="str">"200"</span> height=<span class="str">"200"</span> rx=<span class="str">"46"</span> fill=<span class="str">"url(#bg)"</span>/&gt;
+  &lt;<span class="kw">rect</span> width=<span class="str">"200"</span> height=<span class="str">"200"</span> rx=<span class="str">"46"</span> fill=<span class="str">"url(#hl)"</span>/&gt;
+  &lt;<span class="kw">rect</span> x=<span class="str">"1"</span> y=<span class="str">"1"</span> width=<span class="str">"198"</span> height=<span class="str">"198"</span> rx=<span class="str">"45.5"</span>
+    fill=<span class="str">"none"</span> stroke=<span class="str">"rgba(255,255,255,.15)"</span> stroke-width=<span class="str">"1.5"</span>/&gt;
+  &lt;<span class="kw">g</span> filter=<span class="str">"url(#sh)"</span>&gt;
+    &lt;<span class="kw">polyline</span> points=<span class="str">"32,38 100,162 168,38"</span>
+      fill=<span class="str">"none"</span> stroke=<span class="str">"white"</span>
+      stroke-width=<span class="str">"24"</span>
+      stroke-linecap=<span class="str">"round"</span> stroke-linejoin=<span class="str">"round"</span>/&gt;
+  &lt;/<span class="kw">g</span>&gt;
+&lt;/<span class="kw">svg</span>&gt;</pre>
+  </div>
+</div><!-- /detail-A -->
+
+<!-- NOTURNO DETAIL -->
+<div id="detail-B" class="detail" style="display:none">
+  <p class="sec-lbl" style="margin-bottom:32px">Conceito B — Noturno · Todos os tamanhos</p>
+  <div class="phone-grid" style="margin-bottom:36px">
+    <div class="phone-frame">
+      <div class="phone-title">Home Screen</div>
+      <div class="app-grid">
+        <div class="app-slot">
+          <svg width="56" height="56" viewBox="0 0 200 200" fill="none">
+            <defs><linearGradient id="Bm1" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#0F1C14"/><stop offset="100%" stop-color="#060809"/>
+            </linearGradient><linearGradient id="Bm1v" x1="32" y1="38" x2="100" y2="162" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#78FFAA"/><stop offset="100%" stop-color="#0D8F40"/>
+            </linearGradient><filter id="Bm1g"><feGaussianBlur stdDeviation="5" result="b"/>
+              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+            <rect width="200" height="200" rx="44" fill="url(#Bm1)"/>
+            <polyline points="32,38 100,162 168,38" fill="none" stroke="url(#Bm1v)" stroke-width="23" stroke-linecap="round" stroke-linejoin="round" filter="url(#Bm1g)"/>
+          </svg><span class="app-name">VFIT</span>
+        </div>
+        <div class="app-slot"><div style="width:56px;height:56px;border-radius:16px;background:#1A1C22"></div><span class="app-name">Música</span></div>
+        <div class="app-slot"><div style="width:56px;height:56px;border-radius:16px;background:#1A1C22"></div><span class="app-name">Maps</span></div>
+        <div class="app-slot"><div style="width:56px;height:56px;border-radius:16px;background:#1A1C22"></div><span class="app-name">Saúde</span></div>
+        <div class="app-slot"><div style="width:56px;height:56px;border-radius:16px;background:#161820"></div><span class="app-name">Fotos</span></div>
+        <div class="app-slot"><div style="width:56px;height:56px;border-radius:16px;background:#161820"></div><span class="app-name">Mail</span></div>
+        <div class="app-slot"><div style="width:56px;height:56px;border-radius:16px;background:#161820"></div><span class="app-name">Relógio</span></div>
+        <div class="app-slot"><div style="width:56px;height:56px;border-radius:16px;background:#161820"></div><span class="app-name">Safari</span></div>
+      </div>
+    </div>
+    <div class="phone-frame">
+      <div class="phone-title">Notificação</div>
+      <div class="phone-notif">
+        <div class="notif-icon">
+          <svg width="36" height="36" viewBox="0 0 200 200" fill="none">
+            <defs><linearGradient id="Bn1" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#0F1C14"/><stop offset="100%" stop-color="#060809"/>
+            </linearGradient><linearGradient id="Bn1v" x1="32" y1="38" x2="100" y2="162" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#78FFAA"/><stop offset="100%" stop-color="#0D8F40"/>
+            </linearGradient><filter id="Bn1g"><feGaussianBlur stdDeviation="5" result="b"/>
+              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+            <rect width="200" height="200" rx="44" fill="url(#Bn1)"/>
+            <polyline points="32,38 100,162 168,38" fill="none" stroke="url(#Bn1v)" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" filter="url(#Bn1g)"/>
+          </svg>
+        </div>
+        <div class="notif-text">
+          <div class="notif-title">Hora do treino! 💪</div>
+          <div class="notif-sub">Seu plano de hoje está esperando</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="sec-lbl">Tamanhos</p>
+  <div class="shelf">
+    <div class="sz-item"><svg width="80" height="80" viewBox="0 0 200 200" fill="none">
+      <defs><linearGradient id="Bs1" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#0F1C14"/><stop offset="100%" stop-color="#060809"/>
+      </linearGradient><linearGradient id="Bs1v" x1="32" y1="38" x2="100" y2="162" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#78FFAA"/><stop offset="100%" stop-color="#0D8F40"/>
+      </linearGradient><radialGradient id="Bs1a" cx="50%" cy="58%" r="45%">
+        <stop offset="0%" stop-color="rgba(34,197,94,.14)"/><stop offset="100%" stop-color="rgba(34,197,94,0)"/>
+      </radialGradient><filter id="Bs1g"><feGaussianBlur stdDeviation="7" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+      <rect width="200" height="200" rx="46" fill="url(#Bs1)"/>
+      <rect width="200" height="200" rx="46" fill="url(#Bs1a)"/>
+      <rect x="1" y="1" width="198" height="198" rx="45.5" fill="none" stroke="rgba(34,197,94,.12)" stroke-width="1.5"/>
+      <polyline points="32,38 100,162 168,38" fill="none" stroke="url(#Bs1v)" stroke-width="23" stroke-linecap="round" stroke-linejoin="round" filter="url(#Bs1g)"/>
+      <text x="100" y="188" font-family="'Inter',sans-serif" font-size="11" font-weight="800" letter-spacing="10" fill="rgba(34,197,94,.18)" text-anchor="middle">FIT</text>
+    </svg><span class="sz-lbl">1024px<br/>Full</span></div>
+    <div class="sz-item"><svg width="64" height="64" viewBox="0 0 200 200" fill="none">
+      <defs><linearGradient id="Bs2" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#0F1C14"/><stop offset="100%" stop-color="#060809"/>
+      </linearGradient><linearGradient id="Bs2v" x1="32" y1="38" x2="100" y2="162" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#78FFAA"/><stop offset="100%" stop-color="#16A34A"/>
+      </linearGradient><filter id="Bs2g"><feGaussianBlur stdDeviation="6" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+      <rect width="200" height="200" rx="46" fill="url(#Bs2)"/>
+      <polyline points="32,38 100,162 168,38" fill="none" stroke="url(#Bs2v)" stroke-width="23" stroke-linecap="round" stroke-linejoin="round" filter="url(#Bs2g)"/>
+    </svg><span class="sz-lbl">512px<br/>Store</span></div>
+    <div class="sz-item"><svg width="44" height="44" viewBox="0 0 200 200" fill="none">
+      <defs><linearGradient id="Bs3" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#0F1C14"/><stop offset="100%" stop-color="#060809"/>
+      </linearGradient></defs>
+      <rect width="200" height="200" rx="46" fill="url(#Bs3)"/>
+      <polyline points="32,38 100,162 168,38" fill="none" stroke="#4ADE80" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg><span class="sz-lbl">192px<br/>Android</span></div>
+    <div class="sz-item"><svg width="28" height="28" viewBox="0 0 200 200" fill="none">
+      <rect width="200" height="200" rx="46" fill="#0F1C14"/>
+      <polyline points="38,44 100,156 162,44" fill="none" stroke="#4ADE80" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg><span class="sz-lbl">32px<br/>Favicon</span></div>
+    <div class="sz-item"><svg width="48" height="48" viewBox="0 0 200 200" fill="none">
+      <defs><linearGradient id="Bs4" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#0F1C14"/><stop offset="100%" stop-color="#060809"/>
+      </linearGradient></defs>
+      <circle cx="100" cy="100" r="100" fill="url(#Bs4)"/>
+      <polyline points="32,38 100,162 168,38" fill="none" stroke="#4ADE80" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg><span class="sz-lbl">Watch</span></div>
+  </div>
+
+  <p class="sec-lbl" style="margin-top:36px">Logo Horizontal</p>
+  <div class="lockups">
+    <div class="lk lk-dark">
+      <svg width="320" height="68" viewBox="0 0 320 68" fill="none">
+        <defs><linearGradient id="Blh1" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#0F1C14"/><stop offset="100%" stop-color="#060809"/>
+        </linearGradient><linearGradient id="Blh1v" x1="10" y1="0" x2="32" y2="68" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#78FFAA"/><stop offset="100%" stop-color="#16A34A"/>
+        </linearGradient></defs>
+        <rect width="64" height="64" rx="15" fill="url(#Blh1)"/>
+        <rect width="64" height="64" rx="15" fill="none" stroke="rgba(34,197,94,.15)" stroke-width="1"/>
+        <polyline points="10.5,13 32,55.5 53.5,13" fill="none" stroke="url(#Blh1v)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="80" y="50" font-family="'Inter',sans-serif" font-size="44" font-weight="900" letter-spacing="-2.5" fill="white">V</text>
+        <text x="120" y="50" font-family="'Inter',sans-serif" font-size="44" font-weight="300" letter-spacing="-1.5" fill="rgba(255,255,255,.32)">FIT</text>
+      </svg>
+    </div>
+    <div class="lk lk-dark">
+      <svg width="240" height="56" viewBox="0 0 240 56" fill="none">
+        <defs><linearGradient id="Blh2" x1="0" y1="0" x2="240" y2="0" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#78FFAA"/><stop offset="100%" stop-color="#16A34A"/>
+        </linearGradient></defs>
+        <text x="0" y="46" font-family="'Inter',sans-serif" font-size="48" font-weight="900" letter-spacing="-2.5" fill="url(#Blh2)">VFIT</text>
+      </svg>
+    </div>
+  </div>
+</div><!-- /detail-B -->
+
+<!-- ATIVO DETAIL -->
+<div id="detail-C" class="detail" style="display:none">
+  <p class="sec-lbl" style="margin-bottom:32px">Conceito C — Ativo · Todos os tamanhos</p>
+  <div class="phone-grid" style="margin-bottom:36px">
+    <div class="phone-frame">
+      <div class="phone-title">Home Screen</div>
+      <div class="app-grid">
+        <div class="app-slot">
+          <svg width="56" height="56" viewBox="0 0 200 200" fill="none">
+            <defs><linearGradient id="Cm1" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#14201A"/><stop offset="100%" stop-color="#070C08"/>
+            </linearGradient><linearGradient id="Cm1v" x1="32" y1="44" x2="100" y2="156" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#ECFDF5"/><stop offset="100%" stop-color="#16A34A"/>
+            </linearGradient><filter id="Cm1g"><feGaussianBlur stdDeviation="4" result="b"/>
+              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+            <rect width="200" height="200" rx="44" fill="url(#Cm1)"/>
+            <circle cx="164" cy="38" r="6" fill="#22C55E" opacity=".7"/>
+            <polyline points="32,44 100,156 168,44" fill="none" stroke="url(#Cm1v)" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" filter="url(#Cm1g)"/>
+            <rect x="74" y="168" width="52" height="16" rx="8" fill="rgba(34,197,94,.12)"/>
+            <text x="100" y="180" font-family="'Inter',sans-serif" font-size="9.5" font-weight="700" letter-spacing="3.5" fill="rgba(74,222,128,.55)" text-anchor="middle">FIT</text>
+          </svg><span class="app-name">VFIT</span>
+        </div>
+        <div class="app-slot"><div style="width:56px;height:56px;border-radius:16px;background:#1A1C22"></div><span class="app-name">Música</span></div>
+        <div class="app-slot"><div style="width:56px;height:56px;border-radius:16px;background:#1A1C22"></div><span class="app-name">Maps</span></div>
+        <div class="app-slot"><div style="width:56px;height:56px;border-radius:16px;background:#1A1C22"></div><span class="app-name">Saúde</span></div>
+        <div class="app-slot"><div style="width:56px;height:56px;border-radius:16px;background:#161820"></div><span class="app-name">Fotos</span></div>
+        <div class="app-slot"><div style="width:56px;height:56px;border-radius:16px;background:#161820"></div><span class="app-name">Mail</span></div>
+        <div class="app-slot"><div style="width:56px;height:56px;border-radius:16px;background:#161820"></div><span class="app-name">Relógio</span></div>
+        <div class="app-slot"><div style="width:56px;height:56px;border-radius:16px;background:#161820"></div><span class="app-name">Safari</span></div>
+      </div>
+    </div>
+    <div class="phone-frame">
+      <div class="phone-title">Notificação</div>
+      <div class="phone-notif">
+        <div class="notif-icon">
+          <svg width="36" height="36" viewBox="0 0 200 200" fill="none">
+            <defs><linearGradient id="Cn1" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#14201A"/><stop offset="100%" stop-color="#070C08"/>
+            </linearGradient><linearGradient id="Cn1v" x1="32" y1="44" x2="100" y2="156" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#ECFDF5"/><stop offset="100%" stop-color="#16A34A"/>
+            </linearGradient><filter id="Cn1g"><feGaussianBlur stdDeviation="4" result="b"/>
+              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+            <rect width="200" height="200" rx="44" fill="url(#Cn1)"/>
+            <circle cx="164" cy="38" r="6" fill="#22C55E" opacity=".7"/>
+            <polyline points="32,44 100,156 168,44" fill="none" stroke="url(#Cn1v)" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" filter="url(#Cn1g)"/>
+          </svg>
+        </div>
+        <div class="notif-text">
+          <div class="notif-title">Hora do treino! 💪</div>
+          <div class="notif-sub">Seu plano de hoje está esperando</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="sec-lbl">Tamanhos</p>
+  <div class="shelf">
+    <div class="sz-item"><svg width="80" height="80" viewBox="0 0 200 200" fill="none">
+      <defs><linearGradient id="Cs1" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#14201A"/><stop offset="100%" stop-color="#070C08"/>
+      </linearGradient><linearGradient id="Cs1a" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#22C55E" stop-opacity=".35"/><stop offset="100%" stop-color="#065F2C" stop-opacity="0"/>
+      </linearGradient><linearGradient id="Cs1v" x1="32" y1="44" x2="100" y2="156" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#ECFDF5"/><stop offset="40%" stop-color="#4ADE80"/><stop offset="100%" stop-color="#16A34A"/>
+      </linearGradient><filter id="Cs1g"><feGaussianBlur stdDeviation="5" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+      <rect width="200" height="200" rx="46" fill="url(#Cs1)"/>
+      <rect width="200" height="200" rx="46" fill="url(#Cs1a)"/>
+      <circle cx="164" cy="38" r="6" fill="#22C55E" opacity=".7"/>
+      <polyline points="32,44 100,156 168,44" fill="none" stroke="url(#Cs1v)" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" filter="url(#Cs1g)"/>
+      <rect x="74" y="168" width="52" height="16" rx="8" fill="rgba(34,197,94,.12)"/>
+      <text x="100" y="180" font-family="'Inter',sans-serif" font-size="9.5" font-weight="700" letter-spacing="3.5" fill="rgba(74,222,128,.55)" text-anchor="middle">FIT</text>
+    </svg><span class="sz-lbl">1024px<br/>Full</span></div>
+
+    <div class="sz-item"><svg width="64" height="64" viewBox="0 0 200 200" fill="none">
+      <defs><linearGradient id="Cs2" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#14201A"/><stop offset="100%" stop-color="#070C08"/>
+      </linearGradient><linearGradient id="Cs2v" x1="32" y1="44" x2="100" y2="156" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#86EFAC"/><stop offset="100%" stop-color="#16A34A"/>
+      </linearGradient></defs>
+      <rect width="200" height="200" rx="46" fill="url(#Cs2)"/>
+      <circle cx="164" cy="38" r="7" fill="#22C55E" opacity=".6"/>
+      <polyline points="32,44 100,156 168,44" fill="none" stroke="url(#Cs2v)" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg><span class="sz-lbl">512px<br/>Store</span></div>
+
+    <div class="sz-item"><svg width="44" height="44" viewBox="0 0 200 200" fill="none">
+      <rect width="200" height="200" rx="46" fill="#0F1A12"/>
+      <polyline points="32,44 100,156 168,44" fill="none" stroke="#4ADE80" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg><span class="sz-lbl">192px</span></div>
+
+    <div class="sz-item"><svg width="28" height="28" viewBox="0 0 200 200" fill="none">
+      <rect width="200" height="200" rx="46" fill="#0F1A12"/>
+      <polyline points="38,44 100,156 162,44" fill="none" stroke="#4ADE80" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg><span class="sz-lbl">32px</span></div>
+
+    <div class="sz-item"><svg width="48" height="48" viewBox="0 0 200 200" fill="none">
+      <circle cx="100" cy="100" r="100" fill="#0F1A12"/>
+      <polyline points="32,44 100,156 168,44" fill="none" stroke="#4ADE80" stroke-width="23" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg><span class="sz-lbl">Watch</span></div>
+  </div>
+
+  <p class="sec-lbl" style="margin-top:36px">Logo Horizontal</p>
+  <div class="lockups">
+    <div class="lk lk-dark">
+      <svg width="340" height="68" viewBox="0 0 340 68" fill="none">
+        <defs><linearGradient id="Clh1" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#14201A"/><stop offset="100%" stop-color="#070C08"/>
+        </linearGradient><linearGradient id="Clh1a" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#22C55E" stop-opacity=".3"/><stop offset="100%" stop-color="transparent"/>
+        </linearGradient><linearGradient id="Clh1v" x1="10" y1="13" x2="32" y2="56" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#ECFDF5"/><stop offset="100%" stop-color="#4ADE80"/>
+        </linearGradient></defs>
+        <rect width="64" height="64" rx="15" fill="url(#Clh1)"/>
+        <rect width="64" height="64" rx="15" fill="url(#Clh1a)"/>
+        <circle cx="52" cy="12" r="3.5" fill="#22C55E" opacity=".7"/>
+        <polyline points="10.5,15 32,53 53.5,15" fill="none" stroke="url(#Clh1v)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="80" y="50" font-family="'Inter',sans-serif" font-size="44" font-weight="900" letter-spacing="-2.5" fill="white">V</text>
+        <text x="120" y="50" font-family="'Inter',sans-serif" font-size="44" font-weight="300" letter-spacing="-1.5" fill="rgba(255,255,255,.32)">FIT</text>
+      </svg>
+    </div>
+    <div class="lk lk-white">
+      <svg width="320" height="68" viewBox="0 0 320 68" fill="none">
+        <defs><linearGradient id="Clh2" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#14201A"/><stop offset="100%" stop-color="#070C08"/>
+        </linearGradient></defs>
+        <rect width="64" height="64" rx="15" fill="url(#Clh2)"/>
+        <circle cx="52" cy="12" r="3.5" fill="#22C55E" opacity=".7"/>
+        <polyline points="10.5,15 32,53 53.5,15" fill="none" stroke="#4ADE80" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="80" y="50" font-family="'Inter',sans-serif" font-size="44" font-weight="900" letter-spacing="-2.5" fill="#070C08">V</text>
+        <text x="120" y="50" font-family="'Inter',sans-serif" font-size="44" font-weight="300" letter-spacing="-1.5" fill="rgba(7,12,8,.32)">FIT</text>
+      </svg>
+    </div>
+  </div>
+</div><!-- /detail-C -->
+
+<!-- DOWNLOAD BAR -->
+<div class="dl-bar" id="dl-bar">
+  <div class="dl-info">
+    <h3 id="dl-title">VFIT Vibrante — SVG</h3>
+    <p id="dl-sub">Ícone 512px · Logo horizontal · Todos os tamanhos · Favicon</p>
+  </div>
+  <div class="btn-row">
+    <button class="btn-primary" id="dl-btn" style="background:linear-gradient(135deg,#22C55E,#16A34A);color:#000" onclick="dlActive()">⬇ Baixar SVG</button>
+    <button class="btn-ghost" onclick="copyActive()">⎋ Copiar código</button>
+  </div>
+</div>
+
+</div><!-- /wrap -->
+
+<script>
+let current = 'A';
+
+const NAMES = {A:'Vibrante',B:'Noturno',C:'Ativo'};
+const SUBS = {A:'Gradiente verde vivo · V branco limpo · App Store-ready',
+              B:'Dark premium · V com glow · FIT fantasma discreto',
+              C:'Dark refinado · FIT badge · Ponto accent'};
+
+const SVGS = {
+A:`<svg width="512" height="512" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#56EF85"/>
+      <stop offset="38%" stop-color="#22C55E"/>
+      <stop offset="100%" stop-color="#065F2C"/>
+    </linearGradient>
+    <radialGradient id="hl" cx="33%" cy="28%" r="54%">
+      <stop offset="0%" stop-color="rgba(255,255,255,.30)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+    </radialGradient>
+    <filter id="sh">
+      <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="rgba(0,60,20,.55)"/>
+    </filter>
+  </defs>
+  <rect width="200" height="200" rx="46" fill="url(#bg)"/>
+  <rect width="200" height="200" rx="46" fill="url(#hl)"/>
+  <rect x="1" y="1" width="198" height="198" rx="45.5" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="1.5"/>
+  <g filter="url(#sh)">
+    <polyline points="32,38 100,162 168,38" fill="none" stroke="white"
+      stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>`,
+
+B:`<svg width="512" height="512" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0F1C14"/>
+      <stop offset="55%" stop-color="#0A1210"/>
+      <stop offset="100%" stop-color="#060809"/>
+    </linearGradient>
+    <linearGradient id="vg" x1="32" y1="38" x2="100" y2="162" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#78FFAA"/>
+      <stop offset="50%" stop-color="#22C55E"/>
+      <stop offset="100%" stop-color="#0D8F40"/>
+    </linearGradient>
+    <radialGradient id="aura" cx="50%" cy="58%" r="45%">
+      <stop offset="0%" stop-color="rgba(34,197,94,.14)"/>
+      <stop offset="100%" stop-color="rgba(34,197,94,0)"/>
+    </radialGradient>
+    <filter id="gw">
+      <feGaussianBlur stdDeviation="7" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="200" height="200" rx="46" fill="url(#bg)"/>
+  <rect width="200" height="200" rx="46" fill="url(#aura)"/>
+  <rect x="1" y="1" width="198" height="198" rx="45.5" fill="none" stroke="rgba(34,197,94,.12)" stroke-width="1.5"/>
+  <polyline points="32,38 100,162 168,38" fill="none" stroke="url(#vg)"
+    stroke-width="23" stroke-linecap="round" stroke-linejoin="round" filter="url(#gw)"/>
+  <text x="100" y="188" font-family="system-ui,sans-serif" font-size="11" font-weight="800"
+    letter-spacing="10" fill="rgba(34,197,94,.18)" text-anchor="middle">FIT</text>
+</svg>`,
+
+C:`<svg width="512" height="512" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#14201A"/>
+      <stop offset="60%" stop-color="#0C1610"/>
+      <stop offset="100%" stop-color="#070C08"/>
+    </linearGradient>
+    <linearGradient id="vg" x1="32" y1="44" x2="100" y2="150" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#ECFDF5"/>
+      <stop offset="40%" stop-color="#4ADE80"/>
+      <stop offset="100%" stop-color="#16A34A"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#22C55E" stop-opacity=".35"/>
+      <stop offset="100%" stop-color="#065F2C" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="gw">
+      <feGaussianBlur stdDeviation="5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="200" height="200" rx="46" fill="url(#bg)"/>
+  <rect width="200" height="200" rx="46" fill="url(#accent)"/>
+  <circle cx="164" cy="38" r="6" fill="#22C55E" opacity=".7"/>
+  <polyline points="32,44 100,156 168,44" fill="none" stroke="url(#vg)"
+    stroke-width="22" stroke-linecap="round" stroke-linejoin="round" filter="url(#gw)"/>
+  <rect x="74" y="168" width="52" height="16" rx="8" fill="rgba(34,197,94,.12)"/>
+  <text x="100" y="180" font-family="system-ui,sans-serif" font-size="9.5" font-weight="700"
+    letter-spacing="3.5" fill="rgba(74,222,128,.55)" text-anchor="middle">FIT</text>
+</svg>`
+};
+
+function pick(v) {
+  current = v;
+  ['A','B','C'].forEach(x => {
+    document.getElementById('card-'+x).classList.toggle('active', x===v);
+    document.getElementById('detail-'+x).style.display = x===v ? 'block' : 'none';
+  });
+  document.getElementById('dl-title').textContent = 'VFIT ' + NAMES[v] + ' — SVG';
+  document.getElementById('dl-sub').textContent = SUBS[v];
+  const colors = {A:'#22C55E,#16A34A', B:'#16A34A,#0D8F40', C:'#14A050,#0D8F40'};
+  document.getElementById('dl-btn').style.background = 'linear-gradient(135deg,'+colors[v]+')';
+}
+
+function dlActive() {
+  const b = new Blob(['<?xml version="1.0"?>\n'+SVGS[current]], {type:'image/svg+xml'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(b);
+  a.download = 'vfit-icon-'+current.toLowerCase()+'-'+NAMES[current].toLowerCase()+'.svg';
+  a.click();
+}
+
+function copyActive() {
+  const el = document.getElementById('code-'+current);
+  const text = el ? el.innerText : SVGS[current];
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target;
+    const orig = btn.textContent;
+    btn.textContent = '✓ Copiado!';
+    setTimeout(() => btn.textContent = orig, 1600);
+  });
+}
+
+function copyCode(v) {
+  const el = document.getElementById('code-'+v);
+  navigator.clipboard.writeText(el.innerText).then(() => {
+    const btn = event.target;
+    btn.textContent = '✓ Copiado!';
+    setTimeout(() => btn.textContent = 'Copiar', 1600);
+  });
+}
+</script>
+</body>
+</html>

@@ -56,3 +56,10 @@ whats.mp4
 audit_blog.sh
 blog_urls.txt
 .gstack/
+
+# TWA build artifacts
+twa/app/build/
+twa/build/
+twa/.gradle/
+twa/releases/*.apk
+twa/releases/*.aab

@@ -1,43 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+<svg width="32" height="32" viewBox="0 0 200 200"
+  fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="brand-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#22E6A8"/>
-      <stop offset="50%" stop-color="#3DFCA4"/>
-      <stop offset="100%" stop-color="#A6FF4D"/>
+    <linearGradient id="bg" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#56EF85"/>
+      <stop offset="38%" stop-color="#22C55E"/>
+      <stop offset="100%" stop-color="#065F2C"/>
     </linearGradient>
-    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0F0F12"/>
-      <stop offset="100%" stop-color="#09090B"/>
-    </linearGradient>
-    <!-- Glow filter -->
-    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="12" result="blur"/>
-      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-    </filter>
   </defs>
-  
-  <!-- Background: Rounded square -->
-  <rect width="512" height="512" rx="108" ry="108" fill="url(#bg-grad)"/>
-  
-  <!-- Subtle glow circle behind logo -->
-  <circle cx="256" cy="240" r="120" fill="#22E6A8" opacity="0.08" filter="url(#glow)"/>
-  
-  <!-- "P" letter - stylized -->
-  <path d="M 168 120 L 168 392 L 208 392 L 208 296 L 280 296 C 340 296 380 256 380 208 C 380 160 340 120 280 120 Z M 208 160 L 272 160 C 316 160 340 180 340 208 C 340 236 316 256 272 256 L 208 256 Z" 
-        fill="url(#brand-grad)"/>
-  
-  <!-- "IA" text - small, tech style -->
-  <text x="220" y="420" 
-        font-family="system-ui, -apple-system, sans-serif" 
-        font-weight="800" 
-        font-size="68" 
-        letter-spacing="8"
-        fill="url(#brand-grad)" 
-        opacity="0.9">
-    IA
-  </text>
-  
-  <!-- Accent dot (AI indicator) -->
-  <circle cx="370" cy="140" r="16" fill="#3DFCA4" opacity="0.9"/>
-  <circle cx="370" cy="140" r="8" fill="#FFFFFF" opacity="0.6"/>
+  <rect width="200" height="200" rx="46" fill="url(#bg)"/>
+  <polyline points="38,44 100,156 162,44"
+    fill="none" stroke="white"
+    stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
