@@ -1,23 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
-  <!-- EVOLUIA App Icon: Dumbbell on dark background -->
-  
-  <!-- Background -->
-  <rect width="512" height="512" rx="96" fill="#050A12"/>
-  
-  <!-- Dumbbell Icon (centered, athletic style) -->
-  <g transform="translate(96, 176)">
-    <!-- Left weight plates -->
-    <rect x="0" y="24" width="32" height="112" rx="10" fill="#22C55E"/>
-    <rect x="40" y="40" width="24" height="80" rx="8" fill="#22C55E" opacity="0.85"/>
-    
-    <!-- Bar -->
-    <rect x="64" y="68" width="192" height="24" rx="8" fill="#22C55E" opacity="0.6"/>
-    
-    <!-- Right weight plates -->
-    <rect x="256" y="40" width="24" height="80" rx="8" fill="#22C55E" opacity="0.85"/>
-    <rect x="288" y="24" width="32" height="112" rx="10" fill="#22C55E"/>
-  </g>
-  
-  <!-- Subtle glow effect -->
-  <circle cx="256" cy="256" r="120" fill="#22C55E" opacity="0.06"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#56EF85"/>
+      <stop offset="38%" stop-color="#22C55E"/>
+      <stop offset="100%" stop-color="#065F2C"/>
+    </linearGradient>
+    <radialGradient id="hl" cx="33%" cy="28%" r="54%">
+      <stop offset="0%" stop-color="rgba(255,255,255,.28)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+    </radialGradient>
+  </defs>
+  <rect width="200" height="200" rx="46" fill="url(#bg)"/>
+  <rect width="200" height="200" rx="46" fill="url(#hl)"/>
+  <rect x="1" y="1" width="198" height="198" rx="45" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="1.5"/>
+  <polyline points="32,38 100,162 168,38"
+    fill="none" stroke="white"
+    stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

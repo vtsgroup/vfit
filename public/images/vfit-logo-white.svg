@@ -1,22 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 64" fill="none">
-  <!-- EVOLUIA Logo (white variant for dark backgrounds) -->
-  
-  <!-- Dumbbell Icon -->
-  <g transform="translate(0, 8)">
-    <rect x="2" y="8" width="8" height="32" rx="3" fill="#22C55E"/>
-    <rect x="12" y="12" width="6" height="24" rx="2" fill="#22C55E" opacity="0.8"/>
-    <rect x="18" y="21" width="24" height="6" rx="2" fill="#22C55E" opacity="0.6"/>
-    <rect x="42" y="12" width="6" height="24" rx="2" fill="#22C55E" opacity="0.8"/>
-    <rect x="50" y="8" width="8" height="32" rx="3" fill="#22C55E"/>
+  <defs>
+    <linearGradient id="vfit-bg-w" x1="0" y1="0" x2="56" y2="56" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#56EF85"/>
+      <stop offset="38%" stop-color="#22C55E"/>
+      <stop offset="100%" stop-color="#065F2C"/>
+    </linearGradient>
+    <radialGradient id="vfit-hl-w" cx="33%" cy="28%" r="54%">
+      <stop offset="0%" stop-color="rgba(255,255,255,.28)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+    </radialGradient>
+  </defs>
+  <g transform="translate(4, 4)">
+    <rect width="56" height="56" rx="13" fill="url(#vfit-bg-w)"/>
+    <rect width="56" height="56" rx="13" fill="url(#vfit-hl-w)"/>
+    <rect x="0.3" y="0.3" width="55.4" height="55.4" rx="12.7" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="0.5"/>
+    <polyline points="9,10.6 28,45.4 47,10.6" fill="none" stroke="white" stroke-width="6.7" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
-  
-  <!-- EVOLU text (white) -->
-  <text x="72" y="44" font-family="'DM Sans', 'Inter', -apple-system, sans-serif" font-weight="800" font-size="40" fill="#FFFFFF" letter-spacing="-1">
-    EVOLU
-  </text>
-  
-  <!-- IA text (brand green) -->
-  <text x="225" y="44" font-family="'DM Sans', 'Inter', -apple-system, sans-serif" font-weight="800" font-size="40" fill="#22C55E" letter-spacing="-1">
-    IA
-  </text>
+  <text x="76" y="46" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-weight="900" font-size="42" fill="#F0F4F8" letter-spacing="-1.2">VFIT</text>
 </svg>

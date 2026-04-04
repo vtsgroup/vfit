@@ -292,20 +292,14 @@ export default function RegisterStudentPage() {
 
             {/* Centered Logo — top of banner, above photo overlap zone */}
             <div className="relative z-10 flex items-start justify-center pt-6 sm:pt-8 h-full lg:hidden">
-              <Link href="/" className="flex items-center gap-2 group">
-                <span
-                  className="text-[36px] sm:text-[42px] text-white drop-shadow-[0_2px_16px_rgba(16,185,129,0.4)]"
-                  style={{ fontFamily: 'Inter, sans-serif', fontWeight: 900, letterSpacing: '-0.03em' }}
-                >
-                  PERSONAL
-                </span>
+              <Link href="/" className="flex items-center gap-3 group">
                 <Image
-                  src="/images/logo-transparent-96.webp"
-                  alt="IA"
-                  width={56}
-                  height={44}
-                  className="w-auto transition-transform duration-300 group-hover:scale-110"
-                  style={{ height: '44px', filter: 'drop-shadow(0 0 20px rgba(16,185,129,0.7))' }}
+                  src="/images/vfit-logo-white.svg"
+                  alt="VFIT"
+                  width={160}
+                  height={32}
+                  className="w-auto transition-transform duration-300 group-hover:scale-105"
+                  style={{ height: '40px', filter: 'drop-shadow(0 0 20px rgba(16,185,129,0.7))' }}
                   priority
                 />
               </Link>

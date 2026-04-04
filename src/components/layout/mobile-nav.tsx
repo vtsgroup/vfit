@@ -856,13 +856,11 @@ export function MobileDrawer() {
             <div className="flex h-16 items-center justify-between border-b border-white/8 px-4">
               <div className="flex items-center gap-0">
                 <img
-                  src="/images/logo-transparent-96.webp"
+                  src="/images/vfit-logo-white.svg"
                   alt="VFIT"
                   className="h-6 w-auto"
                   style={{ filter: 'drop-shadow(0 0 8px rgba(16,185,129,0.35))' }}
                 />
-                <span className="ml-2 inline-flex h-4 w-4 items-center justify-center rounded-full border-[1.5px] border-white/55 bg-white/6 text-[10px] font-extrabold text-white/80 leading-none shrink-0">+</span>
-                <span className="ml-1.5 text-[16px] text-white tracking-[0.05em]" style={{ fontWeight: 900, lineHeight: '24px' }}>PERSONAL</span>
               </div>
               <button
                 onClick={() => setOpen(false)}

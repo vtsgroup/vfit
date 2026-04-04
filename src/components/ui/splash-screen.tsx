@@ -1,7 +1,7 @@
 /**
  * src/components/ui/splash-screen.tsx
  *
- * SplashScreen — Ultra-modern PWA opening animation
+ * SplashScreen — Ultra-modern VFIT PWA opening animation
  *
  * Exports: SplashScreen
  * Hooks: useState, useEffect, useMemo
@@ -9,28 +9,70 @@
  */
 
 // ============================================
-// SplashScreen — Ultra-modern PWA opening animation
-// Types "EVOLU" letter by letter, then shows "IA" in green
+// SplashScreen — VFIT brand opening animation
+// V icon draws in with stroke animation, then "VFIT" text fades in
 // Smooth aurora background, particles, cinematic feel
-// Duration: ~3.2s total (typing ~720ms + logo ~500ms + breathe ~2s)
+// Duration: ~2.8s total (icon ~600ms + text ~400ms + breathe ~800ms + exit)
 // ============================================
 
 'use client'
 
 import { useState, useEffect, useMemo } from 'react'
 import { cn } from '@/lib/utils'
-import Image from 'next/image'
 
-const VFIT_LETTERS = 'EVOLU'.split('')
-const LETTER_DELAY = 80 // ms per letter
-const VFIT_START_OFFSET = 350 // icon appears first, then EVOLU starts typing
-const TYPING_DURATION = VFIT_LETTERS.length * LETTER_DELAY // ~400ms
-const BREATHE_START = VFIT_START_OFFSET + TYPING_DURATION + 400 // settle after EVOLU finishes
-const SPLASH_TOTAL = BREATHE_START + 800 // 800ms for exit animation
-const SPLASH_KEY = 'pia-splash-v2'
+const VFIT_LETTERS = 'VFIT'.split('')
+const LETTER_DELAY = 90 // ms per letter
+const ICON_SETTLE = 500 // icon draws in for 500ms
+const TEXT_START = ICON_SETTLE + 200 // text starts 200ms after icon settles
+const TYPING_DURATION = VFIT_LETTERS.length * LETTER_DELAY // ~360ms
+const BREATHE_START = TEXT_START + TYPING_DURATION + 300
+const SPLASH_TOTAL = BREATHE_START + 700
+const SPLASH_KEY = 'vfit-splash-v3'
+
+/* ─── Inline V Icon (no external image dependency) ─── */
+function VFITIcon({ size, className, glowing }: { size: number; className?: string; glowing?: boolean }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 200 200"
+      fill="none"
+      className={className}
+      aria-hidden="true"
+    >
+      <defs>
+        <linearGradient id="splash-bg" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#56EF85" />
+          <stop offset="38%" stopColor="#22C55E" />
+          <stop offset="100%" stopColor="#065F2C" />
+        </linearGradient>
+        <radialGradient id="splash-hl" cx="33%" cy="28%" r="54%">
+          <stop offset="0%" stopColor="rgba(255,255,255,.28)" />
+          <stop offset="100%" stopColor="rgba(255,255,255,0)" />
+        </radialGradient>
+      </defs>
+      <rect width="200" height="200" rx="46" fill="url(#splash-bg)" />
+      <rect width="200" height="200" rx="46" fill="url(#splash-hl)" />
+      <rect x="1" y="1" width="198" height="198" rx="45" fill="none" stroke="rgba(255,255,255,.12)" strokeWidth="1.5" />
+      <polyline
+        points="32,38 100,162 168,38"
+        fill="none"
+        stroke="white"
+        strokeWidth="24"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        style={{
+          strokeDasharray: 340,
+          strokeDashoffset: glowing ? 0 : 340,
+          transition: 'stroke-dashoffset 0.6s cubic-bezier(0.16,1,0.3,1)',
+        }}
+      />
+    </svg>
+  )
+}
 
 export function SplashScreen({ isReady }: { isReady?: boolean }) {
-  const [phase, setPhase] = useState<'init' | 'typing' | 'breathe' | 'exit' | 'done'>('init')
+  const [phase, setPhase] = useState<'init' | 'icon' | 'typing' | 'breathe' | 'exit' | 'done'>('init')
   const [typedCount, setTypedCount] = useState(0)
   const [shouldShow, setShouldShow] = useState(false)
 
@@ -57,26 +99,30 @@ export function SplashScreen({ isReady }: { isReady?: boolean }) {
     setShouldShow(true)
     sessionStorage.setItem(SPLASH_KEY, '1')
 
-    // Icon appears immediately; EVOLU starts after VFIT_START_OFFSET
-    const tStart = setTimeout(() => setPhase('typing'), 150)
+    // Icon draws in
+    const tIcon = setTimeout(() => setPhase('icon'), 100)
 
-    // EVOLU letters — start after icon settles
+    // Text typing starts after icon settles
+    const tTyping = setTimeout(() => setPhase('typing'), 100 + TEXT_START)
+
+    // VFIT letters — typed one by one
     const letterTimers: ReturnType<typeof setTimeout>[] = []
     for (let i = 0; i < VFIT_LETTERS.length; i++) {
       letterTimers.push(
-        setTimeout(() => setTypedCount(i + 1), 150 + VFIT_START_OFFSET + (i + 1) * LETTER_DELAY)
+        setTimeout(() => setTypedCount(i + 1), 100 + TEXT_START + (i + 1) * LETTER_DELAY)
       )
     }
 
-    // Breathe phase (settle — after all letters typed)
-    const tBreathe = setTimeout(() => setPhase('breathe'), 150 + BREATHE_START)
+    // Breathe phase
+    const tBreathe = setTimeout(() => setPhase('breathe'), 100 + BREATHE_START)
     // Exit
-    const tExit = setTimeout(() => setPhase('exit'), 150 + BREATHE_START + 200)
+    const tExit = setTimeout(() => setPhase('exit'), 100 + BREATHE_START + 200)
     // Done
-    const tDone = setTimeout(() => setPhase('done'), 150 + SPLASH_TOTAL)
+    const tDone = setTimeout(() => setPhase('done'), 100 + SPLASH_TOTAL)
 
     return () => {
-      clearTimeout(tStart)
+      clearTimeout(tIcon)
+      clearTimeout(tTyping)
       letterTimers.forEach(clearTimeout)
       clearTimeout(tBreathe)
       clearTimeout(tExit)
@@ -86,6 +132,7 @@ export function SplashScreen({ isReady }: { isReady?: boolean }) {
 
   if (phase === 'done' || !shouldShow) return null
 
+  const iconReady = phase !== 'init'
   const allTyped = typedCount === VFIT_LETTERS.length
   const isExiting = phase === 'exit'
 
@@ -159,8 +206,8 @@ export function SplashScreen({ isReady }: { isReady?: boolean }) {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(5,10,18,0.7)_100%)]" />
       </div>
 
-      {/* ─── Logo + Typing Animation ─── */}
-      <div className="relative z-10 flex flex-col items-center gap-8">
+      {/* ─── Logo + VFIT Text Animation ─── */}
+      <div className="relative z-10 flex flex-col items-center gap-6">
         {/* Outer glow ring */}
         <div
           className={cn(
@@ -168,7 +215,7 @@ export function SplashScreen({ isReady }: { isReady?: boolean }) {
             'border border-brand-primary/15',
             'transition-all duration-1200 ease-[cubic-bezier(0.16,1,0.3,1)]',
             phase === 'init' && 'h-20 w-20 opacity-0',
-            phase === 'typing' && !allTyped && 'h-44 w-44 opacity-100',
+            (phase === 'icon' || phase === 'typing') && !allTyped && 'h-44 w-44 opacity-100',
             allTyped && 'h-72 w-72 opacity-40',
             isExiting && 'h-125 w-125 opacity-0',
           )}
@@ -181,77 +228,50 @@ export function SplashScreen({ isReady }: { isReady?: boolean }) {
             'border border-brand-primary/8',
             'transition-all duration-1400 ease-[cubic-bezier(0.16,1,0.3,1)]',
             phase === 'init' && 'h-10 w-10 opacity-0',
-            phase === 'typing' && !allTyped && 'h-56 w-56 opacity-60',
+            (phase === 'icon' || phase === 'typing') && !allTyped && 'h-56 w-56 opacity-60',
             allTyped && 'h-96 w-96 opacity-25',
             isExiting && 'h-150 w-150 opacity-0',
           )}
         />
 
-        {/* Logo icon → + → EVOLU (typed) → IA (green) */}
+        {/* V Icon + VFIT text row */}
         <div
           className={cn(
-            'relative flex items-center gap-3 transition-all duration-500',
+            'relative flex items-center gap-4 transition-all duration-500',
             phase === 'init' && 'opacity-0 scale-90',
             phase !== 'init' && 'opacity-100 scale-100',
             isExiting && 'opacity-0 scale-95 -translate-y-2',
           )}
         >
-          {/* Logo icon with glow */}
+          {/* V Icon with glow */}
           <div className="relative">
             <div
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full pointer-events-none"
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl pointer-events-none"
               style={{
-                width: '100px',
-                height: '100px',
-                background: 'radial-gradient(circle, rgba(16,185,129,0.45) 0%, rgba(16,185,129,0.12) 40%, transparent 65%)',
+                width: '120px',
+                height: '120px',
+                background: 'radial-gradient(circle, rgba(34,197,94,0.45) 0%, rgba(34,197,94,0.12) 40%, transparent 65%)',
                 animation: allTyped ? 'splashLogoGlow 3s ease-in-out infinite' : 'none',
                 opacity: allTyped ? 1 : 0.4,
                 transition: 'opacity 0.8s ease',
               }}
             />
-            <Image
-              src="/images/logo-transparent-140.webp"
-              alt=""
-              width={68}
-              height={56}
-              className="relative z-10 w-auto"
-              style={{
-                height: 'clamp(38px, 9.5vw, 56px)',
-                filter: 'drop-shadow(0 0 20px rgba(16,185,129,0.55))',
-              }}
+            <VFITIcon
+              size={72}
+              className="relative z-10"
+              glowing={iconReady}
             />
           </div>
 
-          {/* + as circular icon badge */}
-          <span
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: 'clamp(22px, 5vw, 30px)',
-              height: 'clamp(22px, 5vw, 30px)',
-              borderRadius: '50%',
-              border: '2px solid rgba(255,255,255,0.55)',
-              background: 'rgba(255,255,255,0.06)',
-              fontSize: 'clamp(14px, 3.5vw, 19px)',
-              fontWeight: 800,
-              color: 'rgba(255,255,255,0.8)',
-              flexShrink: 0,
-              lineHeight: 1,
-            }}
-          >
-            +
-          </span>
-
-          {/* EVOLU letters — start typing after VFIT_START_OFFSET */}
+          {/* VFIT letters */}
           <span
             className="inline-flex items-center"
             style={{
               fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-              fontWeight: 800,
-              fontSize: 'clamp(32px, 9vw, 48px)',
-              letterSpacing: '-0.02em',
-              lineHeight: '1.15',
+              fontWeight: 900,
+              fontSize: 'clamp(36px, 10vw, 56px)',
+              letterSpacing: '-0.03em',
+              lineHeight: '1',
               color: 'white',
             }}
           >
@@ -263,35 +283,13 @@ export function SplashScreen({ isReady }: { isReady?: boolean }) {
                   opacity: idx < typedCount ? 1 : 0,
                   transform: idx < typedCount ? 'translateY(0)' : 'translateY(8px)',
                   transition: 'opacity 0.15s ease-out, transform 0.2s ease-out',
+                  textShadow: idx < typedCount ? '0 0 30px rgba(34,197,94,0.3)' : 'none',
                 }}
               >
                 {letter}
               </span>
             ))}
-            {/* IA in brand green — appears after EVOLU finishes typing */}
-            <span
-              className="inline-block transition-all duration-300 ease-out"
-              style={{
-                opacity: allTyped ? 1 : 0,
-                transform: allTyped ? 'translateY(0) scale(1)' : 'translateY(8px) scale(0.8)',
-                color: '#10B981',
-                textShadow: allTyped ? '0 0 20px rgba(16,185,129,0.5)' : 'none',
-              }}
-            >
-              IA
-            </span>
           </span>
-
-          {/* Typing cursor */}
-          <span
-            className="inline-block w-[2.5px] rounded-full bg-brand-primary ml-0.5"
-            style={{
-              height: 'clamp(28px, 7.5vw, 44px)',
-              opacity: typedCount < VFIT_LETTERS.length ? 1 : 0,
-              animation: typedCount < VFIT_LETTERS.length ? 'splashCursorBlink 600ms step-end infinite' : 'none',
-              transition: 'opacity 0.3s ease',
-            }}
-          />
         </div>
 
         {/* Subtitle */}
@@ -328,10 +326,6 @@ export function SplashScreen({ isReady }: { isReady?: boolean }) {
 
       {/* Keyframes */}
       <style>{`
-        @keyframes splashCursorBlink {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0; }
-        }
         @keyframes splashLogoGlow {
           0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
           50% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }

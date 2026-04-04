@@ -73,7 +73,7 @@ export default function GuestExplorePage() {
         <div className="mx-auto flex h-14 max-w-lg items-center justify-between px-4">
           <div className="flex items-center gap-2">
             <span className="text-[18px] font-black text-white tracking-tight">
-              EVOLU<span className="text-brand-primary">IA</span>
+              <span className="text-brand-primary">VFIT</span>
             </span>
             <span className="rounded-full bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 text-[8px] font-bold uppercase text-amber-400" style={monoLabel}>
               MODO VISITANTE
@@ -93,7 +93,7 @@ export default function GuestExplorePage() {
         {/* Welcome */}
         <div className="mb-6">
           <h1 className="text-[1.5rem] font-black text-white leading-tight">
-            Explore o EVOLU<span className="text-brand-primary">IA</span>
+            Explore o <span className="text-brand-primary">VFIT</span>
           </h1>
           <p className="mt-1 text-[13px] text-zinc-500">
             Descubra o que a IA pode fazer pelo seu treino. Crie uma conta grátis para desbloquear tudo.

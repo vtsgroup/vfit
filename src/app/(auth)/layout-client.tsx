@@ -77,11 +77,10 @@ function ImageSlideshow() {
   )
 }
 
-const VFIT_LETTERS = 'EVOLU'.split('')
+const VFIT_LETTERS = 'VFIT'.split('')
 
 function AnimatedAuthLogo({ size = 'large' }: { size?: 'large' | 'small' }) {
   const [typedCount, setTypedCount] = useState(0)
-  const [showIA, setShowIA] = useState(false)
 
   useEffect(() => {
     let i = 0
@@ -90,7 +89,6 @@ function AnimatedAuthLogo({ size = 'large' }: { size?: 'large' | 'small' }) {
       setTypedCount(i)
       if (i >= VFIT_LETTERS.length) {
         clearInterval(interval)
-        setTimeout(() => setShowIA(true), 200)
       }
     }, 80)
     return () => clearInterval(interval)
@@ -127,18 +125,6 @@ function AnimatedAuthLogo({ size = 'large' }: { size?: 'large' | 'small' }) {
               {letter}
             </span>
           ))}
-          {/* IA in brand green — appears after EVOLU finishes typing */}
-          <span
-            className="inline-block transition-all duration-500 ease-out"
-            style={{
-              opacity: showIA ? 1 : 0,
-              transform: showIA ? 'translateY(0) scale(1)' : 'translateY(6px) scale(0.5)',
-              color: '#10B981',
-              textShadow: showIA ? '0 0 20px rgba(16,185,129,0.5)' : 'none',
-            }}
-          >
-            IA
-          </span>
         </span>
 
         {/* Typing cursor */}

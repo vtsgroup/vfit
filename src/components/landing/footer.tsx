@@ -132,33 +132,12 @@ export function Footer() {
             {/* Logo */}
             <Link href="/" className="group inline-flex items-center gap-2.5">
               <Image
-                src="/images/logo-transparent-96.webp"
+                src="/images/vfit-logo-white.svg"
                 alt="VFIT"
-                width={36}
+                width={120}
                 height={36}
-                className="h-9 w-auto transition-transform duration-300 group-hover:scale-110"
+                className="h-9 w-auto transition-transform duration-300 group-hover:scale-105"
               />
-              {/* + as circular icon badge */}
-              <span
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: '20px',
-                  height: '20px',
-                  borderRadius: '50%',
-                  border: '1.5px solid rgba(255,255,255,0.55)',
-                  background: 'rgba(255,255,255,0.06)',
-                  fontSize: '13px',
-                  fontWeight: 800,
-                  color: 'rgba(255,255,255,0.8)',
-                  flexShrink: 0,
-                  lineHeight: 1,
-                }}
-              >
-                +
-              </span>
-              <span className="text-2xl font-black tracking-tight text-white" style={headingFont}>PERSONAL</span>
             </Link>
 
             {/* Description */}

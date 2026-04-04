@@ -22,6 +22,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { cn, getShortName } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { DSIcon } from '@/components/ui/ds-icon'
+import { VfitLogo } from '@/components/ui/vfit-logo'
 import { useAppStore } from '@/stores/app-store'
 import { useAuthStore } from '@/stores/auth-store'
 import { useEffectiveUserView } from '@/hooks/use-effective-user-view'
@@ -71,39 +72,15 @@ export function Sidebar() {
         height: 'calc(100dvh - var(--demo-banner-offset, 0px))',
       }}
     >
-      {/* Logo — matching landing page: icon + ⊕ + PERSONAL */}
+      {/* Logo — VFIT brand */}
       <div className="flex h-16 items-center border-b border-white/8 px-4">
         <Link
           href="/dashboard"
           className="flex items-center gap-0 min-w-0"
           aria-label="Ir para o Dashboard"
         >
-          {/* Logo image — always visible */}
-          <img
-            src="/images/logo-transparent-96.webp"
-            alt="VFIT"
-            className="h-7 w-auto shrink-0"
-            style={{ filter: 'drop-shadow(0 0 8px rgba(16,185,129,0.35))' }}
-          />
-          {/* Expanded: + badge + PERSONAL text */}
-          <AnimatePresence>
-            {!collapsed && (
-              <motion.div
-                initial={{ opacity: 0, width: 0 }}
-                animate={{ opacity: 1, width: 'auto' }}
-                exit={{ opacity: 0, width: 0 }}
-                className="flex items-center gap-2 overflow-hidden whitespace-nowrap ml-2"
-              >
-                <span className="inline-flex h-4.5 w-4.5 items-center justify-center rounded-full border-[1.5px] border-white/55 bg-white/6 text-[12px] font-extrabold text-white/80 leading-none shrink-0">+</span>
-                <span
-                  className="text-display-heading text-white tracking-[0.05em]"
-                  style={{ fontWeight: 900, lineHeight: '28px' }}
-                >
-                  PERSONAL
-                </span>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {/* V icon — always visible */}
+          <VfitLogo size="xs" showIcon={true} textColor="white" className={cn('shrink-0', collapsed && '[&>span:last-child]:hidden')} />
         </Link>
       </div>
 

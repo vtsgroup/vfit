@@ -62,13 +62,12 @@ const NAV_ITEMS: NavItem[] = [
 ]
 
 /* ================================================================
-   ANIMATED LOGO — icon + ⊕ → typing "EVOLU" + "IA" green
+   ANIMATED LOGO — VFIT brand typing animation
    ================================================================ */
-const VFIT_LETTERS = 'EVOLU'.split('')
+const VFIT_LETTERS = 'VFIT'.split('')
 
 function AnimatedLogo() {
   const [typedCount, setTypedCount] = useState(0)
-  const [showIA, setShowIA] = useState(false)
 
   useEffect(() => {
     const startDelay = setTimeout(() => {
@@ -78,7 +77,6 @@ function AnimatedLogo() {
         setTypedCount(i)
         if (i >= VFIT_LETTERS.length) {
           clearInterval(letterInterval)
-          setTimeout(() => setShowIA(true), 150)
         }
       }, 80)
       return () => clearInterval(letterInterval)
@@ -88,83 +86,15 @@ function AnimatedLogo() {
 
   return (
     <Link href="/" className="flex items-center gap-0 group shrink-0" aria-label="VFIT - Início">
-      <div className="relative flex items-center gap-2">
+      <div className="relative flex items-center gap-2.5">
         <Image
-          src="/images/logo-transparent-96.webp"
+          src="/images/vfit-logo-white.svg"
           alt="VFIT"
-          width={40}
+          width={120}
           height={32}
-          className="h-8 w-auto transition-transform duration-300 group-hover:scale-110 sm:h-7"
+          className="h-8 w-auto transition-transform duration-300 group-hover:scale-105 sm:h-7"
           style={{ filter: 'drop-shadow(0 0 8px rgba(16,185,129,0.35))' }}
           priority
-        />
-
-        <span
-          className="shrink-0"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '22px',
-            height: '22px',
-            borderRadius: '50%',
-            border: '1.5px solid rgba(16,185,129,0.6)',
-            background: 'rgba(16,185,129,0.08)',
-            fontSize: '13px',
-            fontWeight: 800,
-            color: 'rgba(16,185,129,0.9)',
-            lineHeight: 1,
-            boxShadow: '0 0 10px rgba(16,185,129,0.15)',
-          }}
-        >
-          +
-        </span>
-
-        <span
-          className="hidden sm:inline-flex"
-          style={{
-            fontFamily: 'Inter, system-ui, sans-serif',
-            fontWeight: 900,
-            fontSize: '20px',
-            letterSpacing: '0.05em',
-            lineHeight: '28px',
-            color: 'white',
-          }}
-          aria-label="VFIT"
-        >
-          {VFIT_LETTERS.map((letter, idx) => (
-            <span
-              key={idx}
-              className="inline-block transition-all duration-200 ease-out"
-              style={{
-                opacity: idx < typedCount ? 1 : 0,
-                transform: idx < typedCount ? 'translateY(0)' : 'translateY(4px)',
-              }}
-            >
-              {letter}
-            </span>
-          ))}
-          {/* IA in brand green */}
-          <span
-            className="inline-block transition-all duration-300 ease-out"
-            style={{
-              opacity: showIA ? 1 : 0,
-              transform: showIA ? 'translateY(0) scale(1)' : 'translateY(4px) scale(0.8)',
-              color: '#10B981',
-              textShadow: showIA ? '0 0 12px rgba(16,185,129,0.4)' : 'none',
-            }}
-          >
-            IA
-          </span>
-        </span>
-
-        <span
-          className="hidden sm:inline-block w-0.5 rounded-full bg-brand-primary ml-px transition-opacity duration-300"
-          style={{
-            height: '18px',
-            opacity: typedCount < VFIT_LETTERS.length ? 1 : 0,
-            animation: typedCount < VFIT_LETTERS.length ? 'navCursorBlink 600ms step-end infinite' : 'none',
-          }}
         />
       </div>
     </Link>
@@ -449,14 +379,13 @@ export function Navbar() {
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/6">
           <Link href="/" onClick={closeMobile} className="flex items-center gap-2">
             <Image
-              src="/images/logo-transparent-96.webp"
+              src="/images/vfit-logo-white.svg"
               alt="VFIT"
-              width={32}
+              width={100}
               height={26}
               className="h-6 w-auto"
               style={{ filter: 'drop-shadow(0 0 6px rgba(16,185,129,0.3))' }}
             />
-            <span className="text-sm font-bold text-white/80">VFIT</span>
           </Link>
           <button
             onClick={closeMobile}

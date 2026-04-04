@@ -3,8 +3,8 @@
 /**
  * VFIT Logo Component
  *
- * Renders the VFIT brand logo with dumbbell icon.
- * Primary brand logo component.
+ * Renders the VFIT brand logo with V polyline "Vibrante" icon.
+ * Primary brand logo component used in sidebar, header, login, etc.
  *
  * @example
  * <VfitLogo size="md" />
@@ -16,20 +16,20 @@ import { cn } from '@/lib/utils'
 interface VfitLogoProps {
   /** Logo size preset */
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-  /** Show dumbbell icon */
+  /** Show V icon */
   showIcon?: boolean
   /** Additional className */
   className?: string
-  /** Text color for "EVOLU" part (default: current text color) */
+  /** Text color override (default: currentColor) */
   textColor?: string
 }
 
 const sizeMap = {
-  xs: { fontSize: 14, iconSize: 16, gap: 4 },
-  sm: { fontSize: 18, iconSize: 20, gap: 6 },
-  md: { fontSize: 24, iconSize: 28, gap: 8 },
-  lg: { fontSize: 32, iconSize: 36, gap: 10 },
-  xl: { fontSize: 40, iconSize: 44, gap: 12 },
+  xs: { fontSize: 14, iconSize: 18, gap: 3 },
+  sm: { fontSize: 18, iconSize: 22, gap: 5 },
+  md: { fontSize: 24, iconSize: 28, gap: 6 },
+  lg: { fontSize: 32, iconSize: 38, gap: 8 },
+  xl: { fontSize: 40, iconSize: 48, gap: 10 },
 } as const
 
 export function VfitLogo({
@@ -45,41 +45,56 @@ export function VfitLogo({
       className={cn('inline-flex items-center', className)}
       style={{ gap }}
     >
-      {showIcon && <DumbbellIcon size={iconSize} />}
+      {showIcon && <VIcon size={iconSize} />}
       <span
         style={{
-          fontFamily: "'DM Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-          fontWeight: 800,
+          fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+          fontWeight: 900,
           fontSize,
-          letterSpacing: '-0.025em',
+          letterSpacing: '-0.03em',
           lineHeight: 1,
+          color: textColor || 'currentColor',
         }}
       >
-        <span style={{ color: textColor || 'currentColor' }}>EVOLU</span>
-        <span style={{ color: '#10B981' }}>IA</span>
+        VFIT
       </span>
     </span>
   )
 }
 
-function DumbbellIcon({ size = 24 }: { size?: number }) {
+/** V polyline "Vibrante" icon — matches splash screen & app icons */
+function VIcon({ size = 28 }: { size?: number }) {
+  const id = `vlogo-${size}`
   return (
     <svg
       width={size}
       height={size}
-      viewBox="0 0 24 24"
+      viewBox="0 0 200 200"
       fill="none"
-      xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
     >
-      {/* Left plates */}
-      <rect x="1" y="6" width="3.5" height="12" rx="1.5" fill="#10B981" />
-      <rect x="5.5" y="7.5" width="2.5" height="9" rx="1" fill="#10B981" opacity="0.85" />
-      {/* Bar */}
-      <rect x="8" y="10.5" width="8" height="3" rx="1" fill="#10B981" opacity="0.6" />
-      {/* Right plates */}
-      <rect x="16" y="7.5" width="2.5" height="9" rx="1" fill="#10B981" opacity="0.85" />
-      <rect x="19.5" y="6" width="3.5" height="12" rx="1.5" fill="#10B981" />
+      <defs>
+        <linearGradient id={`${id}-bg`} x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#56EF85" />
+          <stop offset="38%" stopColor="#22C55E" />
+          <stop offset="100%" stopColor="#065F2C" />
+        </linearGradient>
+        <radialGradient id={`${id}-hl`} cx="33%" cy="28%" r="54%">
+          <stop offset="0%" stopColor="rgba(255,255,255,.28)" />
+          <stop offset="100%" stopColor="rgba(255,255,255,0)" />
+        </radialGradient>
+      </defs>
+      <rect width="200" height="200" rx="46" fill={`url(#${id}-bg)`} />
+      <rect width="200" height="200" rx="46" fill={`url(#${id}-hl)`} />
+      <rect x="1" y="1" width="198" height="198" rx="45" fill="none" stroke="rgba(255,255,255,.12)" strokeWidth="1.5" />
+      <polyline
+        points="32,38 100,162 168,38"
+        fill="none"
+        stroke="white"
+        strokeWidth="24"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   )
 }
