@@ -5,6 +5,44 @@
 
 ---
 
+## [v1.7.0-domain-migration] — 04/04/2026 — Domain Migration: iapersonal.app.br → vfit.app.br
+
+### 🌐 Migração Completa de Domínio
+- **128 arquivos** alterados: todas as referências `iapersonal.app.br` → `vfit.app.br`
+- **Zero** referências ao domínio antigo no código fonte
+- Git commit: `407c3e3d` (branch `feat/domain-migration-vfit-app-br`)
+
+### 🏗️ Infraestrutura DNS (Cloudflare)
+- Zone `vfit.app.br` ativa (ID: `f1821903ed0a96fe7aa4b681073ed617`)
+- **6 CNAME records** criados (todos proxied):
+  - `vfit.app.br` → `vfit.pages.dev` (frontend)
+  - `www.vfit.app.br` → `vfit.pages.dev` (redirect)
+  - `api.vfit.app.br` → `vfit-api.vd-b0b.workers.dev` (API backend)
+  - `images.vfit.app.br` → `vfit-api.vd-b0b.workers.dev` (R2 futuro)
+  - `videos.vfit.app.br` → `vfit-api.vd-b0b.workers.dev` (R2 futuro)
+  - `whatsapp.vfit.app.br` → Custom Domain Worker (gateway)
+
+### 🚀 Deploy
+- **Worker `vfit-api`**: Version `abaf0ee2`, rotas `api.vfit.app.br/*`
+- **Worker `vfit-whatsapp`**: Version `da9f2a6f`, custom domain `whatsapp.vfit.app.br`
+- **Pages `vfit`**: 363 files, 128 páginas HTML, deployment `acb336d8`
+- **Custom domains Pages**: `vfit.app.br` + `www.vfit.app.br` (SSL active)
+
+### ✅ Validação
+- `vfit.app.br` → HTTP 200 (SSL OK)
+- `api.vfit.app.br/health` → `{"status":"healthy"}` (D1, KV, R2 OK)
+- `www.vfit.app.br` → HTTP 200
+- `whatsapp.vfit.app.br/health` → `{"status":"ok"}`
+- Fallbacks: `vfit.pages.dev` + `vfit-api.vd-b0b.workers.dev` OK
+
+### ⚠️ Pendente
+- R2 public access para `images.vfit.app.br` e `videos.vfit.app.br`
+- Resend email domain verification
+- TWA rebuild com novo domínio
+- Testes manuais: OAuth, email delivery, passkeys
+
+---
+
 ## [v1.6.0] — 07/04/2026 — Sprint S16: Deferred Sprint 3 (92% tasks)
 
 ### 🔥 T9.9 — Confetti no Treino Concluído
