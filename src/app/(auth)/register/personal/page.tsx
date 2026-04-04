@@ -170,7 +170,7 @@ export default function RegisterPersonalPage() {
     setCpfChecking(true)
     const controller = new AbortController()
 
-    fetch('https://api.iapersonal.app.br/api/v1/cpf/lookup', {
+    fetch('https://api.vfit.app.br/api/v1/cpf/lookup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ cpf: form.cpf.replace(/\D/g, ''), birth_date: form.birthDate }),

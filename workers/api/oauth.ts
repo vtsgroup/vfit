@@ -70,7 +70,7 @@ oauth.get('/google', (c) => {
  * Recebe o code do Google, troca por tokens, cria/login user
  */
 oauth.get('/google/callback', async (c) => {
-  const frontendLogin = 'https://iapersonal.app.br/login'
+  const frontendLogin = 'https://vfit.app.br/login'
 
   try {
   const code = c.req.query('code')
@@ -174,7 +174,7 @@ async function handleOAuthLogin(
 ): Promise<Response> {
   const env = c.env
   const now = new Date().toISOString()
-  const frontendErrorUrl = 'https://iapersonal.app.br/login?error=oauth_failed'
+  const frontendErrorUrl = 'https://vfit.app.br/login?error=oauth_failed'
 
   try {
     // Buscar user existente
@@ -329,7 +329,7 @@ async function handleOAuthLogin(
     }
 
     // Redirecionar para frontend com tokens
-    const frontendUrl = new URL('https://iapersonal.app.br/auth/callback')
+    const frontendUrl = new URL('https://vfit.app.br/auth/callback')
     frontendUrl.searchParams.set('access_token', accessToken)
     frontendUrl.searchParams.set('refresh_token', refreshToken)
     frontendUrl.searchParams.set('session_id', sessionId)

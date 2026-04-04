@@ -13,7 +13,7 @@
 //   breadcrumbSchema(items) → JSON-LD BreadcrumbList
 //   howToSchema(steps) → JSON-LD HowTo
 
-const SITE_URL = 'https://iapersonal.app.br'
+const SITE_URL = 'https://vfit.app.br'
 const BRAND = 'VFIT'
 const LOGO_URL = `${SITE_URL}/AI-logo-round-ext.png?v=20260224-round`
 

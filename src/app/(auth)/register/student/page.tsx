@@ -83,7 +83,7 @@ interface PersonalInfo {
 }
 
 /* ─── Normalize photo URL (same logic as Avatar) ─── */
-const PUBLIC_IMAGES_BASE = (process.env.NEXT_PUBLIC_IMAGES_URL || 'https://images.iapersonal.app.br').replace(/\/+$/, '')
+const PUBLIC_IMAGES_BASE = (process.env.NEXT_PUBLIC_IMAGES_URL || 'https://images.vfit.app.br').replace(/\/+$/, '')
 
 function normalizePhotoUrl(src: string | null | undefined): string | null {
   if (!src) return null
@@ -147,7 +147,7 @@ export default function RegisterStudentPage() {
   // Fetch personal trainer info when invite token present
   useEffect(() => {
     if (!inviteToken) return
-    fetch(`https://api.iapersonal.app.br/api/v1/invitations/${inviteToken}/info`)
+    fetch(`https://api.vfit.app.br/api/v1/invitations/${inviteToken}/info`)
       .then((r) => r.json())
       .then((res) => {
         const data = res as { success: boolean; data?: PersonalInfo }
@@ -173,7 +173,7 @@ export default function RegisterStudentPage() {
     setCpfChecking(true)
     const controller = new AbortController()
 
-    fetch('https://api.iapersonal.app.br/api/v1/cpf/lookup', {
+    fetch('https://api.vfit.app.br/api/v1/cpf/lookup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ cpf: form.cpf.replace(/\D/g, '') }),

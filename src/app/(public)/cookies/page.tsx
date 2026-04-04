@@ -263,8 +263,8 @@ export default function CookiesPage() {
           </p>
           <div className="mt-3 rounded-xl border border-white/8 bg-white/3 p-4">
             <ul className="space-y-1 text-xs text-zinc-400">
-              <li>📧 DPO: <strong className="text-white">dpo@iapersonal.app.br</strong></li>
-              <li>📧 Suporte: <strong className="text-white">suporte@iapersonal.app.br</strong></li>
+              <li>📧 DPO: <strong className="text-white">dpo@vfit.app.br</strong></li>
+              <li>📧 Suporte: <strong className="text-white">suporte@vfit.app.br</strong></li>
             </ul>
           </div>
           <p className="mt-4">

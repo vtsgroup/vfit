@@ -237,7 +237,7 @@ export async function generateBeforeAfterStoryPng(input: {
   // Footer
   ctx.fillStyle = 'rgba(148,163,184,0.9)'
   ctx.font = '600 22px system-ui, -apple-system, Segoe UI, Roboto, Arial'
-  ctx.fillText('iapersonal.app.br', 72, height - 70)
+  ctx.fillText('vfit.app.br', 72, height - 70)
   ctx.fillStyle = 'rgba(61,252,164,0.9)'
   ctx.fillText('VFIT', width - 72 - 160, height - 70)
 

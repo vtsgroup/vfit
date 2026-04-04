@@ -17,7 +17,7 @@ import { useAuthStore } from '@/stores/auth-store'
 import { handleMockRequest, isNetworkError } from './mock-api'
 import { logClientIssue, flushDebugQueue } from './debug-logger'
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.iapersonal.app.br'
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.vfit.app.br'
 
 // Demo mode: ativado automaticamente quando API real falha
 // Inclui mecanismo de recovery: tenta reconectar a cada 30s

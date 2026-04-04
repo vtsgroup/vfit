@@ -348,7 +348,7 @@ const routes: MockRoute[] = [
         const token = 'demo-quick-' + Date.now()
         return ok({
           invitation_token: token,
-          invitation_url: `https://iapersonal.app.br/register/student?token=${token}`,
+          invitation_url: `https://vfit.app.br/register/student?token=${token}`,
           email: null,
           full_name: null,
           personal_name: 'Demo Personal',

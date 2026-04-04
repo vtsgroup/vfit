@@ -127,11 +127,11 @@ export default function LgpdPage() {
           entre em contato com nosso Encarregado de Proteção de Dados.
         </p>
         <a
-          href="mailto:lgpd@iapersonal.app.br"
+          href="mailto:lgpd@vfit.app.br"
           className="inline-flex items-center gap-2 rounded-xl bg-brand-primary px-6 py-3 text-sm font-semibold text-bg-dark transition-all hover:bg-brand-primary-hover"
         >
           <DSIcon name="mail" size={16} />
-          lgpd@iapersonal.app.br
+          lgpd@vfit.app.br
         </a>
       </section>
       </div>

@@ -5,7 +5,7 @@
 // O que faz:
 //   Botões para compartilhar artigo no WhatsApp, Twitter/X e copiar link.
 //   Copy-to-clipboard com feedback visual (ícone muda por 2s).
-//   URL base: https://iapersonal.app.br/blog/{slug}
+//   URL base: https://vfit.app.br/blog/{slug}
 //
 // Exports principais:
 //   ArticleShare — barra de compartilhamento social
@@ -21,7 +21,7 @@ interface ArticleShareProps {
 
 export function ArticleShare({ title, slug }: ArticleShareProps) {
   const [copied, setCopied] = useState(false)
-  const url = `https://iapersonal.app.br/blog/${slug}`
+  const url = `https://vfit.app.br/blog/${slug}`
   const encodedTitle = encodeURIComponent(title)
   const encodedUrl = encodeURIComponent(url)
 

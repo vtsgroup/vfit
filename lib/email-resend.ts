@@ -10,7 +10,7 @@
 
 import type { EmailPayload } from './email'
 
-const DEFAULT_FROM = 'VFIT <noreply@iapersonal.app.br>'
+const DEFAULT_FROM = 'VFIT <noreply@vfit.app.br>'
 
 function renderDarkEmail(options: {
   eyebrow: string
@@ -44,7 +44,7 @@ function renderDarkEmail(options: {
         ${options.footnote ? `<p style="color: #737373; font-size: 12px; margin-top: 16px;">${options.footnote}</p>` : ''}
       </div>
       <div style="padding: 16px 24px; border-top: 1px solid #262626; text-align: center;">
-        <p style="color: #525252; font-size: 11px; margin: 0;">© ${new Date().getFullYear()} VFIT · iapersonal.app.br</p>
+        <p style="color: #525252; font-size: 11px; margin: 0;">© ${new Date().getFullYear()} VFIT · vfit.app.br</p>
       </div>
     </div>
   `
@@ -83,7 +83,7 @@ function renderTemplate(template: EmailPayload['template'], data: EmailPayload['
               </p>
             </div>
             <div style="padding: 16px 24px; border-top: 1px solid #262626; text-align: center;">
-              <p style="color: #525252; font-size: 11px; margin: 0;">© ${new Date().getFullYear()} VFIT · iapersonal.app.br</p>
+              <p style="color: #525252; font-size: 11px; margin: 0;">© ${new Date().getFullYear()} VFIT · vfit.app.br</p>
             </div>
           </div>
         `,
@@ -137,7 +137,7 @@ function renderTemplate(template: EmailPayload['template'], data: EmailPayload['
             </ul>
           `,
           ctaLabel: 'Abrir dashboard',
-          ctaUrl: 'https://iapersonal.app.br/dashboard',
+          ctaUrl: 'https://vfit.app.br/dashboard',
         }),
       }
     case 'welcome-student':
@@ -150,7 +150,7 @@ function renderTemplate(template: EmailPayload['template'], data: EmailPayload['
           subtitle: 'Acompanhe exercícios, progresso e pagamentos em um só lugar.',
           bodyHtml: `<p>Olá <strong>${data.name || 'Aluno'}</strong>! Seu acesso está liberado. Entre no app para ver seus treinos e manter constância.</p>`,
           ctaLabel: 'Acessar área do aluno',
-          ctaUrl: 'https://iapersonal.app.br/dashboard',
+          ctaUrl: 'https://vfit.app.br/dashboard',
         }),
       }
     case 'student-registered':
@@ -190,7 +190,7 @@ function renderTemplate(template: EmailPayload['template'], data: EmailPayload['
               </div>
             </div>
             <div style="padding: 16px 24px; border-top: 1px solid #262626; text-align: center;">
-              <p style="color: #525252; font-size: 11px; margin: 0;">© ${new Date().getFullYear()} VFIT · iapersonal.app.br</p>
+              <p style="color: #525252; font-size: 11px; margin: 0;">© ${new Date().getFullYear()} VFIT · vfit.app.br</p>
             </div>
           </div>
         `,
@@ -205,7 +205,7 @@ function renderTemplate(template: EmailPayload['template'], data: EmailPayload['
           subtitle: 'Recebimento registrado com sucesso.',
           bodyHtml: `<p>Seu pagamento foi confirmado. O histórico financeiro já foi atualizado na plataforma.</p>`,
           ctaLabel: 'Ver pagamentos',
-          ctaUrl: 'https://iapersonal.app.br/dashboard/payments',
+          ctaUrl: 'https://vfit.app.br/dashboard/payments',
         }),
       }
     case 'payment-overdue':
@@ -218,7 +218,7 @@ function renderTemplate(template: EmailPayload['template'], data: EmailPayload['
           subtitle: 'Evite bloqueios e mantenha seu plano ativo.',
           bodyHtml: `<p>Identificamos uma cobrança vencida no seu cadastro. Regularize pelo painel para manter seu acesso sem interrupções.</p>`,
           ctaLabel: 'Regularizar agora',
-          ctaUrl: 'https://iapersonal.app.br/dashboard/payments',
+          ctaUrl: 'https://vfit.app.br/dashboard/payments',
         }),
       }
     case 'subscription-expiring':
@@ -231,14 +231,14 @@ function renderTemplate(template: EmailPayload['template'], data: EmailPayload['
           subtitle: 'Renove para evitar interrupções.',
           bodyHtml: `<p>Sua assinatura está para expirar. Faça a renovação antecipada para manter todas as funcionalidades ativas.</p>`,
           ctaLabel: 'Renovar assinatura',
-          ctaUrl: 'https://iapersonal.app.br/dashboard/settings',
+          ctaUrl: 'https://vfit.app.br/dashboard/settings',
         }),
       }
     case 'assessment-report': {
       const studentName = data.student_name || 'Aluno'
       const personalName = data.personal_name || 'seu personal trainer'
       const assessmentDate = data.assessment_date || new Date().toLocaleDateString('pt-BR')
-      const shareUrl = data.share_url || 'https://iapersonal.app.br/dashboard/assessments'
+      const shareUrl = data.share_url || 'https://vfit.app.br/dashboard/assessments'
       const pdfUrl = data.pdf_url || ''
 
       const metricsHtml = [

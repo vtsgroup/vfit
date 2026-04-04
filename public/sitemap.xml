@@ -4,7 +4,7 @@
 
   <!-- ===== HOME (Landing Page) ===== -->
   <url>
-    <loc>https://iapersonal.app.br/</loc>
+    <loc>https://vfit.app.br/</loc>
     <lastmod>2026-03-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -12,25 +12,25 @@
 
   <!-- ===== INSTITUCIONAL ===== -->
   <url>
-    <loc>https://iapersonal.app.br/sobre</loc>
+    <loc>https://vfit.app.br/sobre</loc>
     <lastmod>2026-03-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://iapersonal.app.br/contato</loc>
+    <loc>https://vfit.app.br/contato</loc>
     <lastmod>2026-03-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://iapersonal.app.br/carreiras</loc>
+    <loc>https://vfit.app.br/carreiras</loc>
     <lastmod>2026-03-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://iapersonal.app.br/lgpd</loc>
+    <loc>https://vfit.app.br/lgpd</loc>
     <lastmod>2026-03-15</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
@@ -38,57 +38,57 @@
 
   <!-- ===== BLOG ===== -->
   <url>
-    <loc>https://iapersonal.app.br/blog</loc>
+    <loc>https://vfit.app.br/blog</loc>
     <lastmod>2026-03-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://iapersonal.app.br/blog/ia-personal-trainer</loc>
+    <loc>https://vfit.app.br/blog/ia-personal-trainer</loc>
     <lastmod>2026-03-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <image:image>
-      <image:loc>https://iapersonal.app.br/blog/hero-ia-personal-trainer.webp</image:loc>
+      <image:loc>https://vfit.app.br/blog/hero-ia-personal-trainer.webp</image:loc>
       <image:title>IA para personal trainer: como aplicar no dia a dia</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://iapersonal.app.br/blog/retencao-alunos-personal</loc>
+    <loc>https://vfit.app.br/blog/retencao-alunos-personal</loc>
     <lastmod>2026-03-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <image:image>
-      <image:loc>https://iapersonal.app.br/blog/hero-retencao-alunos.webp</image:loc>
+      <image:loc>https://vfit.app.br/blog/hero-retencao-alunos.webp</image:loc>
       <image:title>Retenção de alunos no personal training</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://iapersonal.app.br/blog/cobranca-automatica-personal</loc>
+    <loc>https://vfit.app.br/blog/cobranca-automatica-personal</loc>
     <lastmod>2026-03-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <image:image>
-      <image:loc>https://iapersonal.app.br/blog/hero-cobranca-automatica.webp</image:loc>
+      <image:loc>https://vfit.app.br/blog/hero-cobranca-automatica.webp</image:loc>
       <image:title>Cobrança automática para personal trainer</image:title>
     </image:image>
   </url>
 
   <!-- ===== LEGAL ===== -->
   <url>
-    <loc>https://iapersonal.app.br/termos</loc>
+    <loc>https://vfit.app.br/termos</loc>
     <lastmod>2026-03-15</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.2</priority>
   </url>
   <url>
-    <loc>https://iapersonal.app.br/privacidade</loc>
+    <loc>https://vfit.app.br/privacidade</loc>
     <lastmod>2026-03-15</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.2</priority>
   </url>
   <url>
-    <loc>https://iapersonal.app.br/cookies</loc>
+    <loc>https://vfit.app.br/cookies</loc>
     <lastmod>2026-03-15</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.2</priority>
@@ -96,7 +96,7 @@
 
   <!-- ===== PRICING ===== -->
   <url>
-    <loc>https://iapersonal.app.br/pricing</loc>
+    <loc>https://vfit.app.br/pricing</loc>
     <lastmod>2026-03-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -104,7 +104,7 @@
 
   <!-- ===== CONTA ===== -->
   <url>
-    <loc>https://iapersonal.app.br/excluir-conta</loc>
+    <loc>https://vfit.app.br/excluir-conta</loc>
     <lastmod>2026-03-15</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.2</priority>
@@ -114,7 +114,7 @@
 
   <!-- ===== STATUS ===== -->
   <url>
-    <loc>https://iapersonal.app.br/status</loc>
+    <loc>https://vfit.app.br/status</loc>
     <lastmod>2026-03-15</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.3</priority>

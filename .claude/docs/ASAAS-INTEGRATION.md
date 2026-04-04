@@ -148,17 +148,17 @@ O endpoint agora:
 
 ```bash
 # Login admin
-curl -s -X POST "https://api.iapersonal.app.br/api/v1/auth/login" \
+curl -s -X POST "https://api.vfit.app.br/api/v1/auth/login" \
   -H "Content-Type: application/json" \
   -d '{"email":"<admin_email>","password":"<admin_password>","turnstile_token":"<turnstile_token_real>"}'
 
 # Criar cobrança PIX (com Asaas)
-curl -s -X POST "https://api.iapersonal.app.br/api/v1/payments" \
+curl -s -X POST "https://api.vfit.app.br/api/v1/payments" \
   -H "Authorization: Bearer TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"payer_id":"STUDENT_ID","amount":150,"payment_method":"pix","create_in_asaas":true}'
 
 # Ver saldo
-curl -s "https://api.iapersonal.app.br/api/v1/payments/balance" \
+curl -s "https://api.vfit.app.br/api/v1/payments/balance" \
   -H "Authorization: Bearer TOKEN"
 ```

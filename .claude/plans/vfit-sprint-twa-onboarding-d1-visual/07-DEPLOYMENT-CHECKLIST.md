@@ -21,7 +21,7 @@
   ```
 - [ ] `POST /api/v1/plans/generate` returns 200 with valid plan
   ```bash
-  curl -X POST https://api.iapersonal.app.br/api/v1/plans/generate \
+  curl -X POST https://api.vfit.app.br/api/v1/plans/generate \
     -H "Content-Type: application/json" \
     -d '{"gender":"male","age":25,...}' \
     | jq '.plan.days | length'
@@ -232,7 +232,7 @@ wrangler tail
 
 ### Manual
 
-1. Open https://iapersonal.app.br/welcome (not authenticated)
+1. Open https://vfit.app.br/welcome (not authenticated)
    - Expect: Hero + "Começar" CTA
 2. Click "Começar" → complete 1 step
    - Expect: Can fill field + continue

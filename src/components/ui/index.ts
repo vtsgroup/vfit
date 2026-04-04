@@ -10,7 +10,11 @@
 // Exports principais:
 //   Todos os componentes DS v2: Button, DSIcon, PageHeader, FilterPills,
 //   ProgressBarDS, EmptyStateDS, UserSearch, StatsCard, SlidingTabs,
-//   ActionButtons, NotificationCard, ToolCard, CustomSelect3D e demais.
+//   ActionIconButton e demais.
+//
+// v7 Consolidation (S17):
+//   - Removed 9 unused components (ActionButton3D, ActionCard3D, MD3Card*, ToolCard, etc.)
+//   - See individual files for @deprecated notes
 /**
  * src/components/ui/index.ts
  *
@@ -30,15 +34,20 @@ export { EmptyStateDS, type EmptyStateDSProps } from './empty-state-ds'
 export { PageHeader, type PageHeaderProps } from './page-header'
 export { CommandPalette } from './command-palette'
 export { StyledSelect } from './styled-select'
-export { ActionButton3D, ActionCard3D, PERSONAL_ACTIONS } from './action-button-3d'
+// @deprecated — ActionButton3D, ActionCard3D: use <Button variant="primary"> instead
+// export { ActionButton3D, ActionCard3D, PERSONAL_ACTIONS } from './action-button-3d'
 export { ActionIconButton, type ActionIconButtonProps } from './action-icon-button'
 export { AIBotFab, AiBotIcon } from './ai-bot-fab'
 export { DSIcon, type DSIconName, type DSIconProps, DS_ICON_NAMES } from './ds-icon'
 export { StatsCard, type StatsCardProps } from './stats-card'
-export { ToolCard, type ToolCardProps } from './tool-card'
-export { ActionButtons, type ActionButtonsProps } from './action-buttons'
-export { NotificationCard, type NotificationCardProps } from './notification-card'
-export { CustomSelect3D, type CustomSelect3DProps } from './custom-select-3d'
+// @deprecated — ToolCard: use <Card> or <GlassCard> instead
+// export { ToolCard, type ToolCardProps } from './tool-card'
+// @deprecated — ActionButtons: no real-page usage
+// export { ActionButtons, type ActionButtonsProps } from './action-buttons'
+// @deprecated — NotificationCard: use <Alert> instead
+// export { NotificationCard, type NotificationCardProps } from './notification-card'
+// @deprecated — CustomSelect3D: use <StyledSelect> instead
+// export { CustomSelect3D, type CustomSelect3DProps } from './custom-select-3d'
 export { SlidingTabs, type SlidingTabsProps } from './sliding-tabs'
 export { ProgressBarDS, type ProgressBarDSProps } from './progress-bar-ds'
 export { FilterPills, type FilterPillsProps, type FilterPillOption } from './filter-pills'
@@ -49,8 +58,10 @@ export { StaggeredList, StaggeredItem } from './staggered-list'
 export { MD3Tabs, MD3TabPanel } from './md3-tabs'
 export { LinearProgress, CircularProgress, StepProgress } from './md3-progress'
 export { Pagination, type PaginationProps } from './pagination'
-export { MD3Card, MD3CardHeader, MD3CardTitle, MD3CardLabel, MD3CardContent, MD3CardFooter } from './md3-card'
-export { MD3Badge, MD3Chip, MD3Status } from './md3-badge'
+// @deprecated — MD3Card system: use <Card> from './card' instead (50+ usages vs 0)
+// export { MD3Card, MD3CardHeader, MD3CardTitle, MD3CardLabel, MD3CardContent, MD3CardFooter } from './md3-card'
+// @deprecated — MD3Badge/MD3Chip/MD3Status: use <Badge> instead
+// export { MD3Badge, MD3Chip, MD3Status } from './md3-badge'
 export { MD3Select } from './md3-select'
 export { MD3Input, MD3TextArea, MD3SearchBar } from './md3-input'
 export { Modal } from './modal'
@@ -74,3 +85,4 @@ export {
 	SkeletonForm,
 	Shimmer,
 } from './skeleton'
+export { DateRangePicker, type DateRange } from './date-range-picker'

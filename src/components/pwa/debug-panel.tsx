@@ -18,7 +18,7 @@ import { usePwaInstall } from './install-banner'
 
 /**
  * PWA Debug Panel — Comprehensive Chrome installability diagnostics.
- * Access via: iapersonal.app.br?pwa-debug=1
+ * Access via: vfit.app.br?pwa-debug=1
  */
 export function PwaDebugPanel() {
   const [show, setShow] = useState(false)

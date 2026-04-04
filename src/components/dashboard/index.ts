@@ -20,6 +20,7 @@ export { QuickActions, PendingPayments, SubscriptionBanner } from './quick-actio
 export { InfoCard, InfoCardGrid } from './info-card'
 export { ActivityTimeline } from './activity-timeline'
 export { WeeklyProgressRing, StreakRing, XpProgress } from './progress-rings'
+export { DashboardFilterBar, useDefaultFilters, type DashboardFilters } from './dashboard-filter-bar'
 export {
   RevenueAreaChart,
   StudentsPieChart,

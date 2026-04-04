@@ -57,7 +57,7 @@ export function Avatar({ src, name, size = 'md', className }: AvatarProps) {
     const raw = String(src).trim()
     if (!raw) return null
 
-    const publicImagesBase = (process.env.NEXT_PUBLIC_IMAGES_URL || 'https://images.iapersonal.app.br').replace(/\/+$/, '')
+    const publicImagesBase = (process.env.NEXT_PUBLIC_IMAGES_URL || 'https://images.vfit.app.br').replace(/\/+$/, '')
 
     // If backend stored only the key, build a public URL.
     if (raw.startsWith('profiles/')) return `${publicImagesBase}/${raw}`

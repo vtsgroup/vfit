@@ -86,7 +86,7 @@ const PLANS: Plan[] = [
       { text: 'Recorrência automática (Pix Automático)' },
       { text: 'Gamificação completa (badges, ranking)' },
       { text: 'Notificações e-mail + WhatsApp', highlight: true },
-      { text: 'E-mail @iapersonal.app.br incluso' },
+      { text: 'E-mail @vfit.app.br incluso' },
       { text: 'Relatórios avançados' },
     ],
     cta: 'Começar agora',

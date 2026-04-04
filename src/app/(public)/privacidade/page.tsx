@@ -141,7 +141,7 @@ export default function PrivacidadePage() {
             <strong className="text-white">VFIT (Personal IA Tecnologia LTDA)</strong><br />
             CNPJ: XX.XXX.XXX/0001-XX<br />
             Endereço: São Paulo/SP, Brasil<br />
-            DPO (Encarregado): <strong className="text-white">dpo@iapersonal.app.br</strong>
+            DPO (Encarregado): <strong className="text-white">dpo@vfit.app.br</strong>
           </p>
         </Section>
 
@@ -240,7 +240,7 @@ export default function PrivacidadePage() {
           </div>
           <p className="mt-4">
             Para exercer qualquer direito, acesse <strong className="text-white">Configurações → Minha Conta</strong> na
-            Plataforma, ou envie e-mail para <strong className="text-white">dpo@iapersonal.app.br</strong>.
+            Plataforma, ou envie e-mail para <strong className="text-white">dpo@vfit.app.br</strong>.
             Responderemos em até <strong className="text-white">15 dias úteis</strong>.
           </p>
         </Section>
@@ -272,9 +272,9 @@ export default function PrivacidadePage() {
           <div className="mt-4 rounded-xl border border-white/8 bg-white/3 p-4">
             <p className="text-xs font-semibold text-white">Canais de contato:</p>
             <ul className="mt-2 space-y-1 text-xs text-zinc-400">
-              <li>📧 DPO: <strong className="text-white">dpo@iapersonal.app.br</strong></li>
-              <li>📧 Suporte: <strong className="text-white">suporte@iapersonal.app.br</strong></li>
-              <li>🌐 Site: <strong className="text-white">iapersonal.app.br</strong></li>
+              <li>📧 DPO: <strong className="text-white">dpo@vfit.app.br</strong></li>
+              <li>📧 Suporte: <strong className="text-white">suporte@vfit.app.br</strong></li>
+              <li>🌐 Site: <strong className="text-white">vfit.app.br</strong></li>
             </ul>
           </div>
         </Section>

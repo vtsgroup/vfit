@@ -131,7 +131,7 @@ export default function WorkoutDetailClient({ id }: { id: string }) {
     const student = workout.student_name ? `Aluno: ${workout.student_name}` : ''
     const desc = workout.description ? `${workout.description}` : ''
     const count = `${workout.exercises.length} exercício${workout.exercises.length !== 1 ? 's' : ''}`
-    const footer = `\n---\n_Gerado por VFIT — iapersonal.app.br_`
+    const footer = `\n---\n_Gerado por VFIT — vfit.app.br_`
 
     const parts = [header, student, desc, count, '', exercises, footer].filter(Boolean)
     const text = parts.join('\n')

@@ -14,10 +14,10 @@ export const APP_CONFIG = {
   name: 'VFIT',
   tagline: 'Seu app de treinos com IA',
   version: '1.0.0',
-  domain: 'iapersonal.app.br',
-  api_domain: 'api.iapersonal.app.br',
-  videos_domain: 'videos.iapersonal.app.br',
-  images_domain: 'images.iapersonal.app.br',
+  domain: 'vfit.app.br',
+  api_domain: 'api.vfit.app.br',
+  videos_domain: 'videos.vfit.app.br',
+  images_domain: 'images.vfit.app.br',
 } as const
 
 // ============================================

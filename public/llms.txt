@@ -43,24 +43,24 @@ Desenvolvido pela VTS Victorious Tech Solutions Ltda.
 - PWA (Progressive Web App) — funciona como app nativo, inclusive offline
 
 ## Páginas Principais
-- Site: https://iapersonal.app.br
-- Planos: https://iapersonal.app.br/pricing
-- Blog: https://iapersonal.app.br/blog
-- Sobre: https://iapersonal.app.br/sobre
-- Contato: https://iapersonal.app.br/contato
-- Carreiras: https://iapersonal.app.br/carreiras
-- LGPD: https://iapersonal.app.br/lgpd
-- Termos de Uso: https://iapersonal.app.br/termos
-- Política de Privacidade: https://iapersonal.app.br/privacidade
-- Política de Cookies: https://iapersonal.app.br/cookies
-- Status: https://iapersonal.app.br/status
+- Site: https://vfit.app.br
+- Planos: https://vfit.app.br/pricing
+- Blog: https://vfit.app.br/blog
+- Sobre: https://vfit.app.br/sobre
+- Contato: https://vfit.app.br/contato
+- Carreiras: https://vfit.app.br/carreiras
+- LGPD: https://vfit.app.br/lgpd
+- Termos de Uso: https://vfit.app.br/termos
+- Política de Privacidade: https://vfit.app.br/privacidade
+- Política de Cookies: https://vfit.app.br/cookies
+- Status: https://vfit.app.br/status
 
 ## Blog — Artigos
-- https://iapersonal.app.br/blog/ia-personal-trainer — IA para personal trainer: como aplicar no dia a dia com qualidade
-- https://iapersonal.app.br/blog/retencao-alunos-personal — Retenção de alunos: 5 alavancas para reduzir churn
-- https://iapersonal.app.br/blog/cobranca-automatica-personal — Cobrança automática: menos inadimplência
+- https://vfit.app.br/blog/ia-personal-trainer — IA para personal trainer: como aplicar no dia a dia com qualidade
+- https://vfit.app.br/blog/retencao-alunos-personal — Retenção de alunos: 5 alavancas para reduzir churn
+- https://vfit.app.br/blog/cobranca-automatica-personal — Cobrança automática: menos inadimplência
 
 ## Contato
-- Email: contato@iapersonal.app.br
-- Site: https://iapersonal.app.br/contato
-- Instagram: https://instagram.com/iapersonal.app.br
+- Email: contato@vfit.app.br
+- Site: https://vfit.app.br/contato
+- Instagram: https://instagram.com/vfitapp

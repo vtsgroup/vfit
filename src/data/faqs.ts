@@ -47,7 +47,7 @@ export const FAQ_PRIVACIDADE: FaqItem[] = [
   {
     question: 'Como posso solicitar a exclusão dos meus dados?',
     answer:
-      'Você pode excluir sua conta diretamente nas Configurações do app, ou enviar um e-mail para contato@iapersonal.app.br. A exclusão é processada em até 15 dias úteis conforme a LGPD.',
+      'Você pode excluir sua conta diretamente nas Configurações do app, ou enviar um e-mail para contato@vfit.app.br. A exclusão é processada em até 15 dias úteis conforme a LGPD.',
   },
   {
     question: 'Os dados são criptografados?',
@@ -85,7 +85,7 @@ export const FAQ_LGPD: FaqItem[] = [
   {
     question: 'O VFIT tem um Encarregado de Dados (DPO)?',
     answer:
-      'Sim. Para exercer seus direitos ou esclarecer dúvidas, entre em contato com nosso DPO pelo e-mail lgpd@iapersonal.app.br.',
+      'Sim. Para exercer seus direitos ou esclarecer dúvidas, entre em contato com nosso DPO pelo e-mail lgpd@vfit.app.br.',
   },
   {
     question: 'Em quanto tempo minha solicitação LGPD é atendida?',
@@ -147,7 +147,7 @@ export const FAQ_CONTATO: FaqItem[] = [
   {
     question: 'Como faço para reportar um bug ou sugerir uma funcionalidade?',
     answer:
-      'Envie um e-mail para contato@iapersonal.app.br com o assunto "Bug" ou "Sugestão", ou use o formulário de feedback disponível dentro da plataforma em Configurações.',
+      'Envie um e-mail para contato@vfit.app.br com o assunto "Bug" ou "Sugestão", ou use o formulário de feedback disponível dentro da plataforma em Configurações.',
   },
 ]
 
@@ -166,7 +166,7 @@ export const FAQ_CARREIRAS: FaqItem[] = [
   {
     question: 'Posso me candidatar mesmo sem vaga aberta na minha área?',
     answer:
-      'Sim! Envie seu currículo para vagas@iapersonal.app.br com o assunto "Banco de Talentos". Quando surgir uma oportunidade compatível, entraremos em contato.',
+      'Sim! Envie seu currículo para vagas@vfit.app.br com o assunto "Banco de Talentos". Quando surgir uma oportunidade compatível, entraremos em contato.',
   },
 ]
 

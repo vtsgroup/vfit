@@ -136,7 +136,7 @@ function notifyWhatsAppTask(event, payload, options = {}) {
       event,
       actor_label: process.env.WHATSAPP_ACTOR_LABEL || "Deploy Pipeline",
       group_name: process.env.WHATSAPP_GROUP_NAME || "Logs e Docs: VFIT",
-      link_url: process.env.WHATSAPP_LINK_URL || "https://iapersonal.app.br",
+      link_url: process.env.WHATSAPP_LINK_URL || "https://vfit.app.br",
       ...payload,
     };
 
@@ -342,8 +342,8 @@ try {
   if (deployStatus === "success") {
     console.log(`✅ Deploy v${version} completo em ${elapsed}s`);
     console.log(`📦 Versão: ${version}`);
-    if (!skipPages) console.log("🌐 https://iapersonal.app.br");
-    if (!skipWorkers) console.log("⚡ https://api.iapersonal.app.br");
+    if (!skipPages) console.log("🌐 https://vfit.app.br");
+    if (!skipWorkers) console.log("⚡ https://api.vfit.app.br");
     if (!skipGit && !dryRun) console.log("📤 Git: pushed to origin/main");
   } else {
     console.log(`❌ Deploy finalizado com falha em ${elapsed}s`);

@@ -3,7 +3,7 @@
     {
       "allowed": {
         "origins": [
-          "https://iapersonal.app.br",
+          "https://vfit.app.br",
           "https://vfit.pages.dev",
           "http://localhost:3000"
         ],

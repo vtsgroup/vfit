@@ -314,7 +314,7 @@ export function useLogout() {
 // useOAuthRedirect
 // ============================================
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://api.iapersonal.app.br'
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://api.vfit.app.br'
 
 export function useOAuthRedirect() {
   return useMutation({

@@ -313,7 +313,7 @@ students.post('/invite', requireType('personal'), async (c) => {
   const personalName = personalRows[0]?.full_name || 'Seu Personal'
 
   // Enviar email de convite via Resend
-  const invitationUrl = `https://iapersonal.app.br/register/student?token=${invitationToken}`
+  const invitationUrl = `https://vfit.app.br/register/student?token=${invitationToken}`
   let emailSent = false
 
   try {
@@ -341,7 +341,7 @@ students.post('/invite', requireType('personal'), async (c) => {
         parsed.full_name,
         personalName,
         invitationToken,
-        'https://iapersonal.app.br',
+        'https://vfit.app.br',
         requestId
       )
       emailSent = true
@@ -383,12 +383,12 @@ students.post('/invite/quick', requireType('personal'), async (c) => {
   )
   const personalName = personalRows[0]?.full_name || 'Seu Personal'
 
-  const invitationUrl = `https://iapersonal.app.br/register/student?token=${invitationToken}`
+  const invitationUrl = `https://vfit.app.br/register/student?token=${invitationToken}`
 
   // ===== Mode: QR ao vivo (sem email) =====
   if (!parsed.email) {
     const placeholderId = generateId()
-    const dummyEmail = `invite+${invitationToken.slice(0, 28)}@iapersonal.app.br`.toLowerCase()
+    const dummyEmail = `invite+${invitationToken.slice(0, 28)}@vfit.app.br`.toLowerCase()
     const dummyName = parsed.full_name?.trim().slice(0, 255) || 'Aluno convidado'
 
     // Placeholder user (is_active=false, sem password) — será removido ao aceitar convite
@@ -535,7 +535,7 @@ students.post('/invite/quick', requireType('personal'), async (c) => {
         fullName,
         personalName,
         invitationToken,
-        'https://iapersonal.app.br',
+        'https://vfit.app.br',
         requestId
       )
       emailSent = true
@@ -577,7 +577,7 @@ students.post('/manual-create', requireType('personal'), async (c) => {
   const phone = parsed.phone.trim()
   const now = new Date().toISOString()
   const invitationToken = generateInvitationToken()
-  const invitationUrl = `https://iapersonal.app.br/register/student?token=${invitationToken}`
+  const invitationUrl = `https://vfit.app.br/register/student?token=${invitationToken}`
 
   const { rows: existingEmail } = await pgQuery<{ id: string; user_type: string }>(
     c.env,
@@ -659,7 +659,7 @@ students.post('/manual-create', requireType('personal'), async (c) => {
         fullName,
         personalName,
         invitationToken,
-        'https://iapersonal.app.br',
+        'https://vfit.app.br',
         requestId
       )
       emailSent = true
@@ -812,7 +812,7 @@ students.post('/batch-invite', requireType('personal'), async (c) => {
       }
 
       // Enviar email (best-effort)
-      const invitationUrl = `https://iapersonal.app.br/register/student?token=${invitationToken}`
+      const invitationUrl = `https://vfit.app.br/register/student?token=${invitationToken}`
       try {
         if (c.env.RESEND_API_KEY) {
           await sendEmailWithResend(
@@ -1233,7 +1233,7 @@ async function sendStudentWelcomeWhatsApp(
   env: Bindings,
   input: { phone: string; fullName: string; personalName: string; invitationUrl: string }
 ): Promise<boolean> {
-  const gatewayUrl = (env.WHATSAPP_GATEWAY_URL || 'https://whatsapp.iapersonal.app.br').replace(/\/+$/, '')
+  const gatewayUrl = (env.WHATSAPP_GATEWAY_URL || 'https://whatsapp.vfit.app.br').replace(/\/+$/, '')
   const token = env.WHATSAPP_NOTIFY_TOKEN || env.WHATSAPP_ADMIN_AUTH_TOKEN
   if (!token) return false
 

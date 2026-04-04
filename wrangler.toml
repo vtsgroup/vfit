@@ -9,7 +9,7 @@ workers_dev = true
 # Routes (custom domain) — Ativado em 20/02/2026
 # ============================================
 routes = [
-  { pattern = "api.iapersonal.app.br/*", zone_name = "iapersonal.app.br" }
+  { pattern = "api.vfit.app.br/*", zone_name = "vfit.app.br" }
 ]
 
 # ============================================
@@ -87,7 +87,7 @@ bucket_name = "personal-ia-images"  # R2 buckets cannot be renamed
 # Cloudflare Image Resizing
 # Habilitado via Dashboard > Speed > Optimization > Image Resizing
 # Funciona automaticamente nos custom domains R2
-# URL: images.iapersonal.app.br/cdn-cgi/image/{params}/{path}
+# URL: images.vfit.app.br/cdn-cgi/image/{params}/{path}
 # ============================================
 
 # ============================================

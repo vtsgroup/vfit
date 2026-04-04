@@ -74,7 +74,7 @@ TWA (Trusted Web Activity) é a tecnologia do Google que permite publicar uma PW
 │  │  │         Chrome Custom Tab (fullscreen)         │   │   │
 │  │  │                                                │   │   │
 │  │  │   ┌─────────────────────────────────────┐     │   │   │
-│  │  │   │   https://iapersonal.app.br          │     │   │   │
+│  │  │   │   https://vfit.app.br          │     │   │   │
 │  │  │   │   (Next.js 15 static export)         │     │   │   │
 │  │  │   │                                      │     │   │   │
 │  │  │   │   ┌──────────┐  ┌──────────────┐    │     │   │   │
@@ -87,7 +87,7 @@ TWA (Trusted Web Activity) é a tecnologia do Google que permite publicar uma PW
 └─────────────────────────────────────────────────────────────┘
 
 Verificação de Confiança:
-  Android ──► iapersonal.app.br/.well-known/assetlinks.json
+  Android ──► vfit.app.br/.well-known/assetlinks.json
            ◄── SHA-256 match? → Fullscreen (sem barra URL)
            ◄── No match?      → Custom Tab (com barra URL)
 ```
@@ -226,7 +226,7 @@ keytool -list -v -keystore keystore/vfit-release.jks -alias vfit -storepass "$KE
 | Campo | Valor | Notas |
 |-------|-------|-------|
 | `packageId` | `br.app.vfit` | ID único na Play Store |
-| `host` | `iapersonal.app.br` | Domínio principal |
+| `host` | `vfit.app.br` | Domínio principal |
 | `name` | `VFIT` | Nome completo |
 | `launcherName` | `VFIT` | Nome no launcher Android |
 | `display` | `standalone` | Fullscreen sem barra |
@@ -310,7 +310,7 @@ cp app-release-bundle.aab ~/Desktop/vfit-UPLOAD.aab
 
 ### O que são?
 
-Arquivo JSON servido em `https://iapersonal.app.br/.well-known/assetlinks.json` que prova ao Android que o app `br.app.vfit` tem permissão para abrir URLs do domínio em modo fullscreen (sem barra de URL).
+Arquivo JSON servido em `https://vfit.app.br/.well-known/assetlinks.json` que prova ao Android que o app `br.app.vfit` tem permissão para abrir URLs do domínio em modo fullscreen (sem barra de URL).
 
 ### Arquivo atual em produção
 
@@ -352,13 +352,13 @@ Arquivo JSON servido em `https://iapersonal.app.br/.well-known/assetlinks.json` 
 
 ```bash
 # Verificar HTTP
-curl -sI https://iapersonal.app.br/.well-known/assetlinks.json | head -5
+curl -sI https://vfit.app.br/.well-known/assetlinks.json | head -5
 
 # Verificar conteúdo
-curl -s https://iapersonal.app.br/.well-known/assetlinks.json | python3 -m json.tool
+curl -s https://vfit.app.br/.well-known/assetlinks.json | python3 -m json.tool
 
 # Verificar via Google API (fonte de verdade)
-curl -s "https://digitalassetlinks.googleapis.com/v1/statements:list?source.web.site=https://iapersonal.app.br&relation=delegate_permission/common.handle_all_urls" | python3 -m json.tool
+curl -s "https://digitalassetlinks.googleapis.com/v1/statements:list?source.web.site=https://vfit.app.br&relation=delegate_permission/common.handle_all_urls" | python3 -m json.tool
 ```
 
 > **Nota**: A API do Google tem cache de ~1h. Após atualizar o assetlinks.json, pode levar até 1h para refletir.
@@ -466,9 +466,9 @@ if (platform === 'twa') {
 #### `src/app/(legal)/excluir-conta/page.tsx` — Exclusão de conta
 
 Página pública exigida pelo Google Play para Data Deletion:
-- **URL**: `https://iapersonal.app.br/excluir-conta`
+- **URL**: `https://vfit.app.br/excluir-conta`
 - Self-service via app (Configurações → Excluir conta)
-- Email para `contato@iapersonal.app.br`
+- Email para `contato@vfit.app.br`
 - Lista o que é excluído
 - Prazo (15 dias úteis) e base legal (LGPD)
 
@@ -485,16 +485,16 @@ Página pública exigida pelo Google Play para Data Deletion:
 | **Categoria** | Saúde e fitness |
 | **País** | Brasil (somente) |
 | **Idioma** | Português do Brasil |
-| **URL Privacidade** | `https://iapersonal.app.br/privacidade` |
-| **URL Exclusão de Dados** | `https://iapersonal.app.br/excluir-conta` |
-| **Website** | `https://iapersonal.app.br` |
-| **Email de contacto** | `contato@iapersonal.app.br` |
+| **URL Privacidade** | `https://vfit.app.br/privacidade` |
+| **URL Exclusão de Dados** | `https://vfit.app.br/excluir-conta` |
+| **Website** | `https://vfit.app.br` |
+| **Email de contacto** | `contato@vfit.app.br` |
 
 ### Declarações preenchidas
 
 | Seção | Resposta principal |
 |-------|-------------------|
-| **Política de Privacidade** | `https://iapersonal.app.br/privacidade` |
+| **Política de Privacidade** | `https://vfit.app.br/privacidade` |
 | **Acesso a apps** | Restrito — credenciais de teste fornecidas |
 | **Anúncios** | Não contém anúncios |
 | **ID de publicidade** | Não usa |
@@ -529,7 +529,7 @@ Página pública exigida pelo Google Play para Data Deletion:
 
 | Campo | Valor |
 |-------|-------|
-| Email | `google-review@iapersonal.app.br` |
+| Email | `google-review@vfit.app.br` |
 | Senha | `GoogleReview2026!` |
 | Tipo | Aluno (student) |
 
@@ -656,7 +656,7 @@ jarsigner -verify app-release-bundle.aab
 2. Verificar: Play Console → Configuração → Integridade da app → SHA-256 do "Certificado da chave de assinatura de apps"
 3. Adicionar no `assetlinks.json` e fazer deploy
 4. Aguardar cache do Google expirar (~1h)
-5. Validar: `curl "https://digitalassetlinks.googleapis.com/v1/statements:list?source.web.site=https://iapersonal.app.br&relation=delegate_permission/common.handle_all_urls"`
+5. Validar: `curl "https://digitalassetlinks.googleapis.com/v1/statements:list?source.web.site=https://vfit.app.br&relation=delegate_permission/common.handle_all_urls"`
 
 ### ❌ `zsh: event not found` ao digitar senha
 
@@ -806,7 +806,7 @@ Funcionalidades disponíveis:
 
 ### Antes de publicar atualização na Play Store
 
-- [ ] Versão web deployada e estável (`iapersonal.app.br` funcionando)
+- [ ] Versão web deployada e estável (`vfit.app.br` funcionando)
 - [ ] `validate.sh` passando (todos ✅)
 - [ ] Assetlinks verificado (Google API retorna statements)
 - [ ] AAB gerado com `bubblewrap build`
@@ -841,15 +841,15 @@ Funcionalidades disponíveis:
 | Recurso | URL |
 |---------|-----|
 | Play Console | https://play.google.com/console |
-| Assetlinks (produção) | https://iapersonal.app.br/.well-known/assetlinks.json |
-| Validador Google | https://digitalassetlinks.googleapis.com/v1/statements:list?source.web.site=https://iapersonal.app.br&relation=delegate_permission/common.handle_all_urls |
+| Assetlinks (produção) | https://vfit.app.br/.well-known/assetlinks.json |
+| Validador Google | https://digitalassetlinks.googleapis.com/v1/statements:list?source.web.site=https://vfit.app.br&relation=delegate_permission/common.handle_all_urls |
 | Bubblewrap docs | https://github.com/nichaelGuo/nichaelGuo.github.io/issues/4 |
 | TWA docs Google | https://developer.chrome.com/docs/android/trusted-web-activity |
 | Maskable icons tool | https://maskable.app |
 | Play Console integridade | Play Console → Configuração → Integridade da app |
-| Privacidade | https://iapersonal.app.br/privacidade |
-| Exclusão de conta | https://iapersonal.app.br/excluir-conta |
-| Manifest PWA | https://iapersonal.app.br/manifest.json |
+| Privacidade | https://vfit.app.br/privacidade |
+| Exclusão de conta | https://vfit.app.br/excluir-conta |
+| Manifest PWA | https://vfit.app.br/manifest.json |
 
 ---
 

@@ -97,8 +97,8 @@ export type Bindings = {
   HUBDEV_API_TOKEN?: string
 
   // R2 Public URLs
-  R2_VIDEOS_URL: string  // https://videos.iapersonal.app.br
-  R2_IMAGES_URL: string  // https://images.iapersonal.app.br
+  R2_VIDEOS_URL: string  // https://videos.vfit.app.br
+  R2_IMAGES_URL: string  // https://images.vfit.app.br
 
   // Cloudflare Stream (Sprint E — exercise videos with adaptive bitrate)
   CF_STREAM_API_TOKEN?: string

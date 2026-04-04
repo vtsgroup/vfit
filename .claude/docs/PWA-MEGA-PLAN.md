@@ -689,7 +689,7 @@ Chrome 120+ suporta **Rich Install UI** com screenshots, description e rating no
 ## 🔗 FASE 12 — Dedicated Install Page
 
 ### Conceito (estilo Progressier)
-Página dedicada `iapersonal.app.br/install` que simula uma app store:
+Página dedicada `vfit.app.br/install` que simula uma app store:
 
 ```
 ┌─────────────────────────────────┐
@@ -714,7 +714,7 @@ Página dedicada `iapersonal.app.br/install` que simula uma app store:
 // src/app/install/page.tsx
 // Landing page estilo app store
 // Detecta plataforma → CTA contextual
-// Link: iapersonal.app.br/install
+// Link: vfit.app.br/install
 ```
 
 ---
@@ -726,7 +726,7 @@ Para usuários desktop, mostrar QR code que abre a página de instalação no ce
 
 ```typescript
 // Quando detecta desktop + mobile-only context:
-// Gera QR code com URL: iapersonal.app.br/install?utm_source=qr
+// Gera QR code com URL: vfit.app.br/install?utm_source=qr
 // Usuário escaneia → abre install page no celular
 // Biblioteca: qrcode.react (~5KB)
 ```
@@ -834,8 +834,8 @@ navigator.vibrate(300)
 ```
 VAPID_PUBLIC_KEY    — Chave pública VAPID
 VAPID_PRIVATE_KEY   — Chave privada VAPID
-VAPID_SUBJECT       — mailto:contato@iapersonal.app.br
-WEBAUTHN_RP_ID      — iapersonal.app.br
+VAPID_SUBJECT       — mailto:contato@vfit.app.br
+WEBAUTHN_RP_ID      — vfit.app.br
 WEBAUTHN_RP_NAME    — VFIT
 ```
 

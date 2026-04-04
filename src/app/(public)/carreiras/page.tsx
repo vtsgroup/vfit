@@ -88,8 +88,8 @@ export default function CarreirasPage() {
               hiringOrganization: {
                 '@type': 'Organization',
                 name: 'VFIT',
-                sameAs: 'https://iapersonal.app.br',
-                logo: 'https://iapersonal.app.br/icons/icon-512x512.png',
+                sameAs: 'https://vfit.app.br',
+                logo: 'https://vfit.app.br/icons/icon-512x512.png',
               },
               jobLocation: {
                 '@type': 'Place',
@@ -160,7 +160,7 @@ export default function CarreirasPage() {
                   <p className="text-sm text-zinc-400">{job.description}</p>
                 </div>
                 <a
-                  href="mailto:vagas@iapersonal.app.br"
+                  href="mailto:vagas@vfit.app.br"
                   className="shrink-0 hidden sm:inline-flex"
                 >
                   <Button variant="outline" size="sm">
@@ -184,7 +184,7 @@ export default function CarreirasPage() {
           Envie seu currículo mesmo assim! Estamos sempre em busca de talentos
           que compartilham nossa paixão por tecnologia e fitness.
         </p>
-        <a href="mailto:vagas@iapersonal.app.br">
+        <a href="mailto:vagas@vfit.app.br">
           <Button size="lg">
             <DSIcon name="send" size={16} />
             Enviar Currículo

@@ -40,7 +40,7 @@ const updateOnboardingSchema = z.object({
   skipped_steps: z.array(z.number().int().min(1).max(4)).max(4).optional(),
 })
 
-const DEFAULT_PUBLIC_IMAGES_BASE = 'https://images.iapersonal.app.br'
+const DEFAULT_PUBLIC_IMAGES_BASE = 'https://images.vfit.app.br'
 
 function normalizePublicImagesBase(raw: string | undefined | null): string {
   const v = String(raw || '').trim()
@@ -342,7 +342,7 @@ users.delete('/me', async (c) => {
       ),
       updated_at = $3
     WHERE id = $4
-  `, [`Usuário Removido`, `${anonId}@deleted.iapersonal.app.br`, now, userId])
+  `, [`Usuário Removido`, `${anonId}@deleted.vfit.app.br`, now, userId])
 
   // 2. Anonimizar dados de perfil
   if (userType === 'personal') {
@@ -424,7 +424,7 @@ users.get('/me/data-export', async (c) => {
       version: '1.0',
       legal_basis: 'LGPD Art. 18, V — Portabilidade de dados',
       controller: 'VFIT (Personal IA Tecnologia LTDA)',
-      dpo_contact: 'dpo@iapersonal.app.br',
+      dpo_contact: 'dpo@vfit.app.br',
     },
     user: {
       id: user.id,

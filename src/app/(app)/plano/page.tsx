@@ -8,7 +8,7 @@
 
 'use client'
 
-import { useState, useMemo, useEffect, useRef } from 'react'
+import { useState, useMemo, useEffect, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { useQueryClient } from '@tanstack/react-query'
 import { DSIcon } from '@/components/ui/ds-icon'
@@ -35,6 +35,91 @@ function getGreeting(): string {
   if (h < 12) return 'Bom dia! ☀️'
   if (h < 18) return 'Boa tarde! 🌤️'
   return 'Boa noite! 🌙'
+}
+
+// ============================================
+// Share Plan Button
+// ============================================
+
+function SharePlanButton({ planName, totalDays }: { planName: string; totalDays: number }) {
+  const [showMenu, setShowMenu] = useState(false)
+  const [copied, setCopied] = useState(false)
+  const menuRef = useRef<HTMLDivElement>(null)
+
+  const shareText = `💪 Confira meu plano de treino "${planName}" (${totalDays} dias) no VFIT! Junte-se a mim: https://vfit.app.br`
+
+  const handleShare = useCallback(async (type: 'native' | 'whatsapp' | 'copy') => {
+    if (type === 'native' && navigator.share) {
+      try {
+        await navigator.share({ title: `Plano: ${planName}`, text: shareText })
+      } catch { /* user cancelled */ }
+      setShowMenu(false)
+      return
+    }
+    if (type === 'whatsapp') {
+      window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, '_blank')
+      setShowMenu(false)
+      return
+    }
+    if (type === 'copy') {
+      await navigator.clipboard.writeText(shareText)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+      setShowMenu(false)
+    }
+  }, [planName, shareText])
+
+  // Close on outside click
+  useEffect(() => {
+    if (!showMenu) return
+    const handler = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) setShowMenu(false)
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [showMenu])
+
+  return (
+    <div className="relative" ref={menuRef}>
+      <button
+        type="button"
+        onClick={() => setShowMenu(!showMenu)}
+        className="flex h-10 w-10 items-center justify-center rounded-xl border border-border-primary bg-bg-secondary text-text-muted hover:text-text-primary transition-all"
+        title="Compartilhar plano"
+      >
+        <DSIcon name="share2" size={18} />
+      </button>
+
+      {/* Dropdown */}
+      {showMenu && (
+        <div className="absolute right-0 top-12 z-50 w-48 rounded-xl glass-card border border-white/10 p-1.5 shadow-xl animate-in fade-in slide-in-from-top-2 duration-150">
+          {typeof navigator !== 'undefined' && 'share' in navigator && (
+            <button
+              onClick={() => handleShare('native')}
+              className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-left text-[12px] font-medium text-text-primary hover:bg-white/6 transition-colors"
+            >
+              <DSIcon name="share2" size={14} className="text-brand-primary" />
+              Compartilhar...
+            </button>
+          )}
+          <button
+            onClick={() => handleShare('whatsapp')}
+            className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-left text-[12px] font-medium text-text-primary hover:bg-white/6 transition-colors"
+          >
+            <DSIcon name="messageCircle" size={14} className="text-emerald-400" />
+            WhatsApp
+          </button>
+          <button
+            onClick={() => handleShare('copy')}
+            className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-left text-[12px] font-medium text-text-primary hover:bg-white/6 transition-colors"
+          >
+            <DSIcon name={copied ? 'check' : 'copy'} size={14} className={copied ? 'text-emerald-400' : 'text-blue-400'} />
+            {copied ? 'Copiado!' : 'Copiar link'}
+          </button>
+        </div>
+      )}
+    </div>
+  )
 }
 
 export default function PlanoPage() {
@@ -139,13 +224,16 @@ export default function PlanoPage() {
             <p className="text-xs font-semibold text-brand-primary">{getGreeting()}</p>
             <h1 className="text-2xl font-black text-text-primary">Meu Plano</h1>
           </div>
-          <button
-            type="button"
-            onClick={() => router.push('/plano/ajustes')}
-            className="flex h-10 w-10 items-center justify-center rounded-xl border border-border-primary bg-bg-secondary text-text-muted hover:text-text-primary transition-all"
-          >
-            <DSIcon name="settings" size={20} />
-          </button>
+          <div className="flex items-center gap-2">
+            <SharePlanButton planName={plan.name} totalDays={plan.total_days} />
+            <button
+              type="button"
+              onClick={() => router.push('/plano/ajustes')}
+              className="flex h-10 w-10 items-center justify-center rounded-xl border border-border-primary bg-bg-secondary text-text-muted hover:text-text-primary transition-all"
+            >
+              <DSIcon name="settings" size={20} />
+            </button>
+          </div>
         </div>
         <p className="text-sm text-text-secondary">{plan.name}</p>
       </div>

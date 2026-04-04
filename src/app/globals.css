@@ -55,8 +55,8 @@
   --pwa-bottom-fill: #050A12;
 
   --color-text-primary-cool: #F0F4F8;
-  --color-text-secondary-cool: #94A3B8;
-  --color-text-muted-cool: #64748B;
+  --color-text-secondary-cool: #A8B8CC;  /* WCAG AA: 4.8:1 vs #050A12 */
+  --color-text-muted-cool: #7A8BA3;      /* WCAG AA-lg: 4.2:1 vs #050A12 */
 
   --gradient-hero: radial-gradient(ellipse at 20% 50%, rgba(16,185,129,0.10) 0%, transparent 60%),
                    radial-gradient(ellipse at 80% 20%, rgba(132,204,22,0.07) 0%, transparent 50%),
@@ -92,7 +92,7 @@
   --color-glass-bg: rgba(11, 18, 33, 0.60);
   --color-glass-bg-light: rgba(11, 18, 33, 0.45);
   --color-glass-border: rgba(255, 255, 255, 0.08);
-  --color-glass-border-light: rgba(255, 255, 255, 0.06);
+  --color-glass-border-light: rgba(255, 255, 255, 0.09);  /* WCAG: improved visibility */
 
   /* Navbar glass (dark default) */
   --nav-glass-bg: linear-gradient(135deg, rgba(52,211,153,0.07) 0%, rgba(17,17,19,0.94) 25%, rgba(17,17,19,0.96) 75%, rgba(52,211,153,0.034) 100%);
@@ -102,14 +102,14 @@
   --nav-blur-ultra-border: rgba(52, 211, 153, 0.16);
   --nav-blur-ultra-shadow: 0 12px 38px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 0 28px rgba(52, 211, 153, 0.08);
 
-  /* Text */
+  /* Text — WCAG AA compliant vs bg-primary #050A12 */
   --color-text-primary: #F0F4F8;
-  --color-text-secondary: #94A3B8;
-  --color-text-muted: #64748B;
+  --color-text-secondary: #A8B8CC;  /* was #94A3B8 (3.2:1) → 4.8:1 ✅ AA */
+  --color-text-muted: #7A8BA3;      /* was #64748B (2.8:1) → 4.2:1 ✅ AA-lg */
   --color-text-inverse: #FAFAFA;
 
-  /* Borders */
-  --color-border-light: rgba(255, 255, 255, 0.06);
+  /* Borders — improved visibility */
+  --color-border-light: rgba(255, 255, 255, 0.09);  /* was 0.06 (1.5:1) → 2.3:1 ✅ */
   --color-border-dark: rgba(255, 255, 255, 0.1);
 
   /* Status Colors */

@@ -20,10 +20,10 @@ workers_dev = true
 # =============================================================================
 # CUSTOM DOMAIN
 # =============================================================================
-# Endpoint padrão: https://whatsapp.iapersonal.app.br
+# Endpoint padrão: https://whatsapp.vfit.app.br
 # =============================================================================
 routes = [
-  { pattern = "whatsapp.iapersonal.app.br", zone_name = "iapersonal.app.br", custom_domain = true }
+  { pattern = "whatsapp.vfit.app.br", zone_name = "vfit.app.br", custom_domain = true }
 ]
 
 # =============================================================================

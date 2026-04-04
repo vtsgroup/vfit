@@ -28,12 +28,12 @@ import { useScrollLock } from '@/hooks/use-scroll-lock'
 
 const Cropper = dynamic(() => import('react-easy-crop'), { ssr: false })
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://api.iapersonal.app.br'
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://api.vfit.app.br'
 
 const MAX_FILE_SIZE = 20 * 1024 * 1024 // 20MB
 const ACCEPTED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/avif']
 
-const PUBLIC_IMAGES_BASE = (process.env.NEXT_PUBLIC_IMAGES_URL || 'https://images.iapersonal.app.br').replace(/\/+$/, '')
+const PUBLIC_IMAGES_BASE = (process.env.NEXT_PUBLIC_IMAGES_URL || 'https://images.vfit.app.br').replace(/\/+$/, '')
 
 interface PhotoUploadProps {
   className?: string

@@ -144,7 +144,7 @@ function generateOGSvg({ title, subtitle, description, accent }) {
   
   <!-- Domain -->
   <text x="80" y="570" font-family="system-ui, -apple-system, sans-serif" font-weight="500" font-size="18" fill="#71717A">
-    iapersonal.app.br
+    vfit.app.br
   </text>
   
   <!-- Accent dot -->

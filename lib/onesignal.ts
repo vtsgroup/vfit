@@ -187,7 +187,7 @@ export async function notify(
         title: notification.title,
         message: notification.message,
         url: notification.link
-          ? `https://iapersonal.app.br${notification.link}`
+          ? `https://vfit.app.br${notification.link}`
           : undefined,
       },
       { userId, category }

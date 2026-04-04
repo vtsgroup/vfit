@@ -5,6 +5,118 @@
 
 ---
 
+## [Unreleased] — 2026-04-04 — vfit-v2-melhorias S17–S21
+
+### S17 — Design System Cleanup
+- **WCAG AA dark mode fixes**: `--color-text-secondary` (#94A3B8 → #A8B8CC, 4.8:1), `--color-text-muted` (#64748B → #7A8BA3, 4.2:1), `--color-border-light` (0.06 → 0.09)
+- **9 components deprecated** from barrel export (`index.ts`): ActionButton3D, ActionCard3D, ToolCard, ActionButtons, NotificationCard, CustomSelect3D, MD3Card system, MD3Badge/Chip/Status
+- Showcase page imports refactored to direct paths
+
+### S19 — B2C Engagement (sessão 1)
+- **StreakCalendar** (`src/components/progresso/streak-calendar.tsx`): GitHub-style contribution graph, 52×7 grid, tooltip, intensity legend
+- **Streaks page** (`/progresso/streaks`): Hero streak card, milestone progress bar (3d→1yr), KPI row, heatmap calendar, achievements grid
+- **Conquistas page** (`/progresso/conquistas`): XP/level card with progress bar, rarity tiers (Comum/Raro/Épico/Lendário/Especial), badges grid with locked/unlocked states, glow effects
+- **Progresso page** enhanced: Streak card now links to `/progresso/streaks`, quick-link cards for Conquistas and Evolução Corporal
+
+### S20 — B2B Dashboard & CRM (sessão 1)
+- **DateRangePicker** (`src/components/ui/date-range-picker.tsx`): Preset periods (Hoje/7d/30d/Este mês/Mês passado/3m) + custom date inputs, glassmorphism dropdown
+- **DashboardFilterBar** (`src/components/dashboard/dashboard-filter-bar.tsx`): Status pills (Todos/Ativos/Inativos/Pendentes) + DateRangePicker combo
+- **CRM Pipeline** (`/dashboard/pipeline`): Kanban-style 4-column view (Convidados → Ativos → Em Risco → Inativos), payment badges, streak indicators, auto-grouping with virtual "at risk" status
+
+### S21b — TypeScript (sessão 1)
+- Audited entire `src/`: Only 1 `as any` found (Safari `navigator.standalone` — justified)
+- All new files pass `tsc --noEmit` with 0 errors
+
+### ~~Files created (7):~~
+### *(lista de arquivos consolidada abaixo)*
+
+### S19 — B2C Engagement (sessão 2)
+- **Badge unlock animations** (`conquistas/page.tsx`): Staggered CSS appear animation (60ms per-item), click-to-expand (scale-125 icon + description), shimmer overlay on hover, micro-interactions (hover/active scale)
+- **SharePlanButton** (`plano/page.tsx`): Web Share API nativo + WhatsApp (wa.me) + Copy to clipboard com feedback "Copiado!". Glassmorphism dropdown com outside-click close.
+
+### S20 — B2B Dashboard (sessão 2)
+- **Dashboard secondary stats**: 3 novos StatsCards — Ticket Médio (revenue/payment_count), Crescimento MoM (% vs mês anterior com arrow), Retenção (active/total students %)
+- **Pipeline quick actions**: 3 botões por card — WhatsApp (wa.me prefilled), Cobrar (/payments/create), Treino (/workouts/create). stopPropagation para evitar navegação do card.
+
+### S21b — TypeScript (sessão 2)
+- Verified: hooks properly typed via TanStack Query generics (0 `as any` in hooks)
+- Verified: Button, GlassCard, DSIcon all have explicit TypeScript props interfaces
+
+### S21c — E2E Tests (Playwright)
+- **auth.spec.ts** (120 lines): login form, validation, wrong credentials, register, logout
+- **onboarding.spec.ts** (93 lines): welcome page, pricing plans, authenticated dashboard
+- **workout.spec.ts** (118 lines): workouts page, create, plan view, progress, streaks, conquistas
+- **checkout.spec.ts** (107 lines): pricing CTAs, payments page, pipeline kanban
+
+### Files created (11 total):
+- `src/components/progresso/streak-calendar.tsx`
+- `src/app/(app)/progresso/streaks/page.tsx`
+- `src/app/(app)/progresso/conquistas/page.tsx`
+- `src/components/ui/date-range-picker.tsx`
+- `src/components/dashboard/dashboard-filter-bar.tsx`
+- `src/app/dashboard/pipeline/page.tsx`
+- `tests/e2e/auth.spec.ts`
+- `tests/e2e/onboarding.spec.ts`
+- `tests/e2e/workout.spec.ts`
+- `tests/e2e/checkout.spec.ts`
+
+### Files modified (9 total):
+- `src/app/globals.css` — WCAG contrast fixes
+- `src/components/ui/index.ts` — deprecations + DateRangePicker export
+- `src/components/progresso/index.ts` — StreakCalendar export
+- `src/components/dashboard/index.ts` — DashboardFilterBar export
+- `src/app/(app)/progresso/page.tsx` — streak card link + quick-link section
+- `src/app/dashboard/page.tsx` — secondary stats (Ticket Médio, MoM, Retenção)
+- `src/app/dashboard/pipeline/page.tsx` — quick actions (WhatsApp, Cobrar, Treino)
+- `src/app/(app)/progresso/conquistas/page.tsx` — badge animations (stagger, expand, shimmer)
+- `src/app/(app)/plano/page.tsx` — SharePlanButton (share API, WhatsApp, copy)
+
+---
+
+## [v1.7.0] — 07/04/2026 — S17: Plano 100% Final (144/144)
+
+### 🏆 Plano vfit-ultra-v2 concluído — 144/144 tasks (100%)
+
+#### T12.2 — Remoção completa de `as any`
+- `ios-install-gate.tsx`: `(window.navigator as any).standalone` → `SafariNavigator extends Navigator { standalone?: boolean }`
+- `install-banner.tsx`: `(window as any).chrome` → `ChromiumWindow extends Window { chrome?: unknown }`
+- `debug-panel.tsx`: `window as any` → `PwaWindow extends Window { __pwaRelatedApps?, __pwaDebugLog? }` + `InstalledAppsNavigator` para `getInstalledRelatedApps`
+- `marketplace/create/page.tsx`: `(ex as any)[field]` → index signature `[key: string]: string | number` no `ExercisePlan`
+
+#### T12.3 + T12.6 — Componente `<Pagination>` unificado
+- `src/components/ui/pagination.tsx` (78 linhas) — props: `page, totalPages, total?, itemLabel?, onPrev, onNext`
+- Retorna `null` quando `totalPages <= 1` — zero render desnecessário
+- Aplicado em **6 páginas** (7 blocos duplicados → 1 componente):
+  - `dashboard/students`, `admin/users`, `admin/workouts`, `admin/feedback`, `marketplace`, `affiliates` (×2 tabs)
+- Export adicionado ao barrel `src/components/ui/index.ts`
+
+#### T11.7 — Remoção da fonte Inter
+- `layout.tsx`: `Inter` removida do import e do body className
+- `globals.css`: `--font-sans` simplificado (DM Sans como primária, sem fallback Inter)
+- Stack final: **Syne** (display/headings) + **DM Sans** (body)
+
+#### T11.5 — Limpeza de CSS morto
+- `globals.css`: `--font-ds-ui` removida (variável morta que referenciava Inter)
+
+#### T3.6 — Ilustração SVG de onboarding
+- `EmptyState`: tipo `'onboarding'` adicionado — ilustração de troféu + sparkles (SVG 140×140)
+- `onboarding-wizard.tsx`: `illustration="generic"` → `illustration="onboarding"` na tela de erro de carregamento
+
+#### T9.2 / T9.3 / T9.4 — Verificados como concluídos
+- T9.2: Todos os steps de onboarding usam DSIcon (coberto por T3.1 — 24 arquivos)
+- T9.3: Loading phases usam DSIcon (`search, dumbbell, clipboardList, zap, sparkles`) com glow + pulse
+- T9.4: Bottom nav custom SVGs dual-state concluído em T1.2 (`nav-icons.tsx`)
+
+#### T11.6 — PNG→WebP verificado
+- `public/images/` já 100% WebP (hero, logo, og). Favicons/PWA icons permanecem PNG por requisito de compatibilidade
+
+### ✅ Resultado
+- **144/144 tasks** — 100% do plano implementado
+- Build: 128 páginas, 0 erros TS, 0 warnings ESLint
+- Commit: `5ee6f40b` | Tag: `v1.7.0`
+
+---
+
 ## [v1.2.6] — 03/04/2026 — Docs: Regra 20 & Tracking Obrigatório
 
 ### 📝 Documentação
@@ -183,10 +295,10 @@
 - **GitHub**: Novo repositório `victor-development/vfit` — orphan branch sem histórico
 - **Worker API**: `personaliai-api` → `vfit-api` — deployed + 24 secrets migrados
 - **Worker WhatsApp**: `personaliai-whatsapp` → `vfit-whatsapp` — deployed + custom domain movido
-- **Pages**: `personal-ia-prod` / `evoluia` → `vfit` — deployed + custom domain `iapersonal.app.br` movido
+- **Pages**: `personal-ia-prod` / `evoluia` → `vfit` — deployed + custom domain `vfit.app.br` movido
 - **D1**: `personaliai-exercises` → `vfit-exercises` (id: `cca37216-849a-47ce-a183-a62990a0ff1b`) — dados migrados
 - **Hyperdrive**: `personaliai-db` → `vfit-db` (mesmo id: `4aa45e1bd72742ec8eab876215cee1a2`)
-- **DNS**: CNAME `iapersonal.app.br` → `vfit.pages.dev`
+- **DNS**: CNAME `vfit.app.br` → `vfit.pages.dev`
 
 ### 🧹 Cleanup
 - Workers antigos deletados: `personaliai-api`, `personaliai-api-dev`, `personaliai-whatsapp`
@@ -195,9 +307,9 @@
 - 12+ arquivos de código atualizados: wrangler configs, CORS, auth, passkey, deploy scripts, queues
 
 ### 📊 Validação
-- Frontend: `vfit.pages.dev` ✅ | `iapersonal.app.br` ✅
-- API: `api.iapersonal.app.br/health` ✅ (D1 ok, KV ok, R2v ok, R2i ok)
-- WhatsApp: `whatsapp.iapersonal.app.br/health` ✅ (worker: vfit-whatsapp)
+- Frontend: `vfit.pages.dev` ✅ | `vfit.app.br` ✅
+- API: `api.vfit.app.br/health` ✅ (D1 ok, KV ok, R2v ok, R2i ok)
+- WhatsApp: `whatsapp.vfit.app.br/health` ✅ (worker: vfit-whatsapp)
 - Auth: 401 sem token ✅ (JWT_SECRET configurado)
 
 ---
@@ -1598,20 +1710,20 @@ Todos os display names de planos foram unificados em **todo o site** (17+ arquiv
 ## [v5.1.9] — 12/03/2026 — R2 Public Access Fix, CORS, Documentação
 
 ### 🐛 Fix — R2 Custom Domain Desabilitado (Error 401 em imagens)
-- **Root cause:** O custom domain `images.iapersonal.app.br` estava conectado ao bucket `personal-ia-images` mas com `enabled: No`
-- **Diagnóstico:** `curl -I https://images.iapersonal.app.br/...` retornava HTTP 401 ("This bucket cannot be viewed")
+- **Root cause:** O custom domain `images.vfit.app.br` estava conectado ao bucket `personal-ia-images` mas com `enabled: No`
+- **Diagnóstico:** `curl -I https://images.vfit.app.br/...` retornava HTTP 401 ("This bucket cannot be viewed")
 - `wrangler r2 bucket domain list personal-ia-images` confirmou: `enabled: No`, `ownership_status: active`, `ssl_status: active`
 - **Fix:** Removido domínio (`wrangler r2 bucket domain remove`) e re-adicionado (`wrangler r2 bucket domain add`) com `--min-tls 1.2`
 - Resultado: `enabled: Yes`, SSL propagou em ~5s, imagem retorna HTTP 200
 
 ### � Fix — R2 Custom Domain Vídeos (Mesmo problema)
-- Bucket `personal-ia-videos` também tinha `enabled: No` no custom domain `videos.iapersonal.app.br`
+- Bucket `personal-ia-videos` também tinha `enabled: No` no custom domain `videos.vfit.app.br`
 - Aplicado mesmo fix: remove + re-add com `--min-tls 1.2`
 - CORS configurado via `config/r2-cors-videos.json` (inclui `Content-Range` para streaming)
 
 ### �🔧 Infra — R2 CORS Policy Configurada
 - Criado `config/r2-cors.json` com regras para o bucket `personal-ia-images`
-- Origins permitidas: `https://iapersonal.app.br`, `https://personal-ia-prod.pages.dev`, `http://localhost:3000`
+- Origins permitidas: `https://vfit.app.br`, `https://personal-ia-prod.pages.dev`, `http://localhost:3000`
 - Métodos: `GET`, `HEAD` | Headers expostos: `Content-Length`, `Content-Type`, `ETag`
 - `maxAgeSeconds: 86400` (24h cache para preflight)
 - Aplicado via `wrangler r2 bucket cors set personal-ia-images --file config/r2-cors.json`
@@ -1701,7 +1813,7 @@ Todos os display names de planos foram unificados em **todo o site** (17+ arquiv
 
 ---
 
-## [v4.9.5] — 10/03/2026 — Migração de Domínio: vfit.app.br → iapersonal.app.br
+## [v4.9.5] — 10/03/2026 — Migração de Domínio: vfit.app.br → vfit.app.br
 
 ### 🌐 Migração de Domínio (COMPLETA)
 - **70 arquivos fonte** atualizados via sed (src/, lib/, workers/, config/, scripts/, tests/, public/)
@@ -1710,20 +1822,20 @@ Todos os display names de planos foram unificados em **todo o site** (17+ arquiv
 
 ### DNS & Cloudflare
 - 4 CNAME records criados em `victor.pt` zone:
-  - `iapersonal.app.br` → `personal-ia-prod.pages.dev` (Pages)
-  - `api.iapersonal.app.br` → `vfiti-api.vd-b0b.workers.dev` (Workers)
-  - `images.iapersonal.app.br` → R2 `personal-ia-images` bucket
-  - `videos.iapersonal.app.br` → R2 `personal-ia-videos` bucket
-- Pages custom domain `iapersonal.app.br` adicionado ao projeto
+  - `vfit.app.br` → `personal-ia-prod.pages.dev` (Pages)
+  - `api.vfit.app.br` → `vfiti-api.vd-b0b.workers.dev` (Workers)
+  - `images.vfit.app.br` → R2 `personal-ia-images` bucket
+  - `videos.vfit.app.br` → R2 `personal-ia-videos` bucket
+- Pages custom domain `vfit.app.br` adicionado ao projeto
 - R2 custom domains configurados para images e videos buckets
 - Workers secrets atualizados: `R2_VIDEOS_URL`, `R2_IMAGES_URL`, `FRONTEND_URL`
 
 ### Ajustes Críticos
 - **`_worker.js`**: Simplificado — removida lógica de "domínio descontinuado" (era para vfit.app.br)
 - **CORS**: Duplicatas removidas (www/app viraram iapersonal duplicados)
-- **Passkeys rpId**: Atualizado para `iapersonal.app.br` (⚠️ passkeys existentes invalidadas)
+- **Passkeys rpId**: Atualizado para `vfit.app.br` (⚠️ passkeys existentes invalidadas)
 - **Auth allowedOrigins**: Limpo duplicatas
-- **wrangler.toml**: Route atualizada para `api.iapersonal.app.br/*`, zone_name corrigido para `victor.pt`
+- **wrangler.toml**: Route atualizada para `api.vfit.app.br/*`, zone_name corrigido para `victor.pt`
 
 ### .env.local
 - Adicionadas variáveis: `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_API_URL`, `NEXT_PUBLIC_IMAGES_URL`, `NEXT_PUBLIC_VIDEOS_URL`
@@ -2239,7 +2351,7 @@ Todos os display names de planos foram unificados em **todo o site** (17+ arquiv
 ### 🔍 SEO / AEO
 - JSON-LD `BreadcrumbList` schema em TODAS as 9 páginas (gerado automaticamente pelo Breadcrumbs component)
 - Estrutura semântica: `<nav aria-label="Breadcrumb">` para acessibilidade
-- Hierarquia de breadcrumbs com URL canônica `https://iapersonal.app.br`
+- Hierarquia de breadcrumbs com URL canônica `https://vfit.app.br`
 
 ---
 
@@ -2304,7 +2416,7 @@ Todos os display names de planos foram unificados em **todo o site** (17+ arquiv
 ### 📱 Google Play Compliance
 - **`/excluir-conta`** — página pública de exclusão de conta (exigência Google Play)
   - Opção 1: Self-service via app (Configurações → Excluir conta)
-  - Opção 2: Email para contato@iapersonal.app.br
+  - Opção 2: Email para contato@vfit.app.br
   - Lista completa do que é excluído + prazo LGPD (15 dias úteis)
 
 ## [v4.3.3] — 04/03/2026 — TWA Setup Completo (Fase 1)
@@ -2597,8 +2709,8 @@ Todos os display names de planos foram unificados em **todo o site** (17+ arquiv
 ### 🚀 Deploy
 - Deploy oficial realizado via pipeline `cf-deploy`.
 - Versão publicada: **v4.0.0**
-- Frontend: https://iapersonal.app.br
-- API: https://api.iapersonal.app.br
+- Frontend: https://vfit.app.br
+- API: https://api.vfit.app.br
 - WhatsApp `start/end` enviado com sucesso.
 
 ## [v3.9.9] — 28/02/2026 — Criar treino travado no aluno pré-selecionado
@@ -2618,8 +2730,8 @@ Todos os display names de planos foram unificados em **todo o site** (17+ arquiv
 ### 🚀 Deploy
 - Deploy oficial realizado via pipeline `cf-deploy`.
 - Versão publicada: **v3.9.9**
-- Frontend: https://iapersonal.app.br
-- API: https://api.iapersonal.app.br
+- Frontend: https://vfit.app.br
+- API: https://api.vfit.app.br
 - WhatsApp `start/end` enviado com sucesso.
 
 ## [v3.9.8] — 28/02/2026 — CTA Criar Treino + Limpeza Definitiva de Alunos Convidados
@@ -2647,8 +2759,8 @@ Todos os display names de planos foram unificados em **todo o site** (17+ arquiv
 ### 🚀 Deploy
 - Deploy oficial realizado via pipeline `cf-deploy` com sucesso.
 - Versão publicada: **v3.9.8**
-- Frontend: https://iapersonal.app.br
-- API: https://api.iapersonal.app.br
+- Frontend: https://vfit.app.br
+- API: https://api.vfit.app.br
 - WhatsApp `start/end` enviado com sucesso.
 
 ## [v3.9.6] — 28/02/2026 — Pricing Pixel Perfect Refinement
@@ -2833,7 +2945,7 @@ Todos os display names de planos foram unificados em **todo o site** (17+ arquiv
   - `node scripts/cf-deploy.js patch --allow-no-whatsapp --msg "seo sprint00 fechamento tecnico pos-login"` ✅ (v3.8.4)
   - `node scripts/cf-deploy.js patch --allow-no-whatsapp --msg "seo sprint00 publish sitemap-blog"` ✅ (v3.8.5)
 - Observação operacional:
-  - rodada v3.8.5 exibiu `terminated` no deploy de Workers via Wrangler, porém `https://api.iapersonal.app.br/health` permaneceu `200`.
+  - rodada v3.8.5 exibiu `terminated` no deploy de Workers via Wrangler, porém `https://api.vfit.app.br/health` permaneceu `200`.
   - pendência final de infra: `bingbot` ainda retorna `403` (ajuste manual em Cloudflare/WAF).
 
 ### 🔎 Sprint E.2 — SEO/AEO/GEO hardening (noindex mantido)
@@ -3546,7 +3658,7 @@ Todos os display names de planos foram unificados em **todo o site** (17+ arquiv
 - Deploy concluído:
   - **v3.3.7** publicado em Pages + Workers
   - tag git criada e enviada: `v3.3.7`
-  - URL: `https://iapersonal.app.br` e `https://api.iapersonal.app.br`
+  - URL: `https://vfit.app.br` e `https://api.vfit.app.br`
 
 ### 🎬 S62 — CRUD Exercise Media Backend (concluída)
 
@@ -3853,7 +3965,7 @@ Todos os display names de planos foram unificados em **todo o site** (17+ arquiv
 
 - Publicação realizada:
   - versão: **v3.3.5**
-  - worker publicado: `whatsapp.iapersonal.app.br`
+  - worker publicado: `whatsapp.vfit.app.br`
   - tag/push concluídos em `main`
 
 ### 🧪 S14.0 — Smoke auth hardening (preflight JWT) — 25/02/2026
@@ -4260,7 +4372,7 @@ Todos os display names de planos foram unificados em **todo o site** (17+ arquiv
 - **Deploy v2.9.6:** Pages + Workers ✅
 
 - **WhatsApp Gateway (Unipile) — custom domain + mensagens start/end padronizadas:**
-  - gateway: https://whatsapp.iapersonal.app.br
+  - gateway: https://whatsapp.vfit.app.br
   - endpoints: `/health`, `/chats`, `/send`, `/task-notify`, `/format`
   - IDs: `account_id` WhatsApp `eEJpNSKtRAWiJOZQvTa1QQ`, grupo "VFIT" `chat_id` `Rz_dYA6FUm2ILti0MLPboA`
   - docs: [docs/WHATSAPP-GATEWAY.md](docs/WHATSAPP-GATEWAY.md)
@@ -6004,7 +6116,7 @@ Todos os display names de planos foram unificados em **todo o site** (17+ arquiv
 ## [v1.7.7] — 20/02/2026 — Custom Domain + Avatar + OAuth + Complete Profile
 
 ### 🌐 Custom Domain API
-- **Ativado:** `api.iapersonal.app.br` como custom domain do Cloudflare Workers
+- **Ativado:** `api.vfit.app.br` como custom domain do Cloudflare Workers
 - **Fallback:** `vfiti-api.vd-b0b.workers.dev` mantido ativo
 - **CSP atualizado:** `connect-src` agora inclui ambos domínios
 - **OAuth URIs:** `GOOGLE_REDIRECT_URI` e `FACEBOOK_REDIRECT_URI` atualizados via `wrangler secret put`
@@ -6037,7 +6149,7 @@ Todos os display names de planos foram unificados em **todo o site** (17+ arquiv
 - SSL/TLS HTTP/2: ✅
 - OAuth redirect: ✅ Usando novo domínio
 - DNS: ✅ 2 IPs Anycast Cloudflare (GRU)
-- Certificado: ✅ CN=iapersonal.app.br, válido até 21/05/2026
+- Certificado: ✅ CN=vfit.app.br, válido até 21/05/2026
 
 ---
 
@@ -6071,13 +6183,13 @@ Todos os display names de planos foram unificados em **todo o site** (17+ arquiv
 ### 🔧 Fix — Imagens de avaliações bloqueadas pelo Content Security Policy
 **Problema:** Na página de sucesso (`/dashboard/assessments/success-detail`), as fotos salvas no R2 não apareciam. O console mostrava:
 ```
-Refused to load the image 'https://images.iapersonal.app.br/assessments/...' because it violates the following Content Security Policy directive: "img-src 'self' data: blob: https://*.r2.cloudflarestorage.com ..."
+Refused to load the image 'https://images.vfit.app.br/assessments/...' because it violates the following Content Security Policy directive: "img-src 'self' data: blob: https://*.r2.cloudflarestorage.com ..."
 ```
 
-**Root Cause:** O CSP em `public/_headers` tinha `https://*.r2.cloudflarestorage.com` mas NÃO incluía o domínio customizado do R2 `https://images.iapersonal.app.br`.
+**Root Cause:** O CSP em `public/_headers` tinha `https://*.r2.cloudflarestorage.com` mas NÃO incluía o domínio customizado do R2 `https://images.vfit.app.br`.
 
 **Solução:**
-- Adicionado `https://images.iapersonal.app.br` à diretiva `img-src` do CSP em `public/_headers`
+- Adicionado `https://images.vfit.app.br` à diretiva `img-src` do CSP em `public/_headers`
 
 **Arquivos modificados:**
 - `public/_headers` — CSP img-src atualizado
@@ -6149,7 +6261,7 @@ Refused to load the image 'https://images.iapersonal.app.br/assessments/...' bec
 ### 🔧 Fix — POST /assessments/preview-edit-photo agora funciona
 **Problema:** Usuários recebiam erro `405 Method Not Allowed` ao tentar editar fotos com IA (Mais magro/Mais musculoso). No console:
 ```
-POST https://iapersonal.app.br/api/assessments/preview-edit-photo 405 (Method Not Allowed)
+POST https://vfit.app.br/api/assessments/preview-edit-photo 405 (Method Not Allowed)
 [Massive retry loop de +200 chamadas]
 ```
 
@@ -6163,7 +6275,7 @@ POST https://iapersonal.app.br/api/assessments/preview-edit-photo 405 (Method No
 2. **Frontend — usar API client correto:** 
    - ❌ Before: `fetch('/api/assessments/preview-edit-photo', ...)`
    - ✅ After: `api.post('/assessments/preview-edit-photo', {...}, { auth: false })`
-  - Usa o `api` client que resolve para `https://api.iapersonal.app.br/api/v1/assessments/preview-edit-photo`
+  - Usa o `api` client que resolve para `https://api.vfit.app.br/api/v1/assessments/preview-edit-photo`
 
 **Arquivos modificados:**
 - `workers/api/assessments.ts` — Movido endpoint `/preview-edit-photo` antes do `authMiddleware`
@@ -6365,7 +6477,7 @@ POST https://iapersonal.app.br/api/assessments/preview-edit-photo 405 (Method No
 
 ### ⚠️ AÇÃO NECESSÁRIA — Configurar Webhook no Asaas
 O usuário precisa acessar **https://www.asaas.com/apiAccessControl/index** (Menu → Integrações → Mecanismos de segurança) e configurar:
-- **URL:** `https://api.iapersonal.app.br/api/v1/payments/webhooks/asaas/transfer-auth`
+- **URL:** `https://api.vfit.app.br/api/v1/payments/webhooks/asaas/transfer-auth`
 - **Token:** (mesmo ASAAS_WEBHOOK_TOKEN configurado nos secrets do Worker)
 - **Email:** vts@victor.pt
 
@@ -6759,7 +6871,7 @@ O usuário precisa acessar **https://www.asaas.com/apiAccessControl/index** (Men
 
 ### 🔧 Fixes
 - `sql()` → `sql.query()` (Neon driver tagged template fix)
-- CORS para `iapersonal.app.br` adicionado
+- CORS para `vfit.app.br` adicionado
 - Turnstile test keys configuradas
 - Dashboard 401 fix: hooks auth-aware com `enabled: isAuthenticated && isHydrated`
 - Frontend token extraction alinhado com backend

@@ -10,9 +10,9 @@ O VFIT utiliza **4 camadas** de entrega de mídia, todas na edge Cloudflare:
 
 | Camada | Serviço | Domínio | Caso de Uso |
 |--------|---------|---------|-------------|
-| **1. Pages (Static)** | CF Pages CDN | `iapersonal.app.br` | Assets estáticos do build (ícones, OG images, bg videos ≤1MB) |
-| **2. R2 (Object Storage)** | CF R2 + Custom Domain | `images.iapersonal.app.br` / `videos.iapersonal.app.br` | Uploads de usuários (fotos, vídeos de exercícios, PDFs) |
-| **3. Stream (Video)** | CF Stream | `stream.iapersonal.app.br` *(a configurar)* | Vídeos de exercícios com adaptive bitrate (HLS/DASH) |
+| **1. Pages (Static)** | CF Pages CDN | `vfit.app.br` | Assets estáticos do build (ícones, OG images, bg videos ≤1MB) |
+| **2. R2 (Object Storage)** | CF R2 + Custom Domain | `images.vfit.app.br` / `videos.vfit.app.br` | Uploads de usuários (fotos, vídeos de exercícios, PDFs) |
+| **3. Stream (Video)** | CF Stream | `stream.vfit.app.br` *(a configurar)* | Vídeos de exercícios com adaptive bitrate (HLS/DASH) |
 | **4. Images (Transform)** | CF Images | via R2 ou transform rules | Otimização on-the-fly (resize, WebP/AVIF, variants) |
 
 ---
@@ -70,8 +70,8 @@ public/
 
 | Bucket | Binding | Domínio Custom | Status |
 |--------|---------|---------------|--------|
-| `personal-ia-videos` | `R2_VIDEOS` | `videos.iapersonal.app.br` | ✅ Ativo (TLS 1.2, CORS configurado) |
-| `personal-ia-images` | `R2_IMAGES` | `images.iapersonal.app.br` | ✅ Ativo (TLS 1.2, CORS configurado) |
+| `personal-ia-videos` | `R2_VIDEOS` | `videos.vfit.app.br` | ✅ Ativo (TLS 1.2, CORS configurado) |
+| `personal-ia-images` | `R2_IMAGES` | `images.vfit.app.br` | ✅ Ativo (TLS 1.2, CORS configurado) |
 
 ### Estrutura de Keys
 
@@ -93,8 +93,8 @@ exercises/{exerciseId}/video_vertical.mp4  # Versão vertical 9:16
 ```javascript
 // sw.js — Runtime caching para R2
 registerRoute(
-  ({url}) => url.hostname.includes('images.iapersonal.app.br') ||
-             url.hostname.includes('videos.iapersonal.app.br'),
+  ({url}) => url.hostname.includes('images.vfit.app.br') ||
+             url.hostname.includes('videos.vfit.app.br'),
   new CacheFirst({
     cacheName: 'media-r2',
     plugins: [
@@ -230,7 +230,7 @@ hls.attachMedia(videoElement)
 #### Opção B: Image Resizing (via R2 + Transform Rules)
 
 - Mantém imagens no R2
-- Usa Image Resizing na edge: `https://images.iapersonal.app.br/cdn-cgi/image/width=300,quality=80/profiles/user123/photo.jpg`
+- Usa Image Resizing na edge: `https://images.vfit.app.br/cdn-cgi/image/width=300,quality=80/profiles/user123/photo.jpg`
 - Sem migração de storage necessária
 
 | Item | Valor |
@@ -301,7 +301,7 @@ registerRoute(
 
 // P1: R2 Images (profiles, assessments, thumbs)
 registerRoute(
-  ({url}) => url.hostname === 'images.iapersonal.app.br',
+  ({url}) => url.hostname === 'images.vfit.app.br',
   new CacheFirst({
     cacheName: 'r2-images',
     plugins: [expiration(30, 500), rangeRequests()],
@@ -310,7 +310,7 @@ registerRoute(
 
 // P1: R2 Videos (exercise clips ≤10MB)
 registerRoute(
-  ({url}) => url.hostname === 'videos.iapersonal.app.br',
+  ({url}) => url.hostname === 'videos.vfit.app.br',
   new CacheFirst({
     cacheName: 'r2-videos',
     plugins: [expiration(14, 100), rangeRequests()],
@@ -339,7 +339,7 @@ registerRoute(
 // Se Stream offline → tentar R2 fallback → tentar cache → mostrar thumbnail + "Sem conexão"
 async function getExerciseVideo(exerciseId: string): Promise<string> {
   const streamUrl = `https://customer-${subdomain}.cloudflarestream.com/${streamId}/manifest/video.m3u8`
-  const r2Url = `https://videos.iapersonal.app.br/exercises/${exerciseId}/video.mp4`
+  const r2Url = `https://videos.vfit.app.br/exercises/${exerciseId}/video.mp4`
   
   // 1. Try Stream (adaptive, melhor qualidade)
   if (navigator.onLine) return streamUrl
@@ -353,7 +353,7 @@ async function getExerciseVideo(exerciseId: string): Promise<string> {
   if (streamCache) return streamUrl
   
   // 4. Fallback: thumbnail estática
-  return `https://images.iapersonal.app.br/exercises/${exerciseId}/thumb.webp`
+  return `https://images.vfit.app.br/exercises/${exerciseId}/thumb.webp`
 }
 ```
 
@@ -369,19 +369,19 @@ async function getExerciseVideo(exerciseId: string): Promise<string> {
 - [x] Auth BG video em Pages (public/videos/gym-bg.mp4)
 
 ### ⬜ Pendente (Fase Atual)
-- [x] **R2 Public Access — images**: `images.iapersonal.app.br` habilitado (12/03/2026)
+- [x] **R2 Public Access — images**: `images.vfit.app.br` habilitado (12/03/2026)
   ```bash
   # Fix aplicado via CLI:
-  npx wrangler r2 bucket domain remove personal-ia-images --domain images.iapersonal.app.br --force
-  npx wrangler r2 bucket domain add personal-ia-images --domain images.iapersonal.app.br --zone-id 71e8d150d12015b016231950337b075e --min-tls 1.2 --force
+  npx wrangler r2 bucket domain remove personal-ia-images --domain images.vfit.app.br --force
+  npx wrangler r2 bucket domain add personal-ia-images --domain images.vfit.app.br --zone-id 71e8d150d12015b016231950337b075e --min-tls 1.2 --force
   # CORS configurado via: config/r2-cors.json
   npx wrangler r2 bucket cors set personal-ia-images --file config/r2-cors.json
   ```
-- [x] **R2 Public Access — videos**: `videos.iapersonal.app.br` habilitado (12/03/2026)
+- [x] **R2 Public Access — videos**: `videos.vfit.app.br` habilitado (12/03/2026)
   ```bash
   # Mesmo procedimento do images:
-  npx wrangler r2 bucket domain remove personal-ia-videos --domain videos.iapersonal.app.br --force
-  npx wrangler r2 bucket domain add personal-ia-videos --domain videos.iapersonal.app.br --zone-id 71e8d150d12015b016231950337b075e --min-tls 1.2 --force
+  npx wrangler r2 bucket domain remove personal-ia-videos --domain videos.vfit.app.br --force
+  npx wrangler r2 bucket domain add personal-ia-videos --domain videos.vfit.app.br --zone-id 71e8d150d12015b016231950337b075e --min-tls 1.2 --force
   # CORS: config/r2-cors-videos.json (inclui Content-Range para streaming)
   npx wrangler r2 bucket cors set personal-ia-videos --file config/r2-cors-videos.json
   ```
@@ -390,7 +390,7 @@ async function getExerciseVideo(exerciseId: string): Promise<string> {
   npx wrangler logout
   npx wrangler login  # Logar com vts@victor.pt → account b0bf95d0fabb322ac3df37bd84ec0c77
   ```
-- [ ] **R2 CORS**: Configurar CORS nos buckets para o domínio iapersonal.app.br
+- [ ] **R2 CORS**: Configurar CORS nos buckets para o domínio vfit.app.br
 - [ ] **Image Resizing**: Habilitar no CF Dashboard > Speed > Optimization > Image Resizing
 
 ### ⬜ Futuro (Sprint E — Exercícios)

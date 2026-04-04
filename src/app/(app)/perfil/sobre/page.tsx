@@ -39,7 +39,7 @@ export default function SobrePage() {
       <div className="space-y-0.5">
         <LinkItem icon="shield" label="Política de Privacidade" href="/privacidade" />
         <LinkItem icon="fileText" label="Termos de Uso" href="/termos" />
-        <LinkItem icon="helpCircle" label="Central de Ajuda" href="mailto:suporte@iapersonal.app.br" />
+        <LinkItem icon="helpCircle" label="Central de Ajuda" href="mailto:suporte@vfit.app.br" />
       </div>
 
       <p className="mt-10 text-center text-[10px] text-zinc-700">

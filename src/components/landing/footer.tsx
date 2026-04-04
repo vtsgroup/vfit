@@ -61,7 +61,7 @@ const FOOTER_LINKS = {
 const SOCIALS = [
   {
     label: 'Instagram',
-    href: 'https://instagram.com/vfit.app',
+    href: 'https://instagram.com/vfitapp',
     icon: 'instagram' as DSIconName,
   },
   {
@@ -169,11 +169,11 @@ export function Footer() {
             {/* Contact info */}
             <div className="mt-6 space-y-2.5">
               <a
-                href="mailto:contato@iapersonal.app.br"
+                href="mailto:contato@vfit.app.br"
                 className="flex items-center gap-2.5 text-xs text-white/70 transition-colors duration-200 hover:text-brand-primary"
               >
                                 <DSIcon name="mail" size={14} />
-                contato@iapersonal.app.br
+                contato@vfit.app.br
               </a>
               <span className="flex items-center gap-2.5 text-xs text-white/70">
                                 <DSIcon name="mapPin" size={14} />

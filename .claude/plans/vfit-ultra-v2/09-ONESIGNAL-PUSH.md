@@ -71,7 +71,7 @@ export async function notifyWorkoutReminder(env: Bindings, params: {
     ],
     headings: { en: '💪 Hora do treino!' },
     contents: { en: `${params.workoutName} te espera hoje. Bora?` },
-    url: 'https://iapersonal.app.br/treinos',
+    url: 'https://vfit.app.br/treinos',
     data: { type: 'workout_reminder' },
   })
 }
@@ -86,7 +86,7 @@ export async function notifyWeightReminder(env: Bindings, params: {
     ],
     headings: { en: '⚖️ Atualize seu peso' },
     contents: { en: `Faz ${params.daysSinceLastUpdate} dias desde o último registro. Mantenha seu progresso!` },
-    url: 'https://iapersonal.app.br/avaliacoes',
+    url: 'https://vfit.app.br/avaliacoes',
     data: { type: 'weight_reminder' },
   })
 }
@@ -100,7 +100,7 @@ export async function notifyAssessmentDue(env: Bindings, params: {
     ],
     headings: { en: '📊 Avaliação mensal disponível' },
     contents: { en: 'Compare seu progresso! Faça sua avaliação mensal.' },
-    url: 'https://iapersonal.app.br/avaliacoes',
+    url: 'https://vfit.app.br/avaliacoes',
     data: { type: 'assessment_reminder' },
   })
 }

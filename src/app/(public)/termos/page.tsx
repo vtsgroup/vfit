@@ -138,7 +138,7 @@ export default function TermosPage() {
           <p>
             O Usuário é <strong className="text-white">integralmente responsável</strong> por todas as atividades
             realizadas em sua conta. Em caso de uso não autorizado, comunique imediatamente
-            através de <strong className="text-white">suporte@iapersonal.app.br</strong>.
+            através de <strong className="text-white">suporte@vfit.app.br</strong>.
           </p>
         </Section>
 
@@ -225,7 +225,7 @@ export default function TermosPage() {
         <Section icon="alertTriangle" title="8. Rescisão" id="rescisao">
           <p>
             O Usuário pode encerrar sua conta a qualquer momento através das configurações
-            da Plataforma ou solicitando via <strong className="text-white">suporte@iapersonal.app.br</strong>.
+            da Plataforma ou solicitando via <strong className="text-white">suporte@vfit.app.br</strong>.
           </p>
           <ul className="list-disc space-y-1.5 pl-5">
             <li>Dados pessoais serão anonimizados conforme a LGPD</li>
@@ -289,7 +289,7 @@ export default function TermosPage() {
         <p className="text-sm text-zinc-400">
           Dúvidas sobre estes Termos? Entre em contato:
         </p>
-        <p className="mt-2 text-sm font-semibold text-white">suporte@iapersonal.app.br</p>
+        <p className="mt-2 text-sm font-semibold text-white">suporte@vfit.app.br</p>
       </div>
       </div>
     </>

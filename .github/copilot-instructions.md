@@ -448,8 +448,8 @@ Após CADA deploy, atualizar **na mesma sessão**:
 
 | Item | Valor |
 |------|-------|
-| **Frontend** | `https://iapersonal.app.br` (fallback: `vfit.pages.dev`) |
-| **Backend API** | `https://api.iapersonal.app.br` (fallback: `vfit-api.vd-b0b.workers.dev`) |
+| **Frontend** | `https://vfit.app.br` (fallback: `vfit.pages.dev`) |
+| **Backend API** | `https://api.vfit.app.br` (fallback: `vfit-api.vd-b0b.workers.dev`) |
 | **GitHub** | `https://github.com/vtsgroup/vfit` |
 | **CF Account ID** | `b0bf95d0fabb322ac3df37bd84ec0c77` |
 | **GA4** | `G-XGXZ4R6JXH` |
@@ -519,7 +519,7 @@ migrations/                 # SQL migrations (hyperdrive/ + d1/)
 | **R2 Bucket** | `personaliai-media` | **`vfit-media`** |
 | **Package name** | `personal-ia` | **`vfit`** |
 
-**O que NÃO mudou:** Domínios (`iapersonal.app.br`), Neon DB, CF Account, funcionalidades.
+**O que NÃO mudou:** Domínios (`vfit.app.br`), Neon DB, CF Account, funcionalidades.
 
 > Migração concluída. Detalhes históricos em `.claude/docs/archive/`.
 
@@ -605,7 +605,7 @@ migrations/                 # SQL migrations (hyperdrive/ + d1/)
 |-------|-------|
 | **Bucket Name** | `personal-ia-videos` |
 | **Binding** | `R2_VIDEOS` |
-| **Custom Domain** | `videos.iapersonal.app.br` |
+| **Custom Domain** | `videos.vfit.app.br` |
 | **Storage Class** | Standard |
 | **Uso** | Vídeos de exercícios (vertical 9:16 + horizontal 16:9) |
 
@@ -614,7 +614,7 @@ migrations/                 # SQL migrations (hyperdrive/ + d1/)
 |-------|-------|
 | **Bucket Name** | `personal-ia-images` |
 | **Binding** | `R2_IMAGES` |
-| **Custom Domain** | `images.iapersonal.app.br` |
+| **Custom Domain** | `images.vfit.app.br` |
 | **Storage Class** | Standard |
 | **Uso** | Fotos de avaliações, profile photos, logos, PDFs |
 
@@ -686,13 +686,13 @@ migrations/                 # SQL migrations (hyperdrive/ + d1/)
 
 | Domínio | Serviço | Status |
 |---------|---------|--------|
-| `iapersonal.app.br` | Cloudflare Pages (frontend) | ✅ Ativo |
+| `vfit.app.br` | Cloudflare Pages (frontend) | ✅ Ativo |
 | `vfit.pages.dev` | Cloudflare Pages (fallback) | ✅ Ativo |
 | `vfiti-api.vd-b0b.workers.dev` | Cloudflare Workers (backend fallback) | ✅ Ativo |
-| `api.iapersonal.app.br` | Custom domain Workers (backend) | ✅ Ativo |
-| `videos.iapersonal.app.br` | R2 Public Access (vídeos) | ⬜ Pendente |
-| `images.iapersonal.app.br` | R2 Public Access (imagens) | ⬜ Pendente |
-| `stream.iapersonal.app.br` | CF Stream (video adaptive) | ⬜ Futuro (Sprint E) |
+| `api.vfit.app.br` | Custom domain Workers (backend) | ✅ Ativo |
+| `videos.vfit.app.br` | R2 Public Access (vídeos) | ⬜ Pendente |
+| `images.vfit.app.br` | R2 Public Access (imagens) | ⬜ Pendente |
+| `stream.vfit.app.br` | CF Stream (video adaptive) | ⬜ Futuro (Sprint E) |
 
 ---
 
@@ -716,7 +716,7 @@ migrations/                 # SQL migrations (hyperdrive/ + d1/)
 |-------|-------|
 | **Status** | ⬜ A habilitar |
 | **Uso** | Otimização on-the-fly de imagens R2 (resize, WebP/AVIF) |
-| **URL Pattern** | `images.iapersonal.app.br/cdn-cgi/image/width=300,quality=80/path/to/image.jpg` |
+| **URL Pattern** | `images.vfit.app.br/cdn-cgi/image/width=300,quality=80/path/to/image.jpg` |
 | **Pricing** | $0.50/1000 transformations únicas |
 | **Setup** | Dashboard > Speed > Optimization > Image Resizing > Enable |
 
@@ -1055,7 +1055,7 @@ Exemplos: `DEPLOY-2026-04-02-AM`, `HOTFIX-AUTH-2026-04-02-PM`, `MIGRATION-USERS-
 ### Variáveis necessárias (já em `.env.local`)
 
 ```
-WHATSAPP_NOTIFY_URL=https://whatsapp.iapersonal.app.br/task-notify
+WHATSAPP_NOTIFY_URL=https://whatsapp.vfit.app.br/task-notify
 WHATSAPP_NOTIFY_TOKEN=<ADMIN_AUTH_TOKEN>
 ```
 
@@ -1206,8 +1206,8 @@ echo "0" | npx wrangler secret put SENTRY_TRACES_SAMPLE_RATE --env=""
 
 Monitores mínimos recomendados:
 
-1. `https://api.iapersonal.app.br/health` (intervalo 1 min)
-2. `https://iapersonal.app.br` (intervalo 1 min)
+1. `https://api.vfit.app.br/health` (intervalo 1 min)
+2. `https://vfit.app.br` (intervalo 1 min)
 
 Alertas:
 
@@ -1263,10 +1263,10 @@ Quando configurado, o deploy pipeline envia mensagens `start/end` via gateway.
 
 Variáveis de ambiente (local/CI):
 
-- `WHATSAPP_NOTIFY_URL` (ex.: https://whatsapp.iapersonal.app.br/task-notify)
+- `WHATSAPP_NOTIFY_URL` (ex.: https://whatsapp.vfit.app.br/task-notify)
 - `WHATSAPP_NOTIFY_TOKEN` (Bearer = `ADMIN_AUTH_TOKEN` do gateway)
 - `WHATSAPP_GROUP_NAME` (opcional; fallback)
-- `WHATSAPP_LINK_URL` (opcional; ex.: https://iapersonal.app.br)
+- `WHATSAPP_LINK_URL` (opcional; ex.: https://vfit.app.br)
 - `WHATSAPP_ACTOR_LABEL` (opcional)
 
 Regras obrigatórias do formato estão em: `.claude/docs/WHATSAPP-GATEWAY.md`
@@ -1339,7 +1339,7 @@ npm run cf:deploy:minor              # Deploy
 
 ### Workers (Backend API)
 - **Nome**: `vfiti-api` (definido no `wrangler.toml`)
-- **URL**: https://api.iapersonal.app.br
+- **URL**: https://api.vfit.app.br
 - **Bindings ativos**: D1, KV×3, R2×2, Analytics Engine
 - **Bindings inativos**: Hyperdrive (bypassed — neon() HTTP incompatível com TCP), Queues×4, Crons×4 (free plan)
 

@@ -38,7 +38,7 @@ export function Breadcrumbs({ items }: BreadcrumbsProps) {
         '@type': 'ListItem',
         position: index + 1,
         name: item.label,
-        item: `https://iapersonal.app.br${item.href || lastHref}`,
+        item: `https://vfit.app.br${item.href || lastHref}`,
       }
     }),
   }

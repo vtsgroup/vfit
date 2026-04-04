@@ -139,7 +139,7 @@ export function useUploadExerciseMedia(exerciseId: string) {
     }) => {
       if (!token) throw new Error('Token não encontrado')
 
-      const url = `${process.env.NEXT_PUBLIC_API_URL || 'https://api.iapersonal.app.br'}/api/v1/exercises/${exerciseId}/media/upload?type=${type}`
+      const url = `${process.env.NEXT_PUBLIC_API_URL || 'https://api.vfit.app.br'}/api/v1/exercises/${exerciseId}/media/upload?type=${type}`
       const xhr = new XMLHttpRequest()
 
       const response = await new Promise<UploadResponse>((resolve, reject) => {

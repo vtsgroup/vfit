@@ -83,14 +83,14 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("https://iapersonal.app.br"),
+  metadataBase: new URL("https://vfit.app.br"),
   alternates: {
     canonical: "/",
   },
   openGraph: {
     type: "website",
     locale: "pt_BR",
-    url: "https://iapersonal.app.br",
+    url: "https://vfit.app.br",
     siteName: "VFIT",
     title: "VFIT | Treinos com IA — Seu App de Treinos",
     description:
@@ -111,7 +111,7 @@ export const metadata: Metadata = {
     description:
       "VFIT é o app de treinos com IA mais completo do Brasil. Planos personalizados, progresso real e comunidade. Comece grátis.",
     images: ["/og/og-default.png"],
-    creator: "@iapersonal",
+    creator: "@vfitapp",
   },
   robots: INDEX_FOLLOW_ROBOTS,
   manifest: `/manifest.json?v=${APP_VERSION}-${ICONS_REV}`,
@@ -153,7 +153,7 @@ export default function RootLayout({
         {/* Preload logo WebP — evita FOIT e melhora LCP */}
         <link rel="preload" href="/images/logo-transparent-96.webp" as="image" type="image/webp" />
         {/* dns-prefetch para terceiros (leve, sem conexão TCP) */}
-        <link rel="dns-prefetch" href="https://api.iapersonal.app.br" />
+        <link rel="dns-prefetch" href="https://api.vfit.app.br" />
         {/* preconnect removido: GA4 agora é deferred até interação */}
         <link rel="dns-prefetch" href="https://cdn.onesignal.com" />
         <link rel="dns-prefetch" href="https://challenges.cloudflare.com" />

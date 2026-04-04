@@ -16,12 +16,11 @@ import {
   // Cards
   Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter,
   GlassCard, GlassStatsCard, GlassFeatureCard,
-  MD3Card, MD3CardHeader, MD3CardTitle, MD3CardContent,
-  StatsCard, ToolCard, NotificationCard,
+  StatsCard,
   // Actions
-  ActionButton3D, ActionCard3D, ActionIconButton, ActionButtons,
+  ActionIconButton,
   // Forms
-  MD3Input, MD3TextArea, MD3SearchBar, MD3Select, CustomSelect3D,
+  MD3Input, MD3TextArea, MD3SearchBar, MD3Select,
   StyledSelect, UserSearch,
   Toggle, Checkbox, RadioGroup, RadioItem,
   // Navigation
@@ -30,7 +29,7 @@ import {
   LinearProgress, CircularProgress, StepProgress, ProgressBarDS,
   // Display
   DSIcon, type DSIconName, DS_ICON_NAMES,
-  MD3Badge, MD3Chip, MD3Status, Divider,
+  Divider,
   // Feedback
   Alert, Modal, Accordion, AccordionItem, AccordionTrigger, AccordionContent, Tooltip, EmptyStateDS,
   // Skeleton
@@ -38,6 +37,15 @@ import {
   // Animation
   Stagger, StaggerItem,
 } from '@/components/ui'
+
+// @deprecated — Direct imports for showcase-only display (not used in production pages)
+import { MD3Card, MD3CardHeader, MD3CardTitle, MD3CardContent } from '@/components/ui/md3-card'
+import { ToolCard } from '@/components/ui/tool-card'
+import { NotificationCard } from '@/components/ui/notification-card'
+import { ActionButton3D, ActionCard3D } from '@/components/ui/action-button-3d'
+import { ActionButtons } from '@/components/ui/action-buttons'
+import { CustomSelect3D } from '@/components/ui/custom-select-3d'
+import { MD3Badge, MD3Chip, MD3Status } from '@/components/ui/md3-badge'
 import { AuthGuard } from '@/components/auth/auth-guard'
 
 // ============================================
@@ -854,7 +862,7 @@ export default function ShowcasePage() {
                   </div>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
                     <Input label="Campo desabilitado" placeholder="Nao editavel" disabled autoComplete="off" />
-                    <Input label="Com valor fixo" value="personal@iapersonal.app.br" disabled autoComplete="off" />
+                    <Input label="Com valor fixo" value="personal@vfit.app.br" disabled autoComplete="off" />
                   </div>
                 </div>
               </ShowcaseCard>

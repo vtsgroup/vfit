@@ -8,7 +8,7 @@
  *   npm run smoke:notifications:local:clean      # Limpa notificações de smoke criadas anteriormente
  *
  * Env vars (.env.local):
- *   SMOKE_BASE_URL          — Base da API (default: https://api.iapersonal.app.br)
+ *   SMOKE_BASE_URL          — Base da API (default: https://api.vfit.app.br)
  *   SMOKE_ADMIN_TOKEN       — Token de super_admin (obrigatório)
  *   SMOKE_PERSONAL_TOKEN    — Token de personal (para resolver user_id)
  *   SMOKE_STUDENT_TOKEN     — Token de student (para resolver user_id)
@@ -30,7 +30,7 @@ import dns from 'node:dns'
 dns.setDefaultResultOrder('ipv4first')
 
 // ─── Config ───────────────────────────────────────────
-const baseUrl = (process.env.SMOKE_BASE_URL || 'https://api.iapersonal.app.br').replace(/\/$/, '')
+const baseUrl = (process.env.SMOKE_BASE_URL || 'https://api.vfit.app.br').replace(/\/$/, '')
 const adminToken = process.env.SMOKE_ADMIN_TOKEN || ''
 const personalToken = process.env.SMOKE_PERSONAL_TOKEN || ''
 const studentToken = process.env.SMOKE_STUDENT_TOKEN || ''

@@ -180,7 +180,7 @@ mediaRoutes.post('/:exerciseId/media/upload', requireType('personal', 'admin', '
       },
     })
 
-    const base = normalizePublicBase(c.env.R2_VIDEOS_URL, 'https://videos.iapersonal.app.br')
+    const base = normalizePublicBase(c.env.R2_VIDEOS_URL, 'https://videos.vfit.app.br')
     return created({
       type: 'video',
       key,
@@ -208,7 +208,7 @@ mediaRoutes.post('/:exerciseId/media/upload', requireType('personal', 'admin', '
     },
   })
 
-  const base = normalizePublicBase(c.env.R2_IMAGES_URL, 'https://images.iapersonal.app.br')
+  const base = normalizePublicBase(c.env.R2_IMAGES_URL, 'https://images.vfit.app.br')
   return created({
     type: 'thumbnail',
     key,

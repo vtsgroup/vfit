@@ -44,7 +44,7 @@ const passkey = new Hono<AppContext>()
 
 /** Extract RP (Relying Party) config from request origin */
 function getRPConfig(c: { req: { header: (name: string) => string | undefined } }) {
-  const origin = c.req.header('origin') || 'https://iapersonal.app.br'
+  const origin = c.req.header('origin') || 'https://vfit.app.br'
   const url = new URL(origin)
   return {
     rpName: 'VFIT',
@@ -160,12 +160,12 @@ passkey.post('/passkey/register/complete', authMiddleware, async (c) => {
 
     // Flexibilidade: aceitar origens/RPIDs conhecidas (www, pages.dev, etc)
     const allowedOrigins = new Set([
-      'https://iapersonal.app.br',
+      'https://vfit.app.br',
       'https://vfit.pages.dev',
       origin,
     ])
     const allowedRPIDs = new Set([
-      'iapersonal.app.br',
+      'vfit.app.br',
       'vfit.pages.dev',
       rpID,
     ])
@@ -336,12 +336,12 @@ passkey.post('/passkey/login/complete', async (c) => {
 
   // Build arrays of allowed origins and RP IDs for flexibility
   const allowedOrigins = new Set([
-    'https://iapersonal.app.br',
+    'https://vfit.app.br',
     'https://vfit.pages.dev',
     origin,
   ])
   const allowedRPIDs = new Set([
-    'iapersonal.app.br',
+    'vfit.app.br',
     'vfit.pages.dev',
     rpID,
   ])

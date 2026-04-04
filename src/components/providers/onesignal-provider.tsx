@@ -118,8 +118,8 @@ export function OneSignalProvider({ children }: { children: React.ReactNode }) {
               message: 'Notificações ativadas com sucesso!',
             },
             notificationClickHandlerMatch: 'origin',
-            defaultUrl: 'https://iapersonal.app.br/dashboard',
-            defaultNotificationIcon: 'https://iapersonal.app.br/icons/notification-badge-192.png',
+            defaultUrl: 'https://vfit.app.br/dashboard',
+            defaultNotificationIcon: 'https://vfit.app.br/icons/notification-badge-192.png',
           })
           // Store reference ONLY after successful init
           _sdkInstance = OneSignal

@@ -33,7 +33,7 @@ export default function BlogPage() {
       <BlogCollectionSchema
         items={BLOG_POSTS.map((post) => ({
           name: post.title,
-          url: `https://iapersonal.app.br/blog/${post.slug}`,
+          url: `https://vfit.app.br/blog/${post.slug}`,
         }))}
       />
 

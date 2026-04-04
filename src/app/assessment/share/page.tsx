@@ -502,7 +502,7 @@ function AssessmentView({ assessment: a }: { assessment: SharedAssessment }) {
             PERSONAL<span className="text-cyan-400">IA</span>
           </p>
           <p className="text-[10px] text-gray-500">
-            Plataforma para Personal Trainers — iapersonal.app.br
+            Plataforma para Personal Trainers — vfit.app.br
           </p>
           <p className="text-[9px] text-gray-600">
             Este documento é informativo e não substitui avaliação médica.
@@ -617,7 +617,7 @@ function ErrorState({ message }: { message: string }) {
         <h1 className="text-xl font-bold text-white">Link Indisponível</h1>
         <p className="text-sm text-gray-400">{message}</p>
         <a
-          href="https://iapersonal.app.br"
+          href="https://vfit.app.br"
           className="inline-block mt-4 rounded-xl bg-emerald-500 px-6 py-3 text-sm font-bold text-white hover:bg-emerald-400 transition-colors"
         >
           Ir para VFIT

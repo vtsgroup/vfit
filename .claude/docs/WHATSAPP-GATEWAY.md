@@ -8,7 +8,7 @@ Centralizar envio de mensagens via WhatsApp (Unipile) com um contrato único e e
 
 ## URL e Worker
 
-- URL (produção): https://whatsapp.iapersonal.app.br
+- URL (produção): https://whatsapp.vfit.app.br
 - Worker name (Cloudflare): `vfiti-whatsapp`
 
 ## Endpoints
@@ -148,7 +148,7 @@ Status: <resultado final>
 1) Crie um arquivo local (ignorado pelo git): `.env.local`
 
 ```bash
-WHATSAPP_GATEWAY_URL=https://whatsapp.iapersonal.app.br
+WHATSAPP_GATEWAY_URL=https://whatsapp.vfit.app.br
 WHATSAPP_NOTIFY_TOKEN=COLE_AQUI_O_ADMIN_AUTH_TOKEN
 ```
 
@@ -188,7 +188,7 @@ Use para validar layout antes de enviar no grupo.
 ```bash
 read -s "?ADMIN_AUTH_TOKEN: " ADMIN_AUTH_TOKEN; echo
 
-curl -sS -X POST "https://whatsapp.iapersonal.app.br/format" \
+curl -sS -X POST "https://whatsapp.vfit.app.br/format" \
   -H "Authorization: Bearer $ADMIN_AUTH_TOKEN" \
   -H "Content-Type: application/json" \
   --data '{
@@ -199,12 +199,12 @@ curl -sS -X POST "https://whatsapp.iapersonal.app.br/format" \
     "priority":"ALTA",
     "status":"success",
     "deploy_version":"v1.0.0",
-    "link_url":"https://iapersonal.app.br/dashboard",
+    "link_url":"https://vfit.app.br/dashboard",
     "started_at":"2026-02-24T12:00:00.000Z",
     "ended_at":"2026-02-24T12:42:00.000Z",
     "summary":[
       "✅ Entregue: Worker padrão de WhatsApp (Unipile) com endpoint único.",
-      "✅ URL alvo: https://whatsapp.iapersonal.app.br (custom domain).",
+      "✅ URL alvo: https://whatsapp.vfit.app.br (custom domain).",
       "✅ Endpoints: /health, /chats, /send, /task-notify, /format."
     ]
   }' | head -200
@@ -215,7 +215,7 @@ curl -sS -X POST "https://whatsapp.iapersonal.app.br/format" \
 ```bash
 read -s "?ADMIN_AUTH_TOKEN: " ADMIN_AUTH_TOKEN; echo
 
-curl -sS -X POST "https://whatsapp.iapersonal.app.br/task-notify" \
+curl -sS -X POST "https://whatsapp.vfit.app.br/task-notify" \
   -H "Authorization: Bearer $ADMIN_AUTH_TOKEN" \
   -H "Content-Type: application/json" \
   --data '{
@@ -226,12 +226,12 @@ curl -sS -X POST "https://whatsapp.iapersonal.app.br/task-notify" \
     "priority":"ALTA",
     "status":"success",
     "deploy_version":"v1.0.0",
-    "link_url":"https://iapersonal.app.br/dashboard",
+    "link_url":"https://vfit.app.br/dashboard",
     "started_at":"2026-02-24T12:00:00.000Z",
     "ended_at":"2026-02-24T12:42:00.000Z",
     "summary":[
       "✅ Entregue: Worker padrão de WhatsApp (Unipile) com endpoint único.",
-      "✅ URL alvo: https://whatsapp.iapersonal.app.br (custom domain).",
+      "✅ URL alvo: https://whatsapp.vfit.app.br (custom domain).",
       "✅ Endpoints: /health, /chats, /send, /task-notify, /format."
     ]
   }' | head -200

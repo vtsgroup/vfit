@@ -73,7 +73,7 @@ export async function sendVerificationEmail(
   to: string,
   name: string,
   token: string,
-  baseUrl = 'https://iapersonal.app.br',
+  baseUrl = 'https://vfit.app.br',
   requestId?: string
 ): Promise<void> {
   await sendEmail(queue, {
@@ -96,7 +96,7 @@ export async function sendResetPasswordEmail(
   name: string,
   token: string,
   resetCode?: string,
-  baseUrl = 'https://iapersonal.app.br',
+  baseUrl = 'https://vfit.app.br',
   requestId?: string
 ): Promise<void> {
   await sendEmail(queue, {
@@ -138,7 +138,7 @@ export async function sendStudentInvitationEmail(
   studentName: string,
   personalName: string,
   invitationToken: string,
-  baseUrl = 'https://iapersonal.app.br',
+  baseUrl = 'https://vfit.app.br',
   requestId?: string
 ): Promise<void> {
   await sendEmail(queue, {

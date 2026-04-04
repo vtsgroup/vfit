@@ -45,7 +45,7 @@ function isJwtExpired(token, skewMs = 30_000) {
   return Date.now() >= (expMs - skewMs)
 }
 
-const baseUrl = (process.env.SMOKE_BASE_URL || 'https://api.iapersonal.app.br').replace(/\/$/, '')
+const baseUrl = (process.env.SMOKE_BASE_URL || 'https://api.vfit.app.br').replace(/\/$/, '')
 let personalToken = process.env.SMOKE_PERSONAL_TOKEN || ''
 let studentToken = process.env.SMOKE_STUDENT_TOKEN || ''
 let adminToken = process.env.SMOKE_ADMIN_TOKEN || ''
@@ -583,7 +583,7 @@ function buildReport(context) {
     '  - `export SMOKE_MINT_STUDENT_EMAIL=...` (ou `SMOKE_MINT_STUDENT_ID`)',
     '',
     'Opção 3 — UI (super_admin)',
-    '- Abra `https://iapersonal.app.br/dashboard/admin/smoke` e gere tokens temporários para colar no terminal usando `read -s`.',
+    '- Abra `https://vfit.app.br/dashboard/admin/smoke` e gere tokens temporários para colar no terminal usando `read -s`.',
     '',
     '## Configuração de tokens',
     `- Personal token: ${personalToken ? 'informado' : 'ausente'}`,
@@ -630,7 +630,7 @@ function buildReport(context) {
     } else {
       console.error('[auth-smoke] Nenhum token informado (SMOKE_PERSONAL_TOKEN/SMOKE_STUDENT_TOKEN/SMOKE_ADMIN_TOKEN).')
     }
-    console.error('[auth-smoke] Próximo passo recomendado: abrir https://iapersonal.app.br/dashboard/admin/smoke (super_admin) e gerar tokens temporários.')
+    console.error('[auth-smoke] Próximo passo recomendado: abrir https://vfit.app.br/dashboard/admin/smoke (super_admin) e gerar tokens temporários.')
     console.error('[auth-smoke] Alternativa: exporte SMOKE_ADMIN_TOKEN + SMOKE_MINT_PERSONAL_EMAIL/ID + SMOKE_MINT_STUDENT_EMAIL/ID para mint automático.')
     process.exit(1)
   }

@@ -21,7 +21,7 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import { useAuthStore, type AuthTokens, type PersonalProfile, type StudentProfile } from '@/stores/auth-store'
 import { Spinner } from '@/components/ui/spinner'
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://api.iapersonal.app.br'
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://api.vfit.app.br'
 
 function OAuthCallbackContent() {
   const searchParams = useSearchParams()

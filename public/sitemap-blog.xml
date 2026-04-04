@@ -3,41 +3,41 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 
   <url>
-    <loc>https://iapersonal.app.br/blog</loc>
+    <loc>https://vfit.app.br/blog</loc>
     <lastmod>2026-03-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://iapersonal.app.br/blog/ia-personal-trainer</loc>
+    <loc>https://vfit.app.br/blog/ia-personal-trainer</loc>
     <lastmod>2026-03-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://iapersonal.app.br/blog/hero-ia-personal-trainer.webp</image:loc>
+      <image:loc>https://vfit.app.br/blog/hero-ia-personal-trainer.webp</image:loc>
       <image:title>IA para personal trainer: como aplicar no dia a dia com qualidade</image:title>
     </image:image>
   </url>
 
   <url>
-    <loc>https://iapersonal.app.br/blog/retencao-alunos-personal</loc>
+    <loc>https://vfit.app.br/blog/retencao-alunos-personal</loc>
     <lastmod>2026-03-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://iapersonal.app.br/blog/hero-retencao-alunos.webp</image:loc>
+      <image:loc>https://vfit.app.br/blog/hero-retencao-alunos.webp</image:loc>
       <image:title>Retenção de alunos no personal: 5 alavancas para reduzir churn</image:title>
     </image:image>
   </url>
 
   <url>
-    <loc>https://iapersonal.app.br/blog/cobranca-automatica-personal</loc>
+    <loc>https://vfit.app.br/blog/cobranca-automatica-personal</loc>
     <lastmod>2026-03-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://iapersonal.app.br/blog/hero-cobranca-automatica.webp</image:loc>
+      <image:loc>https://vfit.app.br/blog/hero-cobranca-automatica.webp</image:loc>
       <image:title>Cobrança automática para personal trainer: menos inadimplência</image:title>
     </image:image>
   </url>

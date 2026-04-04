@@ -18,7 +18,7 @@ import type { MiddlewareHandler } from 'hono'
 
 // Origens exatas permitidas
 const ALLOWED_ORIGINS = new Set([
-  'https://iapersonal.app.br',
+  'https://vfit.app.br',
   'https://vfit.pages.dev',
 ])
 

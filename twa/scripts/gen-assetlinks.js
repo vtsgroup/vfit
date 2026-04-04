@@ -91,5 +91,5 @@ console.log(`     → public/.well-known/assetlinks.json`);
 console.log("\n📋 Próximo passo:");
 console.log("   cd .. && npm run cf:deploy  (para ativar assetlinks em produção)");
 console.log(
-  "   Verificar: curl https://iapersonal.app.br/.well-known/assetlinks.json\n"
+  "   Verificar: curl https://vfit.app.br/.well-known/assetlinks.json\n"
 );

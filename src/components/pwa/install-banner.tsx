@@ -482,7 +482,7 @@ function getInstructionConfig(platform: Platform | null, browser: PwaInstallCont
       title: 'Acessar como App',
       subtitle: 'Firefox não suporta PWA nativamente',
       steps: [
-        { icon: downloadIcon, title: 'Use Chrome ou Edge', description: 'Abra iapersonal.app.br no Chrome ou Edge para instalar como app' },
+        { icon: downloadIcon, title: 'Use Chrome ou Edge', description: 'Abra vfit.app.br no Chrome ou Edge para instalar como app' },
         { icon: addIcon, title: 'Ou Salve nos Favoritos', description: 'Pressione ⌘+D (Ctrl+D no Windows) para acesso rápido' },
       ],
     }
@@ -555,7 +555,7 @@ function getInstructionConfig(platform: Platform | null, browser: PwaInstallCont
         title: 'Arc não suporta PWA',
         subtitle: 'Use Chrome para a melhor experiência',
         steps: [
-          { icon: downloadIcon, title: 'Abra no Chrome', description: 'Copie iapersonal.app.br e abra no Google Chrome' },
+          { icon: downloadIcon, title: 'Abra no Chrome', description: 'Copie vfit.app.br e abra no Google Chrome' },
           { icon: addIcon, title: 'Instalar como App', description: 'No Chrome: menu ⋮ → "Cast, Save, and Share" → "Install page as app..."' },
           { icon: checkIcon, title: 'Pronto!', description: 'O app aparecerá como app nativo no Mac' },
         ],

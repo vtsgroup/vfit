@@ -6,7 +6,7 @@
 
 Plataforma web + Android para gestão de alunos, treinos, avaliações, pagamentos e comunicação — tudo em um só lugar.
 
-[![Deploy](https://img.shields.io/badge/deploy-cloudflare-F38020?logo=cloudflare&logoColor=white)](https://iapersonal.app.br)
+[![Deploy](https://img.shields.io/badge/deploy-cloudflare-F38020?logo=cloudflare&logoColor=white)](https://vfit.app.br)
 [![Tests](https://img.shields.io/badge/tests-360%20passing-22C55E?logo=vitest&logoColor=white)](#testes)
 [![Version](https://img.shields.io/badge/version-1.0.0-blue)](#)
 
@@ -56,8 +56,8 @@ npm run cf:deploy:dry                # dry-run (simula sem executar)
 
 | Ambiente | URL |
 |----------|-----|
-| **Frontend** | https://iapersonal.app.br |
-| **API** | https://api.iapersonal.app.br |
+| **Frontend** | https://vfit.app.br |
+| **API** | https://api.vfit.app.br |
 
 ## Estrutura
 

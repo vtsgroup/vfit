@@ -327,7 +327,7 @@ function drawPageHeaderBar(ctx: PdfCtx): void {
     x: PAGE_W - MARGIN - 85, y: barY,
     size: 10, font: fontBold, color: C.green,
   })
-  page.drawText('iapersonal.app.br', {
+  page.drawText('vfit.app.br', {
     x: PAGE_W - MARGIN - 85, y: barY - 11,
     size: 6, font, color: C.textMuted,
   })
@@ -343,7 +343,7 @@ function drawPageFooter(ctx: PdfCtx): void {
     thickness: 0.5, color: C.border,
   })
 
-  page.drawText('Gerado por VFIT — iapersonal.app.br', {
+  page.drawText('Gerado por VFIT — vfit.app.br', {
     x: MARGIN, y: footerY + 4,
     size: 7, font: fontBold, color: C.green, opacity: 0.8,
   })
@@ -1164,7 +1164,7 @@ function drawFinalSection(ctx: PdfCtx): void {
   ctx.y -= 72
 
   // ── QR CODE ──
-  const onlineUrl = `https://iapersonal.app.br/dashboard/assessments/view?id=${row.id}`
+  const onlineUrl = `https://vfit.app.br/dashboard/assessments/view?id=${row.id}`
   const qrSize = 72
 
   ensureSpace(ctx, qrSize + 40)
@@ -1187,7 +1187,7 @@ function drawFinalSection(ctx: PdfCtx): void {
   page.drawText('interativa online com gráficos de evolução.', {
     x: MARGIN + 10, y: ctx.y - 36, size: 8, font, color: C.textSecondary,
   })
-  page.drawText('iapersonal.app.br', {
+  page.drawText('vfit.app.br', {
     x: MARGIN + 10, y: ctx.y - 54, size: 8, font: fontBold, color: C.green,
   })
 
@@ -1307,7 +1307,7 @@ export async function buildAssessmentPdfBytes(row: AssessmentPdfRow): Promise<Ui
   const pdfDoc = await PDFDocument.create()
 
   pdfDoc.setTitle(`Avaliação Física — ${safeText(row.student_name, 'Aluno')}`)
-  pdfDoc.setAuthor('VFIT — iapersonal.app.br')
+  pdfDoc.setAuthor('VFIT — vfit.app.br')
   pdfDoc.setSubject('Avaliação Física Profissional')
   pdfDoc.setCreator('VFIT v3.0')
   pdfDoc.setProducer('VFIT — pdf-lib')
@@ -1428,7 +1428,7 @@ export async function generateAndStoreAssessmentPdf(
     customMetadata: { assessment_id: assessmentId, type: 'assessment_pdf', version: '3.0' },
   })
 
-  const base = env.R2_IMAGES_URL || 'https://images.iapersonal.app.br'
+  const base = env.R2_IMAGES_URL || 'https://images.vfit.app.br'
   const url = `${base}/${key}`
 
   await pgQuery(

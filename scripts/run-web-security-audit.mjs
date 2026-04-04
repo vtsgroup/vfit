@@ -4,8 +4,8 @@ import { resolve } from 'node:path'
 import { execSync } from 'node:child_process'
 
 const targets = [
-  { name: 'Frontend', url: 'https://iapersonal.app.br', kind: 'frontend' },
-  { name: 'API Health', url: 'https://api.iapersonal.app.br/health', kind: 'api' },
+  { name: 'Frontend', url: 'https://vfit.app.br', kind: 'frontend' },
+  { name: 'API Health', url: 'https://api.vfit.app.br/health', kind: 'api' },
 ]
 
 const headerChecks = {
@@ -72,7 +72,7 @@ function curlHead(url, { origin } = {}) {
 }
 
 async function inspectTarget(target) {
-  const origin = target.kind === 'api' ? 'https://iapersonal.app.br' : null
+  const origin = target.kind === 'api' ? 'https://vfit.app.br' : null
   const { status, headers, elapsed, error } = curlHead(target.url, { origin })
 
   const checks = headerChecks[target.kind].map((headerName) => {

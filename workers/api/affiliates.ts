@@ -182,7 +182,7 @@ affiliates.get('/link', async (c) => {
   const affiliate = await findAffiliateByPersonal(c.env, personalId)
   if (!affiliate) throw new NotFoundError('Afiliado não ativado')
 
-  const baseUrl = 'https://iapersonal.app.br/register'
+  const baseUrl = 'https://vfit.app.br/register'
   const link = `${baseUrl}?ref=${affiliate.referral_code}`
 
   return success({

@@ -68,9 +68,9 @@ export function SoftwareApplicationSchema() {
     ],
     description:
       'App completo para personal trainers com IA. Pix automático, gamificação de alunos (XP, conquistas, ranking), contratos digitais, nota fiscal eletrônica e white-label.',
-    url: 'https://iapersonal.app.br',
-    image: 'https://iapersonal.app.br/og/og-default.png',
-    downloadUrl: 'https://iapersonal.app.br',
+    url: 'https://vfit.app.br',
+    image: 'https://vfit.app.br/og/og-default.png',
+    downloadUrl: 'https://vfit.app.br',
     author: {
       '@type': 'Organization',
       name: 'VFIT',
@@ -103,17 +103,17 @@ export function OrganizationSchema() {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: 'VFIT',
-    url: 'https://iapersonal.app.br',
-    logo: 'https://iapersonal.app.br/AI-logo-round-ext.png?v=20260224-round',
+    url: 'https://vfit.app.br',
+    logo: 'https://vfit.app.br/AI-logo-round-ext.png?v=20260224-round',
     description: 'App completo para personal trainers com IA. Pix automático, gamificação, contratos digitais e NF eletrônica.',
     sameAs: [
-      'https://instagram.com/iapersonal.app.br',
+      'https://instagram.com/vfitapp',
     ],
     contactPoint: {
       '@type': 'ContactPoint',
       contactType: 'customer service',
       availableLanguage: ['Portuguese'],
-      url: 'https://iapersonal.app.br/contato',
+      url: 'https://vfit.app.br/contato',
     },
   }
 
@@ -125,11 +125,11 @@ export function WebSiteSchema() {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: 'VFIT',
-    url: 'https://iapersonal.app.br',
+    url: 'https://vfit.app.br',
     inLanguage: 'pt-BR',
     potentialAction: {
       '@type': 'SearchAction',
-      target: 'https://iapersonal.app.br/blog?q={search_term_string}',
+      target: 'https://vfit.app.br/blog?q={search_term_string}',
       'query-input': 'required name=search_term_string',
     },
   }
@@ -207,7 +207,7 @@ export function BlogCollectionSchema({ items }: { items: BlogCollectionItem[] })
     '@context': 'https://schema.org',
     '@type': 'Blog',
     name: 'Blog VFIT',
-    url: 'https://iapersonal.app.br/blog',
+    url: 'https://vfit.app.br/blog',
     inLanguage: 'pt-BR',
     blogPost: items.map((item) => ({
       '@type': 'BlogPosting',
@@ -241,7 +241,7 @@ export function BlogPostingSchema({
   dateModified,
   keywords,
 }: BlogPostingSchemaProps) {
-  const url = `https://iapersonal.app.br${slug}`
+  const url = `https://vfit.app.br${slug}`
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
@@ -252,13 +252,13 @@ export function BlogPostingSchema({
     dateModified: dateModified || datePublished,
     inLanguage: 'pt-BR',
     keywords,
-    image: [`https://iapersonal.app.br/og/og-blog-${slug.split('/').pop()?.replace('-personal', '') || 'default'}.png`],
+    image: [`https://vfit.app.br/og/og-blog-${slug.split('/').pop()?.replace('-personal', '') || 'default'}.png`],
     publisher: {
       '@type': 'Organization',
       name: 'VFIT',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://iapersonal.app.br/AI-logo-round-ext.png?v=20260224-round',
+        url: 'https://vfit.app.br/AI-logo-round-ext.png?v=20260224-round',
       },
     },
     author: {
@@ -274,10 +274,10 @@ export function LocalBusinessSchema() {
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
-    '@id': 'https://iapersonal.app.br/#localbusiness',
+    '@id': 'https://vfit.app.br/#localbusiness',
     name: 'VFIT',
-    image: 'https://iapersonal.app.br/AI-logo-round-ext.png?v=20260224-round',
-    url: 'https://iapersonal.app.br',
+    image: 'https://vfit.app.br/AI-logo-round-ext.png?v=20260224-round',
+    url: 'https://vfit.app.br',
     telephone: '+55-21-96564-1822',
     priceRange: 'R$0 - R$199',
     address: {
@@ -300,7 +300,7 @@ export function LocalBusinessSchema() {
       closes: '23:59',
     },
     sameAs: [
-      'https://www.instagram.com/iapersonal.app.br',
+      'https://www.instagram.com/vfitapp',
     ],
     description: 'Plataforma SaaS para personal trainers. Crie treinos com IA, gerencie alunos, automatize cobranças via PIX/boleto/cartão e avaliações físicas.',
     founder: [

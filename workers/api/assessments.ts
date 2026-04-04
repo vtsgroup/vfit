@@ -1169,7 +1169,7 @@ assessments.put('/:id/photos/upload', requireType('personal', 'admin', 'super_ad
   // Atualizar photos JSON na assessment
   const assessment = await findAssessmentById(c.env, id)
   const currentPhotos = parsePhotos(assessment?.photos)
-  const photoUrl = `${c.env.R2_IMAGES_URL || 'https://images.iapersonal.app.br'}/${key}`
+  const photoUrl = `${c.env.R2_IMAGES_URL || 'https://images.vfit.app.br'}/${key}`
 
   currentPhotos.push({
     type: photoType,
@@ -2118,9 +2118,9 @@ assessments.post('/:id/send-email', requireType('personal', 'admin', 'super_admi
   // Gerar share URL se não existir
   let shareUrl = ''
   if (assessment.share_token) {
-    shareUrl = `https://iapersonal.app.br/assessment/share?token=${assessment.share_token}`
+    shareUrl = `https://vfit.app.br/assessment/share?token=${assessment.share_token}`
   } else {
-    shareUrl = `https://iapersonal.app.br/dashboard/assessments/view?id=${id}`
+    shareUrl = `https://vfit.app.br/dashboard/assessments/view?id=${id}`
   }
 
   const assessmentDate = new Date(assessment.assessment_date).toLocaleDateString('pt-BR')
@@ -2216,7 +2216,7 @@ assessments.post('/:id/share', async (c) => {
     if (expires > new Date()) {
       return success({
         share_token: assessment.share_token,
-        share_url: `https://iapersonal.app.br/assessment/share?token=${assessment.share_token}`,
+        share_url: `https://vfit.app.br/assessment/share?token=${assessment.share_token}`,
         expires_at: assessment.share_expires_at,
       })
     }
@@ -2237,7 +2237,7 @@ assessments.post('/:id/share', async (c) => {
 
   return success({
     share_token: shareToken,
-    share_url: `https://iapersonal.app.br/assessment/share?token=${shareToken}`,
+    share_url: `https://vfit.app.br/assessment/share?token=${shareToken}`,
     expires_at: expiresAt,
   })
 })

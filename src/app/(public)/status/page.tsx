@@ -25,7 +25,7 @@ export const metadata: Metadata = buildSeoMetadata({
 })
 
 const services = [
-  { name: 'Plataforma Web', description: 'App principal em iapersonal.app.br', icon: 'globe' as DSIconName },
+  { name: 'Plataforma Web', description: 'App principal em vfit.app.br', icon: 'globe' as DSIconName },
   { name: 'API Backend', description: 'Cloudflare Workers + Hono.js', icon: 'server' as DSIconName },
   { name: 'Banco de Dados', description: 'Neon PostgreSQL 17', icon: 'flame' as DSIconName },
   { name: 'Segurança', description: 'TLS 1.3 + HSTS + CSP', icon: 'shield' as DSIconName },
@@ -82,7 +82,7 @@ export default function StatusPage() {
         <p className="text-sm text-zinc-600">
           Última verificação: agora ·{' '}
           <a
-            href="https://iapersonal.app.br"
+            href="https://vfit.app.br"
             className="text-emerald-500 hover:text-emerald-400 transition-colors"
           >
             Voltar ao site

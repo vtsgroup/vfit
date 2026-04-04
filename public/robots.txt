@@ -64,5 +64,5 @@ Disallow: /dashboard/
 Disallow: /api/
 
 # === Sitemaps ===
-Sitemap: https://iapersonal.app.br/sitemap.xml
-Sitemap: https://iapersonal.app.br/sitemap-blog.xml
+Sitemap: https://vfit.app.br/sitemap.xml
+Sitemap: https://vfit.app.br/sitemap-blog.xml

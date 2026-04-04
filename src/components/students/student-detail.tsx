@@ -135,7 +135,7 @@ export default function StudentDetailClient({ id }: { id: string }) {
     }
 
     if (withMessage) {
-      const msg = encodeURIComponent('Olá! Baixe o app VFIT para acompanhar seus treinos: https://iapersonal.app.br/download')
+      const msg = encodeURIComponent('Olá! Baixe o app VFIT para acompanhar seus treinos: https://vfit.app.br/download')
       window.open(`https://wa.me/${waNumber}?text=${msg}`, '_blank', 'noopener,noreferrer')
       return
     }

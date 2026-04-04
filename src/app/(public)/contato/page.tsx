@@ -33,8 +33,8 @@ const CHANNELS = [
     icon: 'mail' as DSIconName,
     title: 'E-mail',
     description: 'Respondemos em até 24h',
-    value: 'contato@iapersonal.app.br',
-    href: 'mailto:contato@iapersonal.app.br',
+    value: 'contato@vfit.app.br',
+    href: 'mailto:contato@vfit.app.br',
   },
   {
     icon: 'messageCircle' as DSIconName,
@@ -79,13 +79,13 @@ export default function ContatoPage() {
           '@context': 'https://schema.org',
           '@type': 'ContactPage',
           name: 'Contato — VFIT',
-          url: 'https://iapersonal.app.br/contato',
+          url: 'https://vfit.app.br/contato',
           description: 'Fale com a equipe VFIT por e-mail ou WhatsApp para suporte técnico, parcerias e dúvidas.',
           mainEntity: {
             '@type': 'Organization',
             name: 'VFIT',
-            email: 'contato@iapersonal.app.br',
-            url: 'https://iapersonal.app.br',
+            email: 'contato@vfit.app.br',
+            url: 'https://vfit.app.br',
           },
         }) }}
       />

@@ -11,7 +11,7 @@ if (!JWT_SECRET) {
   process.exit(1)
 }
 
-const API_URL = 'https://api.iapersonal.app.br/admin/migrate'
+const API_URL = 'https://api.vfit.app.br/admin/migrate'
 
 const content = readFileSync(file, 'utf8')
 

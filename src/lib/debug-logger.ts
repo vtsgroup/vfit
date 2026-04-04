@@ -39,7 +39,7 @@ const DEBUG_QUEUE_KEY = 'pia_debug_queue_v1'
 const DEBUG_ENABLED_KEY = 'pia_debug_enabled'
 const DEBUG_TEST_RUN_KEY = 'pia_debug_test_run_id'
 const DEBUG_SESSION_KEY = 'pia_debug_session_id'
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.iapersonal.app.br'
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.vfit.app.br'
 // Controla se o debug mode fica sempre ativo independente do localStorage.
 // Em produção, deve ser false (ou NEXT_PUBLIC_FORCE_DEBUG=false).
 // Para ativar temporariamente em QA: NEXT_PUBLIC_FORCE_DEBUG=true no .env.local

@@ -16,7 +16,7 @@ import {
 describe('APP_CONFIG', () => {
   it('deve ter nome e domínio corretos', () => {
     expect(APP_CONFIG.name).toBe('VFIT')
-    expect(APP_CONFIG.domain).toBe('iapersonal.app.br')
+    expect(APP_CONFIG.domain).toBe('vfit.app.br')
   })
 })
 

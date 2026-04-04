@@ -200,7 +200,7 @@ function EmptyState({
 **Lighthouse CI local:**
 
 ```bash
-npx lighthouse https://iapersonal.app.br --output=json --output=html \
+npx lighthouse https://vfit.app.br --output=json --output=html \
   --chrome-flags="--headless" \
   --preset=desktop
 ```

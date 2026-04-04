@@ -170,7 +170,7 @@ function generateOGSvg({ title, subtitle, description, descLine2, accent, accent
   <!-- Domain with dot -->
   <circle cx="100" cy="560" r="4" fill="${accent}"/>
   <text x="115" y="565" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-weight="500" font-size="16" fill="#71717A" letter-spacing="0.5">
-    iapersonal.app.br
+    vfit.app.br
   </text>
   
   <!-- Bottom accent line -->

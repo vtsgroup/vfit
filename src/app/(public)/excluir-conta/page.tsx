@@ -54,7 +54,7 @@ export default function ExcluirContaPage() {
             <li>
               Faça login na sua conta em{' '}
               <Link href="/login" className="text-brand-primary hover:underline">
-                iapersonal.app.br/login
+                vfit.app.br/login
               </Link>
             </li>
             <li>
@@ -94,11 +94,11 @@ export default function ExcluirContaPage() {
             Caso não consiga acessar sua conta, envie um e-mail para:
           </p>
           <a
-            href="mailto:contato@iapersonal.app.br?subject=Solicita%C3%A7%C3%A3o%20de%20exclus%C3%A3o%20de%20conta&body=Ol%C3%A1%2C%20gostaria%20de%20solicitar%20a%20exclus%C3%A3o%20da%20minha%20conta%20e%20dados%20pessoais.%0A%0AE-mail%20cadastrado%3A%20%0ANome%20completo%3A%20"
+            href="mailto:contato@vfit.app.br?subject=Solicita%C3%A7%C3%A3o%20de%20exclus%C3%A3o%20de%20conta&body=Ol%C3%A1%2C%20gostaria%20de%20solicitar%20a%20exclus%C3%A3o%20da%20minha%20conta%20e%20dados%20pessoais.%0A%0AE-mail%20cadastrado%3A%20%0ANome%20completo%3A%20"
             className="inline-flex items-center gap-2 rounded-xl border border-amber-500/20 bg-amber-500/5 px-4 py-2.5 text-sm font-medium text-amber-400 transition-colors hover:bg-amber-500/10"
           >
             <DSIcon name="mail" size={16} />
-            contato@iapersonal.app.br
+            contato@vfit.app.br
           </a>
           <p className="mt-3 text-xs text-text-muted">
             Inclua no e-mail: nome completo e e-mail cadastrado na plataforma.

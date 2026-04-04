@@ -111,7 +111,11 @@
       "Bash(wrangler whoami:*)",
       "Bash(wrangler logout:*)",
       "Read(//private/tmp/claude-501/-Users-macos-Development-apps-vfit-production/**)",
-      "Bash(python3 scripts/search.py \"fitness saas dark navy mobile pwa dashboard\" --design-system -p \"VFIT\")"
+      "Bash(python3 scripts/search.py \"fitness saas dark navy mobile pwa dashboard\" --design-system -p \"VFIT\")",
+      "Read(//tmp/**)",
+      "Read(//private/tmp/**)",
+      "Bash(chmod +x /tmp/generate_report.sh)",
+      "Bash(/tmp/generate_report.sh)"
     ],
     "deny": [
       "Bash(npm run cf:deploy:major)",
@@ -131,7 +135,8 @@
     ],
     "additionalDirectories": [
       "/Users/macos/Development/apps/vfit-production/.claude",
-      "/Users/macos/Development/apps/vfit-production/.claude/plans"
+      "/Users/macos/Development/apps/vfit-production/.claude/plans",
+      "/tmp"
     ]
   },
   "model": "haiku",

@@ -10,7 +10,7 @@
 | **Framework** | Hono v4 (TypeScript) |
 | **Entry Point** | `workers/index.ts` |
 | **Endpoints** | ~180+ (22 sub-routers — atualizado mar/2026) |
-| **URL Produção** | https://api.iapersonal.app.br |
+| **URL Produção** | https://api.vfit.app.br |
 | **Worker Name** | `vfiti-api` |
 | **Database** | Neon PostgreSQL 17 (HTTP via `neon()`, sem Hyperdrive TCP) |
 | **Testes** | 207 Vitest (16 arquivos, 100% passing) |
@@ -666,7 +666,7 @@ dispatchCalendarReminders(env, { windowsMinutes: number[], toleranceMinutes: num
 ```
 Request → CF Workers Edge
   → requestIdMiddleware (X-Request-Id)
-  → corsMiddleware (iapersonal.app.br, vfit.pages.dev)
+  → corsMiddleware (vfit.app.br, vfit.pages.dev)
   → secureHeaders
   → rateLimitMiddleware (KV_RATE_LIMIT)
   → authMiddleware (JWT Web Crypto → userId, userType em c.var)
@@ -714,7 +714,7 @@ npx wrangler tail --format=pretty
 echo "valor" | npx wrangler secret put NOME --env=""
 
 # Health check
-curl https://api.iapersonal.app.br/health
+curl https://api.vfit.app.br/health
 ```
 # Backend Map — VFIT
 

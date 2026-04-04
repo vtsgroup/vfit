@@ -30,8 +30,8 @@ DEPLOY v1.1.0: ✅ (88s)
 - Wrangler: v4.80.0
 - D1 migration: ✅ (0005_user_workouts_cache applied remote)
 - Build Next.js: ✅ (26.2s, 127 pages)
-- CF Pages: ✅ (https://iapersonal.app.br)
-- CF Workers: ✅ (https://api.iapersonal.app.br)
+- CF Pages: ✅ (https://vfit.app.br)
+- CF Workers: ✅ (https://api.vfit.app.br)
 - Git: ✅ (tag v1.1.0 pushed to origin/main)
 - Health check: ✅ (D1 ok, KV ok, R2v ok, R2i ok)
 ```

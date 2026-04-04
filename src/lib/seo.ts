@@ -14,7 +14,7 @@
 // ============================================
 import type { Metadata } from 'next'
 
-const SITE_URL = 'https://iapersonal.app.br'
+const SITE_URL = 'https://vfit.app.br'
 const SITE_NAME = 'VFIT'
 const DEFAULT_OG_IMAGE = '/og/og-default.png'
 

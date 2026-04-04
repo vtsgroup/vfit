@@ -140,7 +140,7 @@ Exemplos: `DEPLOY-2026-04-02-AM`, `HOTFIX-AUTH-2026-04-02-PM`, `MIGRATION-USERS-
 ### Variáveis necessárias (já em `.env.local`)
 
 ```
-WHATSAPP_NOTIFY_URL=https://whatsapp.iapersonal.app.br/task-notify
+WHATSAPP_NOTIFY_URL=https://whatsapp.vfit.app.br/task-notify
 WHATSAPP_NOTIFY_TOKEN=<ADMIN_AUTH_TOKEN>
 ```
 
@@ -291,8 +291,8 @@ echo "0" | npx wrangler secret put SENTRY_TRACES_SAMPLE_RATE --env=""
 
 Monitores mínimos recomendados:
 
-1. `https://api.iapersonal.app.br/health` (intervalo 1 min)
-2. `https://iapersonal.app.br` (intervalo 1 min)
+1. `https://api.vfit.app.br/health` (intervalo 1 min)
+2. `https://vfit.app.br` (intervalo 1 min)
 
 Alertas:
 
@@ -348,10 +348,10 @@ Quando configurado, o deploy pipeline envia mensagens `start/end` via gateway.
 
 Variáveis de ambiente (local/CI):
 
-- `WHATSAPP_NOTIFY_URL` (ex.: https://whatsapp.iapersonal.app.br/task-notify)
+- `WHATSAPP_NOTIFY_URL` (ex.: https://whatsapp.vfit.app.br/task-notify)
 - `WHATSAPP_NOTIFY_TOKEN` (Bearer = `ADMIN_AUTH_TOKEN` do gateway)
 - `WHATSAPP_GROUP_NAME` (opcional; fallback)
-- `WHATSAPP_LINK_URL` (opcional; ex.: https://iapersonal.app.br)
+- `WHATSAPP_LINK_URL` (opcional; ex.: https://vfit.app.br)
 - `WHATSAPP_ACTOR_LABEL` (opcional)
 
 Regras obrigatórias do formato estão em: `.claude/docs/WHATSAPP-GATEWAY.md`
@@ -424,7 +424,7 @@ npm run cf:deploy:minor              # Deploy
 
 ### Workers (Backend API)
 - **Nome**: `vfiti-api` (definido no `wrangler.toml`)
-- **URL**: https://api.iapersonal.app.br
+- **URL**: https://api.vfit.app.br
 - **Bindings ativos**: D1, KV×3, R2×2, Analytics Engine
 - **Bindings inativos**: Hyperdrive (bypassed — neon() HTTP incompatível com TCP), Queues×4, Crons×4 (free plan)
 

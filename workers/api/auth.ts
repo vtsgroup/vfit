@@ -114,7 +114,7 @@ function getClientIp(req: Request): string {
 
 function isAllowedOrigin(origin: string): boolean {
   const allowedOrigins = new Set([
-    'https://iapersonal.app.br',
+    'https://vfit.app.br',
     'https://vfit.pages.dev',
     'http://localhost:3000',
     'http://127.0.0.1:3000',
@@ -355,7 +355,7 @@ auth.post('/register/personal', async (c) => {
       parsed.email.toLowerCase(),
       parsed.full_name,
       verificationToken,
-      'https://iapersonal.app.br',
+      'https://vfit.app.br',
       requestId
     )
   } catch (err) {
@@ -613,7 +613,7 @@ auth.post('/register/student', async (c) => {
                 student_name: parsed.full_name,
                 student_email: parsed.email.toLowerCase(),
                 student_phone: parsed.phone || '',
-                dashboard_url: 'https://iapersonal.app.br/dashboard/students',
+                dashboard_url: 'https://vfit.app.br/dashboard/students',
               },
             },
             c.env.EMAIL_FROM || undefined
@@ -1237,7 +1237,7 @@ auth.post('/forgot-password', async (c) => {
     // Enviar email
     // Preferir envio direto via Resend quando disponível (Queues estão desabilitadas no wrangler.toml hoje).
     // Mantém fallback para queue (best-effort) caso Resend falhe.
-    const baseUrl = 'https://iapersonal.app.br'
+    const baseUrl = 'https://vfit.app.br'
     let sent = false
 
     if (c.env.RESEND_API_KEY) {

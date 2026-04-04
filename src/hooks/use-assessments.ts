@@ -558,7 +558,7 @@ export function useCreateAssessmentWithPhotos() {
 
             // Upload binário direto via fetch (não usar api client pois body é ArrayBuffer)
             const arrayBuffer = await photo.file.arrayBuffer()
-            const uploadUrl = `${process.env.NEXT_PUBLIC_API_URL || 'https://api.iapersonal.app.br'}${uploadPath}?type=${photo.type}&key=${encodeURIComponent(key)}`
+            const uploadUrl = `${process.env.NEXT_PUBLIC_API_URL || 'https://api.vfit.app.br'}${uploadPath}?type=${photo.type}&key=${encodeURIComponent(key)}`
             
             const uploadResponse = await fetch(uploadUrl, {
               method: 'PUT',
@@ -826,7 +826,7 @@ export function useSharedAssessment(token: string) {
   return useQuery({
     queryKey: ['shared-assessment', token],
     queryFn: async () => {
-      const res = await fetch(`https://api.iapersonal.app.br/api/v1/assessments/share/${token}`)
+      const res = await fetch(`https://api.vfit.app.br/api/v1/assessments/share/${token}`)
       if (!res.ok) {
         const err = await res.json().catch(() => ({ error: 'Link inválido ou expirado' })) as { error?: string }
         throw new Error(err.error || 'Avaliação não encontrada')

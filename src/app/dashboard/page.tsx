@@ -240,6 +240,51 @@ export default function DashboardPage() {
         </div>
       )}
 
+      {/* Secondary metrics — ticket médio + crescimento */}
+      {!personalStats.isLoading && !paymentStats.isLoading && (
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
+          {/* Ticket médio */}
+          <StatsCard
+            title="Ticket Médio"
+            value={formatCurrency(
+              (pStats?.summary.payment_count ?? 0) > 0
+                ? (pStats?.summary.total_received ?? 0) / (pStats?.summary.payment_count ?? 1)
+                : 0
+            )}
+            icon="receipt"
+            color="accent"
+            description="por transação"
+          />
+          {/* Crescimento MoM */}
+          {(() => {
+            const monthly = pStats?.monthly_revenue ?? []
+            const current = monthly[monthly.length - 1]?.revenue ?? 0
+            const previous = monthly[monthly.length - 2]?.revenue ?? 0
+            const growth = previous > 0 ? ((current - previous) / previous) * 100 : 0
+            const isPositive = growth >= 0
+            return (
+              <StatsCard
+                title="Crescimento"
+                value={`${isPositive ? '↑' : '↓'} ${Math.abs(growth).toFixed(1)}%`}
+                icon="trendingUp"
+                color={isPositive ? 'success' : 'error'}
+                description="versus mês anterior"
+              />
+            )
+          })()}
+          {/* Taxa de retenção (alunos ativos / total) */}
+          <StatsCard
+            title="Retenção"
+            value={`${(stats?.students.total ?? 0) > 0
+              ? Math.round(((stats?.students.active ?? 0) / (stats?.students.total ?? 1)) * 100)
+              : 0}%`}
+            icon="shield"
+            color="info"
+            description={`${stats?.students.active ?? 0} de ${stats?.students.total ?? 0} ativos`}
+          />
+        </div>
+      )}
+
       {/* Section divider — gradient line with label */}
       <div className="flex items-center gap-3">
         <div className="h-px grow bg-linear-to-r from-transparent via-brand-primary/15 to-transparent" />

@@ -23,7 +23,7 @@ describe('sendEmailWithResend()', () => {
       data: {
         student_name: 'Aluno Teste',
         personal_name: 'Personal Teste',
-        invitation_url: 'https://iapersonal.app.br/register/student?token=abc',
+        invitation_url: 'https://vfit.app.br/register/student?token=abc',
       },
     })
 
@@ -41,7 +41,7 @@ describe('sendEmailWithResend()', () => {
     expect(body.to).toBe('aluno@example.com')
     expect(body.subject).toBe('Convite teste')
     expect(body.html).toContain('Personal Teste')
-    expect(body.html).toContain('https://iapersonal.app.br/register/student?token=abc')
+    expect(body.html).toContain('https://vfit.app.br/register/student?token=abc')
   })
 
   it('deve lançar erro quando API do Resend falhar', async () => {

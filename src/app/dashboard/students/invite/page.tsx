@@ -144,11 +144,11 @@ export default function InviteStudentPage() {
   }, [manualCpf])
 
   const inviteLink = inviteResult
-    ? inviteResult.invitation_url || `https://iapersonal.app.br/register/student?token=${inviteResult.invitation_token}`
+    ? inviteResult.invitation_url || `https://vfit.app.br/register/student?token=${inviteResult.invitation_token}`
     : ''
 
   const quickLink = quickResult
-    ? quickResult.invitation_url || `https://iapersonal.app.br/register/student?token=${quickResult.invitation_token}`
+    ? quickResult.invitation_url || `https://vfit.app.br/register/student?token=${quickResult.invitation_token}`
     : ''
 
   const effectiveLink = mode === 'qr' ? quickLink : inviteLink

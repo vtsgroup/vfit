@@ -116,7 +116,7 @@ function generateBlogSvg({ title, titleLine2, subtitle, icon, accent, accentSec 
   
   <!-- Domain -->
   <circle cx="55" cy="410" r="3" fill="${accent}"/>
-  <text x="68" y="415" font-family="system-ui, -apple-system, sans-serif" font-weight="500" font-size="13" fill="#71717A">iapersonal.app.br</text>
+  <text x="68" y="415" font-family="system-ui, -apple-system, sans-serif" font-weight="500" font-size="13" fill="#71717A">vfit.app.br</text>
   
   <!-- Bottom line -->
   <rect x="0" y="${H - 3}" width="${W}" height="3" fill="url(#accentG)" opacity="0.4"/>

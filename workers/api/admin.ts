@@ -52,11 +52,11 @@ import { dispatchCalendarReminders } from '@lib/calendar-reminders'
 
 // ============================================
 // SUPER_ADMIN emails — NEVER deletable
-// Primary: victor.duarte@iapersonal.app.br
+// Primary: victor.duarte@vfit.app.br
 // Legacy kept for safety during transition.
 // ============================================
 const PROTECTED_SUPER_ADMIN_EMAILS = new Set([
-  'victor.duarte@iapersonal.app.br',
+  'victor.duarte@vfit.app.br',
   'victor.duarte@personalia.com.br',   // legacy domain — keep for safety
   'victor.duarte@personalia.app.br',   // legacy domain — keep for safety
 ])
@@ -529,7 +529,7 @@ adminRoutes.post('/simulation/session', requireAdminOrSuperAdmin, async (c) => {
 
 // ============================================
 // POST /admin/ops/fix-profile-photo-urls — repair legacy invalid URLs (super_admin only)
-// Fixes: https://profiles/<userId>/<file> → https://images.iapersonal.app.br/profiles/<userId>/<file>
+// Fixes: https://profiles/<userId>/<file> → https://images.vfit.app.br/profiles/<userId>/<file>
 // ============================================
 
 adminRoutes.post('/ops/fix-profile-photo-urls', requireSuperAdmin, async (c) => {
@@ -537,7 +537,7 @@ adminRoutes.post('/ops/fix-profile-photo-urls', requireSuperAdmin, async (c) => 
     c.env,
     `WITH updated AS (
       UPDATE users
-      SET profile_photo_url = regexp_replace(profile_photo_url, '^https?://profiles/', 'https://images.iapersonal.app.br/profiles/')
+      SET profile_photo_url = regexp_replace(profile_photo_url, '^https?://profiles/', 'https://images.vfit.app.br/profiles/')
       WHERE profile_photo_url LIKE 'http://profiles/%' OR profile_photo_url LIKE 'https://profiles/%'
       RETURNING 1
     )

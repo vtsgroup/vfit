@@ -3,7 +3,7 @@
 import { writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 
-const baseUrl = process.env.LOAD_TEST_BASE_URL || 'https://api.iapersonal.app.br'
+const baseUrl = process.env.LOAD_TEST_BASE_URL || 'https://api.vfit.app.br'
 const authToken = process.env.LOAD_TEST_AUTH_TOKEN || ''
 const outputPath = resolve(process.cwd(), 'docs/ULTRA-PLANO-MVP-PRODUCAO/LOAD-TEST-BASELINE.generated.md')
 

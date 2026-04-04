@@ -9,6 +9,7 @@
 'use client'
 
 import { useState, useMemo } from 'react'
+import Link from 'next/link'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { KPICard, MiniBarChart } from '@/components/progresso'
 import { useProgressSummary, useProgressChart, useStreak } from '@/hooks/use-progress'
@@ -56,29 +57,34 @@ export default function ProgressoPage() {
         <p className="mt-1 text-[13px] text-text-muted">Acompanhe sua evolução</p>
       </div>
 
-      {/* Streak card */}
-      <div className="glass-card mb-5 rounded-2xl p-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/8">
-              <DSIcon name="flame" size={24} className="text-brand-primary" />
+      {/* Streak card — links to /progresso/streaks */}
+      <Link href="/progresso/streaks" className="block">
+        <div className="glass-card mb-5 rounded-2xl p-4 active:scale-[0.98] transition-transform">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/8">
+                <DSIcon name="flame" size={24} className="text-brand-primary" />
+              </div>
+              <div>
+                <p className="text-xl font-black text-text-primary">{streak?.current_streak || 0} dias</p>
+                <p className="text-[11px] text-text-muted">Sequência atual</p>
+              </div>
             </div>
-            <div>
-              <p className="text-xl font-black text-text-primary">{streak?.current_streak || 0} dias</p>
-              <p className="text-[11px] text-text-muted">Sequência atual</p>
+            <div className="flex items-center gap-2">
+              {(streak?.best_streak || 0) > 0 && (
+                <div className="text-right">
+                  <p className="text-[13px] font-bold text-text-secondary">
+                    <DSIcon name="trophy" size={12} className="mr-1 inline text-amber-500" />
+                    {streak?.best_streak}
+                  </p>
+                  <p className="text-[10px] text-text-muted">Melhor</p>
+                </div>
+              )}
+              <DSIcon name="chevronRight" size={16} className="text-text-muted" />
             </div>
           </div>
-          {(streak?.best_streak || 0) > 0 && (
-            <div className="text-right">
-              <p className="text-[13px] font-bold text-text-secondary">
-                <DSIcon name="trophy" size={12} className="mr-1 inline text-amber-500" />
-                {streak?.best_streak}
-              </p>
-              <p className="text-[10px] text-text-muted">Melhor</p>
-            </div>
-          )}
         </div>
-      </div>
+      </Link>
 
       {/* Period tabs */}
       <div className="mb-4 flex gap-1 rounded-xl bg-white/3 p-1">
@@ -214,6 +220,41 @@ export default function ProgressoPage() {
           )}
         </>
       )}
+
+      {/* Quick links */}
+      <div className="mt-5 space-y-2">
+        <Link
+          href="/progresso/conquistas"
+          className="glass-card flex items-center justify-between rounded-2xl p-4 active:scale-[0.98] transition-transform"
+        >
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-400/10">
+              <DSIcon name="award" size={20} className="text-purple-400" />
+            </div>
+            <div>
+              <p className="text-[14px] font-bold text-text-primary">Conquistas</p>
+              <p className="text-[11px] text-text-muted">Badges e nível de XP</p>
+            </div>
+          </div>
+          <DSIcon name="chevronRight" size={16} className="text-text-muted" />
+        </Link>
+
+        <Link
+          href="/progresso/corporal"
+          className="glass-card flex items-center justify-between rounded-2xl p-4 active:scale-[0.98] transition-transform"
+        >
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-400/10">
+              <DSIcon name="scale" size={20} className="text-blue-400" />
+            </div>
+            <div>
+              <p className="text-[14px] font-bold text-text-primary">Evolução Corporal</p>
+              <p className="text-[11px] text-text-muted">Peso, medidas e IMC</p>
+            </div>
+          </div>
+          <DSIcon name="chevronRight" size={16} className="text-text-muted" />
+        </Link>
+      </div>
     </div>
   )
 }
