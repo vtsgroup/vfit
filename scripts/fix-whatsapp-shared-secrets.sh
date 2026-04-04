@@ -48,7 +48,7 @@ curl -sS -X POST "https://vfit-whatsapp.vd-b0b.workers.dev/task-notify" \
   --data '{"event":"start","actor_label":"Developer Agent","title":"Smoke WhatsApp pós-secrets","task_id":"WA-SMOKE-2026-02-24","priority":"ALTA"}' | jq
 
 echo "\n📲 Enviando start/end da Sprint S1..."
-node scripts/whatsapp-task.mjs start --task-id S1-2026-02-24-R1 --title "Sprint S1 R1 - Overlays e Safe Area" --priority ALTA --actor "Developer Agent" --link "https://iapersonal.app.br/dashboard/workouts/create"
+node scripts/whatsapp-task.mjs start --task-id S1-2026-02-24-R1 --title "Sprint S1 R1 - Overlays e Safe Area" --priority ALTA --actor "Developer Agent" --link "https://vfit.app.br/dashboard/workouts/create"
 node scripts/whatsapp-task.mjs end --task-id S1-2026-02-24-R1 --title "Sprint S1 R1 - Overlays e Safe Area" --status success --deploy v3.3.1 --actor "Developer Agent" --summary "✅ Debug panel com camadas ajustadas (z-index)" --summary "✅ Passkey prompt com safe-area + scroll interno" --summary "✅ Crop modal e install overlay com safe-area" --summary "✅ Fluxo workouts/create validado com safe-area-inset-bottom"
 
 echo "\n✅ Fluxo concluído."

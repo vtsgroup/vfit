@@ -49,7 +49,7 @@ if [ ! -d "android" ]; then
   echo ""
   echo "🤖 [4/5] Inicializando projeto Android (primeira vez)..."
   echo "   (Bubblewrap pode baixar ferramentas adicionais)"
-  bubblewrap init --manifest=https://iapersonal.app.br/manifest.json
+  bubblewrap init --manifest=https://vfit.app.br/manifest.json
 else
   echo ""
   echo "🔄 [4/5] Atualizando projeto Android..."

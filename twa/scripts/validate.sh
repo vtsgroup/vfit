@@ -17,11 +17,11 @@ echo "╚═══════════════════════�
 echo ""
 echo "🔍  Verificando assetlinks em produção..."
 RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" \
-  https://iapersonal.app.br/.well-known/assetlinks.json)
+  https://vfit.app.br/.well-known/assetlinks.json)
 
 if [ "$RESPONSE" = "200" ]; then
   echo "  ✅ assetlinks.json acessível (HTTP 200)"
-  CONTENT=$(curl -s https://iapersonal.app.br/.well-known/assetlinks.json)
+  CONTENT=$(curl -s https://vfit.app.br/.well-known/assetlinks.json)
   if echo "$CONTENT" | grep -q "br.app.vfit"; then
     echo "  ✅ Package ID correto: br.app.vfit"
   else
@@ -37,11 +37,11 @@ fi
 echo ""
 echo "🔍  Verificando manifest.json em produção..."
 MANIFEST_HTTP=$(curl -s -o /dev/null -w "%{http_code}" \
-  https://iapersonal.app.br/manifest.json)
+  https://vfit.app.br/manifest.json)
 
 if [ "$MANIFEST_HTTP" = "200" ]; then
   echo "  ✅ manifest.json acessível (HTTP 200)"
-  MANIFEST_CONTENT=$(curl -s https://iapersonal.app.br/manifest.json)
+  MANIFEST_CONTENT=$(curl -s https://vfit.app.br/manifest.json)
   if echo "$MANIFEST_CONTENT" | grep -q '"standalone"'; then
     echo "  ✅ display: standalone"
   else
@@ -64,7 +64,7 @@ echo ""
 echo "🔍  Verificando ícones em produção..."
 for size in 192 512; do
   STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
-    "https://iapersonal.app.br/icons/icon-${size}.png")
+    "https://vfit.app.br/icons/icon-${size}.png")
   if [ "$STATUS" = "200" ]; then
     echo "  ✅ icon-${size}.png (HTTP 200)"
   else
@@ -78,7 +78,7 @@ echo ""
 echo "🔍  Verificando maskable icons em produção..."
 for size in 192 512; do
   STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
-    "https://iapersonal.app.br/icons/icon-${size}-maskable.png")
+    "https://vfit.app.br/icons/icon-${size}-maskable.png")
   if [ "$STATUS" = "200" ]; then
     echo "  ✅ icon-${size}-maskable.png (HTTP 200)"
   else
