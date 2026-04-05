@@ -1,60 +1,83 @@
 /**
  * src/components/navigation/student-header.tsx
  *
- * Sprint 1 — StudentHeader sticky (B2C)
+ * StudentHeader v5 — B2C App Header (Dashboard-style)
  *
- * Header global para todas as rotas B2C.
- * - Logo VFIT à esquerda (nas tabs root) ou back button (sub-rotas)
- * - Título da página ao centro
- * - Bell icon + Avatar à direita
- * - Sticky com backdrop-blur + safe-area-inset-top
+ * EXACT same style as dashboard header.tsx:
+ * - Breadcrumbs (🏠 > Section > Page title)
+ * - AvatarWithPlanBadge on mobile
+ * - Bell with unread count badge
+ * - Hamburger menu morph on mobile
+ * - Fixed with backdrop-blur-2xl + saturate-180 + scroll shadow
  */
 
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
-import { usePathname, useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { usePathname } from 'next/navigation'
 import Link from 'next/link'
-import Image from 'next/image'
 import { cn } from '@/lib/utils'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { useAuthStore } from '@/stores/auth-store'
+import { AvatarWithPlanBadge } from '@/components/ui/avatar-plan-badge'
+import { useUnreadCount } from '@/hooks/use-student-app'
 
 // ============================================
-// Route titles
+// Route titles & breadcrumbs (B2C)
 // ============================================
-const ROUTE_TITLES: Record<string, string> = {
+const ROUTE_MAP: Record<string, string> = {
   '/treinos': 'Treinos',
+  '/treinos/ativo': 'Treino Ativo',
+  '/treinos/historico': 'Histórico',
   '/nutricao': 'Nutrição',
+  '/nutricao/plano': 'Plano Alimentar',
   '/ia': 'IA & Dicas',
   '/avaliacoes': 'Avaliações',
+  '/avaliacoes/detalhes': 'Detalhes',
   '/perfil': 'Perfil',
+  '/perfil/editar': 'Editar Perfil',
+  '/perfil/notificacoes': 'Notificações',
   '/plano': 'Meu Plano',
-  '/treino-ativo': 'Treino Ativo',
   '/exercicios': 'Exercícios',
   '/progresso': 'Progresso',
   '/social': 'Comunidade',
 }
 
-// Tab root paths (no back button shown)
+// Tab root paths (show home icon in breadcrumb, no back)
 const TAB_ROOTS = new Set(['/treinos', '/nutricao', '/ia', '/avaliacoes', '/perfil'])
 
 // Sub-routes with their own full-screen headers (don't show StudentHeader)
 const EXCLUDED_ROUTES = new Set(['/treino-ativo', '/welcome'])
 
-function getRouteTitle(pathname: string): string {
-  // Exact match first
-  if (ROUTE_TITLES[pathname]) return ROUTE_TITLES[pathname]
-
-  // Match parent path (e.g., /perfil/editar → /perfil → 'Perfil')
-  const segments = pathname.split('/')
-  while (segments.length > 1) {
-    segments.pop()
-    const parent = segments.join('/') || '/'
-    if (ROUTE_TITLES[parent]) return ROUTE_TITLES[parent]
+function getPageTitle(pathname: string): string {
+  if (ROUTE_MAP[pathname]) return ROUTE_MAP[pathname]
+  const parts = pathname.split('/')
+  while (parts.length > 1) {
+    parts.pop()
+    const shorter = parts.join('/') || '/'
+    if (ROUTE_MAP[shorter]) return ROUTE_MAP[shorter]
   }
-
   return ''
+}
+
+interface BreadcrumbItem { label: string; href?: string }
+
+function getBreadcrumbs(pathname: string): BreadcrumbItem[] {
+  // Tab roots: no breadcrumbs (just the title)
+  if (TAB_ROOTS.has(pathname)) return []
+
+  // Sub-pages: build crumbs from parent segments
+  const segments = pathname.replace(/^\//, '').split('/')
+  const crumbs: BreadcrumbItem[] = []
+  let currentPath = ''
+  for (let i = 0; i < segments.length; i++) {
+    currentPath += '/' + segments[i]
+    const label = ROUTE_MAP[currentPath]
+    if (label) crumbs.push({ label, href: currentPath })
+  }
+  // Remove last crumb — it's shown as <h1> page title
+  if (crumbs.length > 0) crumbs.pop()
+  return crumbs
 }
 
 function isTabRoot(pathname: string): boolean {
@@ -70,92 +93,112 @@ function isExcluded(pathname: string): boolean {
 // ============================================
 export function StudentHeader() {
   const pathname = usePathname()
-  const router = useRouter()
   const user = useAuthStore((s) => s.user)
   const [scrolled, setScrolled] = useState(false)
 
-  // Progressive shadow on scroll
-  const handleScroll = useCallback(() => {
-    setScrolled(window.scrollY > 8)
-  }, [])
+  const { data: unread } = useUnreadCount()
+  const unreadCount = unread?.unread_count ?? 0
 
+  const pageTitle = getPageTitle(pathname)
+  const breadcrumbs = getBreadcrumbs(pathname)
+
+  // Scroll detection for progressive shadow (matching dashboard header)
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [handleScroll])
+    const onScroll = () => setScrolled(window.scrollY > 8)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   // Don't render on excluded routes
   if (isExcluded(pathname)) return null
 
-  const title = getRouteTitle(pathname)
-  const showBack = !isTabRoot(pathname)
-
   return (
     <header
       className={cn(
-        'sticky top-0 z-30 flex h-14 items-center gap-3 px-4 transition-shadow duration-200',
-        'bg-(--color-bg-primary)/85 backdrop-blur-xl',
-        scrolled && 'shadow-lg shadow-black/20'
+        'ds3-header fixed left-0 right-0 z-30 backdrop-blur-2xl backdrop-saturate-180 transition-all duration-300',
+        scrolled && 'ds3-header-scrolled'
       )}
-      style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}
+      style={{
+        top: 'var(--demo-banner-offset, 0px)',
+        paddingTop: 'env(safe-area-inset-top, 0px)',
+      }}
     >
-      {/* Left: Back or Logo */}
-      <div className="flex w-10 items-center justify-start">
-        {showBack ? (
-          <button
-            onClick={() => router.back()}
-            className="flex h-10 w-10 items-center justify-center rounded-xl transition-colors active:bg-white/5"
-            aria-label="Voltar"
-          >
-            <DSIcon name="arrowLeft" size={20} className="text-text-secondary" />
-          </button>
-        ) : (
-          <span
-            className="text-lg tracking-tight text-white"
-            style={{ fontFamily: 'Inter, sans-serif', fontWeight: 800, letterSpacing: '-0.03em' }}
-          >
-            V<span className="text-brand-primary">F</span>
-          </span>
-        )}
-      </div>
+      {/* ═══ DS v3 NAVBAR — same as dashboard ═══ */}
+      <div className="flex h-14 items-center justify-between px-4">
 
-      {/* Center: Title */}
-      <div className="flex flex-1 items-center justify-center">
-        <h1 className="truncate text-[15px] font-bold text-text-primary">
-          {title}
-        </h1>
-      </div>
+        {/* ── LEFT: Breadcrumbs + Page title ── */}
+        <div className="flex items-center gap-3 min-w-0 flex-1">
+          <div className="min-w-0 flex flex-col justify-center">
+            {/* Breadcrumbs — home icon > section > sub-page (same as dashboard) */}
+            <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 mb-0.5">
+              <Link href="/treinos" className="text-text-muted hover:text-brand-primary transition-colors shrink-0">
+                <DSIcon name="home" size={14} />
+              </Link>
+              {breadcrumbs.length > 0 ? (
+                breadcrumbs.map((item, i) => (
+                  <span key={i} className="flex items-center gap-1.5">
+                    <DSIcon name="chevronRight" size={10} className="text-text-secondary/40 shrink-0" />
+                    <Link
+                      href={item.href!}
+                      className="text-xs font-medium text-text-muted hover:text-brand-primary transition-colors truncate max-w-32"
+                    >
+                      {item.label}
+                    </Link>
+                  </span>
+                ))
+              ) : (
+                !isTabRoot(pathname) && pageTitle && (
+                  <>
+                    <DSIcon name="chevronRight" size={10} className="text-text-secondary/40 shrink-0" />
+                    <span className="text-xs font-medium text-text-secondary truncate max-w-32">
+                      {pageTitle}
+                    </span>
+                  </>
+                )
+              )}
+            </nav>
+            <h1 className="text-sm font-bold tracking-tight text-text-primary truncate">
+              {pageTitle}
+            </h1>
+          </div>
+        </div>
 
-      {/* Right: Bell + Avatar */}
-      <div className="flex w-20 items-center justify-end gap-1">
-        {/* Bell */}
-        <Link
-          href="/perfil/notificacoes"
-          className="relative flex h-10 w-10 items-center justify-center rounded-xl transition-colors active:bg-white/5"
-          aria-label="Notificações"
-        >
-          <DSIcon name="bell" size={20} className="text-text-secondary" />
-        </Link>
+        {/* ── RIGHT: Bell + Avatar ── */}
+        <div className="flex items-center gap-2 shrink-0">
+          {/* Bell — with absolute positioned badge (same as dashboard) */}
+          <div className="relative">
+            <Link
+              href="/perfil/notificacoes"
+              className="ds3-action-btn flex"
+              title={unreadCount > 0 ? `${unreadCount} não lida(s)` : 'Notificações'}
+              aria-label={unreadCount > 0 ? `${unreadCount} notificações não lidas` : 'Notificações'}
+            >
+              <DSIcon name="bell" size={16} />
+            </Link>
+            {unreadCount > 0 && (
+              <div className="absolute -top-0.5 -right-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-brand-primary text-[9px] font-bold text-white border-2 border-bg-page notification-pulse">
+                {unreadCount > 99 ? '99+' : unreadCount}
+              </div>
+            )}
+          </div>
 
-        {/* Avatar */}
-        <Link
-          href="/perfil"
-          className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 overflow-hidden"
-          aria-label="Perfil"
-        >
-          {user?.avatar_url ? (
-            <Image
-              src={user.avatar_url}
-              alt=""
-              width={36}
-              height={36}
-              className="h-full w-full object-cover"
+          {/* Avatar with plan badge (same as dashboard mobile) */}
+          <div className="shrink-0">
+            <AvatarWithPlanBadge
+              src={user?.avatar_url}
+              name={user?.full_name || 'U'}
+              size="sm"
+              linkToPlans
             />
-          ) : (
-            <DSIcon name="user" size={16} className="text-text-muted" />
-          )}
-        </Link>
+          </div>
+        </div>
       </div>
+
+      {/* Bottom border — subtle, fades in on scroll (same as dashboard) */}
+      <div className={cn(
+        'absolute bottom-0 left-0 right-0 h-px transition-opacity duration-300',
+        scrolled ? 'bg-border-light opacity-100' : 'bg-border-light/50 opacity-60'
+      )} />
     </header>
   )
 }

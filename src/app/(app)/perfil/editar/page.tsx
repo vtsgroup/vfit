@@ -1,16 +1,16 @@
 /**
  * src/app/(app)/perfil/editar/page.tsx
  *
- * Editar perfil — nome, email, foto, dados básicos
+ * Editar perfil — nome, email, foto (com crop/zoom), dados básicos
  */
 
 'use client'
 
 import { useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import Image from 'next/image'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
+import { PhotoUpload } from '@/components/profile/photo-upload'
 import { useAuthStore } from '@/stores/auth-store'
 import { api } from '@/lib/api-client'
 import { hapticSuccess } from '@/lib/haptics'
@@ -54,25 +54,9 @@ export default function EditarPerfilPage() {
         <h1 className="text-lg font-bold text-white">Editar perfil</h1>
       </div>
 
-      {/* Avatar */}
-      <div className="mb-8 flex flex-col items-center gap-3">
-        <div className="relative flex h-24 w-24 items-center justify-center rounded-3xl bg-white/8 text-brand-primary">
-          {user?.avatar_url ? (
-            <Image
-              src={user.avatar_url}
-              alt={user.full_name}
-              width={96}
-              height={96}
-              className="h-full w-full rounded-3xl object-cover"
-            />
-          ) : (
-            <DSIcon name="user" size={40} />
-          )}
-          <div className="absolute -right-1 -bottom-1 flex h-8 w-8 items-center justify-center rounded-full bg-brand-primary text-white">
-            <DSIcon name="camera" size={14} />
-          </div>
-        </div>
-        <p className="text-[11px] text-zinc-600">Toque para alterar foto</p>
+      {/* Avatar com Upload — crop/zoom integrado */}
+      <div className="mb-8">
+        <PhotoUpload />
       </div>
 
       {/* Form */}

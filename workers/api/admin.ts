@@ -89,12 +89,12 @@ function isSuperAdmin(c: { get(key: 'userRole'): string | undefined }): boolean 
   return c.get('userRole') === 'super_admin'
 }
 
-type SimulationMode = 'super_admin' | 'personal' | 'student'
+type SimulationMode = 'super_admin' | 'personal' | 'student' | 'nutritionist'
 
 interface AdminSimulationSession {
   mode: SimulationMode
   target_user_id: string | null
-  target_user_type: 'personal' | 'student' | null
+  target_user_type: 'personal' | 'student' | 'nutritionist' | null
   target_email: string | null
   actor_user_id: string
   updated_at: string
@@ -432,12 +432,12 @@ adminRoutes.post('/simulation/session', requireAdminOrSuperAdmin, async (c) => {
   }
 
   const mode = body?.mode
-  if (mode !== 'super_admin' && mode !== 'personal' && mode !== 'student') {
-    throw new BadRequestError('mode deve ser super_admin|personal|student')
+  if (mode !== 'super_admin' && mode !== 'personal' && mode !== 'student' && mode !== 'nutritionist') {
+    throw new BadRequestError('mode deve ser super_admin|personal|student|nutritionist')
   }
 
   let targetUserId: string | null = null
-  let targetUserType: 'personal' | 'student' | null = null
+  let targetUserType: 'personal' | 'student' | 'nutritionist' | null = null
   let targetEmail: string | null = null
 
   if (mode !== 'super_admin') {
@@ -492,7 +492,7 @@ adminRoutes.post('/simulation/session', requireAdminOrSuperAdmin, async (c) => {
       }
     }
 
-    targetUserType = mode as 'personal' | 'student'
+    targetUserType = mode as 'personal' | 'student' | 'nutritionist'
     targetEmail = target.email
   }
 

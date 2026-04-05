@@ -1,18 +1,19 @@
 /**
  * src/app/(app)/layout.tsx
  *
- * Layout — VFIT B2C App
+ * Layout — VFIT B2C App (v4)
  *
- * Wrapper com StudentHeader (sticky top) + BottomNavigation para todas as rotas B2C.
+ * Wrapper com StudentHeader (fixed top) + BottomNavigation + StudentFabMenu.
  * Requer autenticação (redireciona para /login se não autenticado).
  */
 
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { StudentHeader } from '@/components/navigation/student-header'
 import { BottomNavigation } from '@/components/navigation/bottom-navigation'
+import { StudentFabMenu } from '@/components/navigation/student-fab-menu'
 import { ErrorBoundary } from '@/components/ui/error-boundary'
 import { OneSignalProvider } from '@/components/providers/onesignal-provider'
 import { useAuthStore } from '@/stores/auth-store'
@@ -67,6 +68,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
   const isHydrated = useAuthStore((s) => s.isHydrated)
   const userType = useAuthStore((s) => s.user?.user_type)
+  const [fabMenuOpen, setFabMenuOpen] = useState(false)
 
   // Migrate legacy keys before any reads
   useEffect(() => { migrateLocalStorageKeys() }, [])
@@ -88,18 +90,25 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <OneSignalProvider>
       <div className="min-h-screen bg-bg-primary">
-        {/* Sticky Header */}
+        {/* Fixed Header (v4) */}
         <StudentHeader />
 
-        {/* Main content — padding bottom for nav bar + safe area */}
-        <main className="pb-20">
+        {/* Main content — padding for fixed header top + bottom nav */}
+        <main className="pt-[calc(3.5rem+env(safe-area-inset-top,0px))] pb-[calc(5.5rem+env(safe-area-inset-bottom,0px))]">
           <ErrorBoundary>
             {children}
           </ErrorBoundary>
         </main>
 
-        {/* Bottom Navigation */}
-        <BottomNavigation />
+        {/* Bottom Navigation (v4) + FAB AI Menu */}
+        <BottomNavigation
+          fabMenuOpen={fabMenuOpen}
+          onFabPress={() => setFabMenuOpen((prev) => !prev)}
+        />
+        <StudentFabMenu
+          open={fabMenuOpen}
+          onClose={() => setFabMenuOpen(false)}
+        />
       </div>
     </OneSignalProvider>
   )

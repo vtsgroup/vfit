@@ -1,0 +1,229 @@
+═══════════════════════════════════════════════════════════════════════════════
+  VFIT STUDENT APP v4 REDESIGN — EXECUTIVE SUMMARY
+═══════════════════════════════════════════════════════════════════════════════
+
+PROJECT: Student (Aluno) B2C App Interface Upgrade v3 → v4
+STATUS: ✅ Plan Complete & Ready for Implementation
+DATE: 2026-04-05
+SCOPE: Header + BottomNav + FAB (matching dashboard design)
+
+───────────────────────────────────────────────────────────────────────────────
+WHAT'S CHANGING
+───────────────────────────────────────────────────────────────────────────────
+
+✨ HEADER (Phase 1 — 20 min)
+   ├─ Upgrade backdrop: backdrop-blur-2xl + saturate-180
+   ├─ Add scroll detection → shadow animation
+   ├─ Modern v4 icons (via DSIcon)
+   └─ Subtle bottom border on scroll
+
+📱 BOTTOM NAV (Phase 2 — 45 min, NEW COMPONENT)
+   ├─ Create persistent 5-tab navigation
+   ├─ Tabs: Treinos | Nutrição | IA & Dicas | Avaliações | Perfil
+   ├─ Ultra-modern styling (matching dashboard)
+   ├─ Active state indicator + haptic feedback
+   └─ Safe area respects mobile notches/gesture bars
+
+🤖 FAB MENU (Phase 3 — 30 min, NEW COMPONENT)
+   ├─ Expandable floating action button (green gradient)
+   ├─ Grid opens to 2×3 layout with 6 AI-powered actions
+   ├─ Actions: Goals | Progress | Exercise | Nutrition | Q&A | Close
+   ├─ Spring animation with staggered entrance (50ms per item)
+   ├─ Backdrop blur overlay when expanded
+   └─ Haptic feedback on open/close
+
+KEY DIFFERENCE: NO SIDEBAR (student role ≠ personal/admin)
+   → Only header + bottom nav (no hamburger menu)
+
+───────────────────────────────────────────────────────────────────────────────
+FILES TO MODIFY/CREATE
+───────────────────────────────────────────────────────────────────────────────
+
+MODIFY (1 file):
+  ├─ src/components/navigation/student-header.tsx
+  │  └─ Add scroll detection + backdrop upgrade (copy from dashboard)
+
+CREATE (2 files):
+  ├─ src/components/navigation/student-bottom-nav.tsx
+  │  └─ New 5-tab persistent navigation (study dashboard mobile-nav.tsx)
+  └─ src/components/navigation/student-fab-menu.tsx
+     └─ New expandable AI menu (copy animation from dashboard mobile-nav.tsx)
+
+WIRE UP (1 file):
+  └─ src/app/(app)/layout.tsx
+     └─ Import & render 3 components above
+
+REFERENCE (don't edit):
+  ├─ src/components/layout/header.tsx (450 tokens — scroll logic)
+  ├─ src/components/layout/mobile-nav.tsx (1200 tokens — full pattern)
+  └─ src/components/ui/ai-bot-fab.tsx (80 tokens — FAB template)
+
+───────────────────────────────────────────────────────────────────────────────
+DESIGN TOKENS (Copy-Paste Ready)
+───────────────────────────────────────────────────────────────────────────────
+
+COLORS:
+  • text-text-primary, text-text-secondary, text-text-muted
+  • bg-bg-primary, bg-bg-secondary, bg-bg-page
+  • border-border-light
+  • text-brand-primary, bg-linear-to-br from-emerald-400 via-emerald-500
+
+EFFECTS:
+  • backdrop-blur-2xl backdrop-saturate-180 (header)
+  • shadow-[0_4px_16px_rgba(16,185,129,0.35)] (FAB)
+  • transition-all duration-300 (animations)
+
+SPACING:
+  • px-4 lg:px-6 (header)
+  • gap-3 (large), gap-2 (small)
+  • pt-[calc(4rem+env(safe-area-inset-top))] (content under header)
+  • pb-[calc(5.5rem+env(safe-area-inset-bottom))] (content above nav)
+
+ICONS:
+  • All via DSIcon component (v4 support built-in)
+  • Size: 20-28px typical
+  • Active: filled/bold, Inactive: outline/muted
+
+See CSS-TOKENS.md for complete Tailwind reference.
+
+───────────────────────────────────────────────────────────────────────────────
+IMPLEMENTATION TIMELINE
+───────────────────────────────────────────────────────────────────────────────
+
+Phase 1: Header Upgrade ........................ 20 min
+Phase 2: Bottom Nav Component ................. 45 min
+Phase 3: FAB Menu Component ................... 30 min
+Phase 4: Integration & Testing ............... 10 min
+─────────────────────────────────────────────────────
+TOTAL ESTIMATED TIME ......................... 105 min (~1.75 hours)
+
+Includes:
+  ✓ Code writing
+  ✓ Testing on real mobile device
+  ✓ Haptic feedback verification
+  ✓ Scroll animation smoothness
+
+───────────────────────────────────────────────────────────────────────────────
+QUALITY GATES (Before Shipping)
+───────────────────────────────────────────────────────────────────────────────
+
+VISUAL ✓
+  □ Header backdrop matches dashboard exactly
+  □ Bottom nav icons are v4 modern (DSIcon)
+  □ FAB menu grid matches dashboard quick-actions spacing
+  □ Animations smooth (150-300ms duration)
+  □ Dark mode contrast ≥4.5:1
+
+INTERACTION ✓
+  □ Header scroll shadow appears/disappears smoothly
+  □ Bottom nav highlights active route correctly
+  □ FAB menu expands with spring animation
+  □ All touch targets ≥44×44px
+  □ Haptic feedback works on mobile
+
+ACCESSIBILITY ✓
+  □ All icons have aria-labels
+  □ Tab order matches visual order
+  □ Focus states visible (ring on keyboard nav)
+  □ Screen reader announces active tab
+
+MOBILE SAFETY ✓
+  □ Safe areas respected (notch + gesture bar)
+  □ No horizontal scroll on any device
+  □ Content not hidden behind fixed elements
+  □ Tested on real device (iOS + Android if possible)
+
+───────────────────────────────────────────────────────────────────────────────
+DELIVERABLES (in this folder)
+───────────────────────────────────────────────────────────────────────────────
+
+📄 README.md ...................... Plan navigation guide
+📄 QUICK-START.md ................ 5-min overview (best for copilot)
+📄 PLAN.md ...................... Full strategy (10-min read)
+📄 VISUAL-REFERENCE.md ........... ASCII mockups + animations
+📄 CSS-TOKENS.md ................ Copy-paste Tailwind classes
+📄 EXEC-SUMMARY.txt ............ This file
+
+ALL FILES OPTIMIZED FOR MINIMAL TOKEN OVERHEAD (~8.7KB total)
+
+───────────────────────────────────────────────────────────────────────────────
+FOR COPILOT: WHERE TO START
+───────────────────────────────────────────────────────────────────────────────
+
+1. Read QUICK-START.md (5 min) ← START HERE
+2. Study dashboard benchmark files (15 min):
+   - header.tsx (scroll logic)
+   - mobile-nav.tsx (icon styles + animation)
+   - ai-bot-fab.tsx (FAB template)
+3. Implement Phase 1: header.tsx modification (20 min)
+4. Implement Phase 2: Create student-bottom-nav.tsx (45 min)
+5. Implement Phase 3: Create student-fab-menu.tsx (30 min)
+6. Wire up in layout.tsx (10 min)
+7. Test on real mobile device (verify haptic + scroll)
+
+───────────────────────────────────────────────────────────────────────────────
+KEY PATTERNS TO COPY FROM DASHBOARD
+───────────────────────────────────────────────────────────────────────────────
+
+FROM header.tsx:
+  ├─ Scroll detection (lines 129-135)
+  ├─ Backdrop classes (lines 140-146)
+  ├─ Shadow on scroll (lines 309-312)
+  └─ classname + state variables pattern
+
+FROM mobile-nav.tsx:
+  ├─ Icon SVG patterns (filled vs outline, lines 77-156)
+  ├─ Active tab indicator styling (lines 200-280)
+  ├─ Haptic feedback helper function (lines 43-47)
+  ├─ Framer Motion animation setup (stagger, spring physics)
+  └─ Touch feedback (scale 0.95 on active)
+
+FROM ai-bot-fab.tsx:
+  ├─ FAB styling template (gradient, shadow, hover scale)
+  ├─ Icon sizing and positioning
+  └─ Safe area offset for mobile
+
+───────────────────────────────────────────────────────────────────────────────
+IMPORTANT: DO's AND DON'Ts
+───────────────────────────────────────────────────────────────────────────────
+
+DO ✅
+  • Copy dashboard patterns verbatim (they're production-grade)
+  • Reuse DSIcon for all icons (v4 support is built-in)
+  • Study Framer Motion patterns in mobile-nav.tsx
+  • Test on real mobile device with haptic
+  • Use design tokens (never raw hex values)
+  • Verify safe areas on notch devices (iPhone X+, Android with gesture nav)
+
+DON'T ❌
+  • Don't create custom icons (DSIcon handles it)
+  • Don't hard-code colors (use Tailwind tokens)
+  • Don't animate width/height (transform + opacity only)
+  • Don't skip accessibility (aria-labels, focus states)
+  • Don't forget haptic feedback
+  • Don't ignore safe areas (mobile notches + gesture bars)
+
+───────────────────────────────────────────────────────────────────────────────
+QUESTIONS? REFER TO:
+───────────────────────────────────────────────────────────────────────────────
+
+For implementation details ... → PLAN.md § "Implementation Phases"
+For visual reference ........... → VISUAL-REFERENCE.md
+For Tailwind classes ........... → CSS-TOKENS.md
+For quick answers .............. → QUICK-START.md
+
+───────────────────────────────────────────────────────────────────────────────
+PROJECT LINKS
+───────────────────────────────────────────────────────────────────────────────
+
+Plan folder:     .claude/plans/vfit-redesign-students-v4/
+Design System:   .claude/docs/DESIGN-SYSTEM.md
+Rules:           .claude/docs/RULES.md
+Conventions:     .claude/docs/CONVENTIONS.md
+Tracking:        .claude/plans/vfit-domain-migration/TRACKING.md
+
+───────────────────────────────────────────────────────────────────────────────
+CREATED BY: Claude Code (ui-ux-pro-max skill)
+STATUS: ✅ Ready for Implementation
+LAST UPDATED: 2026-04-05 02:28 UTC
+═══════════════════════════════════════════════════════════════════════════════
