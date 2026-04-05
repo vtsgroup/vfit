@@ -31,6 +31,7 @@ import { useNavPrefetch } from '@/hooks/use-nav-prefetch'
 import {
   personalNavigation,
   studentNavigation,
+  nutritionistNavigation,
   adminNavigation,
   SECTION_COLORS,
   type NavSection,
@@ -46,13 +47,15 @@ export function Sidebar() {
   const setCollapsed = useAppStore((s) => s.setSidebarCollapsed)
   const user = useAuthStore((s) => s.user)
   const logout = useAuthStore((s) => s.logout)
-  const { isPersonalView, isStudentView, hasAdminCapabilities, isSimulationActive, canSimulate, simulationMode, simulation } = useEffectiveUserView()
+  const { isPersonalView, isStudentView, isNutritionistView, hasAdminCapabilities, isSimulationActive, canSimulate, simulationMode, simulation } = useEffectiveUserView()
   const updateSimulation = useUpdateAdminSimulationSession()
   const prefetch = useNavPrefetch()
 
-  let navigation: NavSection[] = (isPersonalView || hasAdminCapabilities) && !isStudentView
-    ? [...personalNavigation]
-    : [...studentNavigation]
+  let navigation: NavSection[] = isNutritionistView
+    ? [...nutritionistNavigation]
+    : (isPersonalView || hasAdminCapabilities) && !isStudentView
+      ? [...personalNavigation]
+      : [...studentNavigation]
 
   // Adicionar seção admin se for admin e NÃO estiver simulando
   if (hasAdminCapabilities && !isSimulationActive) {
@@ -134,9 +137,9 @@ export function Sidebar() {
           <div className="mb-3 flex flex-col gap-1.5">
             <p className="text-[9px] font-bold uppercase tracking-[0.14em] text-white/25 px-1" style={{ fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace' }}>Simular como</p>
             <div className="flex items-center gap-1">
-              {(['super_admin', 'personal', 'student'] as const).map((mode) => {
+              {(['super_admin', 'personal', 'nutritionist', 'student'] as const).map((mode) => {
                 const isActive = (simulationMode || 'super_admin') === mode
-                const labels = { super_admin: 'Admin', personal: 'Personal', student: 'Aluno' } as const
+                const labels = { super_admin: 'Admin', personal: 'Personal', nutritionist: 'Nutri', student: 'Aluno' } as const
                 return (
                   <button
                     key={mode}
@@ -195,7 +198,7 @@ export function Sidebar() {
               <p className="truncate text-[13px] font-semibold text-white/90">{getShortName(user.full_name)}</p>
               <div className="flex items-center gap-1.5 mt-0.5">
                 <Badge variant="premium" className="text-[8px] px-1.5 py-0 h-4">
-                  {isSimulationActive ? (isStudentView ? 'Aluno' : 'Personal') : hasAdminCapabilities ? 'Admin' : isPersonalView ? 'Personal' : 'Aluno'}
+                  {isSimulationActive ? (isStudentView ? 'Aluno' : isNutritionistView ? 'Nutri' : 'Personal') : hasAdminCapabilities ? 'Admin' : isNutritionistView ? 'Nutri' : isPersonalView ? 'Personal' : 'Aluno'}
                 </Badge>
               </div>
             </div>

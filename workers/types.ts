@@ -111,11 +111,11 @@ export type Bindings = {
 export type Variables = {
   requestId: string
   userId: string
-  userType: 'personal' | 'student' | 'admin' | 'super_admin'
+  userType: 'personal' | 'student' | 'nutritionist' | 'admin' | 'super_admin'
   userRole: 'admin' | 'super_admin' | 'user'
   actorUserId?: string
-  actorUserType?: 'personal' | 'student' | 'admin' | 'super_admin'
-  simulationMode?: 'super_admin' | 'personal' | 'student'
+  actorUserType?: 'personal' | 'student' | 'nutritionist' | 'admin' | 'super_admin'
+  simulationMode?: 'super_admin' | 'personal' | 'student' | 'nutritionist'
   jwtPayload: JWTPayload
 }
 
@@ -123,7 +123,7 @@ export type Variables = {
 export type JWTPayload = {
   sub: string           // user id
   email: string
-  type: 'personal' | 'student'
+  type: 'personal' | 'student' | 'nutritionist'
   role?: 'admin' | 'super_admin' | 'user'
   iat: number
   exp: number

@@ -22,7 +22,8 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
 import { useLogin } from '@/hooks/use-auth'
-import { GuestGuard, OAuthButtons, Turnstile, PasskeyLogin, type TurnstileRef } from '@/components/auth'
+import { GuestGuard, OAuthButtons, Turnstile, PasskeyLogin, BiometricLockScreen, type TurnstileRef } from '@/components/auth'
+import { supportsPasskey, getPasskeyEmail, isBiometricAutoUnlockEnabled } from '@/hooks/use-passkey'
 import { APP_VERSION } from '../../../../lib/version'
 import { ApiClientError } from '@/lib/api-client'
 
@@ -55,6 +56,7 @@ export default function LoginPage() {
   const reset = searchParams.get('reset')
   const verified = searchParams.get('verified')
   const oauthError = searchParams.get('error')
+  const biometricParam = searchParams.get('biometric')
 
   const [identifier, setIdentifier] = useState('')
   const [password, setPassword] = useState('')
@@ -63,9 +65,19 @@ export default function LoginPage() {
   const [remember, setRemember] = useState(false)
   const [turnstileToken, setTurnstileToken] = useState('')
   const [show2FA, setShow2FA] = useState(false)
+  const [showBiometricLock, setShowBiometricLock] = useState(false)
   const turnstileRef = useRef<TurnstileRef>(null)
   const twoFactorInputRef = useRef<HTMLInputElement>(null)
   const identifierRef = useRef<HTMLInputElement>(null)
+
+  // Auto-trigger biometric lock screen on mount
+  useEffect(() => {
+    const email = getPasskeyEmail()
+    const autoUnlock = isBiometricAutoUnlockEnabled()
+    if ((autoUnlock || biometricParam === 'auto') && email && supportsPasskey()) {
+      setShowBiometricLock(true)
+    }
+  }, [biometricParam])
 
   // Auto-focus identifier on mount
   useEffect(() => {
@@ -147,6 +159,11 @@ export default function LoginPage() {
 
   return (
     <GuestGuard>
+      {/* ─── Biometric Lock Screen Overlay ─── */}
+      {showBiometricLock && (
+        <BiometricLockScreen onDismiss={() => setShowBiometricLock(false)} />
+      )}
+
       <div className="animate-blur-in">
         {/* Turnstile — invisible-first, fallback to interactive */}
         <Turnstile

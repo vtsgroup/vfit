@@ -30,7 +30,7 @@ export function useEffectiveUserView() {
   const simulationMode = simulation?.mode || 'super_admin'
 
   const effectiveType = canSimulate
-    ? (simulationMode === 'personal' || simulationMode === 'student'
+    ? (simulationMode === 'personal' || simulationMode === 'student' || simulationMode === 'nutritionist'
       ? simulationMode
       : 'admin')
     : (user?.user_type || 'student')
@@ -48,6 +48,7 @@ export function useEffectiveUserView() {
     effectiveType,
     isPersonalView: effectiveType === 'personal' || effectiveType === 'admin',
     isStudentView: effectiveType === 'student',
+    isNutritionistView: effectiveType === 'nutritionist',
     hasAdminCapabilities,
   }
 }

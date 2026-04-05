@@ -114,6 +114,53 @@ export const studentMobileNav: NavItem[] = [
 ]
 
 // ============================================
+// Nutritionist Navigation
+// ============================================
+
+export const nutritionistNavigation: NavSection[] = [
+  {
+    title: 'Principal',
+    items: [
+      { label: 'Dashboard', href: '/dashboard', icon: 'layoutDashboard' },
+      { label: 'Pacientes', href: '/dashboard/patients', icon: 'users' },
+      { label: 'Planos Alimentares', href: '/dashboard/meal-plans', icon: 'clipboardList' },
+      { label: 'Avaliações Nutri', href: '/dashboard/nutrition-assessments', icon: 'activity' },
+      { label: 'Agenda', href: '/dashboard/calendar', icon: 'calendarDays' },
+    ],
+  },
+  {
+    title: 'Financeiro',
+    items: [
+      { label: 'Dashboard Financeiro', href: '/dashboard/financeiro', icon: 'wallet' },
+      { label: 'Cobranças', href: '/dashboard/payments', icon: 'creditCard' },
+    ],
+  },
+  {
+    title: 'Inteligência',
+    items: [
+      { label: 'IA Assistente', href: '/dashboard/ai', icon: 'bot' },
+    ],
+  },
+  {
+    title: 'Outros',
+    items: [
+      { label: 'Mensagens', href: '/dashboard/messages', icon: 'message' },
+      { label: 'Notificações', href: '/dashboard/notifications', icon: 'bell' },
+      { label: 'Planos', href: '/dashboard/plans', icon: 'crown' },
+      { label: 'Configurações', href: '/dashboard/settings', icon: 'settings' },
+    ],
+  },
+]
+
+export const nutritionistMobileNav: NavItem[] = [
+  { label: 'Home', href: '/dashboard', icon: 'layoutDashboard' },
+  { label: 'Pacientes', href: '/dashboard/patients', icon: 'users' },
+  { label: 'Planos', href: '/dashboard/meal-plans', icon: 'clipboardList' },
+  { label: 'IA', href: '/dashboard/ai', icon: 'bot' },
+  { label: 'Mais', href: '/dashboard/settings', icon: 'settings' },
+]
+
+// ============================================
 // Admin Navigation (seção extra para admins)
 // ============================================
 
@@ -125,6 +172,7 @@ export const SECTION_COLORS: Record<string, string> = {
   'Principal': 'text-emerald-400',
   'Financeiro': 'text-amber-400',
   'Inteligência': 'text-violet-400',
+  'Nutrição': 'text-teal-400',
   'Outros': 'text-slate-400',
   'Administração': 'text-purple-400',
 }

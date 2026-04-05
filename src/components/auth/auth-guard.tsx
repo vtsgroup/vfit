@@ -22,7 +22,7 @@ import { PageLoader } from '@/components/ui'
 
 interface AuthGuardProps {
   children: React.ReactNode
-  requiredType?: 'personal' | 'student' | 'admin'
+  requiredType?: 'personal' | 'student' | 'nutritionist' | 'admin'
 }
 
 export function AuthGuard({ children, requiredType }: AuthGuardProps) {

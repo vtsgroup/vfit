@@ -74,6 +74,59 @@ export function clearPasskeyEmail(): void {
 }
 
 // ============================================
+// Biometric Quick Unlock Helpers
+// Persist last user info + auto-unlock preference
+// ============================================
+
+interface LastBiometricUser {
+  name: string
+  avatar: string | null
+  email: string
+}
+
+/** Save user info for biometric lock screen greeting */
+export function setLastBiometricUser(data: LastBiometricUser): void {
+  if (typeof window === 'undefined') return
+  try {
+    localStorage.setItem('vfit_biometric_user', JSON.stringify(data))
+  } catch { /* best-effort */ }
+}
+
+/** Get last user info for biometric lock screen */
+export function getLastBiometricUser(): LastBiometricUser | null {
+  if (typeof window === 'undefined') return null
+  try {
+    const raw = localStorage.getItem('vfit_biometric_user')
+    if (!raw) return null
+    return JSON.parse(raw) as LastBiometricUser
+  } catch {
+    return null
+  }
+}
+
+/** Clear stored biometric user (e.g., on logout) */
+export function clearLastBiometricUser(): void {
+  if (typeof window === 'undefined') return
+  localStorage.removeItem('vfit_biometric_user')
+}
+
+/** Check if biometric auto-unlock is enabled */
+export function isBiometricAutoUnlockEnabled(): boolean {
+  if (typeof window === 'undefined') return false
+  return localStorage.getItem('vfit_biometric_auto_unlock') === 'true'
+}
+
+/** Enable or disable biometric auto-unlock */
+export function setBiometricAutoUnlock(enabled: boolean): void {
+  if (typeof window === 'undefined') return
+  if (enabled) {
+    localStorage.setItem('vfit_biometric_auto_unlock', 'true')
+  } else {
+    localStorage.removeItem('vfit_biometric_auto_unlock')
+  }
+}
+
+// ============================================
 // Types
 // ============================================
 
@@ -134,6 +187,13 @@ export function useRegisterPasskey() {
       if (user) {
         localStorage.setItem(`passkey_registered_${user.id}`, 'true')
         setPasskeyEmail(user.email)
+        // Auto-enable biometric unlock and save user info
+        setLastBiometricUser({
+          name: user.full_name,
+          avatar: user.avatar_url,
+          email: user.email,
+        })
+        setBiometricAutoUnlock(true)
       }
       queryClient.invalidateQueries({ queryKey: ['passkeys'] })
       toast.success('Login rápido com biometria ativado!')

@@ -28,7 +28,7 @@ import { persist, createJSONStorage } from 'zustand/middleware'
 // Types
 // ============================================
 
-export type UserType = 'personal' | 'student' | 'admin'
+export type UserType = 'personal' | 'student' | 'nutritionist' | 'admin'
 
 export interface User {
   id: string
@@ -59,6 +59,16 @@ export interface StudentProfile {
   goals: string[]
 }
 
+export interface NutritionistProfile {
+  slug: string
+  crn: string | null
+  specialties: string[]
+  plan_type: 'trial' | 'pro' | 'profissional' | 'max'
+  plan_expires_at: string | null
+  total_patients: number
+  average_rating: number
+}
+
 export interface AuthTokens {
   access_token: string
   refresh_token: string
@@ -70,6 +80,7 @@ interface AuthState {
   user: User | null
   personalProfile: PersonalProfile | null
   studentProfile: StudentProfile | null
+  nutritionistProfile: NutritionistProfile | null
   tokens: AuthTokens | null
   isAuthenticated: boolean
   isLoading: boolean
@@ -81,6 +92,7 @@ interface AuthState {
   setUser: (user: User) => void
   setPersonalProfile: (profile: PersonalProfile) => void
   setStudentProfile: (profile: StudentProfile) => void
+  setNutritionistProfile: (profile: NutritionistProfile) => void
   setTokens: (tokens: AuthTokens) => void
   login: (data: { user: User; tokens: AuthTokens; profile?: PersonalProfile | StudentProfile }) => void
   logout: () => void
@@ -92,6 +104,7 @@ interface AuthState {
   // Computed helpers
   isPersonal: () => boolean
   isStudent: () => boolean
+  isNutritionist: () => boolean
   isAdmin: () => boolean
   isSuperAdmin: () => boolean
   isTokenExpired: () => boolean
@@ -109,6 +122,7 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       personalProfile: null,
       studentProfile: null,
+      nutritionistProfile: null,
       tokens: null,
       isAuthenticated: false,
       isLoading: true,
@@ -122,6 +136,8 @@ export const useAuthStore = create<AuthState>()(
 
       setStudentProfile: (profile) => set({ studentProfile: profile }),
 
+      setNutritionistProfile: (profile) => set({ nutritionistProfile: profile }),
+
       setTokens: (tokens) => set({ tokens }),
 
       login: ({ user, tokens, profile }) => {
@@ -134,9 +150,15 @@ export const useAuthStore = create<AuthState>()(
         if (user.user_type === 'personal' && profile) {
           state.personalProfile = profile as PersonalProfile
           state.studentProfile = null
+          state.nutritionistProfile = null
         } else if (user.user_type === 'student' && profile) {
           state.studentProfile = profile as StudentProfile
           state.personalProfile = null
+          state.nutritionistProfile = null
+        } else if (user.user_type === 'nutritionist' && profile) {
+          state.nutritionistProfile = profile as NutritionistProfile
+          state.personalProfile = null
+          state.studentProfile = null
         }
         set(state)
       },
@@ -146,6 +168,7 @@ export const useAuthStore = create<AuthState>()(
           user: null,
           personalProfile: null,
           studentProfile: null,
+          nutritionistProfile: null,
           tokens: null,
           isAuthenticated: false,
           isLoading: false,
@@ -165,6 +188,7 @@ export const useAuthStore = create<AuthState>()(
       // Computed helpers
       isPersonal: () => get().user?.user_type === 'personal',
       isStudent: () => get().user?.user_type === 'student',
+      isNutritionist: () => get().user?.user_type === 'nutritionist',
       isAdmin: () => {
         const u = get().user
         return u?.user_type === 'admin' || u?.role === 'admin' || u?.role === 'super_admin'
@@ -234,6 +258,7 @@ export const useAuthStore = create<AuthState>()(
         user: state.user,
         personalProfile: state.personalProfile,
         studentProfile: state.studentProfile,
+        nutritionistProfile: state.nutritionistProfile,
         tokens: state.tokens,
         isAuthenticated: state.isAuthenticated,
       }),

@@ -31,9 +31,9 @@ import { verifyJWT } from '@lib/auth-helpers'
 import { UnauthorizedError } from '@lib/errors'
 
 interface AdminSimulationSession {
-  mode: 'super_admin' | 'personal' | 'student'
+  mode: 'super_admin' | 'personal' | 'student' | 'nutritionist'
   target_user_id: string | null
-  target_user_type: 'personal' | 'student' | null
+  target_user_type: 'personal' | 'student' | 'nutritionist' | null
 }
 
 /**
@@ -108,13 +108,13 @@ export const authMiddleware = createMiddleware<AppContext>(async (c, next) => {
  * Aceita um ou mais tipos: requireType('personal') ou requireType('personal', 'admin', 'super_admin')
  * super_admin sempre é permitido (bypass).
  */
-export function requireType(...types: Array<'personal' | 'student' | 'admin' | 'super_admin'>) {
+export function requireType(...types: Array<'personal' | 'student' | 'nutritionist' | 'admin' | 'super_admin'>) {
   return createMiddleware<AppContext>(async (c, next) => {
     const userType = c.get('userType') as string
     const userRole = c.get('userRole') as string
     // super_admin tem acesso universal (via role no JWT)
     if (userRole === 'super_admin' || userType === 'super_admin') return next()
-    if (!types.includes(userType as 'personal' | 'student' | 'admin' | 'super_admin')) {
+    if (!types.includes(userType as 'personal' | 'student' | 'nutritionist' | 'admin' | 'super_admin')) {
       throw new UnauthorizedError(`Acesso restrito`)
     }
     await next()
