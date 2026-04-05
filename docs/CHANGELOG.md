@@ -5,6 +5,31 @@
 
 ---
 
+## [v1.7.2] — 05/04/2026 — Student Nav v5 (Dashboard Parity) + Fixes
+
+### 🎨 Student App — Nav v5 (Paridade com Dashboard)
+- **bottom-navigation.tsx**: Reescrito com ícones SVG inline idênticos ao dashboard (`TreinosIcon`, `NutricaoIcon`, `AvaliacoesIcon`, `PerfilIcon`, `PlusFabIcon`)
+- **student-header.tsx**: Breadcrumbs + `AvatarWithPlanBadge` + bell badge com contagem de não-lidos — idêntico ao header do dashboard
+- **student-fab-menu.tsx**: Novo componente de overlay AI submenu (2×3 grid, spring animation, backdrop blur)
+- Adicionada classe `mobile-bottom-nav` para ativar pseudo-elementos glass do globals.css
+- `layoutId` alterado para `mobile-active-pill` (consistência com dashboard)
+
+### 🔧 Correções
+- **admin.ts**: Adicionado `nutritionist` ao modo de simulação do admin
+- **_headers (CSP)**: Adicionado `iapersonal.app.br` ao `img-src` para imagens legadas
+- **perfil/editar**: Integrado componente `PhotoUpload` para upload de foto de perfil
+
+### 📄 Documentação
+- Criado plano `vfit-redesign-students-v4/` (7 arquivos de referência)
+- Criado plano `vfit-public-pages-redesign-v1/` com TRACKING.md (85 tasks)
+
+### 🚀 Deploy
+- **Pages**: 343 arquivos, deployment `af50e99f`
+- **Workers**: `vfit-api` version `bf2b2cb7`, 3365 KiB
+- Build: 134 rotas compiladas, 0 erros TypeScript
+
+---
+
 ## [v1.7.0-domain-migration] — 04/04/2026 — Domain Migration: iapersonal.app.br → vfit.app.br
 
 ### 🌐 Migração Completa de Domínio
