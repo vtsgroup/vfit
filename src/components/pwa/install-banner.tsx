@@ -277,7 +277,7 @@ export function PwaInstallProvider({ children }: { children: ReactNode }) {
   )
 }
 
-// ─── Install Banner (Bottom floating ultra-glass card) ────────────────
+// ─── Install Banner (Bottom floating ultra-glass card — 2026 Modern) ──
 
 function InstallBanner() {
   const ctx = usePwaInstall()
@@ -297,7 +297,7 @@ function InstallBanner() {
   })()
 
   const getSubtitle = () => {
-    if (hasNativePrompt) return 'Instale grátis — acesso rápido e offline'
+    if (hasNativePrompt) return 'Instale como app nativo no Chrome'
     if (platform === 'ios') return 'Adicione à tela inicial para acesso rápido'
     if (platform === 'android') return 'Instale o app direto no seu celular'
     if (browserLabel) return `Instale como app nativo no ${browserLabel}`
@@ -305,7 +305,7 @@ function InstallBanner() {
   }
 
   const getButtonLabel = () => {
-    if (hasNativePrompt) return 'Instalar App'
+    if (hasNativePrompt) return 'Instalar Agora'
     if (platform === 'ios') return 'Como Instalar'
     if (platform === 'android') return 'Como Instalar'
     return 'Instalar Agora'
@@ -313,63 +313,52 @@ function InstallBanner() {
 
   return (
     <div
-      className="fixed bottom-0 left-0 right-0 z-9999 p-4 sm:p-6 animate-[banner-slide-up_0.6s_cubic-bezier(0.16,1,0.3,1)]"
-      style={{ paddingBottom: 'calc(1rem + env(safe-area-inset-bottom, 0px))' }}
+      className="fixed bottom-0 left-0 right-0 z-9999 p-3 sm:p-4 animate-[banner-slide-up_0.5s_cubic-bezier(0.16,1,0.3,1)]"
+      style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom, 0px))' }}
     >
-      <div className="relative mx-auto max-w-md overflow-hidden rounded-2xl sm:rounded-3xl">
-        {/* Ultra glass background with multi-layer blur */}
-        <div className="absolute inset-0 bg-bg-dark/60 backdrop-blur-[40px] [-webkit-backdrop-filter:blur(40px)_saturate(200%)] border border-white/8 rounded-2xl sm:rounded-3xl" />
+      <div className="relative mx-auto max-w-sm overflow-hidden rounded-2xl">
+        {/* Ultra glass background */}
+        <div className="absolute inset-0 bg-black/70 backdrop-blur-2xl [-webkit-backdrop-filter:blur(40px)_saturate(180%)] border border-white/10 rounded-2xl" />
 
-        {/* Top accent gradient line */}
-        <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-brand-primary/50 to-transparent" />
-
-        {/* Bottom ambient glow */}
-        <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 w-2/3 h-24 bg-brand-primary/8 rounded-full blur-3xl pointer-events-none" />
-
-        {/* Noise texture */}
-        <div
-          className="absolute inset-0 rounded-2xl sm:rounded-3xl opacity-[0.03] pointer-events-none"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E")`,
-          }}
-        />
+        {/* Top accent line */}
+        <div className="absolute top-0 left-4 right-4 h-px bg-linear-to-r from-transparent via-emerald-400/40 to-transparent" />
 
         {/* Content */}
-        <div className="relative z-10 p-4 sm:p-5">
-          <div className="flex items-start gap-3.5">
-            {/* App icon */}
+        <div className="relative z-10 p-3.5 sm:p-4">
+          {/* Top row: Icon + Text + Close */}
+          <div className="flex items-center gap-3">
+            {/* App icon — VFIT branded */}
             <div className="shrink-0">
-              <div className="relative flex h-13 w-13 items-center justify-center rounded-[14px] bg-linear-to-br from-brand-primary to-emerald-600 shadow-lg shadow-brand-primary/25">
-                <span className="text-base font-black text-bg-dark tracking-tight">IA</span>
-                <div className="absolute inset-0 rounded-[14px] bg-linear-to-br from-white/25 to-transparent" />
+              <div className="relative flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-emerald-500 to-green-600 shadow-lg shadow-emerald-500/25">
+                <span className="text-sm font-black text-white tracking-tighter">VFIT</span>
+                <div className="absolute inset-0 rounded-xl bg-linear-to-br from-white/20 to-transparent" />
               </div>
             </div>
 
-            {/* Text */}
+            {/* Text block */}
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-0.5">
+              <div className="flex items-center gap-2">
                 <h3 className="text-[15px] font-bold text-white tracking-tight">VFIT</h3>
-                <span className="inline-flex items-center rounded-full bg-brand-primary/10 px-2 py-0.5 text-[9px] font-bold text-brand-primary uppercase tracking-widest ring-1 ring-brand-primary/20">
-                  App
+                <span className="inline-flex items-center rounded-full bg-emerald-500/15 px-1.5 py-px text-[9px] font-bold text-emerald-400 uppercase tracking-wider ring-1 ring-emerald-500/25">
+                  APP
                 </span>
               </div>
-              <p className="text-[13px] text-zinc-400 leading-snug">{getSubtitle()}</p>
-
-              {/* Star rating */}
-              <div className="flex items-center gap-0.5 mt-1.5">
+              <p className="text-[12px] text-zinc-400 leading-snug mt-0.5">{getSubtitle()}</p>
+              {/* Star rating inline */}
+              <div className="flex items-center gap-0.5 mt-1">
                 {[1, 2, 3, 4, 5].map((i) => (
-                  <svg key={i} className="h-3 w-3 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                  <svg key={i} className="h-2.5 w-2.5 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                   </svg>
                 ))}
-                <span className="ml-1 text-[11px] text-zinc-500 font-medium">5.0</span>
+                <span className="ml-1 text-[10px] text-zinc-500 font-medium">5.0</span>
               </div>
             </div>
 
             {/* Close button */}
             <button
               onClick={dismissBanner}
-              className="shrink-0 -mt-0.5 -mr-0.5 p-1.5 rounded-xl text-zinc-600 hover:text-white hover:bg-white/8 transition-all duration-200"
+              className="shrink-0 p-1.5 -mr-1 rounded-lg text-zinc-600 hover:text-white hover:bg-white/10 transition-colors"
               aria-label="Fechar"
             >
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -378,12 +367,12 @@ function InstallBanner() {
             </button>
           </div>
 
-          {/* Install CTA */}
+          {/* Install CTA button */}
           <button
             onClick={triggerInstall}
-            className="mt-4 w-full flex items-center justify-center gap-2 rounded-xl bg-linear-to-r from-brand-primary to-emerald-500 px-4 py-3 text-[13px] font-bold text-bg-dark transition-all duration-300 hover:shadow-[0_0_30px_rgba(0,217,142,0.35)] hover:brightness-110 active:scale-[0.98]"
+            className="mt-3 w-full flex items-center justify-center gap-2 rounded-xl bg-emerald-500 px-4 py-2.5 text-[13px] font-bold text-white transition-all duration-200 hover:bg-emerald-400 active:scale-[0.98] shadow-lg shadow-emerald-500/20"
           >
-            <svg className="h-4.5 w-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
             </svg>
             {getButtonLabel()}
@@ -640,8 +629,8 @@ function InstructionsOverlay() {
             {/* Header */}
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
-                <div className="relative flex h-11 w-11 items-center justify-center rounded-[12px] bg-linear-to-br from-brand-primary to-emerald-600 shadow-lg shadow-brand-primary/20">
-                  <span className="text-sm font-black text-bg-dark">IA</span>
+                <div className="relative flex h-11 w-11 items-center justify-center rounded-[12px] bg-linear-to-br from-emerald-500 to-green-600 shadow-lg shadow-emerald-500/20">
+                  <span className="text-[10px] font-black text-white tracking-tighter">VFIT</span>
                   <div className="absolute inset-0 rounded-[12px] bg-linear-to-br from-white/20 to-transparent" />
                 </div>
                 <div>

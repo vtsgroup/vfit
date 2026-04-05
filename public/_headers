@@ -1,52 +1,65 @@
 # ============================================
-# Security & SEO Headers — Cloudflare Pages
+# Security, Performance & SEO Headers — VFIT 2026
+# Cloudflare Pages · Ultra-modern configuration
 # ============================================
 
 /*
+  # ── Security ──────────────────────────────────────
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
-  X-XSS-Protection: 1; mode=block
   Referrer-Policy: strict-origin-when-cross-origin
-  # Necessário para captura de fotos na Avaliação (getUserMedia) e geolocation TWA
-  Permissions-Policy: camera=(self), microphone=(), geolocation=(self), interest-cohort=()
-  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  # HSTS preload-ready (2 years, includeSubDomains)
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+  # COOP — allow popups for OAuth (Google login)
   Cross-Origin-Opener-Policy: same-origin-allow-popups
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://*.challenges.cloudflare.com https://static.cloudflareinsights.com https://cdn.onesignal.com https://*.onesignal.com https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://*.r2.cloudflarestorage.com https://images.vfit.app.br https://*.replicate.delivery https://replicate.delivery https://vfit.app.br https://www.google-analytics.com https://www.googletagmanager.com https://lh3.googleusercontent.com https://*.fbcdn.net; connect-src 'self' https://api.vfit.app.br https://challenges.cloudflare.com https://*.challenges.cloudflare.com https://static.cloudflareinsights.com https://cloudflareinsights.com https://onesignal.com https://*.onesignal.com https://www.google-analytics.com https://analytics.google.com https://*.google-analytics.com https://*.googletagmanager.com https://accounts.google.com; frame-src https://challenges.cloudflare.com https://*.challenges.cloudflare.com https://accounts.google.com https://www.facebook.com; manifest-src 'self'; worker-src 'self' https://cdn.onesignal.com https://challenges.cloudflare.com https://*.challenges.cloudflare.com; child-src 'self' https://challenges.cloudflare.com https://*.challenges.cloudflare.com; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests
+  # Permissions Policy — modern replacement for Feature-Policy (2026 spec)
+  Permissions-Policy: camera=(self), microphone=(), geolocation=(self), interest-cohort=(), browsing-topics=(), attribution-reporting=(), run-ad-auction=(), join-ad-interest-group=(), compute-pressure=()
+  # CSP — comprehensive policy
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://*.challenges.cloudflare.com https://static.cloudflareinsights.com https://cdn.onesignal.com https://*.onesignal.com https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://*.r2.cloudflarestorage.com https://images.vfit.app.br https://*.replicate.delivery https://replicate.delivery https://vfit.app.br https://www.google-analytics.com https://www.googletagmanager.com https://lh3.googleusercontent.com https://*.fbcdn.net; connect-src 'self' https://api.vfit.app.br https://challenges.cloudflare.com https://*.challenges.cloudflare.com https://static.cloudflareinsights.com https://cloudflareinsights.com https://onesignal.com https://*.onesignal.com https://www.google-analytics.com https://analytics.google.com https://*.google-analytics.com https://*.googletagmanager.com https://accounts.google.com; frame-src https://challenges.cloudflare.com https://*.challenges.cloudflare.com https://accounts.google.com; manifest-src 'self'; worker-src 'self' https://cdn.onesignal.com https://challenges.cloudflare.com https://*.challenges.cloudflare.com; child-src 'self' https://challenges.cloudflare.com https://*.challenges.cloudflare.com; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests
+  # ── Performance ───────────────────────────────────
+  # DNS prefetch for critical third-party origins
+  Link: <https://api.vfit.app.br>; rel=preconnect, <https://fonts.googleapis.com>; rel=preconnect; crossorigin, <https://fonts.gstatic.com>; rel=preconnect; crossorigin, <https://static.cloudflareinsights.com>; rel=dns-prefetch
 
-# SEO — Sitemaps correct MIME type
+# ── SEO — Sitemaps & Crawl Files ────────────────────
 /sitemap.xml
-  Content-Type: application/xml
-  Cache-Control: public, max-age=3600
+  Content-Type: application/xml; charset=utf-8
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+  X-Robots-Tag: noindex
 
 /sitemap-blog.xml
-  Content-Type: application/xml
-  Cache-Control: public, max-age=3600
+  Content-Type: application/xml; charset=utf-8
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+  X-Robots-Tag: noindex
 
 /robots.txt
-  Content-Type: text/plain
-  Cache-Control: public, max-age=3600
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
 
 /llms.txt
-  Content-Type: text/plain
-  Cache-Control: public, max-age=86400
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
 
-# TWA — Digital Asset Links (obrigatório para Android TWA)
+# ── TWA — Digital Asset Links ────────────────────────
 /.well-known/assetlinks.json
   Content-Type: application/json
   Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+
+/.well-known/*
   Cache-Control: public, max-age=3600
 
-# Dashboard — block indexing (authed pages)
+# ── Dashboard — block indexing ───────────────────────
 /dashboard/*
   X-Robots-Tag: noindex, nofollow
+  Cache-Control: no-cache
 
-# Manifest — correct MIME type for Chrome PWA installability
+# ── PWA Manifest ─────────────────────────────────────
 /manifest.json
   Content-Type: application/manifest+json
   Cache-Control: no-cache
   X-Robots-Tag: noindex, nofollow
 
-# Service Worker — no caching
+# ── Service Workers — never cache ────────────────────
 /sw.js
   Cache-Control: no-cache, no-store, must-revalidate
   Service-Worker-Allowed: /
@@ -59,34 +72,45 @@
   Cache-Control: no-cache, no-store, must-revalidate
   Service-Worker-Allowed: /
 
-# Static assets — long cache
+# ── Static Assets — immutable long cache (1 year) ────
 /icons/*
   Cache-Control: public, max-age=31536000, immutable
 
 /images/*
   Cache-Control: public, max-age=31536000, immutable
 
-/og/*
-  Cache-Control: public, max-age=86400
+/videos/*
+  Cache-Control: public, max-age=31536000, immutable
 
-# Logo — cache eficiente
-/ia-personal-transparent.png
-  Cache-Control: public, max-age=2592000, immutable
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
 
-# Next.js static chunks — long cache
+# ── Next.js hashed chunks — immutable ────────────────
 /_next/static/*
   Cache-Control: public, max-age=31536000, immutable
 
-# Favicons / Apple touch icon — cache 30d (versionados por ?v= no layout.tsx)
+# ── Favicons & Touch Icons — 30 days ─────────────────
 /favicon.ico
-  Cache-Control: public, max-age=2592000
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=604800
 
 /favicons/*
-  Cache-Control: public, max-age=2592000
+  Cache-Control: public, max-age=2592000, immutable
 
 /apple-touch-icon.png
-  Cache-Control: public, max-age=2592000
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=604800
 
-# OG Image — moderate cache
+# ── OG Images — moderate cache ───────────────────────
+/og/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
 /og-image.png
-  Cache-Control: public, max-age=86400
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+# ── Blog assets — long cache ─────────────────────────
+/blog/*
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=604800
+
+# ── Fonts (if self-hosted) ───────────────────────────
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *

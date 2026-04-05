@@ -97,7 +97,18 @@ const app = new Hono<AppContext>()
 // ============================================
 app.use('*', requestIdMiddleware)
 app.use('*', corsMiddleware)
-app.use('*', secureHeaders())
+app.use('*', secureHeaders({
+  strictTransportSecurity: 'max-age=63072000; includeSubDomains; preload',
+  xContentTypeOptions: 'nosniff',
+  xFrameOptions: 'DENY',
+  referrerPolicy: 'strict-origin-when-cross-origin',
+  crossOriginOpenerPolicy: 'same-origin-allow-popups',
+  permissionsPolicy: {
+    camera: ['self'],
+    microphone: [],
+    geolocation: ['self'],
+  },
+}))
 app.use('*', prettyJSON())
 app.use('*', requestLoggerMiddleware)
 app.use('*', analyticsMiddleware)
