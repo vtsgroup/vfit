@@ -622,7 +622,7 @@ export default function AdminDesignSystemPage() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 {[
                   { name: 'Google Reviewer', email: 'google-review@vfit.app.br', date: '05/03/2026', badges: ['aluno'], verified: true, color: '#10b981', letter: 'G', canDelete: true },
-                  { name: 'Isabela Bellusci Duarte', email: 'bebelbellusci@hotmail.com', date: '01/03/2026', badges: ['aluno', 'super-admin'], color: '#f59e0b', letter: 'I', canDelete: false },
+                  { name: 'Camila Ferreira', email: 'camila@email.com', date: '01/03/2026', badges: ['aluno'], color: '#f59e0b', letter: 'C', canDelete: true },
                   { name: 'Victor Agostinho Melo Duarte', email: 'victor.duarte@vfit.app.br', date: '09/02/2026', badges: ['personal', 'super-admin'], verified: true, color: '#f59e0b', letter: 'V', canDelete: false },
                 ].map((user, i) => (
                   <Card key={i} t={t} style={{ padding: '14px 20px', animation: 'fadeInUp 400ms cubic-bezier(0.16,1,0.3,1) both', animationDelay: `${i * 70}ms` }}>

@@ -795,7 +795,7 @@ export default function ShowcasePage() {
               <Label t={t}>{'Componente <NotificationCard>'}</Label>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 28 }}>
                 <NotificationCard icon="dollar" title="Pagamento Recebido" description="Victor Agostinho pagou R$ 150,00 via PIX" timestamp="Ha 2 minutos" unread />
-                <NotificationCard icon="users" title="Novo Aluno" description="Isabela Bellusci se cadastrou na plataforma" timestamp="Ha 15 minutos" />
+                <NotificationCard icon="users" title="Novo Aluno" description="Camila Ferreira se cadastrou na plataforma" timestamp="Ha 15 minutos" />
                 <NotificationCard icon="bell" title="Lembrete" description="3 cobranças vencem amanha" timestamp="Ha 1 hora" />
               </div>
 
@@ -1890,7 +1890,7 @@ export default function ShowcasePage() {
               <Label t={t}>Lista de Alunos — Stagger Animation</Label>
               <Stagger className="flex flex-col gap-2.5" style={{ marginBottom: 28 }}>
                 {([
-                  { name: 'Isabela Bellusci', email: 'isabela@email.com', plan: 'Premium', status: 'Ativo', color: '#f59e0b', letter: 'I' },
+                  { name: 'Camila Ferreira', email: 'camila@email.com', plan: 'Premium', status: 'Ativo', color: '#f59e0b', letter: 'C' },
                   { name: 'Lucas Mendes', email: 'lucas@email.com', plan: 'Basico', status: 'Pendente', color: '#3b82f6', letter: 'L' },
                   { name: 'Ana Clara Silva', email: 'ana@email.com', plan: 'Premium', status: 'Ativo', color: '#8b5cf6', letter: 'A' },
                   { name: 'Rafael Oliveira', email: 'rafael@email.com', plan: 'Pro', status: 'Ativo', color: '#10b981', letter: 'R' },

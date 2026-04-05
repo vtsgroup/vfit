@@ -27,7 +27,7 @@ const patterns = [
   { name: 'authorization_bearer_hardcoded', severity: 'P0', regex: /Authorization\s*:\s*Bearer\s+[A-Za-z0-9._-]{20,}/gi },
   { name: 'wrangler_oauth_token_hardcoded', severity: 'P0', regex: /oauth_token\s*=\s*"[A-Za-z0-9._-]{20,}"/gi },
   { name: 'hardcoded_password_like', severity: 'P0', regex: /password"\s*:\s*"(?!<)[^"]{6,}"/gi },
-  { name: 'known_admin_email', severity: 'P1', regex: /(victor\.duarte@(?:personalia\.(?:com\.br|app\.br)|(?:ia)?personal\.app\.br|vfit\.app\.br)|emerson\.xavier@personalia\.app\.br)/gi },
+  { name: 'known_admin_email', severity: 'P1', regex: /(victor\.duarte@(?:personalia\.(?:com\.br|app\.br)|(?:ia)?personal\.app\.br|vfit\.app\.br))/gi },
 ]
 
 function listFiles(dir) {
