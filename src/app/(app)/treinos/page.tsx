@@ -19,7 +19,7 @@ import {
   getDifficultyColor,
 } from '@/hooks/use-workout-templates'
 import { hapticLight } from '@/lib/haptics'
-import { useCurrentPlan } from '@/hooks/use-plans'
+import { useCurrentPlan, useAutoGeneratePlan } from '@/hooks/use-plans'
 import { useMealsToday, useNutritionTargets } from '@/hooks/use-vfit-nutrition'
 import { useSelfAssessments, getBMIColor, useAutoAssessmentFromOnboarding } from '@/hooks/use-self-assessments'
 import { useWorkoutLogs } from '@/hooks/use-workouts'
@@ -97,7 +97,7 @@ export default function TreinosPage() {
   )
 
   // T7.3-T7.5 — Current plan data
-  const { data: plan } = useCurrentPlan()
+  const { data: plan, isError: planError, isFetched: planFetched } = useCurrentPlan()
 
   // T7.6 — Nutrition today
   const { data: mealsData } = useMealsToday()
@@ -113,6 +113,13 @@ export default function TreinosPage() {
   useAutoAssessmentFromOnboarding(
     !!onboardingStatus?.completed,
     assessments?.length,
+  )
+
+  // Auto-generate workout plan from onboarding data if user has none yet
+  useAutoGeneratePlan(
+    !!onboardingStatus?.completed,
+    planFetched, // true once the plan query has settled (success or error)
+    !!plan && !planError, // true if plan exists
   )
 
   // T8.9 — Upgrade prompt after 3 workouts

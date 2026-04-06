@@ -3,7 +3,7 @@
  *
  * React Query hooks for VFIT B2C workout plans
  *
- * Hooks: useCurrentPlan, useGeneratePlan, useSavePlan
+ * Hooks: useCurrentPlan, useGeneratePlan, useSavePlan, useAutoGeneratePlan
  */
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -280,5 +280,36 @@ export function useRemovePlanExercise() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['plans', 'current'] })
     },
+  })
+}
+
+// ============================================
+// Auto-generate plan from onboarding data
+// Fires once per session when user has completed onboarding but has no active plan
+// ============================================
+export function useAutoGeneratePlan(
+  hasOnboarding: boolean,
+  planQuerySettled: boolean,
+  hasPlan: boolean,
+) {
+  const isReady = useAuthStore((s) => s.isAuthenticated && s.isHydrated)
+  const qc = useQueryClient()
+
+  return useQuery({
+    queryKey: ['auto-generate-plan'],
+    queryFn: async () => {
+      const res = await api.post<{ plan_id: string; plan_name: string; source: string; already_exists?: boolean }>(
+        '/plans/auto-generate',
+        {},
+      )
+      // Invalidate current plan so it refreshes
+      qc.invalidateQueries({ queryKey: ['plans', 'current'] })
+      return res.data
+    },
+    // Only fire when: authenticated + onboarding done + plan query finished + no plan
+    enabled: isReady && hasOnboarding && planQuerySettled && !hasPlan,
+    staleTime: Infinity, // Only fire once per session
+    retry: 1,
+    retryDelay: 3000,
   })
 }

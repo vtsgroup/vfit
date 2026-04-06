@@ -13,16 +13,24 @@ import { useState, useMemo, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { PaywallPlans, PaywallDiscount, ConfirmExitModal } from '@/components/paywall'
 import type { PaywallPlan } from '@/components/paywall'
+import { useAuthStore } from '@/stores/auth-store'
 
 type Layer = 'L1' | 'L2' | 'L3' | 'confirm'
 
 export default function OnboardingPaywallPage() {
   const router = useRouter()
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
   const [layer, setLayer] = useState<Layer>('L1')
   const [loading, setLoading] = useState(false)
 
   // 15 minutos de countdown para urgência
   const countdownEnd = useMemo(() => Date.now() + 15 * 60 * 1000, [])
+
+  // Where to go after paywall — authenticated users go to app, others to register
+  const getDestination = useCallback((plan: string) => {
+    if (isAuthenticated) return '/treinos'
+    return `/register/student?from=onboarding&plan=${plan}`
+  }, [isAuthenticated])
 
   // Mapeia IDs de UI → IDs de backend
   const PLAN_ID_MAP: Record<string, string> = { monthly: 'premium', annual: 'premium_annual' }
@@ -35,12 +43,12 @@ export default function OnboardingPaywallPage() {
         // Salvar plano selecionado para pegar após signup/login
         const backendId = PLAN_ID_MAP[plan.id] || plan.id
         localStorage.setItem('vfit_selected_plan', backendId)
-        router.push(`/register/student?from=onboarding&plan=${backendId}`)
+        router.push(getDestination(backendId))
       } catch {
         setLoading(false)
       }
     },
-    [router]
+    [router, getDestination]
   )
 
   // ─── Handle discount accept ───
@@ -48,11 +56,11 @@ export default function OnboardingPaywallPage() {
     setLoading(true)
     try {
       localStorage.setItem('vfit_selected_plan', 'premium_annual')
-      router.push('/register/student?from=onboarding&plan=premium_annual')
+      router.push(getDestination('premium_annual'))
     } catch {
       setLoading(false)
     }
-  }, [router])
+  }, [router, getDestination])
 
   // ─── Handle layer transitions ───
   const handleCloseL1 = useCallback(() => {
@@ -72,8 +80,8 @@ export default function OnboardingPaywallPage() {
   }, [])
 
   const handleLeave = useCallback(() => {
-    router.push('/register/student?from=onboarding&plan=free')
-  }, [router])
+    router.push(getDestination('free'))
+  }, [router, getDestination])
 
   return (
     <>

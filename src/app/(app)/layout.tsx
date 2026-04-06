@@ -10,7 +10,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { useQueryClient } from '@tanstack/react-query'
 import { StudentHeader } from '@/components/navigation/student-header'
 import { BottomNavigation } from '@/components/navigation/bottom-navigation'
@@ -20,6 +20,7 @@ import { PullToRefresh } from '@/components/ui/pull-to-refresh'
 import { OneSignalProvider } from '@/components/providers/onesignal-provider'
 import { ToastContainer } from '@/components/layout/toast-container'
 import { useAuthStore } from '@/stores/auth-store'
+import { useB2COnboardingCompleted } from '@/hooks/use-b2c-onboarding'
 
 /**
  * Migrate legacy localStorage keys (evoluia_* → vfit_*) once per device.
@@ -68,11 +69,18 @@ function migrateLocalStorageKeys() {
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
+  const pathname = usePathname()
   const queryClient = useQueryClient()
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
   const isHydrated = useAuthStore((s) => s.isHydrated)
   const userType = useAuthStore((s) => s.user?.user_type)
   const [fabMenuOpen, setFabMenuOpen] = useState(false)
+
+  // Check onboarding status for student redirect
+  const isStudent = userType === 'student'
+  const { data: onboardingStatus, isLoading: onboardingLoading } = useB2COnboardingCompleted(
+    isHydrated && isAuthenticated && isStudent,
+  )
 
   // Pull-to-refresh handler — invalida todas as queries
   const handleRefresh = useCallback(async () => {
@@ -95,6 +103,16 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       router.replace('/dashboard')
     }
   }, [isHydrated, isAuthenticated, userType, router])
+
+  // Force onboarding for students who haven't completed the quiz
+  useEffect(() => {
+    if (!isHydrated || !isAuthenticated || !isStudent) return
+    if (onboardingLoading) return
+    if (onboardingStatus?.completed) return
+    // Don't redirect if already going to onboarding-related pages
+    if (pathname === '/perfil/assinatura' || pathname === '/perfil/editar' || pathname === '/perfil/sobre') return
+    router.replace('/onboarding')
+  }, [isHydrated, isAuthenticated, isStudent, onboardingLoading, onboardingStatus, pathname, router])
 
   return (
     <OneSignalProvider>

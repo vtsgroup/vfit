@@ -564,6 +564,202 @@ plans.post('/regenerate', authMiddleware, async (c) => {
 })
 
 // ============================================
+// POST /auto-generate — Auto-generate plan from onboarding data (no client input needed)
+// Reads user_onboarding, generates via AI, saves to DB, returns plan_id
+// ============================================
+plans.post('/auto-generate', authMiddleware, async (c) => {
+  const userId = c.get('userId')
+
+  // Check if user already has an active plan
+  const existingPlan = await pgQueryOne<{ id: string }>(
+    c.env,
+    `SELECT id FROM workout_plans WHERE user_id = $1 AND status = 'active' LIMIT 1`,
+    [userId]
+  )
+  if (existingPlan) {
+    return success({ plan_id: existingPlan.id, already_exists: true })
+  }
+
+  // Read onboarding data
+  const onboarding = await pgQueryOne<{
+    gender: string
+    experience_level: string
+    training_frequency: string
+    goal: string
+    training_location: string
+    target_muscles: string[]
+    age: number
+    height_cm: number
+    weight_kg: number
+    target_weight_kg: number | null
+    days_per_week: number
+    session_duration: string
+    injuries: string[]
+    preferred_time: string
+  }>(
+    c.env,
+    `SELECT gender, experience_level, training_frequency, goal, training_location,
+            target_muscles, age, height_cm, weight_kg, target_weight_kg,
+            days_per_week, session_duration, injuries, preferred_time
+     FROM user_onboarding WHERE user_id = $1 LIMIT 1`,
+    [userId]
+  )
+
+  if (!onboarding) {
+    throw new BadRequestError('Onboarding não encontrado. Complete o questionário primeiro.')
+  }
+
+  // Map training_frequency text → days_per_week number
+  const freqToDays: Record<string, number> = {
+    never: 3, inconsistently: 3, regularly: 5,
+  }
+  const daysPerWeek = onboarding.days_per_week || freqToDays[onboarding.training_frequency] || 3
+
+  let generatedPlan: GeneratedPlan | null = null
+  let source: 'ai' | 'fallback' = 'ai'
+
+  try {
+    const prompt = PROMPTS.generate_b2c_plan({
+      gender: onboarding.gender,
+      experience_level: onboarding.experience_level,
+      training_frequency: onboarding.training_frequency,
+      goal: onboarding.goal,
+      training_location: onboarding.training_location,
+      target_muscles: onboarding.target_muscles || [],
+      age: onboarding.age,
+      height_cm: onboarding.height_cm,
+      weight_kg: onboarding.weight_kg,
+      target_weight_kg: onboarding.target_weight_kg || onboarding.weight_kg,
+      days_per_week: daysPerWeek,
+      session_duration: onboarding.session_duration || 'medium_45',
+      injuries: onboarding.injuries || [],
+      preferred_time: onboarding.preferred_time || 'any',
+    })
+
+    const dynamicMaxTokens = Math.min(2048 + (daysPerWeek * 1024), 8192)
+    const aiResult = await callWorkersAIWithFallback(
+      c.env,
+      '@cf/meta/llama-4-scout-17b-16e-instruct',
+      prompt,
+      {
+        max_tokens: dynamicMaxTokens,
+        temperature: 0.6,
+        fallbackModel: '@cf/meta/llama-3.3-70b-instruct-fp8-fast',
+      }
+    )
+
+    // Extract JSON from AI response
+    const raw = aiResult.response
+    let parsed: unknown
+    try {
+      parsed = JSON.parse(raw)
+    } catch {
+      const codeBlockMatch = raw.match(/```(?:json)?\s*([\s\S]*?)```/)
+      if (codeBlockMatch) {
+        try { parsed = JSON.parse(codeBlockMatch[1].trim()) } catch {
+          const braceMatch = raw.match(/\{[\s\S]*\}/)
+          if (braceMatch) parsed = JSON.parse(braceMatch[0])
+          else throw new Error('No valid JSON')
+        }
+      } else {
+        const braceMatch = raw.match(/\{[\s\S]*\}/)
+        if (braceMatch) parsed = JSON.parse(braceMatch[0])
+        else throw new Error('No valid JSON')
+      }
+    }
+    generatedPlan = generatedPlanSchema.parse(parsed)
+  } catch (err) {
+    console.warn('[Plans] auto-generate AI failed, using fallback:', err)
+    source = 'fallback'
+  }
+
+  if (!generatedPlan || generatedPlan.days.length !== daysPerWeek) {
+    generatedPlan = getDefaultPlan({
+      goal: onboarding.goal,
+      training_location: onboarding.training_location,
+      experience_level: onboarding.experience_level,
+      days_per_week: daysPerWeek,
+    })
+    source = 'fallback'
+  }
+
+  // Save plan to DB
+  const newPlanId = generateId()
+  const now = new Date().toISOString()
+  const durationMap: Record<string, number> = {
+    quick_15: 15, short_30: 30, medium_45: 45, long_60: 60,
+  }
+  const sessionMin = durationMap[onboarding.session_duration] || 45
+
+  await pgQuery(
+    c.env,
+    `INSERT INTO workout_plans (id, user_id, name, type, status, total_days, current_day, settings, created_at, updated_at)
+     VALUES ($1, $2, $3, 'ai_generated', 'active', $4, 1, $5, $6, $6)`,
+    [
+      newPlanId, userId, generatedPlan.plan_name, daysPerWeek,
+      JSON.stringify({
+        goal: onboarding.goal,
+        level: onboarding.experience_level,
+        location: onboarding.training_location,
+        estimated_calories: generatedPlan.estimated_calories_per_session,
+        source,
+      }),
+      now,
+    ]
+  )
+
+  for (const day of generatedPlan.days) {
+    const dayId = generateId()
+    const muscleGroups = [...new Set(day.exercises.map((e) => e.muscle_group))]
+    await pgQuery(
+      c.env,
+      `INSERT INTO workout_plan_days (id, plan_id, day_number, name, muscle_groups, estimated_duration_min, sort_order, created_at)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+      [dayId, newPlanId, day.day_number, day.name, muscleGroups, sessionMin, day.day_number, now]
+    )
+
+    for (let i = 0; i < day.exercises.length; i++) {
+      const ex = day.exercises[i]
+      await pgQuery(
+        c.env,
+        `INSERT INTO workout_plan_exercises (id, plan_day_id, name, muscle_group, sort_order, sets, reps, weight_kg, rest_seconds, notes, created_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
+        [generateId(), dayId, ex.name, ex.muscle_group, i + 1,
+         ex.sets, ex.reps, ex.weight_suggestion_kg || null, ex.rest_seconds, ex.notes || null, now]
+      )
+    }
+  }
+
+  // D1 Sync (best-effort)
+  try {
+    if (c.env.DB) {
+      await c.env.DB.prepare(
+        `INSERT OR REPLACE INTO user_workouts_cache (id, user_id, name, data, synced_at, created_at)
+         VALUES (?, ?, ?, ?, ?, ?)`
+      ).bind(
+        newPlanId, userId, generatedPlan.plan_name,
+        JSON.stringify({ id: newPlanId, name: generatedPlan.plan_name, days: generatedPlan.days }),
+        Date.now(), Date.now()
+      ).run()
+    }
+  } catch (err) {
+    console.warn(`[D1] auto-generate sync failed:`, err)
+  }
+
+  // Push notification (best-effort)
+  await notify(c.env, userId, {
+    type: 'workout.new',
+    title: '🏋️ Seu plano está pronto!',
+    message: `"${generatedPlan.plan_name}" foi gerado com sucesso. Hora de começar!`,
+    link: '/plano',
+  }).catch(() => {})
+
+  console.log(`[Plans] auto-generated plan ${newPlanId} for user ${userId} (source: ${source})`)
+
+  return created({ plan_id: newPlanId, plan_name: generatedPlan.plan_name, source })
+})
+
+// ============================================
 // PATCH /plans/:planId/days/:dayId/exercises — Update exercises for a day
 // ============================================
 plans.patch('/:planId/days/:dayId/exercises', authMiddleware, async (c) => {

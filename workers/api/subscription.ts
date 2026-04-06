@@ -15,7 +15,7 @@ import { pgQuery, pgQueryOne, generateId } from '@lib/db'
 import { success, created } from '@lib/response'
 import { BadRequestError } from '@lib/errors'
 import { authMiddleware } from '@workers/middleware/auth'
-import { getOrCreateCustomer, createAsaasPayment, getPixQrCode, cancelPayment as cancelAsaasPayment } from '@lib/asaas'
+import { getOrCreateCustomer, createAsaasPayment, getPixQrCode, cancelPayment as cancelAsaasPayment, AsaasApiError } from '@lib/asaas'
 import { VFIT_PLANS } from '@config/constants'
 
 const subscription = new Hono<AppContext>()
@@ -190,9 +190,9 @@ subscription.post('/checkout', async (c) => {
   )
   if (!user) throw new BadRequestError('Usuário não encontrado')
 
-  // Super admin test pricing: R$1.00 for any plan
+  // Super admin test pricing: R$5.00 for any plan (Asaas minimum is R$5.00)
   const isSuperAdmin = user.role === 'super_admin' || c.get('userRole') === 'super_admin'
-  const finalPrice = isSuperAdmin ? 1.00 : planConfig.price_brl
+  const finalPrice = isSuperAdmin ? 5.00 : planConfig.price_brl
 
   // Save CPF permanently to user profile
   const cleanCpf = cpf.replace(/\D/g, '')
@@ -218,7 +218,56 @@ subscription.post('/checkout', async (c) => {
     }
   }
 
-  // Create subscription record
+  // ── Step 1: Asaas API calls FIRST (before DB insert) ──
+  // If Asaas fails, no orphaned DB record is created
+
+  let customer: { id: string }
+  let payment: { id: string }
+  let qrCode: { encodedImage: string; payload: string; expirationDate: string }
+
+  try {
+    // Create/find Asaas customer
+    customer = await getOrCreateCustomer(env, {
+      name: user.full_name,
+      email: user.email,
+      cpfCnpj: cleanCpf,
+      externalReference: userId,
+    })
+  } catch (err) {
+    const msg = err instanceof AsaasApiError ? err.message : 'Erro ao criar cliente no gateway de pagamento'
+    console.error('[Subscription] getOrCreateCustomer failed:', err)
+    throw new BadRequestError(msg)
+  }
+
+  try {
+    // Create PIX payment
+    const dueDate = new Date()
+    dueDate.setDate(dueDate.getDate() + 1)
+
+    payment = await createAsaasPayment(env, {
+      customer: customer.id,
+      billingType: 'PIX',
+      value: finalPrice,
+      dueDate: dueDate.toISOString().split('T')[0],
+      description: `VFIT ${planConfig.name}${isSuperAdmin ? ' [TEST]' : ''}`,
+      externalReference: `vfit_sub_${userId}_${Date.now()}`,
+    })
+  } catch (err) {
+    const msg = err instanceof AsaasApiError ? err.message : 'Erro ao gerar cobrança PIX'
+    console.error('[Subscription] createAsaasPayment failed:', err)
+    throw new BadRequestError(msg)
+  }
+
+  try {
+    qrCode = await getPixQrCode(env, payment.id)
+  } catch (err) {
+    const msg = err instanceof AsaasApiError ? err.message : 'Erro ao gerar QR Code PIX'
+    console.error('[Subscription] getPixQrCode failed:', err)
+    throw new BadRequestError(msg)
+  }
+
+  // ── Step 2: All Asaas calls succeeded → persist to DB ──
+
   const subId = generateId()
   const now = new Date()
   const renewsAt = new Date(now)
@@ -229,42 +278,14 @@ subscription.post('/checkout', async (c) => {
   }
 
   await pgQuery(env, `
-    INSERT INTO vfit_subscriptions (id, user_id, plan_type, billing_cycle, started_at, renews_at, price_paid)
-    VALUES ($1, $2, $3, $4, $5, $6, $7)
+    INSERT INTO vfit_subscriptions (id, user_id, plan_type, billing_cycle, started_at, renews_at, price_paid, asaas_subscription_id)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
     ON CONFLICT (user_id) DO UPDATE SET
       plan_type = $3, billing_cycle = $4, started_at = $5,
-      renews_at = $6, price_paid = $7, canceled_at = NULL, updated_at = NOW()
+      renews_at = $6, price_paid = $7, asaas_subscription_id = $8,
+      canceled_at = NULL, updated_at = NOW()
   `, [subId, userId, planSlug, planSlug === 'premium' ? 'monthly' : 'annual',
-      now.toISOString(), renewsAt.toISOString(), finalPrice])
-
-  // Create/find Asaas customer
-  const customer = await getOrCreateCustomer(env, {
-    name: user.full_name,
-    email: user.email,
-    cpfCnpj: cpf.replace(/\D/g, ''),
-    externalReference: userId,
-  })
-
-  // Create PIX payment
-  const dueDate = new Date()
-  dueDate.setDate(dueDate.getDate() + 1)
-
-  const payment = await createAsaasPayment(env, {
-    customer: customer.id,
-    billingType: 'PIX',
-    value: finalPrice,
-    dueDate: dueDate.toISOString().split('T')[0],
-    description: `VFIT ${planConfig.name}${isSuperAdmin ? ' [TEST]' : ''}`,
-    externalReference: `vfit_sub_${subId}`,
-  })
-
-  // Store Asaas payment ID
-  await pgQuery(env, `
-    UPDATE vfit_subscriptions SET asaas_subscription_id = $1 WHERE id = $2
-  `, [payment.id, subId])
-
-  // Get PIX QR Code
-  const qrCode = await getPixQrCode(env, payment.id)
+      now.toISOString(), renewsAt.toISOString(), finalPrice, payment.id])
 
   return created({
     subscription_id: subId,

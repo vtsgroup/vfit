@@ -14,6 +14,7 @@ import { useEffect, useState, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { useOnboardingStore } from '@/stores/onboarding-store'
 import { api } from '@/lib/api-client'
+import { useAuthStore } from '@/stores/auth-store'
 import { Button } from '@/components/ui/button'
 import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 
@@ -93,6 +94,14 @@ export default function OnboardingLoadingPage() {
         source: string
         stats: Record<string, number>
       }>('/plans/generate', payload, { auth: false })
+
+      // Save onboarding data to backend if user is authenticated
+      const isAuth = useAuthStore.getState().isAuthenticated
+      if (isAuth) {
+        api.post('/onboarding', payload).catch((err) => {
+          console.warn('[Loading] Failed to save onboarding to backend:', err)
+        })
+      }
 
       // Salvar no sessionStorage para a result page
       sessionStorage.setItem('vfit_plan', JSON.stringify(result.data))
