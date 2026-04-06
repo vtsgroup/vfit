@@ -26,6 +26,8 @@ import { getReferralCode, saveReferralCode, clearReferralCode } from '@/lib/refe
 import { ApiClientError } from '@/lib/api-client'
 import { StyledSelect } from '@/components/ui/styled-select'
 
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://api.vfit.app.br'
+
 /* ─── Design tokens ─── */
 const headingFont = {
   fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
@@ -170,7 +172,7 @@ export default function RegisterPersonalPage() {
     setCpfChecking(true)
     const controller = new AbortController()
 
-    fetch('https://api.vfit.app.br/api/v1/cpf/lookup', {
+    fetch(`${API_BASE}/api/v1/cpf/lookup`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ cpf: form.cpf.replace(/\D/g, ''), birth_date: form.birthDate }),

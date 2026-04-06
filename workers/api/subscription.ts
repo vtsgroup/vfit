@@ -28,7 +28,13 @@ subscription.use('*', authMiddleware)
  */
 subscription.get('/status', async (c) => {
   const userId = c.get('userId')
+  const userType = c.get('userType') as string
   const env = c.env
+
+  // Get user CPF (saved permanently)
+  const userCpf = await pgQueryOne<{ cpf: string | null }>(env,
+    'SELECT cpf FROM users WHERE id = $1', [userId]
+  )
 
   // Check B2C subscription first (vfit_subscriptions)
   const b2cSub = await pgQueryOne<{
@@ -56,7 +62,20 @@ subscription.get('/status', async (c) => {
       canceled_at: b2cSub.canceled_at,
       billing_cycle: b2cSub.billing_cycle,
       price_paid: b2cSub.price_paid,
+      cpf: userCpf?.cpf || null,
       limits: getPlanLimits(b2cPlan),
+    })
+  }
+
+  // Students don't have personals records — skip B2B fallback
+  // (fixes: super_admin simulating as student seeing their own B2B plan)
+  if (userType === 'student') {
+    return success({
+      plan: 'free',
+      plan_type: 'free',
+      is_premium: false,
+      cpf: userCpf?.cpf || null,
+      limits: getPlanLimits('free'),
     })
   }
 
@@ -100,6 +119,7 @@ subscription.get('/status', async (c) => {
     expires_at: expiresAt,
     trial_ends_at: trialEndsAt,
     is_premium: b2cPlan !== 'free',
+    cpf: userCpf?.cpf || null,
     limits: getPlanLimits(b2cPlan),
   })
 })
@@ -165,10 +185,18 @@ subscription.post('/checkout', async (c) => {
   }
 
   // Get user info
-  const user = await pgQueryOne<{ email: string; full_name: string }>(env,
-    'SELECT email, full_name FROM users WHERE id = $1', [userId]
+  const user = await pgQueryOne<{ email: string; full_name: string; role: string }>(env,
+    'SELECT email, full_name, role FROM users WHERE id = $1', [userId]
   )
   if (!user) throw new BadRequestError('Usuário não encontrado')
+
+  // Super admin test pricing: R$1.00 for any plan
+  const isSuperAdmin = user.role === 'super_admin' || c.get('userRole') === 'super_admin'
+  const finalPrice = isSuperAdmin ? 1.00 : planConfig.price_brl
+
+  // Save CPF permanently to user profile
+  const cleanCpf = cpf.replace(/\D/g, '')
+  await pgQuery(env, 'UPDATE users SET cpf = $1 WHERE id = $2 AND (cpf IS NULL OR cpf = $1)', [cleanCpf, userId])
 
   // Check existing active subscription
   const existing = await pgQueryOne<{ id: string }>(env,
@@ -199,7 +227,7 @@ subscription.post('/checkout', async (c) => {
       plan_type = $3, billing_cycle = $4, started_at = $5,
       renews_at = $6, price_paid = $7, canceled_at = NULL, updated_at = NOW()
   `, [subId, userId, planSlug, planSlug === 'premium' ? 'monthly' : 'annual',
-      now.toISOString(), renewsAt.toISOString(), planConfig.price_brl])
+      now.toISOString(), renewsAt.toISOString(), finalPrice])
 
   // Create/find Asaas customer
   const customer = await getOrCreateCustomer(env, {
@@ -216,9 +244,9 @@ subscription.post('/checkout', async (c) => {
   const payment = await createAsaasPayment(env, {
     customer: customer.id,
     billingType: 'PIX',
-    value: planConfig.price_brl,
+    value: finalPrice,
     dueDate: dueDate.toISOString().split('T')[0],
-    description: `VFIT ${planConfig.name}`,
+    description: `VFIT ${planConfig.name}${isSuperAdmin ? ' [TEST]' : ''}`,
     externalReference: `vfit_sub_${subId}`,
   })
 
@@ -233,7 +261,7 @@ subscription.post('/checkout', async (c) => {
   return created({
     subscription_id: subId,
     plan: planSlug,
-    amount: planConfig.price_brl,
+    amount: finalPrice,
     pix: {
       qr_code_base64: qrCode.encodedImage,
       copy_paste: qrCode.payload,

@@ -41,25 +41,54 @@ const PLAN_DISPLAY: Record<Plan, { name: string; price: string; priceDetail: str
 
 export default function AssinaturaPage() {
   const router = useRouter()
-  const { data: subStatus, isLoading } = useSubscriptionStatus()
-  const checkout = useVfitCheckout()
-  const cancelSub = useCancelSubscription()
-
-  const currentPlan: Plan = (subStatus?.plan_type as Plan) || 'free'
   const [selectedPlan, setSelectedPlan] = useState<'premium' | 'premium_annual'>('premium_annual')
   const [showCancel, setShowCancel] = useState(false)
   const [cpf, setCpf] = useState('')
   const [pixData, setPixData] = useState<{ qr_code_base64: string; copy_paste: string } | null>(null)
   const [copied, setCopied] = useState(false)
+  const [autoCheckoutReady, setAutoCheckoutReady] = useState(false)
+  const [paymentConfirmed, setPaymentConfirmed] = useState(false)
 
+  // Polling a cada 5s quando PIX QR está ativo (detectar pagamento)
+  const { data: subStatus, isLoading } = useSubscriptionStatus(pixData && !paymentConfirmed ? 5_000 : undefined)
+  const checkout = useVfitCheckout()
+  const cancelSub = useCancelSubscription()
+
+  const currentPlan: Plan = (subStatus?.plan_type as Plan) || 'free'
   const isPremium = subStatus?.is_premium ?? false
 
-  // Ler plano pré-selecionado do onboarding
+  // Detectar quando pagamento foi confirmado via polling
   useEffect(() => {
-    const saved = localStorage.getItem('vfit_selected_plan')
-    if (saved && (saved === 'premium' || saved === 'premium_annual')) {
-      setSelectedPlan(saved)
+    if (pixData && !paymentConfirmed && isPremium) {
+      setPaymentConfirmed(true)
+      setPixData(null)
+    }
+  }, [pixData, paymentConfirmed, isPremium])
+
+  // Pré-carregar CPF salvo do perfil do usuário (backend)
+  useEffect(() => {
+    if (subStatus?.cpf && !cpf) {
+      const raw = subStatus.cpf.replace(/\D/g, '')
+      if (raw.length === 11) {
+        setCpf(raw.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4'))
+      }
+    }
+  }, [subStatus?.cpf, cpf])
+
+  // Ler plano e CPF pré-selecionados do onboarding
+  useEffect(() => {
+    const savedPlan = localStorage.getItem('vfit_selected_plan')
+    const savedCpf = localStorage.getItem('vfit_checkout_cpf')
+    if (savedPlan && (savedPlan === 'premium' || savedPlan === 'premium_annual')) {
+      setSelectedPlan(savedPlan)
       localStorage.removeItem('vfit_selected_plan')
+    }
+    if (savedCpf && savedCpf.length === 11) {
+      setCpf(savedCpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4'))
+      localStorage.removeItem('vfit_checkout_cpf')
+      if (savedPlan && savedPlan !== 'free') {
+        setAutoCheckoutReady(true)
+      }
     }
   }, [])
 
@@ -78,6 +107,13 @@ export default function AssinaturaPage() {
       // Error handled by mutation
     }
   }, [cpf, selectedPlan, checkout])
+
+  // Auto-checkout após registro com CPF (espera auth + subscription carregar)
+  useEffect(() => {
+    if (!autoCheckoutReady || isLoading || isPremium || pixData) return
+    setAutoCheckoutReady(false)
+    handleCheckout()
+  }, [autoCheckoutReady, isLoading, isPremium, pixData, handleCheckout])
 
   const handleCopy = useCallback(() => {
     if (pixData?.copy_paste) {
@@ -148,6 +184,26 @@ export default function AssinaturaPage() {
         </div>
       </div>
 
+      {/* Pagamento confirmado! */}
+      {paymentConfirmed && (
+        <div className="mb-6 rounded-2xl border border-brand-primary/30 bg-brand-primary/8 p-6 text-center">
+          <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-brand-primary/20">
+            <DSIcon name="check" size={28} className="text-brand-primary" />
+          </div>
+          <h2 className="text-lg font-bold text-white">Pagamento Confirmado! 🎉</h2>
+          <p className="mt-1 text-[13px] text-zinc-400">
+            Sua assinatura Premium foi ativada com sucesso.
+          </p>
+          <Button
+            className="mt-4 w-full"
+            onClick={() => router.push('/treinos')}
+          >
+            <DSIcon name="sparkles" size={16} />
+            Começar a treinar
+          </Button>
+        </div>
+      )}
+
       {/* PIX QR Code Display */}
       {pixData && (
         <div className="mb-6 rounded-2xl border border-brand-primary/30 bg-white/3 p-5">
@@ -174,6 +230,10 @@ export default function AssinaturaPage() {
           <p className="mt-2 text-center text-[10px] text-zinc-600">
             Após o pagamento, sua assinatura será ativada automaticamente
           </p>
+          <div className="mt-3 flex items-center justify-center gap-2">
+            <div className="h-2 w-2 animate-pulse rounded-full bg-brand-primary" />
+            <span className="text-[11px] text-zinc-500">Aguardando pagamento...</span>
+          </div>
         </div>
       )}
 

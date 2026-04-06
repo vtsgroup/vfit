@@ -22,6 +22,7 @@ export interface SubscriptionStatus {
   canceled_at: string | null
   billing_cycle: string | null
   price_paid: number | null
+  cpf: string | null
   limits: {
     ai_plans_per_month: number
     workouts_per_week: number
@@ -54,8 +55,9 @@ export interface CheckoutResult {
 
 /**
  * Get current B2C subscription status
+ * @param pollInterval - Optional refetch interval in ms (for PIX payment polling)
  */
-export function useSubscriptionStatus() {
+export function useSubscriptionStatus(pollInterval?: number) {
   const isReady = useAuthStore((s) => s.isAuthenticated && s.isHydrated)
   return useQuery({
     queryKey: ['subscription-status'],
@@ -64,7 +66,8 @@ export function useSubscriptionStatus() {
       return res.data
     },
     enabled: isReady,
-    staleTime: 60_000,
+    staleTime: pollInterval ? 0 : 60_000,
+    refetchInterval: isReady && pollInterval ? pollInterval : false,
   })
 }
 

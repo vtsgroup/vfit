@@ -26,6 +26,8 @@ import { Button } from '@/components/ui/button'
 import { GuestGuard, Turnstile, OAuthButtons, AuthDivider } from '@/components/auth'
 import { ApiClientError } from '@/lib/api-client'
 
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://api.vfit.app.br'
+
 /* ─── Design tokens ─── */
 const headingFont = {
   fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
@@ -100,10 +102,14 @@ export default function RegisterStudentPage() {
     full_name: '',
     email: '',
     password: '',
+    cpf: '',
     invitation_token: inviteToken,
   })
 
   const register = useRegisterStudent()
+  const fromOnboarding = searchParams.get('from') === 'onboarding'
+  const selectedPlanId = searchParams.get('plan') || ''
+  const requireCpf = fromOnboarding && !!selectedPlanId && selectedPlanId !== 'free'
 
   function updateField(field: string, value: string) {
     setForm((prev) => ({ ...prev, [field]: value }))
@@ -112,7 +118,7 @@ export default function RegisterStudentPage() {
   // Fetch personal trainer info when invite token present
   useEffect(() => {
     if (!inviteToken) return
-    fetch(`https://api.vfit.app.br/api/v1/invitations/${inviteToken}/info`)
+    fetch(`${API_BASE}/api/v1/invitations/${inviteToken}/info`)
       .then((r) => r.json())
       .then((res) => {
         const data = res as { success: boolean; data?: PersonalInfo }
@@ -132,16 +138,24 @@ export default function RegisterStudentPage() {
     form.email &&
     form.password.length >= 8 &&
     turnstileToken &&
-    acceptedTerms
+    acceptedTerms &&
+    (!requireCpf || form.cpf.replace(/\D/g, '').length === 11)
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!formValid) return
 
+    // Salvar CPF para checkout automático pós-registro
+    const rawCpf = form.cpf.replace(/\D/g, '')
+    if (rawCpf.length === 11) {
+      localStorage.setItem('vfit_checkout_cpf', rawCpf)
+    }
+
     register.mutate({
       full_name: form.full_name.trim(),
       email: form.email,
       password: form.password,
+      cpf: rawCpf || undefined,
       invitation_token: form.invitation_token || undefined,
       turnstile_token: turnstileToken,
     })
@@ -379,6 +393,32 @@ export default function RegisterStudentPage() {
                 />
               </div>
 
+              {/* CPF — obrigatório quando vem do onboarding com plano */}
+              {requireCpf && (
+                <div>
+                  <label className="flex items-center gap-1.5 text-[10px] uppercase text-zinc-400 mb-2" style={monoLabel}>
+                    <DSIcon name="shield" size={12} className="text-zinc-500" /> CPF
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="000.000.000-00"
+                    value={form.cpf}
+                    onChange={(e) => {
+                      const raw = e.target.value.replace(/\D/g, '').slice(0, 11)
+                      const formatted = raw.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')
+                      updateField('cpf', formatted)
+                    }}
+                    inputMode="numeric"
+                    maxLength={14}
+                    autoComplete="off"
+                    className={inputNormal}
+                  />
+                  <p className="mt-1.5 text-[10px] text-zinc-500">
+                    Necessário para gerar o pagamento via PIX
+                  </p>
+                </div>
+              )}
+
               {/* Senha */}
               <div>
                 <label className="flex items-center gap-1.5 text-[10px] uppercase text-zinc-400 mb-2" style={monoLabel}>
@@ -457,7 +497,7 @@ export default function RegisterStudentPage() {
                 className="w-full uppercase tracking-wider font-black"
               >
                 <DSIcon name="sparkles" size={16} />
-                CRIAR CONTA E ENTRAR
+                {requireCpf ? 'CRIAR CONTA E ASSINAR' : 'CRIAR CONTA E ENTRAR'}
                 <DSIcon name="arrowRight" size={16} />
               </Button>
 

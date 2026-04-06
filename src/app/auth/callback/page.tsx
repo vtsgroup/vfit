@@ -132,6 +132,16 @@ function OAuthCallbackContent() {
           dest = user.user_type === 'student' ? '/welcome' : '/dashboard/complete-profile'
         }
 
+        // Se aluno veio do onboarding com plano pago → redirecionar para checkout
+        if (user.user_type === 'student') {
+          const pendingPlan = typeof window !== 'undefined'
+            ? localStorage.getItem('vfit_selected_plan')
+            : null
+          if (pendingPlan && pendingPlan !== 'free') {
+            dest = '/perfil/assinatura'
+          }
+        }
+
         router.replace(dest)
       } catch (err) {
         console.error('[OAuth Callback] Error:', err)

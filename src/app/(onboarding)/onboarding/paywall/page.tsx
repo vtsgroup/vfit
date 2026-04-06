@@ -24,14 +24,18 @@ export default function OnboardingPaywallPage() {
   // 15 minutos de countdown para urgência
   const countdownEnd = useMemo(() => Date.now() + 15 * 60 * 1000, [])
 
+  // Mapeia IDs de UI → IDs de backend
+  const PLAN_ID_MAP: Record<string, string> = { monthly: 'premium', annual: 'premium_annual' }
+
   // ─── Handle plan selection ───
   const handleSelect = useCallback(
     async (plan: PaywallPlan) => {
       setLoading(true)
       try {
         // Salvar plano selecionado para pegar após signup/login
-        localStorage.setItem('vfit_selected_plan', plan.id)
-        router.push(`/register/student?from=onboarding&plan=${plan.id}`)
+        const backendId = PLAN_ID_MAP[plan.id] || plan.id
+        localStorage.setItem('vfit_selected_plan', backendId)
+        router.push(`/register/student?from=onboarding&plan=${backendId}`)
       } catch {
         setLoading(false)
       }
@@ -43,8 +47,8 @@ export default function OnboardingPaywallPage() {
   const handleDiscountAccept = useCallback(async () => {
     setLoading(true)
     try {
-      localStorage.setItem('vfit_selected_plan', 'premium')
-      router.push('/register/student?from=onboarding&plan=premium')
+      localStorage.setItem('vfit_selected_plan', 'premium_annual')
+      router.push('/register/student?from=onboarding&plan=premium_annual')
     } catch {
       setLoading(false)
     }

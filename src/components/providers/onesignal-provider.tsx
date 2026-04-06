@@ -24,7 +24,7 @@ import { useAuthStore } from '@/stores/auth-store'
 // SDK v16 — https://documentation.onesignal.com/docs/web-sdk
 // ============================================
 
-const ONESIGNAL_APP_ID = 'adbbfe7f-d73c-4562-9664-dff63b035f1c'
+const ONESIGNAL_APP_ID = '3043de4e-d7aa-4fa1-a61b-5abea28d2f47'
 const SAFARI_WEB_ID = 'web.onesignal.auto.18c45a69-7bf7-46f8-9483-0a7df130c3b6'
 
 declare global {
