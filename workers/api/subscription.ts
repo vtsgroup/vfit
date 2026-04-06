@@ -199,15 +199,23 @@ subscription.post('/checkout', async (c) => {
   await pgQuery(env, 'UPDATE users SET cpf = $1 WHERE id = $2 AND (cpf IS NULL OR cpf = $1)', [cleanCpf, userId])
 
   // Check existing active subscription
-  const existing = await pgQueryOne<{ id: string }>(env,
-    `SELECT id FROM vfit_subscriptions
+  const existing = await pgQueryOne<{ id: string; asaas_subscription_id: string | null }>(env,
+    `SELECT id, asaas_subscription_id FROM vfit_subscriptions
      WHERE user_id = $1 AND canceled_at IS NULL
      AND (renews_at IS NULL OR renews_at > NOW())
      LIMIT 1`,
     [userId]
   )
   if (existing) {
-    throw new BadRequestError('Já possui assinatura ativa')
+    // Super admin: auto-cancel previous subscription for repeated testing
+    if (isSuperAdmin) {
+      if (existing.asaas_subscription_id) {
+        try { await cancelAsaasPayment(env, existing.asaas_subscription_id) } catch { /* ignore */ }
+      }
+      await pgQuery(env, `UPDATE vfit_subscriptions SET canceled_at = NOW(), updated_at = NOW() WHERE id = $1`, [existing.id])
+    } else {
+      throw new BadRequestError('Já possui assinatura ativa')
+    }
   }
 
   // Create subscription record

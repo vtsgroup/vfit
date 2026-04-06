@@ -18,6 +18,7 @@ import { StudentFabMenu } from '@/components/navigation/student-fab-menu'
 import { ErrorBoundary } from '@/components/ui/error-boundary'
 import { PullToRefresh } from '@/components/ui/pull-to-refresh'
 import { OneSignalProvider } from '@/components/providers/onesignal-provider'
+import { ToastContainer } from '@/components/layout/toast-container'
 import { useAuthStore } from '@/stores/auth-store'
 
 /**
@@ -119,6 +120,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           open={fabMenuOpen}
           onClose={() => setFabMenuOpen(false)}
         />
+        <ToastContainer />
       </div>
     </OneSignalProvider>
   )

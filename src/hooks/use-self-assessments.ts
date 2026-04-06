@@ -118,3 +118,31 @@ export function getGoalLabel(goal: string | null): string {
     default: return 'Não informado'
   }
 }
+
+/**
+ * Auto-create self-assessment from onboarding data.
+ * Call this on the home page — it fires once per session when:
+ *   1) User has completed onboarding (user_onboarding exists)
+ *   2) User has zero self_assessments
+ * This bridges the gap: onboarding quiz → auto-avaliação.
+ */
+export function useAutoAssessmentFromOnboarding(
+  hasOnboarding: boolean,
+  assessmentsCount: number | undefined,
+) {
+  const isReady = useAuthStore((s) => s.isAuthenticated && s.isHydrated)
+  const qc = useQueryClient()
+
+  return useQuery({
+    queryKey: ['auto-assessment-from-onboarding'],
+    queryFn: async () => {
+      const res = await api.post<{ assessment_id: string }>('/self-assessments/from-onboarding', {})
+      // Invalidate assessments so the list refreshes
+      qc.invalidateQueries({ queryKey: ['self-assessments'] })
+      return res.data
+    },
+    enabled: isReady && hasOnboarding && assessmentsCount === 0,
+    staleTime: Infinity, // Only fire once per session
+    retry: false,
+  })
+}

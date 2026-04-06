@@ -21,9 +21,10 @@ import {
 import { hapticLight } from '@/lib/haptics'
 import { useCurrentPlan } from '@/hooks/use-plans'
 import { useMealsToday, useNutritionTargets } from '@/hooks/use-vfit-nutrition'
-import { useSelfAssessments, getBMIColor } from '@/hooks/use-self-assessments'
+import { useSelfAssessments, getBMIColor, useAutoAssessmentFromOnboarding } from '@/hooks/use-self-assessments'
 import { useWorkoutLogs } from '@/hooks/use-workouts'
 import { useSubscriptionStatus } from '@/hooks/use-vfit-checkout'
+import { useB2COnboardingCompleted } from '@/hooks/use-b2c-onboarding'
 
 const DIFFICULTY_FILTERS = [
   { value: '', label: 'Todos' },
@@ -106,6 +107,13 @@ export default function TreinosPage() {
   // T5.9 — Assessment summary for post-onboarding card
   const { data: assessments } = useSelfAssessments(1)
   const latestAssessment = assessments?.[0]
+
+  // Auto-create assessment from onboarding data if user has none yet
+  const { data: onboardingStatus } = useB2COnboardingCompleted(true)
+  useAutoAssessmentFromOnboarding(
+    !!onboardingStatus?.completed,
+    assessments?.length,
+  )
 
   // T8.9 — Upgrade prompt after 3 workouts
   const { data: subscription } = useSubscriptionStatus()

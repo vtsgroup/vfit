@@ -69,12 +69,10 @@ export const rateLimitMiddleware = createMiddleware<AppContext>(async (c, next) 
         count: existing.count + 1,
         resetAt: existing.resetAt,
       }
-      const ttl = Math.ceil((existing.resetAt - now) / 1000)
-      if (ttl > 0) {
-        await c.env.KV_RATE_LIMIT.put(key, JSON.stringify(updated), {
-          expirationTtl: ttl,
-        })
-      }
+      const ttl = Math.max(60, Math.ceil((existing.resetAt - now) / 1000))
+      await c.env.KV_RATE_LIMIT.put(key, JSON.stringify(updated), {
+        expirationTtl: ttl,
+      })
 
       c.header('X-RateLimit-Limit', String(config.max))
       c.header('X-RateLimit-Remaining', String(config.max - updated.count))
