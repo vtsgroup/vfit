@@ -299,18 +299,29 @@ export default function OnboardingResultPage() {
       <div className="fixed inset-x-0 bottom-0 border-t border-border-primary bg-bg-primary/95 px-6 pb-8 pt-4 backdrop-blur-lg">
         <div className="mx-auto max-w-md space-y-2">
           {useAuthStore.getState().isAuthenticated ? (
-            /* Já logado — vai direto para treinos (auto-generate cuidará do resto) */
-            <Button
-              size="lg"
-              className="w-full"
-              onClick={() => {
-                markCompleted()
-                router.push('/treinos')
-              }}
-            >
-              <DSIcon name="sparkles" className="h-4 w-4" />
-              Ver Meu Plano de Treino
-            </Button>
+            /* Já logado — opções: ver treino grátis ou fazer upgrade */
+            <>
+              <Button
+                size="lg"
+                className="w-full"
+                onClick={() => {
+                  markCompleted()
+                  router.push('/onboarding/paywall')
+                }}
+              >
+                <DSIcon name="crown" className="h-4 w-4" />
+                Desbloquear Premium
+              </Button>
+              <button
+                onClick={() => {
+                  markCompleted()
+                  router.push('/treinos')
+                }}
+                className="w-full py-2 text-center text-xs text-text-muted hover:text-text-secondary"
+              >
+                Continuar gratuitamente
+              </button>
+            </>
           ) : (
             <>
               <Button

@@ -58,6 +58,16 @@ export default function AssinaturaPage() {
   const isPremium = subStatus?.is_premium ?? false
   const paymentStatus = subStatus?.payment_status
 
+  // Forçar exibição do checkout quando vindo do paywall ou para super_admin testando
+  const [forceCheckout, setForceCheckout] = useState(false)
+  useEffect(() => {
+    const savedPlan = localStorage.getItem('vfit_selected_plan')
+    if (savedPlan && savedPlan !== 'free') {
+      setForceCheckout(true)
+    }
+  }, [])
+  const showUpgrade = (!isPremium || forceCheckout) && !pixData
+
   // Detectar quando pagamento foi confirmado via polling (payment_status: pending → confirmed)
   useEffect(() => {
     if (pixData && !paymentConfirmed && paymentStatus === 'confirmed') {
@@ -103,6 +113,7 @@ export default function AssinaturaPage() {
           qr_code_base64: result.pix.qr_code_base64,
           copy_paste: result.pix.copy_paste,
         })
+        setForceCheckout(false) // Esconder upgrade section após gerar PIX
       }
     } catch {
       // Error handled by mutation
@@ -238,8 +249,8 @@ export default function AssinaturaPage() {
         </div>
       )}
 
-      {/* Upgrade section (only for free users) */}
-      {!isPremium && !pixData && (
+      {/* Upgrade section (free users, paywall redirect, or super_admin testing) */}
+      {showUpgrade && (
         <>
           <h2 className="mb-3 text-[13px] font-bold uppercase tracking-wider text-zinc-500">
             Upgrade para Premium

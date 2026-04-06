@@ -28,7 +28,11 @@ export default function OnboardingPaywallPage() {
 
   // Where to go after paywall — authenticated users go to app, others to register
   const getDestination = useCallback((plan: string) => {
-    if (isAuthenticated) return '/treinos'
+    if (isAuthenticated) {
+      // Plano pago → ir para checkout de assinatura
+      // Plano free → ir direto para treinos
+      return plan === 'free' ? '/treinos' : '/perfil/assinatura'
+    }
     return `/register/student?from=onboarding&plan=${plan}`
   }, [isAuthenticated])
 
