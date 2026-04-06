@@ -465,12 +465,12 @@ function HeroScorecard({ assessment: a }: { assessment: AssessmentDetail }) {
 
         {/* Key metrics row */}
         <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <HeroStat label="Peso" value={a.weight_kg?.toFixed(1) ?? '—'} unit="kg" />
-          <HeroStat label="IMC" value={a.bmi?.toFixed(1) ?? '—'} unit="kg/m²" />
-          <HeroStat label="% Gordura" value={a.body_fat_percentage?.toFixed(1) ?? '—'} unit="%" />
+          <HeroStat label="Peso" value={a.weight_kg != null ? Number(a.weight_kg).toFixed(1) : '—'} unit="kg" />
+          <HeroStat label="IMC" value={a.bmi != null ? Number(a.bmi).toFixed(1) : '—'} unit="kg/m²" />
+          <HeroStat label="% Gordura" value={a.body_fat_percentage != null ? Number(a.body_fat_percentage).toFixed(1) : '—'} unit="%" />
           <HeroStat
             label="Massa Magra"
-            value={a.lean_mass_kg?.toFixed(1) ?? '—'}
+            value={a.lean_mass_kg != null ? Number(a.lean_mass_kg).toFixed(1) : '—'}
             unit="kg"
           />
         </div>

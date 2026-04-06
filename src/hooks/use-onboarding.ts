@@ -39,9 +39,7 @@ export interface UpdateOnboardingInput {
 
 export function useOnboardingStatus() {
   const isReady = useAuthStore((s) => {
-    const role = s.user?.role
-    const isPersonalLike = s.user?.user_type === 'personal' || role === 'admin' || role === 'super_admin'
-    return s.isAuthenticated && s.isHydrated && isPersonalLike
+    return s.isAuthenticated && s.isHydrated && s.user?.user_type === 'personal'
   })
 
   return useQuery<OnboardingResponse>({
@@ -57,9 +55,7 @@ export function useOnboardingStatus() {
 
 export function useUpdateOnboarding() {
   const isReady = useAuthStore((s) => {
-    const role = s.user?.role
-    const isPersonalLike = s.user?.user_type === 'personal' || role === 'admin' || role === 'super_admin'
-    return s.isAuthenticated && s.isHydrated && isPersonalLike
+    return s.isAuthenticated && s.isHydrated && s.user?.user_type === 'personal'
   })
   const qc = useQueryClient()
 

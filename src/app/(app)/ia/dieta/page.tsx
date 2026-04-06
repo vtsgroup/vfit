@@ -192,7 +192,7 @@ export default function DietaIAPage() {
                     <p className="text-[10px] text-text-muted">cm</p>
                   </div>
                   <div>
-                    <span className="text-lg font-bold text-text-primary">{latest.bmi?.toFixed(1)}</span>
+                    <span className="text-lg font-bold text-text-primary">{latest.bmi != null ? Number(latest.bmi).toFixed(1) : '—'}</span>
                     <p className="text-[10px] text-text-muted">IMC</p>
                   </div>
                 </div>

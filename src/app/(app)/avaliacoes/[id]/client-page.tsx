@@ -12,8 +12,9 @@ import { useSelfAssessmentDetail, useSelfAssessments, getBMIColor, getActivityLa
 
 export default function AvaliacaoDetalhePage() {
   const router = useRouter()
-  const { id } = useParams<{ id: string }>()
-  const { data: assessment, isLoading } = useSelfAssessmentDetail(id ?? null)
+  const rawId = useParams<{ id: string }>().id
+  const id = rawId && rawId !== '_' ? rawId : null
+  const { data: assessment, isLoading } = useSelfAssessmentDetail(id)
   const { data: allAssessments } = useSelfAssessments(50)
 
   // Find previous assessment for comparison

@@ -20,8 +20,9 @@ import {
 
 export default function TreinoTemplatePage() {
   const router = useRouter()
-  const { id } = useParams<{ id: string }>()
-  const { data: template, isLoading } = useWorkoutTemplateDetail(id ?? null)
+  const rawId = useParams<{ id: string }>().id
+  const id = rawId && rawId !== '_' ? rawId : null
+  const { data: template, isLoading } = useWorkoutTemplateDetail(id)
 
   if (isLoading) {
     return (

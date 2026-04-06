@@ -281,7 +281,7 @@ plans.get('/current', authMiddleware, async (c) => {
   )
 
   if (!plan) {
-    throw new NotFoundError('Nenhum plano ativo encontrado')
+    return success({ plan: null, days: [] })
   }
 
   // Buscar dias do plano

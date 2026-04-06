@@ -87,10 +87,10 @@ export interface GeneratedPlanResult {
 export function useCurrentPlan() {
   const isReady = useAuthStore((s) => s.isAuthenticated && s.isHydrated)
 
-  return useQuery<CurrentPlan>({
+  return useQuery<CurrentPlan | null>({
     queryKey: ['plans', 'current'],
     queryFn: async () => {
-      const res = await api.get<{ plan: CurrentPlan }>('/plans/current')
+      const res = await api.get<{ plan: CurrentPlan | null }>('/plans/current')
       return res.data.plan
     },
     enabled: isReady,

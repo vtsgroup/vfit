@@ -131,8 +131,8 @@ export default function NutritionAssessmentsPage() {
                 )}
                 {assessment.bmi && (
                   <div className="text-center">
-                    <p className={cn('text-sm font-bold', getBMICategory(assessment.bmi).color)}>
-                      {assessment.bmi.toFixed(1)}
+                    <p className={cn('text-sm font-bold', getBMICategory(Number(assessment.bmi)).color)}>
+                      {Number(assessment.bmi).toFixed(1)}
                     </p>
                     <p className="text-[10px] text-text-muted">IMC</p>
                   </div>
