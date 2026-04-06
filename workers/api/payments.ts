@@ -153,22 +153,26 @@ payments.post('/webhooks/asaas', async (c) => {
         const now = new Date().toISOString()
 
         if (['CONFIRMED', 'RECEIVED'].includes(event)) {
-          // Activate B2C subscription
-          const { rows: subRows } = await pgQuery<{ user_id: string; plan_type: string; billing_cycle: string }>(
+          // Activate B2C subscription — find by ID (UUID) or by asaas_subscription_id (payment ID)
+          const { rows: subRows } = await pgQuery<{ id: string; user_id: string; plan_type: string; billing_cycle: string }>(
             c.env,
-            'SELECT user_id, plan_type, billing_cycle FROM vfit_subscriptions WHERE id = $1 LIMIT 1',
-            [subId]
+            `SELECT id, user_id, plan_type, billing_cycle FROM vfit_subscriptions
+             WHERE (id = $1 OR asaas_subscription_id = $2) AND canceled_at IS NULL
+             LIMIT 1`,
+            [subId, paymentData.id]
           )
           if (subRows.length > 0) {
             const sub = subRows[0]
             const renewsAt = new Date()
             renewsAt.setDate(renewsAt.getDate() + (sub.billing_cycle === 'annual' ? 365 : 30))
 
+            // Activate: set payment_status = confirmed, started_at, renews_at
             await pgQuery(c.env, `
               UPDATE vfit_subscriptions
-              SET asaas_subscription_id = $1, started_at = $2, renews_at = $3, updated_at = $2
+              SET payment_status = 'confirmed', asaas_subscription_id = $1,
+                  started_at = $2, renews_at = $3, updated_at = $2
               WHERE id = $4
-            `, [paymentData.id, now, renewsAt.toISOString(), subId])
+            `, [paymentData.id, now, renewsAt.toISOString(), sub.id])
 
             await pgQuery(c.env, `
               UPDATE users
@@ -184,23 +188,25 @@ payments.post('/webhooks/asaas', async (c) => {
               link: '/perfil/assinatura',
             }).catch(() => {})
 
-            console.log(`[Webhook B2C] Subscription ${subId} activated for user ${sub.user_id} (${sub.plan_type})`)
+            console.log(`[Webhook B2C] Subscription ${sub.id} activated for user ${sub.user_id} (${sub.plan_type})`)
           }
         } else if (['REFUNDED', 'DELETED'].includes(event)) {
-          const { rows: subRows } = await pgQuery<{ user_id: string }>(
+          const { rows: subRows } = await pgQuery<{ id: string; user_id: string }>(
             c.env,
-            'SELECT user_id FROM vfit_subscriptions WHERE id = $1 LIMIT 1',
-            [subId]
+            `SELECT id, user_id FROM vfit_subscriptions
+             WHERE (id = $1 OR asaas_subscription_id = $2) AND canceled_at IS NULL
+             LIMIT 1`,
+            [subId, paymentData.id]
           )
-          await pgQuery(c.env, `
-            UPDATE vfit_subscriptions SET canceled_at = $1, updated_at = $1 WHERE id = $2
-          `, [now, subId])
           if (subRows.length > 0) {
+            await pgQuery(c.env, `
+              UPDATE vfit_subscriptions SET canceled_at = $1, payment_status = 'refunded', updated_at = $1 WHERE id = $2
+            `, [now, subRows[0].id])
             await pgQuery(c.env, `
               UPDATE users SET subscription_plan = 'free', subscription_canceled_at = $1 WHERE id = $2
             `, [now, subRows[0].user_id])
+            console.log(`[Webhook B2C] Subscription ${subRows[0].id} canceled/refunded`)
           }
-          console.log(`[Webhook B2C] Subscription ${subId} canceled/refunded`)
         }
         return c.json({ received: true })
       }

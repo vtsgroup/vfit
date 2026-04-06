@@ -15,6 +15,7 @@
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import { DSIcon } from '@/components/ui/ds-icon'
+import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import {
   useMealsToday,
@@ -137,7 +138,7 @@ export default function NutricaoPage() {
         </div>
 
         {/* ═══ Macros Overview ═══ */}
-        <section className="rounded-2xl bg-bg-secondary p-4">
+        <section className="glass-card">
           <h2 className="mb-3 text-xs font-bold uppercase tracking-wider text-text-muted">
             Resumo do Dia
           </h2>
@@ -203,19 +204,21 @@ export default function NutricaoPage() {
           </div>
 
           {meals.length === 0 && !isLoading ? (
-            <div className="flex flex-col items-center gap-3 rounded-2xl bg-bg-secondary py-10 text-center">
+            <div className="glass-card flex flex-col items-center gap-3 py-10 text-center">
               <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/8">
                 <DSIcon name="plus" size={24} className="text-brand-primary" />
               </div>
               <p className="text-sm text-text-secondary">
                 Nenhuma refeição registrada
               </p>
-              <button
+              <Button
+                variant="ghost"
+                size="sm"
                 onClick={() => setShowSearch(true)}
-                className="rounded-xl bg-brand-primary/12 px-4 py-2 text-xs font-semibold text-brand-primary transition-colors hover:bg-brand-primary/20"
               >
+                <DSIcon name="plus" size={16} />
                 Adicionar Refeição
-              </button>
+              </Button>
             </div>
           ) : (
             <div className="space-y-3">
@@ -225,7 +228,7 @@ export default function NutricaoPage() {
                 const items = grouped.get(type)
                 if (!items?.length) return null
                 return (
-                  <div key={type} className="rounded-2xl bg-bg-secondary p-3">
+                  <div key={type} className="glass-card">
                     <div className="mb-2 flex items-center gap-2">
                       <span className="text-base">{MEAL_TYPE_ICONS[type]}</span>
                       <span className="text-xs font-bold text-text-primary">
@@ -265,7 +268,7 @@ export default function NutricaoPage() {
         {/* ═══ Link para IA Dieta ═══ */}
         <Link
           href="/ia/dieta"
-          className="flex items-center gap-3 rounded-2xl bg-bg-secondary p-4 transition-colors hover:bg-bg-tertiary"
+          className="glass-card flex items-center gap-3 transition-colors hover:bg-bg-tertiary"
         >
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/8">
             <DSIcon name="sparkles" size={20} className="text-brand-primary" />
@@ -303,7 +306,7 @@ export default function NutricaoPage() {
           {selectedFood ? (
             /* ── Log form ── */
             <div className="flex flex-1 flex-col p-4">
-              <div className="mb-6 rounded-2xl bg-bg-secondary p-4">
+              <div className="glass-card mb-6">
                 <p className="font-bold text-text-primary">{selectedFood.name}</p>
                 <p className="mt-1 text-xs text-text-muted capitalize">{selectedFood.category}</p>
                 <div className="mt-3 grid grid-cols-4 gap-2 text-center text-xs">
@@ -396,29 +399,24 @@ export default function NutricaoPage() {
               </div>
 
               <div className="mt-auto flex gap-3">
-                <button
+                <Button
+                  variant="secondary"
+                  className="flex-1"
                   onClick={() => {
                     setSelectedFood(null)
                     setSearchQuery('')
                   }}
-                  className="flex-1 rounded-xl bg-bg-secondary px-4 py-3 text-sm font-semibold text-text-primary transition-colors hover:bg-bg-tertiary"
                 >
                   Voltar
-                </button>
-                <button
+                </Button>
+                <Button
+                  className="flex-1"
                   onClick={handleLogMeal}
-                  disabled={logMeal.isPending}
-                  className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-brand-primary px-4 py-3 text-sm font-semibold text-bg-primary transition-colors hover:bg-brand-primary/90 disabled:opacity-50"
+                  loading={logMeal.isPending}
                 >
-                  {logMeal.isPending ? (
-                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-bg-primary border-t-transparent" />
-                  ) : (
-                    <>
-                      <DSIcon name="plus" size={16} />
-                      Registrar
-                    </>
-                  )}
-                </button>
+                  <DSIcon name="plus" size={16} />
+                  Registrar
+                </Button>
               </div>
             </div>
           ) : (

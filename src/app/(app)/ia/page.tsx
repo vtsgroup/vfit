@@ -47,8 +47,8 @@ export default function IAHubPage() {
                 className={cn(
                   'group relative flex flex-col items-center gap-2 rounded-2xl p-4 text-center transition-all',
                   option.isAvailable
-                    ? 'bg-bg-secondary hover:bg-bg-tertiary active:scale-[0.98]'
-                    : 'bg-bg-secondary/50 opacity-60 pointer-events-none'
+                    ? 'glass-card hover:bg-bg-tertiary active:scale-[0.98]'
+                    : 'glass-card opacity-60 pointer-events-none'
                 )}
                 onClick={(e) => {
                   if (!option.isAvailable) e.preventDefault()
@@ -93,7 +93,7 @@ export default function IAHubPage() {
         {/* ═══ Seção 2: Dicas Fitness ═══ */}
         <section>
           {/* Dica do Dia — destaque */}
-          <div className="rounded-2xl border border-white/8 bg-white/3 p-4 mb-4">
+          <div className="glass-card mb-4">
             <p className="mb-1 text-xs font-semibold text-brand-primary">
               💡 Dica do Dia
             </p>

@@ -43,27 +43,32 @@ subscription.get('/status', async (c) => {
     renews_at: string | null
     canceled_at: string | null
     price_paid: number | null
+    payment_status: string
   }>(env, `
-    SELECT plan_type, billing_cycle, renews_at, canceled_at, price_paid
+    SELECT plan_type, billing_cycle, renews_at, canceled_at, price_paid, payment_status
     FROM vfit_subscriptions
     WHERE user_id = $1 AND canceled_at IS NULL
     ORDER BY created_at DESC LIMIT 1
   `, [userId])
 
   if (b2cSub) {
-    const isActive = !b2cSub.renews_at || new Date(b2cSub.renews_at) > new Date()
+    // Only consider subscription active if payment is confirmed AND not expired
+    const isPaymentConfirmed = b2cSub.payment_status === 'confirmed'
+    const isNotExpired = !b2cSub.renews_at || new Date(b2cSub.renews_at) > new Date()
+    const isActive = isPaymentConfirmed && isNotExpired
     const plan = isActive ? b2cSub.plan_type : 'free'
     const b2cPlan = mapToB2CPlan(plan)
     return success({
       plan: b2cPlan,
       plan_type: plan,
-      is_premium: b2cPlan !== 'free',
+      is_premium: isActive && b2cPlan !== 'free',
+      payment_status: b2cSub.payment_status,
       renews_at: b2cSub.renews_at,
       canceled_at: b2cSub.canceled_at,
       billing_cycle: b2cSub.billing_cycle,
       price_paid: b2cSub.price_paid,
       cpf: userCpf?.cpf || null,
-      limits: getPlanLimits(b2cPlan),
+      limits: getPlanLimits(isActive ? b2cPlan : 'free'),
     })
   }
 
@@ -239,6 +244,9 @@ subscription.post('/checkout', async (c) => {
     throw new BadRequestError(msg)
   }
 
+  // Generate subscription ID early so we can use it in externalReference
+  const subId = generateId()
+
   try {
     // Create PIX payment
     const dueDate = new Date()
@@ -250,7 +258,7 @@ subscription.post('/checkout', async (c) => {
       value: finalPrice,
       dueDate: dueDate.toISOString().split('T')[0],
       description: `VFIT ${planConfig.name}${isSuperAdmin ? ' [TEST]' : ''}`,
-      externalReference: `vfit_sub_${userId}_${Date.now()}`,
+      externalReference: `vfit_sub_${subId}`,
     })
   } catch (err) {
     const msg = err instanceof AsaasApiError ? err.message : 'Erro ao gerar cobrança PIX'
@@ -267,25 +275,18 @@ subscription.post('/checkout', async (c) => {
   }
 
   // ── Step 2: All Asaas calls succeeded → persist to DB ──
-
-  const subId = generateId()
-  const now = new Date()
-  const renewsAt = new Date(now)
-  if (planSlug === 'premium') {
-    renewsAt.setDate(renewsAt.getDate() + 30)
-  } else {
-    renewsAt.setDate(renewsAt.getDate() + 365)
-  }
+  // Create subscription as PENDING — webhook will activate it when payment is confirmed
+  // No started_at or renews_at until payment is confirmed (prevents pre-activation)
 
   await pgQuery(env, `
-    INSERT INTO vfit_subscriptions (id, user_id, plan_type, billing_cycle, started_at, renews_at, price_paid, asaas_subscription_id)
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+    INSERT INTO vfit_subscriptions (id, user_id, plan_type, billing_cycle, started_at, renews_at, price_paid, asaas_subscription_id, payment_status)
+    VALUES ($1, $2, $3, $4, NULL, NULL, $5, $6, 'pending')
     ON CONFLICT (user_id) DO UPDATE SET
-      plan_type = $3, billing_cycle = $4, started_at = $5,
-      renews_at = $6, price_paid = $7, asaas_subscription_id = $8,
-      canceled_at = NULL, updated_at = NOW()
+      plan_type = $3, billing_cycle = $4, started_at = NULL,
+      renews_at = NULL, price_paid = $5, asaas_subscription_id = $6,
+      payment_status = 'pending', canceled_at = NULL, updated_at = NOW()
   `, [subId, userId, planSlug, planSlug === 'premium' ? 'monthly' : 'annual',
-      now.toISOString(), renewsAt.toISOString(), finalPrice, payment.id])
+      finalPrice, payment.id])
 
   return created({
     subscription_id: subId,

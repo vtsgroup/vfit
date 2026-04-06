@@ -56,14 +56,15 @@ export default function AssinaturaPage() {
 
   const currentPlan: Plan = (subStatus?.plan_type as Plan) || 'free'
   const isPremium = subStatus?.is_premium ?? false
+  const paymentStatus = subStatus?.payment_status
 
-  // Detectar quando pagamento foi confirmado via polling
+  // Detectar quando pagamento foi confirmado via polling (payment_status: pending → confirmed)
   useEffect(() => {
-    if (pixData && !paymentConfirmed && isPremium) {
+    if (pixData && !paymentConfirmed && paymentStatus === 'confirmed') {
       setPaymentConfirmed(true)
       setPixData(null)
     }
-  }, [pixData, paymentConfirmed, isPremium])
+  }, [pixData, paymentConfirmed, paymentStatus])
 
   // Pré-carregar CPF salvo do perfil do usuário (backend)
   useEffect(() => {

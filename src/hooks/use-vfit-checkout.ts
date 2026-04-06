@@ -18,6 +18,7 @@ export interface SubscriptionStatus {
   plan: string
   plan_type?: string
   is_premium: boolean
+  payment_status?: 'pending' | 'confirmed' | 'refunded'
   renews_at: string | null
   canceled_at: string | null
   billing_cycle: string | null

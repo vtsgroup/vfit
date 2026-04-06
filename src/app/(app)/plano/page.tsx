@@ -195,7 +195,7 @@ export default function PlanoPage() {
           <p className="text-xs font-semibold text-brand-primary">{getGreeting()}</p>
           <h1 className="text-2xl font-black text-text-primary">Meu Plano</h1>
         </div>
-        <div className="flex flex-col items-center justify-center rounded-3xl border border-border-primary bg-bg-secondary p-8 text-center">
+        <div className="glass-card flex flex-col items-center justify-center p-8 text-center">
           <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/8">
             <DSIcon name="sparkles" size={28} className="text-brand-primary" />
           </div>
@@ -300,7 +300,7 @@ export default function PlanoPage() {
             {currentDay.exercises.map((ex, i) => (
               <div
                 key={ex.id}
-                className="flex items-center gap-3 rounded-xl border border-border-primary bg-bg-secondary p-3 transition-all hover:border-brand-primary/30"
+                className="glass-card flex items-center gap-3 transition-all hover:border-brand-primary/30"
               >
                 {/* Index/emoji */}
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-bg-tertiary">
