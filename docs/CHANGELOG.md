@@ -5,6 +5,26 @@
 
 ---
 
+## [v1.9.3] — 06/04/2026 — Fix: Checkout Flow Frontend — Paywall + Subscription Page
+
+### 🐛 Fluxo de Checkout Inacessível para Usuários Autenticados
+- **Bug 1**: Paywall redirecionava autenticados para `/treinos` em vez de `/perfil/assinatura` → checkout nunca atingido
+- **Bug 2**: Result page pulava paywall para autenticados → sem caminho para pagar
+- **Bug 3**: Super admin com plano B2B 'max' → `is_premium: true` → seção de checkout escondida
+
+### Correções
+- **Paywall** (`src/app/(onboarding)/onboarding/paywall/page.tsx`):
+  - Plano pago selecionado → redireciona para `/perfil/assinatura` (checkout B2C)
+  - Plano free → mantém redirect para `/treinos`
+- **Result page** (`src/app/(onboarding)/onboarding/result/page.tsx`):
+  - Autenticados agora veem botão "Desbloquear Premium" → paywall
+  - Opção "Continuar gratuitamente" → `/treinos`
+- **Subscription page** (`src/app/(app)/perfil/assinatura/page.tsx`):
+  - `forceCheckout`: detecta `vfit_selected_plan` no localStorage → exibe checkout mesmo com `is_premium: true`
+  - Permite super_admin testar pagamento mesmo tendo plano B2B ativo
+
+---
+
 ## [v1.9.2] — 06/04/2026 — Fix: Auto-Generate Plan + Checkout Safeguard + Migration 0030
 
 ### 🐛 Critical — Auto-Generate Plan Falha (0 planos salvos)
