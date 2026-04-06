@@ -88,7 +88,8 @@ export default function PerfilPage() {
             loading={exitSimulation.isPending}
             onClick={async () => {
               await exitSimulation.mutateAsync({ mode: 'super_admin' })
-              router.push('/dashboard/admin')
+              // Full reload para garantir que o dashboard carregue com estado admin correto
+              window.location.href = '/dashboard/admin'
             }}
           >
             <DSIcon name="arrowLeft" size={16} />
