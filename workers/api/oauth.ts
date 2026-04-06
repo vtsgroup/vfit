@@ -42,10 +42,15 @@ const oauth = new Hono<AppContext>()
 /**
  * GET /auth/oauth/google
  * Redireciona o user para o Google consent screen
+ * Suporta ?type=student|personal e ?invite=TOKEN para cadastro de alunos
  */
 oauth.get('/google', (c) => {
   const state = generateOAuthState()
   const redirectUri = c.env.GOOGLE_REDIRECT_URI
+
+  // Capturar tipo de user e invite token (para cadastro de alunos via OAuth)
+  const userType = c.req.query('type') || 'personal'
+  const inviteToken = c.req.query('invite') || ''
 
   const params = new URLSearchParams({
     client_id: c.env.GOOGLE_CLIENT_ID,
@@ -57,9 +62,14 @@ oauth.get('/google', (c) => {
     prompt: 'consent',
   })
 
-  // Salvar state no KV para validação (5 min TTL)
+  // Salvar state no KV com metadata (5 min TTL)
+  const stateData = JSON.stringify({
+    provider: 'google',
+    user_type: userType === 'student' ? 'student' : 'personal',
+    invite_token: inviteToken || null,
+  })
   c.executionCtx.waitUntil(
-    c.env.KV_SESSIONS.put(`oauth_state:${state}`, 'google', { expirationTtl: 300 })
+    c.env.KV_SESSIONS.put(`oauth_state:${state}`, stateData, { expirationTtl: 300 })
   )
 
   return c.redirect(`https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`)
@@ -87,8 +97,27 @@ oauth.get('/google/callback', async (c) => {
   }
 
   // Validar state
-  const storedProvider = await c.env.KV_SESSIONS.get(`oauth_state:${state}`)
-  if (storedProvider !== 'google') {
+  const storedData = await c.env.KV_SESSIONS.get(`oauth_state:${state}`)
+  if (!storedData) {
+    throw new BadRequestError('State OAuth inválido ou expirado')
+  }
+
+  // Parse state data — suporta formato novo (JSON) e legado (string "google")
+  let stateProvider = 'google'
+  let stateUserType: 'personal' | 'student' = 'personal'
+  let stateInviteToken: string | null = null
+
+  try {
+    const parsed = JSON.parse(storedData)
+    stateProvider = parsed.provider || 'google'
+    stateUserType = parsed.user_type === 'student' ? 'student' : 'personal'
+    stateInviteToken = parsed.invite_token || null
+  } catch {
+    // Formato legado: string "google"
+    stateProvider = storedData
+  }
+
+  if (stateProvider !== 'google') {
     throw new BadRequestError('State OAuth inválido ou expirado')
   }
   await c.env.KV_SESSIONS.delete(`oauth_state:${state}`)
@@ -142,6 +171,8 @@ oauth.get('/google/callback', async (c) => {
     name: googleUser.name,
     picture: googleUser.picture,
     emailVerified: googleUser.verified_email ?? false,
+    requestedUserType: stateUserType,
+    invitationToken: stateInviteToken,
   })
 
   } catch (err) {
@@ -161,12 +192,14 @@ interface OAuthUserInfo {
   name: string
   picture?: string
   emailVerified: boolean
+  requestedUserType?: 'personal' | 'student'
+  invitationToken?: string | null
 }
 
 /**
  * Lógica compartilhada: login ou registro via OAuth
  * - Se user existe com esse email → login
- * - Se não existe → cria user type 'personal' (default OAuth)
+ * - Se não existe → cria user (personal ou student conforme requestedUserType)
  */
 async function handleOAuthLogin(
   c: { env: Bindings; req: { raw: Request; header: (name: string) => string | undefined }; executionCtx: ExecutionContext },
@@ -198,18 +231,20 @@ async function handleOAuthLogin(
       // ── NOVO USUÁRIO VIA OAUTH ──
       const userId = generateId()
       isNewUser = true
+      const targetType = info.requestedUserType || 'personal'
 
-      console.log(`[OAuth] Creating new user: ${info.email} via ${info.provider}`)
+      console.log(`[OAuth] Creating new ${targetType} user: ${info.email} via ${info.provider}`)
 
       // 1) Criar user (cpf=NULL, password_hash=NULL — OAuth user)
       try {
         await pgQuery(env, `
           INSERT INTO users (id, email, full_name, cpf, user_type, role, profile_photo_url, password_hash, is_active, email_verified, created_at, updated_at, metadata)
-          VALUES ($1, $2, $3, NULL, 'personal', 'user', $4, NULL, true, $5, $6, $6, $7)
+          VALUES ($1, $2, $3, NULL, $4, 'user', $5, NULL, true, $6, $7, $7, $8)
         `, [
           userId,
           info.email.toLowerCase(),
           info.name,
+          targetType,
           info.picture || null,
           info.emailVerified,
           now,
@@ -224,41 +259,87 @@ async function handleOAuthLogin(
         throw err
       }
 
-      // 2) Criar registro na tabela personals (trial plan, placeholder CREF)
-      try {
-        const referralCode = `R${userId.replace(/-/g, '').slice(0, 7).toUpperCase()}`
-        const placeholderCref = `OAUTH-${userId.replace(/-/g, '').slice(0, 8).toUpperCase()}`
-        const trialEnds = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
+      // 2) Criar registro na tabela de profile (personal ou student)
+      if (targetType === 'student') {
+        // Criar registro de student
+        try {
+          // Se tem invitation token, buscar personal_id
+          let personalId: string | null = null
+          if (info.invitationToken) {
+            const { rows: invRows } = await pgQuery<{ personal_id: string }>(env,
+              'SELECT personal_id FROM students WHERE invitation_token = $1 LIMIT 1',
+              [info.invitationToken]
+            )
+            if (invRows.length > 0) {
+              personalId = invRows[0].personal_id
+              // Atualizar student record existente (aceitar convite)
+              await pgQuery(env, `
+                UPDATE students
+                SET id = $1, accepted_at = $2, invitation_token = NULL, status = 'active', updated_at = $2
+                WHERE invitation_token = $3
+              `, [userId, now, info.invitationToken])
+            }
+          }
 
-        await pgQuery(env, `
-          INSERT INTO personals (id, cref, cref_state, specialties, subscription_plan, subscription_status, trial_ends_at, referral_code, total_students, active_students, total_revenue, created_at, updated_at)
-          VALUES ($1, $2, 'XX', ARRAY[]::TEXT[], 'trial', 'active', $3, $4, 0, 0, 0, $5, $5)
-        `, [
-          userId,
-          placeholderCref,
-          trialEnds,
-          referralCode,
-          now,
-        ])
-      } catch (err) {
-        console.error(`[OAuth] Failed to INSERT personals:`, err)
-        // Cleanup: remove orphaned user
-        await pgQuery(env, 'DELETE FROM users WHERE id = $1', [userId]).catch(() => {})
-        throw err
+          if (!personalId) {
+            // Criar student record autônomo (sem vínculo com personal)
+            await pgQuery(env, `
+              INSERT INTO students (id, personal_id, accepted_at, status, payment_status, created_at, updated_at)
+              VALUES ($1, NULL, $2, 'active', 'pending', $2, $2)
+            `, [userId, now])
+          }
+
+          // Incrementar contagem de alunos do personal (se vinculado)
+          if (personalId) {
+            await pgQuery(env, `
+              UPDATE personals
+              SET total_students = total_students + 1,
+                  active_students = active_students + 1,
+                  updated_at = $1
+              WHERE id = $2
+            `, [now, personalId]).catch(() => {})
+          }
+        } catch (err) {
+          console.error(`[OAuth] Failed to INSERT student:`, err)
+          await pgQuery(env, 'DELETE FROM users WHERE id = $1', [userId]).catch(() => {})
+          throw err
+        }
+      } else {
+        // Criar registro de personal (trial plan, placeholder CREF)
+        try {
+          const referralCode = `R${userId.replace(/-/g, '').slice(0, 7).toUpperCase()}`
+          const placeholderCref = `OAUTH-${userId.replace(/-/g, '').slice(0, 8).toUpperCase()}`
+          const trialEnds = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
+
+          await pgQuery(env, `
+            INSERT INTO personals (id, cref, cref_state, specialties, subscription_plan, subscription_status, trial_ends_at, referral_code, total_students, active_students, total_revenue, created_at, updated_at)
+            VALUES ($1, $2, 'XX', ARRAY[]::TEXT[], 'trial', 'active', $3, $4, 0, 0, 0, $5, $5)
+          `, [
+            userId,
+            placeholderCref,
+            trialEnds,
+            referralCode,
+            now,
+          ])
+        } catch (err) {
+          console.error(`[OAuth] Failed to INSERT personals:`, err)
+          await pgQuery(env, 'DELETE FROM users WHERE id = $1', [userId]).catch(() => {})
+          throw err
+        }
       }
 
       user = {
         id: userId,
         email: info.email.toLowerCase(),
         full_name: info.name,
-        user_type: 'personal' as const,
+        user_type: targetType,
         role: 'user',
         is_active: true,
         email_verified: info.emailVerified,
         profile_photo_url: info.picture || null,
       }
 
-      console.log(`[OAuth] New user created: ${userId}`)
+      console.log(`[OAuth] New ${targetType} user created: ${userId}`)
     } else {
       // ── USUÁRIO EXISTENTE ──
       if (!user.is_active) {

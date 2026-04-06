@@ -452,13 +452,15 @@ auth.post('/register/student', async (c) => {
   const now = new Date().toISOString()
   let userId: string
 
-  // CPF obrigatório e único global (comparação por dígitos)
-  const normalizedCpf = normalizeCpf(parsed.cpf)
-  if (!normalizedCpf || normalizedCpf.length !== 11) {
-    throw new BadRequestError('CPF inválido')
+  // CPF opcional — se fornecido, valida e verifica unicidade
+  let canonicalCpf: string | null = null
+  if (parsed.cpf) {
+    const normalizedCpf = normalizeCpf(parsed.cpf)
+    if (!normalizedCpf || normalizedCpf.length !== 11) {
+      throw new BadRequestError('CPF inválido')
+    }
+    canonicalCpf = formatCpf(normalizedCpf)
   }
-
-  const canonicalCpf = formatCpf(normalizedCpf)
 
   // Check se email já existe
   const existingUser = await pgFindUserByEmail(c.env, parsed.email)
@@ -472,9 +474,11 @@ auth.post('/register/student', async (c) => {
         userId = existingUser.id
 
         // Check CPF duplicado (excluindo o próprio placeholder)
-        const existingCpf = await pgFindUserByCpf(c.env, canonicalCpf)
-        if (existingCpf && existingCpf.id !== userId) {
-          throw new ConflictError('CPF já cadastrado')
+        if (canonicalCpf) {
+          const existingCpf = await pgFindUserByCpf(c.env, canonicalCpf)
+          if (existingCpf && existingCpf.id !== userId) {
+            throw new ConflictError('CPF já cadastrado')
+          }
         }
 
         // Atualizar placeholder user com dados reais
@@ -505,10 +509,12 @@ auth.post('/register/student', async (c) => {
     } else {
       // Email não existe — fluxo com convite: criar user + atualizar student pré-criado
 
-      // Check CPF duplicado
-      const existingCpf = await pgFindUserByCpf(c.env, canonicalCpf)
-      if (existingCpf) {
-        throw new ConflictError('CPF já cadastrado')
+      // Check CPF duplicado (só se fornecido)
+      if (canonicalCpf) {
+        const existingCpf = await pgFindUserByCpf(c.env, canonicalCpf)
+        if (existingCpf) {
+          throw new ConflictError('CPF já cadastrado')
+        }
       }
 
       userId = generateId()
@@ -549,9 +555,12 @@ auth.post('/register/student', async (c) => {
       throw new ConflictError('Email já cadastrado')
     }
 
-    const existingCpf = await pgFindUserByCpf(c.env, canonicalCpf)
-    if (existingCpf) {
-      throw new ConflictError('CPF já cadastrado')
+    // Check CPF duplicado (só se fornecido)
+    if (canonicalCpf) {
+      const existingCpf = await pgFindUserByCpf(c.env, canonicalCpf)
+      if (existingCpf) {
+        throw new ConflictError('CPF já cadastrado')
+      }
     }
 
     userId = generateId()

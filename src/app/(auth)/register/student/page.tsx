@@ -1,17 +1,17 @@
 /**
  * src/app/(auth)/register/student/page.tsx
  *
- * Register Student — Ultra-modern · Cover social · CPF-first flow
+ * Register Student — Single-step · Google OAuth first · CPF optional
  *
  * Exports: RegisterStudentPage
- * Hooks: useState, useEffect, useMemo, useRef, useSearchParams, useRegisterStudent
+ * Hooks: useState, useEffect, useMemo, useSearchParams, useRegisterStudent
  * Features: 'use client' · DSIcon
  */
 
 // ============================================
-// Register Student — Ultra-modern · Cover social · CPF-first flow
-// Personal trainer photo/CREF cover · CPF auto-validate
-// Step 1: CPF → auto-validate → Step 2: email + senha → auto-login
+// Register Student — Single-step flow
+// Google OAuth button + email/password form
+// CPF optional — can be added later in profile
 // ============================================
 
 'use client'
@@ -23,7 +23,7 @@ import { useSearchParams } from 'next/navigation'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { useRegisterStudent } from '@/hooks/use-auth'
 import { Button } from '@/components/ui/button'
-import { GuestGuard, Turnstile } from '@/components/auth'
+import { GuestGuard, Turnstile, OAuthButtons, AuthDivider } from '@/components/auth'
 import { ApiClientError } from '@/lib/api-client'
 
 /* ─── Design tokens ─── */
@@ -41,35 +41,6 @@ const monoLabel = {
 /* ─── Input classes ─── */
 const inputBase = 'w-full h-13 rounded-2xl border backdrop-blur-sm px-4 text-[15px] transition-all duration-300 focus:outline-none'
 const inputNormal = `${inputBase} bg-white/95 text-zinc-900 placeholder:text-zinc-400 border-white/20 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-400/25 focus:bg-white shadow-sm`
-const inputSuccess = `${inputBase} bg-emerald-50 text-zinc-900 placeholder:text-zinc-400 border-emerald-500/50 ring-1 ring-emerald-500/30`
-
-/* ─── CPF mask ─── */
-function maskCpf(value: string): string {
-  const digits = value.replace(/\D/g, '').slice(0, 11)
-  let m = digits
-  if (digits.length > 3) m = digits.slice(0, 3) + '.' + digits.slice(3)
-  if (digits.length > 6) m = m.slice(0, 7) + '.' + digits.slice(6)
-  if (digits.length > 9) m = m.slice(0, 11) + '-' + digits.slice(9)
-  return m
-}
-
-/* ─── Validate CPF check digits ─── */
-function validateCpfDigits(cpf: string): boolean {
-  const digits = cpf.replace(/\D/g, '')
-  if (digits.length !== 11) return false
-  if (/^(\d)\1+$/.test(digits)) return false
-  let sum = 0
-  for (let i = 0; i < 9; i++) sum += parseInt(digits[i]) * (10 - i)
-  let d1 = 11 - (sum % 11)
-  if (d1 >= 10) d1 = 0
-  if (parseInt(digits[9]) !== d1) return false
-  sum = 0
-  for (let i = 0; i < 10; i++) sum += parseInt(digits[i]) * (11 - i)
-  let d2 = 11 - (sum % 11)
-  if (d2 >= 10) d2 = 0
-  if (parseInt(digits[10]) !== d2) return false
-  return true
-}
 
 /* ─── Personal Trainer info type ─── */
 interface PersonalInfo {
@@ -119,20 +90,14 @@ export default function RegisterStudentPage() {
   const searchParams = useSearchParams()
   const inviteToken = searchParams.get('token') || ''
 
-  // Steps: 'cpf' → 'details'
-  const [step, setStep] = useState<'cpf' | 'details'>('cpf')
   const [personalInfo, setPersonalInfo] = useState<PersonalInfo | null>(null)
   const [showPassword, setShowPassword] = useState(false)
   const [turnstileToken, setTurnstileToken] = useState('')
   const [acceptedTerms, setAcceptedTerms] = useState(false)
-  const [cpfValidated, setCpfValidated] = useState(false)
-  const [cpfError, setCpfError] = useState('')
-  const [cpfChecking, setCpfChecking] = useState(false)
-  const [cpfLookupName, setCpfLookupName] = useState('')
   const [photoFailed, setPhotoFailed] = useState(false)
 
   const [form, setForm] = useState({
-    cpf: '',
+    full_name: '',
     email: '',
     password: '',
     invitation_token: inviteToken,
@@ -151,87 +116,32 @@ export default function RegisterStudentPage() {
       .then((r) => r.json())
       .then((res) => {
         const data = res as { success: boolean; data?: PersonalInfo }
-        if (data.success && data.data) setPersonalInfo(data.data)
+        if (data.success && data.data) {
+          setPersonalInfo(data.data)
+          // Pre-fill name from invitation
+          if (data.data.student_name) {
+            setForm(prev => ({ ...prev, full_name: data.data!.student_name || '' }))
+          }
+        }
       })
       .catch(() => {})
   }, [inviteToken])
 
-  // Auto-validate CPF via API when CPF is fully typed (11 digits)
-  useEffect(() => {
-    setCpfError('')
-    setCpfLookupName('')
-    setCpfValidated(false)
-    setCpfChecking(false)
-
-    if (form.cpf.length !== 14) return
-
-    if (!validateCpfDigits(form.cpf)) {
-      setCpfError('CPF inválido. Verifique os dígitos.')
-      return
-    }
-
-    setCpfChecking(true)
-    const controller = new AbortController()
-
-    fetch('https://api.vfit.app.br/api/v1/cpf/lookup', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ cpf: form.cpf.replace(/\D/g, '') }),
-      signal: controller.signal,
-    })
-      .then(async (res) => {
-        if (res.status === 429) {
-          setCpfError('Muitas tentativas. Aguarde 1 minuto.')
-          setCpfChecking(false)
-          return
-        }
-        const json = await res.json() as { success: boolean; data?: { available?: boolean; found?: boolean; full_name?: string; birth_date?: string; message?: string } }
-        const data = json?.data
-        if (!data?.available) {
-          setCpfValidated(true)
-          setCpfChecking(false)
-          setTimeout(() => { setStep('details'); window.scrollTo({ top: 0, behavior: 'smooth' }) }, 700)
-          return
-        }
-        if (!data.found || !data.full_name) {
-          setCpfError(data?.message || 'CPF não encontrado na Receita Federal.')
-          setCpfChecking(false)
-          return
-        }
-        setCpfLookupName(data.full_name)
-        setCpfValidated(true)
-        setCpfChecking(false)
-        setTimeout(() => { setStep('details'); window.scrollTo({ top: 0, behavior: 'smooth' }) }, 1000)
-      })
-      .catch((err) => {
-        if (err?.name === 'AbortError') return
-        setCpfValidated(true)
-        setCpfChecking(false)
-        setTimeout(() => { setStep('details'); window.scrollTo({ top: 0, behavior: 'smooth' }) }, 700)
-      })
-
-    return () => controller.abort()
-  }, [form.cpf])
-
-  // Student name: prefer API lookup, fallback to invitation name
-  const studentName = cpfLookupName || personalInfo?.student_name || ''
-
-  const detailsValid =
+  const formValid =
+    form.full_name.trim().length >= 2 &&
     form.email &&
     form.password.length >= 8 &&
     turnstileToken &&
-    acceptedTerms &&
-    cpfValidated
+    acceptedTerms
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (!detailsValid) return
+    if (!formValid) return
 
     register.mutate({
-      full_name: cpfLookupName || studentName || 'Aluno',
+      full_name: form.full_name.trim(),
       email: form.email,
       password: form.password,
-      cpf: form.cpf,
       invitation_token: form.invitation_token || undefined,
       turnstile_token: turnstileToken,
     })
@@ -415,231 +325,153 @@ export default function RegisterStudentPage() {
 
         {/* ─── FORM AREA ─── */}
         <div className="px-5 sm:px-8 lg:px-14 xl:px-20">
-          {/* Step indicator */}
-          <div className="flex items-center gap-3 mb-6">
-            <div className={`flex items-center gap-2 transition-colors duration-300 ${step === 'cpf' ? 'text-emerald-400' : 'text-emerald-500/40'}`}>
-              <div className={`h-7 w-7 rounded-full flex items-center justify-center text-[11px] font-bold transition-all duration-300 ${
-                cpfValidated ? 'bg-emerald-500 text-white' : step === 'cpf' ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-400' : 'bg-white/5 border border-white/10 text-zinc-600'
-              }`}>
-                {cpfValidated ? <DSIcon name="checkCircle2" size={14} /> : '1'}
-              </div>
-              <span className="text-[10px] font-bold uppercase tracking-wider" style={monoLabel}>CPF</span>
+
+          {/* ═══════════════ GOOGLE OAUTH — Opção rápida ═══════════════ */}
+          <div style={{ animation: 'slideUp 0.4s ease-out' }}>
+            <div className="mb-4">
+              <h3 className="text-lg font-black text-white" style={headingFont}>
+                Crie sua conta
+              </h3>
+              <p className="text-[13px] text-zinc-500 mt-1">
+                Cadastro rápido com Google ou email e senha.
+              </p>
             </div>
-            <div className={`h-px flex-1 transition-colors duration-500 ${cpfValidated ? 'bg-emerald-500/40' : 'bg-white/8'}`} />
-            <div className={`flex items-center gap-2 transition-colors duration-300 ${step === 'details' ? 'text-emerald-400' : 'text-zinc-600'}`}>
-              <div className={`h-7 w-7 rounded-full flex items-center justify-center text-[11px] font-bold transition-all duration-300 ${
-                step === 'details' ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-400' : 'bg-white/5 border border-white/10 text-zinc-600'
-              }`}>
-                2
-              </div>
-              <span className="text-[10px] font-bold uppercase tracking-wider" style={monoLabel}>CONTA</span>
-            </div>
+
+            {/* Google OAuth button — prominent */}
+            <OAuthButtons userType="student" invitationToken={inviteToken || undefined} />
+
+            <AuthDivider />
           </div>
 
-          {/* ═══════════════ STEP 1: CPF ═══════════════ */}
-          {step === 'cpf' && (
-            <div style={{ animation: 'slideUp 0.4s ease-out' }}>
-              <div className="mb-5">
-                <h3 className="text-lg font-black text-white" style={headingFont}>
-                  Identifique-se
-                </h3>
-                <p className="text-[13px] text-zinc-500 mt-1">
-                  Digite seu CPF para validação automática.
-                </p>
-              </div>
-
-              <div className="space-y-4">
-                {/* CPF */}
-                <div>
-                  <label className="flex items-center gap-1.5 text-[10px] uppercase text-zinc-400 mb-2" style={monoLabel}>
-                    <DSIcon name="fingerprint" size={12} className="text-zinc-500" /> CPF
-                  </label>
-                  <input
-                    type="text"
-                    inputMode="numeric"
-                    placeholder="000.000.000-00"
-                    value={form.cpf}
-                    onChange={(e) => updateField('cpf', maskCpf(e.target.value))}
-                    autoComplete="off"
-                    required
-                    className={`${cpfValidated ? inputSuccess : cpfError ? `${inputBase} bg-red-50 text-zinc-900 placeholder:text-zinc-400 border-red-500/50 ring-1 ring-red-500/30` : inputNormal} tracking-wider text-lg font-semibold`}
-                    autoFocus
-                  />
-                </div>
-
-                {/* Checking spinner */}
-                {cpfChecking && (
-                  <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/2 px-4 py-3" style={{ animation: 'scaleIn 0.2s ease-out' }}>
-                    <DSIcon name="loader" className="text-emerald-400 animate-spin shrink-0" />
-                    <p className="text-[12px] text-zinc-400 font-medium">Validando CPF...</p>
-                  </div>
-                )}
-
-                {/* CPF validated */}
-                {cpfValidated && !cpfChecking && (
-                  <div className="flex items-center gap-3 rounded-2xl border border-emerald-500/20 bg-emerald-500/6 px-4 py-3" style={{ animation: 'scaleIn 0.3s ease-out' }}>
-                    <DSIcon name="checkCircle2" className="text-emerald-400 shrink-0" />
-                    <p className="text-[10px] text-emerald-500/70 uppercase font-bold" style={monoLabel}>CPF VALIDADO</p>
-                  </div>
-                )}
-
-                {/* CPF error */}
-                {cpfError && (
-                  <div className="flex items-center gap-3 rounded-2xl border border-red-500/20 bg-red-500/6 px-4 py-3" style={{ animation: 'scaleIn 0.2s ease-out' }}>
-                    <DSIcon name="alertCircle" className="text-red-400 shrink-0" />
-                    <p className="text-[12px] text-red-400 font-medium">{cpfError}</p>
-                  </div>
-                )}
-              </div>
-
-              {/* Security note */}
-              <div className="mt-5 flex items-center gap-2 text-[10px] text-zinc-700">
-                <DSIcon name="shield" size={12} />
-                <span>Validação segura — dados protegidos por criptografia SSL</span>
-              </div>
-            </div>
-          )}
-
-          {/* ═══════════════ STEP 2: EMAIL + SENHA ═══════════════ */}
-          {step === 'details' && (
-            <form onSubmit={handleSubmit} style={{ animation: 'slideUp 0.4s ease-out' }}>
-              {/* Validated user */}
-              <div className="mb-5 flex items-center gap-3 rounded-2xl border border-emerald-500/15 bg-emerald-500/5 px-4 py-3">
-                <DSIcon name="checkCircle2" className="text-emerald-400 shrink-0" />
-                <div className="min-w-0 flex-1">
-                  <p className="text-[11px] text-emerald-400/70">{form.cpf}</p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => { setStep('cpf'); setCpfValidated(false); setCpfLookupName(''); updateField('cpf', '') }}
-                  className="text-[10px] font-bold text-zinc-500 hover:text-white transition-colors uppercase"
-                  style={monoLabel}
-                >
-                  Alterar
-                </button>
-              </div>
-
-              <div className="mb-5">
-                <h3 className="text-lg font-black text-white" style={headingFont}>
-                  Crie sua conta
-                </h3>
-                <p className="text-[13px] text-zinc-500 mt-1">
-                  Defina email e senha para acessar a plataforma.
-                </p>
-              </div>
-
-              <div className="space-y-4">
-                {/* Email */}
-                <div>
-                  <label className="flex items-center gap-1.5 text-[10px] uppercase text-zinc-400 mb-2" style={monoLabel}>
-                    <DSIcon name="mail" size={12} className="text-zinc-500" /> EMAIL
-                  </label>
-                  <input
-                    type="email"
-                    placeholder="seu@email.com"
-                    value={form.email}
-                    onChange={(e) => updateField('email', e.target.value)}
-                    autoComplete="email"
-                    required
-                    autoFocus
-                    className={inputNormal}
-                  />
-                </div>
-
-                {/* Senha */}
-                <div>
-                  <label className="flex items-center gap-1.5 text-[10px] uppercase text-zinc-400 mb-2" style={monoLabel}>
-                    <DSIcon name="lock" size={12} className="text-zinc-500" /> SENHA
-                  </label>
-                  <div className="relative">
-                    <input
-                      type={showPassword ? 'text' : 'password'}
-                      placeholder="Mínimo 8 caracteres"
-                      value={form.password}
-                      onChange={(e) => updateField('password', e.target.value)}
-                      autoComplete="new-password"
-                      required
-                      className={`${inputNormal} pr-12`}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-zinc-400 hover:text-zinc-600 transition-colors rounded-lg"
-                      tabIndex={-1}
-                    >
-                      {showPassword ? <DSIcon name="eyeOff" size={16} /> : <DSIcon name="eye" size={16} />}
-                    </button>
-                  </div>
-                  {/* Password strength */}
-                  {form.password && (
-                    <div className="mt-2 flex gap-1">
-                      {[1, 2, 3, 4].map((lvl) => (
-                        <div
-                          key={lvl}
-                          className={`h-1 flex-1 rounded-full transition-colors duration-300 ${
-                            form.password.length >= lvl * 3
-                              ? form.password.length >= 12 ? 'bg-emerald-400' : form.password.length >= 8 ? 'bg-amber-400' : 'bg-red-400'
-                              : 'bg-white/20'
-                          }`}
-                        />
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* Terms */}
-                <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-white/6 bg-white/2 p-3 transition-colors hover:border-emerald-500/20 hover:bg-emerald-500/3">
-                  <div className="relative mt-0.5">
-                    <input
-                      type="checkbox"
-                      checked={acceptedTerms}
-                      onChange={(e) => setAcceptedTerms(e.target.checked)}
-                      className="peer sr-only"
-                    />
-                    <div className="h-4.5 w-4.5 rounded-md border border-zinc-700 bg-zinc-900 peer-checked:bg-emerald-500 peer-checked:border-emerald-500 transition-all duration-200 flex items-center justify-center">
-                      {acceptedTerms && (
-                        <svg className="h-2.5 w-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3.5}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                        </svg>
-                      )}
-                    </div>
-                  </div>
-                  <span className="text-[11px] leading-relaxed text-zinc-500">
-                    Li e aceito os{' '}
-                    <Link href="/termos" target="_blank" className="font-bold text-emerald-400 hover:underline">Termos de Uso</Link>
-                    {' '}e a{' '}
-                    <Link href="/privacidade" target="_blank" className="font-bold text-emerald-400 hover:underline">Política de Privacidade</Link>
-                  </span>
+          {/* ═══════════════ EMAIL + SENHA ═══════════════ */}
+          <form onSubmit={handleSubmit} style={{ animation: 'slideUp 0.5s ease-out' }}>
+            <div className="space-y-4">
+              {/* Nome */}
+              <div>
+                <label className="flex items-center gap-1.5 text-[10px] uppercase text-zinc-400 mb-2" style={monoLabel}>
+                  <DSIcon name="user" size={12} className="text-zinc-500" /> NOME COMPLETO
                 </label>
+                <input
+                  type="text"
+                  placeholder="Seu nome completo"
+                  value={form.full_name}
+                  onChange={(e) => updateField('full_name', e.target.value)}
+                  autoComplete="name"
+                  required
+                  autoFocus
+                  className={inputNormal}
+                />
+              </div>
 
-                {/* Turnstile — invisible-first, fallback to interactive */}
-                <Turnstile onVerify={setTurnstileToken} onExpire={() => setTurnstileToken('')} />
+              {/* Email */}
+              <div>
+                <label className="flex items-center gap-1.5 text-[10px] uppercase text-zinc-400 mb-2" style={monoLabel}>
+                  <DSIcon name="mail" size={12} className="text-zinc-500" /> EMAIL
+                </label>
+                <input
+                  type="email"
+                  placeholder="seu@email.com"
+                  value={form.email}
+                  onChange={(e) => updateField('email', e.target.value)}
+                  autoComplete="email"
+                  required
+                  className={inputNormal}
+                />
+              </div>
 
-                {/* Submit — 3D button */}
-                <Button
-                  type="submit"
-                  size="lg"
-                  disabled={!detailsValid}
-                  loading={register.isPending}
-                  className="w-full uppercase tracking-wider font-black"
-                >
-                  <DSIcon name="sparkles" size={16} />
-                  CRIAR CONTA E ENTRAR
-                  <DSIcon name="arrowRight" size={16} />
-                </Button>
-
-                {/* Error */}
-                {register.isError && (
-                  <div className="flex items-center gap-2.5 rounded-2xl border border-red-500/20 bg-red-500/6 px-4 py-3">
-                    <DSIcon name="alertCircle" size={16} className="text-red-400 shrink-0" />
-                    <p className="text-[12px] font-medium text-red-400">
-                      {register.error instanceof ApiClientError ? register.error.message : 'Erro ao criar conta. Tente novamente.'}
-                    </p>
+              {/* Senha */}
+              <div>
+                <label className="flex items-center gap-1.5 text-[10px] uppercase text-zinc-400 mb-2" style={monoLabel}>
+                  <DSIcon name="lock" size={12} className="text-zinc-500" /> SENHA
+                </label>
+                <div className="relative">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="Mínimo 8 caracteres"
+                    value={form.password}
+                    onChange={(e) => updateField('password', e.target.value)}
+                    autoComplete="new-password"
+                    required
+                    className={`${inputNormal} pr-12`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-zinc-400 hover:text-zinc-600 transition-colors rounded-lg"
+                    tabIndex={-1}
+                  >
+                    {showPassword ? <DSIcon name="eyeOff" size={16} /> : <DSIcon name="eye" size={16} />}
+                  </button>
+                </div>
+                {/* Password strength */}
+                {form.password && (
+                  <div className="mt-2 flex gap-1">
+                    {[1, 2, 3, 4].map((lvl) => (
+                      <div
+                        key={lvl}
+                        className={`h-1 flex-1 rounded-full transition-colors duration-300 ${
+                          form.password.length >= lvl * 3
+                            ? form.password.length >= 12 ? 'bg-emerald-400' : form.password.length >= 8 ? 'bg-amber-400' : 'bg-red-400'
+                            : 'bg-white/20'
+                        }`}
+                      />
+                    ))}
                   </div>
                 )}
               </div>
-            </form>
-          )}
+
+              {/* Terms */}
+              <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-white/6 bg-white/2 p-3 transition-colors hover:border-emerald-500/20 hover:bg-emerald-500/3">
+                <div className="relative mt-0.5">
+                  <input
+                    type="checkbox"
+                    checked={acceptedTerms}
+                    onChange={(e) => setAcceptedTerms(e.target.checked)}
+                    className="peer sr-only"
+                  />
+                  <div className="h-4.5 w-4.5 rounded-md border border-zinc-700 bg-zinc-900 peer-checked:bg-emerald-500 peer-checked:border-emerald-500 transition-all duration-200 flex items-center justify-center">
+                    {acceptedTerms && (
+                      <svg className="h-2.5 w-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                    )}
+                  </div>
+                </div>
+                <span className="text-[11px] leading-relaxed text-zinc-500">
+                  Li e aceito os{' '}
+                  <Link href="/termos" target="_blank" className="font-bold text-emerald-400 hover:underline">Termos de Uso</Link>
+                  {' '}e a{' '}
+                  <Link href="/privacidade" target="_blank" className="font-bold text-emerald-400 hover:underline">Política de Privacidade</Link>
+                </span>
+              </label>
+
+              {/* Turnstile — invisible-first, fallback to interactive */}
+              <Turnstile onVerify={setTurnstileToken} onExpire={() => setTurnstileToken('')} />
+
+              {/* Submit — 3D button */}
+              <Button
+                type="submit"
+                size="lg"
+                disabled={!formValid}
+                loading={register.isPending}
+                className="w-full uppercase tracking-wider font-black"
+              >
+                <DSIcon name="sparkles" size={16} />
+                CRIAR CONTA E ENTRAR
+                <DSIcon name="arrowRight" size={16} />
+              </Button>
+
+              {/* Error */}
+              {register.isError && (
+                <div className="flex items-center gap-2.5 rounded-2xl border border-red-500/20 bg-red-500/6 px-4 py-3">
+                  <DSIcon name="alertCircle" size={16} className="text-red-400 shrink-0" />
+                  <p className="text-[12px] font-medium text-red-400">
+                    {register.error instanceof ApiClientError ? register.error.message : 'Erro ao criar conta. Tente novamente.'}
+                  </p>
+                </div>
+              )}
+            </div>
+          </form>
 
           {/* Footer */}
           <div className="mt-6 mb-4 flex items-center justify-between">

@@ -40,7 +40,8 @@ export const registerStudentSchema = z.object({
   full_name: z.string().min(2, 'Nome muito curto').max(255),
   cpf: z
     .string()
-    .regex(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, 'CPF no formato 000.000.000-00'),
+    .regex(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, 'CPF no formato 000.000.000-00')
+    .optional(),
   phone: z.string().min(10).max(20).optional(),
   invitation_token: z.string().min(1, 'Token de convite inválido').optional(),
   turnstile_token: z.string().default(''),

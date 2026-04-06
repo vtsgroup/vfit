@@ -144,7 +144,9 @@ export function OnboardingStepLayout({
 
       {/* ─── Step content with slide animation ─── */}
       <div
-        className={`flex-1 px-6 transition-all duration-400 ${
+        className={`flex-1 overflow-y-auto px-6 transition-all duration-400 ${
+          !hideFooter ? 'pb-24' : ''
+        } ${
           mounted && direction === 'enter'
             ? 'translate-x-0 opacity-100'
             : direction === 'exit'
@@ -155,9 +157,9 @@ export function OnboardingStepLayout({
         {children}
       </div>
 
-      {/* ─── Footer: continue button ─── */}
+      {/* ─── Footer: continue button — FIXED at bottom ─── */}
       {!hideFooter && (
-        <div className="safe-area-bottom px-6 pb-6 pt-4">
+        <div className="fixed inset-x-0 bottom-0 z-30 safe-area-bottom bg-bg-primary/80 backdrop-blur-xl border-t border-white/5 px-6 pb-6 pt-4">
           <Button
             size="lg"
             className="w-full"

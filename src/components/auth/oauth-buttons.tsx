@@ -35,8 +35,17 @@ const AppleIcon = ({ className }: { className?: string }) => (
 
 const btnBase = 'flex items-center justify-center rounded-xl font-semibold transition-all duration-200'
 
-export function OAuthButtons({ className, compact }: { className?: string; compact?: boolean }) {
+interface OAuthButtonsProps {
+  className?: string
+  compact?: boolean
+  userType?: 'student' | 'personal'
+  invitationToken?: string
+}
+
+export function OAuthButtons({ className, compact, userType, invitationToken }: OAuthButtonsProps) {
   const oauth = useOAuthRedirect()
+
+  const handleGoogle = () => oauth.mutate({ provider: 'google', userType, invitationToken })
 
   if (compact) {
     return (
@@ -47,7 +56,7 @@ export function OAuthButtons({ className, compact }: { className?: string; compa
           <AppleIcon className="h-5 w-5" />
         </button>
         {/* Google — active */}
-        <button type="button" onClick={() => oauth.mutate('google')} disabled={oauth.isPending}
+        <button type="button" onClick={handleGoogle} disabled={oauth.isPending}
           className={cn(btnBase, 'h-11 w-full bg-white text-zinc-800 hover:bg-zinc-50 shadow-[0_1px_3px_rgba(0,0,0,0.08)] hover:shadow-[0_2px_8px_rgba(0,0,0,0.12)]')}>
           <GoogleIcon className="h-5 w-5" />
         </button>
@@ -63,7 +72,7 @@ export function OAuthButtons({ className, compact }: { className?: string; compa
         Continuar com Apple
         <span className="absolute right-3 text-[8px] font-bold uppercase tracking-wider opacity-80 bg-white/20 rounded-full px-1.5 py-0.5">em breve</span>
       </button>
-      <button type="button" onClick={() => oauth.mutate('google')} disabled={oauth.isPending}
+      <button type="button" onClick={handleGoogle} disabled={oauth.isPending}
         className={cn(btnBase, 'h-11 w-full gap-3 text-sm bg-white text-zinc-800 hover:bg-zinc-50 shadow-[0_1px_3px_rgba(0,0,0,0.08)]')}>
         <GoogleIcon className="h-5 w-5" />
         Continuar com Google

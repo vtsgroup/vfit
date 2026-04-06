@@ -59,8 +59,8 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       <main
         id="main-content"
         className={cn(
-          'min-h-dvh pb-[calc(5.5rem+env(safe-area-inset-bottom,0px))] transition-all duration-300 lg:pb-0',
-          'pt-[calc(4rem+env(safe-area-inset-top,0px)+var(--demo-banner-offset,0px))]',
+          'min-h-dvh pb-(--pb-nav) transition-all duration-300 lg:pb-0',
+          'pt-(--pt-personal)',
           collapsed ? 'lg:pl-18' : 'lg:pl-65'
         )}
       >

@@ -102,7 +102,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <StudentHeader />
 
         {/* Main content — padding for fixed header top + bottom nav */}
-        <main className="pt-[calc(3.5rem+env(safe-area-inset-top,0px))] pb-[calc(5.5rem+env(safe-area-inset-bottom,0px))]">
+        <main className="pt-(--pt-student) pb-(--pb-nav)">
           <PullToRefresh onRefresh={handleRefresh}>
             <ErrorBoundary>
               {children}

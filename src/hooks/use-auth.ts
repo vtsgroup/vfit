@@ -189,7 +189,7 @@ export function useRegisterStudent() {
       email: string
       password: string
       full_name: string
-      cpf: string
+      cpf?: string
       phone?: string
       invitation_token?: string
       referral_slug?: string
@@ -332,9 +332,14 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://api.vfit.app.br'
 
 export function useOAuthRedirect() {
   return useMutation({
-    mutationFn: async (provider: 'google') => {
+    mutationFn: async (params: { provider: 'google'; userType?: 'student' | 'personal'; invitationToken?: string }) => {
+      // Build URL with optional query params for student registration
+      const url = new URL(`${API_BASE}/api/v1/auth/oauth/${params.provider}`)
+      if (params.userType) url.searchParams.set('type', params.userType)
+      if (params.invitationToken) url.searchParams.set('invite', params.invitationToken)
+
       // Direct redirect to backend OAuth endpoint (GET-based redirect flow)
-      window.location.href = `${API_BASE}/api/v1/auth/oauth/${provider}`
+      window.location.href = url.toString()
       // Never resolves — page navigates away
       return new Promise<never>(() => {})
     },

@@ -148,7 +148,7 @@ export const Turnstile = forwardRef<TurnstileRef, TurnstileProps>(
         'retry-interval': 5000,
         'refresh-expired': 'auto',
         appearance: targetMode === 'invisible' ? 'interaction-only' : 'always',
-        execution: targetMode === 'invisible' ? 'execute' : 'render',
+        execution: 'render',
       })
     }, [onVerify, onExpire, onError, cleanupWidget])
 
