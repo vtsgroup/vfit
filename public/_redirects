@@ -4,4 +4,25 @@
 # OneSignal SDK v16 looks for this filename by default
 /OneSignalSDK.sw.js /OneSignalSDKWorker.js 200
 
+# Dynamic route rewrites — serve the [id] stub page for any slug
+# Next.js static export only generates _.html; these rewrites let
+# useParams() read the real slug from the URL while serving the stub
+/treinos/:id /treinos/_.html 200
+/exercicios/:id /exercicios/_.html 200
+/avaliacoes/:id /avaliacoes/_.html 200
+/progresso/exercicio/:id /progresso/exercicio/_.html 200
+
+# Dashboard dynamic routes — [id] segment generates flat files
+/dashboard/students/:id/view /dashboard/students/view.html 200
+/dashboard/students/:id/edit /dashboard/students/edit.html 200
+/dashboard/students/:id/import /dashboard/students/import.html 200
+/dashboard/students/:id/assessment/new /dashboard/students/assessment/new.html 200
+/dashboard/workouts/:id/view /dashboard/workouts/view.html 200
+/dashboard/workouts/:id/create /dashboard/workouts/create.html 200
+/dashboard/workouts/:id/execute /dashboard/workouts/execute.html 200
+/dashboard/workouts/:id/exercises/create /dashboard/workouts/exercises/create.html 200
+/dashboard/workouts/:id/exercises/library /dashboard/workouts/exercises/library.html 200
+/dashboard/workouts/:id/media/library /dashboard/workouts/media/library.html 200
+
+# SPA fallback — must be LAST (catch-all)
 /* /index.html 200

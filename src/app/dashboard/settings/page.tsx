@@ -25,6 +25,7 @@ import { GlassCard, CardHeader as GlassCardHeader, CardContent as GlassCardConte
 import { PageHeader } from '@/components/ui/page-header'
 import { useAuthStore } from '@/stores/auth-store'
 import { useEffectiveUserView } from '@/hooks/use-effective-user-view'
+import { useAdminSimulationSession, useUpdateAdminSimulationSession, type AdminSimulationMode } from '@/hooks/use-admin'
 import { useAppStore, toast } from '@/stores/app-store'
 import { useMutation } from '@tanstack/react-query'
 import { api } from '@/lib/api-client'
@@ -245,6 +246,9 @@ export default function SettingsPage() {
           </GlassCard>
         )}
 
+        {/* Super Admin — Mode Switcher */}
+        {user?.role === 'super_admin' && <AdminModeSwitcherCard />}
+
         {/* Profile */}
         <GlassCard variant="surface">
           <GlassCardHeader title="Perfil" icon={<DSIcon name="user" size={16} />} />
@@ -366,6 +370,58 @@ export default function SettingsPage() {
         </GlassCard>
       </div>
     </AuthGuard>
+  )
+}
+
+// ============================================
+// Admin Mode Switcher Card (super_admin only)
+// ============================================
+
+const SIMULATION_MODES: Array<{ value: AdminSimulationMode; label: string; icon: DSIconName; description: string }> = [
+  { value: 'super_admin', label: 'Admin', icon: 'shield', description: 'Painel completo de administração' },
+  { value: 'personal', label: 'Personal', icon: 'dumbbell', description: 'Visão de personal trainer' },
+  { value: 'student', label: 'Aluno', icon: 'user', description: 'Visão de aluno (B2C)' },
+  { value: 'nutritionist', label: 'Nutricionista', icon: 'apple', description: 'Visão de nutricionista' },
+]
+
+function AdminModeSwitcherCard() {
+  const { data: sessionData } = useAdminSimulationSession()
+  const updateSimulation = useUpdateAdminSimulationSession()
+  const currentMode = sessionData?.simulation?.mode || 'super_admin'
+
+  function handleModeChange(mode: AdminSimulationMode) {
+    if (mode === currentMode) return
+    updateSimulation.mutate({ mode })
+  }
+
+  return (
+    <GlassCard variant="surface">
+      <GlassCardHeader title="Modo de Visualização" icon={<DSIcon name="shield" size={16} />} />
+      <GlassCardContent>
+        <p className="mb-3 text-xs text-text-muted">
+          Alterne entre perfis para visualizar a plataforma como diferentes tipos de usuário.
+        </p>
+        <div className="grid grid-cols-2 gap-2">
+          {SIMULATION_MODES.map((mode) => (
+            <button
+              key={mode.value}
+              onClick={() => handleModeChange(mode.value)}
+              disabled={updateSimulation.isPending}
+              className={cn(
+                'flex flex-col items-center gap-1.5 rounded-xl border px-3 py-3 transition-colors',
+                currentMode === mode.value
+                  ? 'border-brand-primary bg-brand-primary/10 text-brand-primary'
+                  : 'border-border-light bg-bg-primary text-text-muted hover:border-brand-primary/30'
+              )}
+            >
+              <DSIcon name={mode.icon} size={20} />
+              <span className="text-xs font-semibold">{mode.label}</span>
+              <span className="text-[10px] text-text-muted leading-tight text-center">{mode.description}</span>
+            </button>
+          ))}
+        </div>
+      </GlassCardContent>
+    </GlassCard>
   )
 }
 

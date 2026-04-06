@@ -1,9 +1,17 @@
 /**
- * Design System Showcase v6 — Ultra Complete
+ * Design System Showcase v10 — Ultra Professional Refinement
  *
  * Filosofia: Glass surfaces · 3D depth · Gradient accents · Perfect contrast
  * Baseado na qualidade visual de /dashboard/admin/design-system
- * 10 seções · 90+ componentes · Light & Dark · Animações premium · Sem emojis
+ * 10 seções · 100+ componentes · Light & Dark · Animações premium · Sem emojis
+ *
+ * v10.0 Improvements:
+ * - Bolder typography (800wt labels, 28px section headers, tighter tracking)
+ * - All buttons have 1px solid border matching their 3D shadow color
+ * - Secondary button redesign: zinc scale for visible depth in both modes
+ * - Larger border-radius on buttons (12/14/16px) for modern feel
+ * - More padding in buttons and cards for breathing room
+ * - Consistent design language across all 100+ components
  */
 
 'use client'
@@ -89,12 +97,12 @@ const themes = {
     primaryDark: '#059669',
     primaryDarker: '#047857',
     primaryBg: 'rgba(16,185,129,0.1)',
-    secondary: '#e2e8f0',
-    secondaryLight: '#f1f5f9',
-    secondaryLighter: '#f8fafc',
-    secondaryDark: '#94a3b8',
-    secondaryDarker: '#64748b',
-    secondaryText: '#1e293b',
+    secondary: '#d4d4d8',
+    secondaryLight: '#e4e4e7',
+    secondaryLighter: '#f4f4f5',
+    secondaryDark: '#a1a1aa',
+    secondaryDarker: '#71717a',
+    secondaryText: '#18181b',
     accent: '#f59e0b',
     accentLight: '#fbbf24',
     accentDark: '#d97706',
@@ -114,9 +122,9 @@ const themes = {
     btn3dPrimary: '0 4px 0 #047857, 0 6px 14px rgba(5,150,105,0.3), inset 0 1px 0 rgba(255,255,255,0.25)',
     btn3dPrimaryHover: '0 5px 0 #047857, 0 8px 20px rgba(5,150,105,0.45), inset 0 1px 0 rgba(255,255,255,0.25)',
     btn3dPrimaryActive: '0 1px 0 #047857, 0 2px 6px rgba(5,150,105,0.2), inset 0 2px 4px rgba(0,0,0,0.15)',
-    btn3dSecondary: '0 4px 0 #334155, 0 6px 18px rgba(71,85,105,0.3), inset 0 1px 0 rgba(255,255,255,0.6)',
-    btn3dSecondaryHover: '0 6px 0 #334155, 0 10px 28px rgba(71,85,105,0.35), inset 0 1px 0 rgba(255,255,255,0.65)',
-    btn3dSecondaryActive: '0 1px 0 #334155, 0 2px 6px rgba(71,85,105,0.15), inset 0 2px 4px rgba(0,0,0,0.1)',
+    btn3dSecondary: '0 4px 0 #52525b, 0 6px 18px rgba(82,82,91,0.35), inset 0 1px 0 rgba(255,255,255,0.7)',
+    btn3dSecondaryHover: '0 6px 0 #52525b, 0 10px 28px rgba(82,82,91,0.4), inset 0 1px 0 rgba(255,255,255,0.75)',
+    btn3dSecondaryActive: '0 1px 0 #52525b, 0 2px 6px rgba(82,82,91,0.2), inset 0 2px 4px rgba(0,0,0,0.12)',
     backdrop: 'blur(20px)',
   },
   dark: {
@@ -137,12 +145,12 @@ const themes = {
     primaryDark: '#059669',
     primaryDarker: '#047857',
     primaryBg: 'rgba(16,185,129,0.1)',
-    secondary: '#475569',
-    secondaryLight: '#64748b',
-    secondaryLighter: '#94a3b8',
-    secondaryDark: '#334155',
-    secondaryDarker: '#1e293b',
-    secondaryText: '#f1f5f9',
+    secondary: '#52525b',
+    secondaryLight: '#71717a',
+    secondaryLighter: '#a1a1aa',
+    secondaryDark: '#3f3f46',
+    secondaryDarker: '#27272a',
+    secondaryText: '#fafafa',
     accent: '#f59e0b',
     accentLight: '#fbbf24',
     accentDark: '#d97706',
@@ -162,9 +170,9 @@ const themes = {
     btn3dPrimary: '0 4px 0 #047857, 0 6px 14px rgba(5,150,105,0.4), inset 0 1px 0 rgba(255,255,255,0.15)',
     btn3dPrimaryHover: '0 5px 0 #047857, 0 8px 20px rgba(5,150,105,0.5), inset 0 1px 0 rgba(255,255,255,0.2)',
     btn3dPrimaryActive: '0 1px 0 #047857, 0 2px 6px rgba(5,150,105,0.25), inset 0 2px 4px rgba(0,0,0,0.2)',
-    btn3dSecondary: '0 4px 0 #1e293b, 0 6px 16px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.10)',
-    btn3dSecondaryHover: '0 6px 0 #1e293b, 0 10px 24px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.14)',
-    btn3dSecondaryActive: '0 1px 0 #1e293b, 0 2px 8px rgba(0,0,0,0.35), inset 0 2px 4px rgba(0,0,0,0.25)',
+    btn3dSecondary: '0 4px 0 #27272a, 0 6px 16px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.12)',
+    btn3dSecondaryHover: '0 6px 0 #27272a, 0 10px 24px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.16)',
+    btn3dSecondaryActive: '0 1px 0 #27272a, 0 2px 8px rgba(0,0,0,0.4), inset 0 2px 4px rgba(0,0,0,0.3)',
     backdrop: 'blur(20px)',
   },
 }
@@ -178,25 +186,34 @@ type Theme = typeof themes.light
 function ShowcaseCard({ children, t, style = {} }: { children: React.ReactNode; t: Theme; style?: React.CSSProperties }) {
   const [h, setH] = useState(false)
   const isDark = t.bg.includes('#050a12') || t.bg.includes('#0b1120')
+
+  // v9 improvement: use dynamic tokens instead of fixed gradient
+  const bgBase = isDark ? t.surface : 'rgba(255,255,255,0.97)'
+  const bgHover = isDark ? t.surfaceHover : '#ffffff'
+  const accentBorder = isDark ? t.primary + '20' : t.primary + '15'
+  const subtleBorder = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)'
+
   return (
     <div onMouseEnter={() => setH(true)} onMouseLeave={() => setH(false)} style={{
-      background: isDark
-        ? 'linear-gradient(145deg, rgba(15,23,42,0.6), rgba(10,15,30,0.8))'
-        : h ? '#ffffff' : 'rgba(255,255,255,0.97)',
+      background: h ? bgHover : bgBase,
       backdropFilter: t.backdrop,
-      border: `1px solid ${h ? (isDark ? t.primary + '20' : t.primary + '15') : isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)'}`,
-      borderRadius: 20, padding: '24px 28px',
-      boxShadow: isDark
-        ? (h ? t.cardShadowHover : t.cardShadow)
-        : h
-          ? '0 2px 4px rgba(0,0,0,0.03), 0 8px 24px rgba(0,0,0,0.06), 0 24px 48px rgba(0,0,0,0.04), 0 0 0 1px rgba(0,0,0,0.02)'
-          : '0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.035), 0 12px 28px rgba(0,0,0,0.02), 0 0 0 1px rgba(0,0,0,0.02)',
+      border: `1px solid ${h ? accentBorder : subtleBorder}`,
+      borderRadius: 20, padding: '28px 32px',
+      boxShadow: h ? t.cardShadowHover : t.cardShadow,
       transform: h ? 'translateY(-2px)' : 'translateY(0)',
       transition: 'transform 300ms cubic-bezier(0.16,1,0.3,1), box-shadow 300ms cubic-bezier(0.16,1,0.3,1), border-color 300ms ease, background 300ms ease',
       position: 'relative', overflow: 'hidden',
       ...style,
     }}>
-      {/* Glass shine — mode aware */}
+      {/* Glass shine — mode aware + top accent line */}
+      <div style={{
+        position: 'absolute', top: 0, left: 0, right: 0,
+        height: '3px',
+        background: isDark
+          ? 'linear-gradient(90deg, transparent, ' + t.primary + '40, transparent)'
+          : 'linear-gradient(90deg, transparent, ' + t.primary + '30, transparent)',
+        pointerEvents: 'none',
+      }} />
       <div style={{
         position: 'absolute', top: 0, left: 0, right: 0,
         height: isDark ? '50%' : '40%',
@@ -211,7 +228,7 @@ function ShowcaseCard({ children, t, style = {} }: { children: React.ReactNode; 
 }
 
 function Label({ children, t }: { children: React.ReactNode; t: Theme }) {
-  return <div style={{ fontSize: 11, fontWeight: 700, color: t.textMuted, textTransform: 'uppercase', letterSpacing: 1.4, marginBottom: 14 }}>{children}</div>
+  return <div style={{ fontSize: 12.5, fontWeight: 800, color: t.textMuted, textTransform: 'uppercase', letterSpacing: 1.4, marginBottom: 14 }}>{children}</div>
 }
 
 function DemoBtn({ variant = 'primary', size = 'md', children, t, icon, onClick }: {
@@ -223,36 +240,31 @@ function DemoBtn({ variant = 'primary', size = 'md', children, t, icon, onClick 
   onClick?: () => void
 }) {
   const [state, setState] = useState<'idle' | 'hover' | 'active'>('idle')
-  const sizes = { sm: { p: '8px 16px', fs: 13, br: 10, g: 6 }, md: { p: '12px 24px', fs: 14, br: 12, g: 8 }, lg: { p: '16px 32px', fs: 16, br: 14, g: 10 } }
+  const sizes = { sm: { p: '8px 18px', fs: 13, br: 12, g: 6 }, md: { p: '12px 26px', fs: 14.5, br: 14, g: 8 }, lg: { p: '16px 34px', fs: 16, br: 16, g: 10 } }
   const s = sizes[size]
   const isH = state === 'hover', isA = state === 'active'
   const base: React.CSSProperties = {
     display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: s.g,
-    padding: s.p, border: 'none', borderRadius: s.br, fontWeight: 700, fontSize: s.fs,
+    padding: s.p, border: 'none', borderRadius: s.br, fontWeight: 800, fontSize: s.fs,
     lineHeight: 1, cursor: 'pointer', userSelect: 'none', fontFamily: 'inherit',
-    letterSpacing: '-0.01em',
+    letterSpacing: '-0.02em',
     transition: 'transform 150ms cubic-bezier(0.16,1,0.3,1), box-shadow 150ms cubic-bezier(0.16,1,0.3,1)',
   }
   const variants: Record<string, React.CSSProperties> = {
     primary: {
       ...base, color: '#fff', textShadow: '0 1px 2px rgba(0,0,0,0.15)',
+      border: `1px solid ${t.primaryDarker}`,
       background: `linear-gradient(180deg, ${isH ? t.primaryLighter : t.primaryLight} 0%, ${isH ? t.primaryLight : t.primary} 50%, ${isH ? t.primary : t.primaryDark} 100%)`,
       boxShadow: isA ? t.btn3dPrimaryActive : isH ? t.btn3dPrimaryHover : t.btn3dPrimary,
       transform: isA ? 'translateY(3px)' : isH ? 'translateY(-1px)' : 'translateY(0)',
     },
     secondary: {
       ...base,
-      color: (t as typeof themes.light & { secondaryText?: string }).secondaryText ?? '#f1f5f9',
-      textShadow: (t as typeof themes.light & { secondaryText?: string }).secondaryText === '#1e293b'
-        ? '0 1px 1px rgba(255,255,255,0.6)'
+      color: t.secondaryText,
+      textShadow: t.text === '#0f172a'
+        ? '0 1px 1px rgba(255,255,255,0.5)'
         : '0 1px 2px rgba(0,0,0,0.3)',
-      // Glass edge borders matching real <Button> secondary variant
-      border: (t as typeof themes.light & { secondaryText?: string }).secondaryText === '#1e293b'
-        ? '1px solid rgba(203,213,225,0.6)'  // light mode: slate-300/60
-        : '1px solid rgba(148,163,184,0.2)',  // dark mode: slate-400/20
-      borderTop: (t as typeof themes.light & { secondaryText?: string }).secondaryText === '#1e293b'
-        ? '1px solid rgba(255,255,255,0.7)'  // light mode top: white edge
-        : '1px solid rgba(148,163,184,0.25)',
+      border: `1px solid ${t.secondaryDarker}`,
       // Correct 3D gradient: light top → mid → dark bottom
       background: `linear-gradient(180deg, ${isH ? t.secondaryLighter : t.secondaryLight} 0%, ${t.secondary} 50%, ${isH ? t.secondaryDark : t.secondaryDarker} 100%)`,
       boxShadow: isA ? t.btn3dSecondaryActive : isH ? t.btn3dSecondaryHover : t.btn3dSecondary,
@@ -260,12 +272,14 @@ function DemoBtn({ variant = 'primary', size = 'md', children, t, icon, onClick 
     },
     warning: {
       ...base, color: '#fff', textShadow: '0 1px 2px rgba(0,0,0,0.15)',
+      border: `1px solid ${t.accentDarker}`,
       background: `linear-gradient(180deg, ${isH ? '#fcd34d' : t.accentLight} 0%, ${isH ? t.accentLight : t.accent} 50%, ${isH ? t.accent : t.accentDark} 100%)`,
       boxShadow: isA ? `0 1px 0 ${t.accentDarker}` : isH ? `0 5px 0 ${t.accentDarker}, 0 8px 20px rgba(217,119,6,0.4)` : `0 4px 0 ${t.accentDarker}, 0 6px 14px rgba(217,119,6,0.35), inset 0 1px 0 rgba(255,255,255,0.2)`,
       transform: isA ? 'translateY(3px)' : isH ? 'translateY(-1px)' : 'translateY(0)',
     },
     danger: {
       ...base, color: '#fff', textShadow: '0 1px 2px rgba(0,0,0,0.15)',
+      border: '1px solid #991b1b',
       background: `linear-gradient(180deg, #f87171 0%, ${t.error} 50%, #dc2626 100%)`,
       boxShadow: isA ? '0 1px 0 #b91c1c' : isH ? '0 5px 0 #b91c1c, 0 8px 20px rgba(239,68,68,0.4)' : '0 4px 0 #b91c1c, 0 6px 14px rgba(239,68,68,0.35), inset 0 1px 0 rgba(255,255,255,0.2)',
       transform: isA ? 'translateY(3px)' : isH ? 'translateY(-1px)' : 'translateY(0)',
@@ -330,9 +344,9 @@ function StatCard({ icon, label, value, accent, t, delay = 0 }: {
           <div style={{ position: 'absolute', inset: 0, borderRadius: 'inherit', background: 'linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%)', pointerEvents: 'none' }} />
           {icon}
         </div>
-        <span style={{ fontSize: 10.5, color: isDark ? 'rgba(148,163,184,0.9)' : '#475569', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1 }}>{label}</span>
+        <span style={{ fontSize: 11, color: isDark ? 'rgba(148,163,184,0.9)' : '#475569', fontWeight: 800, textTransform: 'uppercase', letterSpacing: 1 }}>{label}</span>
       </div>
-      <div style={{ fontSize: 28, fontWeight: 800, fontVariantNumeric: 'tabular-nums', color: t.text, letterSpacing: '-0.03em', lineHeight: 1 }}>{value}</div>
+      <div style={{ fontSize: 32, fontWeight: 900, fontVariantNumeric: 'tabular-nums', color: t.text, letterSpacing: '-0.04em', lineHeight: 1 }}>{value}</div>
     </div>
   )
 }
@@ -345,8 +359,8 @@ function NavPill({ active, children, t, onClick, icon }: {
   return (
     <button onClick={onClick} onMouseEnter={() => setH(true)} onMouseLeave={() => setH(false)} style={{
       display: 'inline-flex', alignItems: 'center', gap: 6, padding: '8px 18px',
-      borderRadius: 12, fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit',
-      letterSpacing: '-0.01em',
+      borderRadius: 12, fontSize: 13.5, fontWeight: 800, cursor: 'pointer', fontFamily: 'inherit',
+      letterSpacing: '-0.02em',
       background: active
         ? `linear-gradient(180deg, ${t.primaryLight}, ${t.primary})`
         : isDark
@@ -459,6 +473,8 @@ export default function ShowcasePage() {
   const [activeFilter, setActiveFilter] = useState('all')
   const [md3TabId, setMd3TabId] = useState('treinos')
   const [showModal, setShowModal] = useState(false)
+  const [iconFilter, setIconFilter] = useState('')
+  const [toastMsg, setToastMsg] = useState<string | null>(null)
   const t = themes[mode]
   const originalTheme = useRef<string | null>(null)
 
@@ -512,6 +528,9 @@ export default function ShowcasePage() {
           @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.4); } 50% { box-shadow: 0 0 0 8px rgba(16,185,129,0); } }
           @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
           @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+          @keyframes gradient-shift { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+          @keyframes dot-pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.6; transform: scale(0.8); } }
+          @keyframes shine-sweep { 0% { left: -100%; } 100% { left: 100%; } }
           * { box-sizing: border-box; }
           ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: rgba(128,128,128,0.3); border-radius: 3px; }
         `}</style>
@@ -533,12 +552,36 @@ export default function ShowcasePage() {
                 boxShadow: '0 4px 12px rgba(16,185,129,0.3)',
               }}><Icons.sparkles size={22} color="#fff" /></div>
               <div>
-                <h1 style={{ fontSize: 22, fontWeight: 800, letterSpacing: -0.5, margin: 0, fontFamily: "var(--font-syne, 'Syne', sans-serif)" }}>
-                  <span style={{ background: `linear-gradient(135deg, ${t.primary}, ${t.ai})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                    Design System Showcase
-                  </span>
-                </h1>
-                <p style={{ fontSize: 12, color: t.textMuted, marginTop: 2 }}>v8.0 — 100+ componentes · 10 secoes · Athletic Luxury Dark</p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <h1 style={{ fontSize: 28, fontWeight: 800, letterSpacing: -0.5, margin: 0, fontFamily: "var(--font-syne, 'Syne', sans-serif)" }}>
+                    <span style={{
+                      background: `linear-gradient(90deg, ${t.primary}, ${t.ai}, ${t.accentLight}, ${t.primary})`,
+                      backgroundSize: '200% auto',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      backgroundClip: 'text',
+                      animation: 'gradient-shift 6s linear infinite'
+                    }}>
+                      Design System Showcase
+                    </span>
+                  </h1>
+                  {/* v9.0 badge */}
+                  <div style={{
+                    display: 'flex', alignItems: 'center', gap: 6,
+                    padding: '6px 12px', borderRadius: 8,
+                    background: `linear-gradient(135deg, ${t.primary}15, ${t.primary}08)`,
+                    border: `1px solid ${t.primary}30`,
+                    backdropFilter: 'blur(8px)',
+                  }}>
+                    <div style={{
+                      width: 6, height: 6, borderRadius: '50%',
+                      background: t.primary,
+                      animation: 'dot-pulse 2s cubic-bezier(0.4,0,0.6,1) infinite'
+                    }} />
+                    <span style={{ fontSize: 11, fontWeight: 700, color: t.primary, letterSpacing: 0.5, textTransform: 'uppercase' }}>v10.0</span>
+                  </div>
+                </div>
+                <p style={{ fontSize: 13, color: t.textMuted, marginTop: 4 }}>100+ componentes · 10 seções · WCAG AA · Athletic Luxury Dark</p>
               </div>
             </div>
             <div style={{ display: 'flex', gap: 4, background: t.neutral100, padding: 4, borderRadius: 12, border: `1px solid ${t.borderLight}` }}>
@@ -567,11 +610,11 @@ export default function ShowcasePage() {
           {/* ═══════════ BUTTONS ═══════════ */}
           {section === 'buttons' && (
             <div style={{ animation: 'fadeInUp 400ms cubic-bezier(0.16,1,0.3,1) both' }}>
-              <h2 style={{ fontSize: 22, fontWeight: 800, marginBottom: 24, letterSpacing: '-0.02em' }}>
+              <h2 style={{ fontSize: 28, fontWeight: 800, marginBottom: 24, letterSpacing: '-0.03em' }}>
                 <span style={{ background: `linear-gradient(135deg, ${t.primary}, ${t.primaryLight})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                   Sistema de Botoes 3D
                 </span>
-                <span style={{ fontSize: 14, fontWeight: 500, color: t.textMuted, marginLeft: 10 }}>— {mode === 'light' ? 'Modo Claro' : 'Modo Escuro'}</span>
+                <span style={{ fontSize: 15, fontWeight: 500, color: t.textMuted, marginLeft: 10 }}>— {mode === 'light' ? 'Modo Claro' : 'Modo Escuro'}</span>
               </h2>
 
               {/* 3D Inline Buttons */}
@@ -602,7 +645,7 @@ export default function ShowcasePage() {
               ]).map((group) => (
                 <ShowcaseCard key={group.variant} t={t} style={{ marginBottom: 16 }}>
                   <Label t={t}>{group.title}</Label>
-                  <div style={{ fontSize: 13, color: t.textMuted, marginBottom: 16 }}>{group.desc}</div>
+                  <div style={{ fontSize: 14, color: t.textMuted, marginBottom: 16 }}>{group.desc}</div>
                   <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
                     {group.examples.map((ex, i) => (
                       <DemoBtn key={i} variant={group.variant} size={ex.s} t={t} icon={ex.icon}>{ex.t}</DemoBtn>
@@ -700,7 +743,7 @@ export default function ShowcasePage() {
           {/* ═══════════ CARDS ═══════════ */}
           {section === 'cards' && (
             <div style={{ animation: 'fadeInUp 400ms cubic-bezier(0.16,1,0.3,1) both' }}>
-              <h2 style={{ fontSize: 22, fontWeight: 800, marginBottom: 24, letterSpacing: '-0.02em' }}>
+              <h2 style={{ fontSize: 28, fontWeight: 800, marginBottom: 24, letterSpacing: '-0.03em' }}>
                 <span style={{ background: `linear-gradient(135deg, ${t.accent}, ${t.primary})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                   Cards
                 </span>
@@ -837,7 +880,7 @@ export default function ShowcasePage() {
           {/* ═══════════ FORMS ═══════════ */}
           {section === 'forms' && (
             <div style={{ animation: 'fadeInUp 400ms cubic-bezier(0.16,1,0.3,1) both' }}>
-              <h2 style={{ fontSize: 22, fontWeight: 800, marginBottom: 24, letterSpacing: '-0.02em' }}>
+              <h2 style={{ fontSize: 28, fontWeight: 800, marginBottom: 24, letterSpacing: '-0.03em' }}>
                 <span style={{ background: `linear-gradient(135deg, ${t.primary}, ${t.info})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                   Formularios
                 </span>
@@ -1151,7 +1194,7 @@ export default function ShowcasePage() {
           {/* ═══════════ NAVIGATION ═══════════ */}
           {section === 'navigation' && (
             <div style={{ animation: 'fadeInUp 400ms cubic-bezier(0.16,1,0.3,1) both' }}>
-              <h2 style={{ fontSize: 22, fontWeight: 800, marginBottom: 24, letterSpacing: '-0.02em' }}>
+              <h2 style={{ fontSize: 28, fontWeight: 800, marginBottom: 24, letterSpacing: '-0.03em' }}>
                 <span style={{ background: `linear-gradient(135deg, ${t.primary}, ${t.info})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                   Navegacao
                 </span>
@@ -1342,7 +1385,7 @@ export default function ShowcasePage() {
           {/* ═══════════ DATA DISPLAY ═══════════ */}
           {section === 'display' && (
             <div style={{ animation: 'fadeInUp 400ms cubic-bezier(0.16,1,0.3,1) both' }}>
-              <h2 style={{ fontSize: 22, fontWeight: 800, marginBottom: 24, letterSpacing: '-0.02em' }}>
+              <h2 style={{ fontSize: 28, fontWeight: 800, marginBottom: 24, letterSpacing: '-0.03em' }}>
                 <span style={{ background: `linear-gradient(135deg, ${t.info}, ${t.ai})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                   Data Display
                 </span>
@@ -1564,7 +1607,7 @@ export default function ShowcasePage() {
           {/* ═══════════ FEEDBACK ═══════════ */}
           {section === 'feedback' && (
             <div style={{ animation: 'fadeInUp 400ms cubic-bezier(0.16,1,0.3,1) both' }}>
-              <h2 style={{ fontSize: 22, fontWeight: 800, marginBottom: 24, letterSpacing: '-0.02em' }}>
+              <h2 style={{ fontSize: 28, fontWeight: 800, marginBottom: 24, letterSpacing: '-0.03em' }}>
                 <span style={{ background: `linear-gradient(135deg, ${t.accent}, ${t.error})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                   Feedback
                 </span>
@@ -1793,25 +1836,75 @@ export default function ShowcasePage() {
                 <span style={{ fontSize: 14, fontWeight: 500, color: t.textMuted, marginLeft: 10 }}>— DSIcon SVG</span>
               </h2>
 
-              <ShowcaseCard t={t}>
+              <ShowcaseCard t={t} style={{ marginBottom: 16 }}>
                 <Label t={t}>Biblioteca Completa — {DS_ICON_NAMES.length} Icones</Label>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', gap: 8 }}>
-                  {DS_ICON_NAMES.map((name) => (
-                    <div key={name} style={{
-                      display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
-                      padding: 16, borderRadius: 12, background: t.neutral50,
-                      border: `1px solid ${t.borderLight}`, cursor: 'pointer',
-                      transition: 'all 200ms ease',
-                    }}
-                      onMouseEnter={(e) => { e.currentTarget.style.background = t.primaryBg; e.currentTarget.style.borderColor = t.primary + '30'; e.currentTarget.style.transform = 'translateY(-2px)' }}
-                      onMouseLeave={(e) => { e.currentTarget.style.background = t.neutral50; e.currentTarget.style.borderColor = t.borderLight; e.currentTarget.style.transform = 'translateY(0)' }}
-                    >
-                      <DSIcon name={name} size={22} />
-                      <span style={{ fontSize: 10, fontWeight: 600, color: t.textMuted, textAlign: 'center' }}>{name}</span>
-                    </div>
-                  ))}
+                {/* v9 improvement: Search bar */}
+                <div style={{ marginBottom: 20, maxWidth: 400 }}>
+                  <MD3SearchBar
+                    placeholder="Buscar ícone (ex: bell, heart, star)..."
+                    value={iconFilter}
+                    onChange={(e) => setIconFilter(e.target.value || '')}
+                  />
                 </div>
+
+                {/* Filter results */}
+                {(() => {
+                  const filtered = DS_ICON_NAMES.filter(n => n.toLowerCase().includes(iconFilter.toLowerCase()))
+                  return (
+                    <>
+                      <div style={{ fontSize: 12, fontWeight: 600, color: t.textSecondary, marginBottom: 16 }}>
+                        Mostrando <span style={{ color: t.primary, fontWeight: 700 }}>{filtered.length}</span> de <span style={{ color: t.primary, fontWeight: 700 }}>{DS_ICON_NAMES.length}</span> ícones
+                      </div>
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', gap: 8 }}>
+                        {filtered.length > 0 ? (
+                          filtered.map((name) => (
+                            <div
+                              key={name}
+                              onClick={() => {
+                                navigator.clipboard.writeText(name)
+                                setToastMsg(`Copiado: ${name}`)
+                                setTimeout(() => setToastMsg(null), 2000)
+                              }}
+                              style={{
+                                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
+                                padding: 16, borderRadius: 12, background: t.neutral50,
+                                border: `1px solid ${t.borderLight}`, cursor: 'pointer',
+                                transition: 'all 200ms ease',
+                              }}
+                              onMouseEnter={(e) => { e.currentTarget.style.background = t.primaryBg; e.currentTarget.style.borderColor = t.primary + '30'; e.currentTarget.style.transform = 'translateY(-2px)' }}
+                              onMouseLeave={(e) => { e.currentTarget.style.background = t.neutral50; e.currentTarget.style.borderColor = t.borderLight; e.currentTarget.style.transform = 'translateY(0)' }}
+                              title="Click para copiar o nome do ícone"
+                            >
+                              <DSIcon name={name} size={22} />
+                              <span style={{ fontSize: 10, fontWeight: 600, color: t.textMuted, textAlign: 'center' }}>{name}</span>
+                            </div>
+                          ))
+                        ) : (
+                          <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '40px 20px', color: t.textMuted }}>
+                            <div style={{ fontSize: 14, fontWeight: 600 }}>Nenhum ícone encontrado</div>
+                            <div style={{ fontSize: 12, marginTop: 8 }}>Tente uma busca diferente (ex: &ldquo;menu&rdquo;, &ldquo;settings&rdquo;)</div>
+                          </div>
+                        )}
+                      </div>
+                    </>
+                  )
+                })()}
               </ShowcaseCard>
+
+              {/* Toast feedback */}
+              {toastMsg && (
+                <div style={{
+                  position: 'fixed', bottom: 24, left: 24,
+                  background: t.primary, color: '#fff',
+                  padding: '12px 16px', borderRadius: 8,
+                  fontSize: 13, fontWeight: 600,
+                  boxShadow: '0 4px 12px rgba(16,185,129,0.3)',
+                  animation: 'fadeInUp 300ms cubic-bezier(0.16,1,0.3,1) both',
+                  zIndex: 50,
+                }}>
+                  ✓ {toastMsg}
+                </div>
+              )}
             </div>
           )}
 
@@ -1990,7 +2083,7 @@ export default function ShowcasePage() {
           {/* ═══════════ FOUNDATIONS ═══════════ */}
           {section === 'foundations' && (
             <div style={{ animation: 'fadeInUp 400ms cubic-bezier(0.16,1,0.3,1) both' }}>
-              <h2 style={{ fontSize: 22, fontWeight: 800, marginBottom: 8, letterSpacing: '-0.02em', fontFamily: "var(--font-syne,'Syne',sans-serif)" }}>
+              <h2 style={{ fontSize: 28, fontWeight: 800, marginBottom: 8, letterSpacing: '-0.03em', fontFamily: "var(--font-syne,'Syne',sans-serif)" }}>
                 <span style={{ background: `linear-gradient(135deg, ${t.primary}, ${t.ai})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                   Foundations
                 </span>
@@ -2135,7 +2228,7 @@ export default function ShowcasePage() {
           {/* ═══════════ MOTION ═══════════ */}
           {section === 'motion' && (
             <div style={{ animation: 'fadeInUp 400ms cubic-bezier(0.16,1,0.3,1) both' }}>
-              <h2 style={{ fontSize: 22, fontWeight: 800, marginBottom: 8, letterSpacing: '-0.02em', fontFamily: "var(--font-syne,'Syne',sans-serif)" }}>
+              <h2 style={{ fontSize: 28, fontWeight: 800, marginBottom: 8, letterSpacing: '-0.03em', fontFamily: "var(--font-syne,'Syne',sans-serif)" }}>
                 <span style={{ background: `linear-gradient(135deg, ${t.primary}, ${t.ai})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                   Motion System
                 </span>
@@ -2217,15 +2310,18 @@ export default function ShowcasePage() {
 
           {/* ───── FOOTER ───── */}
           <div style={{ marginTop: 48, textAlign: 'center', padding: '24px 0', borderTop: `1px solid ${t.border}`, animation: 'fadeInUp 400ms cubic-bezier(0.16,1,0.3,1) 200ms both' }}>
-            <p style={{ fontSize: 13, color: t.textMuted, fontWeight: 500 }}>VFIT Design System v7.0 — 100+ componentes · 8 secoes · Glass + 3D + Gradients</p>
-            <p style={{ fontSize: 12, color: t.textMuted, marginTop: 4 }}>Built with Next.js 15, Tailwind CSS v4, Framer Motion · Every detail matters</p>
+            <p style={{ fontSize: 13, color: t.textMuted, fontWeight: 500 }}>VFIT Design System v10.0 — 100+ componentes · 10 seções · Glass + 3D + Gradients · WCAG AA</p>
+            <p style={{ fontSize: 12, color: t.textMuted, marginTop: 4 }}>Updated 2026-04-05 · Built with Next.js 15, Tailwind CSS v4, Framer Motion · Every detail matters</p>
           </div>
 
-          {/* ───── AI BOT FAB ───── */}
+          {/* ───── SCROLL TO TOP FAB ───── */}
           <div style={{ position: 'fixed', bottom: 24, right: 24, zIndex: 100 }}>
             <button
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
               onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.08) rotate(-5deg)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(16,185,129,0.5)' }}
               onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 4px 16px rgba(16,185,129,0.35)' }}
+              title="Voltar ao topo"
+              aria-label="Scroll to top"
               style={{
                 width: 56, height: 56, borderRadius: 18, border: 'none', cursor: 'pointer',
                 background: `linear-gradient(135deg, ${t.primary}, ${t.primaryDark})`,

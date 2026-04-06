@@ -205,6 +205,49 @@ payments.post('/webhooks/asaas', async (c) => {
         return c.json({ received: true })
       }
 
+      // Check if B2B platform checkout payment (personal buying plan)
+      if (extRef?.startsWith('platform_checkout_')) {
+        // Format: platform_checkout_{userId}_{planSlug}_{billingCycle}
+        const parts = extRef.replace('platform_checkout_', '').split('_')
+        const userId = parts[0]
+        const planSlug = parts[1] // pro, profissional, max
+        const billingCycle = parts[2] // monthly, annual
+        const now = new Date().toISOString()
+
+        if (['CONFIRMED', 'RECEIVED'].includes(event)) {
+          // Calculate expiration date
+          const expiresAt = new Date()
+          expiresAt.setDate(expiresAt.getDate() + (billingCycle === 'annual' ? 365 : 30))
+
+          // Activate B2B subscription plan for the personal trainer
+          await pgQuery(c.env, `
+            UPDATE personals
+            SET subscription_plan = $1, subscription_expires_at = $2, updated_at = $3
+            WHERE id = $4
+          `, [planSlug, expiresAt.toISOString(), now, userId])
+
+          // Push notification: plan activated
+          await notify(c.env, userId, {
+            type: 'subscription',
+            title: '🎉 Plano Ativado!',
+            message: `Seu plano ${planSlug === 'max' ? 'Max' : planSlug === 'profissional' ? 'Pro+' : 'Pro'} foi ativado com sucesso!`,
+            link: '/dashboard/plans',
+          }).catch(() => {}) // best-effort
+
+          console.log(`[Webhook B2B] Plan ${planSlug} (${billingCycle}) activated for personal ${userId}`)
+        } else if (['REFUNDED', 'DELETED'].includes(event)) {
+          // Revert to trial plan
+          await pgQuery(c.env, `
+            UPDATE personals
+            SET subscription_plan = 'trial', subscription_expires_at = NULL, updated_at = $1
+            WHERE id = $2
+          `, [now, userId])
+
+          console.log(`[Webhook B2B] Plan refunded/deleted for personal ${userId}`)
+        }
+        return c.json({ received: true })
+      }
+
       console.log(`[Webhook Asaas] Payment not found: ${paymentData.id}`)
       return c.json({ received: true })
     }

@@ -15,6 +15,7 @@ import {
   getDifficultyLabel,
   getDifficultyColor,
   getCategoryLabel,
+  type TemplateDay,
 } from '@/hooks/use-workout-templates'
 
 export default function TreinoTemplatePage() {
@@ -90,17 +91,46 @@ export default function TreinoTemplatePage() {
         <StatBox label="Exercícios" value={`${template.exercises_count}`} icon="dumbbell" />
       </div>
 
-      {/* Exercises placeholder */}
+      {/* Exercises */}
       <div className="mb-5">
         <h3 className="mb-3 text-[13px] font-bold uppercase tracking-wider text-zinc-500">
           Exercícios
         </h3>
-        <div className="rounded-2xl border border-white/5 bg-white/2 p-6 text-center">
-          <DSIcon name="layers" size={24} className="mx-auto mb-2 text-zinc-600" />
-          <p className="text-[13px] text-zinc-500">
-            Detalhes dos exercícios disponíveis em breve
-          </p>
-        </div>
+        {template.days && template.days.length > 0 ? (
+          <div className="space-y-4">
+            {(template.days as TemplateDay[]).map((day) => (
+              <div key={day.day} className="rounded-2xl border border-white/5 bg-white/2 overflow-hidden">
+                <div className="bg-white/3 px-4 py-2.5 border-b border-white/5">
+                  <p className="text-sm font-bold text-white">Dia {day.day} — {day.name}</p>
+                </div>
+                <div className="divide-y divide-white/5">
+                  {day.exercises.map((ex, i) => (
+                    <div key={i} className="flex items-center gap-3 px-4 py-3">
+                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-primary/10 text-brand-primary">
+                        <DSIcon name="dumbbell" size={14} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[13px] font-semibold text-white truncate">{ex.name}</p>
+                        <p className="text-[11px] text-zinc-500">{ex.muscle_group}</p>
+                      </div>
+                      <div className="text-right shrink-0">
+                        <p className="text-[12px] font-bold text-zinc-300">{ex.sets}×{ex.reps}</p>
+                        <p className="text-[10px] text-zinc-600">{ex.rest_seconds}s desc.</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="rounded-2xl border border-white/5 bg-white/2 p-6 text-center">
+            <DSIcon name="layers" size={24} className="mx-auto mb-2 text-zinc-600" />
+            <p className="text-[13px] text-zinc-500">
+              Detalhes dos exercícios disponíveis em breve
+            </p>
+          </div>
+        )}
       </div>
 
       {/* CTAs */}

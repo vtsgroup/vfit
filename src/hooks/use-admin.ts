@@ -255,7 +255,7 @@ export interface BonusInput {
   type?: string
 }
 
-export type AdminSimulationMode = 'super_admin' | 'personal' | 'student'
+export type AdminSimulationMode = 'super_admin' | 'personal' | 'student' | 'nutritionist'
 
 export interface AdminSimulationSession {
   mode: AdminSimulationMode

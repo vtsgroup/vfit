@@ -22,6 +22,24 @@ export interface WorkoutTemplate {
   exercises_count: number
 }
 
+export interface TemplateExercise {
+  name: string
+  sets: number
+  reps: string
+  rest_seconds: number
+  muscle_group: string
+}
+
+export interface TemplateDay {
+  day: number
+  name: string
+  exercises: TemplateExercise[]
+}
+
+export interface WorkoutTemplateDetail extends WorkoutTemplate {
+  days: TemplateDay[]
+}
+
 export function useWorkoutTemplates(filters?: { difficulty?: string; category?: string }) {
   const isReady = useAuthStore((s) => s.isAuthenticated && s.isHydrated)
 
@@ -35,6 +53,7 @@ export function useWorkoutTemplates(filters?: { difficulty?: string; category?: 
       const res = await api.get<WorkoutTemplate[]>(`/workout-templates${qs ? `?${qs}` : ''}`)
       return res.data
     },
+    // Templates são públicos — funciona com ou sem auth
     enabled: isReady,
     staleTime: 5 * 60 * 1000, // 5 min
   })
@@ -43,12 +62,13 @@ export function useWorkoutTemplates(filters?: { difficulty?: string; category?: 
 export function useWorkoutTemplateDetail(id: string | null) {
   const isReady = useAuthStore((s) => s.isAuthenticated && s.isHydrated)
 
-  return useQuery({
+  return useQuery<WorkoutTemplateDetail>({
     queryKey: ['workout-template', id],
     queryFn: async () => {
-      const res = await api.get<WorkoutTemplate & { days: unknown[] }>(`/workout-templates/${id}`)
+      const res = await api.get<WorkoutTemplateDetail>(`/workout-templates/${id}`)
       return res.data
     },
+    // Templates são públicos — funciona com ou sem auth
     enabled: isReady && !!id,
     ...APP_QUERY_CACHE.detail,
   })

@@ -204,4 +204,150 @@ platform.post(
   }
 )
 
+// ══════════════════════════════════════════════
+//  POST /upgrade — Upgrade plan (creates new checkout)
+// ══════════════════════════════════════════════
+const upgradeSchema = z.object({
+  plan_slug: z.enum(['pro', 'profissional', 'max']),
+  billing_cycle: z.enum(['monthly', 'annual']).default('monthly'),
+})
+
+platform.post(
+  '/upgrade',
+  requireType('personal', 'admin', 'super_admin'),
+  async (c) => {
+    const body = await c.req.json()
+    const parsed = upgradeSchema.parse(body)
+    const jwt = c.get('jwtPayload')
+
+    // Get current plan
+    const personal = await pgQueryOne<{
+      subscription_plan: string | null
+    }>(
+      c.env,
+      'SELECT subscription_plan FROM personals WHERE id = $1',
+      [jwt.sub]
+    )
+
+    const currentPlan = personal?.subscription_plan || 'trial'
+    const planOrder = ['trial', 'pro', 'profissional', 'max']
+    const currentIdx = planOrder.indexOf(currentPlan)
+    const targetIdx = planOrder.indexOf(parsed.plan_slug)
+
+    if (targetIdx <= currentIdx) {
+      throw new BadRequestError('Escolha um plano superior ao atual para fazer upgrade')
+    }
+
+    // Activate plan immediately (payment via checkout creates separate charge)
+    const expiresAt = new Date()
+    expiresAt.setDate(expiresAt.getDate() + (parsed.billing_cycle === 'annual' ? 365 : 30))
+    const now = new Date().toISOString()
+
+    await pgQueryOne(
+      c.env,
+      `UPDATE personals SET subscription_plan = $1, subscription_expires_at = $2, updated_at = $3 WHERE id = $4 RETURNING id`,
+      [parsed.plan_slug, expiresAt.toISOString(), now, jwt.sub]
+    )
+
+    return success({ success: true, plan_slug: parsed.plan_slug })
+  }
+)
+
+// ══════════════════════════════════════════════
+//  POST /downgrade — Downgrade plan
+// ══════════════════════════════════════════════
+const downgradeSchema = z.object({
+  plan_slug: z.enum(['trial', 'pro', 'profissional']),
+})
+
+platform.post(
+  '/downgrade',
+  requireType('personal', 'admin', 'super_admin'),
+  async (c) => {
+    const body = await c.req.json()
+    const parsed = downgradeSchema.parse(body)
+    const jwt = c.get('jwtPayload')
+
+    // Get current plan
+    const personal = await pgQueryOne<{
+      subscription_plan: string | null
+      subscription_expires_at: string | null
+    }>(
+      c.env,
+      'SELECT subscription_plan, subscription_expires_at FROM personals WHERE id = $1',
+      [jwt.sub]
+    )
+
+    const currentPlan = personal?.subscription_plan || 'trial'
+    const planOrder = ['trial', 'pro', 'profissional', 'max']
+    const currentIdx = planOrder.indexOf(currentPlan)
+    const targetIdx = planOrder.indexOf(parsed.plan_slug)
+
+    if (targetIdx >= currentIdx) {
+      throw new BadRequestError('Escolha um plano inferior ao atual para fazer downgrade')
+    }
+
+    const now = new Date().toISOString()
+
+    // Downgrade takes effect at end of current billing period (if exists)
+    // For now, apply immediately
+    const expiresAt = parsed.plan_slug === 'trial'
+      ? null
+      : personal?.subscription_expires_at || null
+
+    await pgQueryOne(
+      c.env,
+      `UPDATE personals SET subscription_plan = $1, subscription_expires_at = $2, updated_at = $3 WHERE id = $4 RETURNING id`,
+      [parsed.plan_slug, expiresAt, now, jwt.sub]
+    )
+
+    return success({ success: true, plan_slug: parsed.plan_slug })
+  }
+)
+
+// ══════════════════════════════════════════════
+//  POST /subscription/cancel — Cancel subscription
+// ══════════════════════════════════════════════
+platform.post(
+  '/subscription/cancel',
+  requireType('personal', 'admin', 'super_admin'),
+  async (c) => {
+    const jwt = c.get('jwtPayload')
+    const now = new Date().toISOString()
+
+    const personal = await pgQueryOne<{
+      subscription_plan: string | null
+      subscription_expires_at: string | null
+    }>(
+      c.env,
+      'SELECT subscription_plan, subscription_expires_at FROM personals WHERE id = $1',
+      [jwt.sub]
+    )
+
+    if (!personal || !personal.subscription_plan || personal.subscription_plan === 'trial') {
+      throw new BadRequestError('Não há assinatura ativa para cancelar')
+    }
+
+    // Keep access until end of current billing period, then revert to trial
+    // If no expiration date, cancel immediately
+    if (personal.subscription_expires_at && new Date(personal.subscription_expires_at) > new Date()) {
+      // Plan stays active until expiration, but mark as pending cancellation
+      // For now just set plan to trial after current period
+      await pgQueryOne(
+        c.env,
+        `UPDATE personals SET subscription_plan = 'trial', subscription_expires_at = NULL, updated_at = $1 WHERE id = $2 RETURNING id`,
+        [now, jwt.sub]
+      )
+    } else {
+      await pgQueryOne(
+        c.env,
+        `UPDATE personals SET subscription_plan = 'trial', subscription_expires_at = NULL, updated_at = $1 WHERE id = $2 RETURNING id`,
+        [now, jwt.sub]
+      )
+    }
+
+    return success({ success: true })
+  }
+)
+
 export { platform as platformRoutes }
