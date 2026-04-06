@@ -38,6 +38,11 @@ const SIMPLE_REWRITES = {
   '/OneSignalSDK.sw.js': '/OneSignalSDKWorker.js',
 };
 
+// Simple 301 redirects
+const PERMANENT_REDIRECTS = {
+  '/default-icon': '/icons/icon-192.png',
+};
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -48,13 +53,19 @@ export default {
       pathname = pathname.slice(0, -1);
     }
 
-    // 1. Simple rewrites
+    // 1. Permanent redirects (301)
+    if (PERMANENT_REDIRECTS[pathname]) {
+      const redirectUrl = new URL(PERMANENT_REDIRECTS[pathname], request.url);
+      return Response.redirect(redirectUrl.toString(), 301);
+    }
+
+    // 2. Simple rewrites (serve different file, same URL)
     if (SIMPLE_REWRITES[pathname]) {
       const rewriteUrl = new URL(SIMPLE_REWRITES[pathname], request.url);
       return env.ASSETS.fetch(new Request(rewriteUrl, request));
     }
 
-    // 2. Dynamic route rewrites
+    // 3. Dynamic route rewrites
     for (const rule of DYNAMIC_REWRITES) {
       // Exact match (static named routes like /avaliacoes/nova)
       if (rule.match && pathname === rule.match) {
@@ -85,7 +96,7 @@ export default {
       }
     }
 
-    // 3. Try serving the static asset directly
+    // 4. Try serving the static asset directly
     try {
       const response = await env.ASSETS.fetch(request);
       if (response.status !== 404) {
@@ -95,7 +106,7 @@ export default {
       // Asset not found, fall through to SPA fallback
     }
 
-    // 4. SPA fallback — serve index.html for client-side routing
+    // 5. SPA fallback — serve index.html for client-side routing
     const indexUrl = new URL('/index.html', request.url);
     return env.ASSETS.fetch(new Request(indexUrl, request));
   },

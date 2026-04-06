@@ -1,33 +1,13 @@
-/manifest.webmanifest /manifest.json 200
-/default-icon /icons/icon-192.png 301
-
-# OneSignal SDK v16 looks for this filename by default
-/OneSignalSDK.sw.js /OneSignalSDKWorker.js 200
-
-# Static named routes — must come BEFORE dynamic :id rewrites
-# Otherwise /avaliacoes/nova would match :id and serve _.html (wrong page)
-/avaliacoes/nova /avaliacoes/nova.html 200
-/treinos/novo /treinos/novo.html 200
-
-# Dynamic route rewrites — serve the [id] stub page for any slug
-# Next.js static export only generates _.html; these rewrites let
-# useParams() read the real slug from the URL while serving the stub
-/treinos/:id /treinos/_.html 200
-/exercicios/:id /exercicios/_.html 200
-/avaliacoes/:id /avaliacoes/_.html 200
-/progresso/exercicio/:id /progresso/exercicio/_.html 200
-
-# Dashboard dynamic routes — [id] segment generates flat files
-/dashboard/students/:id/view /dashboard/students/view.html 200
-/dashboard/students/:id/edit /dashboard/students/edit.html 200
-/dashboard/students/:id/import /dashboard/students/import.html 200
-/dashboard/students/:id/assessment/new /dashboard/students/assessment/new.html 200
-/dashboard/workouts/:id/view /dashboard/workouts/view.html 200
-/dashboard/workouts/:id/create /dashboard/workouts/create.html 200
-/dashboard/workouts/:id/execute /dashboard/workouts/execute.html 200
-/dashboard/workouts/:id/exercises/create /dashboard/workouts/exercises/create.html 200
-/dashboard/workouts/:id/exercises/library /dashboard/workouts/exercises/library.html 200
-/dashboard/workouts/:id/media/library /dashboard/workouts/media/library.html 200
-
-# SPA fallback — must be LAST (catch-all)
-/* /index.html 200
+# ============================================
+# _redirects — INTENCIONALMENTE VAZIO
+#
+# TODA a lógica de routing é gerenciada pelo _worker.js (Advanced Mode).
+# Não adicionar regras aqui — _redirects é processado pela infra CF Pages
+# ANTES do worker e pode causar 308 redirect loops.
+#
+# Routing gerenciado pelo worker:
+# - Simple rewrites (manifest, OneSignal)
+# - Dynamic [id] routes (/avaliacoes/:id → _.html)
+# - Dashboard nested routes (/dashboard/students/:id/view)
+# - SPA fallback (/* → index.html)
+# ============================================
