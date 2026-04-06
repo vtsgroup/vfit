@@ -197,7 +197,7 @@ subscription.post('/checkout', async (c) => {
 
   // Super admin test pricing: R$5.00 for any plan (Asaas minimum is R$5.00)
   const isSuperAdmin = user.role === 'super_admin' || c.get('userRole') === 'super_admin'
-  const finalPrice = isSuperAdmin ? 5.00 : planConfig.price_brl
+  const finalPrice = Math.max(isSuperAdmin ? 5.00 : planConfig.price_brl, 5.00) // Asaas minimum R$5.00
 
   // Save CPF permanently to user profile
   const cleanCpf = cpf.replace(/\D/g, '')

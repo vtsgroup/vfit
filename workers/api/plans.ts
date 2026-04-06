@@ -183,9 +183,9 @@ plans.post('/save', async (c) => {
   // Inserir plano
   await pgQuery(
     c.env,
-    `INSERT INTO workout_plans (id, user_id, name, description, status, created_at, updated_at)
-     VALUES ($1, $2, $3, $4, 'active', $5, $5)`,
-    [planId, userId, plan.plan_name, plan.description, now]
+    `INSERT INTO workout_plans (id, user_id, created_by, name, title, description, status, created_at, updated_at)
+     VALUES ($1, $2, $2, $3, $3, $4, 'active', $5, $5)`,
+    [planId, userId, plan.plan_name, plan.description || '', now]
   )
 
   // Inserir dias + exercícios
@@ -486,10 +486,11 @@ plans.post('/regenerate', authMiddleware, async (c) => {
 
   // Salvar novo plano
   const newPlanId = generateId()
+  const now = new Date().toISOString()
   await pgQuery(
     c.env,
-    `INSERT INTO workout_plans (id, user_id, name, type, status, total_days, current_day, settings)
-     VALUES ($1, $2, $3, 'ai_generated', 'active', $4, 1, $5)`,
+    `INSERT INTO workout_plans (id, user_id, created_by, name, title, type, status, total_days, current_day, settings, created_at, updated_at)
+     VALUES ($1, $2, $2, $3, $3, 'ai_generated', 'active', $4, 1, $5, $6, $6)`,
     [
       newPlanId,
       userId,
@@ -501,6 +502,7 @@ plans.post('/regenerate', authMiddleware, async (c) => {
         location: profile.training_location,
         estimated_calories: generatedPlan.estimated_calories_per_session,
       }),
+      now,
     ]
   )
 
@@ -693,8 +695,8 @@ plans.post('/auto-generate', authMiddleware, async (c) => {
 
   await pgQuery(
     c.env,
-    `INSERT INTO workout_plans (id, user_id, name, type, status, total_days, current_day, settings, created_at, updated_at)
-     VALUES ($1, $2, $3, 'ai_generated', 'active', $4, 1, $5, $6, $6)`,
+    `INSERT INTO workout_plans (id, user_id, created_by, name, title, type, status, total_days, current_day, settings, created_at, updated_at)
+     VALUES ($1, $2, $2, $3, $3, 'ai_generated', 'active', $4, 1, $5, $6, $6)`,
     [
       newPlanId, userId, generatedPlan.plan_name, daysPerWeek,
       JSON.stringify({
