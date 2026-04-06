@@ -16,16 +16,14 @@ export const metadata: Metadata = {
 
 export default function OnboardingLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="vfit-theme">
-      <Suspense
-        fallback={
-          <div className="flex min-h-dvh items-center justify-center bg-bg-dark">
-            <div className="h-8 w-8 animate-spin rounded-full border-2 border-white/10 border-t-brand-primary" />
-          </div>
-        }
-      >
-        {children}
-      </Suspense>
-    </div>
+    <Suspense
+      fallback={
+        <div className="flex min-h-dvh items-center justify-center bg-bg-primary">
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-white/10 border-t-brand-primary" />
+        </div>
+      }
+    >
+      {children}
+    </Suspense>
   )
 }

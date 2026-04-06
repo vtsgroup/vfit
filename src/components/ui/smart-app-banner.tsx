@@ -88,8 +88,8 @@ export function SmartAppBanner() {
   }
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-9999 animate-slide-down" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
-      <div className="flex items-center gap-3 bg-white dark:bg-[#111B2E] border-b border-zinc-200 dark:border-white/8 px-3 py-2.5 shadow-lg">
+    <div className="fixed bottom-0 left-0 right-0 z-9999 animate-slide-up" style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
+      <div className="flex items-center gap-3 bg-white dark:bg-[#111B2E] border-t border-zinc-200 dark:border-white/8 px-3 py-2.5 shadow-[0_-4px_16px_rgba(0,0,0,0.15)]">
         {/* Close button */}
         <button
           onClick={handleDismiss}
