@@ -98,9 +98,15 @@ export default function OnboardingLoadingPage() {
       // Save onboarding data to backend if user is authenticated
       const isAuth = useAuthStore.getState().isAuthenticated
       if (isAuth) {
-        api.post('/onboarding', payload).catch((err) => {
+        try {
+          await api.post('/onboarding', payload)
+          // Auto-create self-assessment from onboarding data (fire-and-forget)
+          api.post('/self-assessments/from-onboarding', {}).catch((err) => {
+            console.warn('[Loading] Failed to create assessment from onboarding:', err)
+          })
+        } catch (err) {
           console.warn('[Loading] Failed to save onboarding to backend:', err)
-        })
+        }
       }
 
       // Salvar no sessionStorage para a result page

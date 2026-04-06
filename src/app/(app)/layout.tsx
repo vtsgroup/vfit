@@ -21,6 +21,7 @@ import { OneSignalProvider } from '@/components/providers/onesignal-provider'
 import { ToastContainer } from '@/components/layout/toast-container'
 import { useAuthStore } from '@/stores/auth-store'
 import { useB2COnboardingCompleted } from '@/hooks/use-b2c-onboarding'
+import { useEffectiveUserView } from '@/hooks/use-effective-user-view'
 
 /**
  * Migrate legacy localStorage keys (evoluia_* → vfit_*) once per device.
@@ -76,10 +77,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const userType = useAuthStore((s) => s.user?.user_type)
   const [fabMenuOpen, setFabMenuOpen] = useState(false)
 
-  // Check onboarding status for student redirect
-  const isStudent = userType === 'student'
+  // Use effective user view to support admin simulation
+  const { effectiveType, isSimulationActive } = useEffectiveUserView()
+
+  // Check onboarding status — for students AND admins simulating as student
+  const isEffectiveStudent = effectiveType === 'student'
   const { data: onboardingStatus, isLoading: onboardingLoading } = useB2COnboardingCompleted(
-    isHydrated && isAuthenticated && isStudent,
+    isHydrated && isAuthenticated && isEffectiveStudent,
   )
 
   // Pull-to-refresh handler — invalida todas as queries
@@ -99,20 +103,21 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       return
     }
     // T7.8 — Personal trainers should use the B2B dashboard, not the B2C app
-    if (userType === 'personal') {
+    // BUT: if admin is simulating as student, stay in B2C app
+    if (userType === 'personal' && !isSimulationActive) {
       router.replace('/dashboard')
     }
-  }, [isHydrated, isAuthenticated, userType, router])
+  }, [isHydrated, isAuthenticated, userType, isSimulationActive, router])
 
-  // Force onboarding for students who haven't completed the quiz
+  // Force onboarding for students (or simulated students) who haven't completed the quiz
   useEffect(() => {
-    if (!isHydrated || !isAuthenticated || !isStudent) return
+    if (!isHydrated || !isAuthenticated || !isEffectiveStudent) return
     if (onboardingLoading) return
     if (onboardingStatus?.completed) return
     // Don't redirect if already going to onboarding-related pages
     if (pathname === '/perfil/assinatura' || pathname === '/perfil/editar' || pathname === '/perfil/sobre') return
     router.replace('/onboarding')
-  }, [isHydrated, isAuthenticated, isStudent, onboardingLoading, onboardingStatus, pathname, router])
+  }, [isHydrated, isAuthenticated, isEffectiveStudent, onboardingLoading, onboardingStatus, pathname, router])
 
   return (
     <OneSignalProvider>
