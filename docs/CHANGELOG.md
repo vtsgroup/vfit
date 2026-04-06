@@ -5,6 +5,33 @@
 
 ---
 
+## [v1.7.6] — 01/07/2026 — Fix B2C Tables + Plans 500 + Student UX
+
+### 🗄️ Migration — 8 Tabelas B2C Recriadas
+- **Causa raiz**: Migration 0022 falhou integralmente porque `exercises(id)` FK referenciava tabela D1-only (não existe no Neon)
+- **Tabelas criadas**: `user_onboarding`, `workout_plan_days`, `workout_plan_exercises`, `workout_sessions`, `exercise_logs`, `personal_records`, `user_streaks`, `self_assessments`
+- FKs para `exercises` removidas; `name` e `muscle_group` desnormalizados em `workout_plan_exercises` e `exercise_logs`
+- Migration: `2026-07-01_fix_b2c_exercises_tables.sql`
+
+### 🐛 Backend — 500 Errors Corrigidos
+- **`/plans/current` 500**: Removido `LEFT JOIN exercises e` (tabela não existe no Neon); lê colunas desnormalizadas `pe.name`, `pe.muscle_group`
+- **`/plans/save` 500**: Corrigido nomes de colunas (`day_id`→`plan_day_id`, `order_index`→`sort_order`, `weight_suggestion_kg`→`weight_kg`)
+- **`/plans/regenerate`**: Corrigido INSERT — agora salva `name` e `muscle_group` do plano gerado pela IA
+- **PATCH exercises**: Adicionado `name` e `muscle_group` no body type e INSERT statement
+- **`/onboarding` GET 500**: Wrapped em try-catch com fallback graceful `{ completed: false, data: null }`
+
+### 📱 Frontend — Student UX
+- **Redirect `/dashboard` → `/treinos`**: PWA `start_url` é `/dashboard`, mas students agora são redirecionados para `/treinos` (app B2C)
+- **PullToRefresh**: Adicionado ao layout B2C `(app)/layout.tsx` — puxar para baixo invalida todas as queries (idêntico ao dashboard)
+- **Avaliação wizard**: Corrigido `catch {}` vazio — agora exibe `alert()` com mensagem de erro
+
+### 🚀 Deploy
+- **Pages**: deployment `f5b41875`
+- **Workers**: `vfit-api` version `b1625a69`, 3387 KiB
+- Build: 131 rotas compiladas, 0 erros TypeScript
+
+---
+
 ## [v1.7.2] — 05/04/2026 — Student Nav v5 (Dashboard Parity) + Fixes
 
 ### 🎨 Student App — Nav v5 (Paridade com Dashboard)

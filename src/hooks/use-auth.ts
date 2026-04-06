@@ -111,12 +111,22 @@ export function useLogin(options?: { onError?: (error: Error) => void }) {
         : data.student
       login({ user: normalizedUser, tokens, profile })
       toast.success('Login realizado com sucesso!')
-      // Student vai para B2C (treinos), admin para admin, personal para dashboard
-      const dest = normalizedUser.user_type === 'admin'
-        ? '/dashboard/admin'
-        : normalizedUser.user_type === 'student'
-          ? '/treinos'
-          : '/dashboard'
+
+      // Se veio do onboarding com plano selecionado → checkout
+      const selectedPlan = typeof window !== 'undefined'
+        ? sessionStorage.getItem('vfit_selected_plan')
+        : null
+
+      let dest: string
+      if (selectedPlan && selectedPlan !== 'free' && normalizedUser.user_type === 'student') {
+        dest = '/perfil/assinatura'
+      } else if (normalizedUser.user_type === 'admin') {
+        dest = '/dashboard/admin'
+      } else if (normalizedUser.user_type === 'student') {
+        dest = '/treinos'
+      } else {
+        dest = '/dashboard'
+      }
       router.push(dest)
     },
     onError: (error: Error) => {
@@ -199,7 +209,11 @@ export function useRegisterStudent() {
         }
         login({ user: normalizeAuthUser(data.user), tokens, profile: data.student })
         toast.success('Conta criada com sucesso!', 'Bem-vindo ao VFIT!')
-        router.push('/treinos')
+        // Se veio do onboarding com plano → checkout
+        const selectedPlan = typeof window !== 'undefined'
+          ? sessionStorage.getItem('vfit_selected_plan')
+          : null
+        router.push(selectedPlan && selectedPlan !== 'free' ? '/perfil/assinatura' : '/treinos')
       } else {
         toast.success('Conta criada!', 'Faça login para acessar seus treinos.')
         router.push('/login?registered=true')

@@ -7,7 +7,7 @@
 
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
@@ -53,6 +53,15 @@ export default function AssinaturaPage() {
   const [copied, setCopied] = useState(false)
 
   const isPremium = subStatus?.is_premium ?? false
+
+  // Ler plano pré-selecionado do onboarding
+  useEffect(() => {
+    const saved = sessionStorage.getItem('vfit_selected_plan')
+    if (saved && (saved === 'premium' || saved === 'premium_annual')) {
+      setSelectedPlan(saved)
+      sessionStorage.removeItem('vfit_selected_plan')
+    }
+  }, [])
 
   const handleCheckout = useCallback(async () => {
     if (!cpf || cpf.replace(/\D/g, '').length < 11) return

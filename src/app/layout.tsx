@@ -20,6 +20,7 @@ import { Providers } from "@/components/providers";
 import { DeferredComponents } from "@/components/layout/deferred-components";
 import { LazyWebVitals } from "@/components/analytics/lazy-web-vitals";
 import { SoftwareApplicationSchema, OrganizationSchema, WebSiteSchema } from "@/components/seo/json-ld";
+import { SmartAppBanner } from "@/components/ui/smart-app-banner";
 import { INDEX_FOLLOW_ROBOTS } from "@/lib/seo";
 import "./globals.css";
 
@@ -219,6 +220,7 @@ export default function RootLayout({
         </Script>
       </head>
       <body className={`${syne.variable} ${dmSans.variable} font-sans antialiased`}>
+        <SmartAppBanner />
         <SoftwareApplicationSchema />
         <OrganizationSchema />
         <WebSiteSchema />

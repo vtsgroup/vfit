@@ -11,12 +11,17 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
+import { Button } from '@/components/ui/button'
 import { useAuthStore } from '@/stores/auth-store'
+import { useUpdateAdminSimulationSession } from '@/hooks/use-admin'
+import { APP_VERSION } from '../../../../lib/version'
 
 export default function PerfilPage() {
   const user = useAuthStore((s) => s.user)
   const logout = useAuthStore((s) => s.logout)
   const router = useRouter()
+  const isAdminSimulating = user?.role === 'super_admin' || user?.role === 'admin'
+  const exitSimulation = useUpdateAdminSimulationSession()
 
   // TODO: Sprint 25 — checar subscription real. Por ora: sempre false para B2C
   const isPremium = false
@@ -63,6 +68,34 @@ export default function PerfilPage() {
           <DSIcon name="edit3" size={18} className="text-text-secondary" />
         </Link>
       </div>
+
+      {/* Admin Simulation Banner */}
+      {isAdminSimulating && (
+        <div className="mb-5 rounded-2xl border border-amber-500/30 bg-amber-500/8 p-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-500/15">
+              <DSIcon name="shield" size={20} className="text-amber-400" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-[13px] font-bold text-amber-300">Modo Simulação Ativo</p>
+              <p className="text-[11px] text-amber-400/70">Você está visualizando como aluno</p>
+            </div>
+          </div>
+          <Button
+            variant="secondary"
+            size="sm"
+            className="mt-3 w-full"
+            loading={exitSimulation.isPending}
+            onClick={async () => {
+              await exitSimulation.mutateAsync({ mode: 'super_admin' })
+              router.push('/dashboard/admin')
+            }}
+          >
+            <DSIcon name="arrowLeft" size={16} />
+            Voltar ao Painel Admin
+          </Button>
+        </div>
+      )}
 
       {/* Premium CTA */}
       {!isPremium && (
@@ -125,7 +158,7 @@ export default function PerfilPage() {
       </button>
 
       {/* Version */}
-      <p className="mt-6 text-center text-[10px] text-text-muted">VFIT v6.7.7</p>
+      <p className="mt-6 text-center text-[10px] text-text-muted">VFIT v{APP_VERSION}</p>
     </div>
   )
 }
