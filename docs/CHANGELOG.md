@@ -5,6 +5,31 @@
 
 ---
 
+## [v1.8.9] — 08/07/2026 — Fix B2C PIX Payment + Glass DS
+
+### 🐛 Critical — B2C PIX Pre-Activation Bug
+- **Bug**: Subscription era criada como ativa ANTES do pagamento PIX — aluno ganhava Premium grátis ao gerar QR code
+- **Fix**: Nova coluna `payment_status` (`pending` → `confirmed`) na tabela `vfit_subscriptions`
+- POST `/subscription/checkout` agora cria com `payment_status='pending'`, `started_at=NULL`, `renews_at=NULL`
+- GET `/subscription/status` só retorna `is_premium: true` quando `payment_status='confirmed'`
+- Frontend polling detecta `payment_status` mudando de `pending` → `confirmed` (não mais `isPremium`)
+- Migration: `0029_subscription_payment_status.sql`
+
+### 🐛 Critical — Webhook externalReference Mismatch
+- **Bug**: Checkout usava `externalReference: vfit_sub_${userId}_${Date.now()}` mas webhook fazia `extRef.replace('vfit_sub_', '')` esperando UUID
+- **Resultado**: Webhook NUNCA encontrava o subscription → usuário paga mas não é ativado
+- **Fix**: `externalReference` agora é `vfit_sub_${subId}` (UUID puro)
+- Webhook também busca por `asaas_subscription_id` como fallback (`WHERE id=$1 OR asaas_subscription_id=$2`)
+
+### 🎨 Frontend — Glass + Design System Compliance
+- **Nutrição**: Aplicado `glass-card` em Macros Overview, meal groups, empty state, food card, IA link
+- **Nutrição**: 3 CTAs raw substituídos por `<Button>` (Adicionar Refeição, Voltar, Registrar com loading)
+- **IA Hub**: Aplicado `glass-card` em consultation option cards e Dica do Dia
+- **Plano**: Aplicado `glass-card` em empty state e exercise cards
+
+### 🚀 Deploy
+- **Pages + Workers**: v1.8.9 deployed
+
 ## [v1.7.6] — 01/07/2026 — Fix B2C Tables + Plans 500 + Student UX
 
 ### 🗄️ Migration — 8 Tabelas B2C Recriadas
