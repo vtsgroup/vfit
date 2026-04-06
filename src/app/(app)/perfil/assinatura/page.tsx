@@ -56,10 +56,10 @@ export default function AssinaturaPage() {
 
   // Ler plano pré-selecionado do onboarding
   useEffect(() => {
-    const saved = sessionStorage.getItem('vfit_selected_plan')
+    const saved = localStorage.getItem('vfit_selected_plan')
     if (saved && (saved === 'premium' || saved === 'premium_annual')) {
       setSelectedPlan(saved)
-      sessionStorage.removeItem('vfit_selected_plan')
+      localStorage.removeItem('vfit_selected_plan')
     }
   }, [])
 

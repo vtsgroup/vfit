@@ -68,14 +68,14 @@ const variantStyles: Record<ButtonVariant, string> = {
     'active:translate-y-[3px] active:scale-[0.98]',
     'active:shadow-[0_1px_0_0_#334155,0_2px_6px_-2px_rgba(71,85,105,0.15),inset_0_2px_4px_rgba(0,0,0,0.1)]',
     'active:brightness-95',
-    // Dark mode: slate-500 → 600 → 700 — white text
-    'dark:from-slate-500 dark:via-slate-600 dark:to-slate-700',
-    'dark:text-slate-100 dark:[text-shadow:0_1px_2px_rgba(0,0,0,0.3)]',
-    'dark:border-t-slate-400/25 dark:border-x-slate-600/30 dark:border-b-slate-800/50',
-    'dark:shadow-[0_4px_0_0_#1e293b,0_6px_18px_-4px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.1)]',
-    'dark:hover:shadow-[0_6px_0_0_#1e293b,0_10px_28px_-4px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.14)]',
-    'dark:active:shadow-[0_1px_0_0_#1e293b,0_2px_8px_-2px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(0,0,0,0.25)]',
-    'focus-visible:ring-slate-400/40',
+    // Dark mode: zinc-400 → 500 → 600 — bright surface for contrast vs #050A12 bg
+    'dark:from-zinc-400 dark:via-zinc-500 dark:to-zinc-600',
+    'dark:text-white dark:font-bold dark:[text-shadow:0_1px_2px_rgba(0,0,0,0.4)]',
+    'dark:border-t-zinc-300/30 dark:border-x-zinc-500/20 dark:border-b-zinc-700/50',
+    'dark:shadow-[0_4px_0_0_#18181b,0_6px_18px_-4px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.18)]',
+    'dark:hover:shadow-[0_6px_0_0_#18181b,0_10px_28px_-4px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.22)]',
+    'dark:active:shadow-[0_1px_0_0_#18181b,0_2px_8px_-2px_rgba(0,0,0,0.5),inset_0_2px_4px_rgba(0,0,0,0.3)]',
+    'focus-visible:ring-zinc-400/40',
   ].join(' '),
 
   outline: [

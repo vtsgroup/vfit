@@ -50,9 +50,12 @@ export default {
     const url = new URL(request.url);
     let { pathname } = url;
 
-    // Remove trailing slash (except root)
+    // Remove trailing slash (except root) — emit real HTTP 308 redirect
+    // so CF Pages doesn't loop between file/directory resolution
     if (pathname.length > 1 && pathname.endsWith('/')) {
-      pathname = pathname.slice(0, -1);
+      const cleanUrl = new URL(request.url);
+      cleanUrl.pathname = pathname.slice(0, -1);
+      return Response.redirect(cleanUrl.toString(), 308);
     }
 
     // 1. Permanent redirects (301)

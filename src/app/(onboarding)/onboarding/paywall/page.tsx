@@ -30,7 +30,7 @@ export default function OnboardingPaywallPage() {
       setLoading(true)
       try {
         // Salvar plano selecionado para pegar após signup/login
-        sessionStorage.setItem('vfit_selected_plan', plan.id)
+        localStorage.setItem('vfit_selected_plan', plan.id)
         router.push(`/register/student?from=onboarding&plan=${plan.id}`)
       } catch {
         setLoading(false)
@@ -43,7 +43,7 @@ export default function OnboardingPaywallPage() {
   const handleDiscountAccept = useCallback(async () => {
     setLoading(true)
     try {
-      sessionStorage.setItem('vfit_selected_plan', 'premium')
+      localStorage.setItem('vfit_selected_plan', 'premium')
       router.push('/register/student?from=onboarding&plan=premium')
     } catch {
       setLoading(false)

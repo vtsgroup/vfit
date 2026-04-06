@@ -3,11 +3,15 @@
  *
  * Welcome Screen — First page of onboarding flow
  * Hero BG + VFIT branding + CTA to start quiz
+ *
+ * IMPORTANT: Animations are CSS-only (no JS mounted state).
+ * This ensures content is visible even if React hydration is slow
+ * (critical for iPhone PWA standalone mode).
  */
 
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
@@ -27,7 +31,6 @@ export default function WelcomePage() {
   const router = useRouter()
   const { reset } = useOnboardingStore()
   const { isAuthenticated, isHydrated } = useAuthStore()
-  const [mounted, setMounted] = useState(false)
 
   // TWA smart entry: redirect authenticated users to dashboard
   // or trigger biometric unlock if available
@@ -44,10 +47,6 @@ export default function WelcomePage() {
       router.replace('/login?biometric=auto')
     }
   }, [isHydrated, isAuthenticated, router])
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   const handleStart = () => {
     reset()
@@ -71,11 +70,10 @@ export default function WelcomePage() {
 
       {/* ─── Content ─── */}
       <div className="relative z-10 flex flex-1 flex-col items-center justify-between px-6 pb-10 pt-16">
-        {/* Top: Logo + branding */}
+        {/* Top: Logo + branding — CSS animation, no JS dependency */}
         <div
-          className={`flex flex-col items-center transition-all duration-700 ${
-            mounted ? 'translate-y-0 opacity-100' : '-translate-y-4 opacity-0'
-          }`}
+          className="flex flex-col items-center"
+          style={{ animation: 'welcome-slide-down 0.7s ease-out both' }}
         >
           <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-sm">
             <DSIcon name="sparkles" className="h-8 w-8 text-brand-primary" />
@@ -91,11 +89,10 @@ export default function WelcomePage() {
           </p>
         </div>
 
-        {/* Middle: Features */}
+        {/* Middle: Features — CSS animation with delay */}
         <div
-          className={`w-full max-w-sm space-y-3 transition-all delay-300 duration-700 ${
-            mounted ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
-          }`}
+          className="w-full max-w-sm space-y-3"
+          style={{ animation: 'welcome-slide-up 0.7s ease-out 0.3s both' }}
         >
           <h2 className="mb-5 text-center text-lg font-semibold text-white">
             Seu treino personalizado em
@@ -107,10 +104,7 @@ export default function WelcomePage() {
               key={i}
               className="flex items-center gap-3 rounded-xl border border-white/6 bg-white/4 px-4 py-3 backdrop-blur-sm"
               style={{
-                transitionDelay: `${400 + i * 100}ms`,
-                opacity: mounted ? 1 : 0,
-                transform: mounted ? 'translateX(0)' : 'translateX(-16px)',
-                transition: 'opacity 0.5s, transform 0.5s',
+                animation: `welcome-slide-right 0.5s ease-out ${400 + i * 100}ms both`,
               }}
             >
               <DSIcon name={f.icon} className="h-5 w-5 shrink-0 text-brand-primary" />
@@ -119,11 +113,10 @@ export default function WelcomePage() {
           ))}
         </div>
 
-        {/* Bottom: CTAs */}
+        {/* Bottom: CTAs — CSS animation with longer delay */}
         <div
-          className={`w-full max-w-sm space-y-3 transition-all delay-700 duration-700 ${
-            mounted ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
-          }`}
+          className="w-full max-w-sm space-y-3"
+          style={{ animation: 'welcome-slide-up 0.7s ease-out 0.7s both' }}
         >
           <Button
             size="lg"

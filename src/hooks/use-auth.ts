@@ -114,7 +114,7 @@ export function useLogin(options?: { onError?: (error: Error) => void }) {
 
       // Se veio do onboarding com plano selecionado → checkout
       const selectedPlan = typeof window !== 'undefined'
-        ? sessionStorage.getItem('vfit_selected_plan')
+        ? localStorage.getItem('vfit_selected_plan')
         : null
 
       let dest: string
@@ -210,8 +210,9 @@ export function useRegisterStudent() {
         login({ user: normalizeAuthUser(data.user), tokens, profile: data.student })
         toast.success('Conta criada com sucesso!', 'Bem-vindo ao VFIT!')
         // Se veio do onboarding com plano → checkout
+        // Tenta localStorage primeiro, depois URL params como fallback
         const selectedPlan = typeof window !== 'undefined'
-          ? sessionStorage.getItem('vfit_selected_plan')
+          ? (localStorage.getItem('vfit_selected_plan') || new URLSearchParams(window.location.search).get('plan'))
           : null
         router.push(selectedPlan && selectedPlan !== 'free' ? '/perfil/assinatura' : '/treinos')
       } else {

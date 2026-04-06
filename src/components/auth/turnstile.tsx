@@ -100,7 +100,8 @@ export const Turnstile = forwardRef<TurnstileRef, TurnstileProps>(
 
       // Turnstile API accepts: 'normal', 'compact', 'flexible' for size
       // Invisible behavior is achieved via appearance: 'interaction-only'
-      const size = targetMode === 'invisible' ? 'compact' : 'normal'
+      // Interactive uses 'flexible' for 100% width responsiveness
+      const size = targetMode === 'invisible' ? 'compact' : 'flexible'
 
       widgetIdRef.current = window.turnstile.render(containerRef.current, {
         sitekey: TURNSTILE_SITE_KEY,
@@ -198,7 +199,7 @@ export const Turnstile = forwardRef<TurnstileRef, TurnstileProps>(
     return (
       <div
         ref={containerRef}
-        className={mode === 'invisible' ? '' : 'flex justify-center animate-blur-in'}
+        className={mode === 'invisible' ? '' : 'flex justify-center w-full animate-blur-in [&>iframe]:w-full! [&>div]:w-full!'}
       />
     )
   }
