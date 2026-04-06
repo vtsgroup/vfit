@@ -14,7 +14,7 @@ import { Button } from '@/components/ui/button'
 import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 import { useAuthStore } from '@/stores/auth-store'
 import { useOnboardingStore } from '@/stores/onboarding-store'
-import { supportsPasskey, getPasskeyEmail, isBiometricAutoUnlockEnabled } from '@/hooks/use-passkey'
+import { supportsPasskey, getPasskeyEmail, isBiometricAutoUnlockEnabled, isBiometricInCooldown } from '@/hooks/use-passkey'
 
 const FEATURES: { icon: DSIconName; text: string }[] = [
   { icon: 'target', text: 'Plano personalizado por IA' },
@@ -37,10 +37,10 @@ export default function WelcomePage() {
       router.replace('/dashboard')
       return
     }
-    // If biometric auto-unlock is enabled, redirect to login with biometric trigger
+    // If biometric auto-unlock is enabled AND not in cooldown, redirect to login with biometric trigger
     const email = getPasskeyEmail()
     const autoUnlock = isBiometricAutoUnlockEnabled()
-    if (autoUnlock && email && supportsPasskey()) {
+    if (autoUnlock && email && supportsPasskey() && !isBiometricInCooldown()) {
       router.replace('/login?biometric=auto')
     }
   }, [isHydrated, isAuthenticated, router])

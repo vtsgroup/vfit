@@ -79,6 +79,7 @@ export default function OnboardingPaywallPage() {
         <PaywallPlans
           onSelect={handleSelect}
           onClose={handleCloseL1}
+          onSkip={handleLeave}
           loading={loading}
         />
       )}

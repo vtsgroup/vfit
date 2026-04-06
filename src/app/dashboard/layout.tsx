@@ -22,6 +22,7 @@ import { DashboardLayout } from '@/components/layout'
 import { DashboardProviders } from '@/components/providers/dashboard-providers'
 import { PwaInstallProvider } from '@/components/pwa/install-banner'
 import { PasskeyPrompt } from '@/components/auth'
+import { RateAppPrompt, UpgradePrompt } from '@/components/engagement'
 import { IOSInstallGate } from '@/components/pwa/ios-install-gate'
 import { RoutePrefetch } from '@/components/cache/route-prefetch'
 import { DashboardAuthGate } from '@/components/auth/dashboard-auth-gate'
@@ -52,6 +53,8 @@ export default function DashboardRootLayout({
                 {children}
               </ErrorBoundary>
               <PasskeyPrompt />
+              <RateAppPrompt />
+              <UpgradePrompt />
               <IOSInstallGate />
               <RoutePrefetch />
             </DashboardLayout>

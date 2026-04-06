@@ -45,14 +45,20 @@ export function isPasskeyDismissed(userId: string): boolean {
   const dismissed = localStorage.getItem(`passkey_dismissed_${userId}`)
   if (!dismissed) return false
   const dismissedAt = parseInt(dismissed, 10)
-  // Re-show after 30 days
-  return Date.now() - dismissedAt < 30 * 24 * 60 * 60 * 1000
+  // Re-show after 7 days (not 30 — we want users to set up biometric)
+  return Date.now() - dismissedAt < 7 * 24 * 60 * 60 * 1000
 }
 
-/** Dismiss the passkey prompt (won't show for 30 days) */
+/** Dismiss the passkey prompt (won't show for 7 days) */
 export function dismissPasskeyPrompt(userId: string): void {
   if (typeof window === 'undefined') return
   localStorage.setItem(`passkey_dismissed_${userId}`, Date.now().toString())
+}
+
+/** Reset passkey dismiss (e.g., after a fresh login to re-offer biometric) */
+export function resetPasskeyDismiss(userId: string): void {
+  if (typeof window === 'undefined') return
+  localStorage.removeItem(`passkey_dismissed_${userId}`)
 }
 
 /** Get stored email that has a passkey (for login page) */
@@ -124,6 +130,34 @@ export function setBiometricAutoUnlock(enabled: boolean): void {
   } else {
     localStorage.removeItem('vfit_biometric_auto_unlock')
   }
+}
+
+// ============================================
+// Biometric Auth Cooldown
+// Don't nag if authenticated recently (1h)
+// ============================================
+
+const BIOMETRIC_COOLDOWN_MS = 60 * 60 * 1000 // 1 hour
+
+/** Record that user just authenticated via biometric */
+export function setBiometricLastAuth(): void {
+  if (typeof window === 'undefined') return
+  localStorage.setItem('vfit_biometric_last_auth_at', Date.now().toString())
+}
+
+/** Check if biometric auth is within cooldown period */
+export function isBiometricInCooldown(): boolean {
+  if (typeof window === 'undefined') return false
+  const lastAuth = localStorage.getItem('vfit_biometric_last_auth_at')
+  if (!lastAuth) return false
+  const elapsed = Date.now() - parseInt(lastAuth, 10)
+  return elapsed < BIOMETRIC_COOLDOWN_MS
+}
+
+/** Clear biometric cooldown (e.g., on logout) */
+export function clearBiometricCooldown(): void {
+  if (typeof window === 'undefined') return
+  localStorage.removeItem('vfit_biometric_last_auth_at')
 }
 
 // ============================================

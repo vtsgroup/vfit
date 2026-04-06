@@ -26,6 +26,9 @@ import {
   dismissPasskeyPrompt,
   usePasskeys,
   useRegisterPasskey,
+  setBiometricAutoUnlock,
+  setLastBiometricUser,
+  setBiometricLastAuth,
 } from '@/hooks/use-passkey'
 import { useScrollLock } from '@/hooks/use-scroll-lock'
 
@@ -86,6 +89,18 @@ export function PasskeyPrompt() {
   async function handleRegister() {
     try {
       await registerPasskey.mutateAsync(getDeviceName())
+      // Auto-enable biometric unlock after successful registration
+      if (user) {
+        setBiometricAutoUnlock(true)
+        setLastBiometricUser({
+          name: user.full_name,
+          avatar: user.avatar_url ?? null,
+          email: user.email,
+        })
+        setBiometricLastAuth()
+        localStorage.setItem(`passkey_registered_${user.id}`, 'true')
+        localStorage.setItem('passkey_email', user.email)
+      }
       setShow(false)
     } catch {
       // Error handled in hook

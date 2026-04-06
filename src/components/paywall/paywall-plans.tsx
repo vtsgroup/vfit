@@ -63,10 +63,11 @@ const PLANS: PaywallPlan[] = [
 interface PaywallPlansProps {
   onSelect: (plan: PaywallPlan) => void
   onClose: () => void
+  onSkip?: () => void
   loading?: boolean
 }
 
-export function PaywallPlans({ onSelect, onClose, loading }: PaywallPlansProps) {
+export function PaywallPlans({ onSelect, onClose, onSkip, loading }: PaywallPlansProps) {
   const [selected, setSelected] = useState<'monthly' | 'annual'>('annual')
   const selectedPlan = PLANS.find((p) => p.id === selected)!
 
@@ -194,6 +195,14 @@ export function PaywallPlans({ onSelect, onClose, loading }: PaywallPlansProps) 
           <p className="text-center text-[10px] text-text-muted">
             Renovação automática. Cancele a qualquer momento.
           </p>
+          {onSkip && (
+            <button
+              onClick={onSkip}
+              className="mt-2 w-full py-2 text-center text-sm font-medium text-text-muted underline underline-offset-2 transition-colors hover:text-text-secondary active:scale-[0.98]"
+            >
+              Continuar gratuitamente
+            </button>
+          )}
         </div>
       </div>
     </div>

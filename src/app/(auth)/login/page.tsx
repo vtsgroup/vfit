@@ -23,7 +23,7 @@ import { DSIcon } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
 import { useLogin } from '@/hooks/use-auth'
 import { GuestGuard, OAuthButtons, Turnstile, PasskeyLogin, BiometricLockScreen, type TurnstileRef } from '@/components/auth'
-import { supportsPasskey, getPasskeyEmail, isBiometricAutoUnlockEnabled } from '@/hooks/use-passkey'
+import { supportsPasskey, getPasskeyEmail, isBiometricAutoUnlockEnabled, isBiometricInCooldown } from '@/hooks/use-passkey'
 import { APP_VERSION } from '../../../../lib/version'
 import { ApiClientError } from '@/lib/api-client'
 
@@ -70,11 +70,12 @@ export default function LoginPage() {
   const twoFactorInputRef = useRef<HTMLInputElement>(null)
   const identifierRef = useRef<HTMLInputElement>(null)
 
-  // Auto-trigger biometric lock screen on mount
+  // Auto-trigger biometric lock screen on mount (with cooldown)
   useEffect(() => {
     const email = getPasskeyEmail()
     const autoUnlock = isBiometricAutoUnlockEnabled()
-    if ((autoUnlock || biometricParam === 'auto') && email && supportsPasskey()) {
+    const inCooldown = isBiometricInCooldown()
+    if ((autoUnlock || biometricParam === 'auto') && email && supportsPasskey() && !inCooldown) {
       setShowBiometricLock(true)
     }
   }, [biometricParam])

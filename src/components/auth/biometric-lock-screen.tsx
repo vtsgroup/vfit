@@ -27,6 +27,7 @@ import {
   getPasskeyEmail,
   getLastBiometricUser,
   setLastBiometricUser,
+  setBiometricLastAuth,
   useLoginWithPasskey,
 } from '@/hooks/use-passkey'
 import { toast } from '@/stores/app-store'
@@ -100,6 +101,9 @@ export function BiometricLockScreen({ onDismiss }: BiometricLockScreenProps) {
         avatar: user.avatar_url,
         email: user.email,
       })
+
+      // Record auth time for cooldown (won't nag again for 1h)
+      setBiometricLastAuth()
 
       login({ user, tokens })
       setStatus('success')
