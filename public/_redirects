@@ -4,6 +4,11 @@
 # OneSignal SDK v16 looks for this filename by default
 /OneSignalSDK.sw.js /OneSignalSDKWorker.js 200
 
+# Static named routes — must come BEFORE dynamic :id rewrites
+# Otherwise /avaliacoes/nova would match :id and serve _.html (wrong page)
+/avaliacoes/nova /avaliacoes/nova.html 200
+/treinos/novo /treinos/novo.html 200
+
 # Dynamic route rewrites — serve the [id] stub page for any slug
 # Next.js static export only generates _.html; these rewrites let
 # useParams() read the real slug from the URL while serving the stub

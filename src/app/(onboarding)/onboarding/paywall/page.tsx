@@ -31,7 +31,7 @@ export default function OnboardingPaywallPage() {
       try {
         // Salvar plano selecionado para pegar após signup/login
         sessionStorage.setItem('vfit_selected_plan', plan.id)
-        router.push(`/register?from=onboarding&plan=${plan.id}`)
+        router.push(`/register/student?from=onboarding&plan=${plan.id}`)
       } catch {
         setLoading(false)
       }
@@ -44,7 +44,7 @@ export default function OnboardingPaywallPage() {
     setLoading(true)
     try {
       sessionStorage.setItem('vfit_selected_plan', 'premium')
-      router.push('/register?from=onboarding&plan=premium')
+      router.push('/register/student?from=onboarding&plan=premium')
     } catch {
       setLoading(false)
     }
@@ -68,7 +68,7 @@ export default function OnboardingPaywallPage() {
   }, [])
 
   const handleLeave = useCallback(() => {
-    router.push('/register?from=onboarding&plan=free')
+    router.push('/register/student?from=onboarding&plan=free')
   }, [router])
 
   return (
