@@ -5,6 +5,37 @@
 
 ---
 
+## [v1.9.2] — 06/04/2026 — Fix: Auto-Generate Plan + Checkout Safeguard + Migration 0030
+
+### 🐛 Critical — Auto-Generate Plan Falha (0 planos salvos)
+- **Bug**: INSERT em `workout_plans` falhava com `null value in column 'created_by' violates not-null constraint`
+- **Causa**: Tabela `workout_plans` foi criada para marketplace (B2B) com colunas NOT NULL (`created_by`, `title`, `description`, `category`, `price_brl`, `plan_content`, etc.) que o INSERT B2C não preenchia
+- **Fix 1**: Migration `0030_workout_plans_nullable_b2b_cols.sql` — torna 8 colunas B2B nullable com defaults
+- **Fix 2**: Todos os 3 INSERTs (`/plans/save`, `/plans/regenerate`, `/plans/auto-generate`) atualizados para incluir `created_by = userId` e `title = plan_name`
+- **Impacto**: 3 erros no app_logs, 0 workout_plans salvos → agora funciona
+
+### 🐛 Checkout 500 — Safeguard R$5.00 Mínimo Asaas
+- **Bug**: 6 erros "O valor da cobrança (R$ 1,00) não pode ser menor que R$ 5,00" — resquício de versão anterior
+- **Fix**: Adicionado `Math.max(price, 5.00)` no cálculo de `finalPrice` para garantir mínimo do Asaas
+
+### 📊 Auditoria Completa de Produção
+- **Checkout B2C**: ✅ PASS — Error handling completo, validação, Asaas API
+- **Auth/Register**: ✅ PASS — Whitelist aberta, ban check, Turnstile, auto-login
+- **Webhooks Asaas**: ✅ PASS — B2C e B2B, comissão de afiliado, refund
+- **Rate Limiting**: ✅ PASS — KV-based, 10 rotas configuradas
+- **Dieta/Nutrição**: ✅ PASS — Cálculo frontend Mifflin-St Jeor funcional
+- **Onboarding → Plan**: ✅ PASS (com fix) — Safety net em /treinos dispara auto-generate
+
+### ⚠️ Pendências Documentadas
+- **Afiliados para Students**: Requer sprint separada — renomear FK `personal_id`→`user_id`, adicionar `referral_code` a students, redesenhar modelo de comissão
+- **Saque de Afiliado**: Semi-manual (Queue não processada automaticamente)
+- **Cron de Comissão**: TODO em admin.ts (não blocker — comissões processadas no webhook)
+
+### 🚀 Deploy
+- **v1.9.2** | Pages + Workers | Migration 0030 aplicada
+
+---
+
 ## [v1.8.9] — 08/07/2026 — Fix B2C PIX Payment + Glass DS
 
 ### 🐛 Critical — B2C PIX Pre-Activation Bug
