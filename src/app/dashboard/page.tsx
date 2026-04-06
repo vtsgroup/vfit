@@ -41,8 +41,7 @@ import {
   SubscriptionBanner,
   ActivityTimeline,
 } from '@/components/dashboard'
-import { StudentDashboard } from '@/components/dashboard/student-dashboard'
-import { useB2COnboardingCompleted } from '@/hooks/use-b2c-onboarding'
+// Student agora é redirecionado para /treinos (B2C app)
 
 // Lazy-load heavy recharts components (~200KB)
 const RevenueAreaChart = dynamic(() => import('@/components/dashboard/charts/revenue-area-chart').then(m => m.RevenueAreaChart), { ssr: false })
@@ -100,32 +99,23 @@ export default function DashboardPage() {
   const hour = new Date().getHours()
   const greeting = hour < 12 ? 'Bom dia' : hour < 18 ? 'Boa tarde' : 'Boa noite'
 
-  // ─── Student onboarding B2C guard ───
-  const b2cOnboarding = useB2COnboardingCompleted(effectiveType === 'student')
-
+  // ─── Student → redirecionar para app B2C (/treinos) ───
+  // PWA start_url é /dashboard, mas students devem usar o app B2C
   useEffect(() => {
     if (!isHydrated || effectiveType !== 'student') return
-    if (b2cOnboarding.isLoading) return
-    // Se não completou onboarding B2C → redirect para /welcome
-    if (b2cOnboarding.data?.completed === false) {
-      router.replace('/welcome')
-    }
-  }, [isHydrated, effectiveType, b2cOnboarding.data, b2cOnboarding.isLoading, router])
+    router.replace('/treinos')
+  }, [isHydrated, effectiveType, router])
 
-  // Student dashboard — real student OR admin simulating student
+  // Student vê loading enquanto redireciona para /treinos
   if (isHydrated && effectiveType === 'student') {
-    // Aguardar verificação de onboarding antes de renderizar
-    if (b2cOnboarding.isLoading || b2cOnboarding.data?.completed === false) {
-      return (
-        <div className="flex min-h-[60vh] items-center justify-center">
-          <div className="flex flex-col items-center gap-4">
-            <div className="h-10 w-10 animate-spin rounded-full border-4 border-brand-primary border-t-transparent" />
-            <p className="text-sm text-text-muted">Preparando sua experiência...</p>
-          </div>
+    return (
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-brand-primary border-t-transparent" />
+          <p className="text-sm text-text-muted">Redirecionando...</p>
         </div>
-      )
-    }
-    return <StudentDashboard />
+      </div>
+    )
   }
 
   if (isHydrated && effectiveType === 'personal' && onboarding.isLoading) {

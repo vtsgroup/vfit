@@ -9,12 +9,14 @@
 
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
+import { useQueryClient } from '@tanstack/react-query'
 import { StudentHeader } from '@/components/navigation/student-header'
 import { BottomNavigation } from '@/components/navigation/bottom-navigation'
 import { StudentFabMenu } from '@/components/navigation/student-fab-menu'
 import { ErrorBoundary } from '@/components/ui/error-boundary'
+import { PullToRefresh } from '@/components/ui/pull-to-refresh'
 import { OneSignalProvider } from '@/components/providers/onesignal-provider'
 import { useAuthStore } from '@/stores/auth-store'
 
@@ -65,10 +67,16 @@ function migrateLocalStorageKeys() {
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
+  const queryClient = useQueryClient()
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
   const isHydrated = useAuthStore((s) => s.isHydrated)
   const userType = useAuthStore((s) => s.user?.user_type)
   const [fabMenuOpen, setFabMenuOpen] = useState(false)
+
+  // Pull-to-refresh handler — invalida todas as queries
+  const handleRefresh = useCallback(async () => {
+    await queryClient.invalidateQueries()
+  }, [queryClient])
 
   // Migrate legacy keys before any reads
   useEffect(() => { migrateLocalStorageKeys() }, [])
@@ -95,9 +103,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
         {/* Main content — padding for fixed header top + bottom nav */}
         <main className="pt-[calc(3.5rem+env(safe-area-inset-top,0px))] pb-[calc(5.5rem+env(safe-area-inset-bottom,0px))]">
-          <ErrorBoundary>
-            {children}
-          </ErrorBoundary>
+          <PullToRefresh onRefresh={handleRefresh}>
+            <ErrorBoundary>
+              {children}
+            </ErrorBoundary>
+          </PullToRefresh>
         </main>
 
         {/* Bottom Navigation (v4) + FAB AI Menu */}

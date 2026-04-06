@@ -51,38 +51,44 @@ onboarding.get('/', async (c) => {
   const userId = c.get('userId')
   const env = c.env
 
-  const row = await pgQueryOne<{
-    id: string
-    gender: string
-    experience_level: string
-    training_frequency: string
-    goal: string
-    training_location: string
-    target_muscles: string[]
-    age: number
-    height_cm: number
-    weight_kg: number
-    target_weight_kg: number | null
-    days_per_week: number
-    session_duration: string
-    injuries: string[]
-    preferred_days: string[]
-    preferred_time: string
-    completed_at: string | null
-    created_at: string
-  }>(env, `
-    SELECT id, gender, experience_level, training_frequency, goal, training_location,
-           target_muscles, age, height_cm, weight_kg, target_weight_kg,
-           days_per_week, session_duration, injuries, preferred_days, preferred_time,
-           completed_at, created_at
-    FROM user_onboarding WHERE user_id = $1 LIMIT 1
-  `, [userId])
+  try {
+    const row = await pgQueryOne<{
+      id: string
+      gender: string
+      experience_level: string
+      training_frequency: string
+      goal: string
+      training_location: string
+      target_muscles: string[]
+      age: number
+      height_cm: number
+      weight_kg: number
+      target_weight_kg: number | null
+      days_per_week: number
+      session_duration: string
+      injuries: string[]
+      preferred_days: string[]
+      preferred_time: string
+      completed_at: string | null
+      created_at: string
+    }>(env, `
+      SELECT id, gender, experience_level, training_frequency, goal, training_location,
+             target_muscles, age, height_cm, weight_kg, target_weight_kg,
+             days_per_week, session_duration, injuries, preferred_days, preferred_time,
+             completed_at, created_at
+      FROM user_onboarding WHERE user_id = $1 LIMIT 1
+    `, [userId])
 
-  if (!row) {
+    if (!row) {
+      return success({ completed: false, data: null })
+    }
+
+    return success({ completed: !!row.completed_at, data: row })
+  } catch (err) {
+    // Table might not exist yet (migration pending)
+    console.warn('[onboarding] GET error:', err instanceof Error ? err.message : err)
     return success({ completed: false, data: null })
   }
-
-  return success({ completed: !!row.completed_at, data: row })
 })
 
 /**

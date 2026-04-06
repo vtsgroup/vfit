@@ -84,8 +84,10 @@ export default function NovaAvaliacaoPage() {
         body_fat_percentage: res.body_fat_percentage ?? null,
       })
       setStep(3)
-    } catch {
-      // TODO: toast
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Erro ao salvar avaliação. Tente novamente.'
+      // Show inline error since toast may not be available in (app) layout
+      alert(message)
     }
   }, [weightKg, heightCm, waistCm, hipCm, chestCm, armCm, thighCm, activityLevel, goal, createAssessment])
 

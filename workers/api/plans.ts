@@ -203,7 +203,7 @@ plans.post('/save', async (c) => {
       const ex = day.exercises[i]
       await pgQuery(
         c.env,
-        `INSERT INTO workout_plan_exercises (id, day_id, name, muscle_group, sets, reps, rest_seconds, weight_suggestion_kg, notes, order_index, created_at)
+        `INSERT INTO workout_plan_exercises (id, plan_day_id, name, muscle_group, sets, reps, rest_seconds, weight_kg, notes, sort_order, created_at)
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
         [generateId(), dayId, ex.name, ex.muscle_group, ex.sets, ex.reps, ex.rest_seconds, ex.weight_suggestion_kg || null, ex.notes || null, i, now]
       )
@@ -326,9 +326,8 @@ plans.get('/current', authMiddleware, async (c) => {
       c.env,
       `SELECT pe.id, pe.plan_day_id, pe.exercise_id, pe.sort_order, pe.sets, pe.reps,
               pe.weight_kg, pe.rest_seconds, pe.is_warmup, pe.is_superset, pe.superset_group, pe.notes,
-              e.name AS exercise_name, e.muscle_group
+              pe.name AS exercise_name, pe.muscle_group
        FROM workout_plan_exercises pe
-       LEFT JOIN exercises e ON e.id = pe.exercise_id
        WHERE pe.plan_day_id IN (${placeholders})
        ORDER BY pe.sort_order ASC`,
       dayIds
@@ -520,10 +519,10 @@ plans.post('/regenerate', authMiddleware, async (c) => {
       const ex = day.exercises[i]
       await pgQuery(
         c.env,
-        `INSERT INTO workout_plan_exercises (id, plan_day_id, exercise_id, sort_order, sets, reps, weight_kg, rest_seconds, notes)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+        `INSERT INTO workout_plan_exercises (id, plan_day_id, name, muscle_group, sort_order, sets, reps, weight_kg, rest_seconds, notes)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
         [
-          generateId(), dayId, generateId(), i + 1,
+          generateId(), dayId, ex.name, ex.muscle_group, i + 1,
           ex.sets, ex.reps, ex.weight_suggestion_kg || null, ex.rest_seconds, ex.notes || null,
         ]
       )
@@ -590,6 +589,8 @@ plans.patch('/:planId/days/:dayId/exercises', authMiddleware, async (c) => {
     exercises: Array<{
       id?: string
       exercise_id: string
+      name?: string
+      muscle_group?: string
       sets: number
       reps: string
       weight_kg?: number | null
@@ -611,10 +612,10 @@ plans.patch('/:planId/days/:dayId/exercises', authMiddleware, async (c) => {
   for (let i = 0; i < body.exercises.length; i++) {
     const ex = body.exercises[i]
     await pgQuery(c.env,
-      `INSERT INTO workout_plan_exercises (id, plan_day_id, exercise_id, sort_order, sets, reps, weight_kg, rest_seconds, is_warmup, is_superset, superset_group, notes)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
+      `INSERT INTO workout_plan_exercises (id, plan_day_id, exercise_id, name, muscle_group, sort_order, sets, reps, weight_kg, rest_seconds, is_warmup, is_superset, superset_group, notes)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)`,
       [
-        ex.id || generateId(), dayId, ex.exercise_id, i + 1,
+        ex.id || generateId(), dayId, ex.exercise_id, ex.name || null, ex.muscle_group || null, i + 1,
         ex.sets, ex.reps, ex.weight_kg || null, ex.rest_seconds || 60,
         ex.is_warmup || false, ex.is_superset || false,
         ex.superset_group || null, ex.notes || null,
