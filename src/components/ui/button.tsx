@@ -36,37 +36,37 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary: [
-    // Surface: rich emerald gradient with subtle mid-tone
-    'bg-linear-to-b from-emerald-400 via-emerald-500 to-emerald-600',
+    // Surface: VFIT blue gradient with subtle mid-tone
+    'bg-linear-to-b from-blue-400 via-blue-500 to-blue-600',
     'text-white font-bold',
     '[text-shadow:0_1px_2px_rgba(0,0,0,0.2)]',
     // Border: lighter top edge, darker bottom — glass edge
-    'border border-t-emerald-300/50 border-x-emerald-500/30 border-b-emerald-700/50',
+    'border border-t-blue-300/50 border-x-blue-500/30 border-b-blue-700/50',
     // 3D depth + ambient glow + inner highlight
-    'shadow-[0_4px_0_0_#047857,0_6px_20px_-4px_rgba(16,185,129,0.5),0_0_0_0_transparent,inset_0_1px_0_rgba(255,255,255,0.25)]',
+    'shadow-[0_4px_0_0_#1d4ed8,0_6px_20px_-4px_rgba(37,99,235,0.5),0_0_0_0_transparent,inset_0_1px_0_rgba(255,255,255,0.25)]',
     // Hover: lift + stronger glow
     'hover:-translate-y-0.5',
-    'hover:shadow-[0_6px_0_0_#047857,0_10px_30px_-4px_rgba(16,185,129,0.6),0_0_60px_-10px_rgba(52,211,153,0.25),inset_0_1px_0_rgba(255,255,255,0.3)]',
+    'hover:shadow-[0_6px_0_0_#1d4ed8,0_10px_30px_-4px_rgba(37,99,235,0.6),0_0_60px_-10px_rgba(37,99,235,0.25),inset_0_1px_0_rgba(255,255,255,0.3)]',
     'hover:brightness-105',
     // Active: press down + inner shadow
     'active:translate-y-[3px] active:scale-[0.98]',
-    'active:shadow-[0_1px_0_0_#047857,0_2px_8px_-2px_rgba(16,185,129,0.3),0_0_0_0_transparent,inset_0_2px_6px_rgba(0,0,0,0.15)]',
+    'active:shadow-[0_1px_0_0_#1d4ed8,0_2px_8px_-2px_rgba(37,99,235,0.3),0_0_0_0_transparent,inset_0_2px_6px_rgba(0,0,0,0.15)]',
     'active:brightness-95',
-    'focus-visible:ring-emerald-400/40',
+    'focus-visible:ring-blue-400/40',
   ].join(' '),
 
   secondary: [
-    // Light mode: slate gradient — light top → mid → darker bottom (correct 3D direction)
-    'bg-linear-to-b from-slate-100 via-slate-200 to-slate-400',
-    'text-slate-800 font-semibold',
+    // Light mode: zinc gradient — light top → mid → darker bottom (correct 3D direction)
+    'bg-linear-to-b from-zinc-100 via-zinc-200 to-zinc-400',
+    'text-zinc-800 font-semibold',
     '[text-shadow:0_1px_1px_rgba(255,255,255,0.6)]',
-    'border border-t-white/70 border-x-slate-300/40 border-b-slate-500/40',
-    'shadow-[0_4px_0_0_#334155,0_6px_18px_-4px_rgba(71,85,105,0.3),inset_0_1px_0_rgba(255,255,255,0.6)]',
+    'border border-t-white/70 border-x-zinc-300/40 border-b-zinc-500/40',
+    'shadow-[0_4px_0_0_#27272a,0_6px_18px_-4px_rgba(39,39,42,0.3),inset_0_1px_0_rgba(255,255,255,0.6)]',
     'hover:-translate-y-0.5',
-    'hover:shadow-[0_6px_0_0_#334155,0_10px_28px_-4px_rgba(71,85,105,0.35),inset_0_1px_0_rgba(255,255,255,0.65)]',
+    'hover:shadow-[0_6px_0_0_#27272a,0_10px_28px_-4px_rgba(39,39,42,0.35),inset_0_1px_0_rgba(255,255,255,0.65)]',
     'hover:brightness-[1.02]',
     'active:translate-y-[3px] active:scale-[0.98]',
-    'active:shadow-[0_1px_0_0_#334155,0_2px_6px_-2px_rgba(71,85,105,0.15),inset_0_2px_4px_rgba(0,0,0,0.1)]',
+    'active:shadow-[0_1px_0_0_#27272a,0_2px_6px_-2px_rgba(39,39,42,0.15),inset_0_2px_4px_rgba(0,0,0,0.1)]',
     'active:brightness-95',
     // Dark mode: zinc-400 → 500 → 600 — bright surface for contrast vs #050A12 bg
     'dark:from-zinc-400 dark:via-zinc-500 dark:to-zinc-600',
@@ -80,25 +80,25 @@ const variantStyles: Record<ButtonVariant, string> = {
 
   outline: [
     // Lighter alias of secondary — more glass, less depth weight
-    'bg-linear-to-b from-white via-slate-100 to-slate-200',
-    'text-slate-700 font-semibold',
+    'bg-linear-to-b from-white via-zinc-100 to-zinc-200',
+    'text-zinc-700 font-semibold',
     '[text-shadow:0_1px_1px_rgba(255,255,255,0.7)]',
-    'border border-t-white/80 border-x-slate-200/50 border-b-slate-400/40',
-    'shadow-[0_3px_0_0_#475569,0_5px_16px_-4px_rgba(71,85,105,0.2),inset_0_1px_0_rgba(255,255,255,0.75)]',
+    'border border-t-white/80 border-x-zinc-200/50 border-b-zinc-400/40',
+    'shadow-[0_3px_0_0_#3f3f46,0_5px_16px_-4px_rgba(63,63,70,0.2),inset_0_1px_0_rgba(255,255,255,0.75)]',
     'hover:-translate-y-0.5',
-    'hover:shadow-[0_5px_0_0_#475569,0_8px_24px_-4px_rgba(71,85,105,0.28),inset_0_1px_0_rgba(255,255,255,0.8)]',
+    'hover:shadow-[0_5px_0_0_#3f3f46,0_8px_24px_-4px_rgba(63,63,70,0.28),inset_0_1px_0_rgba(255,255,255,0.8)]',
     'hover:brightness-[1.02]',
     'active:translate-y-[3px] active:scale-[0.98]',
-    'active:shadow-[0_1px_0_0_#475569,0_2px_6px_-2px_rgba(71,85,105,0.12),inset_0_2px_4px_rgba(0,0,0,0.08)]',
+    'active:shadow-[0_1px_0_0_#3f3f46,0_2px_6px_-2px_rgba(63,63,70,0.12),inset_0_2px_4px_rgba(0,0,0,0.08)]',
     'active:brightness-95',
     // Dark
-    'dark:from-slate-600 dark:via-slate-700 dark:to-slate-800',
-    'dark:text-slate-100 dark:[text-shadow:0_1px_2px_rgba(0,0,0,0.35)]',
-    'dark:border-t-slate-500/25 dark:border-x-slate-700/30 dark:border-b-slate-900/50',
-    'dark:shadow-[0_3px_0_0_#0f172a,0_5px_16px_-4px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.08)]',
-    'dark:hover:shadow-[0_5px_0_0_#0f172a,0_8px_24px_-4px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.11)]',
-    'dark:active:shadow-[0_1px_0_0_#0f172a,0_2px_8px_-2px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(0,0,0,0.25)]',
-    'focus-visible:ring-slate-400/40',
+    'dark:from-zinc-600 dark:via-zinc-700 dark:to-zinc-800',
+    'dark:text-zinc-100 dark:[text-shadow:0_1px_2px_rgba(0,0,0,0.35)]',
+    'dark:border-t-zinc-500/25 dark:border-x-zinc-700/30 dark:border-b-zinc-900/50',
+    'dark:shadow-[0_3px_0_0_#18181b,0_5px_16px_-4px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.08)]',
+    'dark:hover:shadow-[0_5px_0_0_#18181b,0_8px_24px_-4px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.11)]',
+    'dark:active:shadow-[0_1px_0_0_#18181b,0_2px_8px_-2px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(0,0,0,0.25)]',
+    'focus-visible:ring-zinc-400/40',
   ].join(' '),
 
   ghost:
@@ -288,7 +288,10 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {/* Content */}
         {loading && (
           <svg
-            className="h-4 w-4 animate-spin"
+            className={cn(
+              "h-4 w-4 animate-spin",
+              variant === 'primary' ? "text-white" : "text-current"
+            )}
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"

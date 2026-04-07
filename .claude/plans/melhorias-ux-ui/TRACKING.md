@@ -155,9 +155,9 @@
 **Progress:** 0/106h (0%)  
 
 #### Sprint 5 — Tokens & Padrão Azul (0/10h)
-- [ ] Definir VFIT color tokens (2h)
-- [ ] Aplicar em /onboarding (4h)
-- [ ] Aplicar em componentes base (3h)
+- [x] Definir VFIT color tokens (2h)
+- [x] Aplicar em /onboarding (4h)
+- [x] Aplicar em componentes base (3h)
 - [ ] Testes WCAG (1h)
 
 #### Sprint 6 — Botão CTA Redesign (0/9h)

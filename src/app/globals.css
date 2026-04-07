@@ -40,21 +40,21 @@
    ============================================ */
 
 @theme {
-  /* Brand Colors — emerald-500 (aligned with DS Showcase) */
-  --color-brand-primary: #10B981;
-  --color-brand-primary-hover: #34D399;
+  /* Brand Colors — VFIT Blue Standard (WCAG AA compliant) */
+  --color-brand-primary: #2563eb;        /* VFIT primary blue (5.17:1 vs white) */
+  --color-brand-primary-hover: #1d4ed8; /* VFIT primary hover (6.70:1 vs white) */
   --color-brand-secondary: #09090B;
-  /* Accent — lime energy (logo left/bright side) */
-  --color-brand-accent: #84CC16;
-  --color-brand-accent-hover: #A3E635;
+  /* Accent — VFIT yellow energy */
+  --color-brand-accent: #eab308;        /* VFIT accent yellow */
+  --color-brand-accent-hover: #facc15;  /* VFIT accent hover */
 
   /* Brand gradient + glow helpers */
-  --color-brand-mint: #6EE7B7;
-  --color-brand-lime: #A3E635;
-  --color-brand-deep: #065F46;
-  --color-brand-glow: rgba(16, 185, 129, 0.30);
-  --color-brand-glow-weak: rgba(16, 185, 129, 0.12);
-  --color-brand-ring: rgba(16, 185, 129, 0.24);
+  --color-brand-mint: #3b82f6;          /* VFIT blue light */
+  --color-brand-lime: #facc15;          /* VFIT yellow */
+  --color-brand-deep: #1e40af;          /* VFIT deep blue (8.72:1 vs white) */
+  --color-brand-glow: rgba(37,99,235,0.30); /* VFIT blue glow */
+  --color-brand-glow-weak: rgba(37,99,235,0.12);
+  --color-brand-ring: rgba(37,99,235,0.24);
 
   /* Midnight Pulse Foundation */
   --color-bg-base: #050A12;
@@ -71,19 +71,19 @@
   --color-text-secondary-cool: #A8B8CC;  /* WCAG AA: 4.8:1 vs #050A12 */
   --color-text-muted-cool: #7A8BA3;      /* WCAG AA-lg: 4.2:1 vs #050A12 */
 
-  --gradient-hero: radial-gradient(ellipse at 20% 50%, rgba(16,185,129,0.10) 0%, transparent 60%),
-                   radial-gradient(ellipse at 80% 20%, rgba(132,204,22,0.07) 0%, transparent 50%),
+  --gradient-hero: radial-gradient(ellipse at 20% 50%, rgba(59,130,246,0.10) 0%, transparent 60%),
+                   radial-gradient(ellipse at 80% 20%, rgba(234,179,8,0.07) 0%, transparent 50%),
                    radial-gradient(ellipse at 50% 100%, rgba(56,189,248,0.04) 0%, transparent 40%);
-  --gradient-cta: linear-gradient(135deg, #10B981 0%, #34D399 100%);
-  --gradient-cta-hover: linear-gradient(135deg, #34D399 0%, #6EE7B7 100%);
-  --gradient-text: linear-gradient(135deg, #10B981 0%, #34D399 50%, #A3E635 100%);
+  --gradient-cta: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  --gradient-cta-hover: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+  --gradient-text: linear-gradient(135deg, #2563eb 0%, #1d4ed8 50%, #eab308 100%);
 
   /* Redesign (Premium Sidebar + KPI Hero) */
-  --color-sidebar-bg: #102A20;
-  --color-sidebar-active: #1A3B2E;
+  --color-sidebar-bg: #1d4ed8;      /* VFIT deep blue */
+  --color-sidebar-active: #2563eb;   /* VFIT primary hover */
   --color-sidebar-text: rgba(255, 255, 255, 0.78);
   --color-sidebar-text-active: #FFFFFF;
-  --color-sidebar-dot: #34D399;
+  --color-sidebar-dot: #60a5fa;      /* VFIT blue light */
 
   --color-bg-page: #050A12;
   --color-kpi-dark: #0E1525;
@@ -108,12 +108,12 @@
   --color-glass-border-light: rgba(255, 255, 255, 0.09);  /* WCAG: improved visibility */
 
   /* Navbar glass (dark default) */
-  --nav-glass-bg: linear-gradient(135deg, rgba(52,211,153,0.07) 0%, rgba(17,17,19,0.94) 25%, rgba(17,17,19,0.96) 75%, rgba(52,211,153,0.034) 100%);
-  --nav-glass-border: rgba(52, 211, 153, 0.12);
-  --nav-glass-shadow: 0 -2px 20px rgba(0,0,0,0.25), 0 0 24px rgba(52,211,153,0.05), inset 0 1px 0 rgba(255,255,255,0.04);
+  --nav-glass-bg: linear-gradient(135deg, rgba(59,130,246,0.07) 0%, rgba(17,17,19,0.94) 25%, rgba(17,17,19,0.96) 75%, rgba(59,130,246,0.034) 100%);
+  --nav-glass-border: rgba(59, 130, 246, 0.12);
+  --nav-glass-shadow: 0 -2px 20px rgba(0,0,0,0.25), 0 0 24px rgba(59,130,246,0.05), inset 0 1px 0 rgba(255,255,255,0.04);
   --nav-blur-ultra-bg: linear-gradient(180deg, rgba(14, 16, 18, 0.72) 0%, rgba(14, 16, 18, 0.58) 100%);
-  --nav-blur-ultra-border: rgba(52, 211, 153, 0.16);
-  --nav-blur-ultra-shadow: 0 12px 38px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 0 28px rgba(52, 211, 153, 0.08);
+  --nav-blur-ultra-border: rgba(59, 130, 246, 0.16);
+  --nav-blur-ultra-shadow: 0 12px 38px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 0 28px rgba(59, 130, 246, 0.08);
 
   /* Text — WCAG AA compliant vs bg-primary #050A12 */
   --color-text-primary: #F0F4F8;
