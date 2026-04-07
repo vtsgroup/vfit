@@ -2,7 +2,7 @@
 
 **Documento vivo:** Atualizar após cada sprint  
 **Última atualização:** 2026-04-07 (Fase 1 Completa)  
-**Versão atual:** v1.9.4-sprint-1  
+**Versão atual:** v1.9.5-fase-1  
 
 ---
 
