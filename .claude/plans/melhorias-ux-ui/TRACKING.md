@@ -1,0 +1,396 @@
+# 📊 TRACKING — Acompanhamento de Progresso
+
+**Documento vivo:** Atualizar após cada sprint  
+**Última atualização:** [data do último sprint completo]  
+**Versão atual:** [versão de produção]  
+
+---
+
+## 🎯 Resumo Executivo
+
+| Métrica | Target | Atual | Status |
+|---------|--------|-------|--------|
+| **Fase 1 completa** | Sem 2 | 0% | 🔴 Não iniciado |
+| **Bugs P0 resolvidos** | 5/5 | 0/5 | 🔴 Não iniciado |
+| **Conversão onboarding** | >75% | ~40% | 🟡 Baseline |
+| **Design system** | 100% azul | 30% verde | 🟡 Baseline |
+| **Lighthouse mobile** | 90+ | 62 | 🟡 Baseline |
+
+---
+
+## 📋 Lista de Tasks por Fase
+
+### FASE 1 — ESTRUTURAL (Sprint 1-4)
+
+**Status:** 🔴 Não iniciado  
+**Data início:** [TBD]  
+**Data target fim:** [TBD]  
+**Progress:** 0/56h (0%)  
+
+#### Sprint 1 — Bugs Críticos (0/12h)
+
+- [ ] BUG#1 Cookie banner suprimido
+  - [ ] middleware.ts criado
+  - [ ] componente CookieBanner atualizado
+  - [ ] Teste /welcome (mobile)
+  - ⏱️ Tempo: 1h
+  
+- [ ] BUG#2 PWA banner invisível em onboarding
+  - [ ] useBeforeInstallPrompt hook
+  - [ ] SUPPRESS_INSTALL_ROUTES definido
+  - [ ] Teste /onboarding
+  - ⏱️ Tempo: 1h
+
+- [ ] BUG#3 Template treino 404 corrigido
+  - [ ] getWorkoutTemplate query revisada
+  - [ ] Banco de templates populado
+  - [ ] Teste /treinos/[templateId]
+  - ⏱️ Tempo: 2h
+
+- [ ] BUG#4 Avaliação UUID 404 corrigido
+  - [ ] getAssessment query revisada
+  - [ ] Permission check adicionado
+  - [ ] Teste /avaliacoes/[uuid]
+  - ⏱️ Tempo: 1h
+
+- [ ] BUG#5 Banco alimentos populado (PARALELO)
+  - [ ] TACO database importado
+  - [ ] 7000+ foods inseridos
+  - [ ] 800+ fotos em R2
+  - [ ] Teste busca de alimentos
+  - ⏱️ Tempo: 4h
+
+**Sprint 1 Progress:** 0/5 tasks ✅  
+**Sprint 1 Blocker:** None  
+**Sprint 1 QA Sign-off:** ⏳ Pending
+
+---
+
+#### Sprint 2 — Formulários & Auth (0/5.75h)
+
+- [ ] UX#19 Nome Completo adicionado
+  - [ ] Form field criado
+  - [ ] Validation adicionada
+  - [ ] API endpoint atualizado
+  - ⏱️ Tempo: 0.5h
+
+- [ ] UX#18 Google OAuth para Personal
+  - [ ] Google button adicionado
+  - [ ] Handler implementado
+  - [ ] Redirect para complete-profile
+  - ⏱️ Tempo: 2h
+
+- [ ] UX#7 Apple "Em breve" removido
+  - [ ] Button removido de /register/student
+  - [ ] Layout ajustado
+  - ⏱️ Tempo: 0.25h
+
+- [ ] UX#6 Color tokens criados (preparo)
+  - [ ] config/vfit-colors.ts criado
+  - [ ] CSS variables definidas
+  - [ ] Tailwind config atualizado
+  - ⏱️ Tempo: 2h
+
+**Sprint 2 Progress:** 0/4 tasks ✅  
+**Sprint 2 QA Sign-off:** ⏳ Pending
+
+---
+
+#### Sprint 3 — Performance (0/3.5h)
+
+- [ ] UX#14 Login preserva redirect
+  - [ ] Query param `redirect` implementado
+  - [ ] Handler de callback atualizado
+  - [ ] Teste deeplink
+  - ⏱️ Tempo: 1h
+
+- [ ] UX#15 Turnstile invisível
+  - [ ] Modo `interaction-only` ativado
+  - [ ] `opacity: 0` até resolução
+  - [ ] Teste no /login
+  - ⏱️ Tempo: 0.5h
+
+- [ ] UX#13 Barra progresso visual
+  - [ ] Framer Motion integrado
+  - [ ] Barra animada criada
+  - [ ] Cores azul configuradas
+  - ⏱️ Tempo: 1h
+
+**Sprint 3 Progress:** 0/3 tasks ✅  
+**Sprint 3 QA Sign-off:** ⏳ Pending
+
+---
+
+#### Sprint 4 — Testes & Preparação (0/5h)
+
+- [ ] UX#16 Salvar progresso onboarding
+  - [ ] localStorage persist implementado
+  - [ ] Recovery ao voltar
+  - [ ] Teste completo
+  - ⏱️ Tempo: 2h
+
+- [ ] QA completa Fase 1
+  - [ ] Todos bugs testados
+  - [ ] Smoke tests passam
+  - [ ] Nenhum erro P0
+  - ⏱️ Tempo: 2h
+
+- [ ] Docs & CHANGELOG
+  - [ ] CHANGELOG.md atualizado
+  - [ ] v1.9.4 release notes
+  - [ ] Git tags criadas
+  - ⏱️ Tempo: 1h
+
+**Sprint 4 Progress:** 0/3 tasks ✅  
+**Sprint 4 QA Sign-off:** ⏳ Pending
+
+---
+
+### FASE 2 — DESIGN SYSTEM (Sprint 5-10)
+
+**Status:** ⏳ Aguardando Fase 1  
+**Data target início:** [Sem 3]  
+**Data target fim:** [Sem 5]  
+**Progress:** 0/106h (0%)  
+
+#### Sprint 5 — Tokens & Padrão Azul (0/10h)
+- [ ] Definir VFIT color tokens (2h)
+- [ ] Aplicar em /onboarding (4h)
+- [ ] Aplicar em componentes base (3h)
+- [ ] Testes WCAG (1h)
+
+#### Sprint 6 — Botão CTA Redesign (0/9h)
+- [ ] Redesign botão primary (3h)
+- [ ] Redesign botões secondary (2h)
+- [ ] Redesign botões danger (2h)
+- [ ] States (loading, disabled) (1h)
+- [ ] Testes (1h)
+
+#### Sprint 7 — Componentes Reutilizáveis (0/8h)
+- [ ] Badge redesign (2h)
+- [ ] Card redesign (2h)
+- [ ] Avatar cores determinísticas (1h)
+- [ ] Modal/Sheet redesign (2h)
+- [ ] Testes (1h)
+
+#### Sprint 8 — Aplicar Design System (0/7h)
+- [ ] Atualizar /onboarding completo (4h)
+- [ ] Atualizar tabela comparativa (1h)
+- [ ] Testes + ajustes (2h)
+
+#### Sprint 9 — Dashboard Aplicação (0/13h)
+- [ ] Aplicar design system /dashboard (5h)
+- [ ] Aplicar em /treinos (3h)
+- [ ] Aplicar em /nutricao (3h)
+- [ ] Testes + Deploy (2h)
+
+#### Sprint 10 — Revisão & Acessibilidade (0/7h)
+- [ ] Auditoria contraste WCAG (2h)
+- [ ] Revisão visual side-by-side (2h)
+- [ ] Ajustes de cores/spacing (2h)
+- [ ] Deploy final (1h)
+
+**Fase 2 Progress:** 0/54 tasks ✅  
+**Fase 2 QA Sign-off:** ⏳ Pending
+
+---
+
+### FASE 3 — FEATURES MODERNAS (Sprint 11-14)
+
+**Status:** ⏳ Aguardando Fase 2  
+**Data target início:** [Sem 6]  
+**Data target fim:** [Sem 9]  
+**Progress:** 0/88h (0%)  
+
+#### Sprint 11 — Card de Exercício (0/12h)
+- [ ] Integração ExerciseDB (3h)
+- [ ] Card redesign (3h)
+- [ ] Badge anatômico (2h)
+- [ ] Cache em R2 (2h)
+- [ ] Testes (2h)
+
+#### Sprint 12 — Timer & Filtros (0/10h)
+- [ ] Timer de descanso (3h)
+- [ ] Filtros por músculo (2h)
+- [ ] Botão substituir (2h)
+- [ ] Progress bar (1h)
+- [ ] Testes (2h)
+
+#### Sprint 13 — Banco de Alimentos (0/12h)
+- [ ] TACO database (4h)
+- [ ] Fotos alimentos (4h)
+- [ ] Inserção DB (1h)
+- [ ] API busca (1h)
+- [ ] Testes (2h)
+
+#### Sprint 14 — Scanner & Macro Ring (0/14h)
+- [ ] Camera + Vision AI (4h)
+- [ ] Barcode scanner (3h)
+- [ ] Macro Ring Chart (3h)
+- [ ] Integração UI (2h)
+- [ ] Testes (2h)
+
+**Fase 3 Progress:** 0/48 tasks ✅  
+**Fase 3 QA Sign-off:** ⏳ Pending
+
+---
+
+### FASE 4 — POLISH & LAUNCH (Sprint 15-16)
+
+**Status:** ⏳ Aguardando Fase 3  
+**Data target início:** [Sem 10]  
+**Data target fim:** [Sem 12]  
+**Progress:** 0/38h (0%)  
+
+#### Sprint 15 — Animações (0/8h)
+- [ ] Transições onboarding Framer (3h)
+- [ ] Loading states (2h)
+- [ ] Page transitions (1h)
+- [ ] Hover states (1h)
+- [ ] Testes (1h)
+
+#### Sprint 16 — Performance & Launch (0/12h)
+- [ ] Lighthouse audit (2h)
+- [ ] Image optimization (3h)
+- [ ] Bundle splitting (2h)
+- [ ] Font preload (1h)
+- [ ] Full QA (3h)
+- [ ] Docs + CHANGELOG (1h)
+
+**Fase 4 Progress:** 0/20 tasks ✅  
+**Fase 4 QA Sign-off:** ⏳ Pending
+
+---
+
+## 📈 Indicadores de Progresso
+
+### Por Fase
+
+```
+Fase 1 [████████░░░░░░░░] 0%   (0/56h)
+Fase 2 [░░░░░░░░░░░░░░░░] 0%   (0/106h) — Bloqueado
+Fase 3 [░░░░░░░░░░░░░░░░] 0%   (0/88h)  — Bloqueado
+Fase 4 [░░░░░░░░░░░░░░░░] 0%   (0/38h)  — Bloqueado
+
+TOTAL: [░░░░░░░░░░░░░░░░] 0%   (0/288h)
+```
+
+### Por Sprint
+
+| Sprint | Fase | Status | Progress | ETA |
+|--------|------|--------|----------|-----|
+| 1 | 1 | 🔴 Não iniciado | 0/12h | Sem 1 |
+| 2 | 1 | 🔴 Não iniciado | 0/5.75h | Sem 1 |
+| 3 | 1 | 🔴 Não iniciado | 0/3.5h | Sem 2 |
+| 4 | 1 | 🔴 Não iniciado | 0/5h | Sem 2 |
+| 5-10 | 2 | ⏳ Bloqueado | 0/106h | Sem 3-5 |
+| 11-14 | 3 | ⏳ Bloqueado | 0/88h | Sem 6-9 |
+| 15-16 | 4 | ⏳ Bloqueado | 0/38h | Sem 10-12 |
+
+---
+
+## 🔥 Bloqueadores & Riscos
+
+| ID | Descrição | Status | Impacto | Mitigação |
+|----|-----------|--------|---------|-----------|
+| BLOCK-001 | Nenhum (pronto para iniciar) | ✅ Resolvido | — | — |
+
+---
+
+## 📝 Notas de Execução
+
+### Sessions de Trabalho Planejadas
+
+**Sesão 1: Sprint 1 (Dia 1-3)**
+- Objetivo: Fix 5 bugs P0
+- Copilot: Ler 03-FASE-ESTRUTURAL.md (30 min)
+- Tempo: 12h (3 dias × 4h/dia)
+- QA: 3h
+- Deploy: v1.9.4
+
+**Sesão 2: Sprint 2-4 (Dia 4-9)**
+- Objetivo: P1 fixes + prepare design system
+- Tempo: 14.25h
+- Deploy: v1.9.4 patch
+
+### Checkpoints de Qualidade
+
+- [ ] Após Sprint 1: Nenhum erro P0 em produção
+- [ ] Após Sprint 2-4: Google OAuth + colors tokens prontos
+- [ ] Após Sprint 5-10: Design system 100% aplicado
+- [ ] Após Sprint 11-14: Features modernas completas
+- [ ] Após Sprint 15-16: Lighthouse 90+ ✅
+
+---
+
+## 📊 Métricas de Sucesso Continuadas
+
+### Fase 1 Target
+- ✅ Conversão mobile: +40% (de 26% → 36%)
+- ✅ Bugs P0: 0 em produção
+- ✅ Deploy time: <2h
+
+### Fase 2 Target
+- ✅ Design consistency: 100% (vs. 30% verde)
+- ✅ WCAG 2.1 AA: 100% de componentes
+- ✅ Deploy time: <3h
+
+### Fase 3 Target
+- ✅ Engagement: +25% (treino + nutrição)
+- ✅ Paridade BeFit: Alcançada
+- ✅ Deploy time: <4h
+
+### Fase 4 Target
+- ✅ Lighthouse: 90+ (mobile/desktop)
+- ✅ FID: <100ms
+- ✅ LCP: <2.5s
+- ✅ CLS: <0.1
+
+---
+
+## 🔄 Ciclo de Atualização
+
+**Frequência:** Após cada sprint (5-7 dias)  
+**Responsável:** Copilot/Tech Lead  
+**Documentação:** Commit com message `docs: update tracking sprint X`  
+
+### Template de Atualização
+
+```markdown
+## [Data] — Sprint X Completo ✅
+
+**Tasks completadas:** X/X
+**Tempo real:** Xh (vs. Xh estimado)
+**QA status:** ✅ / 🟡 / ❌
+**Bloqueadores:** None / [list]
+**Next sprint:** [Sprint N+1 foco]
+
+### Mudanças de escopo
+- [lista de mudanças, se houver]
+
+### Aprendizados
+- [lista de learnings para próximos sprints]
+```
+
+---
+
+## 🎯 Visão Consolidada (Atualizar a cada dia útil)
+
+```
+SEMANA 1  SEMANA 2  SEMANA 3-5  SEMANA 6-9  SEMANA 10-12
+[Sprint]  [Sprint]  [Sprint]    [Sprint]     [Sprint]
+   1-2      3-4       5-10        11-14       15-16
+  56h       —        106h        88h         38h
+  ████      ░░        ░░░░        ░░░░        ░░░░
+  
+  TARGET CONVERSÃO: +40% mobile by Sem 2 ✅
+  TARGET V2.0 LAUNCH: Sem 12 🚀
+```
+
+---
+
+**Última sincronização:** [TBD]  
+**Próxima sincronização esperada:** [TBD]  
+**Status geral:** 🔴 Não iniciado (pronto para começar)
+
+Para começar: Leia [00-VISAO-GERAL.md](00-VISAO-GERAL.md) depois [03-FASE-ESTRUTURAL.md](03-FASE-ESTRUTURAL.md)
