@@ -49,16 +49,12 @@ export function OAuthButtons({ className, compact, userType, invitationToken }: 
 
   if (compact) {
     return (
-      <div className={cn('grid grid-cols-2 gap-2', className)}>
-        {/* Apple — em breve */}
-        <button type="button" disabled title="Em breve"
-          className={cn(btnBase, 'h-11 w-full bg-black text-white opacity-50 cursor-not-allowed')}>
-          <AppleIcon className="h-5 w-5" />
-        </button>
+      <div className={cn('flex justify-center', className)}>
         {/* Google — active */}
         <button type="button" onClick={handleGoogle} disabled={oauth.isPending}
-          className={cn(btnBase, 'h-11 w-full bg-white text-zinc-800 hover:bg-zinc-50 shadow-[0_1px_3px_rgba(0,0,0,0.08)] hover:shadow-[0_2px_8px_rgba(0,0,0,0.12)]')}>
+          className={cn(btnBase, 'h-11 w-full max-w-xs bg-white text-zinc-800 hover:bg-zinc-50 shadow-[0_1px_3px_rgba(0,0,0,0.08)] hover:shadow-[0_2px_8px_rgba(0,0,0,0.12)]')}>
           <GoogleIcon className="h-5 w-5" />
+          <span className="ml-2">Continuar com Google</span>
         </button>
       </div>
     )

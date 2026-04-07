@@ -1,7 +1,7 @@
 # 📊 TRACKING — Acompanhamento de Progresso
 
 **Documento vivo:** Atualizar após cada sprint  
-**Última atualização:** 2026-04-06 (Sprint 1 Completo)  
+**Última atualização:** 2026-04-06 (Sprint 2 Completo)  
 **Versão atual:** v1.9.4-sprint-1  
 
 ---
@@ -10,7 +10,7 @@
 
 | Métrica | Target | Atual | Status |
 |---------|--------|-------|--------|
-| **Fase 1 completa** | Sprint 1 | 1/4 ✅ | 🟢 Em progresso |
+| **Fase 1 completa** | Sprint 1-2 | 2/4 ✅ | 🟢 Completo |
 | **Bugs P0 resolvidos** | 5/5 | 5/5 ✅ | 🟢 Completo |
 | **Conversão onboarding** | >75% | ~40% | 🟡 Baseline |
 | **Design system** | 100% azul | 30% verde | 🟡 Baseline |
@@ -68,31 +68,32 @@
 
 #### Sprint 2 — Formulários & Auth (0/5.75h)
 
-- [ ] UX#19 Nome Completo adicionado
-  - [ ] Form field criado
-  - [ ] Validation adicionada
-  - [ ] API endpoint atualizado
+- [x] UX#19 Nome Completo adicionado
+  - [x] Form field criado
+  - [x] Validation adicionada
+  - [x] API endpoint atualizado
   - ⏱️ Tempo: 0.5h
 
-- [ ] UX#18 Google OAuth para Personal
-  - [ ] Google button adicionado
-  - [ ] Handler implementado
-  - [ ] Redirect para complete-profile
+- [x] UX#18 Google OAuth para Personal
+  - [x] OAuthButtons já implementado
+  - [x] userType="personal" adicionado
+  - [x] Backend suporta personal OAuth
+  - [x] Redireciona para /complete-profile
   - ⏱️ Tempo: 2h
 
-- [ ] UX#7 Apple "Em breve" removido
-  - [ ] Button removido de /register/student
-  - [ ] Layout ajustado
+- [x] UX#7 Apple "Em breve" removido
+  - [x] Button removido de /register/student
+  - [x] Layout ajustado
   - ⏱️ Tempo: 0.25h
 
-- [ ] UX#6 Color tokens criados (preparo)
-  - [ ] config/vfit-colors.ts criado
-  - [ ] CSS variables definidas
-  - [ ] Tailwind config atualizado
+- [x] UX#6 Color tokens criados (preparo)
+  - [x] config/vfit-colors.ts criado
+  - [x] CSS variables definidas
+  - [x] Tailwind config atualizado
   - ⏱️ Tempo: 2h
 
-**Sprint 2 Progress:** 0/4 tasks ✅  
-**Sprint 2 QA Sign-off:** ⏳ Pending
+**Sprint 2 Progress:** 4/4 tasks ✅  
+**Sprint 2 QA Sign-off:** ✅ Completo
 
 ---
 

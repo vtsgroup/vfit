@@ -143,6 +143,48 @@
   --shadow-glow-accent: 0 0 30px rgba(108, 92, 231, 0.3), 0 0 60px rgba(108, 92, 231, 0.1);
   --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.40);
 
+  /* VFIT Blue Color System — Primary Scale */
+  --color-vfit-primary-50: #eff6ff;
+  --color-vfit-primary-100: #dbeafe;
+  --color-vfit-primary-200: #bfdbfe;
+  --color-vfit-primary-300: #93c5fd;
+  --color-vfit-primary-400: #60a5fa;
+  --color-vfit-primary-500: #3b82f6;
+  --color-vfit-primary-600: #2563eb;
+  --color-vfit-primary-700: #1d4ed8;
+  --color-vfit-primary-800: #1e40af;
+  --color-vfit-primary-900: #1e3a8a;
+
+  /* VFIT Blue Color System — Secondary Scale */
+  --color-vfit-secondary-50: #f8fafc;
+  --color-vfit-secondary-100: #f1f5f9;
+  --color-vfit-secondary-200: #e2e8f0;
+  --color-vfit-secondary-300: #cbd5e1;
+  --color-vfit-secondary-400: #94a3b8;
+  --color-vfit-secondary-500: #64748b;
+  --color-vfit-secondary-600: #475569;
+  --color-vfit-secondary-700: #334155;
+  --color-vfit-secondary-800: #1e293b;
+  --color-vfit-secondary-900: #0f172a;
+
+  /* VFIT Blue Color System — Accent Scale */
+  --color-vfit-accent-50: #fefce8;
+  --color-vfit-accent-100: #fef9c3;
+  --color-vfit-accent-200: #fef08a;
+  --color-vfit-accent-300: #fde047;
+  --color-vfit-accent-400: #facc15;
+  --color-vfit-accent-500: #eab308;
+  --color-vfit-accent-600: #ca8a04;
+  --color-vfit-accent-700: #a16207;
+  --color-vfit-accent-800: #854d0e;
+  --color-vfit-accent-900: #713f12;
+
+  /* VFIT Blue Color System — Gradients */
+  --gradient-vfit-primary: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  --gradient-vfit-secondary: linear-gradient(135deg, #64748b 0%, #334155 100%);
+  --gradient-vfit-accent: linear-gradient(135deg, #eab308 0%, #a16207 100%);
+  --gradient-vfit-card: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+
   /* Border Radius */
   --radius-sm: 0.375rem;
   --radius-md: 0.5rem;

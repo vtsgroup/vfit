@@ -110,6 +110,7 @@ export default function RegisterPersonalPage() {
   const turnstileRef = useRef<TurnstileRef>(null)
 
   const [form, setForm] = useState({
+    fullName: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -220,7 +221,7 @@ export default function RegisterPersonalPage() {
     if (step === 1) { setStep(2); return }
 
     register.mutate({
-      full_name: cpfLookupName || 'Personal',
+      full_name: form.fullName,
       email: form.email,
       password: form.password,
       cpf: form.cpf,
@@ -234,7 +235,7 @@ export default function RegisterPersonalPage() {
   }
 
   const passwordsMatch = form.password === form.confirmPassword
-  const step1Valid = cpfValidated && form.email && form.password && form.confirmPassword && passwordsMatch
+  const step1Valid = cpfValidated && form.fullName && form.email && form.password && form.confirmPassword && passwordsMatch
   const step2Valid = form.cref && form.cref_state && acceptedTerms
 
   return (
@@ -315,7 +316,7 @@ export default function RegisterPersonalPage() {
         {/* OAuth on step 1 */}
         {step === 1 && (
           <>
-            <OAuthButtons compact />
+            <OAuthButtons compact userType="personal" />
             <div className="relative my-6">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-white/6" />
@@ -333,6 +334,22 @@ export default function RegisterPersonalPage() {
         <form onSubmit={handleSubmit} className="space-y-4">
           {step === 1 && (
             <>
+              {/* Nome Completo */}
+              <div>
+                <label className="flex items-center gap-1.5 text-[10px] uppercase text-zinc-400 mb-2" style={monoLabel}>
+                  <DSIcon name="user" size={12} className="text-zinc-500" /> NOME COMPLETO
+                </label>
+                <input
+                  type="text"
+                  placeholder="Como aparecerá para seus alunos"
+                  value={form.fullName}
+                  onChange={(e) => updateField('fullName', e.target.value)}
+                  autoComplete="name"
+                  required
+                  className={inputClass}
+                />
+              </div>
+
               {/* CPF */}
               <div>
                 <label className="flex items-center gap-1.5 text-[10px] uppercase text-zinc-400 mb-2" style={monoLabel}>
