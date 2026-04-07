@@ -5,6 +5,41 @@
 
 ---
 
+## [v1.9.5] — 07/04/2026 — Sprint 3: Performance UX Improvements
+
+### 🎯 Sprint 3 Performance — UX Melhorias Completas
+**Status:** ✅ Completo | **Melhorias:** 3/3 | **Horas:** 3.5h | **Tag:** v1.9.5-sprint-3
+
+#### UX#14: Login Redirect Preservation
+- **Sintoma:** Login não preservava redirects customizados da URL
+- **Raiz:** Hook useLogin sem suporte a parâmetro redirect
+- **Solução:**
+  - Modificado `src/app/(auth)/login/page.tsx` para extrair `redirect` de searchParams
+  - Atualizado `src/hooks/use-auth.ts` useLogin para aceitar opção redirect
+  - Implementada lógica de prioridade: custom redirect > default fallback
+- **Validação:** ✅ Deeplink test passed
+
+#### UX#15: Invisible Turnstile UX
+- **Sintoma:** Turnstile aparecia mesmo quando invisible mode funcionava
+- **Raiz:** Sem controle de opacidade até resolução
+- **Solução:**
+  - Adicionado estado `isVerified` em `src/components/auth/turnstile.tsx`
+  - Implementado `opacity: 0` até callback de verificação
+  - Reset automático do estado na função reset()
+- **Validação:** ✅ /login test passed
+
+#### UX#13: Visual Progress Bar Component
+- **Sintoma:** Falta componente de barra progresso animada
+- **Raiz:** Nenhum componente UI para visualização de progresso
+- **Solução:**
+  - Criado `src/components/ui/progress-bar.tsx` com Framer Motion
+  - Animação suave com cores VFIT blue (#22C55E gradient)
+  - Efeito 3D com overlay de profundidade
+  - Adicionado ao barrel export `src/components/ui/index.ts`
+- **Validação:** ✅ Build passed, componente funcional
+
+---
+
 ## [v1.9.4] — 06/04/2026 — Sprint 1: Fix 5 P0 Critical Bugs
 
 ### 🎯 Sprint 1 Estrutural — Bugs Críticos Resolvidos

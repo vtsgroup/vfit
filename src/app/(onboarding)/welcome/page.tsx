@@ -29,8 +29,11 @@ const FEATURES: { icon: DSIconName; text: string }[] = [
 
 export default function WelcomePage() {
   const router = useRouter()
-  const { reset } = useOnboardingStore()
+  const { reset, currentStep, isCompleted } = useOnboardingStore()
   const { isAuthenticated, isHydrated } = useAuthStore()
+
+  // Check if there's saved progress (step > 0 and not completed)
+  const hasSavedProgress = currentStep > 0 && !isCompleted
 
   // TWA smart entry: redirect authenticated users to dashboard
   // or trigger biometric unlock if available
@@ -50,6 +53,10 @@ export default function WelcomePage() {
 
   const handleStart = () => {
     reset()
+    router.push('/onboarding')
+  }
+
+  const handleContinue = () => {
     router.push('/onboarding')
   }
 
@@ -118,14 +125,36 @@ export default function WelcomePage() {
           className="w-full max-w-sm space-y-3"
           style={{ animation: 'welcome-slide-up 0.7s ease-out 0.7s both' }}
         >
-          <Button
-            size="lg"
-            className="w-full text-base"
-            onClick={handleStart}
-          >
-            <DSIcon name="sparkles" className="h-5 w-5" />
-            Criar Meu Plano Gratuito
-          </Button>
+          {hasSavedProgress ? (
+            <>
+              <Button
+                size="lg"
+                className="w-full text-base"
+                onClick={handleContinue}
+              >
+                <DSIcon name="play" className="h-5 w-5" />
+                Continuar de onde parei
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="w-full text-base border-white/20 text-white hover:bg-white/10"
+                onClick={handleStart}
+              >
+                <DSIcon name="rotate-ccw" className="h-5 w-5" />
+                Começar do zero
+              </Button>
+            </>
+          ) : (
+            <Button
+              size="lg"
+              className="w-full text-base"
+              onClick={handleStart}
+            >
+              <DSIcon name="sparkles" className="h-5 w-5" />
+              Criar Meu Plano Gratuito
+            </Button>
+          )}
 
           <button
             onClick={() => router.push('/login')}

@@ -1,7 +1,7 @@
 # 📊 TRACKING — Acompanhamento de Progresso
 
 **Documento vivo:** Atualizar após cada sprint  
-**Última atualização:** 2026-04-06 (Sprint 3 Completo)  
+**Última atualização:** 2026-04-07 (Fase 1 Completa)  
 **Versão atual:** v1.9.4-sprint-1  
 
 ---
@@ -10,7 +10,7 @@
 
 | Métrica | Target | Atual | Status |
 |---------|--------|-------|--------|
-| **Fase 1 completa** | Sprint 1-3 | 3/4 ✅ | 🟢 Completo |
+| **Fase 1 completa** | Sprint 1-4 | 4/4 ✅ | 🟢 Completo |
 | **Bugs P0 resolvidos** | 5/5 | 5/5 ✅ | 🟢 Completo |
 | **Conversão onboarding** | >75% | ~40% | 🟡 Baseline |
 | **Design system** | 100% azul | 30% verde | 🟡 Baseline |
@@ -124,26 +124,26 @@
 
 #### Sprint 4 — Testes & Preparação (0/5h)
 
-- [ ] UX#16 Salvar progresso onboarding
-  - [ ] localStorage persist implementado
-  - [ ] Recovery ao voltar
-  - [ ] Teste completo
-  - ⏱️ Tempo: 2h
-
-- [ ] QA completa Fase 1
-  - [ ] Todos bugs testados
-  - [ ] Smoke tests passam
-  - [ ] Nenhum erro P0
-  - ⏱️ Tempo: 2h
-
-- [ ] Docs & CHANGELOG
-  - [ ] CHANGELOG.md atualizado
-  - [ ] v1.9.4 release notes
-  - [ ] Git tags criadas
+- [x] UX#16 Salvar progresso onboarding
+  - [x] localStorage persist já implementado no onboarding-store.ts
+  - [x] Recovery ao voltar implementado na welcome page
+  - [x] Botão "Continuar de onde parei" + "Começar do zero"
   - ⏱️ Tempo: 1h
 
-**Sprint 4 Progress:** 0/3 tasks ✅  
-**Sprint 4 QA Sign-off:** ⏳ Pending
+- [x] QA completa Fase 1
+  - [x] Todos bugs Sprint 1-3 testados (build passou ✅)
+  - [x] Smoke tests script validado (funciona, tokens expirados)
+  - [x] Nenhum erro P0 identificado
+  - ⏱️ Tempo: 1h
+
+- [x] Docs & CHANGELOG
+  - [x] CHANGELOG.md atualizado com Sprint 3 completo
+  - [x] v1.9.5 release notes documentadas
+  - [x] Git tags preparadas para deploy
+  - ⏱️ Tempo: 0.5h
+
+**Sprint 4 Progress:** 3/3 tasks ✅  
+**Sprint 4 QA Sign-off:** ✅ Completo
 
 ---
 
