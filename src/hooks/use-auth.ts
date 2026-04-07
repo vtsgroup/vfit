@@ -85,7 +85,7 @@ interface MessageResponse {
 // useLogin
 // ============================================
 
-export function useLogin(options?: { onError?: (error: Error) => void }) {
+export function useLogin(options?: { redirect?: string; onError?: (error: Error) => void }) {
   const router = useRouter()
   const login = useAuthStore((s) => s.login)
 
@@ -118,7 +118,10 @@ export function useLogin(options?: { onError?: (error: Error) => void }) {
         : null
 
       let dest: string
-      if (selectedPlan && selectedPlan !== 'free' && normalizedUser.user_type === 'student') {
+      if (options?.redirect) {
+        // Redirect customizado tem prioridade
+        dest = options.redirect
+      } else if (selectedPlan && selectedPlan !== 'free' && normalizedUser.user_type === 'student') {
         dest = '/perfil/assinatura'
       } else if (normalizedUser.user_type === 'admin') {
         dest = '/dashboard/admin'

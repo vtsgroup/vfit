@@ -53,12 +53,14 @@ export const Turnstile = forwardRef<TurnstileRef, TurnstileProps>(
     const widgetIdRef = useRef<string | null>(null)
     const retryCountRef = useRef(0)
     const [mode, setMode] = useState<'invisible' | 'interactive'>('invisible')
+    const [isVerified, setIsVerified] = useState(false)
     const modeRef = useRef<'invisible' | 'interactive'>('invisible')
 
     // Expose reset + execute to parent via ref
     useImperativeHandle(ref, () => ({
       reset: () => {
         retryCountRef.current = 0
+        setIsVerified(false) // Reset verification state
         if (widgetIdRef.current && window.turnstile) {
           window.turnstile.reset(widgetIdRef.current)
         }
@@ -106,6 +108,7 @@ export const Turnstile = forwardRef<TurnstileRef, TurnstileProps>(
       widgetIdRef.current = window.turnstile.render(containerRef.current, {
         sitekey: TURNSTILE_SITE_KEY,
         callback: (token: string) => {
+          setIsVerified(true) // Mark as verified for opacity
           onVerify(token)
         },
         'expired-callback': () => {
@@ -200,6 +203,7 @@ export const Turnstile = forwardRef<TurnstileRef, TurnstileProps>(
       <div
         ref={containerRef}
         className={mode === 'invisible' ? '' : 'flex justify-center w-full animate-blur-in [&>iframe]:w-full! [&>div]:w-full!'}
+        style={{ opacity: mode === 'invisible' && !isVerified ? 0 : 1 }}
       />
     )
   }

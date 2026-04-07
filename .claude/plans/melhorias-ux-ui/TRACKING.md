@@ -1,7 +1,7 @@
 # 📊 TRACKING — Acompanhamento de Progresso
 
 **Documento vivo:** Atualizar após cada sprint  
-**Última atualização:** 2026-04-06 (Sprint 2 Completo)  
+**Última atualização:** 2026-04-06 (Sprint 3 Completo)  
 **Versão atual:** v1.9.4-sprint-1  
 
 ---
@@ -10,7 +10,7 @@
 
 | Métrica | Target | Atual | Status |
 |---------|--------|-------|--------|
-| **Fase 1 completa** | Sprint 1-2 | 2/4 ✅ | 🟢 Completo |
+| **Fase 1 completa** | Sprint 1-3 | 3/4 ✅ | 🟢 Completo |
 | **Bugs P0 resolvidos** | 5/5 | 5/5 ✅ | 🟢 Completo |
 | **Conversão onboarding** | >75% | ~40% | 🟡 Baseline |
 | **Design system** | 100% azul | 30% verde | 🟡 Baseline |
@@ -99,26 +99,26 @@
 
 #### Sprint 3 — Performance (0/3.5h)
 
-- [ ] UX#14 Login preserva redirect
-  - [ ] Query param `redirect` implementado
-  - [ ] Handler de callback atualizado
-  - [ ] Teste deeplink
+- [x] UX#14 Login preserva redirect
+  - [x] Query param `redirect` implementado na página de login
+  - [x] Handler de callback atualizado no hook useLogin
+  - [x] Teste de deeplink validado
   - ⏱️ Tempo: 1h
 
-- [ ] UX#15 Turnstile invisível
-  - [ ] Modo `interaction-only` ativado
-  - [ ] `opacity: 0` até resolução
-  - [ ] Teste no /login
+- [x] UX#15 Turnstile invisível
+  - [x] Modo `interaction-only` ativado (já estava)
+  - [x] `opacity: 0` até resolução implementado
+  - [x] Teste no /login validado
   - ⏱️ Tempo: 0.5h
 
-- [ ] UX#13 Barra progresso visual
-  - [ ] Framer Motion integrado
-  - [ ] Barra animada criada
-  - [ ] Cores azul configuradas
+- [x] UX#13 Barra progresso visual
+  - [x] Framer Motion integrado
+  - [x] Barra animada criada com cores azul VFIT
+  - [x] Componente ProgressBar adicionado ao DS
   - ⏱️ Tempo: 1h
 
-**Sprint 3 Progress:** 0/3 tasks ✅  
-**Sprint 3 QA Sign-off:** ⏳ Pending
+**Sprint 3 Progress:** 3/3 tasks ✅  
+**Sprint 3 QA Sign-off:** ✅ Completo
 
 ---
 

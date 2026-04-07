@@ -57,6 +57,7 @@ export default function LoginPage() {
   const verified = searchParams.get('verified')
   const oauthError = searchParams.get('error')
   const biometricParam = searchParams.get('biometric')
+  const redirectParam = searchParams.get('redirect')
 
   const [identifier, setIdentifier] = useState('')
   const [password, setPassword] = useState('')
@@ -104,6 +105,7 @@ export default function LoginPage() {
   }, [])
 
   const login = useLogin({
+    redirect: redirectParam || undefined,
     onError: (error) => {
       // Reset Turnstile for next attempt
       setTurnstileToken('')
