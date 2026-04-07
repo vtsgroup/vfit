@@ -22,6 +22,25 @@ import { DSIcon } from '@/components/ui/ds-icon'
 const DISMISS_KEY = 'vfit_banner_dismissed'
 const DISMISS_DAYS = 14 // Re-show after 14 days
 
+// Routes where SmartAppBanner should NOT appear
+const SUPPRESS_APP_BANNER_ROUTES = [
+  '/welcome',
+  '/register',
+  '/register/student',
+  '/register/personal',
+  '/onboarding',
+  '/reset-password',
+  '/verify-email',
+  '/auth',
+  '/login',
+]
+
+function shouldSuppressAppBanner(pathname: string): boolean {
+  return SUPPRESS_APP_BANNER_ROUTES.some(route => 
+    pathname === route || pathname.startsWith(route + '/')
+  )
+}
+
 // Play Store URL (TWA package: br.app.vfit)
 const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=br.app.vfit'
 // Website URL como fallback
@@ -61,6 +80,11 @@ export function SmartAppBanner() {
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
+    // Check if on suppressed route (early exit)
+    if (typeof window !== 'undefined' && shouldSuppressAppBanner(window.location.pathname)) {
+      return
+    }
+
     // Delay to avoid layout shift on initial render
     const timer = setTimeout(() => {
       if (!isStandalone() && isMobile() && !isDismissed()) {

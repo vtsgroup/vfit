@@ -52,6 +52,26 @@ function storeConsent(prefs: CookiePreferences) {
   }
 }
 
+// ─── Route Suppression ───────────────────────────────
+// Routes where cookie banner should NOT appear
+const SUPPRESS_COOKIE_BANNER_ROUTES = [
+  '/welcome',
+  '/register',
+  '/register/student',
+  '/register/personal',
+  '/onboarding',
+  '/reset-password',
+  '/verify-email',
+  '/auth',
+  '/login',
+]
+
+function shouldSuppressCookieBanner(pathname: string): boolean {
+  return SUPPRESS_COOKIE_BANNER_ROUTES.some(route => 
+    pathname === route || pathname.startsWith(route + '/')
+  )
+}
+
 // ─── Component ───────────────────────────────────────
 export function CookieConsentBanner() {
   const [visible, setVisible] = useState(false)
@@ -60,6 +80,12 @@ export function CookieConsentBanner() {
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    // Check if on suppressed route (early exit)
+    if (typeof window !== 'undefined' && shouldSuppressCookieBanner(window.location.pathname)) {
+      setMounted(true)
+      return
+    }
+
     // Delay mounting until AFTER Lighthouse LCP window (~2.5s)
     // Uses requestIdleCallback → setTimeout fallback to avoid being detected as LCP element
     const scheduleMount = () => {
