@@ -104,15 +104,15 @@ export function Tooltip({
             'pointer-events-none absolute z-9999',
             'rounded-xl px-3 py-2 text-xs font-medium leading-relaxed',
             'bg-bg-elevated/95 text-text-primary backdrop-blur-xl',
-            'border dark:border-white/10 light:border-slate-200/60',
-            'dark:shadow-[0_8px_32px_rgba(0,0,0,0.4),0_2px_8px_rgba(0,0,0,0.25),inset_0_1px_0_rgba(255,255,255,0.08)] light:shadow-[0_4px_16px_rgba(0,0,0,0.08),0_1px_4px_rgba(0,0,0,0.05)]',
+            'border dark:border-brand-primary/20 light:border-brand-primary/20',
+            'dark:shadow-[0_8px_32px_rgba(0,0,0,0.4),0_2px_8px_rgba(0,0,0,0.25),0_0_20px_rgba(16,185,129,0.10),inset_0_1px_0_rgba(255,255,255,0.08)] light:shadow-[0_4px_16px_rgba(0,0,0,0.08),0_1px_4px_rgba(0,0,0,0.05)]',
             positionClasses[actualPos],
             enterAnim[actualPos],
             className
           )}
         >
           {/* Glass shine */}
-          <span className="pointer-events-none absolute inset-x-0 top-0 h-1/2 rounded-t-[inherit] bg-linear-to-b dark:from-white/8 light:from-white/60 to-transparent" />
+          <span className="pointer-events-none absolute inset-x-0 top-0 h-1/2 rounded-t-[inherit] bg-linear-to-b dark:from-brand-primary/12 light:from-brand-primary/8 to-transparent" />
           <span className="relative">{content}</span>
           {arrow && (
             <span className={cn('absolute h-0 w-0 border-[5px]', arrowClasses[actualPos])} />

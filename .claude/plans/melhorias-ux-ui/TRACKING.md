@@ -1,7 +1,7 @@
 # 📊 TRACKING — Acompanhamento de Progresso
 
 **Documento vivo:** Atualizar após cada sprint  
-**Última atualização:** 2026-04-08 (hotfix + QA Playwright não-Chrome)  
+**Última atualização:** 2026-04-08 (hotfix + QA concluído + Sprint 8 iniciada)  
 **Versão atual:** v1.9.5-fase-1  
 
 ---
@@ -13,7 +13,7 @@
 | **Fase 1 completa** | Sprint 1-4 | 4/4 ✅ | 🟢 Completo |
 | **Bugs P0 resolvidos** | 5/5 | 5/5 ✅ | 🟢 Completo |
 | **Conversão onboarding** | >75% | ~40% | 🟡 Baseline |
-| **Design system (brand)** | Destaque principal verde | Green restaurado | 🟢 Alinhado |
+| **Design system (brand)** | Destaque principal verde | Green restaurado + Sprint 8 em progresso | 🟡 Em execução |
 | **Lighthouse mobile** | 90+ | 62 | 🟡 Baseline |
 
 ---

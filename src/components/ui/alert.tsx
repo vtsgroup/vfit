@@ -36,11 +36,11 @@ const variantConfig: Record<AlertVariant, {
   icon: ReactNode
 }> = {
   info: {
-    bg: 'dark:bg-blue-500/8 light:bg-blue-50',
-    border: 'dark:border-blue-500/20 light:border-blue-200/60',
-    iconColor: 'dark:text-blue-400 light:text-blue-500',
-    titleColor: 'dark:text-blue-300 light:text-blue-700',
-    textColor: 'dark:text-blue-200/80 light:text-blue-600/80',
+    bg: 'dark:bg-brand-primary/8 light:bg-brand-primary/6',
+    border: 'dark:border-brand-primary/20 light:border-brand-primary/25',
+    iconColor: 'dark:text-brand-primary light:text-brand-primary-hover',
+    titleColor: 'dark:text-brand-primary light:text-brand-primary-hover',
+    textColor: 'dark:text-brand-primary/85 light:text-brand-primary-hover/85',
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="12" cy="12" r="10" /><path d="M12 16v-4" /><path d="M12 8h.01" />

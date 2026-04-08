@@ -1,8 +1,8 @@
 # 📊 TRACKING — VFIT v2.0.0 Phase 2: Design System (rebaseline)
 
-> **Última atualização:** 08/04/2026 — v1.9.6
+> **Última atualização:** 08/04/2026 — Sprint 8 iniciado
 > **Baseline:** Phase 1 completa (56h UX improvements) + Deploy v1.9.6
-> **Progresso atual:** Sprint 7 concluído (16/16h) · Phase 2: 3/10 sprints (51/96h)
+> **Progresso atual:** Sprint 8 em progresso · Phase 2: 3/10 sprints concluídos + execução ativa
 > **Objetivo:** Consolidar Design System VFIT com baseline atual em **Green** (WCAG AA compliant), mantendo consistência e reusabilidade.
 
 ---
@@ -68,6 +68,15 @@
 - [x] T7.9 — Testar consistência visual em todas as páginas
 - [x] T7.10 — Documentar atualizações no DESIGN-SYSTEM.md
 > VFIT blue aplicado consistentemente em todos os componentes principais. Build validado, acessibilidade confirmada.
+
+### S8: Component Applications Avançadas 🔄 (em progresso)
+- [x] T8.1 — Rebaseline do plano visual para baseline atual green (tracking/docs)
+- [x] T8.2 — Feedback UI: `Alert` variante info migrada para tokens de brand
+- [x] T8.3 — Notification system badge/icon migrado de blue para brand
+- [x] T8.4 — Tooltip/Accordion com acento green (borda/glow/open state)
+- [ ] T8.5 — Aplicar baseline em dropdowns/accordions adicionais de páginas avançadas
+- [ ] T8.6 — Rodar validação build + acessibilidade
+- [ ] T8.7 — Documentar resultados no DESIGN-SYSTEM/CHANGELOG
 
 ---
 

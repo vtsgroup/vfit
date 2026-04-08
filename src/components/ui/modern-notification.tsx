@@ -78,9 +78,9 @@ const NOTIF_CONFIG: Record<string, {
   },
   system: {
     icon: 'bell',
-    bg: 'bg-blue-500/10',
-    iconColor: 'text-blue-400',
-    dotColor: 'bg-blue-400',
+    bg: 'bg-brand-primary/10',
+    iconColor: 'text-brand-primary',
+    dotColor: 'bg-brand-primary',
   },
 }
 

@@ -97,8 +97,8 @@ export function AccordionItem({ children, value, className, disabled = false }: 
     card: cn(
       'rounded-xl border transition-all duration-200',
       isOpen
-        ? 'border-border-light bg-bg-tertiary/60 shadow-[0_4px_16px_rgba(0,0,0,0.2)] backdrop-blur-sm'
-        : 'border-border-light/60 bg-bg-secondary/40 hover:border-border-light'
+        ? 'border-brand-primary/25 bg-bg-tertiary/60 shadow-[0_4px_16px_rgba(0,0,0,0.2),0_0_24px_rgba(16,185,129,0.08)] backdrop-blur-sm'
+        : 'border-border-light/60 bg-bg-secondary/40 hover:border-brand-primary/20'
     ),
     ghost: 'rounded-lg',
   }
