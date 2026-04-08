@@ -377,14 +377,40 @@ export const api = {
   },
 
   /**
+   * Upload raw File com Content-Type do arquivo (sem FormData)
+   * Usado em endpoints que recebem arrayBuffer diretamente (cover-image, exercise video, muscle image)
+   */
+  uploadFile: async <T = unknown>(endpoint: string, file: File) => {
+    const token = await ensureValidToken()
+    const headers: Record<string, string> = {
+      'Content-Type': file.type,
+    }
+    if (token) headers['Authorization'] = `Bearer ${token}`
+
+    const url = `${API_BASE_URL}${endpoint}`
+    const res = await fetch(url, {
+      method: 'POST',
+      headers,
+      body: file,
+    })
+
+    if (!res.ok) {
+      const json = (await res.json().catch(() => null)) as ApiError | null
+      throw new ApiClientError(
+        json?.error?.message || `Upload failed: ${res.status}`,
+        json?.error?.code || 'UPLOAD_ERROR',
+        res.status
+      )
+    }
+
+    return (await res.json()) as ApiResponse<T>
+  },
+
+  /**
    * Download file (binary/text) com autenticação
    */
-  download: async (endpoint: string, options?: FetchOptions) => {
+  download: async (endpoint: string, options?: FetchOptions & { params?: Record<string, string | number | boolean | undefined> }) => {
     const { auth = true, params, headers: customHeaders, ...initRaw } = options || {}
-    const init = { ...initRaw } as RequestInit
-    if ('body' in init) {
-      delete (init as { body?: unknown }).body
-    }
 
     let normalizedEndpoint = endpoint
     if (!endpoint.startsWith('/api/') && !endpoint.startsWith('http')) {
@@ -407,6 +433,11 @@ export const api = {
       if (token) headers['Authorization'] = `Bearer ${token}`
     }
 
+    const init = { ...initRaw } as RequestInit
+    if ('body' in init) {
+      delete (init as { body?: unknown }).body
+    }
+
     const res = await fetch(url.toString(), {
       ...init,
       method: init.method || 'GET',
@@ -426,3 +457,4 @@ export const api = {
     return res
   },
 }
+

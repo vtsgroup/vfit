@@ -1554,4 +1554,156 @@ workouts.get('/b2c/records', authMiddleware, async (c) => {
   return success({ records: result.rows })
 })
 
+// ============================================
+// POST /workouts/:id/cover-image — Upload imagem de capa do treino (R2)
+// Personal faz upload direto; backend salva em R2_IMAGES e atualiza cover_image_url
+// ============================================
+workouts.post('/:id/cover-image', requireType('personal'), async (c) => {
+  const personalId = c.get('userId')
+  const workoutId = c.req.param('id')
+
+  await ensureWorkoutOwnership(c.env, workoutId, personalId)
+
+  const contentType = c.req.header('content-type') || ''
+  if (!contentType.startsWith('image/')) {
+    throw new BadRequestError('Content-Type deve ser image/*')
+  }
+
+  const extMap: Record<string, string> = {
+    'image/jpeg': 'jpg',
+    'image/jpg': 'jpg',
+    'image/png': 'png',
+    'image/webp': 'webp',
+  }
+  const ext = extMap[contentType.split(';')[0].trim()] ?? 'jpg'
+  const key = `workouts/${workoutId}/cover.${ext}`
+
+  const body = await c.req.arrayBuffer()
+  if (body.byteLength > 10 * 1024 * 1024) {
+    throw new BadRequestError('Imagem deve ter no máximo 10 MB')
+  }
+
+  await c.env.R2_IMAGES.put(key, body, { httpMetadata: { contentType } })
+
+  const base = (c.env.R2_IMAGES_URL || 'https://images.vfit.app.br').replace(/\/+$/, '')
+  const coverUrl = `${base}/${key}`
+
+  const now = new Date().toISOString()
+  await pgQuery(c.env,
+    'UPDATE workouts SET cover_image_url = $1, updated_at = $2 WHERE id = $3',
+    [coverUrl, now, workoutId]
+  )
+
+  return success({ cover_image_url: coverUrl })
+})
+
+// ============================================
+// DELETE /workouts/:id/cover-image — Remover imagem de capa
+// ============================================
+workouts.delete('/:id/cover-image', requireType('personal'), async (c) => {
+  const personalId = c.get('userId')
+  const workoutId = c.req.param('id')
+
+  await ensureWorkoutOwnership(c.env, workoutId, personalId)
+
+  // Remove todos os formatos possíveis (jpg, png, webp)
+  for (const ext of ['jpg', 'png', 'webp']) {
+    try { await c.env.R2_IMAGES.delete(`workouts/${workoutId}/cover.${ext}`) } catch { /* best-effort */ }
+  }
+
+  const now = new Date().toISOString()
+  await pgQuery(c.env,
+    'UPDATE workouts SET cover_image_url = NULL, updated_at = $1 WHERE id = $2',
+    [now, workoutId]
+  )
+
+  return success({ cover_image_url: null })
+})
+
+// ============================================
+// POST /workouts/:id/exercises/:eid/video — Upload vídeo customizado do aluno
+// Personal faz upload do vídeo gravado na academia para substituir o da biblioteca
+// ============================================
+workouts.post('/:id/exercises/:eid/video', requireType('personal'), async (c) => {
+  const personalId = c.get('userId')
+  const workoutId = c.req.param('id')
+  const exerciseRowId = c.req.param('eid')
+
+  await ensureWorkoutOwnership(c.env, workoutId, personalId)
+
+  // Verificar que o exercício pertence ao treino
+  const exRow = await pgQueryOne<{ id: string }>(c.env,
+    'SELECT id FROM workout_exercises WHERE id = $1 AND workout_id = $2',
+    [exerciseRowId, workoutId]
+  )
+  if (!exRow) throw new NotFoundError('Exercício')
+
+  const contentType = c.req.header('content-type') || ''
+  if (!contentType.startsWith('video/')) {
+    throw new BadRequestError('Content-Type deve ser video/*')
+  }
+
+  const extMap: Record<string, string> = {
+    'video/mp4': 'mp4',
+    'video/quicktime': 'mov',
+    'video/webm': 'webm',
+  }
+  const ext = extMap[contentType.split(';')[0].trim()] ?? 'mp4'
+  const key = `workouts/${workoutId}/exercises/${exerciseRowId}.${ext}`
+
+  const body = await c.req.arrayBuffer()
+  if (body.byteLength > 100 * 1024 * 1024) {
+    throw new BadRequestError('Vídeo deve ter no máximo 100 MB')
+  }
+
+  await c.env.R2_IMAGES.put(key, body, { httpMetadata: { contentType } })
+
+  const base = (c.env.R2_IMAGES_URL || 'https://images.vfit.app.br').replace(/\/+$/, '')
+  const videoUrl = `${base}/${key}`
+
+  const now = new Date().toISOString()
+  await pgQuery(c.env,
+    'UPDATE workout_exercises SET custom_video_url = $1 WHERE id = $2',
+    [videoUrl, exerciseRowId]
+  )
+  await pgQuery(c.env,
+    'UPDATE workouts SET updated_at = $1 WHERE id = $2',
+    [now, workoutId]
+  )
+
+  return success({ custom_video_url: videoUrl })
+})
+
+// ============================================
+// DELETE /workouts/:id/exercises/:eid/video — Remover vídeo customizado
+// ============================================
+workouts.delete('/:id/exercises/:eid/video', requireType('personal'), async (c) => {
+  const personalId = c.get('userId')
+  const workoutId = c.req.param('id')
+  const exerciseRowId = c.req.param('eid')
+
+  await ensureWorkoutOwnership(c.env, workoutId, personalId)
+
+  const exRow = await pgQueryOne<{ id: string; custom_video_url: string | null }>(c.env,
+    'SELECT id, custom_video_url FROM workout_exercises WHERE id = $1 AND workout_id = $2',
+    [exerciseRowId, workoutId]
+  )
+  if (!exRow) throw new NotFoundError('Exercício')
+
+  // Remove do R2 se o URL for nosso bucket
+  if (exRow.custom_video_url?.includes('images.vfit.app.br')) {
+    try {
+      const urlParts = new URL(exRow.custom_video_url)
+      await c.env.R2_IMAGES.delete(urlParts.pathname.replace(/^\//, ''))
+    } catch { /* best-effort */ }
+  }
+
+  await pgQuery(c.env,
+    'UPDATE workout_exercises SET custom_video_url = NULL WHERE id = $1',
+    [exerciseRowId]
+  )
+
+  return success({ custom_video_url: null })
+})
+
 export { workouts as workoutsRoutes }

@@ -23,9 +23,11 @@ import { useQueryClient } from '@tanstack/react-query'
 
 export function ExerciseVideoPlayer({
   exerciseId,
+  customVideoUrl,
   className,
 }: {
   exerciseId: string
+  customVideoUrl?: string
   className?: string
 }) {
   const { data, isLoading } = useExerciseMedia(exerciseId)
@@ -39,7 +41,9 @@ export function ExerciseVideoPlayer({
   const userType = useAuthStore((s) => s.user?.user_type)
   const isPersonal = userType === 'personal' || userType === 'admin'
 
-  const hasVideo = !!media?.video_url
+  // custom video (aluno específico) tem prioridade sobre biblioteca
+  const activeVideoUrl = customVideoUrl || media?.video_url
+  const hasVideo = !!activeVideoUrl
 
   async function handleUpload(file: File) {
     if (!file) return
@@ -162,7 +166,7 @@ export function ExerciseVideoPlayer({
               playsInline
               preload="metadata"
               poster={media?.thumbnail_url || undefined}
-              src={media?.video_url}
+              src={activeVideoUrl}
             >
               Seu navegador não suporta vídeo HTML5.
             </video>

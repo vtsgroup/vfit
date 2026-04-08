@@ -272,7 +272,7 @@ function NotificationCard({
   const iconConfig = {
     payments: { icon: 'dollar' as DSIconName, color: 'text-emerald-500', bg: 'bg-emerald-50 dark:bg-emerald-500/12', accent: 'border-l-emerald-500' },
     workouts: { icon: 'dumbbell' as DSIconName, color: 'text-violet-500', bg: 'bg-violet-50 dark:bg-violet-500/12', accent: 'border-l-violet-500' },
-    system: { icon: 'settings' as DSIconName, color: 'text-blue-500', bg: 'bg-blue-50 dark:bg-blue-500/12', accent: 'border-l-blue-500' },
+    system: { icon: 'settings' as DSIconName, color: 'text-brand-primary', bg: 'bg-white dark:bg-brand-primary/12', accent: 'border-l-brand-primary' },
   }[category]!
 
   const Wrapper = notification.link ? 'button' : 'div'

@@ -41,6 +41,12 @@ export interface MuscleGroup {
   icon_svg: string | null
   description: string | null
   display_order: number
+  // Anatomy / media fields (added in migration 0003)
+  image_url: string | null
+  animation_url: string | null
+  color_hex: string | null
+  parent_id: string | null
+  sub_muscles?: MuscleGroup[]
 }
 
 interface ExercisesResult {

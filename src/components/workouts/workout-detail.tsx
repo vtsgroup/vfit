@@ -27,6 +27,10 @@ import {
   useExportWorkout,
   useAssignWorkout,
   useExerciseLibrary,
+  useUploadWorkoutCover,
+  useRemoveWorkoutCover,
+  useUploadExerciseVideo,
+  useRemoveExerciseVideo,
   type WorkoutExercise,
   type WorkoutLog,
 } from '@/hooks/use-workouts'
@@ -59,6 +63,8 @@ export default function WorkoutDetailClient({ id }: { id: string }) {
   const duplicateWorkout = useDuplicateWorkout(id)
   const exportWorkout = useExportWorkout()
   const assignWorkout = useAssignWorkout()
+  const uploadCover = useUploadWorkoutCover()
+  const removeCover = useRemoveWorkoutCover()
   const [showMenu, setShowMenu] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [showAssignModal, setShowAssignModal] = useState(false)
@@ -155,14 +161,52 @@ export default function WorkoutDetailClient({ id }: { id: string }) {
         {/* Header card */}
         <div className="flex flex-col gap-4 rounded-xl border border-border-light bg-bg-secondary p-6 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-start gap-4">
-            <div className={cn(
-              'flex h-14 w-14 shrink-0 items-center justify-center rounded-xl',
-              workout.ai_generated ? 'bg-brand-accent/10' : 'bg-brand-primary/10'
-            )}>
-              {workout.ai_generated ? (
-                <DSIcon name="sparkles" className="text-brand-accent" />
+            {/* Cover image / icon com upload */}
+            <div className="group relative h-14 w-14 shrink-0">
+              {workout.cover_image_url ? (
+                <img
+                  src={workout.cover_image_url}
+                  alt={workout.name}
+                  className="h-14 w-14 rounded-xl object-cover"
+                />
               ) : (
-                <DSIcon name="dumbbell" className="text-brand-primary" />
+                <div className={cn(
+                  'flex h-14 w-14 items-center justify-center rounded-xl',
+                  workout.ai_generated ? 'bg-brand-accent/10' : 'bg-brand-primary/10'
+                )}>
+                  {workout.ai_generated ? (
+                    <DSIcon name="sparkles" className="text-brand-accent" />
+                  ) : (
+                    <DSIcon name="dumbbell" className="text-brand-primary" />
+                  )}
+                </div>
+              )}
+              {/* Upload overlay */}
+              <label
+                className="absolute inset-0 flex cursor-pointer items-center justify-center rounded-xl bg-black/60 opacity-0 transition-opacity group-hover:opacity-100"
+                title={workout.cover_image_url ? 'Trocar foto de capa' : 'Adicionar foto de capa'}
+              >
+                <DSIcon name={workout.cover_image_url ? 'edit' : 'image'} size={18} className="text-white" />
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="sr-only"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0]
+                    if (file) uploadCover.mutate({ workoutId: id, file })
+                    e.target.value = ''
+                  }}
+                />
+              </label>
+              {/* Remove cover */}
+              {workout.cover_image_url && (
+                <button
+                  className="absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-error text-white opacity-0 shadow transition-opacity group-hover:opacity-100"
+                  onClick={() => removeCover.mutate(id)}
+                  title="Remover foto de capa"
+                >
+                  <DSIcon name="x" size={10} />
+                </button>
               )}
             </div>
             <div>
@@ -314,6 +358,7 @@ export default function WorkoutDetailClient({ id }: { id: string }) {
                       key={exercise.id}
                       exercise={exercise}
                       index={idx}
+                      workoutId={id}
                       exerciseMap={exerciseMap}
                     />
                   ))}
@@ -359,14 +404,18 @@ export default function WorkoutDetailClient({ id }: { id: string }) {
 function ExerciseRow({
   exercise,
   index,
+  workoutId,
   exerciseMap,
 }: {
   exercise: WorkoutExercise
   index: number
+  workoutId: string
   exerciseMap: Map<string, { name_pt: string; muscle_group_id: string; difficulty: string; thumbnail_url: string | null }>
 }) {
   const lib = exerciseMap.get(exercise.exercise_id)
   const name = lib?.name_pt || `Exercício ${exercise.exercise_id.slice(0, 8)}`
+  const uploadVideo = useUploadExerciseVideo()
+  const removeVideo = useRemoveExerciseVideo()
 
   return (
     <div className="rounded-xl border border-border-light bg-bg-primary p-3">
@@ -402,6 +451,21 @@ function ExerciseRow({
             {exercise.load && <span>• {exercise.load}</span>}
             <span>• {exercise.rest_seconds}s descanso</span>
           </div>
+          {/* Custom video badge */}
+          {exercise.custom_video_url && (
+            <div className="mt-1 flex items-center gap-1">
+              <span className="inline-flex items-center gap-1 rounded-full bg-violet-500/10 px-2 py-0.5 text-[10px] font-medium text-violet-400">
+                <DSIcon name="video" size={10} /> Vídeo personalizado
+              </span>
+              <button
+                className="text-[10px] text-text-muted hover:text-error"
+                onClick={() => removeVideo.mutate({ workoutId, exerciseRowId: exercise.id })}
+                title="Remover vídeo personalizado"
+              >
+                ✕
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Notes indicator */}
@@ -411,8 +475,29 @@ function ExerciseRow({
           </div>
         )}
 
-        {/* Video button (compact, right side) */}
-        <ExerciseVideoPlayer exerciseId={exercise.exercise_id} />
+        {/* Upload custom video */}
+        <label
+          className="shrink-0 cursor-pointer rounded-lg p-1.5 text-text-muted hover:bg-white/6 hover:text-violet-400 transition-colors"
+          title={exercise.custom_video_url ? 'Substituir vídeo do aluno' : 'Upload vídeo do aluno'}
+        >
+          <DSIcon name="video" size={16} />
+          <input
+            type="file"
+            accept="video/*"
+            className="sr-only"
+            onChange={(e) => {
+              const file = e.target.files?.[0]
+              if (file) uploadVideo.mutate({ workoutId, exerciseRowId: exercise.id, file })
+              e.target.value = ''
+            }}
+          />
+        </label>
+
+        {/* Video button (library) */}
+        <ExerciseVideoPlayer
+          exerciseId={exercise.exercise_id}
+          customVideoUrl={exercise.custom_video_url ?? undefined}
+        />
       </div>
     </div>
   )

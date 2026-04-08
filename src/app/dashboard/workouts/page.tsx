@@ -442,17 +442,28 @@ function WorkoutCard({ workout }: { workout: WorkoutListItem }) {
         workout.is_template && 'border-l-4 border-l-purple-500',
       )}
     >
-      {/* Icon */}
-      <div className={cn(
-        'flex h-12 w-12 shrink-0 items-center justify-center rounded-xl',
-        workout.is_template ? 'bg-purple-500/10' : workout.ai_generated ? 'bg-brand-accent/10' : 'bg-brand-primary/10'
-      )}>
-        {workout.is_template ? (
-          <DSIcon name="shoppingBag" size={20} className="text-purple-400" />
-        ) : workout.ai_generated ? (
-          <DSIcon name="sparkles" size={20} className="text-brand-accent" />
+      {/* Cover Image or Icon */}
+      <div className="relative h-12 w-12 shrink-0">
+        {workout.cover_image_url ? (
+          <img
+            src={workout.cover_image_url}
+            alt={workout.name}
+            className="h-12 w-12 rounded-xl object-cover"
+            loading="lazy"
+          />
         ) : (
-          <DSIcon name="dumbbell" size={20} className="text-brand-primary" />
+          <div className={cn(
+            'flex h-12 w-12 items-center justify-center rounded-xl',
+            workout.is_template ? 'bg-purple-500/10' : workout.ai_generated ? 'bg-brand-accent/10' : 'bg-brand-primary/10'
+          )}>
+            {workout.is_template ? (
+              <DSIcon name="shoppingBag" size={20} className="text-purple-400" />
+            ) : workout.ai_generated ? (
+              <DSIcon name="sparkles" size={20} className="text-brand-accent" />
+            ) : (
+              <DSIcon name="dumbbell" size={20} className="text-brand-primary" />
+            )}
+          </div>
         )}
       </div>
 

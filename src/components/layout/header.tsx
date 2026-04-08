@@ -78,6 +78,7 @@ const ROUTE_MAP: Record<string, string> = {
   '/dashboard/admin/payments': 'Pagamentos (Admin)',
   '/dashboard/admin/feedback': 'Sugestões',
   '/dashboard/admin/smoke': 'Smoke Tests',
+  '/dashboard/admin/muscle-groups': 'Grupos Musculares',
   '/dashboard/plans': 'Planos',
 }
 

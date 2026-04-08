@@ -1,0 +1,246 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - generic [ref=e38]:
+    - link "VFIT - Início" [ref=e39] [cursor=pointer]:
+      - /url: /
+      - generic [ref=e41]:
+        - generic [ref=e42]: V
+        - generic [ref=e43]: F
+        - generic [ref=e44]: I
+        - generic [ref=e45]: T
+    - generic [ref=e47]:
+      - paragraph [ref=e48]: "PLATAFORMA #1 PARA PERSONAL TRAINERS"
+      - heading "Treinos, alunos e cobranças" [level=2] [ref=e49]
+      - paragraph [ref=e50]: Gere treinos com IA, acompanhe evolução e receba pagamentos automaticamente — tudo em uma plataforma.
+      - generic [ref=e51]:
+        - generic [ref=e52]:
+          - img [ref=e54]
+          - generic [ref=e57]: IA GENERATIVA
+        - generic [ref=e58]:
+          - img [ref=e60]
+          - generic [ref=e62]: PIX AUTOMÁTICO
+        - generic [ref=e63]:
+          - img [ref=e65]
+          - generic [ref=e66]: MÉTRICAS
+        - generic [ref=e67]:
+          - img [ref=e69]
+          - generic [ref=e71]: PWA OFFLINE
+        - generic [ref=e72]:
+          - img [ref=e74]
+          - generic [ref=e80]: TREINOS IA
+        - generic [ref=e81]:
+          - img [ref=e83]
+          - generic [ref=e88]: GESTÃO ALUNOS
+        - generic [ref=e89]:
+          - img [ref=e91]
+          - generic [ref=e94]: AGENDAMENTOS
+        - generic [ref=e95]:
+          - img [ref=e97]
+          - generic [ref=e103]: GAMIFICAÇÃO
+        - generic [ref=e104]:
+          - img [ref=e106]
+          - generic [ref=e109]: LGPD
+        - generic [ref=e110]:
+          - img [ref=e112]
+          - generic [ref=e117]: MARKETPLACE
+      - generic [ref=e118]:
+        - generic [ref=e119]:
+          - generic [ref=e120]: 2.5k+
+          - generic [ref=e121]: PERSONAIS
+        - generic [ref=e122]:
+          - generic [ref=e123]: 45k+
+          - generic [ref=e124]: TREINOS
+        - generic [ref=e125]:
+          - generic [ref=e126]: 98%
+          - generic [ref=e127]: SATISFAÇÃO
+    - generic [ref=e130]:
+      - generic [ref=e132]:
+        - generic [ref=e133]:
+          - generic [ref=e134]:
+            - img [ref=e135]
+            - img [ref=e137]
+            - img [ref=e139]
+            - img [ref=e141]
+            - img [ref=e143]
+          - generic [ref=e145]: "5.0"
+        - paragraph [ref=e146]:
+          - text: “A IA gera treinos incríveis em segundos. Meus alunos adoram a personalização e eu
+          - strong [ref=e147]: economizo horas
+          - text: por semana.”
+        - generic [ref=e148]:
+          - generic [ref=e149]: CM
+          - generic [ref=e150]:
+            - generic [ref=e151]: Carlos Mendes
+            - generic [ref=e152]: PERSONAL TRAINER · SÃO PAULO
+      - generic [ref=e154]:
+        - generic [ref=e155]:
+          - generic [ref=e156]:
+            - img [ref=e157]
+            - img [ref=e159]
+            - img [ref=e161]
+            - img [ref=e163]
+            - img [ref=e165]
+          - generic [ref=e167]: "5.0"
+        - paragraph [ref=e168]:
+          - text: “O sistema de cobranças automáticas
+          - strong [ref=e169]: mudou meu negócio
+          - text: . Não perco mais tempo cobrando alunos.”
+        - generic [ref=e170]:
+          - generic [ref=e171]: AB
+          - generic [ref=e172]:
+            - generic [ref=e173]: Ana Beatriz
+            - generic [ref=e174]: PERSONAL TRAINER · RIO DE JANEIRO
+      - generic [ref=e176]:
+        - generic [ref=e177]:
+          - generic [ref=e178]:
+            - img [ref=e179]
+            - img [ref=e181]
+            - img [ref=e183]
+            - img [ref=e185]
+            - img [ref=e187]
+          - generic [ref=e189]: "5.0"
+        - paragraph [ref=e190]:
+          - text: “Comecei com 10 alunos e
+          - strong [ref=e191]: hoje tenho 85
+          - text: usando a plataforma. A gestão ficou muito mais organizada.”
+        - generic [ref=e192]:
+          - generic [ref=e193]: RS
+          - generic [ref=e194]:
+            - generic [ref=e195]: Rafael Santos
+            - generic [ref=e196]: PERSONAL TRAINER · BELO HORIZONTE
+      - generic [ref=e198]:
+        - generic [ref=e199]:
+          - generic [ref=e200]:
+            - img [ref=e201]
+            - img [ref=e203]
+            - img [ref=e205]
+            - img [ref=e207]
+            - img [ref=e209]
+          - generic [ref=e211]: "5.0"
+        - paragraph [ref=e212]:
+          - text: “O marketplace é genial. Já vendi
+          - strong [ref=e213]: mais de 200
+          - text: programas de treino para pessoas que nem são meus alunos.”
+        - generic [ref=e214]:
+          - generic [ref=e215]: JC
+          - generic [ref=e216]:
+            - generic [ref=e217]: Juliana Costa
+            - generic [ref=e218]: PERSONAL TRAINER · CURITIBA
+      - generic [ref=e220]:
+        - generic [ref=e221]:
+          - generic [ref=e222]:
+            - img [ref=e223]
+            - img [ref=e225]
+            - img [ref=e227]
+            - img [ref=e229]
+            - img [ref=e231]
+          - generic [ref=e233]: "5.0"
+        - paragraph [ref=e234]:
+          - text: “Implementamos para todos os
+          - strong [ref=e235]: 12 personais
+          - text: da academia. O relatório admin é fantástico.”
+        - generic [ref=e236]:
+          - generic [ref=e237]: PO
+          - generic [ref=e238]:
+            - generic [ref=e239]: Pedro Oliveira
+            - generic [ref=e240]: DONO DE ACADEMIA · SALVADOR
+      - generic [ref=e242]:
+        - generic [ref=e243]:
+          - generic [ref=e244]:
+            - img [ref=e245]
+            - img [ref=e247]
+            - img [ref=e249]
+            - img [ref=e251]
+            - img [ref=e253]
+          - generic [ref=e255]: "5.0"
+        - paragraph [ref=e256]:
+          - text: “A IA gera treinos incríveis em segundos. Meus alunos adoram a personalização e eu
+          - strong [ref=e257]: economizo horas
+          - text: por semana.”
+        - generic [ref=e258]:
+          - generic [ref=e259]: CM
+          - generic [ref=e260]:
+            - generic [ref=e261]: Carlos Mendes
+            - generic [ref=e262]: PERSONAL TRAINER · SÃO PAULO
+      - generic [ref=e264]:
+        - generic [ref=e265]:
+          - generic [ref=e266]:
+            - img [ref=e267]
+            - img [ref=e269]
+            - img [ref=e271]
+            - img [ref=e273]
+            - img [ref=e275]
+          - generic [ref=e277]: "5.0"
+        - paragraph [ref=e278]:
+          - text: “O sistema de cobranças automáticas
+          - strong [ref=e279]: mudou meu negócio
+          - text: . Não perco mais tempo cobrando alunos.”
+        - generic [ref=e280]:
+          - generic [ref=e281]: AB
+          - generic [ref=e282]:
+            - generic [ref=e283]: Ana Beatriz
+            - generic [ref=e284]: PERSONAL TRAINER · RIO DE JANEIRO
+      - generic [ref=e286]:
+        - generic [ref=e287]:
+          - generic [ref=e288]:
+            - img [ref=e289]
+            - img [ref=e291]
+            - img [ref=e293]
+            - img [ref=e295]
+            - img [ref=e297]
+          - generic [ref=e299]: "5.0"
+        - paragraph [ref=e300]:
+          - text: “Comecei com 10 alunos e
+          - strong [ref=e301]: hoje tenho 85
+          - text: usando a plataforma. A gestão ficou muito mais organizada.”
+        - generic [ref=e302]:
+          - generic [ref=e303]: RS
+          - generic [ref=e304]:
+            - generic [ref=e305]: Rafael Santos
+            - generic [ref=e306]: PERSONAL TRAINER · BELO HORIZONTE
+      - generic [ref=e308]:
+        - generic [ref=e309]:
+          - generic [ref=e310]:
+            - img [ref=e311]
+            - img [ref=e313]
+            - img [ref=e315]
+            - img [ref=e317]
+            - img [ref=e319]
+          - generic [ref=e321]: "5.0"
+        - paragraph [ref=e322]:
+          - text: “O marketplace é genial. Já vendi
+          - strong [ref=e323]: mais de 200
+          - text: programas de treino para pessoas que nem são meus alunos.”
+        - generic [ref=e324]:
+          - generic [ref=e325]: JC
+          - generic [ref=e326]:
+            - generic [ref=e327]: Juliana Costa
+            - generic [ref=e328]: PERSONAL TRAINER · CURITIBA
+      - generic [ref=e330]:
+        - generic [ref=e331]:
+          - generic [ref=e332]:
+            - img [ref=e333]
+            - img [ref=e335]
+            - img [ref=e337]
+            - img [ref=e339]
+            - img [ref=e341]
+          - generic [ref=e343]: "5.0"
+        - paragraph [ref=e344]:
+          - text: “Implementamos para todos os
+          - strong [ref=e345]: 12 personais
+          - text: da academia. O relatório admin é fantástico.”
+        - generic [ref=e346]:
+          - generic [ref=e347]: PO
+          - generic [ref=e348]:
+            - generic [ref=e349]: Pedro Oliveira
+            - generic [ref=e350]: DONO DE ACADEMIA · SALVADOR
+  - generic [ref=e354]:
+    - main [ref=e355]:
+      - generic [ref=e358]:
+        - status "Carregando" [ref=e359]:
+          - generic [ref=e360]: Carregando...
+        - paragraph [ref=e361]: Carregando...
+    - contentinfo [ref=e362]: © 2026 VFIT · TODOS OS DIREITOS RESERVADOS
+```

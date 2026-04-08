@@ -190,6 +190,7 @@ export const adminNavigation: NavSection = {
     { label: 'Treinos', href: '/dashboard/admin/workouts', icon: 'dumbbell' },
     { label: 'Pagamentos', href: '/dashboard/admin/payments', icon: 'wallet' },
     { label: 'Sugestões', href: '/dashboard/admin/feedback', icon: 'messageSquareHeart' },
+    { label: 'Grupos Musculares', href: '/dashboard/admin/muscle-groups', icon: 'activity' },
     { label: 'Logs', href: '/dashboard/logs', icon: 'scrollText' },
   ],
 }

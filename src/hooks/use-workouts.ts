@@ -34,6 +34,7 @@ export interface WorkoutExercise {
   order_index: number
   notes: string | null
   technique_tips: string | null
+  custom_video_url: string | null
 }
 
 export interface WorkoutListItem {
@@ -48,6 +49,8 @@ export interface WorkoutListItem {
   created_at: string
   student_name: string | null
   exercise_count: number
+  cover_image_url: string | null
+  primary_muscle: string | null
 }
 
 export interface WorkoutDetail {
@@ -68,6 +71,8 @@ export interface WorkoutDetail {
   updated_at: string
   student_name: string | null
   exercises: WorkoutExercise[]
+  cover_image_url: string | null
+  primary_muscle: string | null
 }
 
 export interface WorkoutLog {
@@ -723,6 +728,88 @@ export function useExerciseProgress(exerciseId: string, days = 90) {
 // ============================================
 // Assign Workout to Student — S07-07
 // ============================================
+
+// ============================================
+// Upload Cover Image do Treino
+// ============================================
+export function useUploadWorkoutCover() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({ workoutId, file }: { workoutId: string; file: File }) => {
+      const res = await api.uploadFile<{ cover_image_url: string }>(
+        `/workouts/${workoutId}/cover-image`,
+        file
+      )
+      return res.data
+    },
+    onSuccess: (_data, { workoutId }) => {
+      queryClient.invalidateQueries({ queryKey: ['workout', workoutId] })
+      queryClient.invalidateQueries({ queryKey: ['workouts'] })
+      toast.success('Imagem de capa atualizada!')
+    },
+    onError: () => toast.error('Erro ao fazer upload da imagem'),
+  })
+}
+
+export function useRemoveWorkoutCover() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (workoutId: string) => {
+      const res = await api.delete<{ cover_image_url: null }>(`/workouts/${workoutId}/cover-image`)
+      return res.data
+    },
+    onSuccess: (_data, workoutId) => {
+      queryClient.invalidateQueries({ queryKey: ['workout', workoutId] })
+      queryClient.invalidateQueries({ queryKey: ['workouts'] })
+      toast.success('Imagem de capa removida')
+    },
+  })
+}
+
+// ============================================
+// Upload Vídeo Customizado por Exercício do Treino
+// ============================================
+export function useUploadExerciseVideo() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({ workoutId, exerciseRowId, file }: {
+      workoutId: string
+      exerciseRowId: string
+      file: File
+    }) => {
+      const res = await api.uploadFile<{ custom_video_url: string }>(
+        `/workouts/${workoutId}/exercises/${exerciseRowId}/video`,
+        file
+      )
+      return res.data
+    },
+    onSuccess: (_data, { workoutId }) => {
+      queryClient.invalidateQueries({ queryKey: ['workout', workoutId] })
+      toast.success('Vídeo do exercício atualizado!')
+    },
+    onError: () => toast.error('Erro ao fazer upload do vídeo'),
+  })
+}
+
+export function useRemoveExerciseVideo() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({ workoutId, exerciseRowId }: { workoutId: string; exerciseRowId: string }) => {
+      const res = await api.delete<{ custom_video_url: null }>(
+        `/workouts/${workoutId}/exercises/${exerciseRowId}/video`
+      )
+      return res.data
+    },
+    onSuccess: (_data, { workoutId }) => {
+      queryClient.invalidateQueries({ queryKey: ['workout', workoutId] })
+      toast.success('Vídeo removido')
+    },
+  })
+}
 
 export function useAssignWorkout() {
   const queryClient = useQueryClient()

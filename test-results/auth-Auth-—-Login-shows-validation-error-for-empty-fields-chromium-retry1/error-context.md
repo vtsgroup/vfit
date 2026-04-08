@@ -1,0 +1,303 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e42]:
+      - link "VFIT - Início" [ref=e43] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e45]:
+          - generic [ref=e46]: V
+          - generic [ref=e47]: F
+          - generic [ref=e48]: I
+          - generic [ref=e49]: T
+      - generic [ref=e51]:
+        - paragraph [ref=e52]: "PLATAFORMA #1 PARA PERSONAL TRAINERS"
+        - heading "Treinos, alunos e cobranças" [level=2] [ref=e53]
+        - paragraph [ref=e54]: Gere treinos com IA, acompanhe evolução e receba pagamentos automaticamente — tudo em uma plataforma.
+        - generic [ref=e55]:
+          - generic [ref=e56]:
+            - img [ref=e58]
+            - generic [ref=e61]: IA GENERATIVA
+          - generic [ref=e62]:
+            - img [ref=e64]
+            - generic [ref=e66]: PIX AUTOMÁTICO
+          - generic [ref=e67]:
+            - img [ref=e69]
+            - generic [ref=e70]: MÉTRICAS
+          - generic [ref=e71]:
+            - img [ref=e73]
+            - generic [ref=e75]: PWA OFFLINE
+          - generic [ref=e76]:
+            - img [ref=e78]
+            - generic [ref=e84]: TREINOS IA
+          - generic [ref=e85]:
+            - img [ref=e87]
+            - generic [ref=e92]: GESTÃO ALUNOS
+          - generic [ref=e93]:
+            - img [ref=e95]
+            - generic [ref=e98]: AGENDAMENTOS
+          - generic [ref=e99]:
+            - img [ref=e101]
+            - generic [ref=e107]: GAMIFICAÇÃO
+          - generic [ref=e108]:
+            - img [ref=e110]
+            - generic [ref=e113]: LGPD
+          - generic [ref=e114]:
+            - img [ref=e116]
+            - generic [ref=e121]: MARKETPLACE
+        - generic [ref=e122]:
+          - generic [ref=e123]:
+            - generic [ref=e124]: 2.5k+
+            - generic [ref=e125]: PERSONAIS
+          - generic [ref=e126]:
+            - generic [ref=e127]: 45k+
+            - generic [ref=e128]: TREINOS
+          - generic [ref=e129]:
+            - generic [ref=e130]: 98%
+            - generic [ref=e131]: SATISFAÇÃO
+      - generic [ref=e134]:
+        - generic [ref=e136]:
+          - generic [ref=e137]:
+            - generic [ref=e138]:
+              - img [ref=e139]
+              - img [ref=e141]
+              - img [ref=e143]
+              - img [ref=e145]
+              - img [ref=e147]
+            - generic [ref=e149]: "5.0"
+          - paragraph [ref=e150]:
+            - text: “A IA gera treinos incríveis em segundos. Meus alunos adoram a personalização e eu
+            - strong [ref=e151]: economizo horas
+            - text: por semana.”
+          - generic [ref=e152]:
+            - generic [ref=e153]: CM
+            - generic [ref=e154]:
+              - generic [ref=e155]: Carlos Mendes
+              - generic [ref=e156]: PERSONAL TRAINER · SÃO PAULO
+        - generic [ref=e158]:
+          - generic [ref=e159]:
+            - generic [ref=e160]:
+              - img [ref=e161]
+              - img [ref=e163]
+              - img [ref=e165]
+              - img [ref=e167]
+              - img [ref=e169]
+            - generic [ref=e171]: "5.0"
+          - paragraph [ref=e172]:
+            - text: “O sistema de cobranças automáticas
+            - strong [ref=e173]: mudou meu negócio
+            - text: . Não perco mais tempo cobrando alunos.”
+          - generic [ref=e174]:
+            - generic [ref=e175]: AB
+            - generic [ref=e176]:
+              - generic [ref=e177]: Ana Beatriz
+              - generic [ref=e178]: PERSONAL TRAINER · RIO DE JANEIRO
+        - generic [ref=e180]:
+          - generic [ref=e181]:
+            - generic [ref=e182]:
+              - img [ref=e183]
+              - img [ref=e185]
+              - img [ref=e187]
+              - img [ref=e189]
+              - img [ref=e191]
+            - generic [ref=e193]: "5.0"
+          - paragraph [ref=e194]:
+            - text: “Comecei com 10 alunos e
+            - strong [ref=e195]: hoje tenho 85
+            - text: usando a plataforma. A gestão ficou muito mais organizada.”
+          - generic [ref=e196]:
+            - generic [ref=e197]: RS
+            - generic [ref=e198]:
+              - generic [ref=e199]: Rafael Santos
+              - generic [ref=e200]: PERSONAL TRAINER · BELO HORIZONTE
+        - generic [ref=e202]:
+          - generic [ref=e203]:
+            - generic [ref=e204]:
+              - img [ref=e205]
+              - img [ref=e207]
+              - img [ref=e209]
+              - img [ref=e211]
+              - img [ref=e213]
+            - generic [ref=e215]: "5.0"
+          - paragraph [ref=e216]:
+            - text: “O marketplace é genial. Já vendi
+            - strong [ref=e217]: mais de 200
+            - text: programas de treino para pessoas que nem são meus alunos.”
+          - generic [ref=e218]:
+            - generic [ref=e219]: JC
+            - generic [ref=e220]:
+              - generic [ref=e221]: Juliana Costa
+              - generic [ref=e222]: PERSONAL TRAINER · CURITIBA
+        - generic [ref=e224]:
+          - generic [ref=e225]:
+            - generic [ref=e226]:
+              - img [ref=e227]
+              - img [ref=e229]
+              - img [ref=e231]
+              - img [ref=e233]
+              - img [ref=e235]
+            - generic [ref=e237]: "5.0"
+          - paragraph [ref=e238]:
+            - text: “Implementamos para todos os
+            - strong [ref=e239]: 12 personais
+            - text: da academia. O relatório admin é fantástico.”
+          - generic [ref=e240]:
+            - generic [ref=e241]: PO
+            - generic [ref=e242]:
+              - generic [ref=e243]: Pedro Oliveira
+              - generic [ref=e244]: DONO DE ACADEMIA · SALVADOR
+        - generic [ref=e246]:
+          - generic [ref=e247]:
+            - generic [ref=e248]:
+              - img [ref=e249]
+              - img [ref=e251]
+              - img [ref=e253]
+              - img [ref=e255]
+              - img [ref=e257]
+            - generic [ref=e259]: "5.0"
+          - paragraph [ref=e260]:
+            - text: “A IA gera treinos incríveis em segundos. Meus alunos adoram a personalização e eu
+            - strong [ref=e261]: economizo horas
+            - text: por semana.”
+          - generic [ref=e262]:
+            - generic [ref=e263]: CM
+            - generic [ref=e264]:
+              - generic [ref=e265]: Carlos Mendes
+              - generic [ref=e266]: PERSONAL TRAINER · SÃO PAULO
+        - generic [ref=e268]:
+          - generic [ref=e269]:
+            - generic [ref=e270]:
+              - img [ref=e271]
+              - img [ref=e273]
+              - img [ref=e275]
+              - img [ref=e277]
+              - img [ref=e279]
+            - generic [ref=e281]: "5.0"
+          - paragraph [ref=e282]:
+            - text: “O sistema de cobranças automáticas
+            - strong [ref=e283]: mudou meu negócio
+            - text: . Não perco mais tempo cobrando alunos.”
+          - generic [ref=e284]:
+            - generic [ref=e285]: AB
+            - generic [ref=e286]:
+              - generic [ref=e287]: Ana Beatriz
+              - generic [ref=e288]: PERSONAL TRAINER · RIO DE JANEIRO
+        - generic [ref=e290]:
+          - generic [ref=e291]:
+            - generic [ref=e292]:
+              - img [ref=e293]
+              - img [ref=e295]
+              - img [ref=e297]
+              - img [ref=e299]
+              - img [ref=e301]
+            - generic [ref=e303]: "5.0"
+          - paragraph [ref=e304]:
+            - text: “Comecei com 10 alunos e
+            - strong [ref=e305]: hoje tenho 85
+            - text: usando a plataforma. A gestão ficou muito mais organizada.”
+          - generic [ref=e306]:
+            - generic [ref=e307]: RS
+            - generic [ref=e308]:
+              - generic [ref=e309]: Rafael Santos
+              - generic [ref=e310]: PERSONAL TRAINER · BELO HORIZONTE
+        - generic [ref=e312]:
+          - generic [ref=e313]:
+            - generic [ref=e314]:
+              - img [ref=e315]
+              - img [ref=e317]
+              - img [ref=e319]
+              - img [ref=e321]
+              - img [ref=e323]
+            - generic [ref=e325]: "5.0"
+          - paragraph [ref=e326]:
+            - text: “O marketplace é genial. Já vendi
+            - strong [ref=e327]: mais de 200
+            - text: programas de treino para pessoas que nem são meus alunos.”
+          - generic [ref=e328]:
+            - generic [ref=e329]: JC
+            - generic [ref=e330]:
+              - generic [ref=e331]: Juliana Costa
+              - generic [ref=e332]: PERSONAL TRAINER · CURITIBA
+        - generic [ref=e334]:
+          - generic [ref=e335]:
+            - generic [ref=e336]:
+              - img [ref=e337]
+              - img [ref=e339]
+              - img [ref=e341]
+              - img [ref=e343]
+              - img [ref=e345]
+            - generic [ref=e347]: "5.0"
+          - paragraph [ref=e348]:
+            - text: “Implementamos para todos os
+            - strong [ref=e349]: 12 personais
+            - text: da academia. O relatório admin é fantástico.”
+          - generic [ref=e350]:
+            - generic [ref=e351]: PO
+            - generic [ref=e352]:
+              - generic [ref=e353]: Pedro Oliveira
+              - generic [ref=e354]: DONO DE ACADEMIA · SALVADOR
+    - generic [ref=e358]:
+      - main [ref=e359]:
+        - generic [ref=e361]:
+          - generic [ref=e364]:
+            - generic [ref=e365]:
+              - img [ref=e366]
+              - paragraph [ref=e368]: ACESSE SUA CONTA
+            - heading "Entrar" [level=1] [ref=e369]
+            - paragraph [ref=e370]: Evolua com inteligência — login unificado
+          - button "Continuar com Google" [ref=e373]:
+            - img [ref=e374]
+            - generic [ref=e379]: Continuar com Google
+          - generic [ref=e384]: OU COM CPF / EMAIL
+          - generic [ref=e385]:
+            - generic [ref=e386]:
+              - generic [ref=e387]:
+                - img [ref=e388]
+                - text: CPF OU EMAIL
+              - textbox "000.000.000-00 ou email" [active] [ref=e391]
+            - generic [ref=e392]:
+              - generic [ref=e393]:
+                - img [ref=e394]
+                - text: SENHA
+              - generic [ref=e397]:
+                - textbox "••••••••" [ref=e398]
+                - button "Mostrar senha" [ref=e399]:
+                  - img [ref=e400]
+            - generic [ref=e403]:
+              - generic [ref=e404] [cursor=pointer]:
+                - checkbox "Lembrar de mim" [ref=e406]
+                - generic [ref=e408]: Lembrar de mim
+              - link "Esqueceu a senha?" [ref=e409] [cursor=pointer]:
+                - /url: /forgot-password
+            - button "ENTRAR" [disabled]:
+              - generic:
+                - text: ENTRAR
+                - img
+          - generic [ref=e410]:
+            - paragraph [ref=e411]:
+              - text: Sem conta?
+              - link "Criar grátis" [ref=e412] [cursor=pointer]:
+                - /url: /register
+            - generic [ref=e413]:
+              - img [ref=e414]
+              - text: SSL · LGPD
+          - button "Explorar sem conta" [ref=e416]:
+            - generic [ref=e417]:
+              - img [ref=e418]
+              - text: Explorar sem conta
+          - paragraph [ref=e421]: v1.9.5
+      - contentinfo [ref=e422]: © 2026 VFIT · TODOS OS DIREITOS RESERVADOS
+  - generic [ref=e427] [cursor=pointer]:
+    - button "Open Next.js Dev Tools" [ref=e428]:
+      - img [ref=e429]
+    - generic [ref=e432]:
+      - button "Open issues overlay" [ref=e433]:
+        - generic [ref=e434]:
+          - generic [ref=e435]: "0"
+          - generic [ref=e436]: "1"
+        - generic [ref=e437]: Issue
+      - button "Collapse issues badge" [ref=e438]:
+        - img [ref=e439]
+  - alert [ref=e441]
+```

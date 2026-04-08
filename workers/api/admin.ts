@@ -2228,4 +2228,144 @@ adminRoutes.delete('/feedback/:id', requireSuperAdmin, async (c) => {
   await pgQuery(c.env, 'DELETE FROM feedback_suggestions WHERE id = $1', [id])
 
   return noContent()
+
+// ============================================================
+// SUPER ADMIN — Gestão de Muscle Groups (anatomia)
+// Editar name_pt, image_url, animation_url, parent_id via painel
+// DB: D1 (vfit-exercises) — acesso via c.env.DB
+// ============================================================
+
+// GET /admin/muscle-groups — Listar todos (raízes + sub-músculos)
+adminRoutes.get('/muscle-groups', requireSuperAdmin, async (c) => {
+  const results = await c.env.DB
+    .prepare(`SELECT id, name, name_pt, parent_id, icon_svg, image_url, animation_url,
+                     color_hex, description, display_order
+              FROM muscle_groups
+              ORDER BY display_order, name_pt`)
+    .all()
+  return success({ muscle_groups: results.results })
+})
+
+// GET /admin/muscle-groups/:id — Detalhe de um grupo
+adminRoutes.get('/muscle-groups/:id', requireSuperAdmin, async (c) => {
+  const { id } = c.req.param()
+  const row = await c.env.DB
+    .prepare('SELECT * FROM muscle_groups WHERE id = ?')
+    .bind(id)
+    .first()
+  if (!row) throw new NotFoundError('Grupo muscular')
+  return success({ muscle_group: row })
+})
+
+// PATCH /admin/muscle-groups/:id — Editar campos editáveis
+adminRoutes.patch('/muscle-groups/:id', requireSuperAdmin, async (c) => {
+  const { id } = c.req.param()
+  const body = await c.req.json() as Record<string, unknown>
+
+  const allowed = ['name_pt', 'description', 'image_url', 'animation_url', 'color_hex', 'display_order', 'parent_id']
+  const entries = Object.entries(body).filter(([k]) => allowed.includes(k))
+  if (entries.length === 0) throw new BadRequestError('Nenhum campo editável enviado')
+
+  const setClauses = entries.map(([k], i) => `${k} = ?${i < entries.length - 1 ? '' : ''}`).join(', ')
+  const values = entries.map(([, v]) => v)
+
+  await c.env.DB
+    .prepare(`UPDATE muscle_groups SET ${entries.map(([k]) => `${k} = ?`).join(', ')} WHERE id = ?`)
+    .bind(...values, id)
+    .run()
+
+  const updated = await c.env.DB
+    .prepare('SELECT * FROM muscle_groups WHERE id = ?')
+    .bind(id)
+    .first()
+
+  return success({ muscle_group: updated })
+})
+
+// POST /admin/muscle-groups/:id/image — Upload de imagem do músculo para R2
+adminRoutes.post('/muscle-groups/:id/image', requireSuperAdmin, async (c) => {
+  const { id } = c.req.param()
+  const type = (c.req.query('type') || 'image') as 'image' | 'animation'
+
+  const existing = await c.env.DB
+    .prepare('SELECT id FROM muscle_groups WHERE id = ?')
+    .bind(id)
+    .first()
+  if (!existing) throw new NotFoundError('Grupo muscular')
+
+  const contentType = c.req.header('content-type') || ''
+  const isImage = contentType.startsWith('image/')
+  const isVideo = contentType.startsWith('video/') || contentType === 'image/gif'
+
+  if (!isImage && !isVideo) throw new BadRequestError('Envie image/* ou video/* ou image/gif')
+
+  const extMap: Record<string, string> = {
+    'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp',
+    'image/gif': 'gif', 'image/svg+xml': 'svg',
+    'video/mp4': 'mp4', 'video/webm': 'webm',
+  }
+  const ext = extMap[contentType.split(';')[0].trim()] ?? 'jpg'
+  const field = type === 'animation' ? 'animation_url' : 'image_url'
+  const key = `muscles/${id}/${field}.${ext}`
+
+  const body = await c.req.arrayBuffer()
+  if (body.byteLength > 20 * 1024 * 1024) throw new BadRequestError('Arquivo máximo: 20 MB')
+
+  await c.env.R2_IMAGES.put(key, body, { httpMetadata: { contentType } })
+
+  const base = (c.env.R2_IMAGES_URL || 'https://images.vfit.app.br').replace(/\/+$/, '')
+  const url = `${base}/${key}`
+
+  await c.env.DB
+    .prepare(`UPDATE muscle_groups SET ${field} = ? WHERE id = ?`)
+    .bind(url, id)
+    .run()
+
+  return success({ [field]: url })
+})
+
+// POST /admin/muscle-groups — Criar novo sub-músculo
+adminRoutes.post('/muscle-groups', requireSuperAdmin, async (c) => {
+  const body = await c.req.json() as Record<string, unknown>
+  const { id, name, name_pt, parent_id, display_order, color_hex, description } = body as {
+    id: string; name: string; name_pt: string
+    parent_id?: string; display_order?: number; color_hex?: string; description?: string
+  }
+
+  if (!id || !name || !name_pt) throw new BadRequestError('id, name, name_pt obrigatórios')
+
+  await c.env.DB
+    .prepare(`INSERT INTO muscle_groups (id, name, name_pt, parent_id, display_order, color_hex, description)
+              VALUES (?, ?, ?, ?, ?, ?, ?)`)
+    .bind(id, name, name_pt, parent_id ?? null, display_order ?? 999, color_hex ?? '#22c55e', description ?? null)
+    .run()
+
+  const row = await c.env.DB
+    .prepare('SELECT * FROM muscle_groups WHERE id = ?')
+    .bind(id)
+    .first()
+
+  return created(row)
+})
+
+// DELETE /admin/muscle-groups/:id — Deletar sub-músculo (não deleta se tiver exercícios)
+adminRoutes.delete('/muscle-groups/:id', requireSuperAdmin, async (c) => {
+  const { id } = c.req.param()
+
+  const hasExercises = await c.env.DB
+    .prepare('SELECT COUNT(*) as n FROM exercises WHERE muscle_group_id = ?')
+    .bind(id)
+    .first<{ n: number }>()
+
+  if (hasExercises && hasExercises.n > 0) {
+    throw new BadRequestError(`Não é possível deletar: ${hasExercises.n} exercício(s) vinculado(s)`)
+  }
+
+  await c.env.DB
+    .prepare('DELETE FROM muscle_groups WHERE id = ?')
+    .bind(id)
+    .run()
+
+  return noContent()
+})
 })
