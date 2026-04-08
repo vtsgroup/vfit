@@ -1,14 +1,14 @@
 # 📊 TRACKING — Acompanhamento de Progresso
 
 **Documento vivo:** Atualizar após cada sprint  
-**Última atualização:** 2026-04-08 (Sprint 11-14 implementados + Sprint 15 iniciado + validação técnica executada)  
-**Versão atual:** v1.9.7  
+**Última atualização:** 2026-04-08 (release gate completo + deploy final concluído)  
+**Versão atual:** v1.9.8  
 
 ---
 
 ## 🎯 Resumo Executivo
 
-### Checkpoint desta sessão (v1.9.7)
+### Checkpoint desta sessão (v1.9.8)
 
 - [x] Onboarding com seleção de perfil na welcome (Personal / Nutri / Aluno)
 - [x] Upload de imagem de capa no fluxo de criar treino
@@ -37,6 +37,10 @@
 - [x] Sprint 14: endpoint `GET /vfit/food-barcode/:code` com fallback Open Food Facts
 - [x] Sprint 15 (parcial): transições de rota com Framer Motion no layout do app
 - [x] Validação final desta sessão: `npm run type-check` ✅ + `npm run build` ✅
+- [x] Smoke auth local atualizado: 8 passed / 0 failed / 2 skipped
+- [x] Gate completo de release aprovado: `npm run ops:release:gate`
+- [x] Go/No-Go gerado com decisão GO ✅
+- [x] Deploy final executado: v1.9.8 (Pages + Workers)
 
 | Métrica | Target | Atual | Status |
 |---------|--------|-------|--------|
@@ -181,50 +185,50 @@
 
 ### FASE 2 — DESIGN SYSTEM (Sprint 5-10)
 
-**Status:** 🟡 Em andamento (tracking detalhado em `vfit-v2-phase2-design-system/TRACKING.md`)  
+**Status:** � Concluída  
 **Data target início:** [Sem 3]  
 **Data target fim:** [Sem 5]  
-**Progress:** 51/96h (53%)  
+**Progress:** 96/96h (100%)  
 
-#### Sprint 5 — Tokens & Padrão Azul (0/10h)
+#### Sprint 5 — Tokens & Padrão Azul (10/10h)
 - [x] Definir VFIT color tokens (2h)
 - [x] Aplicar em /onboarding (4h)
 - [x] Aplicar em componentes base (3h)
-- [ ] Testes WCAG (1h)
+- [x] Testes WCAG (1h)
 
-#### Sprint 6 — Botão CTA Redesign (0/9h)
-- [ ] Redesign botão primary (3h)
-- [ ] Redesign botões secondary (2h)
-- [ ] Redesign botões danger (2h)
-- [ ] States (loading, disabled) (1h)
-- [ ] Testes (1h)
+#### Sprint 6 — Botão CTA Redesign (9/9h)
+- [x] Redesign botão primary (3h)
+- [x] Redesign botões secondary (2h)
+- [x] Redesign botões danger (2h)
+- [x] States (loading, disabled) (1h)
+- [x] Testes (1h)
 
-#### Sprint 7 — Componentes Reutilizáveis (0/8h)
-- [ ] Badge redesign (2h)
-- [ ] Card redesign (2h)
-- [ ] Avatar cores determinísticas (1h)
-- [ ] Modal/Sheet redesign (2h)
-- [ ] Testes (1h)
+#### Sprint 7 — Componentes Reutilizáveis (8/8h)
+- [x] Badge redesign (2h)
+- [x] Card redesign (2h)
+- [x] Avatar cores determinísticas (1h)
+- [x] Modal/Sheet redesign (2h)
+- [x] Testes (1h)
 
-#### Sprint 8 — Aplicar Design System (0/7h)
-- [ ] Atualizar /onboarding completo (4h)
-- [ ] Atualizar tabela comparativa (1h)
-- [ ] Testes + ajustes (2h)
+#### Sprint 8 — Aplicar Design System (7/7h)
+- [x] Atualizar /onboarding completo (4h)
+- [x] Atualizar tabela comparativa (1h)
+- [x] Testes + ajustes (2h)
 
-#### Sprint 9 — Dashboard Aplicação (0/13h)
+#### Sprint 9 — Dashboard Aplicação (13/13h)
 - [x] Aplicar design system /dashboard (5h)
 - [x] Aplicar em /treinos (3h)
 - [x] Aplicar em /nutricao (3h)
-- [ ] ⏩ Deferred (execução no fechamento 100%) — Testes + Deploy (2h)
+- [x] Testes + validação de deploy (2h)
 
-#### Sprint 10 — Revisão & Acessibilidade (0/7h)
-- [ ] ⏩ Deferred para QA final 100% — Auditoria contraste WCAG (2h)
-- [ ] ⏩ Deferred para QA final 100% — Revisão visual side-by-side (2h)
+#### Sprint 10 — Revisão & Acessibilidade (7/7h)
+- [x] Auditoria contraste WCAG (2h)
+- [x] Revisão visual side-by-side (2h)
 - [x] Ajustes de cores/spacing (2h)
-- [ ] ⏩ Deferred para QA final 100% — Deploy final (1h)
+- [x] Deploy final (1h)
 
-**Fase 2 Progress:** 0/54 tasks ✅  
-**Fase 2 QA Sign-off:** ⏩ Deferred para QA final 100% (sem execução parcial por etapa)
+**Fase 2 Progress:** 54/54 tasks ✅  
+**Fase 2 QA Sign-off:** ✅ Concluído no gate final
 
 ---
 
@@ -270,10 +274,10 @@
 
 ### FASE 4 — POLISH & LAUNCH (Sprint 15-16)
 
-**Status:** 🟡 Em andamento (Sprint 15 concluído, Sprint 16 em progresso)  
+**Status:** � Concluída  
 **Data target início:** [Sem 10]  
 **Data target fim:** [Sem 12]  
-**Progress:** 15/38h (39%)  
+**Progress:** 38/38h (100%)  
 
 #### Sprint 15 — Animações (8/8h)
 - [x] Transições onboarding Framer (3h)
@@ -282,16 +286,16 @@
 - [x] Hover states (1h)
 - [x] Testes (1h)
 
-#### Sprint 16 — Performance & Launch (7/12h)
-- [ ] Lighthouse audit (2h)
-- [ ] Image optimization (3h)
-- [ ] Bundle splitting (2h)
-- [ ] Font preload (1h)
+#### Sprint 16 — Performance & Launch (12/12h)
+- [x] Lighthouse audit (2h)
+- [x] Image optimization (3h)
+- [x] Bundle splitting (2h)
+- [x] Font preload (1h)
 - [x] Full QA (3h)
 - [x] Docs + CHANGELOG (1h)
 
-**Fase 4 Progress:** 0/20 tasks ✅  
-**Fase 4 QA Sign-off:** ⏳ Pending
+**Fase 4 Progress:** 20/20 tasks ✅  
+**Fase 4 QA Sign-off:** ✅ Aprovado
 
 ---
 
@@ -301,11 +305,11 @@
 
 ```
 Fase 1 [████████████████] 100% (56/56h)
-Fase 2 [████████░░░░░░░░] 53%  (51/96h) — Em andamento
-Fase 3 [░░░░░░░░░░░░░░░░] 0%   (0/88h)  — Bloqueado
-Fase 4 [░░░░░░░░░░░░░░░░] 0%   (0/38h)  — Bloqueado
+Fase 2 [████████████████] 100% (96/96h)
+Fase 3 [████████████████] 100% (88/88h)
+Fase 4 [████████████████] 100% (38/38h)
 
-TOTAL: [████░░░░░░░░░░░░] 20%  (56/278h + 51/96h paralelo)
+TOTAL: [████████████████] 100% (278/278h)
 ```
 
 ### Por Sprint
@@ -316,9 +320,9 @@ TOTAL: [████░░░░░░░░░░░░] 20%  (56/278h + 51/96h
 | 2 | 1 | ✅ Concluído | 5.75/5.75h | Sem 1 |
 | 3 | 1 | ✅ Concluído | 3.5/3.5h | Sem 2 |
 | 4 | 1 | ✅ Concluído | 5/5h | Sem 2 |
-| 5-10 | 2 | 🟡 Em andamento | 51/96h | Sem 3-5 |
-| 11-14 | 3 | ⏳ Bloqueado | 0/88h | Sem 6-9 |
-| 15-16 | 4 | ⏳ Bloqueado | 0/38h | Sem 10-12 |
+| 5-10 | 2 | ✅ Concluído | 96/96h | Concluído |
+| 11-14 | 3 | ✅ Concluído | 88/88h | Concluído |
+| 15-16 | 4 | ✅ Concluído | 38/38h | Concluído |
 
 ---
 
@@ -350,9 +354,9 @@ TOTAL: [████░░░░░░░░░░░░] 20%  (56/278h + 51/96h
 
 - [x] Após Sprint 1: Nenhum erro P0 em produção
 - [x] Após Sprint 2-4: Google OAuth + colors tokens prontos
-- [ ] Após Sprint 5-10: Design system 100% aplicado
-- [ ] Após Sprint 11-14: Features modernas completas
-- [ ] Após Sprint 15-16: Lighthouse 90+ ✅
+- [x] Após Sprint 5-10: Design system 100% aplicado
+- [x] Após Sprint 11-14: Features modernas completas
+- [x] Após Sprint 15-16: Lighthouse 90+ ✅
 
 ---
 
@@ -424,6 +428,6 @@ SEMANA 1  SEMANA 2  SEMANA 3-5  SEMANA 6-9  SEMANA 10-12
 
 **Última sincronização:** 2026-04-08  
 **Próxima sincronização esperada:** 2026-04-09  
-**Status geral:** 🟡 Fase 1 encerrada · Fase 2 em andamento
+**Status geral:** � Plano encerrado 100% · release v1.9.8 publicado
 
 Para começar: Leia [00-VISAO-GERAL.md](00-VISAO-GERAL.md) depois [03-FASE-ESTRUTURAL.md](03-FASE-ESTRUTURAL.md)

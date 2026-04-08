@@ -27,6 +27,25 @@
 
 ---
 
+## [v1.9.8] — 2026-04-08 — Sprint 16 fechado (release gate + deploy final)
+
+### ✅ Release gate completo
+- `npm run ops:release:gate` aprovado ponta a ponta:
+  - smoke auth local ✅
+  - quality:ci ✅
+  - go/no-go ✅
+- Relatórios atualizados:
+  - [docs/ULTRA-PLANO-MVP-PRODUCAO/AUTH-SMOKE.generated.md](docs/ULTRA-PLANO-MVP-PRODUCAO/AUTH-SMOKE.generated.md)
+  - [docs/ULTRA-PLANO-MVP-PRODUCAO/SENSITIVE-REFERENCES-AUDIT.generated.md](docs/ULTRA-PLANO-MVP-PRODUCAO/SENSITIVE-REFERENCES-AUDIT.generated.md)
+  - [docs/ULTRA-PLANO-MVP-PRODUCAO/GO-NO-GO-MVP.generated.md](docs/ULTRA-PLANO-MVP-PRODUCAO/GO-NO-GO-MVP.generated.md)
+
+### 🧪 Estabilidade de testes
+- Ajustado timeout dos 3 testes de hash bcrypt em [tests/lib/auth-helpers.test.ts](tests/lib/auth-helpers.test.ts) para eliminar flake por limite de 5s em ambiente mais lento.
+
+### 🚀 Deploy
+- Deploy patch publicado via pipeline oficial: **v1.9.8**
+- Frontend (Pages) + Backend (Workers) concluídos com sucesso.
+
 ## [v1.9.6] — 2026-04-09 — Workout Cover Images + Custom Exercise Videos + Admin Muscle Groups
 
 ### Novas funcionalidades
