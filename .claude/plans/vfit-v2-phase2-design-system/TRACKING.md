@@ -1,9 +1,9 @@
-# 📊 TRACKING — VFIT v2.0.0 Phase 2: Design System VFIT Blue
+# 📊 TRACKING — VFIT v2.0.0 Phase 2: Design System (rebaseline)
 
 > **Última atualização:** 08/04/2026 — v1.9.6
 > **Baseline:** Phase 1 completa (56h UX improvements) + Deploy v1.9.6
 > **Progresso atual:** Sprint 7 concluído (16/16h) · Phase 2: 3/10 sprints (51/96h)
-> **Objetivo:** Transição completa para Design System VFIT Blue (WCAG AA compliant), redesign de componentes CTA, e aplicação consistente em toda a aplicação.
+> **Objetivo:** Consolidar Design System VFIT com baseline atual em **Green** (WCAG AA compliant), mantendo consistência e reusabilidade.
 
 ---
 
@@ -93,13 +93,14 @@
 ## Próximos Passos
 
 **Phase 2 Sprint 8: Component Applications Avançadas (15h) — PRÓXIMO**
-1. Aplicar VFIT blue em componentes avançados (tooltips, dropdowns, accordions)
-2. Atualizar componentes de feedback (alerts, toasts, notifications)
-3. Aplicar VFIT blue em componentes de data visualization (charts, graphs)
-4. Atualizar componentes de media (video players, image galleries)
-5. Build validation + acessibilidade testing
-6. Testar consistência visual em páginas avançadas
-7. Documentar atualizações no DESIGN-SYSTEM.md
+1. Rebaseline do plano visual: substituir referências de "VFIT blue" para baseline atual **VFIT green** onde aplicável
+2. Aplicar baseline atual em componentes avançados (tooltips, dropdowns, accordions)
+3. Atualizar componentes de feedback (alerts, toasts, notifications)
+4. Aplicar baseline atual em componentes de data visualization (charts, graphs)
+5. Atualizar componentes de media (video players, image galleries)
+6. Build validation + acessibilidade testing
+7. Testar consistência visual em páginas avançadas
+8. Documentar atualizações no DESIGN-SYSTEM.md
 
 **Phase 2 Remaining (45h)**
 - S8-S10: Component applications avançadas (29h)
