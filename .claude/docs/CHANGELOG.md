@@ -19,6 +19,7 @@
 - **Hardening aplicado**: seletores E2E atualizados para login atual, região `overflow-x-auto` da pricing table tornou-se focável por teclado e botão de revelar senha ganhou `aria-label`.
 - **Ajuste visual solicitado**: destaques principais revertidos de blue para **green** (`button primary`, tokens de marca e realces de navegação).
 - **Sprint 8 (andamento)**: componentes avançados de interação/feedback receberam rebaseline green (`Tooltip`, `Accordion`, `Alert` variante info e `ModernNotification` tipo system).
+- **Sprint 8 T8.8 (concluído)**: audit de charts e media components — **zero tokens blue** nos charts (`chart-primitives.tsx`, `payments-status-chart.tsx`, `revenue-area-chart.tsx`, etc.); tokens blue semânticos mantidos intencionalmente em `activity-timeline.tsx` (cor categórica de aluno), `info-card.tsx` (variante informacional) e `optimized-image.tsx` (paleta de avatar por hash). **Sprint 8 encerrado.**
 - **Regressão não-Chrome**: suíte `smoke-public + auth + a11y` em `webkit/mobile-safari` passou com **30 passed / 4 skipped / 0 failed**.
 - **Estabilização E2E auth**: [tests/e2e/auth.spec.ts](tests/e2e/auth.spec.ts) ficou menos frágil (seletores de submit e asserts de `/register` resilientes).
 - **Go/No-Go**: após registrar artefatos em `docs/ULTRA-PLANO-MVP-PRODUCAO` (execução de lotes, auditoria web e quality gates), o relatório final em [docs/ULTRA-PLANO-MVP-PRODUCAO/GO-NO-GO-MVP.generated.md](docs/ULTRA-PLANO-MVP-PRODUCAO/GO-NO-GO-MVP.generated.md) fechou com status **GO ✅**.

@@ -1,8 +1,8 @@
 # 📊 TRACKING — VFIT v2.0.0 Phase 2: Design System (rebaseline)
 
-> **Última atualização:** 08/04/2026 — Sprint 8 iniciado
+> **Última atualização:** 08/04/2026 — Sprint 8 concluído ✅
 > **Baseline:** Phase 1 completa (56h UX improvements) + Deploy v1.9.6
-> **Progresso atual:** Sprint 8 em progresso · Phase 2: 3/10 sprints concluídos + execução ativa
+> **Progresso atual:** Sprint 8 concluído · Phase 2: 4/10 sprints concluídos
 > **Objetivo:** Consolidar Design System VFIT com baseline atual em **Green** (WCAG AA compliant), mantendo consistência e reusabilidade.
 
 ---
@@ -69,7 +69,7 @@
 - [x] T7.10 — Documentar atualizações no DESIGN-SYSTEM.md
 > VFIT blue aplicado consistentemente em todos os componentes principais. Build validado, acessibilidade confirmada.
 
-### S8: Component Applications Avançadas 🔄 (em progresso)
+### S8: Component Applications Avançadas ✅ (8/8 tasks — concluído)
 - [x] T8.1 — Rebaseline do plano visual para baseline atual green (tracking/docs)
 - [x] T8.2 — Feedback UI: `Alert` variante info migrada para tokens de brand
 - [x] T8.3 — Notification system badge/icon migrado de blue para brand
@@ -77,7 +77,7 @@
 - [x] T8.5 — Audit de dropdowns/accordions avançados concluído (sem resíduos blue nos componentes-alvo)
 - [x] T8.6 — Regressão não-Chrome executada (`webkit/mobile-safari`: 30 passed, 4 skipped)
 - [x] T8.7 — Resultados documentados em TRACKING + CHANGELOG
-- [ ] T8.8 — Aplicar baseline em charts/media components restantes da Sprint 8
+- [x] T8.8 — Audit charts/media: zero tokens blue (charts limpos, blue semântico em timeline/info-card/avatar palette mantido intencionalmente)
 
 ---
 
@@ -86,9 +86,9 @@
 | Phase | Sprints | Tasks | Concluídas | Em Progresso | Deferred |
 |:-----:|:-------:|:-----:|:----------:|:------------:|:--------:|
 | 1 | 4 | 56h | **56h** ✅ | 0 | 0 |
-| 2 | 3/10 | 51h | **51h** ✅ | 0 | 45h ⏳ |
+| 2 | 4/10 | ~66h | **~66h** ✅ | 0 | 30h ⏳ |
 
-> **Sprint 7: 16/16h concluído.** Phase 2 com 3/10 sprints implementados (51/96h).
+> **Sprint 8 concluído.** Phase 2 com 4/10 sprints implementados. Próximo: Sprint 9 — aplicação em componentes de página (forms, tables, modals avançados).
 
 ### Deploys realizados
 
@@ -102,18 +102,17 @@
 
 ## Próximos Passos
 
-**Phase 2 Sprint 8: Component Applications Avançadas (15h) — PRÓXIMO**
-1. Rebaseline do plano visual: substituir referências de "VFIT blue" para baseline atual **VFIT green** onde aplicável
-2. Aplicar baseline atual em componentes avançados (tooltips, dropdowns, accordions)
-3. Atualizar componentes de feedback (alerts, toasts, notifications)
-4. Aplicar baseline atual em componentes de data visualization (charts, graphs)
-5. Atualizar componentes de media (video players, image galleries)
-6. Build validation + acessibilidade testing
-7. Testar consistência visual em páginas avançadas
-8. Documentar atualizações no DESIGN-SYSTEM.md
+**Phase 2 Sprint 9: Component Applications — Pages (15h) — PRÓXIMO**
+1. Aplicar baseline green em páginas de dashboard (header, stats, KPI sections)
+2. Auditar e rebaseline de modais avançados (create workout, assessment, payment)
+3. Auditar form components avançados (multi-step forms, validation states)
+4. Aplicar baseline em tables/data grids (hover, selected, pagination)
+5. Regressão cross-browser completa (chromium + webkit + firefox + mobile)
+6. Build validation + type-check
+7. Documentar Sprint 9 em CHANGELOG
 
-**Phase 2 Remaining (45h)**
-- S8-S10: Component applications avançadas (29h)
+**Phase 2 Remaining (~30h)**
+- S9-S10: Component applications — pages (15h)
 - S11-S15: Advanced features (16h)
 
 ---
