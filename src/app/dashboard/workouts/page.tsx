@@ -275,10 +275,10 @@ function PersonalWorkoutsView() {
           <Link
             href="/dashboard/workouts/exercises/library"
             style={{ animation: 'stagger-fade-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) 180ms both' }}
-            className="group relative flex min-h-14 items-center gap-3 overflow-hidden rounded-2xl border border-blue-500/30 bg-linear-to-r from-blue-500/15 to-blue-600/5 px-4 py-4 text-sm font-bold text-text-primary shadow-[0_4px_16px_rgba(59,130,246,0.15),inset_0_1px_0_rgba(255,255,255,0.08)] transition-all hover:shadow-[0_6px_24px_rgba(59,130,246,0.25),inset_0_1px_0_rgba(255,255,255,0.12)] hover:-translate-y-1 active:translate-y-0 active:shadow-[0_2px_8px_rgba(59,130,246,0.1)]"
+            className="group relative flex min-h-14 items-center gap-3 overflow-hidden rounded-2xl border border-brand-primary/30 bg-linear-to-r from-brand-primary/15 to-brand-accent/5 px-4 py-4 text-sm font-bold text-text-primary shadow-[0_4px_16px_rgba(34,197,94,0.15),inset_0_1px_0_rgba(255,255,255,0.08)] transition-all hover:shadow-[0_6px_24px_rgba(34,197,94,0.25),inset_0_1px_0_rgba(255,255,255,0.12)] hover:-translate-y-1 active:translate-y-0 active:shadow-[0_2px_8px_rgba(34,197,94,0.1)]"
           >
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-500/20 shadow-[inset_0_-2px_4px_rgba(0,0,0,0.1),0_1px_2px_rgba(59,130,246,0.2)] animate-[float_3s_ease-in-out_0.5s_infinite]">
-              <DSIcon name="bookOpen" size={20} className="text-blue-400" />
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-primary/20 shadow-[inset_0_-2px_4px_rgba(0,0,0,0.1),0_1px_2px_rgba(34,197,94,0.2)] animate-[float_3s_ease-in-out_0.5s_infinite]">
+              <DSIcon name="bookOpen" size={20} className="text-brand-primary" />
             </div>
             <span className="leading-tight">Biblioteca de<br className="sm:hidden" /> exercícios</span>
             <div className="pointer-events-none absolute inset-0 rounded-2xl bg-linear-to-b from-white/5 to-transparent" />

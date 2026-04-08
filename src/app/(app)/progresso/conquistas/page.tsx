@@ -18,13 +18,13 @@ import { useBadges, useGamificationProfile, getLevelTitle } from '@/hooks/use-ga
 
 const RARITY_MAP: Record<string, { tier: string; color: string; bg: string; glow: string }> = {
   // Streak badges (rare → epic)
-  streak_7:      { tier: 'Raro',      color: 'text-blue-400',   bg: 'bg-blue-400/10',   glow: 'shadow-[0_0_12px_rgba(96,165,250,0.2)]' },
+  streak_7:      { tier: 'Raro',      color: 'text-brand-primary',   bg: 'bg-brand-primary/10',   glow: 'shadow-[0_0_12px_rgba(34,197,94,0.2)]' },
   streak_30:     { tier: 'Épico',     color: 'text-purple-400', bg: 'bg-purple-400/10',  glow: 'shadow-[0_0_12px_rgba(192,132,252,0.2)]' },
   streak_100:    { tier: 'Lendário',  color: 'text-amber-400',  bg: 'bg-amber-400/10',   glow: 'shadow-[0_0_16px_rgba(251,191,36,0.3)]' },
 
   // Workout milestones (common → rare)
   workouts_10:   { tier: 'Comum',     color: 'text-emerald-400', bg: 'bg-emerald-400/10', glow: '' },
-  workouts_50:   { tier: 'Raro',      color: 'text-blue-400',    bg: 'bg-blue-400/10',   glow: 'shadow-[0_0_12px_rgba(96,165,250,0.2)]' },
+  workouts_50:   { tier: 'Raro',      color: 'text-brand-primary',    bg: 'bg-brand-primary/10',   glow: 'shadow-[0_0_12px_rgba(34,197,94,0.2)]' },
   workouts_100:  { tier: 'Épico',     color: 'text-purple-400',  bg: 'bg-purple-400/10',  glow: 'shadow-[0_0_12px_rgba(192,132,252,0.2)]' },
 
   // Goals (epic)
@@ -33,7 +33,7 @@ const RARITY_MAP: Record<string, { tier: string; color: string; bg: string; glow
 
   // Social & special
   first_review:  { tier: 'Comum',     color: 'text-emerald-400', bg: 'bg-emerald-400/10', glow: '' },
-  early_bird:    { tier: 'Especial',  color: 'text-cyan-400',    bg: 'bg-cyan-400/10',    glow: 'shadow-[0_0_12px_rgba(34,211,238,0.2)]' },
+  early_bird:    { tier: 'Especial',  color: 'text-brand-primary',    bg: 'bg-brand-primary/10',    glow: 'shadow-[0_0_12px_rgba(34,197,94,0.2)]' },
 }
 
 const DEFAULT_RARITY = { tier: 'Comum', color: 'text-emerald-400', bg: 'bg-emerald-400/10', glow: '' }

@@ -339,7 +339,7 @@ export default function DietaIAPage() {
 
               <div className="grid grid-cols-3 gap-3 text-center">
                 <div className="rounded-xl bg-bg-primary/50 p-3">
-                  <span className="text-xl font-bold text-blue-400">{dietPlan.protein}g</span>
+                  <span className="text-xl font-bold text-brand-primary">{dietPlan.protein}g</span>
                   <p className="text-[10px] text-text-muted">Proteína</p>
                   <p className="text-[9px] text-text-muted">{Math.round((dietPlan.protein * 4 / dietPlan.targetCalories) * 100)}%</p>
                 </div>
@@ -408,7 +408,7 @@ export default function DietaIAPage() {
                       </span>
                     </div>
                     <div className="grid grid-cols-3 gap-2 text-center text-[10px]">
-                      <span className="rounded-lg bg-blue-400/10 py-1 font-semibold text-blue-400">
+                      <span className="rounded-lg bg-brand-primary/10 py-1 font-semibold text-brand-primary">
                         P: {meal.protein}g
                       </span>
                       <span className="rounded-lg bg-amber-400/10 py-1 font-semibold text-amber-400">

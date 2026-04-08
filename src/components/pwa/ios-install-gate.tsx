@@ -330,7 +330,7 @@ function IOSFullGate({
             <div className="mt-8 w-full max-w-80 space-y-4">
               {/* Step 1 */}
               <div className="relative flex items-start gap-4 rounded-2xl bg-white/4 border border-white/6 p-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/10 text-blue-400 shrink-0">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary shrink-0">
                   <svg className="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 8.25H7.5a2.25 2.25 0 00-2.25 2.25v9a2.25 2.25 0 002.25 2.25h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25H15m0-3l-3-3m0 0l-3 3m3-3V15" />
                   </svg>
@@ -341,7 +341,7 @@ function IOSFullGate({
                     <h3 className="text-[14px] font-semibold text-white">Toque em Compartilhar</h3>
                   </div>
                   <p className="mt-1 text-[12px] text-zinc-400 leading-relaxed">
-                    Toque no ícone <span className="inline-flex items-center mx-0.5 text-blue-400 font-medium">□↑</span> na barra inferior do Safari
+                    Toque no ícone <span className="inline-flex items-center mx-0.5 text-brand-primary font-medium">□↑</span> na barra inferior do Safari
                   </p>
                 </div>
               </div>

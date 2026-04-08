@@ -28,7 +28,7 @@ function getBMICategory(bmi: number): BMICategory {
       label: 'Abaixo do peso',
       icon: 'wind',
       message: 'Vamos montar um plano focado em ganho saudável',
-      color: 'text-blue-400',
+      color: 'text-brand-primary',
     }
   }
   if (bmi < 25) {
@@ -135,7 +135,7 @@ export function StepWeight() {
           <div className="space-y-1">
             <div className="relative h-2 w-full overflow-hidden rounded-full bg-white/10">
               <div
-                className="absolute top-0 left-0 h-full rounded-full bg-linear-to-r from-blue-400 via-emerald-400 to-orange-400"
+                className="absolute top-0 left-0 h-full rounded-full bg-linear-to-r from-brand-primary via-emerald-400 to-orange-400"
                 style={{ width: '100%' }}
               />
               {/* Indicator */}

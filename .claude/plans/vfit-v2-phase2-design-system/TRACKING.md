@@ -1,8 +1,8 @@
 # 📊 TRACKING — VFIT v2.0.0 Phase 2: Design System (rebaseline)
 
-> **Última atualização:** 08/04/2026 — Sprint 8 concluído ✅
+> **Última atualização:** 08/04/2026 — Execução contínua sem pausa: Sprint 9 fechado no escopo visual + Sprint 10 semântico concluído (QA final deferred) 🔄
 > **Baseline:** Phase 1 completa (56h UX improvements) + Deploy v1.9.6
-> **Progresso atual:** Sprint 8 concluído · Phase 2: 4/10 sprints concluídos
+> **Progresso atual:** Sprint 9 em execução avançada · Sprint 10 em andamento · QA final deferred para fechamento 100%
 > **Objetivo:** Consolidar Design System VFIT com baseline atual em **Green** (WCAG AA compliant), mantendo consistência e reusabilidade.
 
 ---
@@ -99,6 +99,34 @@
 | **v1.9.6** | **S6: Button CTA Redesign** | **08/04/2026** | **deployed** | **1** | ✅ Produção |
 
 ---
+
+## Sprint 9 — Em progresso (checkpoint atual)
+
+- [x] T9.1 — Baseline green aplicado em cards de overview admin ([src/app/dashboard/admin/page.tsx](src/app/dashboard/admin/page.tsx))
+- [x] T9.2 — Baseline green aplicado em cards de receita admin/payments ([src/app/dashboard/admin/payments/page.tsx](src/app/dashboard/admin/payments/page.tsx))
+- [x] T9.3 — Baseline green aplicado em stat/info cards de affiliates ([src/app/dashboard/affiliates/page.tsx](src/app/dashboard/affiliates/page.tsx))
+- [x] T9.4 — Validação técnica: `npm run type-check` ✅
+- [x] T9.5 — Ajuste inicial em /treinos: quick action card "Biblioteca de exercícios" migrado para baseline green ([src/app/dashboard/workouts/page.tsx](src/app/dashboard/workouts/page.tsx))
+- [x] T9.6 — Auditoria restante /treinos e /nutricao concluída: ajustes em [src/app/dashboard/workouts/create/page.tsx](src/app/dashboard/workouts/create/page.tsx) e [src/app/dashboard/meal-plans/page.tsx](src/app/dashboard/meal-plans/page.tsx) + varredura `rg` sem resíduos blue/cyan/sky
+- [x] T9.6b — Dashboard financeiro: KPI "Ticket médio" alinhado para brand ([src/app/dashboard/financeiro/page.tsx](src/app/dashboard/financeiro/page.tsx))
+- [x] T9.6c — Admin/personals: avatar inicial alinhado para baseline green ([src/app/dashboard/admin/personals/page.tsx](src/app/dashboard/admin/personals/page.tsx))
+- [x] T9.6d — Pipeline dashboard: coluna "Convidados" e CTA "Treino" alinhados para brand ([src/app/dashboard/pipeline/page.tsx](src/app/dashboard/pipeline/page.tsx))
+- [x] T9.6e — Admin feedback: categoria/status/prioridade e bolhas de usuário alinhadas para brand ([src/app/dashboard/admin/feedback/page.tsx](src/app/dashboard/admin/feedback/page.tsx))
+- [x] T9.6f — Dashboard exercises/ai alinhados para baseline green ([src/app/dashboard/exercises/page.tsx](src/app/dashboard/exercises/page.tsx), [src/app/dashboard/ai/page.tsx](src/app/dashboard/ai/page.tsx))
+- [x] T9.6g — Varredura geral `rg` em `src/app/dashboard` sem resíduos `blue/cyan/sky`
+- [x] T9.6h — Expansão baseline green para app/components fora do dashboard (auth/onboarding/progresso/nutrição/share/blog/ui/pwa)
+- [x] T9.6i — Limpeza global final: varredura `rg` em `src/app` + `src/components` sem resíduos `blue/cyan/sky`
+- [ ] T9.7 — ⏩ Deferred para QA final 100%: regressão cross-browser (chromium/webkit/firefox/mobile)
+- [ ] T9.8 — ⏩ Deferred para QA final 100%: build + docs + deploy
+
+## Sprint 10 — Em andamento (sem QA intermediário)
+
+- [x] T10.1 — Ajustes de cores/spacing aplicados em blocos de app/components com acentos legados
+- [x] T10.2 — Renomeação de tokens glass legados `blue` → `brand` em [src/app/globals.css](src/app/globals.css)
+- [x] T10.2a — Limpeza semântica final concluída: aliases `brand/teal`, calendário, quick actions e demos sem resíduos `blue/cyan/sky` em [src/app](src/app) + [src/components](src/components)
+- [ ] T10.3 — ⏩ Deferred para QA final 100%: auditoria de contraste WCAG
+- [ ] T10.4 — ⏩ Deferred para QA final 100%: revisão visual side-by-side
+- [ ] T10.5 — ⏩ Deferred para QA final 100%: build + regressão + deploy final
 
 ## Próximos Passos
 

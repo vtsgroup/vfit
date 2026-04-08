@@ -4,12 +4,12 @@
  * ProgressBar — Barra de progresso animada com Framer Motion
  *
  * Exports: ProgressBar
- * Features: Animação suave, cores VFIT blue, 3D depth effect
+ * Features: Animação suave, cores VFIT brand, 3D depth effect
  */
 
 // ============================================
 // ProgressBar — Barra de progresso animada
-// Framer Motion + VFIT blue colors + 3D depth
+// Framer Motion + cores VFIT brand + 3D depth
 // ============================================
 
 'use client'

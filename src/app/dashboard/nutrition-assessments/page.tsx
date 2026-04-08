@@ -32,7 +32,7 @@ interface NutritionAssessment {
 }
 
 function getBMICategory(bmi: number): { label: string; color: string } {
-  if (bmi < 18.5) return { label: 'Abaixo', color: 'text-blue-400' }
+  if (bmi < 18.5) return { label: 'Abaixo', color: 'text-brand-primary' }
   if (bmi < 25) return { label: 'Normal', color: 'text-emerald-400' }
   if (bmi < 30) return { label: 'Sobrepeso', color: 'text-amber-400' }
   return { label: 'Obesidade', color: 'text-red-400' }
@@ -145,7 +145,7 @@ export default function NutritionAssessmentsPage() {
                 )}
                 {assessment.waist_hip_ratio && (
                   <div className="text-center">
-                    <p className="text-sm font-bold text-blue-400">{assessment.waist_hip_ratio.toFixed(2)}</p>
+                    <p className="text-sm font-bold text-brand-primary">{assessment.waist_hip_ratio.toFixed(2)}</p>
                     <p className="text-[10px] text-text-muted">C/Q</p>
                   </div>
                 )}

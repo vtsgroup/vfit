@@ -33,6 +33,7 @@ import { authMiddleware } from '@workers/middleware/auth'
 import { pgQuery, pgQueryOne, generateId } from '@lib/db'
 import { success, created, paginated, noContent } from '@lib/response'
 import { BadRequestError, NotFoundError, ForbiddenError } from '@lib/errors'
+import { callWorkersAIWithFallback } from '@lib/workers-ai'
 import { z } from 'zod'
 
 const vfit = new Hono<AppContext>()
@@ -626,6 +627,162 @@ vfit.get('/profile', async (c) => {
     recent_workouts_data: recentSessions,
     recent_meals_data: recentMeals,
   }))
+})
+
+// ============================================
+// FOOD IDENTIFY — Vision AI
+// ============================================
+
+/**
+ * POST /food-identify — Identifica alimento por foto (base64 JPEG/PNG ≤ 1MB)
+ *
+ * Body: { image_base64: string, mime_type?: 'image/jpeg' | 'image/png' }
+ * Returns: { suggestions: Array<{ name: string, confidence: number }>, search_query: string }
+ *
+ * Sprint 14 — Scanner & Macro Ring
+ */
+vfit.post('/food-identify', async (c) => {
+  const env = c.env
+  const body = await c.req.json()
+
+  const schema = z.object({
+    image_base64: z.string().min(100).max(1_500_000), // ≤ 1MB base64
+    mime_type: z.enum(['image/jpeg', 'image/png', 'image/webp']).default('image/jpeg'),
+  })
+
+  const { image_base64 } = schema.parse(body)
+
+  // Prompt direto para identificação de alimentos
+  const prompt = `Você é um especialista em nutrição e identificação de alimentos brasileiro.
+Analise esta imagem e identifique os alimentos visíveis.
+Responda SOMENTE com JSON no formato:
+{
+  "suggestions": [
+    { "name": "Nome do alimento em português", "confidence": 0.95 },
+    { "name": "Alternativa provável", "confidence": 0.6 }
+  ],
+  "search_query": "termo de busca principal no banco TACO"
+}
+Máximo 3 sugestões. Use nomes de alimentos comuns no Brasil (ex: arroz branco, feijão carioca, peito de frango grelhado).`
+
+  try {
+    // Usar Workers AI com llama-3.2-11b-vision se disponível, senão llama-3.1
+    let result: string
+
+    if (env.AI) {
+      // Workers AI — llama-3.2-11b-vision-instruct suporta imagens
+      const response = await (env.AI as {
+        run: (model: string, inputs: Record<string, unknown>) => Promise<{ response: string }>
+      }).run('@cf/meta/llama-3.2-11b-vision-instruct', {
+        prompt,
+        image: image_base64,
+        max_tokens: 300,
+      })
+      result = response.response || ''
+    } else {
+      // Fallback: usar Workers AI texto com descrição da imagem (sem vision)
+      const { response: aiResponse } = await callWorkersAIWithFallback(
+        env,
+        '@cf/meta/llama-3.3-70b-instruct-fp8-fast',
+        `${prompt}\n\n[Imagem não disponível para análise direta — forneça sugestões genéricas de alimentos comuns no Brasil]`,
+        { max_tokens: 300 }
+      )
+      result = aiResponse
+    }
+
+    // Parse da resposta JSON
+    const jsonMatch = result.match(/\{[\s\S]*\}/)
+    if (!jsonMatch) {
+      return c.json(success({
+        suggestions: [],
+        search_query: '',
+        raw: result,
+      }))
+    }
+
+    const parsed = JSON.parse(jsonMatch[0]) as {
+      suggestions: Array<{ name: string; confidence: number }>
+      search_query: string
+    }
+
+    return c.json(success(parsed))
+  } catch (err) {
+    throw new BadRequestError(
+      `Erro ao identificar alimento: ${err instanceof Error ? err.message : 'unknown'}`
+    )
+  }
+})
+
+// ============================================
+// FOOD BARCODE LOOKUP
+// ============================================
+
+/**
+ * GET /food-barcode/:code — Busca alimento por código de barras EAN
+ *
+ * Tenta localizar no banco local (vfit_foods.barcode) primeiro,
+ * depois tenta Open Food Facts como fallback.
+ *
+ * Sprint 14 — Scanner & Macro Ring
+ */
+vfit.get('/food-barcode/:code', async (c) => {
+  const env = c.env
+  const code = c.req.param('code')
+
+  if (!/^\d{8,14}$/.test(code)) {
+    throw new BadRequestError('Código de barras inválido (deve ter 8-14 dígitos)')
+  }
+
+  // 1. Buscar no banco local
+  const localFood = await pgQueryOne(
+    env,
+    `SELECT * FROM vfit_foods WHERE barcode = $1 AND is_library = true LIMIT 1`,
+    [code]
+  )
+
+  if (localFood) {
+    return c.json(success({ source: 'local', food: localFood }))
+  }
+
+  // 2. Fallback: Open Food Facts API (gratuita, sem auth)
+  try {
+    const offRes = await fetch(
+      `https://world.openfoodfacts.org/api/v0/product/${code}.json`,
+      { headers: { 'User-Agent': 'VFIT App/1.0 (contact@vfit.app.br)' } }
+    )
+    if (offRes.ok) {
+      const offData = await offRes.json() as {
+        status: number
+        product?: {
+          product_name: string
+          nutriments: Record<string, number>
+          serving_size?: string
+        }
+      }
+
+      if (offData.status === 1 && offData.product) {
+        const p = offData.product
+        const n = p.nutriments
+        return c.json(success({
+          source: 'openfoodfacts',
+          food: {
+            name: p.product_name || 'Alimento desconhecido',
+            calories: Math.round(n['energy-kcal_100g'] || 0),
+            protein_g: Math.round((n['proteins_100g'] || 0) * 10) / 10,
+            carbs_g: Math.round((n['carbohydrates_100g'] || 0) * 10) / 10,
+            fat_g: Math.round((n['fat_100g'] || 0) * 10) / 10,
+            fiber_g: Math.round((n['fiber_100g'] || 0) * 10) / 10,
+            standard_portion_g: 100,
+            category: 'industrializado',
+          },
+        }))
+      }
+    }
+  } catch {
+    // Fallback silencioso
+  }
+
+  throw new NotFoundError('Código de barras não encontrado na base de dados')
 })
 
 export { vfit as vfitRoutes }

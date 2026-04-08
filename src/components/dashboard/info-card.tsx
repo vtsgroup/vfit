@@ -26,7 +26,7 @@ interface InfoCardProps {
   value: string | number
   color?: 'primary' | 'success' | 'warning' | 'error' | 'info' | 'accent' | 'violet'
   badge?: string
-  badgeColor?: 'green' | 'yellow' | 'red' | 'blue' | 'violet' | 'default'
+  badgeColor?: 'green' | 'yellow' | 'red' | 'brand' | 'violet' | 'default'
   href?: string
   suffix?: ReactNode
   description?: string
@@ -38,7 +38,7 @@ const iconColors = {
   success: 'bg-emerald-500/12 text-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.15)]',
   warning: 'bg-amber-500/12 text-amber-400 shadow-[0_0_12px_rgba(245,158,11,0.15)]',
   error: 'bg-red-500/12 text-red-400 shadow-[0_0_12px_rgba(239,68,68,0.15)]',
-  info: 'bg-blue-500/12 text-blue-400 shadow-[0_0_12px_rgba(59,130,246,0.15)]',
+  info: 'bg-brand-primary/12 text-brand-primary shadow-[0_0_12px_rgba(34,197,94,0.15)]',
   accent: 'bg-lime-500/12 text-lime-400 shadow-[0_0_12px_rgba(132,204,22,0.15)]',
   violet: 'bg-violet-500/12 text-violet-400 shadow-[0_0_12px_rgba(139,92,246,0.15)]',
 }
@@ -47,7 +47,7 @@ const badgeColors = {
   green: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/20',
   yellow: 'bg-amber-500/15 text-amber-400 border-amber-500/20',
   red: 'bg-red-500/15 text-red-400 border-red-500/20',
-  blue: 'bg-blue-500/15 text-blue-400 border-blue-500/20',
+  brand: 'bg-brand-primary/15 text-brand-primary border-brand-primary/20',
   violet: 'bg-violet-500/15 text-violet-400 border-violet-500/20',
   default: 'bg-black/6 dark:bg-white/6 text-text-muted border-border-light',
 }

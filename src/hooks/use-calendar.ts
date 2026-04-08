@@ -18,10 +18,11 @@ import { toast } from '@/stores/app-store'
 import { useAuthStore } from '@/stores/auth-store'
 import { APP_QUERY_CACHE } from '@/lib/query-cache-policy'
 
-export type CalendarEventColor = 'blue' | 'green' | 'purple' | 'orange' | 'red'
+type CalendarEventApiColor = 'blue' | 'green' | 'purple' | 'orange' | 'red'
+export type CalendarEventColor = 'brand' | 'green' | 'purple' | 'orange' | 'red'
 export type CalendarEventStatus = 'available' | 'partial' | 'busy' | null
 
-export interface CalendarEventApi {
+interface CalendarEventApiResponse {
   id: string
   personal_id: string
   student_id: string | null
@@ -30,7 +31,7 @@ export interface CalendarEventApi {
   meeting_url: string | null
   start_at: string
   end_at: string
-  color: CalendarEventColor
+  color: CalendarEventApiColor
   status: CalendarEventStatus
   recurrence_group_id: string | null
   recurrence_index: number | null
@@ -38,6 +39,19 @@ export interface CalendarEventApi {
   updated_at: string
   personal_name: string
   student_name: string | null
+}
+
+export interface CalendarEventApi extends Omit<CalendarEventApiResponse, 'color'> {
+  color: CalendarEventColor
+}
+
+function normalizeCalendarColor(color: CalendarEventApiColor): CalendarEventColor {
+  return color === 'blue' ? 'brand' : color
+}
+
+function toApiCalendarColor(color: CalendarEventColor | undefined): CalendarEventApiColor | undefined {
+  if (!color) return undefined
+  return color === 'brand' ? 'blue' : color
 }
 
 export interface RecurrenceInput {
@@ -81,7 +95,12 @@ export function useCalendarEvents(params: { from: string; to: string }) {
       const res = await api.get<ListCalendarEventsResponse>('/calendar/events', {
         params: { from: params.from, to: params.to },
       })
-      return res.data
+      return {
+        events: (res.data.events as CalendarEventApiResponse[]).map((event) => ({
+          ...event,
+          color: normalizeCalendarColor(event.color),
+        })),
+      }
     },
     enabled: isReady && !!params.from && !!params.to,
     staleTime: 30_000,
@@ -92,8 +111,15 @@ export function useCreateCalendarEvent(rangeToInvalidate?: { from: string; to: s
   const qc = useQueryClient()
   return useMutation({
     mutationFn: async (input: CreateCalendarEventInput) => {
-      const res = await api.post<{ event?: CalendarEventApi; events?: CalendarEventApi[] }>('/calendar/events', input)
-      return res.data.events ?? (res.data.event ? [res.data.event] : [])
+      const res = await api.post<{ event?: CalendarEventApiResponse; events?: CalendarEventApiResponse[] }>('/calendar/events', {
+        ...input,
+        color: toApiCalendarColor(input.color),
+      })
+      const events = res.data.events ?? (res.data.event ? [res.data.event] : [])
+      return events.map((event) => ({
+        ...event,
+        color: normalizeCalendarColor(event.color),
+      }))
     },
     onSuccess: () => {
       toast.success('Agendamento criado')
@@ -110,8 +136,14 @@ export function useUpdateCalendarEvent(id: string, rangeToInvalidate?: { from: s
   const qc = useQueryClient()
   return useMutation({
     mutationFn: async (input: UpdateCalendarEventInput) => {
-      const res = await api.patch<{ event: CalendarEventApi }>(`/calendar/events/${id}`, input)
-      return res.data.event
+      const res = await api.patch<{ event: CalendarEventApiResponse }>(`/calendar/events/${id}`, {
+        ...input,
+        color: toApiCalendarColor(input.color),
+      })
+      return {
+        ...res.data.event,
+        color: normalizeCalendarColor(res.data.event.color),
+      }
     },
     onSuccess: () => {
       toast.success('Agendamento atualizado')

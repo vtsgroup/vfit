@@ -29,7 +29,7 @@ import type { FeedbackItem, FeedbackReply } from '@/hooks/use-feedback'
 
 const categoryConfig: Record<string, { label: string; icon: DSIconName; color: string }> = {
   feature: { label: 'Nova funcionalidade', icon: 'lightbulb', color: 'text-amber-400' },
-  improvement: { label: 'Melhoria', icon: 'wrench', color: 'text-blue-400' },
+  improvement: { label: 'Melhoria', icon: 'wrench', color: 'text-brand-primary' },
   bug: { label: 'Bug', icon: 'bug', color: 'text-red-400' },
   ui: { label: 'Visual', icon: 'palette', color: 'text-purple-400' },
   other: { label: 'Outro', icon: 'helpCircle', color: 'text-zinc-400' },
@@ -37,7 +37,7 @@ const categoryConfig: Record<string, { label: string; icon: DSIconName; color: s
 
 const statusConfig: Record<string, { label: string; color: string; icon: DSIconName }> = {
   pending: { label: 'Pendente', color: 'bg-warning/10 text-warning border-warning/20', icon: 'clock' },
-  reviewing: { label: 'Analisando', color: 'bg-blue-400/10 text-blue-400 border-blue-400/20', icon: 'eye' },
+  reviewing: { label: 'Analisando', color: 'bg-brand-primary/10 text-brand-primary border-brand-primary/20', icon: 'eye' },
   planned: { label: 'Planejado', color: 'bg-purple-400/10 text-purple-400 border-purple-400/20', icon: 'sparkles' },
   in_progress: { label: 'Em andamento', color: 'bg-brand-primary/10 text-brand-primary border-brand-primary/20', icon: 'loader' },
   done: { label: 'Concluído', color: 'bg-success/10 text-success border-success/20', icon: 'checkCircle2' },
@@ -75,11 +75,11 @@ function MessageBubble({ reply, isLast }: { reply: FeedbackReply; isLast: boolea
       {/* Avatar */}
       <div className={cn(
         'flex h-7 w-7 shrink-0 items-center justify-center rounded-full mt-1',
-        isUser && 'bg-blue-500/20',
+        isUser && 'bg-brand-primary/20',
         isAdmin && 'bg-emerald-500/20',
         isAI && 'bg-purple-500/20',
       )}>
-        {isUser && <DSIcon name="user" size={14} className="text-blue-400" />}
+        {isUser && <DSIcon name="user" size={14} className="text-brand-primary" />}
         {isAdmin && <DSIcon name="shield" size={14} className="text-emerald-400" />}
         {isAI && <DSIcon name="bot" size={14} className="text-purple-400" />}
       </div>
@@ -87,14 +87,14 @@ function MessageBubble({ reply, isLast }: { reply: FeedbackReply; isLast: boolea
       {/* Bubble */}
       <div className={cn(
         'max-w-[80%] rounded-2xl px-3.5 py-2.5',
-        isUser && 'rounded-tr-md bg-blue-500/15 border border-blue-500/20',
+        isUser && 'rounded-tr-md bg-brand-primary/15 border border-brand-primary/20',
         isAdmin && 'rounded-tl-md bg-emerald-500/10 border border-emerald-500/20',
         isAI && 'rounded-tl-md bg-purple-500/10 border border-purple-500/20',
       )}>
         {/* Sender name */}
         <p className={cn(
           'text-[10px] font-semibold mb-0.5',
-          isUser && 'text-blue-400 text-right',
+          isUser && 'text-brand-primary text-right',
           isAdmin && 'text-emerald-400',
           isAI && 'text-purple-400',
         )}>

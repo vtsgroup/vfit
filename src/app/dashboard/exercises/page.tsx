@@ -48,16 +48,16 @@ const ExerciseProgressionChart = dynamic(
 // Body region colors for muscle group cards
 // ============================================
 const REGION_COLORS: Record<string, { bg: string; border: string; text: string }> = {
-  chest: { bg: 'bg-blue-500/10', border: 'border-blue-500/20', text: 'text-blue-400' },
+  chest: { bg: 'bg-brand-primary/10', border: 'border-brand-primary/20', text: 'text-brand-primary' },
   back: { bg: 'bg-emerald-500/10', border: 'border-emerald-500/20', text: 'text-emerald-400' },
   shoulders: { bg: 'bg-violet-500/10', border: 'border-violet-500/20', text: 'text-violet-400' },
   biceps: { bg: 'bg-orange-500/10', border: 'border-orange-500/20', text: 'text-orange-400' },
   triceps: { bg: 'bg-rose-500/10', border: 'border-rose-500/20', text: 'text-rose-400' },
   forearms: { bg: 'bg-amber-500/10', border: 'border-amber-500/20', text: 'text-amber-400' },
-  quadriceps: { bg: 'bg-cyan-500/10', border: 'border-cyan-500/20', text: 'text-cyan-400' },
+  quadriceps: { bg: 'bg-emerald-500/10', border: 'border-emerald-500/20', text: 'text-emerald-400' },
   hamstrings: { bg: 'bg-teal-500/10', border: 'border-teal-500/20', text: 'text-teal-400' },
   glutes: { bg: 'bg-pink-500/10', border: 'border-pink-500/20', text: 'text-pink-400' },
-  calves: { bg: 'bg-sky-500/10', border: 'border-sky-500/20', text: 'text-sky-400' },
+  calves: { bg: 'bg-brand-primary/10', border: 'border-brand-primary/20', text: 'text-brand-primary' },
   abs: { bg: 'bg-red-500/10', border: 'border-red-500/20', text: 'text-red-400' },
   traps: { bg: 'bg-indigo-500/10', border: 'border-indigo-500/20', text: 'text-indigo-400' },
   core: { bg: 'bg-yellow-500/10', border: 'border-yellow-500/20', text: 'text-yellow-400' },

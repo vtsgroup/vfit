@@ -34,9 +34,9 @@ const COLUMNS: PipelineColumn[] = [
     id: 'invited',
     label: 'Convidados',
     icon: 'mail',
-    color: 'text-blue-400',
-    bgColor: 'bg-blue-400/8',
-    borderColor: 'border-blue-400/20',
+    color: 'text-brand-primary',
+    bgColor: 'bg-brand-primary/8',
+    borderColor: 'border-brand-primary/20',
     statuses: ['invited', 'pending'],
   },
   {
@@ -200,7 +200,7 @@ function StudentCard({ student }: { student: Student }) {
         <Link
           href={`/dashboard/workouts/create?student_id=${student.id}`}
           onClick={(e) => e.stopPropagation()}
-          className="flex items-center gap-1 rounded-md px-1.5 py-1 text-[9px] font-semibold text-blue-400 hover:bg-blue-400/10 transition-colors"
+          className="flex items-center gap-1 rounded-md px-1.5 py-1 text-[9px] font-semibold text-brand-primary hover:bg-brand-primary/10 transition-colors"
           title="Treino"
         >
           <DSIcon name="dumbbell" size={10} />

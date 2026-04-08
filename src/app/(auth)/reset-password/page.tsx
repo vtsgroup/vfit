@@ -89,7 +89,7 @@ function ResetPasswordInner() {
           <div className="flex items-center gap-2 mb-2">
             {usingTokenFlow
               ? <DSIcon name="keyRound" size={14} className="text-brand-primary/60" />
-              : <DSIcon name="shieldAlert" size={14} className="text-sky-400/60" />
+              : <DSIcon name="shieldAlert" size={14} className="text-brand-primary/60" />
             }
             <p className="text-[9px] uppercase text-brand-primary/70" style={monoLabel}>
               {usingTokenFlow ? 'REDEFINIÇÃO' : 'RECUPERAÇÃO'}

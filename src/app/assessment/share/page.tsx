@@ -106,13 +106,13 @@ function bmiColor(c: string | null) {
   if (!c) return 'text-gray-400'
   if (c === 'Peso normal') return 'text-emerald-400'
   if (c === 'Sobrepeso') return 'text-amber-400'
-  if (c === 'Abaixo do peso') return 'text-sky-400'
+  if (c === 'Abaixo do peso') return 'text-brand-primary'
   return 'text-red-400'
 }
 
 function fatColor(c: string | null) {
   if (!c) return 'text-gray-400'
-  if (c.includes('Atleta') || c.includes('Essencial')) return 'text-sky-400'
+  if (c.includes('Atleta') || c.includes('Essencial')) return 'text-brand-primary'
   if (c.includes('Bom') || c.includes('Fitness')) return 'text-emerald-400'
   if (c.includes('Média') || c.includes('Aceitável')) return 'text-amber-400'
   return 'text-red-400'
@@ -201,13 +201,13 @@ function AssessmentView({ assessment: a }: { assessment: SharedAssessment }) {
   return (
     <div className="min-h-screen bg-bg-page text-white">
       {/* Gradient top bar */}
-      <div className="h-1 bg-linear-to-r from-emerald-500 via-cyan-500 to-emerald-500" />
+      <div className="h-1 bg-linear-to-r from-emerald-500 via-brand-primary to-emerald-500" />
 
       <div className="mx-auto max-w-3xl px-4 py-8 space-y-6">
         {/* Header */}
         <header className="text-center space-y-2">
           <h1 className="text-3xl font-black tracking-tight">
-            <span className="bg-linear-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-emerald-400 to-brand-primary bg-clip-text text-transparent">
               AVALIAÇÃO FÍSICA
             </span>
           </h1>
@@ -225,7 +225,7 @@ function AssessmentView({ assessment: a }: { assessment: SharedAssessment }) {
           <div className="flex items-center gap-4">
             {a.personal_photo ? (
               <div className="relative shrink-0">
-                <div className="h-16 w-16 rounded-full bg-linear-to-br from-emerald-400 to-cyan-400 p-0.5">
+                <div className="h-16 w-16 rounded-full bg-linear-to-br from-emerald-400 to-brand-primary p-0.5">
                   <Image
                     src={a.personal_photo}
                     alt={a.personal_name || 'Personal'}
@@ -276,7 +276,7 @@ function AssessmentView({ assessment: a }: { assessment: SharedAssessment }) {
 
         {/* Student */}
         <section className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-5">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-cyan-400 mb-2">Aluno</p>
+          <p className="text-[10px] font-bold uppercase tracking-widest text-brand-primary mb-2">Aluno</p>
           <div className="flex items-center gap-3">
             {a.student_photo ? (
               <Image
@@ -284,13 +284,13 @@ function AssessmentView({ assessment: a }: { assessment: SharedAssessment }) {
                 alt={a.student_name || 'Aluno'}
                 width={40}
                 height={40}
-                className="h-10 w-10 rounded-full object-cover ring-2 ring-cyan-400/30"
+                className="h-10 w-10 rounded-full object-cover ring-2 ring-brand-primary/30"
                 unoptimized
                 priority
               />
             ) : (
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-cyan-500/20">
-                <DSIcon name="user" className="text-cyan-400" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-primary/20">
+                <DSIcon name="user" className="text-brand-primary" />
               </div>
             )}
             <h3 className="text-base font-semibold text-white">{a.student_name || 'Aluno'}</h3>
@@ -299,7 +299,7 @@ function AssessmentView({ assessment: a }: { assessment: SharedAssessment }) {
 
         {/* Key Metrics */}
         <section className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <MetricCard icon="scale" label="Peso" value={a.weight_kg ? `${toNum(a.weight_kg)?.toFixed(1)}` : '—'} unit="kg" accent="from-blue-500 to-blue-600" />
+          <MetricCard icon="scale" label="Peso" value={a.weight_kg ? `${toNum(a.weight_kg)?.toFixed(1)}` : '—'} unit="kg" accent="from-brand-primary to-emerald-600" />
           <MetricCard icon="ruler" label="Altura" value={a.height_cm ? `${toNum(a.height_cm)?.toFixed(0)}` : '—'} unit="cm" accent="from-violet-500 to-violet-600" />
           <MetricCard icon="percent" label="% Gordura" value={a.body_fat_percentage ? `${toNum(a.body_fat_percentage)?.toFixed(1)}` : '—'} unit="%" accent="from-orange-500 to-orange-600" />
           <MetricCard icon="dumbbell" label="Massa Musc." value={a.muscle_mass_kg ? `${toNum(a.muscle_mass_kg)?.toFixed(1)}` : '—'} unit="kg" accent="from-emerald-500 to-emerald-600" />
@@ -345,7 +345,7 @@ function AssessmentView({ assessment: a }: { assessment: SharedAssessment }) {
 
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
               <CompStat label="Massa Gorda" value={fmtKg(a.fat_mass_kg)} pct={composition.fatPct} color="bg-orange-500" />
-              <CompStat label="Massa Magra" value={fmtKg(a.lean_mass_kg)} pct={composition.leanPct} color="bg-blue-500" />
+              <CompStat label="Massa Magra" value={fmtKg(a.lean_mass_kg)} pct={composition.leanPct} color="bg-brand-primary" />
               <CompStat label="Massa Muscular" value={fmtKg(a.muscle_mass_kg)} pct={toNum(a.muscle_mass_percentage)} color="bg-emerald-500" />
               <CompStat label="Massa Óssea" value={fmtKg(a.bone_mass_kg)} pct={null} color="bg-gray-400" />
             </div>
@@ -353,14 +353,14 @@ function AssessmentView({ assessment: a }: { assessment: SharedAssessment }) {
             {/* Visual bar */}
             <div className="flex h-4 w-full overflow-hidden rounded-full bg-white/5">
               <div className="bg-orange-500 transition-all duration-700" style={{ width: `${composition.fatPct}%` }} />
-              <div className="bg-blue-500 transition-all duration-700" style={{ width: `${composition.leanPct}%` }} />
+              <div className="bg-brand-primary transition-all duration-700" style={{ width: `${composition.leanPct}%` }} />
             </div>
             <div className="flex justify-between text-xs text-gray-400">
               <span className="flex items-center gap-1">
                 <span className="h-2 w-2 rounded-full bg-orange-500" /> Gordura {composition.fatPct.toFixed(1)}%
               </span>
               <span className="flex items-center gap-1">
-                <span className="h-2 w-2 rounded-full bg-blue-500" /> Magra {composition.leanPct.toFixed(1)}%
+                <span className="h-2 w-2 rounded-full bg-brand-primary" /> Magra {composition.leanPct.toFixed(1)}%
               </span>
             </div>
           </section>
@@ -499,7 +499,7 @@ function AssessmentView({ assessment: a }: { assessment: SharedAssessment }) {
         {/* Footer */}
         <footer className="text-center space-y-2 border-t border-white/5 pt-6 pb-8">
           <p className="text-xs font-bold text-emerald-400">
-            PERSONAL<span className="text-cyan-400">IA</span>
+            PERSONAL<span className="text-brand-primary">IA</span>
           </p>
           <p className="text-[10px] text-gray-500">
             Plataforma para Personal Trainers — vfit.app.br
@@ -581,7 +581,7 @@ function MetabBox({ icon, label, sublabel, value, unit }: {
 function LoadingSkeleton() {
   return (
     <div className="min-h-screen bg-bg-page text-white">
-      <div className="h-1 bg-linear-to-r from-emerald-500 via-cyan-500 to-emerald-500" />
+      <div className="h-1 bg-linear-to-r from-emerald-500 via-brand-primary to-emerald-500" />
       <div className="mx-auto max-w-3xl px-4 py-8 space-y-6 animate-pulse">
         <div className="h-10 w-64 mx-auto rounded-lg bg-white/10" />
         <div className="h-4 w-40 mx-auto rounded bg-white/5" />

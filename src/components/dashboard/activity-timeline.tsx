@@ -43,10 +43,10 @@ interface ActivityTimelineProps {
 
 const eventConfig: Record<TimelineEventType, { icon: DSIconName; color: string; dotColor: string }> = {
   payment: { icon: 'creditCard', color: 'text-emerald-400', dotColor: 'bg-emerald-500' },
-  student: { icon: 'userPlus', color: 'text-blue-400', dotColor: 'bg-blue-500' },
+    student: { icon: 'userPlus', color: 'text-brand-primary', dotColor: 'bg-brand-primary' },
   workout: { icon: 'dumbbell', color: 'text-violet-400', dotColor: 'bg-violet-500' },
   assessment: { icon: 'clipboardList', color: 'text-amber-400', dotColor: 'bg-amber-500' },
-  message: { icon: 'message', color: 'text-cyan-400', dotColor: 'bg-cyan-500' },
+  message: { icon: 'message', color: 'text-brand-primary', dotColor: 'bg-brand-primary' },
   system: { icon: 'flame', color: 'text-text-muted', dotColor: 'bg-black/30 dark:bg-white/30' },
 }
 

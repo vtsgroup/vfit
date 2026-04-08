@@ -66,9 +66,9 @@ const NOTIF_CONFIG: Record<string, {
   },
   student: {
     icon: 'userPlus',
-    bg: 'bg-cyan-500/10',
-    iconColor: 'text-cyan-400',
-    dotColor: 'bg-cyan-400',
+    bg: 'bg-brand-primary/10',
+    iconColor: 'text-brand-primary',
+    dotColor: 'bg-brand-primary',
   },
   ai: {
     icon: 'sparkles',

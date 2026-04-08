@@ -38,7 +38,7 @@ interface FeedbackModalProps {
 
 const categories = [
   { key: 'feature', label: 'Nova funcionalidade', icon: 'lightbulb' as DSIconName, color: 'text-amber-400', bg: 'bg-amber-400/10 border-amber-400/20' },
-  { key: 'improvement', label: 'Melhoria', icon: 'wrench' as DSIconName, color: 'text-blue-400', bg: 'bg-blue-400/10 border-blue-400/20' },
+  { key: 'improvement', label: 'Melhoria', icon: 'wrench' as DSIconName, color: 'text-brand-primary', bg: 'bg-brand-primary/10 border-brand-primary/20' },
   { key: 'bug', label: 'Problema/Bug', icon: 'bug' as DSIconName, color: 'text-red-400', bg: 'bg-red-400/10 border-red-400/20' },
   { key: 'ui', label: 'Visual/Design', icon: 'palette' as DSIconName, color: 'text-purple-400', bg: 'bg-purple-400/10 border-purple-400/20' },
   { key: 'other', label: 'Outro', icon: 'helpCircle' as DSIconName, color: 'text-zinc-400', bg: 'bg-zinc-400/10 border-zinc-400/20' },
@@ -46,7 +46,7 @@ const categories = [
 
 const statusConfig: Record<string, { label: string; color: string; icon: DSIconName }> = {
   pending: { label: 'Pendente', color: 'bg-warning/10 text-warning', icon: 'clock' },
-  reviewing: { label: 'Analisando', color: 'bg-blue-400/10 text-blue-400', icon: 'eye' },
+  reviewing: { label: 'Analisando', color: 'bg-brand-primary/10 text-brand-primary', icon: 'eye' },
   planned: { label: 'Planejado', color: 'bg-purple-400/10 text-purple-400', icon: 'sparkles' },
   in_progress: { label: 'Em andamento', color: 'bg-brand-primary/10 text-brand-primary', icon: 'loader' },
   done: { label: 'Concluído', color: 'bg-success/10 text-success', icon: 'checkCircle2' },

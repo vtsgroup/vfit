@@ -308,8 +308,8 @@ export default function TreinosPage() {
           href="/plano"
           className="group glass-card flex flex-col gap-2 rounded-2xl p-4 transition-all hover:border-info/20"
         >
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/15">
-            <DSIcon name="clipboardList" size={20} className="text-blue-400" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-primary/15">
+            <DSIcon name="clipboardList" size={20} className="text-brand-primary" />
           </div>
           <p className="text-[13px] font-bold text-text-primary">Meu Plano</p>
           <p className="text-[11px] text-text-muted">Treino atual ativo</p>

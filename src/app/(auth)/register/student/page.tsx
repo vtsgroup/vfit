@@ -300,7 +300,7 @@ export default function RegisterStudentPage() {
             ) : (
               /* No invite — generic header */
               <div style={{ animation: 'slideUp 0.6s ease-out' }} className="pt-12">
-                <p className="text-[9px] font-bold uppercase tracking-widest text-cyan-400/70 mb-1" style={monoLabel}>
+                <p className="text-[9px] font-bold uppercase tracking-widest text-brand-primary/70 mb-1" style={monoLabel}>
                   CADASTRO ALUNO
                 </p>
                 <h2 className="text-2xl font-black text-white leading-tight" style={headingFont}>

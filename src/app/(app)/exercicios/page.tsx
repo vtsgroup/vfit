@@ -15,6 +15,7 @@ import { DSIcon } from '@/components/ui/ds-icon'
 import { ExerciseCard } from '@/components/exercicios'
 import { useExercises, useMuscleGroups } from '@/hooks/use-exercises'
 import { useFavoriteExercises } from '@/hooks/use-favorite-exercises'
+import { useImagePrefetch } from '@/hooks/use-image-prefetch'
 import type { MuscleGroup } from '@/hooks/use-exercises'
 
 // ============================================
@@ -78,7 +79,7 @@ export default function ExerciciosPage() {
   })
   const { favorites, isFavorite, toggleFavorite, count: favCount } = useFavoriteExercises()
 
-  const exercises = exercisesData?.exercises || []
+  const exercises = useMemo(() => exercisesData?.exercises ?? [], [exercisesData?.exercises])
   const muscleGroupMap = useMemo(() => {
     const map: Record<string, MuscleGroup> = {}
     if (muscleGroups) {
@@ -88,6 +89,11 @@ export default function ExerciciosPage() {
     }
     return map
   }, [muscleGroups])
+
+  // Sprint 11 — Cache R2: prefetch de imagens de grupos musculares para offline
+  useImagePrefetch(muscleGroups?.map((mg) => mg.image_url) ?? [])
+  // Prefetch thumbnails dos exercícios carregados
+  useImagePrefetch(exercises.slice(0, 30).map((ex) => ex.thumbnail_url))
 
   // Filtered exercises for equipment tab
   const equipmentFiltered = useMemo(() => {
@@ -476,6 +482,7 @@ function ExerciseList({
         <ExerciseCard
           key={ex.id}
           exercise={ex}
+          muscleGroup={muscleGroupMap[ex.muscle_group_id]}
           muscleGroupName={muscleGroupMap[ex.muscle_group_id]?.name_pt}
           isFavorite={isFavorite(ex.id)}
           onToggleFavorite={() => toggleFavorite(ex.id)}

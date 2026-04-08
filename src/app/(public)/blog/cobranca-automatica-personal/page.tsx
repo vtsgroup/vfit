@@ -54,7 +54,7 @@ const STEPS_SETUP = [
 ]
 
 const REGUA_LEMBRETES: { day: string; action: string; icon: DSIconName; color: string; bg: string }[] = [
-  { day: 'D-3', action: 'Lembrete amigável de vencimento próximo via push + email', icon: 'bell', color: 'text-blue-400', bg: 'bg-blue-500/15' },
+  { day: 'D-3', action: 'Lembrete amigável de vencimento próximo via push + email', icon: 'bell', color: 'text-brand-primary', bg: 'bg-brand-primary/15' },
   { day: 'D-0', action: 'Notificação no dia do vencimento com link de pagamento', icon: 'clock', color: 'text-amber-400', bg: 'bg-amber-500/15' },
   { day: 'D+1', action: 'Aviso de pagamento em atraso — tom empático, não punitivo', icon: 'alertTriangle', color: 'text-orange-400', bg: 'bg-orange-500/15' },
   { day: 'D+3', action: 'Segundo lembrete com novo link de pagamento gerado', icon: 'send', color: 'text-red-400', bg: 'bg-red-500/15' },
@@ -187,7 +187,7 @@ export default function CobrancaAutomaticaPage() {
 
         <div className="relative space-y-0">
           {/* Timeline line */}
-          <div className="absolute left-5 top-5 bottom-5 w-px bg-linear-to-b from-blue-500/40 via-amber-500/40 to-red-500/40 sm:left-5" />
+          <div className="absolute left-5 top-5 bottom-5 w-px bg-linear-to-b from-brand-primary/40 via-amber-500/40 to-red-500/40 sm:left-5" />
 
           {REGUA_LEMBRETES.map((item) => (
             <div key={item.day} className="relative flex items-start gap-4 py-3">

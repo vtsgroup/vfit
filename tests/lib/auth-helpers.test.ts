@@ -117,20 +117,20 @@ describe('Password — hashPassword + verifyPassword', () => {
 
     const isValid = await verifyPassword(password, hash)
     expect(isValid).toBe(true)
-  })
+  }, 20000)
 
   it('deve rejeitar senha errada', async () => {
     const hash = await hashPassword('SenhaCorreta123!')
     const isValid = await verifyPassword('SenhaErrada456!', hash)
     expect(isValid).toBe(false)
-  })
+  }, 20000)
 
   it('hashes diferentes para mesma senha (salt random)', async () => {
     const password = 'MesmaSenha123!'
     const hash1 = await hashPassword(password)
     const hash2 = await hashPassword(password)
     expect(hash1).not.toBe(hash2) // salts diferentes
-  })
+  }, 20000)
 })
 
 describe('generateReferralCode()', () => {

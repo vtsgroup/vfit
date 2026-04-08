@@ -349,7 +349,7 @@ function AffiliateDashboardView() {
           icon="trendingUp"
           label="Este Mês"
           value={formatCurrency(dashboard!.this_month.total)}
-          accent="blue"
+          accent="green"
         />
       </div>
 
@@ -466,7 +466,7 @@ const accentMap = {
   emerald: { bg: 'bg-emerald-500/10', text: 'text-emerald-400', ring: 'ring-emerald-500/10' },
   green: { bg: 'bg-emerald-500/10', text: 'text-emerald-400', ring: 'ring-emerald-500/10' },
   amber: { bg: 'bg-amber-500/10', text: 'text-amber-400', ring: 'ring-amber-500/10' },
-  blue: { bg: 'bg-blue-500/10', text: 'text-blue-400', ring: 'ring-blue-500/10' },
+  brand: { bg: 'bg-brand-primary/10', text: 'text-brand-primary', ring: 'ring-brand-primary/10' },
 }
 
 function StatCard({ icon, label, value, accent }: {
@@ -787,8 +787,8 @@ function WithdrawTab({ balance }: { balance: number }) {
       )}
 
       {/* Info */}
-      <div className="rounded-xl border border-blue-500/15 bg-blue-500/5 p-3 flex items-start gap-2.5">
-        <DSIcon name="info" size={14} className="text-blue-400 shrink-0 mt-0.5" />
+      <div className="rounded-xl border border-brand-primary/15 bg-brand-primary/5 p-3 flex items-start gap-2.5">
+        <DSIcon name="info" size={14} className="text-brand-primary shrink-0 mt-0.5" />
         <p className="text-xs text-text-secondary leading-relaxed">
           Saques são processados em até <strong className="text-text-primary">48h úteis</strong>. O valor mínimo é R$ 10,00.
         </p>

@@ -221,7 +221,7 @@ export function CookieConsentBanner() {
                 {/* Analytics */}
                 <div className="flex items-center justify-between rounded-xl border dark:border-white/6 light:border-slate-200 dark:bg-white/2 light:bg-slate-50 p-3.5">
                   <div className="flex items-center gap-3">
-                    <DSIcon name="barChart" size={16} className="text-blue-400" />
+                    <DSIcon name="barChart" size={16} className="text-brand-primary" />
                     <div>
                       <p className="text-xs font-semibold dark:text-white light:text-slate-900">Analytics</p>
                       <p className="text-[10px] dark:text-zinc-400 light:text-slate-500">Cloudflare Analytics (server-side, sem PII)</p>
@@ -230,14 +230,14 @@ export function CookieConsentBanner() {
                   <button
                     onClick={() => setAnalytics(!analytics)}
                     className={`flex h-6 w-11 items-center rounded-full px-0.5 transition-colors ${
-                      analytics ? 'bg-blue-500/20' : 'dark:bg-zinc-800 light:bg-slate-200'
+                      analytics ? 'bg-brand-primary/20' : 'dark:bg-zinc-800 light:bg-slate-200'
                     }`}
                     role="switch"
                     aria-checked={analytics}
                   >
                     <div
                       className={`h-5 w-5 rounded-full shadow-sm transition-all ${
-                        analytics ? 'translate-x-5 bg-blue-400' : 'translate-x-0 dark:bg-zinc-600 light:bg-slate-400'
+                        analytics ? 'translate-x-5 bg-brand-primary' : 'translate-x-0 dark:bg-zinc-600 light:bg-slate-400'
                       }`}
                     />
                   </button>

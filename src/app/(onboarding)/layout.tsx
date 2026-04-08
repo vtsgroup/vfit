@@ -8,6 +8,7 @@
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import { NO_INDEX_ROBOTS } from '@/lib/seo'
+import { OnboardingTransition } from '@/components/layout/onboarding-transition'
 
 export const metadata: Metadata = {
   title: 'VFIT — Criar Meu Plano',
@@ -23,7 +24,7 @@ export default function OnboardingLayout({ children }: { children: React.ReactNo
         </div>
       }
     >
-      {children}
+      <OnboardingTransition>{children}</OnboardingTransition>
     </Suspense>
   )
 }

@@ -19,7 +19,7 @@ type GenderOption = {
 }
 
 const GENDER_OPTIONS: GenderOption[] = [
-  { value: 'male', label: 'Masculino', icon: 'user', color: 'from-blue-500/20 to-blue-600/5' },
+  { value: 'male', label: 'Masculino', icon: 'user', color: 'from-brand-primary/20 to-emerald-600/5' },
   { value: 'female', label: 'Feminino', icon: 'user', color: 'from-pink-500/20 to-pink-600/5' },
   { value: 'other', label: 'Outro', icon: 'users', color: 'from-purple-500/20 to-purple-600/5' },
   { value: 'prefer_not_say', label: 'Prefiro não dizer', icon: 'shieldCheck', color: 'from-white/10 to-white/5' },

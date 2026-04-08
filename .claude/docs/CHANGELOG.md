@@ -5,6 +5,28 @@
 
 ---
 
+## [Unreleased] — 2026-04-08 — Sprint 11-15 (UX Nutrição/Exercícios)
+
+### ✨ Features
+- **Nutrição:** integração de `MacroRingChart` em [src/app/(app)/nutricao/page.tsx](src/app/(app)/nutricao/page.tsx) substituindo o bloco antigo de barras lineares.
+- **Nutrição:** scanner de código de barras integrado no modal de busca com `BarcodeScanner` e shortcut no header da busca.
+- **Nutrição:** câmera com Vision AI integrada via `FoodCamera` + sugestão automática de busca por alimento.
+- **Nutrição:** lista de resultados com identificação visual por categoria (emoji + badge/cor).
+- **App Layout:** transições de rota com Framer Motion em [src/app/(app)/layout.tsx](src/app/(app)/layout.tsx) usando `AnimatePresence` + `motion.div`.
+- **Onboarding:** transições de rota com Framer Motion em [src/app/(onboarding)/layout.tsx](src/app/(onboarding)/layout.tsx) via wrapper [src/components/layout/onboarding-transition.tsx](src/components/layout/onboarding-transition.tsx).
+- **Exercícios:** prefetch de imagens com Cache API (R2/CDN) em [src/app/(app)/exercicios/page.tsx](src/app/(app)/exercicios/page.tsx) via `useImagePrefetch`.
+
+### 🔌 Backend
+- Novos endpoints em [workers/api/vfit.ts](workers/api/vfit.ts):
+  - `POST /vfit/food-identify` (Workers AI vision + fallback textual)
+  - `GET /vfit/food-barcode/:code` (lookup local + fallback Open Food Facts)
+
+### ✅ QA desta sessão
+- `npm run type-check` — sem erros
+- `npm run build` — concluído com sucesso (static export completo)
+
+---
+
 ## [v1.9.6] — 2026-04-09 — Workout Cover Images + Custom Exercise Videos + Admin Muscle Groups
 
 ### Novas funcionalidades

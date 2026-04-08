@@ -23,7 +23,7 @@ type Goal = 'cut' | 'maintain' | 'bulk'
 
 // ─── IMC ranges ───
 const IMC_RANGES = [
-  { max: 18.5, label: 'Abaixo do peso', color: 'text-blue-400', bg: 'bg-blue-500/10' },
+  { max: 18.5, label: 'Abaixo do peso', color: 'text-brand-primary', bg: 'bg-brand-primary/10' },
   { max: 24.9, label: 'Peso normal', color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
   { max: 29.9, label: 'Sobrepeso', color: 'text-amber-400', bg: 'bg-amber-500/10' },
   { max: 34.9, label: 'Obesidade Grau I', color: 'text-orange-400', bg: 'bg-orange-500/10' },
@@ -382,8 +382,8 @@ export default function GuestCalculatorsPage() {
               <div className="mt-4 space-y-3">
                 <ResultCard label="Calorias diárias" value={macrosResult.calories.toLocaleString('pt-BR')} unit="kcal" accent />
                 <div className="grid grid-cols-3 gap-2">
-                  <div className="rounded-xl border border-blue-500/20 bg-blue-500/5 p-3 text-center">
-                    <p className="text-[10px] font-semibold uppercase text-blue-400">Proteína</p>
+                  <div className="rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-3 text-center">
+                    <p className="text-[10px] font-semibold uppercase text-brand-primary">Proteína</p>
                     <p className="mt-1 text-[18px] font-black text-white">{macrosResult.protein}g</p>
                   </div>
                   <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-3 text-center">

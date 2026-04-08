@@ -113,7 +113,7 @@ function SharePlanButton({ planName, totalDays }: { planName: string; totalDays:
             onClick={() => handleShare('copy')}
             className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-left text-[12px] font-medium text-text-primary hover:bg-white/6 transition-colors"
           >
-            <DSIcon name={copied ? 'check' : 'copy'} size={14} className={copied ? 'text-emerald-400' : 'text-blue-400'} />
+            <DSIcon name={copied ? 'check' : 'copy'} size={14} className={copied ? 'text-emerald-400' : 'text-brand-primary'} />
             {copied ? 'Copiado!' : 'Copiar link'}
           </button>
         </div>

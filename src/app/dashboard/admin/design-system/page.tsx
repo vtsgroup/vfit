@@ -691,9 +691,9 @@ export default function ShowcasePage() {
                   <ActionButton3D color="green" label="Gerar Treino" icon={<DSIcon name="sparkles" size={16} className="text-white" />} />
                   <ActionButton3D color="violet" label="Assistente IA" icon={<DSIcon name="brainCircuit" size={16} className="text-white" />} />
                   <ActionButton3D color="amber" label="Nova Cobranca" icon={<DSIcon name="dollar" size={16} className="text-white" />} />
-                  <ActionButton3D color="blue" label="Indicar" size="sm" icon={<DSIcon name="users" size={14} className="text-white" />} />
+                  <ActionButton3D color="teal" label="Indicar" size="sm" icon={<DSIcon name="users" size={14} className="text-white" />} />
                   <ActionButton3D color="rose" label="Remover" size="sm" icon={<DSIcon name="trash" size={14} className="text-white" />} />
-                  <ActionButton3D color="cyan" label="Exportar" size="sm" icon={<DSIcon name="download" size={14} className="text-white" />} />
+                  <ActionButton3D color="brand" label="Exportar" size="sm" icon={<DSIcon name="download" size={14} className="text-white" />} />
                   <ActionButton3D color="orange" label="Lembrete" size="sm" icon={<DSIcon name="bell" size={14} className="text-white" />} />
                 </div>
               </ShowcaseCard>
@@ -706,9 +706,9 @@ export default function ShowcasePage() {
                   <ActionCard3D color="green" icon={<DSIcon name="sparkles" size={22} className="text-white" />} label="Gerar Treino" description="IA personalizada" onClick={() => {}} />
                   <ActionCard3D color="violet" icon={<DSIcon name="brainCircuit" size={22} className="text-white" />} label="Assistente IA" description="Tire duvidas" onClick={() => {}} />
                   <ActionCard3D color="amber" icon={<DSIcon name="dollar" size={22} className="text-white" />} label="Nova Cobranca" description="PIX, boleto, cartao" onClick={() => {}} />
-                  <ActionCard3D color="cyan" icon={<DSIcon name="users" size={22} className="text-white" />} label="Novo Aluno" description="Cadastrar aluno" onClick={() => {}} />
+                  <ActionCard3D color="brand" icon={<DSIcon name="users" size={22} className="text-white" />} label="Novo Aluno" description="Cadastrar aluno" onClick={() => {}} />
                   <ActionCard3D color="rose" icon={<DSIcon name="heart" size={22} className="text-white" />} label="Avaliacoes" description="Composicao corporal" onClick={() => {}} />
-                  <ActionCard3D color="blue" icon={<DSIcon name="calendar" size={22} className="text-white" />} label="Agenda" description="Gerenciar horarios" onClick={() => {}} />
+                  <ActionCard3D color="teal" icon={<DSIcon name="calendar" size={22} className="text-white" />} label="Agenda" description="Gerenciar horarios" onClick={() => {}} />
                 </div>
               </ShowcaseCard>
 
@@ -2127,11 +2127,11 @@ export default function ShowcasePage() {
               {/* ── Tonal Glass ── */}
               <ShowcaseCard t={t} style={{ marginBottom: 20 }}>
                 <Label t={t}>Tonal Glass Surfaces</Label>
-                <p style={{ fontSize: 12, color: t.textMuted, marginBottom: 16 }}>Cards com tint semântico de cor — verde para receita, azul para alunos, âmbar para pagamentos.</p>
+                <p style={{ fontSize: 12, color: t.textMuted, marginBottom: 16 }}>Cards com tint semântico de cor — verde para receita e alunos, âmbar para pagamentos.</p>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 12 }}>
                   {[
                     { label: 'Revenue', bg: 'rgba(34,197,94,0.06)', border: 'rgba(34,197,94,0.14)', shadow: '0 4px 24px rgba(34,197,94,0.12)', icon: '22C55E', name: '--ds-glass-green' },
-                    { label: 'Students', bg: 'rgba(59,130,246,0.06)', border: 'rgba(59,130,246,0.14)', shadow: '0 4px 24px rgba(59,130,246,0.12)', icon: '3B82F6', name: '--ds-glass-blue' },
+                    { label: 'Students', bg: 'rgba(34,197,94,0.06)', border: 'rgba(34,197,94,0.14)', shadow: '0 4px 24px rgba(34,197,94,0.12)', icon: '22C55E', name: '--ds-glass-brand' },
                     { label: 'Payments', bg: 'rgba(245,158,11,0.06)', border: 'rgba(245,158,11,0.14)', shadow: '0 4px 24px rgba(245,158,11,0.12)', icon: 'F59E0B', name: '--ds-glass-amber' },
                     { label: 'AI / Plans', bg: 'rgba(139,92,246,0.06)', border: 'rgba(139,92,246,0.14)', shadow: '0 4px 24px rgba(139,92,246,0.12)', icon: '8B5CF6', name: '--ds-glass-purple' },
                     { label: 'Alerts', bg: 'rgba(239,68,68,0.06)', border: 'rgba(239,68,68,0.14)', shadow: '0 4px 24px rgba(239,68,68,0.12)', icon: 'EF4444', name: '--ds-glass-red' },

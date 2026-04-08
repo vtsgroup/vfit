@@ -43,7 +43,7 @@ import { useAuthStore } from '@/stores/auth-store'
 
 const categoryConfig: Record<string, { label: string; icon: DSIconName; color: string }> = {
   feature: { label: 'Funcionalidade', icon: 'lightbulb', color: 'bg-amber-400/10 text-amber-400' },
-  improvement: { label: 'Melhoria', icon: 'wrench', color: 'bg-blue-400/10 text-blue-400' },
+  improvement: { label: 'Melhoria', icon: 'wrench', color: 'bg-brand-primary/10 text-brand-primary' },
   bug: { label: 'Bug', icon: 'bug', color: 'bg-red-400/10 text-red-400' },
   ui: { label: 'Visual', icon: 'palette', color: 'bg-purple-400/10 text-purple-400' },
   other: { label: 'Outro', icon: 'helpCircle', color: 'bg-zinc-400/10 text-zinc-400' },
@@ -51,7 +51,7 @@ const categoryConfig: Record<string, { label: string; icon: DSIconName; color: s
 
 const statusConfig: Record<string, { label: string; color: string; icon: DSIconName }> = {
   pending: { label: 'Pendente', color: 'bg-warning/10 text-warning', icon: 'clock' },
-  reviewing: { label: 'Analisando', color: 'bg-blue-400/10 text-blue-400', icon: 'eye' },
+  reviewing: { label: 'Analisando', color: 'bg-brand-primary/10 text-brand-primary', icon: 'eye' },
   planned: { label: 'Planejado', color: 'bg-purple-400/10 text-purple-400', icon: 'sparkles' },
   in_progress: { label: 'Em andamento', color: 'bg-brand-primary/10 text-brand-primary', icon: 'loader' },
   done: { label: 'Concluído', color: 'bg-success/10 text-success', icon: 'checkCircle2' },
@@ -60,7 +60,7 @@ const statusConfig: Record<string, { label: string; color: string; icon: DSIconN
 
 const priorityConfig: Record<string, { label: string; color: string }> = {
   low: { label: 'Baixa', color: 'bg-zinc-400/10 text-zinc-400' },
-  normal: { label: 'Normal', color: 'bg-blue-400/10 text-blue-400' },
+  normal: { label: 'Normal', color: 'bg-brand-primary/10 text-brand-primary' },
   high: { label: 'Alta', color: 'bg-warning/10 text-warning' },
   urgent: { label: 'Urgente', color: 'bg-error/10 text-error' },
 }
@@ -81,24 +81,24 @@ function AdminMessageBubble({ reply }: { reply: FeedbackReply }) {
     <div className={cn('flex gap-2', isUser ? 'flex-row' : 'flex-row-reverse')}>
       <div className={cn(
         'flex h-6 w-6 shrink-0 items-center justify-center rounded-full mt-1',
-        isUser && 'bg-blue-500/20',
+        isUser && 'bg-brand-primary/20',
         isAdmin && 'bg-emerald-500/20',
         isAI && 'bg-purple-500/20',
       )}>
-        {isUser && <DSIcon name="user" size={12} className="text-blue-400" />}
+        {isUser && <DSIcon name="user" size={12} className="text-brand-primary" />}
         {isAdmin && <DSIcon name="shield" size={12} className="text-emerald-400" />}
         {isAI && <DSIcon name="bot" size={12} className="text-purple-400" />}
       </div>
 
       <div className={cn(
         'max-w-[75%] rounded-2xl px-3 py-2',
-        isUser && 'rounded-tl-md bg-blue-500/10 border border-blue-500/15',
+        isUser && 'rounded-tl-md bg-brand-primary/10 border border-brand-primary/15',
         isAdmin && 'rounded-tr-md bg-emerald-500/10 border border-emerald-500/15',
         isAI && 'rounded-tr-md bg-purple-500/10 border border-purple-500/15',
       )}>
         <p className={cn(
           'text-[9px] font-semibold mb-0.5',
-          isUser && 'text-blue-400',
+          isUser && 'text-brand-primary',
           isAdmin && 'text-emerald-400',
           isAI && 'text-purple-400',
         )}>
@@ -440,7 +440,7 @@ export default function AdminFeedbackPage() {
                       <p className="mt-1 text-xs text-text-muted line-clamp-1">
                         {item.last_reply_type === 'ai' && <DSIcon name="bot" size={12} className="mr-0.5 inline text-purple-400" />}
                         {item.last_reply_type === 'admin' && <DSIcon name="shield" size={12} className="mr-0.5 inline text-emerald-400" />}
-                        {item.last_reply_type === 'user' && <DSIcon name="user" size={12} className="mr-0.5 inline text-blue-400" />}
+                        {item.last_reply_type === 'user' && <DSIcon name="user" size={12} className="mr-0.5 inline text-brand-primary" />}
                         {item.last_reply}
                       </p>
                     )}

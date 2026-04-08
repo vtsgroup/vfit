@@ -22,8 +22,8 @@ const MILESTONES = [
   { days: 14, label: '2 semanas', icon: '💪', color: 'text-emerald-400', bg: 'bg-emerald-400/10' },
   { days: 30, label: '1 mês', icon: '🏆', color: 'text-amber-400', bg: 'bg-amber-400/10' },
   { days: 60, label: '2 meses', icon: '🌟', color: 'text-purple-400', bg: 'bg-purple-400/10' },
-  { days: 90, label: '3 meses', icon: '👑', color: 'text-cyan-400', bg: 'bg-cyan-400/10' },
-  { days: 180, label: '6 meses', icon: '💎', color: 'text-blue-400', bg: 'bg-blue-400/10' },
+  { days: 90, label: '3 meses', icon: '👑', color: 'text-brand-primary', bg: 'bg-brand-primary/10' },
+  { days: 180, label: '6 meses', icon: '💎', color: 'text-brand-primary', bg: 'bg-brand-primary/10' },
   { days: 365, label: '1 ano', icon: '🏅', color: 'text-rose-400', bg: 'bg-rose-400/10' },
 ] as const
 
@@ -126,7 +126,7 @@ export default function StreaksPage() {
 
             {/* Total */}
             <div className="glass-card flex flex-col items-center rounded-xl p-3">
-              <DSIcon name="calendar" size={18} className="mb-1 text-blue-400" />
+              <DSIcon name="calendar" size={18} className="mb-1 text-brand-primary" />
               <p className="text-lg font-black text-text-primary">{totalDays}</p>
               <p className="text-[10px] text-text-muted">Total</p>
             </div>

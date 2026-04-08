@@ -52,7 +52,7 @@ export function ArticleShare({ title, slug }: ArticleShareProps) {
         href={`https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/8 bg-white/3 text-zinc-400 transition-all duration-300 hover:border-blue-400/30 hover:text-blue-400 hover:shadow-[0_0_12px_rgba(96,165,250,0.12)]"
+        className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/8 bg-white/3 text-zinc-400 transition-all duration-300 hover:border-brand-primary/30 hover:text-brand-primary hover:shadow-[0_0_12px_rgba(34,197,94,0.12)]"
         aria-label="Compartilhar no Twitter"
       >
         <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor">
@@ -64,7 +64,7 @@ export function ArticleShare({ title, slug }: ArticleShareProps) {
         href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/8 bg-white/3 text-zinc-400 transition-all duration-300 hover:border-blue-500/30 hover:text-blue-500 hover:shadow-[0_0_12px_rgba(59,130,246,0.12)]"
+        className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/8 bg-white/3 text-zinc-400 transition-all duration-300 hover:border-brand-primary/30 hover:text-brand-primary hover:shadow-[0_0_12px_rgba(34,197,94,0.12)]"
         aria-label="Compartilhar no LinkedIn"
       >
         <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor">

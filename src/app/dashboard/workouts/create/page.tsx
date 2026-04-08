@@ -90,6 +90,7 @@ export default function CreateWorkoutPage() {
   const [showPicker, setShowPicker] = useState(false)
   const [showQuickTemplates, setShowQuickTemplates] = useState(false)
   const [exerciseSearch, setExerciseSearch] = useState('')
+  const [replaceIndex, setReplaceIndex] = useState<number | null>(null)
 
   // AI states
   const [showAIModal, setShowAIModal] = useState(false)
@@ -208,7 +209,40 @@ export default function CreateWorkoutPage() {
     ? form.name && form.start_date
     : form.student_id && form.name && form.start_date
 
+  function closePicker() {
+    setShowPicker(false)
+    setExerciseSearch('')
+    setReplaceIndex(null)
+  }
+
+  function openAddPicker() {
+    setReplaceIndex(null)
+    setShowPicker(true)
+  }
+
+  function openReplacePicker(index: number) {
+    setReplaceIndex(index)
+    setShowPicker(true)
+  }
+
   function addExercise(exercise: D1Exercise) {
+    if (replaceIndex !== null) {
+      setExercises((prev) =>
+        prev.map((item, idx) =>
+          idx === replaceIndex
+            ? {
+                ...item,
+                exercise_id: exercise.id,
+                name: exercise.name_pt || exercise.name,
+              }
+            : item
+        )
+      )
+      toast.success('Exercício substituído')
+      closePicker()
+      return
+    }
+
     const newExercise: SelectedExercise = {
       exercise_id: exercise.id,
       name: exercise.name_pt || exercise.name,
@@ -220,8 +254,7 @@ export default function CreateWorkoutPage() {
       order_index: exercises.length,
     }
     setExercises((prev) => [...prev, newExercise])
-    setShowPicker(false)
-    setExerciseSearch('')
+    closePicker()
   }
 
   function removeExercise(index: number) {
@@ -662,7 +695,7 @@ export default function CreateWorkoutPage() {
                     <DSIcon name="sparkles" size={14} />
                     IA
                   </Button>
-                  <Button size="sm" variant="outline" onClick={() => setShowPicker(true)}>
+                  <Button size="sm" variant="outline" onClick={openAddPicker}>
                     <DSIcon name="plus" size={16} />
                     Manual
                   </Button>
@@ -685,7 +718,7 @@ export default function CreateWorkoutPage() {
                       <DSIcon name="sparkles" size={16} />
                       Gerar com IA
                     </Button>
-                    <Button size="sm" variant="outline" onClick={() => setShowPicker(true)}>
+                    <Button size="sm" variant="outline" onClick={openAddPicker}>
                       <DSIcon name="plus" size={16} />
                       Adicionar manual
                     </Button>
@@ -707,6 +740,7 @@ export default function CreateWorkoutPage() {
                           total={exercises.length}
                           onUpdate={updateExercise}
                           onRemove={removeExercise}
+                          onReplace={openReplacePicker}
                           onMove={moveExercise}
                         />
                       ))}
@@ -752,8 +786,11 @@ export default function CreateWorkoutPage() {
             search={exerciseSearch}
             onSearchChange={setExerciseSearch}
             onSelect={addExercise}
-            onClose={() => { setShowPicker(false); setExerciseSearch('') }}
-            selectedIds={exercises.map((e) => e.exercise_id)}
+            onClose={closePicker}
+            title={replaceIndex !== null ? 'Substituir exercício' : 'Adicionar exercício'}
+            selectedIds={exercises
+              .filter((_, idx) => idx !== replaceIndex)
+              .map((e) => e.exercise_id)}
           />
         )}
 
@@ -860,7 +897,7 @@ function WorkoutPreview({
             <p className="text-[10px] text-text-muted">Séries totais</p>
           </div>
           <div className="rounded-xl bg-black/5 dark:bg-white/5 p-3 text-center">
-            <DSIcon name="clock" size={20} className="mx-auto text-cyan-400" />
+            <DSIcon name="clock" size={20} className="mx-auto text-brand-primary" />
             <p className="mt-1 text-lg font-bold text-text-primary">~{estimatedMinutes}min</p>
             <p className="text-[10px] text-text-muted">Estimativa</p>
           </div>
@@ -1313,6 +1350,7 @@ function SortableExerciseFormRow(props: {
   total: number
   onUpdate: (index: number, field: keyof SelectedExercise, value: string | number) => void
   onRemove: (index: number) => void
+  onReplace: (index: number) => void
   onMove: (index: number, direction: 'up' | 'down') => void
 }) {
   const {
@@ -1352,6 +1390,7 @@ function ExerciseFormRow({
   total,
   onUpdate,
   onRemove,
+  onReplace,
   onMove,
   dragHandleProps,
   isDragging,
@@ -1361,6 +1400,7 @@ function ExerciseFormRow({
   total: number
   onUpdate: (index: number, field: keyof SelectedExercise, value: string | number) => void
   onRemove: (index: number) => void
+  onReplace: (index: number) => void
   onMove: (index: number, direction: 'up' | 'down') => void
   dragHandleProps?: Record<string, unknown>
   isDragging?: boolean
@@ -1383,7 +1423,15 @@ function ExerciseFormRow({
           {index + 1}
         </span>
         <p className="flex-1 text-sm font-medium text-text-primary truncate">{exercise.name}</p>
-        <button onClick={() => onRemove(index)} className="text-text-muted hover:text-error">
+        <button
+          type="button"
+          onClick={() => onReplace(index)}
+          className="inline-flex items-center gap-1 rounded-lg border border-brand-primary/15 bg-brand-primary/6 px-2 py-1 text-[11px] font-medium text-brand-primary hover:bg-brand-primary/10"
+        >
+          <DSIcon name="rotateCcw" size={14} />
+          Substituir
+        </button>
+        <button type="button" onClick={() => onRemove(index)} className="text-text-muted hover:text-error">
           <DSIcon name="trash" size={16} />
         </button>
       </div>
@@ -1476,7 +1524,7 @@ const QUICK_TEMPLATES: QuickTemplate[] = [
     icon: 'A',
     description: 'ABC Split · Peito e tríceps com empurrar',
     split: 'ABC',
-    color: 'blue',
+    color: 'brand',
     exercises: [
       { nameSearch: 'bench press', sets: 4, reps: '10-12', rest_seconds: 90, load: '' },
       { nameSearch: 'incline bench press', sets: 3, reps: '10-12', rest_seconds: 90, load: '' },
@@ -1541,7 +1589,7 @@ const QUICK_TEMPLATES: QuickTemplate[] = [
     icon: 'pull',
     description: 'Push/Pull/Legs · Dia de puxar',
     split: 'PPL',
-    color: 'cyan',
+    color: 'green',
     exercises: [
       { nameSearch: 'deadlift', sets: 4, reps: '5-6', rest_seconds: 180, load: '' },
       { nameSearch: 'lat pulldown', sets: 4, reps: '8-10', rest_seconds: 90, load: '' },
@@ -1602,7 +1650,7 @@ const QUICK_TEMPLATES: QuickTemplate[] = [
 ]
 
 const SPLIT_COLORS: Record<string, string> = {
-  ABC: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+  ABC: 'bg-brand-primary/10 text-brand-primary border-brand-primary/20',
   PPL: 'bg-rose-500/10 text-rose-400 border-rose-500/20',
   'Upper/Lower': 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20',
 }
@@ -1793,6 +1841,7 @@ function ExercisePicker({
   onSelect,
   onClose,
   selectedIds,
+  title,
 }: {
   exercises: D1Exercise[]
   search: string
@@ -1800,16 +1849,9 @@ function ExercisePicker({
   onSelect: (exercise: D1Exercise) => void
   onClose: () => void
   selectedIds: string[]
+  title?: string
 }) {
-  const grouped = useMemo(() => {
-    const map = new Map<string, D1Exercise[]>()
-    exercises.forEach((ex) => {
-      const group = ex.muscle_group_id || 'outro'
-      if (!map.has(group)) map.set(group, [])
-      map.get(group)!.push(ex)
-    })
-    return map
-  }, [exercises])
+  const [muscleFilter, setMuscleFilter] = useState('')
 
   const groupLabels: Record<string, string> = {
     chest: 'Peito',
@@ -1832,6 +1874,31 @@ function ExercisePicker({
     'lower-back': 'Lombar',
   }
 
+  const filteredExercises = useMemo(
+    () => exercises.filter((ex) => !muscleFilter || ex.muscle_group_id === muscleFilter),
+    [exercises, muscleFilter]
+  )
+
+  const grouped = useMemo(() => {
+    const map = new Map<string, D1Exercise[]>()
+    filteredExercises.forEach((ex) => {
+      const group = ex.muscle_group_id || 'outro'
+      if (!map.has(group)) map.set(group, [])
+      map.get(group)!.push(ex)
+    })
+    return map
+  }, [filteredExercises])
+
+  const filterOptions = useMemo(
+    () => [
+      { value: '', label: 'Todos os músculos' },
+      ...Array.from(new Set(exercises.map((ex) => ex.muscle_group_id).filter(Boolean)))
+        .sort((a, b) => (groupLabels[a] || a).localeCompare(groupLabels[b] || b, 'pt-BR'))
+        .map((groupId) => ({ value: groupId, label: groupLabels[groupId] || groupId })),
+    ],
+    [exercises]
+  )
+
   return (
     <>
       <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm" onClick={onClose} />
@@ -1841,13 +1908,13 @@ function ExercisePicker({
         style={{ bottom: 'calc(5rem + env(safe-area-inset-bottom, 0px))' }}
       >
         <div className="flex items-center justify-between border-b border-border-light px-4 py-3">
-          <h3 className="font-semibold text-text-primary">Adicionar Exercício</h3>
+          <h3 className="font-semibold text-text-primary">{title || 'Adicionar exercício'}</h3>
           <button onClick={onClose} className="text-text-muted hover:text-text-primary">
             <DSIcon name="x" size={20} />
           </button>
         </div>
 
-        <div className="border-b border-border-light px-4 py-3">
+        <div className="space-y-3 border-b border-border-light px-4 py-3">
           <MD3Input
             label="Buscar exercício"
             placeholder="Buscar exercício..."
@@ -1856,12 +1923,22 @@ function ExercisePicker({
             autoFocus
             leadingIcon={<DSIcon name="search" size={16} />}
           />
+          <div>
+            <label className="mb-1 block text-[11px] font-medium uppercase tracking-[0.08em] text-text-muted">
+              Filtrar por músculo
+            </label>
+            <StyledSelect
+              value={muscleFilter}
+              onChange={setMuscleFilter}
+              options={filterOptions}
+            />
+          </div>
         </div>
 
         <div className="flex-1 overflow-y-auto px-4 py-3">
-          {exercises.length === 0 ? (
+          {filteredExercises.length === 0 ? (
             <p className="py-8 text-center text-sm text-text-muted">
-              Nenhum exercício encontrado.
+              Nenhum exercício encontrado para o filtro atual.
             </p>
           ) : (
             Array.from(grouped.entries()).map(([groupId, groupExercises]) => (

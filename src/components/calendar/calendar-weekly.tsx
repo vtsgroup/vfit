@@ -48,12 +48,12 @@ type CalendarEvent = {
   meetingUrl?: string
   start: string // ISO
   end: string // ISO
-  color: 'blue' | 'green' | 'purple' | 'orange' | 'red'
+  color: 'brand' | 'green' | 'purple' | 'orange' | 'red'
   status?: EventStatus
 }
 
 const COLOR_STYLES: Record<CalendarEvent['color'], string> = {
-  blue: 'bg-blue-600 text-white',
+  brand: 'bg-brand-primary text-white',
   green: 'bg-emerald-600 text-white',
   purple: 'bg-purple-600 text-white',
   orange: 'bg-orange-600 text-white',
@@ -133,7 +133,7 @@ function apiToUi(e: CalendarEventApi): CalendarEvent {
     end: e.end_at,
     notes: e.notes ?? undefined,
     meetingUrl: e.meeting_url ?? undefined,
-    color: (e.color as CalendarEvent['color']) || 'blue',
+    color: e.color || 'brand',
     status: (e.status as EventStatus) || undefined,
   }
 }
@@ -655,7 +655,7 @@ function EventEditor({
   const [title, setTitle] = useState('')
   const [notes, setNotes] = useState('')
   const [meetingUrl, setMeetingUrl] = useState('')
-  const [color, setColor] = useState<CalendarEvent['color']>('blue')
+  const [color, setColor] = useState<CalendarEvent['color']>('brand')
   const [status, setStatus] = useState<EventStatus>('available')
   const [startLocal, setStartLocal] = useState(() => localInputDefault(1))
   const [endLocal, setEndLocal] = useState(() => localInputDefault(2))
@@ -683,7 +683,7 @@ function EventEditor({
       setTitle('')
       setNotes('')
       setMeetingUrl('')
-      setColor('blue')
+      setColor('brand')
       setStatus('available')
       setStartLocal(localInputDefault(1))
       setEndLocal(localInputDefault(2))
@@ -806,7 +806,7 @@ function EventEditor({
                 value={color}
                 onChange={(v) => setColor(v as CalendarEvent['color'])}
                 options={[
-                  { value: 'blue', label: 'Azul' },
+                  { value: 'brand', label: 'Verde VFIT' },
                   { value: 'green', label: 'Verde' },
                   { value: 'purple', label: 'Roxo' },
                   { value: 'orange', label: 'Laranja' },

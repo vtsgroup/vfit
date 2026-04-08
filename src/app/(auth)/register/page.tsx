@@ -132,7 +132,7 @@ export default function RegisterPage() {
             </div>
           </Link>
 
-          {/* Student Card — 3D with sky accent */}
+          {/* Student Card — 3D with brand accent */}
           <Link
             href={`/register/student${refQuery}`}
             className="group relative block rounded-2xl bg-linear-to-b from-[#0F1A2E] to-[#0B1322] border border-white/6 p-6 transition-all duration-300 shadow-[0_4px_0_0_#1e3a5f,0_6px_20px_rgba(0,0,0,0.3)] hover:-translate-y-1 hover:shadow-[0_6px_0_0_#1e3a5f,0_10px_30px_rgba(56,189,248,0.1)] active:translate-y-0.5 active:shadow-[0_2px_0_0_#1e3a5f,0_3px_8px_rgba(0,0,0,0.3)]"
@@ -145,13 +145,13 @@ export default function RegisterPage() {
             <div className="relative z-10">
               {/* Icon + Title + Arrow */}
               <div className="flex items-center gap-4 mb-4">
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-linear-to-br from-sky-400 to-sky-600 shadow-[0_4px_12px_rgba(56,189,248,0.3)]">
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-linear-to-br from-brand-primary to-emerald-600 shadow-[0_4px_12px_rgba(34,197,94,0.3)]">
                   <DSIcon name="graduationCap" size={28} className="text-white" />
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
                     <h3 className="text-[18px] text-white" style={headingFont}>Aluno</h3>
-                    <span className="rounded-full bg-sky-400/15 px-2 py-0.5 text-[8px] font-bold uppercase text-sky-400" style={monoLabel}>
+                    <span className="rounded-full bg-brand-primary/15 px-2 py-0.5 text-[8px] font-bold uppercase text-brand-primary" style={monoLabel}>
                       FREE
                     </span>
                   </div>
@@ -159,7 +159,7 @@ export default function RegisterPage() {
                     Acesse treinos, compre no marketplace e acompanhe sua evolução
                   </p>
                 </div>
-                <DSIcon name="arrowRight" className="text-zinc-600 transition-all group-hover:translate-x-1.5 group-hover:text-sky-400" />
+                <DSIcon name="arrowRight" className="text-zinc-600 transition-all group-hover:translate-x-1.5 group-hover:text-brand-primary" />
               </div>
 
               {/* Feature pills — only included ones */}
@@ -170,9 +170,9 @@ export default function RegisterPage() {
               </div>
 
               {/* Info note */}
-              <div className="mt-3 flex items-start gap-2 rounded-xl bg-sky-500/6 border border-sky-400/10 px-3 py-2">
-                <DSIcon name="shield" size={14} className="text-sky-400 shrink-0 mt-0.5" />
-                <p className="text-[10px] text-sky-300/80 leading-relaxed">
+              <div className="mt-3 flex items-start gap-2 rounded-xl bg-brand-primary/6 border border-brand-primary/10 px-3 py-2">
+                <DSIcon name="shield" size={14} className="text-brand-primary shrink-0 mt-0.5" />
+                <p className="text-[10px] text-brand-primary/80 leading-relaxed">
                   Cadastre-se sem personal — compre treinos no marketplace. Vincule-se a um personal a qualquer momento.
                 </p>
               </div>

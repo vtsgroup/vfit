@@ -289,7 +289,7 @@ export function StudentDashboard() {
         <StudentMiniKpi
           label="Último pagamento"
           value={latestPaymentDate ? new Date(latestPaymentDate).toLocaleDateString('pt-BR') : 'Nenhum'}
-          icon={<DSIcon name="creditCard" size={16} className="text-cyan-500 dark:text-cyan-400" />}
+          icon={<DSIcon name="creditCard" size={16} className="text-brand-primary" />}
         />
       </div>
 
@@ -619,7 +619,7 @@ function StudentHeroCard({
             href="/dashboard/payments"
             icon="payments"
             label="Pagamentos"
-            accent="cyan"
+            accent="brand"
           />
         </div>
       </div>
@@ -630,7 +630,7 @@ function StudentHeroCard({
 // ── Quick Action Button ──────────────────────────────────────────────────────
 
 type QuickActionIcon = 'startWorkout' | 'assessment' | 'payments'
-type AccentColor = 'emerald' | 'violet' | 'cyan' | 'orange'
+type AccentColor = 'emerald' | 'violet' | 'brand' | 'orange'
 
 const QUICK_ACTION_SVGS: Record<QuickActionIcon, React.ReactNode> = {
   startWorkout: (
@@ -678,12 +678,12 @@ const ACCENT_CONFIG: Record<AccentColor, { border: string; bg: string; iconBg: s
     text: 'text-violet-300',
     glow: 'shadow-[0_0_16px_rgba(139,92,246,0.12)]',
   },
-  cyan: {
-    border: 'border-cyan-500/25',
-    bg: 'bg-cyan-500/6 hover:bg-cyan-500/12',
-    iconBg: 'bg-cyan-500/15',
-    icon: 'text-cyan-400',
-    text: 'text-cyan-300',
+  brand: {
+    border: 'border-brand-primary/25',
+    bg: 'bg-brand-primary/6 hover:bg-brand-primary/12',
+    iconBg: 'bg-brand-primary/15',
+    icon: 'text-brand-primary',
+    text: 'text-brand-primary',
     glow: '',
   },
   orange: {

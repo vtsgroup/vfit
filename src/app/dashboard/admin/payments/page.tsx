@@ -196,7 +196,7 @@ export default function AdminPaymentsPage() {
             icon="trendingUp"
             label="Receita Confirmada"
             value={adminStats?.asaas_statistics?.income?.confirmed}
-            accent="from-blue-500 to-cyan-500"
+            accent="from-brand-primary to-brand-accent"
             description="Cobranças confirmadas"
           />
           <BalanceCard

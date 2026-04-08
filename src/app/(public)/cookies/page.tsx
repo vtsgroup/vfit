@@ -60,7 +60,7 @@ function CookieCard({ name, type, purpose, duration, required }: {
           <span className={`ml-2 inline-flex rounded-full px-2 py-0.5 text-[10px] font-medium ${
             required
               ? 'bg-emerald-500/10 text-emerald-400'
-              : 'bg-blue-500/10 text-blue-400'
+              : 'bg-brand-primary/10 text-brand-primary'
           }`}>
             {type}
           </span>

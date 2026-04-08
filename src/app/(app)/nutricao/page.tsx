@@ -2,12 +2,6 @@
  * src/app/(app)/nutricao/page.tsx
  *
  * Nutrição — Tracker de refeições e macros diários (VFIT B2C)
- *
- * Seções:
- * 1. Macros do dia (calorias, proteína, carbs, gordura) com barras de progresso
- * 2. Lista de refeições agrupadas por tipo
- * 3. Busca de alimentos + registrar refeição
- * 4. Navegação de data (hoje, ontem, etc.)
  */
 
 'use client'
@@ -17,6 +11,10 @@ import Link from 'next/link'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { api } from '@/lib/api-client'
+import { MacroRingChart } from '@/components/nutrition/macro-ring-chart'
+import { BarcodeScanner } from '@/components/nutrition/barcode-scanner'
+import { FoodCamera } from '@/components/nutrition/food-camera'
 import {
   useMealsToday,
   useFoodSearch,
@@ -28,6 +26,32 @@ import {
   type MealType,
   type VfitFood,
 } from '@/hooks/use-vfit-nutrition'
+
+// ── Food category visual config ────────────────────────
+
+const FOOD_CATEGORY_CONFIG: Record<string, { emoji: string; color: string; bg: string }> = {
+  'cereais e derivados': { emoji: '🌾', color: 'text-amber-400', bg: 'bg-amber-400/12' },
+  'leguminosas': { emoji: '🫘', color: 'text-green-400', bg: 'bg-green-400/12' },
+  'carnes': { emoji: '🥩', color: 'text-red-400', bg: 'bg-red-400/12' },
+  'aves': { emoji: '🍗', color: 'text-orange-400', bg: 'bg-orange-400/12' },
+  'peixes': { emoji: '🐟', color: 'text-blue-400', bg: 'bg-blue-400/12' },
+  'laticínios': { emoji: '🥛', color: 'text-zinc-300', bg: 'bg-zinc-300/12' },
+  'frutas': { emoji: '🍎', color: 'text-rose-400', bg: 'bg-rose-400/12' },
+  'verduras': { emoji: '🥬', color: 'text-emerald-400', bg: 'bg-emerald-400/12' },
+  'legumes': { emoji: '🥕', color: 'text-orange-400', bg: 'bg-orange-400/12' },
+  'ovos': { emoji: '🥚', color: 'text-yellow-400', bg: 'bg-yellow-400/12' },
+  'gorduras': { emoji: '🫙', color: 'text-amber-500', bg: 'bg-amber-500/12' },
+  'açúcares': { emoji: '🍬', color: 'text-pink-400', bg: 'bg-pink-400/12' },
+  'bebidas': { emoji: '🥤', color: 'text-brand-primary', bg: 'bg-brand-primary/12' },
+  'industrializado': { emoji: '📦', color: 'text-zinc-400', bg: 'bg-zinc-400/12' },
+  'suplementos': { emoji: '💊', color: 'text-violet-400', bg: 'bg-violet-400/12' },
+  'default': { emoji: '🍽️', color: 'text-zinc-400', bg: 'bg-zinc-400/12' },
+}
+
+function getFoodCategoryConfig(category: string) {
+  const key = (category || '').toLowerCase()
+  return FOOD_CATEGORY_CONFIG[key] ?? FOOD_CATEGORY_CONFIG['default']
+}
 
 // ── Helpers ────────────────────────────────────────────
 
@@ -56,16 +80,18 @@ export default function NutricaoPage() {
   const [selectedMealType, setSelectedMealType] = useState<MealType>('lunch')
   const [selectedFood, setSelectedFood] = useState<VfitFood | null>(null)
   const [quantity, setQuantity] = useState(100)
+  const [showBarcode, setShowBarcode] = useState(false)
+  const [showFoodCamera, setShowFoodCamera] = useState(false)
 
   const { data: dailyData, isLoading } = useMealsToday(selectedDate)
   const { data: foods, isLoading: searchLoading } = useFoodSearch(searchQuery)
-  const { data: targets = { calories: 2000, protein: 150, carbs: 250, fat: 65 } } = useNutritionTargets()
+  const { data: targets = { calories: 2000, protein: 150, carbs: 250, fat: 65 } } =
+    useNutritionTargets()
   const logMeal = useLogMeal()
 
   const totals = dailyData?.totals ?? { calories: 0, protein: 0, carbs: 0, fat: 0 }
-  const meals = dailyData?.meals ?? []
+  const meals = useMemo(() => dailyData?.meals ?? [], [dailyData?.meals])
 
-  // Agrupar refeições por tipo
   const grouped = useMemo(() => {
     const map = new Map<MealType, typeof meals>()
     for (const m of meals) {
@@ -75,6 +101,28 @@ export default function NutricaoPage() {
     }
     return map
   }, [meals])
+
+  async function handleBarcodeDetected(code: string) {
+    setShowBarcode(false)
+    try {
+      const res = await api.get<{ source: 'local' | 'openfoodfacts'; food?: VfitFood }>(
+        `/vfit/food-barcode/${code}`
+      )
+      if (res.data?.food) {
+        setSelectedFood(res.data.food)
+        setQuantity(res.data.food.standard_portion_g || 100)
+        setShowSearch(true)
+      }
+    } catch {
+      // silently ignore
+    }
+  }
+
+  function handleFoodCameraSearch(query: string) {
+    setShowFoodCamera(false)
+    setSearchQuery(query)
+    setShowSearch(true)
+  }
 
   function handleLogMeal() {
     if (!selectedFood) return
@@ -99,7 +147,7 @@ export default function NutricaoPage() {
   return (
     <div className="flex min-h-screen flex-col bg-bg-primary pb-24">
       <div className="space-y-5 px-4 pt-1">
-        {/* Action button — add food */}
+        {/* Action button */}
         <div className="flex justify-end">
           <button
             onClick={() => setShowSearch(true)}
@@ -121,10 +169,12 @@ export default function NutricaoPage() {
             {getDateLabel(selectedDate)}
           </span>
           <button
-            onClick={() => setSelectedDate((d) => {
-              const next = shiftDate(d, 1)
-              return next > today ? d : next
-            })}
+            onClick={() =>
+              setSelectedDate((d) => {
+                const next = shiftDate(d, 1)
+                return next > today ? d : next
+              })
+            }
             disabled={selectedDate === today}
             className={cn(
               'flex h-8 w-8 items-center justify-center rounded-full bg-bg-secondary transition-colors',
@@ -137,62 +187,24 @@ export default function NutricaoPage() {
           </button>
         </div>
 
-        {/* ═══ Macros Overview ═══ */}
-        <section className="glass-card">
-          <h2 className="mb-3 text-xs font-bold uppercase tracking-wider text-text-muted">
-            Resumo do Dia
-          </h2>
-
+        {/* ═══ Macros Overview — MacroRingChart ═══ */}
+        <section className="glass-card flex flex-col items-center py-4">
           {isLoading ? (
-            <div className="flex items-center justify-center py-6">
+            <div className="flex items-center justify-center py-10">
               <div className="h-6 w-6 animate-spin rounded-full border-2 border-brand-primary border-t-transparent" />
             </div>
           ) : (
-            <>
-              {/* Calories — big number */}
-              <div className="mb-4 text-center">
-                <span className="text-3xl font-extrabold text-text-primary">
-                  {Math.round(totals.calories)}
-                </span>
-                <span className="ml-1 text-sm text-text-muted">
-                  / {targets.calories} kcal
-                </span>
-                <div className="mx-auto mt-2 h-2 w-full max-w-xs overflow-hidden rounded-full bg-bg-tertiary">
-                  <div
-                    className="h-full rounded-full bg-brand-primary transition-all duration-500"
-                    style={{ width: `${Math.min((totals.calories / targets.calories) * 100, 100)}%` }}
-                  />
-                </div>
-              </div>
-
-              {/* Macros grid */}
-              <div className="grid grid-cols-3 gap-3">
-                <MacroCard
-                  label="Proteína"
-                  value={totals.protein}
-                  target={targets.protein}
-                  unit="g"
-                  color="text-blue-400"
-                  bgColor="bg-blue-400"
-                />
-                <MacroCard
-                  label="Carboidrato"
-                  value={totals.carbs}
-                  target={targets.carbs}
-                  unit="g"
-                  color="text-amber-400"
-                  bgColor="bg-amber-400"
-                />
-                <MacroCard
-                  label="Gordura"
-                  value={totals.fat}
-                  target={targets.fat}
-                  unit="g"
-                  color="text-red-400"
-                  bgColor="bg-red-400"
-                />
-              </div>
-            </>
+            <MacroRingChart
+              calories={totals.calories}
+              calorieTarget={targets.calories}
+              protein={totals.protein}
+              proteinTarget={targets.protein}
+              carbs={totals.carbs}
+              carbsTarget={targets.carbs}
+              fat={totals.fat}
+              fatTarget={targets.fat}
+              size={220}
+            />
           )}
         </section>
 
@@ -208,14 +220,8 @@ export default function NutricaoPage() {
               <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/8">
                 <DSIcon name="plus" size={24} className="text-brand-primary" />
               </div>
-              <p className="text-sm text-text-secondary">
-                Nenhuma refeição registrada
-              </p>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowSearch(true)}
-              >
+              <p className="text-sm text-text-secondary">Nenhuma refeição registrada</p>
+              <Button variant="ghost" size="sm" onClick={() => setShowSearch(true)}>
                 <DSIcon name="plus" size={16} />
                 Adicionar Refeição
               </Button>
@@ -223,7 +229,14 @@ export default function NutricaoPage() {
           ) : (
             <div className="space-y-3">
               {(
-                ['breakfast', 'snack', 'lunch', 'pre_workout', 'post_workout', 'dinner'] as MealType[]
+                [
+                  'breakfast',
+                  'snack',
+                  'lunch',
+                  'pre_workout',
+                  'post_workout',
+                  'dinner',
+                ] as MealType[]
               ).map((type) => {
                 const items = grouped.get(type)
                 if (!items?.length) return null
@@ -245,13 +258,11 @@ export default function NutricaoPage() {
                             <p className="truncate text-sm font-medium text-text-primary">
                               {meal.food_name}
                             </p>
-                            <p className="text-xs text-text-muted">
-                              {meal.quantity_g}g
-                            </p>
+                            <p className="text-xs text-text-muted">{meal.quantity_g}g</p>
                           </div>
                           <div className="flex items-center gap-3 text-xs text-text-secondary">
                             <span>{Math.round(meal.calories_total)} kcal</span>
-                            <span className="text-blue-400">
+                            <span className="text-brand-primary">
                               {formatMacro(meal.protein_total)}p
                             </span>
                           </div>
@@ -287,7 +298,7 @@ export default function NutricaoPage() {
       {showSearch && (
         <div className="fixed inset-0 z-50 flex flex-col bg-bg-primary">
           {/* Modal header */}
-          <header className="flex items-center gap-3 border-b border-border-light/20 px-4 py-3">
+          <header className="flex items-center gap-3 border-b border-white/8 px-4 py-3">
             <button
               onClick={() => {
                 setShowSearch(false)
@@ -298,9 +309,33 @@ export default function NutricaoPage() {
             >
               <DSIcon name="x" size={20} className="text-text-primary" />
             </button>
-            <h2 className="text-base font-bold text-text-primary">
+            <h2 className="flex-1 text-base font-bold text-text-primary">
               {selectedFood ? 'Registrar Refeição' : 'Buscar Alimento'}
             </h2>
+            {!selectedFood && (
+              <>
+                <button
+                  onClick={() => {
+                    setShowSearch(false)
+                    setShowBarcode(true)
+                  }}
+                  title="Escanear código de barras"
+                  className="flex h-8 w-8 items-center justify-center rounded-full bg-bg-secondary text-text-secondary transition-colors hover:bg-bg-tertiary hover:text-text-primary"
+                >
+                  <DSIcon name="scan" size={16} />
+                </button>
+                <button
+                  onClick={() => {
+                    setShowSearch(false)
+                    setShowFoodCamera(true)
+                  }}
+                  title="Identificar por foto"
+                  className="flex h-8 w-8 items-center justify-center rounded-full bg-bg-secondary text-text-secondary transition-colors hover:bg-bg-tertiary hover:text-text-primary"
+                >
+                  <DSIcon name="camera" size={16} />
+                </button>
+              </>
+            )}
           </header>
 
           {selectedFood ? (
@@ -308,14 +343,14 @@ export default function NutricaoPage() {
             <div className="flex flex-1 flex-col p-4">
               <div className="glass-card mb-6">
                 <p className="font-bold text-text-primary">{selectedFood.name}</p>
-                <p className="mt-1 text-xs text-text-muted capitalize">{selectedFood.category}</p>
+                <p className="mt-1 text-xs capitalize text-text-muted">{selectedFood.category}</p>
                 <div className="mt-3 grid grid-cols-4 gap-2 text-center text-xs">
                   <div>
                     <span className="font-bold text-text-primary">{selectedFood.calories}</span>
                     <p className="text-text-muted">kcal</p>
                   </div>
                   <div>
-                    <span className="font-bold text-blue-400">{selectedFood.protein_g}g</span>
+                    <span className="font-bold text-brand-primary">{selectedFood.protein_g}g</span>
                     <p className="text-text-muted">prot</p>
                   </div>
                   <div>
@@ -336,7 +371,14 @@ export default function NutricaoPage() {
               <label className="mb-2 text-xs font-bold text-text-muted">Tipo de Refeição</label>
               <div className="mb-4 grid grid-cols-3 gap-2">
                 {(
-                  ['breakfast', 'lunch', 'snack', 'dinner', 'pre_workout', 'post_workout'] as MealType[]
+                  [
+                    'breakfast',
+                    'lunch',
+                    'snack',
+                    'dinner',
+                    'pre_workout',
+                    'post_workout',
+                  ] as MealType[]
                 ).map((type) => (
                   <button
                     key={type}
@@ -359,11 +401,11 @@ export default function NutricaoPage() {
                 type="number"
                 value={quantity}
                 onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 0))}
-                className="mb-6 rounded-xl border border-border-light/20 bg-bg-secondary px-4 py-3 text-sm text-text-primary outline-none focus:border-brand-primary"
+                className="mb-6 rounded-xl border border-white/8 bg-bg-secondary px-4 py-3 text-sm text-text-primary outline-none focus:border-brand-primary"
                 min={1}
               />
 
-              {/* Macros preview for quantity */}
+              {/* Macros preview */}
               <div className="mb-6 grid grid-cols-4 gap-2 rounded-xl bg-bg-secondary p-3 text-center text-xs">
                 {(() => {
                   const ratio = quantity / (selectedFood.standard_portion_g || 100)
@@ -376,7 +418,7 @@ export default function NutricaoPage() {
                         <p className="text-text-muted">kcal</p>
                       </div>
                       <div>
-                        <span className="font-bold text-blue-400">
+                        <span className="font-bold text-brand-primary">
                           {formatMacro(selectedFood.protein_g * ratio)}g
                         </span>
                         <p className="text-text-muted">prot</p>
@@ -409,11 +451,7 @@ export default function NutricaoPage() {
                 >
                   Voltar
                 </Button>
-                <Button
-                  className="flex-1"
-                  onClick={handleLogMeal}
-                  loading={logMeal.isPending}
-                >
+                <Button className="flex-1" onClick={handleLogMeal} loading={logMeal.isPending}>
                   <DSIcon name="plus" size={16} />
                   Registrar
                 </Button>
@@ -422,7 +460,7 @@ export default function NutricaoPage() {
           ) : (
             /* ── Search view ── */
             <div className="flex flex-1 flex-col">
-              <div className="border-b border-border-light/10 px-4 py-3">
+              <div className="border-b border-white/6 px-4 py-3">
                 <div className="flex items-center gap-2 rounded-xl bg-bg-secondary px-3 py-2.5">
                   <DSIcon name="search" size={16} className="text-text-muted" />
                   <input
@@ -448,6 +486,28 @@ export default function NutricaoPage() {
                     <p className="text-sm text-text-muted">
                       Digite pelo menos 2 letras para buscar
                     </p>
+                    <div className="mt-6 flex gap-3">
+                      <button
+                        onClick={() => {
+                          setShowSearch(false)
+                          setShowBarcode(true)
+                        }}
+                        className="flex items-center gap-2 rounded-xl bg-bg-secondary px-4 py-2.5 text-xs font-semibold text-text-secondary transition-colors hover:bg-bg-tertiary"
+                      >
+                        <DSIcon name="scan" size={14} />
+                        Código de barras
+                      </button>
+                      <button
+                        onClick={() => {
+                          setShowSearch(false)
+                          setShowFoodCamera(true)
+                        }}
+                        className="flex items-center gap-2 rounded-xl bg-bg-secondary px-4 py-2.5 text-xs font-semibold text-text-secondary transition-colors hover:bg-bg-tertiary"
+                      >
+                        <DSIcon name="camera" size={14} />
+                        Identificar foto
+                      </button>
+                    </div>
                   </div>
                 ) : searchLoading ? (
                   <div className="flex items-center justify-center pt-16">
@@ -461,29 +521,42 @@ export default function NutricaoPage() {
                   </div>
                 ) : (
                   <div className="space-y-2">
-                    {foods.map((food) => (
-                      <button
-                        key={food.id}
-                        onClick={() => {
-                          setSelectedFood(food)
-                          setQuantity(food.standard_portion_g || 100)
-                        }}
-                        className="flex w-full items-center justify-between rounded-xl bg-bg-secondary p-3 text-left transition-colors hover:bg-bg-tertiary active:scale-[0.99]"
-                      >
-                        <div className="min-w-0 flex-1">
-                          <p className="truncate text-sm font-medium text-text-primary">
-                            {food.name}
-                          </p>
-                          <p className="text-xs text-text-muted capitalize">{food.category}</p>
-                        </div>
-                        <div className="ml-3 text-right text-xs text-text-secondary">
-                          <span className="font-bold">{food.calories} kcal</span>
-                          <p className="text-text-muted">
-                            P:{food.protein_g} C:{food.carbs_g} G:{food.fat_g}
-                          </p>
-                        </div>
-                      </button>
-                    ))}
+                    {foods.map((food) => {
+                      const cat = getFoodCategoryConfig(food.category)
+                      return (
+                        <button
+                          key={food.id}
+                          onClick={() => {
+                            setSelectedFood(food)
+                            setQuantity(food.standard_portion_g || 100)
+                          }}
+                          className="flex w-full items-center gap-3 rounded-xl bg-bg-secondary p-3 text-left transition-colors hover:bg-bg-tertiary active:scale-[0.99]"
+                        >
+                          <div
+                            className={cn(
+                              'flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-base',
+                              cat.bg
+                            )}
+                          >
+                            {cat.emoji}
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <p className="truncate text-sm font-medium text-text-primary">
+                              {food.name}
+                            </p>
+                            <p className={cn('text-xs capitalize', cat.color)}>
+                              {food.category}
+                            </p>
+                          </div>
+                          <div className="ml-1 text-right text-xs text-text-secondary">
+                            <span className="font-bold">{food.calories} kcal</span>
+                            <p className="text-text-muted">
+                              P:{food.protein_g} C:{food.carbs_g} G:{food.fat_g}
+                            </p>
+                          </div>
+                        </button>
+                      )
+                    })}
                   </div>
                 )}
               </div>
@@ -491,44 +564,22 @@ export default function NutricaoPage() {
           )}
         </div>
       )}
-    </div>
-  )
-}
 
-// ── Sub-components ─────────────────────────────────────
-
-function MacroCard({
-  label,
-  value,
-  target,
-  unit,
-  color,
-  bgColor,
-}: {
-  label: string
-  value: number
-  target: number
-  unit: string
-  color: string
-  bgColor: string
-}) {
-  const pct = Math.min((value / target) * 100, 100)
-
-  return (
-    <div className="rounded-xl bg-bg-primary/50 p-2.5 text-center">
-      <p className={cn('text-lg font-bold', color)}>
-        {formatMacro(value)}
-        <span className="text-xs text-text-muted">{unit}</span>
-      </p>
-      <div className="mx-auto my-1.5 h-1 w-full overflow-hidden rounded-full bg-bg-tertiary">
-        <div
-          className={cn('h-full rounded-full transition-all duration-500', bgColor)}
-          style={{ width: `${pct}%` }}
+      {/* ═══ Barcode Scanner Modal (Sprint 14) ═══ */}
+      {showBarcode && (
+        <BarcodeScanner
+          onDetected={handleBarcodeDetected}
+          onClose={() => setShowBarcode(false)}
         />
-      </div>
-      <p className="text-[10px] text-text-muted">
-        {label} · {target}{unit}
-      </p>
+      )}
+
+      {/* ═══ Food Camera / Vision AI Modal (Sprint 14) ═══ */}
+      {showFoodCamera && (
+        <FoodCamera
+          onSearch={handleFoodCameraSearch}
+          onClose={() => setShowFoodCamera(false)}
+        />
+      )}
     </div>
   )
 }

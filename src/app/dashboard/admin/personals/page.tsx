@@ -199,7 +199,7 @@ export default function AdminPersonalsPage() {
                   {/* Top: name + plan */}
                   <div className="flex items-start justify-between gap-2 mb-3">
                     <div className="flex items-center gap-3 min-w-0 overflow-hidden">
-                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-blue-400 to-blue-500/70 text-base font-bold text-white">
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-brand-primary to-emerald-600 text-base font-bold text-white">
                         {p.full_name.charAt(0).toUpperCase()}
                       </div>
                       <div className="min-w-0">

@@ -207,7 +207,7 @@ function BMIBar({ bmi }: { bmi: number }) {
   return (
     <div className="relative mt-3">
       <div className="flex h-2 overflow-hidden rounded-full">
-        <div className="flex-1 bg-blue-500/30" />
+        <div className="flex-1 bg-brand-primary/30" />
         <div className="flex-1 bg-emerald-500/30" />
         <div className="flex-1 bg-yellow-500/30" />
         <div className="flex-1 bg-red-500/30" />

@@ -513,7 +513,7 @@ function StepBasicInfo({
                 onClick={() => setGender('male')}
                 className={`flex-1 rounded-lg px-3 py-2.5 text-sm font-medium transition-all ${
                   gender === 'male'
-                    ? 'bg-blue-500/20 text-blue-400 border border-blue-500/40 shadow-sm'
+                    ? 'bg-brand-primary/20 text-brand-primary border border-brand-primary/40 shadow-sm'
                     : 'bg-bg-tertiary text-text-muted hover:text-text-primary border border-transparent'
                 }`}
               >

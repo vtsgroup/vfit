@@ -191,7 +191,7 @@ function CinematicBackground() {
         }}
       />
 
-      {/* Aurora layer 3 — subtle blue accent */}
+      {/* Aurora layer 3 — subtle brand accent */}
       <div
         className="absolute inset-0 opacity-20"
         style={{
@@ -399,7 +399,7 @@ export function AuthLayoutClient({ children }: { children: ReactNode }) {
             style={{ animation: 'authFloat 8s ease-in-out infinite' }}
           />
           <div
-            className="absolute bottom-[20%] right-[-5%] h-80 w-80 rounded-full bg-sky-500/8 blur-[120px]"
+            className="absolute bottom-[20%] right-[-5%] h-80 w-80 rounded-full bg-brand-primary/8 blur-[120px]"
             style={{ animation: 'authFloat 10s ease-in-out infinite', animationDelay: '3s' }}
           />
 
@@ -484,7 +484,7 @@ export function AuthLayoutClient({ children }: { children: ReactNode }) {
           {/* Ambient glow */}
           <div className="pointer-events-none absolute inset-0 overflow-hidden">
             <div className="absolute -top-40 right-[-10%] h-96 w-96 rounded-full bg-brand-primary/3 blur-[120px]" />
-            <div className="absolute bottom-[-10%] left-[-5%] h-60 w-60 rounded-full bg-sky-500/2 blur-[100px]" />
+            <div className="absolute bottom-[-10%] left-[-5%] h-60 w-60 rounded-full bg-brand-primary/2 blur-[100px]" />
           </div>
 
           {/* Subtle grid on right panel */}

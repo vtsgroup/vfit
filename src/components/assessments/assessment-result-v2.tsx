@@ -231,7 +231,7 @@ export default function AssessmentResultV2({ assessment }: AssessmentResultV2Pro
                 value={a.lean_mass_kg}
                 unit="kg"
                 pct={composition.leanPct}
-                color="bg-blue-500"
+                color="bg-brand-primary"
               />
               <CompositionStat
                 label="Massa Muscular"
@@ -257,7 +257,7 @@ export default function AssessmentResultV2({ assessment }: AssessmentResultV2Pro
                 title={`Gordura: ${composition.fatPct.toFixed(1)}%`}
               />
               <div
-                className="bg-blue-500 transition-all duration-700"
+                className="bg-brand-primary transition-all duration-700"
                 style={{ width: `${composition.leanPct}%` }}
                 title={`Magra: ${composition.leanPct.toFixed(1)}%`}
               />
@@ -267,7 +267,7 @@ export default function AssessmentResultV2({ assessment }: AssessmentResultV2Pro
                 <span className="h-2 w-2 rounded-full bg-orange-500" /> Gordura {composition.fatPct.toFixed(1)}%
               </span>
               <span className="flex items-center gap-1">
-                <span className="h-2 w-2 rounded-full bg-blue-500" /> Magra {composition.leanPct.toFixed(1)}%
+                <span className="h-2 w-2 rounded-full bg-brand-primary" /> Magra {composition.leanPct.toFixed(1)}%
               </span>
             </div>
           </CardContent>

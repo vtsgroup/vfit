@@ -5,6 +5,58 @@
 
 ---
 
+## [Unreleased] — 08/04/2026 — Sprint 11-15 (UX Nutrição/Exercícios)
+
+### ✨ Features
+- **Nutrição:** integração de `MacroRingChart` em [src/app/(app)/nutricao/page.tsx](src/app/(app)/nutricao/page.tsx).
+- **Nutrição:** scanner de código de barras integrado no modal de busca com `BarcodeScanner`.
+- **Nutrição:** câmera com Vision AI integrada via `FoodCamera` + sugestão automática de busca.
+- **Nutrição:** lista de resultados com identificação visual por categoria (emoji + badge/cor).
+- **App Layout:** transições de rota com Framer Motion em [src/app/(app)/layout.tsx](src/app/(app)/layout.tsx).
+- **Onboarding:** transições de rota com Framer Motion em [src/app/(onboarding)/layout.tsx](src/app/(onboarding)/layout.tsx) via [src/components/layout/onboarding-transition.tsx](src/components/layout/onboarding-transition.tsx).
+- **Exercícios:** prefetch de imagens com Cache API (R2/CDN) via `useImagePrefetch` em [src/app/(app)/exercicios/page.tsx](src/app/(app)/exercicios/page.tsx).
+
+### 🔌 Backend
+- Novos endpoints em [workers/api/vfit.ts](workers/api/vfit.ts):
+  - `POST /vfit/food-identify`
+  - `GET /vfit/food-barcode/:code`
+
+### ✅ QA desta sessão
+- `npm run type-check` — sem erros
+- `npm run build` — concluído com sucesso
+
+
+## [v1.9.7] — 08/04/2026 — Role Selection + Cover Image + MuscleAnatomyCard
+
+### ✨ Features
+
+#### Onboarding: Role Selection na Welcome Page
+- **Problema:** Onboarding sempre encaminhava como aluno, sem opção para Personal/Nutri
+- **Solução:**
+  - Substituído botão único "Criar Meu Plano Gratuito" por 3 cards de seleção de perfil
+  - **Personal Trainer** → `/register/personal?from=welcome`
+  - **Nutricionista** → `/register/personal?type=nutri&from=welcome`
+  - **Aluno/Atleta** → `/onboarding` (fluxo quiz existente, com ícone + FREE badge)
+  - Mantido estado "Continuar de onde parei" para alunos com progresso salvo
+- **Arquivo:** `src/app/(onboarding)/welcome/page.tsx`
+
+#### Create Workout: Upload de Imagem de Capa
+- **Problema:** Capa de treino só podia ser definida após criação (no detalhe)
+- **Solução:**
+  - Adicionado campo de upload de capa no Step 1 do formulário de criação
+  - Criado `useCreateWorkoutRaw()` hook para retornar o ID do treino criado
+  - Fluxo encadeado: criar treino → upload capa (se selecionada) → navegar
+  - UI: preview da imagem com botões "Trocar" e "Remover" no hover
+- **Arquivo:** `src/app/dashboard/workouts/create/page.tsx`, `src/hooks/use-workouts.ts`
+
+#### MuscleAnatomyCard Component
+- **Novo componente:** `src/components/workouts/muscle-anatomy-card.tsx`
+- Exibe imagem do músculo principal (de `image_url`) ou placeholder colorido com ícone
+- Lista músculos secundários como badges coloridos
+- Props: `primaryMuscleId`, `secondaryMuscleIds`, `size` (sm/md/lg), `showSecondary`
+- Placeholder automático com a `color_hex` do grupo muscular quando sem imagem
+
+
 ## [v1.9.5] — 07/04/2026 — Sprint 3: Performance UX Improvements
 
 ### 🎯 Sprint 3 Performance — UX Melhorias Completas

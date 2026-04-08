@@ -221,7 +221,7 @@ const STATUS_COLORS = {
 function nameToColor(name: string): string {
   const colors = [
     'from-brand-primary to-brand-accent',
-    'from-blue-500 to-blue-400',
+    'from-brand-primary to-emerald-500',
     'from-purple-500 to-purple-400',
     'from-pink-500 to-pink-400',
     'from-orange-500 to-orange-400',

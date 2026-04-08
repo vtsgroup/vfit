@@ -33,7 +33,7 @@ const variantStyles: Record<BadgeVariant, string> = {
   outline: 'border border-border-light bg-transparent text-text-secondary backdrop-blur-sm',
   premium: 'bg-linear-to-r from-brand-primary/15 to-brand-accent/15 text-brand-accent border-brand-primary/20 backdrop-blur-sm shadow-[0_0_16px_rgba(16,185,129,0.12)]',
   // DS v2 Role Badges — gradient backgrounds with accent colors
-  aluno: 'bg-linear-to-r from-blue-100 to-blue-50 text-blue-600 border-blue-500/15 dark:from-blue-900/30 dark:to-blue-800/20 dark:text-blue-400 dark:border-blue-400/20',
+  aluno: 'bg-linear-to-r from-brand-primary/15 to-brand-accent/10 text-brand-primary border-brand-primary/15 dark:from-brand-primary/30 dark:to-brand-accent/20 dark:text-brand-primary dark:border-brand-primary/20',
   personal: 'bg-linear-to-r from-emerald-100 to-emerald-50 text-emerald-700 border-emerald-500/20 dark:from-emerald-900/30 dark:to-emerald-800/20 dark:text-emerald-400 dark:border-emerald-400/20',
   admin: 'bg-linear-to-r from-violet-100 to-violet-50 text-violet-700 border-violet-500/15 dark:from-violet-900/30 dark:to-violet-800/20 dark:text-violet-400 dark:border-violet-400/20',
   'super-admin': 'bg-linear-to-r from-amber-100 to-amber-50 text-amber-700 border-amber-500/15 dark:from-amber-900/30 dark:to-amber-800/20 dark:text-amber-400 dark:border-amber-400/20',
@@ -48,7 +48,7 @@ const dotColors: Record<BadgeVariant, string> = {
   info: 'bg-info',
   outline: 'bg-text-secondary',
   premium: 'bg-brand-accent',
-  aluno: 'bg-blue-500',
+  aluno: 'bg-brand-primary',
   personal: 'bg-brand-primary',
   admin: 'bg-violet-500',
   'super-admin': 'bg-amber-500',

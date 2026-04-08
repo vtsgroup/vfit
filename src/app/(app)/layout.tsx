@@ -12,6 +12,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { useQueryClient } from '@tanstack/react-query'
+import { AnimatePresence, motion } from 'framer-motion'
 import { StudentHeader } from '@/components/navigation/student-header'
 import { BottomNavigation } from '@/components/navigation/bottom-navigation'
 import { StudentFabMenu } from '@/components/navigation/student-fab-menu'
@@ -129,7 +130,17 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <main className="pt-(--pt-student) pb-(--pb-nav)">
           <PullToRefresh onRefresh={handleRefresh}>
             <ErrorBoundary>
-              {children}
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                  key={pathname}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.22, ease: 'easeOut' }}
+                >
+                  {children}
+                </motion.div>
+              </AnimatePresence>
             </ErrorBoundary>
           </PullToRefresh>
         </main>

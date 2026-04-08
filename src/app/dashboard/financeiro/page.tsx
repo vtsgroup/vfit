@@ -86,8 +86,8 @@ export default function FinanceiroPage() {
             title="Ticket médio"
             value={formatCurrency(month?.average_ticket ?? 0)}
             icon={<DSIcon name="receipt" size={20} />}
-            iconBg="bg-blue-500/10"
-            iconColor="text-blue-500"
+            iconBg="bg-brand-primary/10"
+            iconColor="text-brand-primary"
           />
           <KpiCard
             title="Total recebido"

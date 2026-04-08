@@ -160,8 +160,8 @@ export default function ProgressoPage() {
               icon="target"
               label="Exercícios"
               value={kpis.exercises}
-              color="text-blue-400"
-              iconBg="bg-blue-400/10"
+              color="text-brand-primary"
+              iconBg="bg-brand-primary/10"
             />
             <KPICard
               icon="clock"
@@ -183,8 +183,8 @@ export default function ProgressoPage() {
               icon="trendingUp"
               label="Repetições"
               value={kpis.total_reps.toLocaleString('pt-BR')}
-              color="text-cyan-400"
-              iconBg="bg-cyan-400/10"
+              color="text-brand-primary"
+              iconBg="bg-brand-primary/10"
             />
             <KPICard
               icon="scale"
@@ -244,8 +244,8 @@ export default function ProgressoPage() {
           className="glass-card flex items-center justify-between rounded-2xl p-4 active:scale-[0.98] transition-transform"
         >
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-400/10">
-              <DSIcon name="scale" size={20} className="text-blue-400" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-primary/10">
+              <DSIcon name="scale" size={20} className="text-brand-primary" />
             </div>
             <div>
               <p className="text-[14px] font-bold text-text-primary">Evolução Corporal</p>

@@ -492,7 +492,7 @@ wrangler vectorize query my-index --vector "[0.1, 0.2, ...]" --top-k 10
 ```bash
 # Create config
 wrangler hyperdrive create my-hyperdrive \
-  --connection-string "postgres://user:pass@host:5432/database"
+  --connection-string "<POSTGRES_CONNECTION_STRING>"
 
 # List configs
 wrangler hyperdrive list

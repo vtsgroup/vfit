@@ -101,7 +101,7 @@
   --color-bg-landing-light: #F8F8F8;
   --color-bg-landing-light-end: #F0F1F3;
 
-  /* Glass — Neutral dark, no blue tint */
+  /* Glass — dark neutro, sem viés frio */
   --color-glass-bg: rgba(11, 18, 33, 0.60);
   --color-glass-bg-light: rgba(11, 18, 33, 0.45);
   --color-glass-border: rgba(255, 255, 255, 0.08);
@@ -143,7 +143,7 @@
   --shadow-glow-accent: 0 0 30px rgba(108, 92, 231, 0.3), 0 0 60px rgba(108, 92, 231, 0.1);
   --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.40);
 
-  /* VFIT Blue Color System — Primary Scale */
+  /* VFIT Base Color System — Primary Scale */
   --color-vfit-primary-50: #eff6ff;
   --color-vfit-primary-100: #dbeafe;
   --color-vfit-primary-200: #bfdbfe;
@@ -155,7 +155,7 @@
   --color-vfit-primary-800: #1e40af;
   --color-vfit-primary-900: #1e3a8a;
 
-  /* VFIT Blue Color System — Secondary Scale */
+  /* VFIT Base Color System — Secondary Scale */
   --color-vfit-secondary-50: #f8fafc;
   --color-vfit-secondary-100: #f1f5f9;
   --color-vfit-secondary-200: #e2e8f0;
@@ -167,7 +167,7 @@
   --color-vfit-secondary-800: #1e293b;
   --color-vfit-secondary-900: #0f172a;
 
-  /* VFIT Blue Color System — Accent Scale */
+  /* VFIT Base Color System — Accent Scale */
   --color-vfit-accent-50: #fefce8;
   --color-vfit-accent-100: #fef9c3;
   --color-vfit-accent-200: #fef08a;
@@ -179,7 +179,7 @@
   --color-vfit-accent-800: #854d0e;
   --color-vfit-accent-900: #713f12;
 
-  /* VFIT Blue Color System — Gradients */
+  /* VFIT Base Color System — Gradients */
   --gradient-vfit-primary: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
   --gradient-vfit-secondary: linear-gradient(135deg, #64748b 0%, #334155 100%);
   --gradient-vfit-accent: linear-gradient(135deg, #eab308 0%, #a16207 100%);
@@ -342,6 +342,7 @@
   --animate-card-shine: card-shine 3s ease-in-out infinite;
   --animate-pill-expand: pill-expand 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   --animate-breathe: breathe 4s ease-in-out infinite;
+  --animate-scan-line: scan-line 1.5s linear infinite;
   --animate-ripple: ripple 0.6s ease-out;
   --animate-enter-scale: enter-scale 0.35s cubic-bezier(0.23, 1, 0.32, 1);
   --animate-press: press 0.15s ease-out;
@@ -434,8 +435,8 @@
   --ds-glass-green-glow: rgba(16, 185, 129, 0.08);
   --ds-glass-amber: rgba(245, 158, 11, 0.06);
   --ds-glass-amber-border: rgba(245, 158, 11, 0.14);
-  --ds-glass-blue: rgba(59, 130, 246, 0.06);
-  --ds-glass-blue-border: rgba(59, 130, 246, 0.14);
+  --ds-glass-brand: rgba(34, 197, 94, 0.06);
+  --ds-glass-brand-border: rgba(34, 197, 94, 0.14);
   --ds-glass-purple: rgba(139, 92, 246, 0.06);
   --ds-glass-purple-border: rgba(139, 92, 246, 0.14);
   --ds-glass-red: rgba(239, 68, 68, 0.06);
@@ -484,7 +485,7 @@
   /* Tonal card shadows (colored ambient) */
   --ds-shadow-green: 0 4px 24px rgba(16,185,129,0.12), 0 1px 3px rgba(0,0,0,0.2);
   --ds-shadow-green-hover: 0 8px 32px rgba(16,185,129,0.20), 0 2px 8px rgba(0,0,0,0.25);
-  --ds-shadow-blue: 0 4px 24px rgba(59,130,246,0.12), 0 1px 3px rgba(0,0,0,0.2);
+  --ds-shadow-brand: 0 4px 24px rgba(34,197,94,0.12), 0 1px 3px rgba(0,0,0,0.2);
   --ds-shadow-amber: 0 4px 24px rgba(245,158,11,0.12), 0 1px 3px rgba(0,0,0,0.2);
   --ds-shadow-purple: 0 4px 24px rgba(139,92,246,0.12), 0 1px 3px rgba(0,0,0,0.2);
 }
@@ -794,8 +795,8 @@ select option {
   --ds-glass-green-glow: rgba(34, 197, 94, 0.06);
   --ds-glass-amber: rgba(245, 158, 11, 0.05);
   --ds-glass-amber-border: rgba(245, 158, 11, 0.18);
-  --ds-glass-blue: rgba(59, 130, 246, 0.05);
-  --ds-glass-blue-border: rgba(59, 130, 246, 0.18);
+  --ds-glass-brand: rgba(34, 197, 94, 0.05);
+  --ds-glass-brand-border: rgba(34, 197, 94, 0.18);
   --ds-glass-purple: rgba(139, 92, 246, 0.05);
   --ds-glass-purple-border: rgba(139, 92, 246, 0.18);
   --ds-glass-red: rgba(239, 68, 68, 0.05);
@@ -812,7 +813,7 @@ select option {
 
   --ds-shadow-green: 0 4px 24px rgba(34,197,94,0.10), 0 1px 3px rgba(0,0,0,0.06);
   --ds-shadow-green-hover: 0 8px 32px rgba(34,197,94,0.16), 0 2px 8px rgba(0,0,0,0.08);
-  --ds-shadow-blue: 0 4px 24px rgba(59,130,246,0.10), 0 1px 3px rgba(0,0,0,0.06);
+  --ds-shadow-brand: 0 4px 24px rgba(34,197,94,0.10), 0 1px 3px rgba(0,0,0,0.06);
   --ds-shadow-amber: 0 4px 24px rgba(245,158,11,0.10), 0 1px 3px rgba(0,0,0,0.06);
   --ds-shadow-purple: 0 4px 24px rgba(139,92,246,0.10), 0 1px 3px rgba(0,0,0,0.06);
 }
@@ -834,6 +835,11 @@ select option {
 @keyframes fade-in {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+@keyframes scan-line {
+  0% { top: 0; opacity: 1; }
+  100% { top: 100%; opacity: 0.4; }
 }
 
 @keyframes slide-up {
@@ -1667,9 +1673,9 @@ body {
   color: var(--color-text-primary);
   border-color: var(--color-brand-primary-20, rgba(16, 185, 129, 0.2));
 }
-/* VFIT Theme — action btn hover uses VFIT blue tint */
+/* VFIT Theme — action btn hover uses brand tint */
 .vfit-theme .ds3-action-btn:hover {
-  border-color: rgba(37, 99, 235, 0.18);
+  border-color: rgba(34, 197, 94, 0.18);
 }
 
 /* Legacy header-surface (kept for backward compat, will deprecate) */
@@ -1704,11 +1710,11 @@ body {
   box-shadow: 0 4px 16px rgba(0,0,0,0.2), 0 1px 4px rgba(0,0,0,0.15), 0 0 0 0.5px rgba(255,255,255,0.05) inset;
 }
 
-/* VFIT Theme — surface-card with subtle VFIT blue tint */
+/* VFIT Theme — surface-card with subtle brand tint */
 .vfit-theme .surface-card {
   background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(37, 99, 235, 0.06);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.2), 0 1px 4px rgba(0,0,0,0.15), 0 0 0 0.5px rgba(37,99,235,0.04) inset;
+  border-color: rgba(34, 197, 94, 0.06);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2), 0 1px 4px rgba(0,0,0,0.15), 0 0 0 0.5px rgba(34,197,94,0.04) inset;
 }
 
 .surface-card-hover {
@@ -2627,10 +2633,10 @@ html.light {
   border: 1px solid var(--ds-glass-amber-border);
   box-shadow: var(--ds-shadow-amber);
 }
-.ds-card-blue {
-  background: var(--ds-glass-blue);
-  border: 1px solid var(--ds-glass-blue-border);
-  box-shadow: var(--ds-shadow-blue);
+.ds-card-brand {
+  background: var(--ds-glass-brand);
+  border: 1px solid var(--ds-glass-brand-border);
+  box-shadow: var(--ds-shadow-brand);
 }
 .ds-card-purple {
   background: var(--ds-glass-purple);

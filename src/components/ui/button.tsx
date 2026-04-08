@@ -188,7 +188,7 @@ const variantStyles: Record<ButtonVariant, string> = {
 
   // Gradient: vibrant multi-color gradient — for premium/AI CTAs
   gradient: [
-    'bg-linear-to-r from-emerald-500 via-teal-500 to-cyan-500',
+    'bg-linear-to-r from-emerald-500 via-brand-primary to-brand-accent',
     'text-white font-bold',
     '[text-shadow:0_1px_2px_rgba(0,0,0,0.2)]',
     'border border-t-white/20 border-x-transparent border-b-black/10',

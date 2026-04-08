@@ -40,7 +40,7 @@ const badgeColors = {
   success: 'bg-emerald-500 text-white',
   warning: 'bg-amber-500 text-white',
   error: 'bg-red-500 text-white',
-  info: 'bg-blue-500 text-white',
+  info: 'bg-brand-primary text-white',
   brand: 'bg-brand-primary text-(--surface-container-lowest)',
 }
 
@@ -123,10 +123,10 @@ const chipTonalColors: Record<ChipColor, { bg: string; text: string; border: str
     selectedBg: 'bg-red-500/15',
   },
   info: {
-    bg: 'bg-blue-500/8',
-    text: 'text-blue-500',
-    border: 'border-blue-500/20',
-    selectedBg: 'bg-blue-500/15',
+    bg: 'bg-brand-primary/8',
+    text: 'text-brand-primary',
+    border: 'border-brand-primary/20',
+    selectedBg: 'bg-brand-primary/15',
   },
   ai: {
     bg: 'bg-violet-500/8',
@@ -227,7 +227,7 @@ const statusStyles: Record<StatusType, { bg: string; text: string; dot: string }
   success: { bg: 'bg-emerald-500/10', text: 'text-emerald-500', dot: 'bg-emerald-500' },
   error: { bg: 'bg-red-500/10', text: 'text-red-500', dot: 'bg-red-500' },
   warning: { bg: 'bg-amber-500/10', text: 'text-amber-500', dot: 'bg-amber-500' },
-  info: { bg: 'bg-blue-500/10', text: 'text-blue-500', dot: 'bg-blue-500' },
+  info: { bg: 'bg-brand-primary/10', text: 'text-brand-primary', dot: 'bg-brand-primary' },
 }
 
 const statusLabels: Record<StatusType, string> = {

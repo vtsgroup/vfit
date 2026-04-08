@@ -90,7 +90,7 @@ export function StepTargetWeight() {
               <p
                 className={`text-xl font-bold ${
                   diff.direction === 'loss'
-                    ? 'text-blue-400'
+                    ? 'text-brand-primary'
                     : diff.direction === 'gain'
                       ? 'text-brand-primary'
                       : 'text-white/60'

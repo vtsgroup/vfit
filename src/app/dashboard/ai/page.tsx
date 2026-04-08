@@ -284,7 +284,7 @@ function AIPageContent() {
       title: 'Criar treino personalizado',
       description: 'Montagem inteligente com periodização',
       prompt: 'Quero criar um treino personalizado para um aluno',
-      accent: 'from-emerald-500 to-cyan-400',
+      accent: 'from-emerald-500 to-brand-accent',
       priority: 4,
     })
 
@@ -303,7 +303,7 @@ function AIPageContent() {
       title: 'Crescer meu negócio',
       description: 'Insights e estratégias práticas',
       prompt: `Sou personal trainer com ${totalStudents} alunos (${activeStudents} ativos). Me dê uma análise completa do meu negócio com sugestões práticas de crescimento.`,
-      accent: 'from-blue-500 to-cyan-500',
+      accent: 'from-brand-primary to-emerald-500',
       priority: 6,
     })
 

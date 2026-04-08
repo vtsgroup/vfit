@@ -23,7 +23,7 @@ import { DSIcon } from '@/components/ui/ds-icon'
 // Color System — Cores didáticas por ação
 // ============================================
 
-export type ActionColor = 'green' | 'violet' | 'amber' | 'cyan' | 'lime' | 'blue' | 'rose' | 'orange'
+export type ActionColor = 'green' | 'violet' | 'amber' | 'brand' | 'lime' | 'teal' | 'rose' | 'orange'
 
 const ACTION_COLORS: Record<ActionColor, {
   bg: string
@@ -61,13 +61,13 @@ const ACTION_COLORS: Record<ActionColor, {
     glow: 'hover:ring-amber-400/30',
     label: 'text-white',
   },
-  cyan: {
-    bg: 'bg-linear-to-b from-cyan-400 to-cyan-600',
-    shadow: 'shadow-[0_4px_0_0_#164E63,0_6px_16px_rgba(6,182,212,0.3)]',
-    shadowHover: 'hover:shadow-[0_6px_0_0_#164E63,0_10px_24px_rgba(6,182,212,0.35)]',
-    shadowActive: 'active:shadow-[0_2px_0_0_#164E63,0_3px_8px_rgba(6,182,212,0.2)]',
+  brand: {
+    bg: 'bg-linear-to-b from-brand-primary to-emerald-600',
+    shadow: 'shadow-[0_4px_0_0_#166534,0_6px_16px_rgba(34,197,94,0.3)]',
+    shadowHover: 'hover:shadow-[0_6px_0_0_#166534,0_10px_24px_rgba(34,197,94,0.35)]',
+    shadowActive: 'active:shadow-[0_2px_0_0_#166534,0_3px_8px_rgba(34,197,94,0.2)]',
     iconBg: 'bg-white/20',
-    glow: 'hover:ring-cyan-400/30',
+    glow: 'hover:ring-brand-primary/30',
     label: 'text-white',
   },
   lime: {
@@ -79,13 +79,13 @@ const ACTION_COLORS: Record<ActionColor, {
     glow: 'hover:ring-lime-400/30',
     label: 'text-black',
   },
-  blue: {
-    bg: 'bg-linear-to-b from-blue-400 to-blue-600',
-    shadow: 'shadow-[0_4px_0_0_#1E3A8A,0_6px_16px_rgba(59,130,246,0.3)]',
-    shadowHover: 'hover:shadow-[0_6px_0_0_#1E3A8A,0_10px_24px_rgba(59,130,246,0.35)]',
-    shadowActive: 'active:shadow-[0_2px_0_0_#1E3A8A,0_3px_8px_rgba(59,130,246,0.2)]',
+  teal: {
+    bg: 'bg-linear-to-b from-teal-400 to-teal-600',
+    shadow: 'shadow-[0_4px_0_0_#115E59,0_6px_16px_rgba(20,184,166,0.3)]',
+    shadowHover: 'hover:shadow-[0_6px_0_0_#115E59,0_10px_24px_rgba(20,184,166,0.35)]',
+    shadowActive: 'active:shadow-[0_2px_0_0_#115E59,0_3px_8px_rgba(20,184,166,0.2)]',
     iconBg: 'bg-white/20',
-    glow: 'hover:ring-blue-400/30',
+    glow: 'hover:ring-teal-400/30',
     label: 'text-white',
   },
   rose: {
@@ -217,7 +217,7 @@ export function ActionCard3D({ color, icon, label, description, href, onClick }:
       </div>
 
       {/* Label */}
-      <div className="min-h-[42px] flex flex-col items-center justify-start">
+      <div className="min-h-10.5 flex flex-col items-center justify-start">
         <p className="text-sm font-bold text-text-primary leading-tight">{label}</p>
         {description && (
           <p className="mt-1 text-[10px] leading-snug text-text-secondary/60 line-clamp-2">{description}</p>
@@ -260,7 +260,7 @@ export const PERSONAL_ACTIONS = {
     href: '/dashboard/payments/create',
   },
   addStudent: {
-    color: 'cyan' as ActionColor,
+    color: 'brand' as ActionColor,
     icon: <DSIcon name="userPlus" size={20} />,
     label: 'Cadastrar Aluno',
     description: 'Convidar novo aluno',
@@ -274,7 +274,7 @@ export const PERSONAL_ACTIONS = {
     href: '/dashboard/ai',
   },
   referral: {
-    color: 'blue' as ActionColor,
+    color: 'teal' as ActionColor,
     icon: <DSIcon name="share" size={20} />,
     label: 'Indicar Personal',
     description: 'Programa de afiliados',

@@ -196,7 +196,7 @@ export function HealthIndicatorsSection({ assessment }: { assessment: Assessment
         unit: '%',
         score,
         description: score === 'good' ? 'Hidratação adequada' : 'Considerar aumentar ingestão hídrica',
-        color: 'cyan',
+        color: 'green',
       })
     }
 

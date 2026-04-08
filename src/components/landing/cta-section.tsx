@@ -32,7 +32,7 @@ const monoLabel = {
 export function CtaSection() {
   return (
     <section className="relative overflow-hidden py-20 sm:py-36" aria-label="Chamada para ação">
-      {/* Background image — fitness photo with blue-dark filter */}
+      {/* Background image — fitness photo with brand-dark filter */}
       <div className="absolute inset-0">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
@@ -47,11 +47,11 @@ export function CtaSection() {
         />
       </div>
 
-      {/* Blue-dark overlay — cinematic look */}
+      {/* Overlay escuro cinematográfico */}
       <div className="absolute inset-0 bg-[#030810]/85" />
 
-      {/* Blue tint layer */}
-      <div className="absolute inset-0 bg-blue-950/40 mix-blend-multiply" />
+      {/* Camada tonal da marca */}
+      <div className="absolute inset-0 bg-brand-primary/40 mix-blend-multiply" />
 
       {/* Bottom gradient fade to dark (transitions into footer) */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-linear-to-t from-bg-primary to-transparent" />

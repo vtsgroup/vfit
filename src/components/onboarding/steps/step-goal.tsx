@@ -32,7 +32,7 @@ const GOAL_OPTIONS: GoalOption[] = [
     label: 'Ganhar massa',
     subtitle: 'Hipertrofia e volume muscular',
     icon: 'dumbbell',
-    color: 'from-blue-500/20 to-indigo-500/5',
+    color: 'from-brand-primary/20 to-indigo-500/5',
   },
   {
     value: 'tone',
@@ -60,7 +60,7 @@ const GOAL_OPTIONS: GoalOption[] = [
     label: 'Flexibilidade',
     subtitle: 'Mobilidade e alongamento',
     icon: 'wind',
-    color: 'from-cyan-500/20 to-teal-500/5',
+    color: 'from-brand-primary/20 to-teal-500/5',
   },
 ]
 

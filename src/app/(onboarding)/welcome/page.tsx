@@ -181,17 +181,17 @@ export default function WelcomePage() {
               {hasSavedProgress ? (
                 <button
                   onClick={handleContinue}
-                  className="group flex w-full items-center gap-3.5 rounded-2xl border border-sky-400/25 bg-sky-400/8 px-4 py-3.5 backdrop-blur-sm transition-all duration-200 hover:bg-sky-400/12 active:scale-[0.98]"
+                  className="group flex w-full items-center gap-3.5 rounded-2xl border border-brand-primary/25 bg-brand-primary/8 px-4 py-3.5 backdrop-blur-sm transition-all duration-200 hover:bg-brand-primary/12 active:scale-[0.98]"
                 >
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-linear-to-br from-sky-400 to-sky-600 shadow-[0_4px_12px_rgba(56,189,248,0.25)]">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-linear-to-br from-brand-primary to-emerald-600 shadow-[0_4px_12px_rgba(34,197,94,0.25)]">
                     <DSIcon name="play" size={20} className="text-white" />
                   </div>
                   <div className="flex-1 min-w-0 text-left">
                     <p className="text-sm font-semibold text-white" style={headingFont}>Continuar como Aluno</p>
-                    <p className="text-[11px] text-sky-300/70 mt-0.5">Retomar onde parei</p>
+                    <p className="text-[11px] text-brand-primary/70 mt-0.5">Retomar onde parei</p>
                   </div>
                   <div className="flex flex-col items-end gap-0.5">
-                    <DSIcon name="arrowRight" size={16} className="text-sky-400/60 transition-transform group-hover:translate-x-0.5" />
+                    <DSIcon name="arrowRight" size={16} className="text-brand-primary/60 transition-transform group-hover:translate-x-0.5" />
                     <button
                       onClick={(e) => { e.stopPropagation(); handleStart() }}
                       className="text-[9px] text-white/30 hover:text-white/60 transition-colors"
@@ -203,15 +203,15 @@ export default function WelcomePage() {
               ) : (
                 <button
                   onClick={handleStart}
-                  className="group flex w-full items-center gap-3.5 rounded-2xl border border-sky-400/20 bg-white/5 px-4 py-3.5 backdrop-blur-sm transition-all duration-200 hover:bg-white/10 hover:border-white/15 active:scale-[0.98]"
+                  className="group flex w-full items-center gap-3.5 rounded-2xl border border-brand-primary/20 bg-white/5 px-4 py-3.5 backdrop-blur-sm transition-all duration-200 hover:bg-white/10 hover:border-white/15 active:scale-[0.98]"
                 >
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-linear-to-br from-sky-400 to-sky-600 shadow-[0_4px_12px_rgba(56,189,248,0.25)]">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-linear-to-br from-brand-primary to-emerald-600 shadow-[0_4px_12px_rgba(34,197,94,0.25)]">
                     <DSIcon name="graduationCap" size={20} className="text-white" />
                   </div>
                   <div className="flex-1 min-w-0 text-left">
                     <div className="flex items-center gap-2">
                       <p className="text-sm font-semibold text-white" style={headingFont}>Sou Aluno / Atleta</p>
-                      <span className="rounded-full bg-sky-400/20 px-1.5 py-px text-[9px] font-bold uppercase text-sky-400 tracking-wider">FREE</span>
+                      <span className="rounded-full bg-brand-primary/20 px-1.5 py-px text-[9px] font-bold uppercase text-brand-primary tracking-wider">FREE</span>
                     </div>
                     <p className="text-[11px] text-white/45 mt-0.5 truncate">Monte seu plano de treino gratuito</p>
                   </div>

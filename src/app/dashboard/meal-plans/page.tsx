@@ -140,7 +140,7 @@ export default function MealPlansPage() {
                       <p className="text-[9px] text-text-muted">kcal</p>
                     </div>
                     <div className="rounded-lg bg-white/5 p-1.5 text-center">
-                      <p className="text-xs font-bold text-blue-400">{plan.protein_target || 0}g</p>
+                      <p className="text-xs font-bold text-brand-primary">{plan.protein_target || 0}g</p>
                       <p className="text-[9px] text-text-muted">Prot</p>
                     </div>
                     <div className="rounded-lg bg-white/5 p-1.5 text-center">
