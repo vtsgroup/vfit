@@ -411,6 +411,21 @@ export function useCreateWorkout() {
   })
 }
 
+  export function useCreateWorkoutRaw() {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+      mutationFn: (data: CreateWorkoutInput) =>
+        api.post<{ workout: { id: string } }>('/workouts', data),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['workouts'] })
+      },
+      onError: (err: Error) => {
+        toast.error(err.message || 'Erro ao criar treino')
+      },
+    })
+  }
+
 export function useUpdateWorkout(id: string) {
   const queryClient = useQueryClient()
 

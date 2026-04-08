@@ -19,6 +19,7 @@ import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 import { useAuthStore } from '@/stores/auth-store'
 import { useOnboardingStore } from '@/stores/onboarding-store'
 import { supportsPasskey, getPasskeyEmail, isBiometricAutoUnlockEnabled, isBiometricInCooldown } from '@/hooks/use-passkey'
+import Link from 'next/link'
 
 const FEATURES: { icon: DSIconName; text: string }[] = [
   { icon: 'target', text: 'Plano personalizado por IA' },
@@ -26,6 +27,12 @@ const FEATURES: { icon: DSIconName; text: string }[] = [
   { icon: 'trophy', text: 'Gamificação + Streaks' },
   { icon: 'zap', text: 'Treinos de 15 a 60 min' },
 ]
+
+const headingFont = {
+  fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+  fontWeight: 900,
+  letterSpacing: '-0.03em',
+}
 
 export default function WelcomePage() {
   const router = useRouter()
@@ -125,43 +132,100 @@ export default function WelcomePage() {
           className="w-full max-w-sm space-y-3"
           style={{ animation: 'welcome-slide-up 0.7s ease-out 0.7s both' }}
         >
-          {hasSavedProgress ? (
-            <>
-              <Button
-                size="lg"
-                className="w-full text-base"
-                onClick={handleContinue}
+            {/* ─── Role selection cards ─── */}
+            <div className="space-y-2">
+              <p
+                className="text-center text-[11px] font-bold uppercase tracking-widest text-white/40 mb-3"
+                style={{ fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace' }}
               >
-                <DSIcon name="play" className="h-5 w-5" />
-                Continuar de onde parei
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="w-full text-base border-white/20 text-white hover:bg-white/10"
-                onClick={handleStart}
-              >
-                <DSIcon name="rotateCcw" className="h-5 w-5" />
-                Começar do zero
-              </Button>
-            </>
-          ) : (
-            <Button
-              size="lg"
-              className="w-full text-base"
-              onClick={handleStart}
-            >
-              <DSIcon name="sparkles" className="h-5 w-5" />
-              Criar Meu Plano Gratuito
-            </Button>
-          )}
+                Como você quer usar o VFIT?
+              </p>
 
-          <button
-            onClick={() => router.push('/login')}
-            className="w-full py-2 text-center text-sm font-medium text-white/50 transition-colors hover:text-white/80"
-          >
-            Já tenho conta · Entrar
-          </button>
+              {/* Personal Trainer */}
+              <Link
+                href="/register/personal?from=welcome"
+                className="group flex items-center gap-3.5 rounded-2xl border border-white/8 bg-white/5 px-4 py-3.5 backdrop-blur-sm transition-all duration-200 hover:bg-white/10 hover:border-white/15 active:scale-[0.98]"
+              >
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-linear-to-br from-brand-primary to-[#16A34A] shadow-[0_4px_12px_rgba(34,197,94,0.3)]">
+                  <DSIcon name="dumbbell" size={20} className="text-white" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-semibold text-white" style={headingFont}>Personal Trainer</p>
+                    <span className="rounded-full bg-brand-primary/20 px-1.5 py-px text-[9px] font-bold uppercase text-brand-primary tracking-wider">PRO</span>
+                  </div>
+                  <p className="text-[11px] text-white/45 mt-0.5 truncate">Gerencie alunos, treinos e cobranças</p>
+                </div>
+                <DSIcon name="arrowRight" size={16} className="text-white/30 transition-transform group-hover:translate-x-0.5" />
+              </Link>
+
+              {/* Nutricionista */}
+              <Link
+                href="/register/personal?type=nutri&from=welcome"
+                className="group flex items-center gap-3.5 rounded-2xl border border-white/8 bg-white/5 px-4 py-3.5 backdrop-blur-sm transition-all duration-200 hover:bg-white/10 hover:border-white/15 active:scale-[0.98]"
+              >
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-linear-to-br from-emerald-400 to-teal-600 shadow-[0_4px_12px_rgba(52,211,153,0.3)]">
+                  <DSIcon name="apple" size={20} className="text-white" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-semibold text-white" style={headingFont}>Nutricionista</p>
+                    <span className="rounded-full bg-emerald-400/20 px-1.5 py-px text-[9px] font-bold uppercase text-emerald-400 tracking-wider">PRO</span>
+                  </div>
+                  <p className="text-[11px] text-white/45 mt-0.5 truncate">Planos alimentares e acompanhamento</p>
+                </div>
+                <DSIcon name="arrowRight" size={16} className="text-white/30 transition-transform group-hover:translate-x-0.5" />
+              </Link>
+
+              {/* Aluno / Atleta */}
+              {hasSavedProgress ? (
+                <button
+                  onClick={handleContinue}
+                  className="group flex w-full items-center gap-3.5 rounded-2xl border border-sky-400/25 bg-sky-400/8 px-4 py-3.5 backdrop-blur-sm transition-all duration-200 hover:bg-sky-400/12 active:scale-[0.98]"
+                >
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-linear-to-br from-sky-400 to-sky-600 shadow-[0_4px_12px_rgba(56,189,248,0.25)]">
+                    <DSIcon name="play" size={20} className="text-white" />
+                  </div>
+                  <div className="flex-1 min-w-0 text-left">
+                    <p className="text-sm font-semibold text-white" style={headingFont}>Continuar como Aluno</p>
+                    <p className="text-[11px] text-sky-300/70 mt-0.5">Retomar onde parei</p>
+                  </div>
+                  <div className="flex flex-col items-end gap-0.5">
+                    <DSIcon name="arrowRight" size={16} className="text-sky-400/60 transition-transform group-hover:translate-x-0.5" />
+                    <button
+                      onClick={(e) => { e.stopPropagation(); handleStart() }}
+                      className="text-[9px] text-white/30 hover:text-white/60 transition-colors"
+                    >
+                      Recomeçar
+                    </button>
+                  </div>
+                </button>
+              ) : (
+                <button
+                  onClick={handleStart}
+                  className="group flex w-full items-center gap-3.5 rounded-2xl border border-sky-400/20 bg-white/5 px-4 py-3.5 backdrop-blur-sm transition-all duration-200 hover:bg-white/10 hover:border-white/15 active:scale-[0.98]"
+                >
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-linear-to-br from-sky-400 to-sky-600 shadow-[0_4px_12px_rgba(56,189,248,0.25)]">
+                    <DSIcon name="graduationCap" size={20} className="text-white" />
+                  </div>
+                  <div className="flex-1 min-w-0 text-left">
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm font-semibold text-white" style={headingFont}>Sou Aluno / Atleta</p>
+                      <span className="rounded-full bg-sky-400/20 px-1.5 py-px text-[9px] font-bold uppercase text-sky-400 tracking-wider">FREE</span>
+                    </div>
+                    <p className="text-[11px] text-white/45 mt-0.5 truncate">Monte seu plano de treino gratuito</p>
+                  </div>
+                  <DSIcon name="arrowRight" size={16} className="text-white/30 transition-transform group-hover:translate-x-0.5" />
+                </button>
+              )}
+            </div>
+
+            <button
+              onClick={() => router.push('/login')}
+              className="w-full py-2 text-center text-sm font-medium text-white/50 transition-colors hover:text-white/80"
+            >
+              Já tenho conta · Entrar
+            </button>
         </div>
       </div>
     </div>

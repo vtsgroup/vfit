@@ -5,6 +5,32 @@
 
 ---
 
+## [v1.9.6] — 2026-04-09 — Workout Cover Images + Custom Exercise Videos + Admin Muscle Groups
+
+### Novas funcionalidades
+- **Imagem de capa de treino**: personal pode fazer upload de imagem de capa por treino via hover overlay em `workout-detail.tsx` (endpoint `POST /workouts/:id/cover-image`). A imagem é salva no R2 e exibida no `WorkoutCard` da listagem.
+- **Vídeo personalizado por exercício/aluno**: em cada exercício de um treino, novo botão de upload aparece para personals. Vídeo é salvo em `workout_exercises.custom_video_url` e tem prioridade sobre o vídeo da biblioteca no `ExerciseVideoPlayer`.
+- **Admin Grupos Musculares**: nova página `dashboard/admin/muscle-groups` (super_admin only) com árvore de grupos raiz → sub-músculos, upload de imagem e animação por grupo, edição de nome/cor/ordem, criação de sub-músculos e exclusão.
+- **Navegação admin atualizada**: link "Grupos Musculares" adicionado no `adminNavigation` (navigation.ts), QuickLink no painel admin e título no header.
+
+### Arquivos modificados
+- [src/lib/api-client.ts](src/lib/api-client.ts) — método `uploadFile()` adicionado (raw binary, sem FormData); corrigida mescla incorreta com método `download`
+- [src/hooks/use-workouts.ts](src/hooks/use-workouts.ts) — campo `exercises` duplicado removido de `WorkoutDetail`
+- [src/hooks/use-exercises.ts](src/hooks/use-exercises.ts) — `MuscleGroup` type expandido com campos de anatomia (`image_url`, `animation_url`, `color_hex`, `parent_id`, `sub_muscles`)
+- [src/hooks/use-muscle-groups.ts](src/hooks/use-muscle-groups.ts) — arquivo novo: hooks admin-only (não duplica `useMuscleGroups` público)
+- [src/app/dashboard/workouts/page.tsx](src/app/dashboard/workouts/page.tsx) — `WorkoutCard` mostra `cover_image_url`
+- [src/components/workouts/workout-detail.tsx](src/components/workouts/workout-detail.tsx) — upload de capa + upload de vídeo por exercício
+- [src/components/workouts/exercise-video-player.tsx](src/components/workouts/exercise-video-player.tsx) — prop `customVideoUrl` + `activeVideoUrl = customVideoUrl || media?.video_url`
+- [src/app/dashboard/admin/muscle-groups/page.tsx](src/app/dashboard/admin/muscle-groups/page.tsx) — página nova (super_admin)
+- [src/app/dashboard/admin/page.tsx](src/app/dashboard/admin/page.tsx) — QuickLink Grupos Musculares adicionado
+- [src/lib/navigation.ts](src/lib/navigation.ts) — item Grupos Musculares em adminNavigation
+- [src/components/layout/header.tsx](src/components/layout/header.tsx) — título da rota `/dashboard/admin/muscle-groups`
+
+### Deploy
+- **v1.9.6** · Pages + Workers · WhatsApp 401 (bypass `--allow-no-whatsapp`)
+
+
+
 ## [Unreleased] — 2026-04-04 — vfit-v2-melhorias S17–S21
 
 ### Hotfix — 08/04/2026 — Treinos/Avaliações + biblioteca alimentar

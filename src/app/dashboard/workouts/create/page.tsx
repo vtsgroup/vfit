@@ -15,10 +15,10 @@
 
 'use client'
 
-import { useState, useMemo, useEffect, useCallback } from 'react'
+import { useState, useMemo, useEffect, useCallback, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 import { DSIcon } from '@/components/ui/ds-icon'
 import {
   DndContext,
@@ -41,6 +41,8 @@ import { cn } from '@/lib/utils'
 import { useStudents } from '@/hooks/use-students'
 import {
   useCreateWorkout,
+  useCreateWorkoutRaw,
+  useUploadWorkoutCover,
   useExerciseLibrary,
   type CreateWorkoutInput,
   type D1Exercise,
@@ -69,6 +71,7 @@ interface SelectedExercise {
 
 export default function CreateWorkoutPage() {
   const searchParams = useSearchParams()
+    const router = useRouter()
   const preselectedExerciseId = (searchParams.get('exercise_id') || '').trim()
   const preselectedStudentId = (searchParams.get('student_id') || '').trim()
   const isLockedToStudent = !!preselectedStudentId
@@ -135,6 +138,26 @@ export default function CreateWorkoutPage() {
 
   const createWorkout = useCreateWorkout()
   const generateWorkout = useGenerateWorkout()
+    const createWorkoutRaw = useCreateWorkoutRaw()
+    const uploadCover = useUploadWorkoutCover()
+    const coverInputRef = useRef<HTMLInputElement>(null)
+    const [coverFile, setCoverFile] = useState<File | null>(null)
+    const [coverPreview, setCoverPreview] = useState<string | null>(null)
+
+    function handleCoverSelect(e: React.ChangeEvent<HTMLInputElement>) {
+      const file = e.target.files?.[0]
+      if (!file) return
+      setCoverFile(file)
+      const url = URL.createObjectURL(file)
+      setCoverPreview(url)
+    }
+
+    function handleCoverRemove() {
+      setCoverFile(null)
+      if (coverPreview) URL.revokeObjectURL(coverPreview)
+      setCoverPreview(null)
+      if (coverInputRef.current) coverInputRef.current.value = ''
+    }
 
   useEffect(() => {
     if (!preselectedStudentId) return
@@ -349,8 +372,22 @@ export default function CreateWorkoutPage() {
       })),
     }
 
-    createWorkout.mutate(data)
-  }
+      createWorkoutRaw.mutateAsync(data).then(async (res) => {
+        const workoutId = res?.data?.workout?.id ?? (res as { workout?: { id: string } })?.workout?.id
+        if (coverFile && workoutId) {
+          try {
+            await uploadCover.mutateAsync({ workoutId, file: coverFile })
+          } catch {
+            // capa é opcional, não bloqueia
+          }
+        }
+        toast.success('Treino criado com sucesso!')
+      }).catch(() => {
+        // erro já tratado pelo hook
+      }).finally(() => {
+        router.push('/dashboard/workouts')
+      })
+    }
 
   return (
     <AuthGuard requiredType="personal">
@@ -538,6 +575,58 @@ export default function CreateWorkoutPage() {
               onChange={(e) => updateField('notes', e.target.value)}
             />
 
+              {/* ─── Cover image (optional) ─── */}
+              <div className="space-y-1.5">
+                <label className="text-sm font-medium text-text-primary">
+                  Imagem de capa <span className="text-text-muted font-normal">(opcional)</span>
+                </label>
+                <input
+                  ref={coverInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleCoverSelect}
+                />
+                {coverPreview ? (
+                  <div className="relative overflow-hidden rounded-xl border border-border-light">
+                    <Image
+                      src={coverPreview}
+                      alt="Capa do treino"
+                      width={600}
+                      height={200}
+                      className="h-32 w-full object-cover"
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center gap-2 bg-black/40 opacity-0 hover:opacity-100 transition-opacity">
+                      <button
+                        type="button"
+                        onClick={() => coverInputRef.current?.click()}
+                        className="flex items-center gap-1.5 rounded-lg bg-white/20 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-sm hover:bg-white/30 transition-colors"
+                      >
+                        <DSIcon name="pencil" size={12} />
+                        Trocar
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleCoverRemove}
+                        className="flex items-center gap-1.5 rounded-lg bg-red-500/80 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-sm hover:bg-red-500 transition-colors"
+                      >
+                        <DSIcon name="trash" size={12} />
+                        Remover
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => coverInputRef.current?.click()}
+                    className="flex h-24 w-full items-center justify-center gap-3 rounded-xl border-2 border-dashed border-border-light bg-bg-primary text-text-muted transition-all hover:border-brand-primary/50 hover:bg-brand-primary/3 hover:text-brand-primary"
+                  >
+                    <DSIcon name="image" size={20} />
+                    <span className="text-sm font-medium">Adicionar imagem de capa</span>
+                  </button>
+                )}
+              </div>
+
             <div className="flex justify-end pt-2">
               <Button onClick={() => setStep(2)} disabled={!step1Valid}>
                 Próximo: Exercícios
@@ -653,7 +742,7 @@ export default function CreateWorkoutPage() {
             selectedStudent={selectedStudent}
             onBack={() => setStep(2)}
             onSubmit={handleSubmit}
-            isSubmitting={createWorkout.isPending}
+            isSubmitting={createWorkout.isPending || createWorkoutRaw.isPending || uploadCover.isPending}
           />
         )}
 
