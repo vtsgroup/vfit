@@ -1,7 +1,7 @@
 # 📊 TRACKING — Acompanhamento de Progresso
 
 **Documento vivo:** Atualizar após cada sprint  
-**Última atualização:** 2026-04-08 (hotfix + QA concluído + Sprint 8 iniciada)  
+**Última atualização:** 2026-04-08 (hotfix + Sprint 8 T8.1–T8.7 concluídos + regressão não-Chrome OK)  
 **Versão atual:** v1.9.5-fase-1  
 
 ---

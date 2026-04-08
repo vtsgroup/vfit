@@ -74,9 +74,10 @@
 - [x] T8.2 — Feedback UI: `Alert` variante info migrada para tokens de brand
 - [x] T8.3 — Notification system badge/icon migrado de blue para brand
 - [x] T8.4 — Tooltip/Accordion com acento green (borda/glow/open state)
-- [ ] T8.5 — Aplicar baseline em dropdowns/accordions adicionais de páginas avançadas
-- [ ] T8.6 — Rodar validação build + acessibilidade
-- [ ] T8.7 — Documentar resultados no DESIGN-SYSTEM/CHANGELOG
+- [x] T8.5 — Audit de dropdowns/accordions avançados concluído (sem resíduos blue nos componentes-alvo)
+- [x] T8.6 — Regressão não-Chrome executada (`webkit/mobile-safari`: 30 passed, 4 skipped)
+- [x] T8.7 — Resultados documentados em TRACKING + CHANGELOG
+- [ ] T8.8 — Aplicar baseline em charts/media components restantes da Sprint 8
 
 ---
 

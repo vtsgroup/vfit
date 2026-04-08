@@ -18,6 +18,9 @@
 - **Playwright sem Chrome**: smoke público em `webkit/mobile-safari/firefox` ✅ (6/6), acessibilidade em `webkit/mobile-safari` ✅ (12 passed · 2 skipped), auth em `webkit/mobile-safari` ✅ (14 passed · 2 skipped, logout skip por falta de `E2E_*`).
 - **Hardening aplicado**: seletores E2E atualizados para login atual, região `overflow-x-auto` da pricing table tornou-se focável por teclado e botão de revelar senha ganhou `aria-label`.
 - **Ajuste visual solicitado**: destaques principais revertidos de blue para **green** (`button primary`, tokens de marca e realces de navegação).
+- **Sprint 8 (andamento)**: componentes avançados de interação/feedback receberam rebaseline green (`Tooltip`, `Accordion`, `Alert` variante info e `ModernNotification` tipo system).
+- **Regressão não-Chrome**: suíte `smoke-public + auth + a11y` em `webkit/mobile-safari` passou com **30 passed / 4 skipped / 0 failed**.
+- **Estabilização E2E auth**: [tests/e2e/auth.spec.ts](tests/e2e/auth.spec.ts) ficou menos frágil (seletores de submit e asserts de `/register` resilientes).
 - **Go/No-Go**: após registrar artefatos em `docs/ULTRA-PLANO-MVP-PRODUCAO` (execução de lotes, auditoria web e quality gates), o relatório final em [docs/ULTRA-PLANO-MVP-PRODUCAO/GO-NO-GO-MVP.generated.md](docs/ULTRA-PLANO-MVP-PRODUCAO/GO-NO-GO-MVP.generated.md) fechou com status **GO ✅**.
 
 ### VFIT v2 Phase 2 — Sprint 7 concluído (Design System VFIT Blue)
