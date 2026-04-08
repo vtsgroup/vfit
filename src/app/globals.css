@@ -40,21 +40,21 @@
    ============================================ */
 
 @theme {
-  /* Brand Colors — VFIT Blue Standard (WCAG AA compliant) */
-  --color-brand-primary: #2563eb;        /* VFIT primary blue (5.17:1 vs white) */
-  --color-brand-primary-hover: #1d4ed8; /* VFIT primary hover (6.70:1 vs white) */
+  /* Brand Colors — VFIT Green Standard */
+  --color-brand-primary: #22c55e;
+  --color-brand-primary-hover: #16a34a;
   --color-brand-secondary: #09090B;
-  /* Accent — VFIT yellow energy */
-  --color-brand-accent: #eab308;        /* VFIT accent yellow */
-  --color-brand-accent-hover: #facc15;  /* VFIT accent hover */
+  /* Accent — VFIT lime energy */
+  --color-brand-accent: #84cc16;
+  --color-brand-accent-hover: #a3e635;
 
   /* Brand gradient + glow helpers */
-  --color-brand-mint: #3b82f6;          /* VFIT blue light */
-  --color-brand-lime: #facc15;          /* VFIT yellow */
-  --color-brand-deep: #1e40af;          /* VFIT deep blue (8.72:1 vs white) */
-  --color-brand-glow: rgba(37,99,235,0.30); /* VFIT blue glow */
-  --color-brand-glow-weak: rgba(37,99,235,0.12);
-  --color-brand-ring: rgba(37,99,235,0.24);
+  --color-brand-mint: #86efac;
+  --color-brand-lime: #bef264;
+  --color-brand-deep: #166534;
+  --color-brand-glow: rgba(34,197,94,0.30);
+  --color-brand-glow-weak: rgba(34,197,94,0.12);
+  --color-brand-ring: rgba(34,197,94,0.24);
 
   /* Midnight Pulse Foundation */
   --color-bg-base: #050A12;
@@ -71,19 +71,19 @@
   --color-text-secondary-cool: #A8B8CC;  /* WCAG AA: 4.8:1 vs #050A12 */
   --color-text-muted-cool: #7A8BA3;      /* WCAG AA-lg: 4.2:1 vs #050A12 */
 
-  --gradient-hero: radial-gradient(ellipse at 20% 50%, rgba(59,130,246,0.10) 0%, transparent 60%),
-                   radial-gradient(ellipse at 80% 20%, rgba(234,179,8,0.07) 0%, transparent 50%),
-                   radial-gradient(ellipse at 50% 100%, rgba(56,189,248,0.04) 0%, transparent 40%);
-  --gradient-cta: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-  --gradient-cta-hover: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
-  --gradient-text: linear-gradient(135deg, #2563eb 0%, #1d4ed8 50%, #eab308 100%);
+  --gradient-hero: radial-gradient(ellipse at 20% 50%, rgba(34,197,94,0.10) 0%, transparent 60%),
+                   radial-gradient(ellipse at 80% 20%, rgba(132,204,22,0.07) 0%, transparent 50%),
+                   radial-gradient(ellipse at 50% 100%, rgba(134,239,172,0.04) 0%, transparent 40%);
+  --gradient-cta: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  --gradient-cta-hover: linear-gradient(135deg, #16a34a 0%, #166534 100%);
+  --gradient-text: linear-gradient(135deg, #22c55e 0%, #16a34a 50%, #84cc16 100%);
 
   /* Redesign (Premium Sidebar + KPI Hero) */
-  --color-sidebar-bg: #1d4ed8;      /* VFIT deep blue */
-  --color-sidebar-active: #2563eb;   /* VFIT primary hover */
+  --color-sidebar-bg: #166534;
+  --color-sidebar-active: #22c55e;
   --color-sidebar-text: rgba(255, 255, 255, 0.78);
   --color-sidebar-text-active: #FFFFFF;
-  --color-sidebar-dot: #60a5fa;      /* VFIT blue light */
+  --color-sidebar-dot: #86efac;
 
   --color-bg-page: #050A12;
   --color-kpi-dark: #0E1525;
@@ -496,14 +496,14 @@
    ============================================ */
 .vfit-theme {
   /* ── Brand ── */
-  --color-brand-primary: #00FF00;
-  --color-brand-primary-hover: #00CC00;
-  --color-brand-accent: #00FF00;
-  --color-brand-glow: rgba(0, 255, 0, 0.30);
-  --color-brand-glow-weak: rgba(0, 255, 0, 0.12);
-  --color-brand-ring: rgba(0, 255, 0, 0.24);
-  --color-brand-mint: #66FF66;
-  --color-brand-deep: #005500;
+  --color-brand-primary: #22c55e;
+  --color-brand-primary-hover: #16a34a;
+  --color-brand-accent: #84cc16;
+  --color-brand-glow: rgba(34, 197, 94, 0.30);
+  --color-brand-glow-weak: rgba(34, 197, 94, 0.12);
+  --color-brand-ring: rgba(34, 197, 94, 0.24);
+  --color-brand-mint: #86efac;
+  --color-brand-deep: #166534;
 
   /* ── Backgrounds ── */
   --color-bg-primary: #0F2B2B;
@@ -527,47 +527,47 @@
   --surface-container-highest: #224D4D;
   --surface-bright: #2E6A6A;
 
-  /* ── MD3 Surface Tint (neon lime) ── */
-  --surface-tint: rgba(0, 255, 0, 0.04);
-  --surface-tint-hover: rgba(0, 255, 0, 0.08);
-  --surface-tint-active: rgba(0, 255, 0, 0.12);
+  /* ── MD3 Surface Tint (VFIT green) ── */
+  --surface-tint: rgba(34, 197, 94, 0.04);
+  --surface-tint-hover: rgba(34, 197, 94, 0.08);
+  --surface-tint-active: rgba(34, 197, 94, 0.12);
 
   /* ── MD3 On-Surface ── */
-  --outline: rgba(0, 255, 0, 0.16);
-  --outline-variant: rgba(0, 255, 0, 0.08);
+  --outline: rgba(34, 197, 94, 0.16);
+  --outline-variant: rgba(34, 197, 94, 0.08);
 
   /* ── Borders ── */
-  --color-border-light: rgba(0, 255, 0, 0.08);
-  --color-border-dark: rgba(0, 255, 0, 0.14);
+  --color-border-light: rgba(34, 197, 94, 0.08);
+  --color-border-dark: rgba(34, 197, 94, 0.14);
 
   /* ── Text ── */
   --color-text-secondary: #B3B3B3;
   --color-text-muted: #808080;
 
-  /* ── Glass Premium (teal-tinted) ── */
+  /* ── Glass Premium (VFIT green-tinted) ── */
   --color-glass-premium: rgba(15, 43, 43, 0.78);
-  --color-glass-premium-border: rgba(0, 255, 0, 0.10);
-  --color-glass-premium-shine: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 45%, rgba(0,255,0,0.04) 100%);
-  --shadow-glass-premium: 0 8px 32px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.25), 0 0 0 0.5px rgba(0,255,0,0.06) inset, 0 1px 0 rgba(255,255,255,0.06) inset;
-  --shadow-glass-premium-hover: 0 20px 60px rgba(0,0,0,0.5), 0 8px 16px rgba(0,0,0,0.3), 0 0 0 0.5px rgba(0,255,0,0.12) inset, 0 1px 0 rgba(255,255,255,0.10) inset;
-  --shadow-card-glow: 0 0 0 1px rgba(0,255,0,0.06), 0 8px 24px rgba(0,0,0,0.35), 0 0 48px rgba(0,255,0,0.03);
-  --shadow-card-glow-hover: 0 0 0 1px rgba(0,255,0,0.14), 0 16px 48px rgba(0,0,0,0.45), 0 0 32px rgba(0,255,0,0.06);
+  --color-glass-premium-border: rgba(34, 197, 94, 0.10);
+  --color-glass-premium-shine: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 45%, rgba(34,197,94,0.04) 100%);
+  --shadow-glass-premium: 0 8px 32px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.25), 0 0 0 0.5px rgba(34,197,94,0.06) inset, 0 1px 0 rgba(255,255,255,0.06) inset;
+  --shadow-glass-premium-hover: 0 20px 60px rgba(0,0,0,0.5), 0 8px 16px rgba(0,0,0,0.3), 0 0 0 0.5px rgba(34,197,94,0.12) inset, 0 1px 0 rgba(255,255,255,0.10) inset;
+  --shadow-card-glow: 0 0 0 1px rgba(34,197,94,0.06), 0 8px 24px rgba(0,0,0,0.35), 0 0 48px rgba(34,197,94,0.03);
+  --shadow-card-glow-hover: 0 0 0 1px rgba(34,197,94,0.14), 0 16px 48px rgba(0,0,0,0.45), 0 0 32px rgba(34,197,94,0.06);
 
-  /* ── Frosted Glass (teal-tinted) ── */
+  /* ── Frosted Glass (VFIT green-tinted) ── */
   --frosted-bg: rgba(15, 43, 43, 0.72);
   --frosted-bg-thick: rgba(15, 43, 43, 0.88);
-  --frosted-border: rgba(0, 255, 0, 0.10);
+  --frosted-border: rgba(34, 197, 94, 0.10);
 
   /* ── MD3 Pill Indicator ── */
-  --color-pill-bg: rgba(0, 255, 0, 0.12);
-  --color-pill-glow: rgba(0, 255, 0, 0.25);
+  --color-pill-bg: rgba(34, 197, 94, 0.12);
+  --color-pill-glow: rgba(34, 197, 94, 0.25);
 
   /* ── Focus Ring ── */
-  --focus-ring: 0 0 0 3px rgba(0, 255, 0, 0.20);
+  --focus-ring: 0 0 0 3px rgba(34, 197, 94, 0.20);
   --focus-ring-offset: 0 0 0 2px var(--color-bg-primary);
 
   /* ── Gradients ── */
-  --gradient-cta: linear-gradient(135deg, #00FF00 0%, #00CC00 100%);
+  --gradient-cta: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
   --gradient-cta-hover: linear-gradient(135deg, #33FF33 0%, #00FF00 100%);
 
   /* ── 3D Shadows ── */
@@ -1645,7 +1645,7 @@ body {
 }
 .vfit-theme .ds3-header.ds3-header-scrolled {
   background: rgba(15, 43, 43, 0.75);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(0, 255, 0, 0.04);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(37, 99, 235, 0.04);
 }
 
 /* DS v3 Action buttons — 36×36 individual pills */
@@ -1667,9 +1667,9 @@ body {
   color: var(--color-text-primary);
   border-color: var(--color-brand-primary-20, rgba(16, 185, 129, 0.2));
 }
-/* VFIT Theme — action btn hover uses neon lime tint */
+/* VFIT Theme — action btn hover uses VFIT blue tint */
 .vfit-theme .ds3-action-btn:hover {
-  border-color: rgba(0, 255, 0, 0.18);
+  border-color: rgba(37, 99, 235, 0.18);
 }
 
 /* Legacy header-surface (kept for backward compat, will deprecate) */
@@ -1704,11 +1704,11 @@ body {
   box-shadow: 0 4px 16px rgba(0,0,0,0.2), 0 1px 4px rgba(0,0,0,0.15), 0 0 0 0.5px rgba(255,255,255,0.05) inset;
 }
 
-/* VFIT Theme — surface-card with subtle teal tint */
+/* VFIT Theme — surface-card with subtle VFIT blue tint */
 .vfit-theme .surface-card {
   background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(0, 255, 0, 0.06);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.2), 0 1px 4px rgba(0,0,0,0.15), 0 0 0 0.5px rgba(0,255,0,0.04) inset;
+  border-color: rgba(37, 99, 235, 0.06);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2), 0 1px 4px rgba(0,0,0,0.15), 0 0 0 0.5px rgba(37,99,235,0.04) inset;
 }
 
 .surface-card-hover {
@@ -2224,7 +2224,7 @@ html.light {
   box-shadow: var(--shadow-glass-premium-hover);
 }
 .vfit-theme .glass-premium:hover {
-  border-color: rgba(0, 255, 0, 0.14);
+  border-color: rgba(37, 99, 235, 0.14);
 }
 
 /* Card with gradient border glow (animated) */

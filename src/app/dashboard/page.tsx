@@ -79,6 +79,13 @@ export default function DashboardPage() {
     }
   }, [isHydrated, effectiveType, onboarding.data?.onboarding, router])
 
+  // ─── Student → redirecionar para app B2C (/treinos) ───
+  // PWA start_url é /dashboard, mas students devem usar o app B2C
+  useEffect(() => {
+    if (!isHydrated || effectiveType !== 'student') return
+    router.replace('/treinos')
+  }, [isHydrated, effectiveType, router])
+
   // Admin vê loading enquanto redireciona para /dashboard/admin (exceto simulação)
   if (isHydrated && user?.user_type === 'admin' && effectiveType === 'admin') {
     return (
@@ -98,13 +105,6 @@ export default function DashboardPage() {
   // Greeting based on time of day
   const hour = new Date().getHours()
   const greeting = hour < 12 ? 'Bom dia' : hour < 18 ? 'Boa tarde' : 'Boa noite'
-
-  // ─── Student → redirecionar para app B2C (/treinos) ───
-  // PWA start_url é /dashboard, mas students devem usar o app B2C
-  useEffect(() => {
-    if (!isHydrated || effectiveType !== 'student') return
-    router.replace('/treinos')
-  }, [isHydrated, effectiveType, router])
 
   // Student vê loading enquanto redireciona para /treinos
   if (isHydrated && effectiveType === 'student') {

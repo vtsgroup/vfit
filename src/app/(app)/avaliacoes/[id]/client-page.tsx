@@ -9,9 +9,11 @@
 import { useParams, useRouter } from 'next/navigation'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { useSelfAssessmentDetail, useSelfAssessments, getBMIColor, getActivityLabel, getGoalLabel } from '@/hooks/use-self-assessments'
+import { useAuthStore } from '@/stores/auth-store'
 
 export default function AvaliacaoDetalhePage() {
   const router = useRouter()
+  const isHydrated = useAuthStore((s) => s.isHydrated)
   const rawId = useParams<{ id: string }>().id
   const id = rawId && rawId !== '_' ? rawId : null
   const { data: assessment, isLoading } = useSelfAssessmentDetail(id)
@@ -24,7 +26,7 @@ export default function AvaliacaoDetalhePage() {
     return idx >= 0 && idx < allAssessments.length - 1 ? allAssessments[idx + 1] : null
   })()
 
-  if (isLoading) {
+  if (!isHydrated || isLoading) {
     return (
       <div className="flex items-center justify-center py-32">
         <DSIcon name="loader" size={24} className="animate-spin text-zinc-500" />

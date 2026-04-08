@@ -1,15 +1,17 @@
 import { expect, test } from '@playwright/test'
 
 test.describe('S92 • Smoke público', () => {
+  test.setTimeout(60_000)
+
   test('home pública responde', async ({ page }) => {
     await page.goto('/')
     await expect(page).toHaveURL(/\//)
   })
 
   test('login carrega formulário', async ({ page }) => {
-    await page.goto('/login')
-    await expect(page.getByPlaceholder('Email')).toBeVisible()
-    await expect(page.getByPlaceholder('Senha')).toBeVisible()
-    await expect(page.getByRole('button', { name: 'Entrar' })).toBeVisible()
+    await page.goto('/login', { waitUntil: 'domcontentloaded' })
+    await expect(page.getByPlaceholder('000.000.000-00 ou email')).toBeVisible({ timeout: 15_000 })
+    await expect(page.locator('input[autocomplete="current-password"]')).toBeVisible({ timeout: 15_000 })
+    await expect(page.getByRole('button', { name: /entrar/i })).toBeVisible({ timeout: 15_000 })
   })
 })

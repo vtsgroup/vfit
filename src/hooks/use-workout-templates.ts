@@ -41,7 +41,7 @@ export interface WorkoutTemplateDetail extends WorkoutTemplate {
 }
 
 export function useWorkoutTemplates(filters?: { difficulty?: string; category?: string }) {
-  const isReady = useAuthStore((s) => s.isAuthenticated && s.isHydrated)
+  const isHydrated = useAuthStore((s) => s.isHydrated)
 
   return useQuery({
     queryKey: ['workout-templates', filters],
@@ -53,14 +53,14 @@ export function useWorkoutTemplates(filters?: { difficulty?: string; category?: 
       const res = await api.get<WorkoutTemplate[]>(`/workout-templates${qs ? `?${qs}` : ''}`)
       return res.data
     },
-    // Templates são públicos — funciona com ou sem auth
-    enabled: isReady,
+    // Templates são públicos — basta hidratar a store
+    enabled: isHydrated,
     staleTime: 5 * 60 * 1000, // 5 min
   })
 }
 
 export function useWorkoutTemplateDetail(id: string | null) {
-  const isReady = useAuthStore((s) => s.isAuthenticated && s.isHydrated)
+  const isHydrated = useAuthStore((s) => s.isHydrated)
 
   return useQuery<WorkoutTemplateDetail>({
     queryKey: ['workout-template', id],
@@ -68,8 +68,8 @@ export function useWorkoutTemplateDetail(id: string | null) {
       const res = await api.get<WorkoutTemplateDetail>(`/workout-templates/${id}`)
       return res.data
     },
-    // Templates são públicos — funciona com ou sem auth
-    enabled: isReady && !!id,
+    // Templates são públicos — basta hidratar a store
+    enabled: isHydrated && !!id,
     ...APP_QUERY_CACHE.detail,
   })
 }

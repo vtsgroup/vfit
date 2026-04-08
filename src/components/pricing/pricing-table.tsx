@@ -34,7 +34,12 @@ export function PricingTable({ rows }: PricingTableProps) {
   const planLabels = { gratis: 'Grátis', pro: 'Pro', proPlus: 'Pro+', max: 'Max' }
 
   return (
-    <div className="overflow-x-auto">
+    <div
+      className="overflow-x-auto"
+      tabIndex={0}
+      role="region"
+      aria-label="Tabela comparativa de planos"
+    >
       <table className="w-full text-left">
         <thead>
           <tr className="border-b border-white/8">

@@ -94,7 +94,7 @@ interface AuthState {
   setStudentProfile: (profile: StudentProfile) => void
   setNutritionistProfile: (profile: NutritionistProfile) => void
   setTokens: (tokens: AuthTokens) => void
-  login: (data: { user: User; tokens: AuthTokens; profile?: PersonalProfile | StudentProfile }) => void
+  login: (data: { user: User; tokens: AuthTokens; profile?: PersonalProfile | StudentProfile | NutritionistProfile }) => void
   logout: () => void
   updateUser: (partial: Partial<User>) => void
   setLoading: (loading: boolean) => void

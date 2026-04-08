@@ -486,14 +486,14 @@ export function Navbar() {
             </span>
           </div>
           <div className="space-y-0.5">
-            <a href="/blog" onClick={closeMobile} className="flex items-center gap-3 rounded-xl px-4 py-3 text-[14px] text-white/85 hover:text-white hover:bg-white/8 transition-all">
+            <Link href="/blog" onClick={closeMobile} className="flex items-center gap-3 rounded-xl px-4 py-3 text-[14px] text-white/85 hover:text-white hover:bg-white/8 transition-all">
               <DSIcon name="bookOpen" size={16} className="text-white/60" />
               Blog
-            </a>
-            <a href="/#about" onClick={closeMobile} className="flex items-center gap-3 rounded-xl px-4 py-3 text-[14px] text-white/85 hover:text-white hover:bg-white/8 transition-all">
+            </Link>
+            <Link href="/#about" onClick={closeMobile} className="flex items-center gap-3 rounded-xl px-4 py-3 text-[14px] text-white/85 hover:text-white hover:bg-white/8 transition-all">
               <DSIcon name="info" size={16} className="text-white/60" />
               Sobre
-            </a>
+            </Link>
           </div>
         </div>
 

@@ -3,6 +3,13 @@
 > Paleta web (Next.js), contrastes WCAG, componentes UI, tokens CSS.
 > Para design system mobile (React Native), ver `.claude/vfit-design-system.md`.
 
+## Atualização — Hotfix visual (08/04/2026)
+
+- Destaques principais revertidos para **VFIT Green** (brand primary)
+- `Button` variante `primary` voltou para gradiente/hover em emerald
+- Tokens globais de marca e glow retornaram para paleta verde em `globals.css`
+- Build e regressão Playwright não-Chrome validados após o ajuste
+
 ---
 
 ## Cores & Contraste (Web — Tema Atual)

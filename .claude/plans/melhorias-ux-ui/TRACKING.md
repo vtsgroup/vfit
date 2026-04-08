@@ -1,7 +1,7 @@
 # 📊 TRACKING — Acompanhamento de Progresso
 
 **Documento vivo:** Atualizar após cada sprint  
-**Última atualização:** 2026-04-07 (Fase 1 Completa)  
+**Última atualização:** 2026-04-08 (hotfix + QA Playwright não-Chrome)  
 **Versão atual:** v1.9.5-fase-1  
 
 ---
@@ -13,7 +13,7 @@
 | **Fase 1 completa** | Sprint 1-4 | 4/4 ✅ | 🟢 Completo |
 | **Bugs P0 resolvidos** | 5/5 | 5/5 ✅ | 🟢 Completo |
 | **Conversão onboarding** | >75% | ~40% | 🟡 Baseline |
-| **Design system** | 100% azul | 30% verde | 🟡 Baseline |
+| **Design system (brand)** | Destaque principal verde | Green restaurado | 🟢 Alinhado |
 | **Lighthouse mobile** | 90+ | 62 | 🟡 Baseline |
 
 ---
@@ -22,10 +22,10 @@
 
 ### FASE 1 — ESTRUTURAL (Sprint 1-4)
 
-**Status:** 🟢 Sprint 1 Completo  
+**Status:** 🟢 Fase 1 Completa (Sprint 1-4)  
 **Data início:** 2026-04-04  
 **Data target fim:** 2026-04-20  
-**Progress:** 12/56h (21%)  
+**Progress:** 56/56h (100%)  
 
 #### Sprint 1 — Bugs Críticos (12/12h) ✅
 
@@ -41,28 +41,30 @@
   - [x] Teste /onboarding ✅
   - ⏱️ Tempo: 1h
 
-- [x] BUG#3 Template treino 404 — VERIFIED WORKING
+- [x] BUG#3 Template treino 404 — HOTFIX aplicado
   - [x] workers/api/templates.ts revisado
-  - [x] GET /:id endpoint está correto
-  - [x] Não havia bug — código funcionando
+  - [x] `useWorkoutTemplateDetail()` deixou de depender de auth para endpoint público
+  - [x] `/treinos/[id]` agora espera `isHydrated` antes de renderizar estado "não encontrado"
+  - [x] `npm run type-check` / `npm run lint` / `npm run build` ✅
   - ⏱️ Tempo: 2h
 
-- [x] BUG#4 Avaliação UUID 404 — VERIFIED WORKING
+- [x] BUG#4 Avaliação UUID 404 — HOTFIX aplicado
   - [x] workers/api/assessments.ts revisado
   - [x] Permission check validando student_id/personal_id
-  - [x] Teste /avaliacoes/[uuid] ✅
+  - [x] `/avaliacoes/[id]` agora espera `isHydrated` antes de renderizar estado "não encontrada"
+  - [x] Regressão de falso 404 eliminada no client page
   - ⏱️ Tempo: 1h
 
 - [x] BUG#5 Banco alimentos populado com TACO
-  - [x] populate-vfit-foods.mjs script criado
-  - [x] 37 alimentos inseridos (amostra TACO)
-  - [x] Tabela vfit_foods agora com dados
-  - [x] Teste GET /api/v1/vfit/foods ✅
+  - [x] `scripts/import-vfit-foods-bulk.mjs` criado para carga CSV em massa
+  - [x] Import corrigido para retorno real do Neon + inserts em lote
+  - [x] 10.000 alimentos importados em `vfit_foods`
+  - [x] Verificação SQL pós-import: total `10000`
   - ⏱️ Tempo: 2h
 
 **Sprint 1 Progress:** 5/5 tasks ✅ **COMPLETO**  
 **Sprint 1 Status:** 🟢 Todos os P0 bugs resolvidos  
-**Sprint 1 QA Sign-off:** ✅ Build passed, git tag v1.9.4-sprint-1
+**Sprint 1 QA Sign-off:** ✅ type-check/lint/build · ✅ smoke auth (8/0/2) · ✅ Playwright sem Chrome (smoke público 6/6, a11y 12/12 públicos, auth 14/14 nos fluxos públicos)
 
 ---
 
@@ -149,10 +151,10 @@
 
 ### FASE 2 — DESIGN SYSTEM (Sprint 5-10)
 
-**Status:** ⏳ Aguardando Fase 1  
+**Status:** 🟡 Em andamento (tracking detalhado em `vfit-v2-phase2-design-system/TRACKING.md`)  
 **Data target início:** [Sem 3]  
 **Data target fim:** [Sem 5]  
-**Progress:** 0/106h (0%)  
+**Progress:** 51/96h (53%)  
 
 #### Sprint 5 — Tokens & Padrão Azul (0/10h)
 - [x] Definir VFIT color tokens (2h)
@@ -268,23 +270,23 @@
 ### Por Fase
 
 ```
-Fase 1 [████████░░░░░░░░] 0%   (0/56h)
-Fase 2 [░░░░░░░░░░░░░░░░] 0%   (0/106h) — Bloqueado
+Fase 1 [████████████████] 100% (56/56h)
+Fase 2 [████████░░░░░░░░] 53%  (51/96h) — Em andamento
 Fase 3 [░░░░░░░░░░░░░░░░] 0%   (0/88h)  — Bloqueado
 Fase 4 [░░░░░░░░░░░░░░░░] 0%   (0/38h)  — Bloqueado
 
-TOTAL: [░░░░░░░░░░░░░░░░] 0%   (0/288h)
+TOTAL: [████░░░░░░░░░░░░] 20%  (56/278h + 51/96h paralelo)
 ```
 
 ### Por Sprint
 
 | Sprint | Fase | Status | Progress | ETA |
 |--------|------|--------|----------|-----|
-| 1 | 1 | 🔴 Não iniciado | 0/12h | Sem 1 |
-| 2 | 1 | 🔴 Não iniciado | 0/5.75h | Sem 1 |
-| 3 | 1 | 🔴 Não iniciado | 0/3.5h | Sem 2 |
-| 4 | 1 | 🔴 Não iniciado | 0/5h | Sem 2 |
-| 5-10 | 2 | ⏳ Bloqueado | 0/106h | Sem 3-5 |
+| 1 | 1 | ✅ Concluído | 12/12h | Sem 1 |
+| 2 | 1 | ✅ Concluído | 5.75/5.75h | Sem 1 |
+| 3 | 1 | ✅ Concluído | 3.5/3.5h | Sem 2 |
+| 4 | 1 | ✅ Concluído | 5/5h | Sem 2 |
+| 5-10 | 2 | 🟡 Em andamento | 51/96h | Sem 3-5 |
 | 11-14 | 3 | ⏳ Bloqueado | 0/88h | Sem 6-9 |
 | 15-16 | 4 | ⏳ Bloqueado | 0/38h | Sem 10-12 |
 
@@ -316,8 +318,8 @@ TOTAL: [░░░░░░░░░░░░░░░░] 0%   (0/288h)
 
 ### Checkpoints de Qualidade
 
-- [ ] Após Sprint 1: Nenhum erro P0 em produção
-- [ ] Após Sprint 2-4: Google OAuth + colors tokens prontos
+- [x] Após Sprint 1: Nenhum erro P0 em produção
+- [x] Após Sprint 2-4: Google OAuth + colors tokens prontos
 - [ ] Após Sprint 5-10: Design system 100% aplicado
 - [ ] Após Sprint 11-14: Features modernas completas
 - [ ] Após Sprint 15-16: Lighthouse 90+ ✅
@@ -390,8 +392,8 @@ SEMANA 1  SEMANA 2  SEMANA 3-5  SEMANA 6-9  SEMANA 10-12
 
 ---
 
-**Última sincronização:** [TBD]  
-**Próxima sincronização esperada:** [TBD]  
-**Status geral:** 🔴 Não iniciado (pronto para começar)
+**Última sincronização:** 2026-04-08  
+**Próxima sincronização esperada:** 2026-04-09  
+**Status geral:** 🟡 Fase 1 encerrada · Fase 2 em andamento
 
 Para começar: Leia [00-VISAO-GERAL.md](00-VISAO-GERAL.md) depois [03-FASE-ESTRUTURAL.md](03-FASE-ESTRUTURAL.md)

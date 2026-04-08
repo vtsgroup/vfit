@@ -7,6 +7,26 @@
 
 ## [Unreleased] — 2026-04-04 — vfit-v2-melhorias S17–S21
 
+### Hotfix — 08/04/2026 — Treinos/Avaliações + biblioteca alimentar
+- **Treinos públicos**: [src/hooks/use-workout-templates.ts](src/hooks/use-workout-templates.ts) passou a habilitar queries públicas apenas com `isHydrated`, removendo falso bloqueio por auth em `/treinos/[id]`.
+- **Template detail**: [src/app/(app)/treinos/[id]/client-page.tsx](src/app/(app)/treinos/[id]/client-page.tsx) agora segura o estado de loading até a hidratação da store, evitando falso “Template não encontrado”.
+- **Avaliações detail**: [src/app/(app)/avaliacoes/[id]/client-page.tsx](src/app/(app)/avaliacoes/[id]/client-page.tsx) recebeu o mesmo guard de hidratação para eliminar falso “Avaliação não encontrada”.
+- **Biblioteca alimentar**: novo script [scripts/import-vfit-foods-bulk.mjs](scripts/import-vfit-foods-bulk.mjs) com parsing CSV, deduplicação, truncamento seguro e inserts em lote para Neon.
+- **Carga executada**: importados **10.000 alimentos** em `vfit_foods`, com verificação SQL final `COUNT(*) = 10000`.
+- **QA local**: `npm run type-check` ✅ · `npm run lint` ✅ (warnings não bloqueantes) · `npm run build` ✅.
+- **Smoke auth**: `npm run smoke:auth:local` ✅ (8 passed · 0 failed · 2 skipped) com evidência em [docs/ULTRA-PLANO-MVP-PRODUCAO/AUTH-SMOKE.generated.md](docs/ULTRA-PLANO-MVP-PRODUCAO/AUTH-SMOKE.generated.md).
+- **Playwright sem Chrome**: smoke público em `webkit/mobile-safari/firefox` ✅ (6/6), acessibilidade em `webkit/mobile-safari` ✅ (12 passed · 2 skipped), auth em `webkit/mobile-safari` ✅ (14 passed · 2 skipped, logout skip por falta de `E2E_*`).
+- **Hardening aplicado**: seletores E2E atualizados para login atual, região `overflow-x-auto` da pricing table tornou-se focável por teclado e botão de revelar senha ganhou `aria-label`.
+- **Ajuste visual solicitado**: destaques principais revertidos de blue para **green** (`button primary`, tokens de marca e realces de navegação).
+- **Go/No-Go**: após registrar artefatos em `docs/ULTRA-PLANO-MVP-PRODUCAO` (execução de lotes, auditoria web e quality gates), o relatório final em [docs/ULTRA-PLANO-MVP-PRODUCAO/GO-NO-GO-MVP.generated.md](docs/ULTRA-PLANO-MVP-PRODUCAO/GO-NO-GO-MVP.generated.md) fechou com status **GO ✅**.
+
+### VFIT v2 Phase 2 — Sprint 7 concluído (Design System VFIT Blue)
+- **Navigation**: sidebar com glow/sombras ativas em VFIT blue e `SECTION_COLORS.Principal` migrado para `text-blue-400`
+- **Tabs**: `MD3Tabs` (variant `pills`) com sombra ativa em VFIT blue (`rgba(37,99,235,0.08)`)
+- **Badges**: variantes `personal` e `verified` migradas de emerald para blue gradients
+- **Admin Users**: avatar gradient de `student` migrado para blue (`from-blue-400 to-blue-500/70`)
+- **Validação**: `npm run build` concluído com sucesso (133/133 páginas geradas)
+
 ### S17 — Design System Cleanup
 - **WCAG AA dark mode fixes**: `--color-text-secondary` (#94A3B8 → #A8B8CC, 4.8:1), `--color-text-muted` (#64748B → #7A8BA3, 4.2:1), `--color-border-light` (0.06 → 0.09)
 - **9 components deprecated** from barrel export (`index.ts`): ActionButton3D, ActionCard3D, ToolCard, ActionButtons, NotificationCard, CustomSelect3D, MD3Card system, MD3Badge/Chip/Status

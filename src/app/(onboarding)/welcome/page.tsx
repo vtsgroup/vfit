@@ -141,7 +141,7 @@ export default function WelcomePage() {
                 className="w-full text-base border-white/20 text-white hover:bg-white/10"
                 onClick={handleStart}
               >
-                <DSIcon name="rotate-ccw" className="h-5 w-5" />
+                <DSIcon name="rotateCcw" className="h-5 w-5" />
                 Começar do zero
               </Button>
             </>
