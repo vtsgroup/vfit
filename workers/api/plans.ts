@@ -180,23 +180,29 @@ plans.post('/save', async (c) => {
   const planId = generateId()
   const now = new Date().toISOString()
 
-  // Inserir plano
+  // Inserir plano (com todas as colunas para GET /current funcionar corretamente)
   await pgQuery(
     c.env,
-    `INSERT INTO workout_plans (id, user_id, created_by, name, title, description, status, created_at, updated_at)
-     VALUES ($1, $2, NULL, $3, $4, $5, 'active', $6, $6)`,
-    [planId, userId, plan.plan_name, plan.plan_name, plan.description || '', now]
+    `INSERT INTO workout_plans (id, user_id, created_by, name, title, description, type, status, total_days, current_day, settings, created_at, updated_at)
+     VALUES ($1, $2, NULL, $3, $4, $5, 'ai_generated', 'active', $6, 1, $7, $8, $8)`,
+    [
+      planId, userId, plan.plan_name, plan.plan_name, plan.description || '',
+      plan.days.length,
+      JSON.stringify({ estimated_calories: plan.estimated_calories_per_session }),
+      now,
+    ]
   )
 
   // Inserir dias + exercícios
   for (const day of plan.days) {
     const dayId = generateId()
+    const dayMuscleGroups = [...new Set(day.exercises.map((e) => e.muscle_group))]
 
     await pgQuery(
       c.env,
-      `INSERT INTO workout_plan_days (id, plan_id, day_number, name, focus, created_at)
-       VALUES ($1, $2, $3, $4, $5, $6)`,
-      [dayId, planId, day.day_number, day.name, day.focus, now]
+      `INSERT INTO workout_plan_days (id, plan_id, day_number, name, focus, muscle_groups, sort_order, created_at)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+      [dayId, planId, day.day_number, day.name, day.focus, dayMuscleGroups, day.day_number, now]
     )
 
     for (let i = 0; i < day.exercises.length; i++) {
@@ -205,7 +211,7 @@ plans.post('/save', async (c) => {
         c.env,
         `INSERT INTO workout_plan_exercises (id, plan_day_id, name, muscle_group, sets, reps, rest_seconds, weight_kg, notes, sort_order, created_at)
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
-        [generateId(), dayId, ex.name, ex.muscle_group, ex.sets, ex.reps, ex.rest_seconds, ex.weight_suggestion_kg || null, ex.notes || null, i, now]
+        [generateId(), dayId, ex.name, ex.muscle_group, ex.sets, ex.reps, ex.rest_seconds, ex.weight_suggestion_kg || null, ex.notes || null, i + 1, now]
       )
     }
   }
@@ -409,54 +415,76 @@ plans.post('/regenerate', authMiddleware, async (c) => {
     [userId]
   )
 
-  // Buscar perfil do usuário para gerar novo plano
-  const profile = await pgQueryOne<{
+  // Buscar perfil do onboarding (B2C) ou students (B2B)
+  const onboardingProfile = await pgQueryOne<{
     gender: string
-    training_location: string
     experience_level: string
+    training_frequency: string
     goal: string
+    training_location: string
+    target_muscles: string[]
+    age: number
     height_cm: number
     weight_kg: number
-    training_frequency: number
-    session_duration: number
+    target_weight_kg: number | null
+    days_per_week: number
+    session_duration: string
     injuries: string[]
-  }>(
-    c.env,
-    `SELECT u.gender, u.height_cm, u.weight_kg,
-            s.training_location, s.experience_level, s.goal,
-            s.training_frequency, s.session_duration, s.injuries
-     FROM users u
-     LEFT JOIN students s ON s.id = u.id
-     WHERE u.id = $1`,
-    [userId]
-  )
+    preferred_time: string
+  }>(c.env, `SELECT * FROM user_onboarding WHERE user_id = $1 LIMIT 1`, [userId])
 
-  if (!profile) {
+  // Fallback: students + users JOIN (B2B flow)
+  const fallbackProfile = !onboardingProfile
+    ? await pgQueryOne<{
+        gender: string; training_location: string; experience_level: string;
+        goal: string; height_cm: number; weight_kg: number;
+        training_frequency: string; session_duration: string; injuries: string[];
+      }>(c.env, `SELECT u.gender, u.height_cm, u.weight_kg,
+              s.training_location, s.experience_level, s.goal,
+              s.training_frequency, s.session_duration, s.injuries
+       FROM users u LEFT JOIN students s ON s.id = u.id WHERE u.id = $1`, [userId])
+    : null
+
+  if (!onboardingProfile && !fallbackProfile) {
     throw new BadRequestError('Perfil não encontrado. Complete o onboarding primeiro.')
   }
 
+  // Normalize session_duration → valid enum for prompt
+  const normalizeSessionDuration = (sd: unknown): string => {
+    if (!sd) return 'medium_45'
+    const s = String(sd)
+    if (['quick_15', 'short_30', 'medium_45', 'long_60'].includes(s)) return s
+    const labelMap: Record<string, string> = { quick: 'quick_15', short: 'short_30', medium: 'medium_45', long: 'long_60' }
+    return labelMap[s] || 'medium_45'
+  }
+
+  // Merge profile from onboarding (preferred) or fallback
+  const p = onboardingProfile || fallbackProfile!
+  const regenDaysPerWeek = onboardingProfile?.days_per_week || parseInt(String(p.training_frequency), 10) || 3
+  const regenSessionDuration = normalizeSessionDuration(p.session_duration)
+
   // Gerar com IA (reusa a lógica de /generate)
   const prompt = PROMPTS.generate_b2c_plan({
-    gender: profile.gender || 'male',
-    experience_level: profile.experience_level || 'beginner',
-    training_frequency: String(profile.training_frequency || 3),
-    goal: profile.goal || 'muscle_gain',
-    training_location: profile.training_location || 'gym',
-    target_muscles: [],
-    age: 25,
-    height_cm: profile.height_cm || 170,
-    weight_kg: profile.weight_kg || 70,
-    target_weight_kg: profile.weight_kg || 70,
-    days_per_week: profile.training_frequency || 3,
-    session_duration: `medium_${profile.session_duration || 45}`,
-    injuries: profile.injuries || [],
-    preferred_time: 'morning',
+    gender: p.gender || 'male',
+    experience_level: p.experience_level || 'beginner',
+    training_frequency: onboardingProfile?.training_frequency || String(regenDaysPerWeek),
+    goal: p.goal || 'muscle_gain',
+    training_location: p.training_location || 'gym',
+    target_muscles: onboardingProfile?.target_muscles || [],
+    age: onboardingProfile?.age || 25,
+    height_cm: p.height_cm || 170,
+    weight_kg: p.weight_kg || 70,
+    target_weight_kg: onboardingProfile?.target_weight_kg || p.weight_kg || 70,
+    days_per_week: regenDaysPerWeek,
+    session_duration: regenSessionDuration,
+    injuries: p.injuries || [],
+    preferred_time: onboardingProfile?.preferred_time || 'morning',
   })
 
   let generatedPlan: GeneratedPlan | null = null
 
   try {
-    const regenMaxTokens = Math.min(2048 + ((profile.training_frequency || 3) * 1024), 8192)
+    const regenMaxTokens = Math.min(2048 + (regenDaysPerWeek * 1024), 8192)
     const aiResult = await callWorkersAIWithFallback(
       c.env,
       '@cf/meta/llama-4-scout-17b-16e-instruct',
@@ -477,16 +505,21 @@ plans.post('/regenerate', authMiddleware, async (c) => {
 
   if (!generatedPlan) {
     generatedPlan = getDefaultPlan({
-      training_location: profile.training_location || 'gym',
-      goal: profile.goal || 'muscle_gain',
-      experience_level: profile.experience_level || 'beginner',
-      days_per_week: profile.training_frequency || 3,
+      training_location: p.training_location || 'gym',
+      goal: p.goal || 'muscle_gain',
+      experience_level: p.experience_level || 'beginner',
+      days_per_week: regenDaysPerWeek,
     })
   }
 
   // Salvar novo plano
   const newPlanId = generateId()
   const now = new Date().toISOString()
+  const regenDurationMap: Record<string, number> = {
+    quick_15: 15, short_30: 30, medium_45: 45, long_60: 60,
+  }
+  const regenSessionMin = regenDurationMap[regenSessionDuration] || 45
+
   await pgQuery(
     c.env,
     `INSERT INTO workout_plans (id, user_id, created_by, name, title, type, status, total_days, current_day, settings, created_at, updated_at)
@@ -495,9 +528,9 @@ plans.post('/regenerate', authMiddleware, async (c) => {
       newPlanId, userId, generatedPlan.plan_name, generatedPlan.plan_name,
       generatedPlan.days.length,
       JSON.stringify({
-        goal: profile.goal,
-        level: profile.experience_level,
-        location: profile.training_location,
+        goal: p.goal,
+        level: p.experience_level,
+        location: p.training_location,
         estimated_calories: generatedPlan.estimated_calories_per_session,
       }),
       now,
@@ -512,7 +545,7 @@ plans.post('/regenerate', authMiddleware, async (c) => {
       c.env,
       `INSERT INTO workout_plan_days (id, plan_id, day_number, name, muscle_groups, estimated_duration_min, sort_order)
        VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-      [dayId, newPlanId, day.day_number, day.name, muscleGroups, profile.session_duration || 60, day.day_number]
+      [dayId, newPlanId, day.day_number, day.name, muscleGroups, regenSessionMin, day.day_number]
     )
 
     for (let i = 0; i < day.exercises.length; i++) {
