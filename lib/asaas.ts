@@ -524,8 +524,11 @@ export function mapPaymentMethod(method: string): 'BOLETO' | 'CREDIT_CARD' | 'PI
     credit_card: 'CREDIT_CARD',
     boleto: 'BOLETO',
     undefined: 'UNDEFINED',
+    '': 'UNDEFINED', // fallback para string vazia
   }
-  return map[method] || 'PIX'
+  // Se payment_method não for reconhecido, usar UNDEFINED (não PIX por padrão)
+  // Isso evita tentar criar cobrança PIX sem uma chave PIX válida configurada
+  return map[method?.toLowerCase?.()] || 'UNDEFINED'
 }
 
 export function mapBillingCycle(cycle: string): CreateSubscriptionInput['cycle'] {
