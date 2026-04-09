@@ -6,11 +6,14 @@
 
 'use client'
 
+import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { useSelfAssessments, getBMIColor } from '@/hooks/use-self-assessments'
+import { useLinkPersonalTrainer, useStudentProfile } from '@/hooks/use-student-app'
 
 /** Format delta with sign and color */
 function DeltaBadge({ current, previous, unit, invert }: {
@@ -37,6 +40,50 @@ function DeltaBadge({ current, previous, unit, invert }: {
 export default function AvaliacoesPage() {
   const router = useRouter()
   const { data: assessments, isLoading } = useSelfAssessments()
+  const { data: studentProfile } = useStudentProfile()
+  const linkPersonalTrainer = useLinkPersonalTrainer()
+  const [personalReferralCode, setPersonalReferralCode] = useState('')
+  const [showPersonalQr, setShowPersonalQr] = useState(false)
+  const [personalInviteQrUrl, setPersonalInviteQrUrl] = useState('')
+
+  const personalInviteLink = useMemo(() => {
+    const base = typeof window !== 'undefined' ? window.location.origin : 'https://vfit.app.br'
+    const params = new URLSearchParams({
+      source: 'student-invite',
+      origin: 'avaliacoes',
+      context: 'assessment-complete',
+    })
+    if (studentProfile?.id) params.set('student_id', studentProfile.id)
+    return `${base}/register/personal?${params.toString()}`
+  }, [studentProfile?.id])
+
+  useEffect(() => {
+    let cancelled = false
+
+    async function generateQr() {
+      if (!showPersonalQr) {
+        setPersonalInviteQrUrl('')
+        return
+      }
+
+      try {
+        const dataUrl = await (await import('qrcode')).default.toDataURL(personalInviteLink, {
+          margin: 1,
+          width: 280,
+          color: { dark: '#0a0f0a', light: '#ffffff' },
+        })
+        if (!cancelled) setPersonalInviteQrUrl(dataUrl)
+      } catch {
+        if (!cancelled) setPersonalInviteQrUrl('')
+      }
+    }
+
+    void generateQr()
+
+    return () => {
+      cancelled = true
+    }
+  }, [showPersonalQr, personalInviteLink])
 
   return (
     <div className="mx-auto max-w-lg px-4 pt-4 pb-24">
@@ -56,6 +103,88 @@ export default function AvaliacoesPage() {
             Nova
           </Button>
         </Link>
+      </div>
+
+      <div className="mb-5 rounded-2xl border border-brand-primary/20 bg-linear-to-br from-brand-primary/8 to-transparent p-4">
+        <div className="mb-3 flex items-start justify-between gap-3">
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-wider text-brand-primary">
+              Avaliação Completa com Personal
+            </p>
+            <p className="mt-1 text-[13px] text-text-secondary">
+              Convide um personal para revisar e completar sua avaliação física.
+            </p>
+            {studentProfile?.personal_name && (
+              <p className="mt-1 text-[12px] font-semibold text-success">
+                Personal vinculado: {studentProfile.personal_name}
+              </p>
+            )}
+          </div>
+          <DSIcon name="userPlus" size={18} className="text-brand-primary" />
+        </div>
+
+        <div className="mb-3 flex gap-2">
+          <Input
+            value={personalReferralCode}
+            onChange={(e) => setPersonalReferralCode(e.target.value.toUpperCase())}
+            placeholder="Código do personal"
+            disabled={linkPersonalTrainer.isPending || !!studentProfile?.personal_id}
+          />
+          <Button
+            onClick={() => linkPersonalTrainer.mutate(personalReferralCode)}
+            loading={linkPersonalTrainer.isPending}
+            disabled={!personalReferralCode.trim() || !!studentProfile?.personal_id}
+          >
+            Vincular
+          </Button>
+        </div>
+
+        <div className="flex flex-wrap gap-2">
+          <Button variant="outline" size="sm" onClick={() => navigator.clipboard.writeText(personalInviteLink)}>
+            <DSIcon name="copy" size={14} />
+            Copiar link
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => window.open(`mailto:?subject=${encodeURIComponent('Convite VFIT — Avaliação Completa')}&body=${encodeURIComponent(`Olá! Quero te convidar para me acompanhar no VFIT e completar minha avaliação física.\n\nCadastro: ${personalInviteLink}`)}`, '_blank')}
+          >
+            <DSIcon name="mail" size={14} />
+            Email
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(`Olá! Quero te convidar para completar minha avaliação física no VFIT.\n\nCadastro: ${personalInviteLink}`)}`, '_blank')}
+          >
+            <DSIcon name="share2" size={14} />
+            WhatsApp
+          </Button>
+          <Button
+            variant={showPersonalQr ? 'secondary' : 'outline'}
+            size="sm"
+            onClick={() => setShowPersonalQr((v) => !v)}
+          >
+            <DSIcon name="qrcode" size={14} />
+            QR Code
+          </Button>
+        </div>
+
+        {showPersonalQr && (
+          <div className="mt-4 flex justify-center">
+            {personalInviteQrUrl ? (
+              <img
+                src={personalInviteQrUrl}
+                alt="QR Code convite personal"
+                className="h-44 w-44 rounded-xl border border-white/12 bg-white p-2"
+              />
+            ) : (
+              <div className="flex h-44 w-44 items-center justify-center rounded-xl border border-white/12 bg-white/6">
+                <DSIcon name="loader" size={20} className="animate-spin text-text-muted" />
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Loading */}

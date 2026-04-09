@@ -6,12 +6,15 @@
 
 'use client'
 
+import { useState } from 'react'
 import { useParams, usePathname, useRouter } from 'next/navigation'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
 import { useSelfAssessmentDetail, useSelfAssessments, useDeleteSelfAssessment, getBMIColor, getActivityLabel, getGoalLabel } from '@/hooks/use-self-assessments'
+import { useLinkPersonalTrainer, useStudentProfile } from '@/hooks/use-student-app'
 import { useAuthStore } from '@/stores/auth-store'
 import { toast } from '@/stores/app-store'
+import { Input } from '@/components/ui/input'
 
 export default function AvaliacaoDetalhePage() {
   const router = useRouter()
@@ -23,6 +26,20 @@ export default function AvaliacaoDetalhePage() {
   const { data: assessment, isLoading } = useSelfAssessmentDetail(id)
   const { data: allAssessments } = useSelfAssessments(50)
   const deleteAssessment = useDeleteSelfAssessment(id)
+  const { data: studentProfile } = useStudentProfile()
+  const linkPersonalTrainer = useLinkPersonalTrainer()
+  const [personalReferralCode, setPersonalReferralCode] = useState('')
+
+  const personalInviteLink = (() => {
+    const base = typeof window !== 'undefined' ? window.location.origin : 'https://vfit.app.br'
+    const params = new URLSearchParams({
+      source: 'student-invite',
+      origin: 'avaliacao-detalhe',
+      context: 'assessment-complete',
+    })
+    if (studentProfile?.id) params.set('student_id', studentProfile.id)
+    return `${base}/register/personal?${params.toString()}`
+  })()
 
   // Find previous assessment for comparison
   const prev = (() => {
@@ -101,6 +118,59 @@ export default function AvaliacaoDetalhePage() {
       </div>
 
       {/* Main stats */}
+      <div className="mb-4 rounded-2xl border border-brand-primary/20 bg-brand-primary/8 p-4">
+        <p className="text-[11px] font-bold uppercase tracking-wider text-brand-primary">
+          Melhorar esta avaliação com personal
+        </p>
+        <p className="mt-1 text-[12px] text-zinc-400">
+          Convide e vincule um personal trainer para completar sua avaliação.
+        </p>
+        {studentProfile?.personal_name && (
+          <p className="mt-1 text-[12px] font-semibold text-brand-primary">
+            Personal vinculado: {studentProfile.personal_name}
+          </p>
+        )}
+
+        <div className="mt-3 flex gap-2">
+          <Input
+            value={personalReferralCode}
+            onChange={(e) => setPersonalReferralCode(e.target.value.toUpperCase())}
+            placeholder="Código do personal"
+            disabled={linkPersonalTrainer.isPending || !!studentProfile?.personal_id}
+          />
+          <Button
+            onClick={() => linkPersonalTrainer.mutate(personalReferralCode)}
+            loading={linkPersonalTrainer.isPending}
+            disabled={!personalReferralCode.trim() || !!studentProfile?.personal_id}
+          >
+            Vincular
+          </Button>
+        </div>
+
+        <div className="mt-2 flex flex-wrap gap-2">
+          <Button variant="outline" size="sm" onClick={() => navigator.clipboard.writeText(personalInviteLink)}>
+            <DSIcon name="copy" size={14} />
+            Link
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(`Olá! Quero te convidar para completar minha avaliação física no VFIT.\n\nCadastro: ${personalInviteLink}`)}`, '_blank')}
+          >
+            <DSIcon name="share2" size={14} />
+            WhatsApp
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => window.open(`mailto:?subject=${encodeURIComponent('Convite VFIT — Avaliação Completa')}&body=${encodeURIComponent(`Olá! Quero te convidar para me acompanhar no VFIT e completar minha avaliação física.\n\nCadastro: ${personalInviteLink}`)}`, '_blank')}
+          >
+            <DSIcon name="mail" size={14} />
+            Email
+          </Button>
+        </div>
+      </div>
+
       <div className="mb-5 grid grid-cols-3 gap-3">
         <StatCard label="Peso" value={`${assessment.weight_kg}`} unit="kg" />
         <StatCard
