@@ -26,6 +26,36 @@
 - `npm run build` — concluído com sucesso
 
 
+## [v2.1.3] — 09/04/2026 — Treinos Home (Hoje + IA) + Convites Contextuais
+
+### ✨ Treinos (Home)
+- Seção **"Treinos Prontos de Hoje (IA)"** adicionada na home do aluno em [src/app/(app)/treinos/page.tsx](src/app/(app)/treinos/page.tsx), priorizando o treino do dia atual (`current_day`).
+- Inclusão explícita de aviso de segurança: **carga estimada por IA deve ser revisada pelo professor** antes da execução.
+- Lista de exercícios do dia com resumo objetivo (séries, reps, descanso e carga estimada).
+- Substituição de thumbnail por emoji por **placeholders visuais gerados por exercício e grupo muscular**.
+
+### ✨ Convites e vínculo (Aluno)
+- Convite/vínculo de personal reforçado no contexto de avaliações:
+  - [src/app/(app)/avaliacoes/page.tsx](src/app/(app)/avaliacoes/page.tsx)
+  - [src/app/(app)/avaliacoes/[id]/client-page.tsx](src/app/(app)/avaliacoes/[id]/client-page.tsx)
+- Convite/vínculo de nutricionista reforçado na página de nutrição:
+  - [src/app/(app)/nutricao/page.tsx](src/app/(app)/nutricao/page.tsx)
+
+### 🔌 Backend
+- Novo endpoint para vínculo de nutricionista por código de indicação:
+  - `POST /students/me/link-nutritionist` em [workers/api/students.ts](workers/api/students.ts)
+
+### 🛠️ Correções complementares
+- Robustez de resolução de `id` em rotas dinâmicas no app estático (fallback para pathname) em páginas de avaliação/treino.
+- Exclusão definitiva de autoavaliação disponível para o aluno:
+  - Hook: [src/hooks/use-self-assessments.ts](src/hooks/use-self-assessments.ts)
+  - API: `DELETE /self-assessments/:id` em [workers/api/self-assessments.ts](workers/api/self-assessments.ts)
+
+### 🚀 Deploy
+- Pipeline oficial concluído com sucesso: **v2.1.3**
+- Frontend (Pages) + Backend (Workers) publicados
+
+
 ## [v1.9.9] — 09/04/2026 — Onboarding aluno como fluxo principal
 
 ### ✨ Onboarding (welcome)

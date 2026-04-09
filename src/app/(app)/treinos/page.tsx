@@ -28,6 +28,8 @@ import { useWorkoutLogs } from '@/hooks/use-workouts'
 import { useSubscriptionStatus } from '@/hooks/use-vfit-checkout'
 import { useB2COnboardingCompleted } from '@/hooks/use-b2c-onboarding'
 import { useStudentProfile, useLinkPersonalTrainer } from '@/hooks/use-student-app'
+import { useExercises, useMuscleGroups } from '@/hooks/use-exercises'
+import { useAuthStore } from '@/stores/auth-store'
 
 const DIFFICULTY_FILTERS = [
   { value: '', label: 'Todos' },
@@ -55,6 +57,14 @@ function toneByMuscle(muscle?: string | null): 'green' | 'blue' | 'orange' | 'vi
   if (v.includes('perna') || v.includes('coxa') || v.includes('glúteo') || v.includes('panturr')) return 'orange'
   if (v.includes('bíceps') || v.includes('tríceps') || v.includes('braço')) return 'violet'
   return 'green'
+}
+
+function normalizeText(value?: string | null) {
+  return (value || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .trim()
 }
 
 // ── T7.5 — Progress Ring SVG (T11.8: memo) ──────────────────────────
@@ -115,10 +125,15 @@ const ProgressRing = memo(function ProgressRing({
 })
 
 export default function TreinosPage() {
+  const user = useAuthStore((s) => s.user)
+  const isSuperAdmin = user?.role === 'super_admin'
+
   const [difficulty, setDifficulty] = useState('')
   const { data: templates, isLoading } = useWorkoutTemplates(
     difficulty ? { difficulty } : undefined
   )
+  const { data: muscleGroups = [] } = useMuscleGroups()
+  const { data: exerciseCatalog } = useExercises({ per_page: 200 })
 
   // T7.3-T7.5 — Current plan data
   const { data: plan, isError: planError, isFetched: planFetched } = useCurrentPlan()
@@ -204,6 +219,34 @@ export default function TreinosPage() {
     return plan.days[(plan.current_day - 1) % plan.days.length] ?? plan.days[0]
   }, [plan])
   const todayExercises = todayDay?.exercises ?? []
+
+  const exerciseById = useMemo(() => {
+    const map = new Map<string, (typeof exerciseCatalog.exercises)[number]>()
+    for (const ex of exerciseCatalog?.exercises ?? []) {
+      map.set(ex.id, ex)
+    }
+    return map
+  }, [exerciseCatalog?.exercises])
+
+  const muscleByName = useMemo(() => {
+    const map = new Map<string, (typeof muscleGroups)[number]>()
+    for (const mg of muscleGroups ?? []) {
+      map.set(normalizeText(mg.name_pt), mg)
+      map.set(normalizeText(mg.name), mg)
+    }
+    return map
+  }, [muscleGroups])
+
+  const todayMuscles = useMemo(() => {
+    return (todayDay?.muscle_groups ?? []).map((name) => {
+      const match = muscleByName.get(normalizeText(name))
+      return {
+        name,
+        imageUrl: match?.image_url ?? null,
+        tone: toneByMuscle(name),
+      }
+    })
+  }, [todayDay?.muscle_groups, muscleByName])
 
   const totals = mealsData?.totals ?? { calories: 0, protein: 0, carbs: 0, fat: 0 }
   const planPct = plan && plan.total_days > 0 ? Math.round((plan.current_day / plan.total_days) * 100) : 0
@@ -514,29 +557,61 @@ export default function TreinosPage() {
             Carga estimada por IA. Peça para o professor da academia revisar o peso de cada exercício antes de executar.
           </p>
 
-          {!!todayDay.muscle_groups?.length && (
-            <div className="mb-3 flex flex-wrap gap-2">
-              {todayDay.muscle_groups.map((group) => (
-                <div key={group} className="flex items-center gap-1.5 rounded-full border border-white/12 bg-white/6 px-2 py-1">
-                  <img
-                    src={buildPlaceholderImage(group, toneByMuscle(group))}
-                    alt={`Grupo muscular ${group}`}
-                    className="h-5 w-5 rounded-full object-cover"
-                  />
-                  <span className="text-[10px] text-text-secondary">{group}</span>
-                </div>
-              ))}
+          {!!todayMuscles.length && (
+            <div className="mb-4">
+              <p className="mb-2 text-[11px] font-bold uppercase tracking-wider text-text-muted">
+                Músculos alvo de hoje
+              </p>
+              <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
+                {todayMuscles.map((group) => (
+                  <div
+                    key={group.name}
+                    className="shrink-0 rounded-xl border border-white/10 bg-white/4 p-2"
+                  >
+                    <img
+                      src={group.imageUrl || buildPlaceholderImage(group.name, group.tone)}
+                      alt={`Grupo muscular ${group.name}`}
+                      className="h-20 w-24 rounded-lg object-cover"
+                    />
+                    <p className="mt-1 text-center text-[11px] text-text-secondary">{group.name}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {isSuperAdmin && (
+            <div className="mb-3 rounded-lg border border-white/12 bg-white/4 p-2.5 text-[10px] text-text-secondary">
+              Você pode editar imagens de grupos musculares em
+              {' '}
+              <Link href="/dashboard/admin/muscle-groups" className="font-semibold text-brand-primary">
+                Admin › Grupos Musculares
+              </Link>
+              {' '}e vídeos/thumbs de exercícios em{' '}
+              <Link href="/dashboard/workouts/media/library" className="font-semibold text-brand-primary">
+                Biblioteca de Mídia
+              </Link>
+              .
             </div>
           )}
 
           <div className="space-y-2">
             {todayExercises.map((ex) => (
               <div key={ex.id} className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-2.5">
-                <img
-                  src={buildPlaceholderImage(ex.exercise_name || ex.muscle_group || 'Exercício', toneByMuscle(ex.muscle_group))}
-                  alt={ex.exercise_name || 'Exercício'}
-                  className="h-12 w-16 shrink-0 rounded-lg object-cover"
-                />
+                <div className="relative shrink-0">
+                  <img
+                    src={exerciseById.get(ex.exercise_id)?.thumbnail_url || buildPlaceholderImage(ex.exercise_name || ex.muscle_group || 'Exercício', toneByMuscle(ex.muscle_group))}
+                    alt={ex.exercise_name || 'Exercício'}
+                    className="h-12 w-16 rounded-lg object-cover"
+                  />
+                  {!!ex.muscle_group && (
+                    <img
+                      src={muscleByName.get(normalizeText(ex.muscle_group))?.image_url || buildPlaceholderImage(ex.muscle_group, toneByMuscle(ex.muscle_group))}
+                      alt={`Músculo ${ex.muscle_group}`}
+                      className="absolute -right-1 -bottom-1 h-6 w-6 rounded-md border border-white/20 bg-bg-secondary object-cover"
+                    />
+                  )}
+                </div>
 
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-[12px] font-bold text-text-primary">{ex.exercise_name || 'Exercício'}</p>
@@ -546,6 +621,9 @@ export default function TreinosPage() {
                   <p className="text-[10px] text-brand-primary">
                     Carga estimada IA: {ex.weight_kg != null ? `${ex.weight_kg} kg` : 'ajustar com professor'}
                   </p>
+                  {!!exerciseById.get(ex.exercise_id)?.video_url_vertical && (
+                    <p className="text-[10px] text-text-muted">Vídeo disponível</p>
+                  )}
                 </div>
               </div>
             ))}
