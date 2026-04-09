@@ -1,0 +1,37 @@
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🚀 VFIT — Deploy Pipeline v2
+📋 Bump: patch | Workers: true | Pages: true | Git: true
+⚠️ WhatsApp start/end: bypass habilitado (--allow-no-whatsapp)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⏳ [WhatsApp] task-notify (start)...
+   ❌ [WhatsApp] task-notify (start) falhou: Unipile send 401: {"status":401,"type":"errors/invalid_credentials","title":"Invalid credentials"}
+   ⚠️  Continuando sem WhatsApp...
+
+📌 Mudanças pendentes detectadas — serão incluídas no commit
+
+⏳ Bump versão (patch)...
+v2.1.2
+   ✅ Bump versão (patch)
+
+📦 Nova versão: v2.1.2
+
+⏳ Atualizar version files...
+📦 New version: 2.1.2
+✅ manifest.json updated
+✅ lib/version.ts updated
+
+🎉 Version 2.1.2 ready!
+   ✅ Atualizar version files (0.4s)
+
+⏳ Build Next.js...
+
+> vfit@2.1.2 build
+> next build
+
+   ▲ Next.js 15.5.14
+   - Environments: .env.local
+   - Experiments (use with caution):
+     · optimizePackageImports
+
+   Creating an optimized production build ...

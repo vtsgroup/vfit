@@ -1,0 +1,16 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "deploy-vfit-patch-no-whatsapp",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"scripts/cf-deploy.js",
+				"patch",
+				"--allow-no-whatsapp"
+			],
+			"isBackground": false
+		}
+	]
+}

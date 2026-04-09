@@ -36,6 +36,27 @@ const DIFFICULTY_FILTERS = [
   { value: 'advanced', label: 'Avançado' },
 ]
 
+function buildPlaceholderImage(label: string, tone: 'green' | 'blue' | 'orange' | 'violet' = 'green') {
+  const safe = (label || 'Exercício').slice(0, 18)
+  const palettes: Record<typeof tone, { bg1: string; bg2: string; fg: string }> = {
+    green: { bg1: '#0f2a1b', bg2: '#1f8f57', fg: '#d1fae5' },
+    blue: { bg1: '#0f1f33', bg2: '#2f74c0', fg: '#dbeafe' },
+    orange: { bg1: '#2b1b0f', bg2: '#d97706', fg: '#ffedd5' },
+    violet: { bg1: '#1e1433', bg2: '#7c3aed', fg: '#ede9fe' },
+  }
+  const p = palettes[tone]
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='320' height='180' viewBox='0 0 320 180'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0%' stop-color='${p.bg1}'/><stop offset='100%' stop-color='${p.bg2}'/></linearGradient></defs><rect width='320' height='180' fill='url(#g)' rx='18'/><circle cx='46' cy='44' r='20' fill='rgba(255,255,255,0.16)'/><rect x='24' y='132' width='272' height='12' rx='6' fill='rgba(255,255,255,0.16)'/><text x='24' y='108' fill='${p.fg}' font-family='Inter,Arial,sans-serif' font-size='20' font-weight='700'>${safe}</text></svg>`
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`
+}
+
+function toneByMuscle(muscle?: string | null): 'green' | 'blue' | 'orange' | 'violet' {
+  const v = (muscle || '').toLowerCase()
+  if (v.includes('peito') || v.includes('ombro') || v.includes('costa')) return 'blue'
+  if (v.includes('perna') || v.includes('coxa') || v.includes('glúteo') || v.includes('panturr')) return 'orange'
+  if (v.includes('bíceps') || v.includes('tríceps') || v.includes('braço')) return 'violet'
+  return 'green'
+}
+
 // ── T7.5 — Progress Ring SVG (T11.8: memo) ──────────────────────────
 const ProgressRing = memo(function ProgressRing({
   value,
@@ -182,6 +203,7 @@ export default function TreinosPage() {
     if (dayIdx >= 0) return plan.days[dayIdx]
     return plan.days[(plan.current_day - 1) % plan.days.length] ?? plan.days[0]
   }, [plan])
+  const todayExercises = todayDay?.exercises ?? []
 
   const totals = mealsData?.totals ?? { calories: 0, protein: 0, carbs: 0, fat: 0 }
   const planPct = plan && plan.total_days > 0 ? Math.round((plan.current_day / plan.total_days) * 100) : 0
@@ -472,9 +494,72 @@ export default function TreinosPage() {
         </Link>
       )}
 
+      {/* Treino de hoje (IA) */}
+      <div className="mb-4 flex items-center justify-between">
+        <h2 className="text-[15px] font-bold text-text-primary">Treinos Prontos de Hoje (IA)</h2>
+      </div>
+
+      {todayDay ? (
+        <div className="mb-5 rounded-2xl border border-brand-primary/20 bg-linear-to-br from-brand-primary/8 to-transparent p-4">
+          <div className="mb-3 flex items-center justify-between">
+            <p className="text-[13px] font-bold text-text-primary">
+              Dia {plan?.current_day} — {todayDay.name}
+            </p>
+            <span className="rounded-full bg-brand-primary/20 px-2 py-0.5 text-[10px] font-bold text-brand-primary">
+              Hoje
+            </span>
+          </div>
+
+          <p className="mb-3 text-[11px] text-amber-300">
+            Carga estimada por IA. Peça para o professor da academia revisar o peso de cada exercício antes de executar.
+          </p>
+
+          {!!todayDay.muscle_groups?.length && (
+            <div className="mb-3 flex flex-wrap gap-2">
+              {todayDay.muscle_groups.map((group) => (
+                <div key={group} className="flex items-center gap-1.5 rounded-full border border-white/12 bg-white/6 px-2 py-1">
+                  <img
+                    src={buildPlaceholderImage(group, toneByMuscle(group))}
+                    alt={`Grupo muscular ${group}`}
+                    className="h-5 w-5 rounded-full object-cover"
+                  />
+                  <span className="text-[10px] text-text-secondary">{group}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="space-y-2">
+            {todayExercises.map((ex) => (
+              <div key={ex.id} className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-2.5">
+                <img
+                  src={buildPlaceholderImage(ex.exercise_name || ex.muscle_group || 'Exercício', toneByMuscle(ex.muscle_group))}
+                  alt={ex.exercise_name || 'Exercício'}
+                  className="h-12 w-16 shrink-0 rounded-lg object-cover"
+                />
+
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-[12px] font-bold text-text-primary">{ex.exercise_name || 'Exercício'}</p>
+                  <p className="text-[10px] text-text-muted">
+                    {ex.sets} séries · {ex.reps} · descanso {ex.rest_seconds}s
+                  </p>
+                  <p className="text-[10px] text-brand-primary">
+                    Carga estimada IA: {ex.weight_kg != null ? `${ex.weight_kg} kg` : 'ajustar com professor'}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="mb-5 rounded-2xl border border-white/10 bg-white/4 p-4 text-[12px] text-text-muted">
+          Ainda não há treino do dia gerado. Gere seu plano com IA para ver o treino pronto de hoje.
+        </div>
+      )}
+
       {/* Templates section */}
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-[15px] font-bold text-text-primary">Treinos Prontos</h2>
+        <h2 className="text-[15px] font-bold text-text-primary">Biblioteca de Treinos Prontos</h2>
       </div>
 
       {/* Difficulty filter */}
@@ -513,9 +598,11 @@ export default function TreinosPage() {
               href={`/treinos/${t.id}`}
               className="glass-card flex items-center gap-3 rounded-2xl p-4 transition-all hover:border-white/12"
             >
-              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-white/5 text-2xl">
-                {t.image_emoji}
-              </div>
+              <img
+                src={buildPlaceholderImage(t.name || t.category || 'Treino', toneByMuscle(t.category))}
+                alt={`Placeholder treino ${t.name}`}
+                className="h-14 w-14 shrink-0 rounded-xl object-cover"
+              />
 
               <div className="min-w-0 flex-1">
                 <div className="mb-0.5 flex items-center gap-2">
