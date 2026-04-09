@@ -180,11 +180,11 @@ plans.post('/save', async (c) => {
   const planId = generateId()
   const now = new Date().toISOString()
 
-  // Inserir plano (com todas as colunas para GET /current funcionar corretamente)
+  // Inserir plano (sem created_by — B2C plans não têm personal trainer)
   await pgQuery(
     c.env,
-    `INSERT INTO workout_plans (id, user_id, created_by, name, title, description, type, status, total_days, current_day, settings, created_at, updated_at)
-     VALUES ($1, $2, NULL, $3, $4, $5, 'ai_generated', 'active', $6, 1, $7, $8, $8)`,
+    `INSERT INTO workout_plans (id, user_id, name, title, description, type, status, total_days, current_day, settings, created_at, updated_at)
+     VALUES ($1, $2, $3, $4, $5, 'ai_generated', 'active', $6, 1, $7, $8, $8)`,
     [
       planId, userId, plan.plan_name, plan.plan_name, plan.description || '',
       plan.days.length,
@@ -522,8 +522,8 @@ plans.post('/regenerate', authMiddleware, async (c) => {
 
   await pgQuery(
     c.env,
-    `INSERT INTO workout_plans (id, user_id, created_by, name, title, type, status, total_days, current_day, settings, created_at, updated_at)
-     VALUES ($1, $2, NULL, $3, $4, 'ai_generated', 'active', $5, 1, $6, $7, $7)`,
+    `INSERT INTO workout_plans (id, user_id, name, title, type, status, total_days, current_day, settings, created_at, updated_at)
+     VALUES ($1, $2, $3, $4, 'ai_generated', 'active', $5, 1, $6, $7, $7)`,
     [
       newPlanId, userId, generatedPlan.plan_name, generatedPlan.plan_name,
       generatedPlan.days.length,
@@ -761,8 +761,8 @@ plans.post('/auto-generate', authMiddleware, async (c) => {
   try {
     await pgQuery(
       c.env,
-      `INSERT INTO workout_plans (id, user_id, created_by, name, title, type, status, total_days, current_day, settings, created_at, updated_at)
-       VALUES ($1, $2, NULL, $3, $4, 'ai_generated', 'active', $5, 1, $6, $7, $7)`,
+      `INSERT INTO workout_plans (id, user_id, name, title, type, status, total_days, current_day, settings, created_at, updated_at)
+       VALUES ($1, $2, $3, $4, 'ai_generated', 'active', $5, 1, $6, $7, $7)`,
       [
         newPlanId, userId, generatedPlan.plan_name, generatedPlan.plan_name, daysPerWeek,
         JSON.stringify({
