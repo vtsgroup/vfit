@@ -402,7 +402,10 @@ export function useCreateWorkout() {
       api.post('/workouts', data),
     onSuccess: () => {
       toast.success('Treino criado com sucesso!')
+      // Invalidate both personal workouts and student's assigned workouts
       queryClient.invalidateQueries({ queryKey: ['workouts'] })
+      queryClient.invalidateQueries({ queryKey: ['my-workouts'] })
+      queryClient.invalidateQueries({ queryKey: ['student', 'workouts'] })
       router.push('/dashboard/workouts')
     },
     onError: (err: Error) => {
