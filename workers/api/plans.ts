@@ -570,6 +570,13 @@ plans.post('/regenerate', authMiddleware, async (c) => {
 plans.post('/auto-generate', authMiddleware, async (c) => {
   const userId = c.get('userId')
 
+  const asString = (v: unknown, fallback: string) => (typeof v === 'string' && v.length > 0 ? v : fallback)
+  const asNumber = (v: unknown, fallback: number) => {
+    const n = Number(v)
+    return Number.isFinite(n) ? n : fallback
+  }
+  const asStringArray = (v: unknown) => (Array.isArray(v) ? v.filter((x): x is string => typeof x === 'string') : [])
+
   // Check if user already has an active plan
   const existingPlan = await pgQueryOne<{ id: string }>(
     c.env,
@@ -581,32 +588,36 @@ plans.post('/auto-generate', authMiddleware, async (c) => {
   }
 
   // Read onboarding data
-  const onboarding = await pgQueryOne<{
-    gender: string
-    experience_level: string
-    training_frequency: string
-    goal: string
-    training_location: string
-    target_muscles: string[]
-    age: number
-    height_cm: number
-    weight_kg: number
-    target_weight_kg: number | null
-    days_per_week: number
-    session_duration: string
-    injuries: string[]
-    preferred_time: string
-  }>(
-    c.env,
-    `SELECT gender, experience_level, training_frequency, goal, training_location,
-            target_muscles, age, height_cm, weight_kg, target_weight_kg,
-            days_per_week, session_duration, injuries, preferred_time
-     FROM user_onboarding WHERE user_id = $1 LIMIT 1`,
-    [userId]
-  )
-
-  if (!onboarding) {
+  let onboardingRaw: Record<string, unknown> | null = null
+  try {
+    onboardingRaw = await pgQueryOne<Record<string, unknown>>(
+      c.env,
+      `SELECT * FROM user_onboarding WHERE user_id = $1 LIMIT 1`,
+      [userId]
+    )
+  } catch {
     throw new BadRequestError('Onboarding não encontrado. Complete o questionário primeiro.')
+  }
+
+  if (!onboardingRaw) {
+    throw new BadRequestError('Onboarding não encontrado. Complete o questionário primeiro.')
+  }
+
+  const onboarding = {
+    gender: asString(onboardingRaw.gender, 'prefer_not_say'),
+    experience_level: asString(onboardingRaw.experience_level, 'beginner'),
+    training_frequency: asString(onboardingRaw.training_frequency, 'inconsistently'),
+    goal: asString(onboardingRaw.goal, 'health'),
+    training_location: asString(onboardingRaw.training_location, 'gym_small'),
+    target_muscles: asStringArray(onboardingRaw.target_muscles),
+    age: asNumber(onboardingRaw.age, 25),
+    height_cm: asNumber(onboardingRaw.height_cm, 170),
+    weight_kg: asNumber(onboardingRaw.weight_kg, 70),
+    target_weight_kg: onboardingRaw.target_weight_kg != null ? asNumber(onboardingRaw.target_weight_kg, 70) : null,
+    days_per_week: asNumber(onboardingRaw.days_per_week, 3),
+    session_duration: asString(onboardingRaw.session_duration, 'medium_45'),
+    injuries: asStringArray(onboardingRaw.injuries),
+    preferred_time: asString(onboardingRaw.preferred_time, 'any'),
   }
 
   // Map training_frequency text → days_per_week number
