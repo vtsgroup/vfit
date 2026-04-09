@@ -30,16 +30,20 @@ import { PageHeader } from '@/components/ui/page-header'
 import { AssessmentsPageSkeleton } from '@/components/ui/page-skeletons'
 import { StaggeredList } from '@/components/ui/staggered-list'
 import { AssessmentTimeline } from '@/components/assessments/assessment-timeline'
-import { useAuthStore } from '@/stores/auth-store'
 import { useEffectiveUserView } from '@/hooks/use-effective-user-view'
 
 export default function AssessmentsPage() {
   const [page, setPage] = useState(1)
   const router = useRouter()
   const createTestStudent = useCreateTestStudent()
-  const user = useAuthStore((s) => s.user)
-  const { isPersonalView } = useEffectiveUserView()
+  const { isPersonalView, isStudentView } = useEffectiveUserView()
   const isPersonal = isPersonalView
+
+  // ── Determinar qual hook usar baseado no tipo efetivo do usuário ──
+  // Students veem apenas suas avaliações via /assessments/my
+  // Personals veem avaliações de seus alunos via /assessments (com filtro)
+  const shouldFetchPersonalAssessments = isPersonal
+  const shouldFetchMyAssessments = isStudentView
 
   const params: AssessmentListParams = {
     page,
@@ -48,13 +52,15 @@ export default function AssessmentsPage() {
     order: 'desc',
   }
 
+  // Query para personal ver avaliações de seus alunos
   const { data, isLoading, isError, refetch } = useAssessments(params)
-  const assessments = data?.assessments ?? []
-  const meta = data?.meta
+  const assessments = shouldFetchPersonalAssessments ? (data?.assessments ?? []) : []
+  const meta = shouldFetchPersonalAssessments ? data?.meta : undefined
 
+  // Query para student ver suas próprias avaliações
   const { data: myData, isLoading: isMyLoading, isError: isMyError, refetch: myRefetch } = useMyAssessments({ page, per_page: 20 })
-  const myAssessments = myData?.assessments ?? []
-  const myMeta = myData?.meta
+  const myAssessments = shouldFetchMyAssessments ? (myData?.assessments ?? []) : []
+  const myMeta = shouldFetchMyAssessments ? myData?.meta : undefined
 
   return (
     <AuthGuard>
@@ -94,7 +100,7 @@ export default function AssessmentsPage() {
         />
 
         {/* List */}
-        {isPersonal ? (
+        {shouldFetchPersonalAssessments ? (
           isLoading ? (
             <AssessmentsPageSkeleton />
           ) : isError ? (
@@ -123,7 +129,7 @@ export default function AssessmentsPage() {
               </StaggeredList>
             </>
           )
-        ) : (
+        ) : shouldFetchMyAssessments ? (
           isMyLoading ? (
             <AssessmentsPageSkeleton />
           ) : isMyError ? (
@@ -199,20 +205,20 @@ export default function AssessmentsPage() {
               ))}
             </StaggeredList>
           )
-        )}
+        ) : null}
 
         {/* Pagination */}
-        {(isPersonal ? meta : myMeta) && (isPersonal ? meta!.total_pages : myMeta!.total_pages) > 1 && (
+        {(shouldFetchPersonalAssessments ? meta : myMeta) && (shouldFetchPersonalAssessments ? meta!.total_pages : myMeta!.total_pages) > 1 && (
           <div className="flex items-center justify-between">
             <p className="text-sm text-text-muted">
-              Página {(isPersonal ? meta!.page : myMeta!.page)} de {(isPersonal ? meta!.total_pages : myMeta!.total_pages)}
+              Página {(shouldFetchPersonalAssessments ? meta!.page : myMeta!.page)} de {(shouldFetchPersonalAssessments ? meta!.total_pages : myMeta!.total_pages)}
             </p>
             <div className="flex gap-2">
               <Button
                 variant="outline"
                 size="sm"
-                disabled={(isPersonal ? meta!.page : myMeta!.page) <= 1}
-                onClick={() => setPage((isPersonal ? meta!.page : myMeta!.page) - 1)}
+                disabled={(shouldFetchPersonalAssessments ? meta!.page : myMeta!.page) <= 1}
+                onClick={() => setPage((shouldFetchPersonalAssessments ? meta!.page : myMeta!.page) - 1)}
               >
                 <DSIcon name="chevronLeft" size={16} />
                 Anterior
@@ -220,8 +226,8 @@ export default function AssessmentsPage() {
               <Button
                 variant="outline"
                 size="sm"
-                disabled={(isPersonal ? meta!.page : myMeta!.page) >= (isPersonal ? meta!.total_pages : myMeta!.total_pages)}
-                onClick={() => setPage((isPersonal ? meta!.page : myMeta!.page) + 1)}
+                disabled={(shouldFetchPersonalAssessments ? meta!.page : myMeta!.page) >= (shouldFetchPersonalAssessments ? meta!.total_pages : myMeta!.total_pages)}
+                onClick={() => setPage((shouldFetchPersonalAssessments ? meta!.page : myMeta!.page) + 1)}
               >
                 Próxima
                 <DSIcon name="chevronRight" size={16} />
