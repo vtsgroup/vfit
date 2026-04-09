@@ -6,10 +6,11 @@
 
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import Link from 'next/link'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import { api } from '@/lib/api-client'
 import { MacroRingChart } from '@/components/nutrition/macro-ring-chart'
@@ -26,6 +27,7 @@ import {
   type MealType,
   type VfitFood,
 } from '@/hooks/use-vfit-nutrition'
+import { useStudentProfile, useLinkNutritionist } from '@/hooks/use-student-app'
 
 // ── Food category visual config ────────────────────────
 
@@ -82,6 +84,11 @@ export default function NutricaoPage() {
   const [quantity, setQuantity] = useState(100)
   const [showBarcode, setShowBarcode] = useState(false)
   const [showFoodCamera, setShowFoodCamera] = useState(false)
+  const [nutritionistReferralCode, setNutritionistReferralCode] = useState('')
+  const [showNutritionQr, setShowNutritionQr] = useState(false)
+  const [nutritionInviteQrUrl, setNutritionInviteQrUrl] = useState('')
+  const { data: studentProfile } = useStudentProfile()
+  const linkNutritionist = useLinkNutritionist()
 
   const { data: dailyData, isLoading } = useMealsToday(selectedDate)
   const { data: foods, isLoading: searchLoading } = useFoodSearch(searchQuery)
@@ -101,6 +108,45 @@ export default function NutricaoPage() {
     }
     return map
   }, [meals])
+
+  const nutritionInviteLink = useMemo(() => {
+    const base = typeof window !== 'undefined' ? window.location.origin : 'https://vfit.app.br'
+    const params = new URLSearchParams({
+      source: 'student-invite',
+      origin: 'nutricao',
+      role: 'nutritionist',
+    })
+    if (studentProfile?.id) params.set('student_id', studentProfile.id)
+    return `${base}/contato?${params.toString()}`
+  }, [studentProfile?.id])
+
+  useEffect(() => {
+    let cancelled = false
+
+    async function generateQr() {
+      if (!showNutritionQr) {
+        setNutritionInviteQrUrl('')
+        return
+      }
+
+      try {
+        const dataUrl = await (await import('qrcode')).default.toDataURL(nutritionInviteLink, {
+          margin: 1,
+          width: 280,
+          color: { dark: '#0a0f0a', light: '#ffffff' },
+        })
+        if (!cancelled) setNutritionInviteQrUrl(dataUrl)
+      } catch {
+        if (!cancelled) setNutritionInviteQrUrl('')
+      }
+    }
+
+    void generateQr()
+
+    return () => {
+      cancelled = true
+    }
+  }, [showNutritionQr, nutritionInviteLink])
 
   async function handleBarcodeDetected(code: string) {
     setShowBarcode(false)
@@ -205,6 +251,86 @@ export default function NutricaoPage() {
               fatTarget={targets.fat}
               size={220}
             />
+          )}
+        </section>
+
+        {/* ═══ Convite/Vínculo com Nutricionista ═══ */}
+        <section className="rounded-2xl border border-brand-primary/20 bg-linear-to-br from-brand-primary/8 to-transparent p-4">
+          <div className="mb-3 flex items-start justify-between gap-3">
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-wider text-brand-primary">Nutricionista</p>
+              <p className="mt-1 text-[13px] text-text-secondary">
+                Convide um nutricionista e vincule por código para acompanhamento alimentar.
+              </p>
+            </div>
+            <DSIcon name="userPlus" size={18} className="text-brand-primary" />
+          </div>
+
+          <div className="mb-3 flex gap-2">
+            <Input
+              value={nutritionistReferralCode}
+              onChange={(e) => setNutritionistReferralCode(e.target.value.toUpperCase())}
+              placeholder="Código do nutricionista"
+              disabled={linkNutritionist.isPending}
+            />
+            <Button
+              onClick={() => linkNutritionist.mutate(nutritionistReferralCode)}
+              loading={linkNutritionist.isPending}
+              disabled={!nutritionistReferralCode.trim()}
+            >
+              Vincular
+            </Button>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigator.clipboard.writeText(nutritionInviteLink)}
+            >
+              <DSIcon name="copy" size={14} />
+              Copiar link
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => window.open(`mailto:?subject=${encodeURIComponent('Convite VFIT — Nutricionista')}&body=${encodeURIComponent(`Olá! Quero te convidar para me acompanhar no VFIT na parte nutricional.\n\nContato/cadastro: ${nutritionInviteLink}`)}`, '_blank')}
+            >
+              <DSIcon name="mail" size={14} />
+              Email
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(`Olá! Quero te convidar para meu acompanhamento nutricional no VFIT.\n\nContato/cadastro: ${nutritionInviteLink}`)}`, '_blank')}
+            >
+              <DSIcon name="share2" size={14} />
+              WhatsApp
+            </Button>
+            <Button
+              variant={showNutritionQr ? 'secondary' : 'outline'}
+              size="sm"
+              onClick={() => setShowNutritionQr((v) => !v)}
+            >
+              <DSIcon name="qrcode" size={14} />
+              QR Code
+            </Button>
+          </div>
+
+          {showNutritionQr && (
+            <div className="mt-4 flex justify-center">
+              {nutritionInviteQrUrl ? (
+                <img
+                  src={nutritionInviteQrUrl}
+                  alt="QR Code convite nutricionista"
+                  className="h-44 w-44 rounded-xl border border-white/12 bg-white p-2"
+                />
+              ) : (
+                <div className="flex h-44 w-44 items-center justify-center rounded-xl border border-white/12 bg-white/6">
+                  <DSIcon name="loader" size={20} className="animate-spin text-text-muted" />
+                </div>
+              )}
+            </div>
           )}
         </section>
 

@@ -1007,6 +1007,113 @@ students.post('/me/link-personal', requireType('student'), async (c) => {
 })
 
 // ============================================
+// POST /students/me/link-nutritionist — Aluno cria vínculo com nutricionista
+// ============================================
+students.post('/me/link-nutritionist', requireType('student'), async (c) => {
+  const studentId = c.get('userId')
+  const body = await c.req.json()
+  const parsed = linkStudentToPersonalSchema.parse(body)
+  const now = new Date().toISOString()
+
+  const existingLink = await pgQueryOne<{ id: string; nutritionist_id: string }>(
+    c.env,
+    `SELECT id, nutritionist_id
+       FROM patients
+      WHERE user_id = $1 AND status IN ('active', 'inactive', 'blocked')
+      ORDER BY created_at DESC
+      LIMIT 1`,
+    [studentId]
+  )
+
+  if (existingLink) {
+    throw new ConflictError('Você já está vinculado a um nutricionista')
+  }
+
+  const nutritionist = await pgQueryOne<{ id: string }>(
+    c.env,
+    'SELECT id FROM nutritionists WHERE referral_code = $1 LIMIT 1',
+    [parsed.referral_code.toUpperCase()]
+  )
+
+  if (!nutritionist) {
+    throw new NotFoundError('Código de referência inválido')
+  }
+
+  const studentProfile = await pgQueryOne<{
+    full_name: string
+    email: string
+    phone: string | null
+    cpf: string
+    date_of_birth: string | null
+    gender: string | null
+    goals: unknown
+  }>(
+    c.env,
+    `SELECT u.full_name, u.email, u.phone, u.cpf,
+            s.date_of_birth::text as date_of_birth, s.gender, s.goals
+       FROM users u
+       JOIN students s ON s.id = u.id
+      WHERE u.id = $1
+      LIMIT 1`,
+    [studentId]
+  )
+
+  if (!studentProfile) {
+    throw new NotFoundError('Aluno')
+  }
+
+  await pgQuery(
+    c.env,
+    `INSERT INTO patients (
+       id, nutritionist_id, user_id,
+       full_name, email, phone, cpf, date_of_birth, gender,
+       objectives, status, created_at, updated_at
+     ) VALUES (
+       $1, $2, $3,
+       $4, $5, $6, $7, $8, $9,
+       $10, 'active', $11, $11
+     )`,
+    [
+      generateId(),
+      nutritionist.id,
+      studentId,
+      studentProfile.full_name,
+      studentProfile.email,
+      studentProfile.phone,
+      studentProfile.cpf,
+      studentProfile.date_of_birth,
+      studentProfile.gender,
+      studentProfile.goals ? JSON.stringify(studentProfile.goals) : null,
+      now,
+    ]
+  )
+
+  await pgQuery(
+    c.env,
+    `UPDATE nutritionists
+        SET total_patients = total_patients + 1,
+            active_patients = active_patients + 1,
+            updated_at = $1
+      WHERE id = $2`,
+    [now, nutritionist.id]
+  )
+
+  await pgQuery(
+    c.env,
+    `UPDATE users
+        SET metadata = COALESCE(metadata, '{}'::jsonb) || jsonb_build_object('nutrition_referral', $1::jsonb),
+            updated_at = $2
+      WHERE id = $3`,
+    [JSON.stringify({ nutritionist_id: nutritionist.id, referral_code: parsed.referral_code.toUpperCase(), linked_at: now }), now, studentId]
+  )
+
+  return success({
+    message: 'Vínculo com nutricionista criado com sucesso',
+    nutritionist_id: nutritionist.id,
+  })
+})
+
+// ============================================
 // GET /students/:id — Detalhes de um aluno (personal)
 // ============================================
 students.get('/:id', requireType('personal'), async (c) => {

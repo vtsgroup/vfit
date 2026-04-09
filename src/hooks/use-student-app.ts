@@ -12,10 +12,11 @@
 // Student Dashboard hooks — TanStack Query
 // ============================================
 
-import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { api } from '@/lib/api-client'
 import { APP_QUERY_CACHE } from '@/lib/query-cache-policy'
 import { useAuthStore } from '@/stores/auth-store'
+import { toast } from '@/stores/app-store'
 
 // ============================================
 // Types
@@ -40,6 +41,9 @@ export interface StudentProfile {
   medical_restrictions: string | null
   training_frequency: number | null
   preferred_training_time: string | null
+  personal_id?: string | null
+  personal_name?: string | null
+  personal_photo?: string | null
 }
 
 export interface StudentWorkoutItem {
@@ -312,5 +316,48 @@ export function useUnreadCount() {
     enabled: isReady,
     ...APP_QUERY_CACHE.realtime,
     refetchInterval: isReady ? 60_000 : false,
+  })
+}
+
+export function useLinkPersonalTrainer() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (referralCode: string) => {
+      const res = await api.post<{ message: string; personal_id: string }>('/students/me/link-personal', {
+        referral_code: referralCode.trim().toUpperCase(),
+      })
+      return res.data
+    },
+    onSuccess: (data) => {
+      toast.success(data.message || 'Personal vinculado com sucesso!')
+      queryClient.invalidateQueries({ queryKey: ['student', 'me'] })
+      queryClient.invalidateQueries({ queryKey: ['student', 'assessments'] })
+      queryClient.invalidateQueries({ queryKey: ['assessments', 'my'] })
+    },
+    onError: (err: Error) => {
+      toast.error(err.message || 'Não foi possível vincular o personal')
+    },
+  })
+}
+
+export function useLinkNutritionist() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (referralCode: string) => {
+      const res = await api.post<{ message: string; nutritionist_id: string }>('/students/me/link-nutritionist', {
+        referral_code: referralCode.trim().toUpperCase(),
+      })
+      return res.data
+    },
+    onSuccess: (data) => {
+      toast.success(data.message || 'Nutricionista vinculado com sucesso!')
+      queryClient.invalidateQueries({ queryKey: ['student', 'me'] })
+      queryClient.invalidateQueries({ queryKey: ['vfit-nutrition-targets'] })
+    },
+    onError: (err: Error) => {
+      toast.error(err.message || 'Não foi possível vincular o nutricionista')
+    },
   })
 }
