@@ -48,6 +48,7 @@ import {
   type D1Exercise,
 } from '@/hooks/use-workouts'
 import { useGenerateWorkout } from '@/hooks/use-ai'
+import { useOnboardingStore } from '@/stores/onboarding-store'
 import { AuthGuard } from '@/components/auth'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -117,6 +118,14 @@ export default function CreateWorkoutPage() {
   }> | null>(null)
   const [selectedAIWorkoutIdx, setSelectedAIWorkoutIdx] = useState(0)
   const [didApplyPreselectedExercise, setDidApplyPreselectedExercise] = useState(false)
+
+  // ─── Read days_per_week from onboarding store ───
+  const onboardingData = useOnboardingStore((s) => s.data)
+  useEffect(() => {
+    if (onboardingData.days_per_week && onboardingData.days_per_week !== 3) {
+      setAiDaysPerWeek(onboardingData.days_per_week)
+    }
+  }, [onboardingData.days_per_week])
 
   const { data: studentsData } = useStudents({ per_page: 100 })
   const students = studentsData?.students ?? []
