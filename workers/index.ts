@@ -635,9 +635,12 @@ app.onError((err, c) => {
     )
   }
 
-  // Unknown errors
+  // Unknown errors — include sanitized message for debugging
+  const safeMessage = err?.message
+    ? `Erro interno: ${String(err.message).slice(0, 200)}`
+    : 'Erro interno do servidor'
   return error(
-    'Erro interno do servidor',
+    safeMessage,
     500,
     'INTERNAL_ERROR'
   )

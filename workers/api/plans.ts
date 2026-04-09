@@ -569,6 +569,7 @@ plans.post('/regenerate', authMiddleware, async (c) => {
 // ============================================
 plans.post('/auto-generate', authMiddleware, async (c) => {
   const userId = c.get('userId')
+  console.log(`[Plans] auto-generate START for user ${userId}`)
 
   const asString = (v: unknown, fallback: string) => (typeof v === 'string' && v.length > 0 ? v : fallback)
   const asNumber = (v: unknown, fallback: number) => {
@@ -577,17 +578,24 @@ plans.post('/auto-generate', authMiddleware, async (c) => {
   }
   const asStringArray = (v: unknown) => (Array.isArray(v) ? v.filter((x): x is string => typeof x === 'string') : [])
 
-  // Check if user already has an active plan
-  const existingPlan = await pgQueryOne<{ id: string }>(
-    c.env,
-    `SELECT id FROM workout_plans WHERE user_id = $1 AND status = 'active' LIMIT 1`,
-    [userId]
-  )
+  // ── Step 1: Check existing active plan ──
+  let existingPlan: { id: string } | null = null
+  try {
+    existingPlan = await pgQueryOne<{ id: string }>(
+      c.env,
+      `SELECT id FROM workout_plans WHERE user_id = $1 AND status = 'active' LIMIT 1`,
+      [userId]
+    )
+  } catch (err) {
+    console.error('[Plans] auto-generate step 1 (check existing) failed:', err)
+    throw new BadRequestError('Erro ao verificar planos existentes. Tente novamente.')
+  }
   if (existingPlan) {
+    console.log(`[Plans] auto-generate: user ${userId} already has plan ${existingPlan.id}`)
     return success({ plan_id: existingPlan.id, already_exists: true })
   }
 
-  // Read onboarding data
+  // ── Step 2: Read onboarding data ──
   let onboardingRaw: Record<string, unknown> | null = null
   try {
     onboardingRaw = await pgQueryOne<Record<string, unknown>>(
@@ -595,12 +603,14 @@ plans.post('/auto-generate', authMiddleware, async (c) => {
       `SELECT * FROM user_onboarding WHERE user_id = $1 LIMIT 1`,
       [userId]
     )
-  } catch {
-    throw new BadRequestError('Onboarding não encontrado. Complete o questionário primeiro.')
+    console.log(`[Plans] auto-generate step 2: onboarding found=${!!onboardingRaw}`)
+  } catch (err) {
+    console.error('[Plans] auto-generate step 2 (read onboarding) failed:', err)
+    throw new BadRequestError('Erro ao ler dados do questionário. Tente novamente.')
   }
 
   if (!onboardingRaw) {
-    throw new BadRequestError('Onboarding não encontrado. Complete o questionário primeiro.')
+    throw new BadRequestError('Questionário não preenchido. Complete o onboarding primeiro.')
   }
 
   const onboarding = {
@@ -625,7 +635,9 @@ plans.post('/auto-generate', authMiddleware, async (c) => {
     never: 3, inconsistently: 3, regularly: 5,
   }
   const daysPerWeek = onboarding.days_per_week || freqToDays[onboarding.training_frequency] || 3
+  console.log(`[Plans] auto-generate: goal=${onboarding.goal}, level=${onboarding.experience_level}, days=${daysPerWeek}`)
 
+  // ── Step 3: Generate plan (AI with fallback) ──
   let generatedPlan: GeneratedPlan | null = null
   let source: 'ai' | 'fallback' = 'ai'
 
@@ -648,6 +660,8 @@ plans.post('/auto-generate', authMiddleware, async (c) => {
     })
 
     const dynamicMaxTokens = Math.min(2048 + (daysPerWeek * 1024), 8192)
+    console.log(`[Plans] auto-generate step 3: calling AI (maxTokens=${dynamicMaxTokens})`)
+
     const aiResult = await Promise.race([
       callWorkersAIWithFallback(
         c.env,
@@ -660,9 +674,11 @@ plans.post('/auto-generate', authMiddleware, async (c) => {
         }
       ),
       new Promise<never>((_, reject) =>
-        setTimeout(() => reject(new Error('AI timeout on auto-generate')), 20_000)
+        setTimeout(() => reject(new Error('AI timeout on auto-generate')), 25_000)
       ),
     ])
+
+    console.log(`[Plans] auto-generate step 3: AI responded (provider=${aiResult.provider}, len=${aiResult.response.length})`)
 
     // Extract JSON from AI response
     const raw = aiResult.response
@@ -675,21 +691,23 @@ plans.post('/auto-generate', authMiddleware, async (c) => {
         try { parsed = JSON.parse(codeBlockMatch[1].trim()) } catch {
           const braceMatch = raw.match(/\{[\s\S]*\}/)
           if (braceMatch) parsed = JSON.parse(braceMatch[0])
-          else throw new Error('No valid JSON')
+          else throw new Error('No valid JSON in AI response')
         }
       } else {
         const braceMatch = raw.match(/\{[\s\S]*\}/)
         if (braceMatch) parsed = JSON.parse(braceMatch[0])
-        else throw new Error('No valid JSON')
+        else throw new Error('No valid JSON in AI response')
       }
     }
     generatedPlan = generatedPlanSchema.parse(parsed)
+    console.log(`[Plans] auto-generate step 3: parsed plan "${generatedPlan.plan_name}" with ${generatedPlan.days.length} days`)
   } catch (err) {
-    console.warn('[Plans] auto-generate AI failed, using fallback:', err)
+    console.warn('[Plans] auto-generate AI failed, using fallback:', err instanceof Error ? err.message : err)
     source = 'fallback'
   }
 
   if (!generatedPlan || generatedPlan.days.length !== daysPerWeek) {
+    console.log(`[Plans] auto-generate: using default plan template (goal=${onboarding.goal})`)
     generatedPlan = getDefaultPlan({
       goal: onboarding.goal,
       training_location: onboarding.training_location,
@@ -699,7 +717,7 @@ plans.post('/auto-generate', authMiddleware, async (c) => {
     source = 'fallback'
   }
 
-  // Save plan to DB
+  // ── Step 4: Save plan to DB ──
   const newPlanId = generateId()
   const now = new Date().toISOString()
   const durationMap: Record<string, number> = {
@@ -707,43 +725,62 @@ plans.post('/auto-generate', authMiddleware, async (c) => {
   }
   const sessionMin = durationMap[onboarding.session_duration] || 45
 
-  await pgQuery(
-    c.env,
-    `INSERT INTO workout_plans (id, user_id, created_by, name, title, type, status, total_days, current_day, settings, created_at, updated_at)
-     VALUES ($1, $2, $3, $4, $4, 'ai_generated', 'active', $5, 1, $6, $7, $7)`,
-    [
-      newPlanId, userId, null, generatedPlan.plan_name, daysPerWeek,
-      JSON.stringify({
-        goal: onboarding.goal,
-        level: onboarding.experience_level,
-        location: onboarding.training_location,
-        estimated_calories: generatedPlan.estimated_calories_per_session,
-        source,
-      }),
-      now,
-    ]
-  )
-
-  for (const day of generatedPlan.days) {
-    const dayId = generateId()
-    const muscleGroups = [...new Set(day.exercises.map((e) => e.muscle_group))]
+  try {
     await pgQuery(
       c.env,
-      `INSERT INTO workout_plan_days (id, plan_id, day_number, name, muscle_groups, estimated_duration_min, sort_order, created_at)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
-      [dayId, newPlanId, day.day_number, day.name, muscleGroups, sessionMin, day.day_number, now]
+      `INSERT INTO workout_plans (id, user_id, created_by, name, title, type, status, total_days, current_day, settings, created_at, updated_at)
+       VALUES ($1, $2, NULL, $3, $3, 'ai_generated', 'active', $4, 1, $5, $6, $6)`,
+      [
+        newPlanId, userId, generatedPlan.plan_name, daysPerWeek,
+        JSON.stringify({
+          goal: onboarding.goal,
+          level: onboarding.experience_level,
+          location: onboarding.training_location,
+          estimated_calories: generatedPlan.estimated_calories_per_session,
+          source,
+        }),
+        now,
+      ]
     )
+    console.log(`[Plans] auto-generate step 4: plan ${newPlanId} saved`)
+  } catch (err) {
+    console.error('[Plans] auto-generate step 4 (INSERT workout_plans) failed:', err)
+    throw new BadRequestError(`Erro ao salvar plano. Tente novamente. (${err instanceof Error ? err.message : 'DB error'})`)
+  }
 
-    for (let i = 0; i < day.exercises.length; i++) {
-      const ex = day.exercises[i]
+  // ── Step 5: Save days + exercises ──
+  try {
+    for (const day of generatedPlan.days) {
+      const dayId = generateId()
+      const muscleGroups = [...new Set(day.exercises.map((e) => e.muscle_group))]
       await pgQuery(
         c.env,
-        `INSERT INTO workout_plan_exercises (id, plan_day_id, name, muscle_group, sort_order, sets, reps, weight_kg, rest_seconds, notes, created_at)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
-        [generateId(), dayId, ex.name, ex.muscle_group, i + 1,
-         ex.sets, ex.reps, ex.weight_suggestion_kg || null, ex.rest_seconds, ex.notes || null, now]
+        `INSERT INTO workout_plan_days (id, plan_id, day_number, name, muscle_groups, estimated_duration_min, sort_order, created_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+        [dayId, newPlanId, day.day_number, day.name, muscleGroups, sessionMin, day.day_number, now]
       )
+
+      for (let i = 0; i < day.exercises.length; i++) {
+        const ex = day.exercises[i]
+        await pgQuery(
+          c.env,
+          `INSERT INTO workout_plan_exercises (id, plan_day_id, name, muscle_group, sort_order, sets, reps, weight_kg, rest_seconds, notes, created_at)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
+          [generateId(), dayId, ex.name, ex.muscle_group, i + 1,
+           ex.sets, ex.reps, ex.weight_suggestion_kg || null, ex.rest_seconds, ex.notes || null, now]
+        )
+      }
     }
+    console.log(`[Plans] auto-generate step 5: ${generatedPlan.days.length} days + exercises saved`)
+  } catch (err) {
+    // Cleanup: remove partial plan
+    console.error('[Plans] auto-generate step 5 (INSERT days/exercises) failed:', err)
+    try {
+      await pgQuery(c.env, `DELETE FROM workout_plan_exercises WHERE plan_day_id IN (SELECT id FROM workout_plan_days WHERE plan_id = $1)`, [newPlanId])
+      await pgQuery(c.env, `DELETE FROM workout_plan_days WHERE plan_id = $1`, [newPlanId])
+      await pgQuery(c.env, `DELETE FROM workout_plans WHERE id = $1`, [newPlanId])
+    } catch { /* cleanup best-effort */ }
+    throw new BadRequestError(`Erro ao salvar exercícios do plano. Tente novamente. (${err instanceof Error ? err.message : 'DB error'})`)
   }
 
   // D1 Sync (best-effort)
@@ -770,7 +807,7 @@ plans.post('/auto-generate', authMiddleware, async (c) => {
     link: '/plano',
   }).catch(() => {})
 
-  console.log(`[Plans] auto-generated plan ${newPlanId} for user ${userId} (source: ${source})`)
+  console.log(`[Plans] auto-generated plan ${newPlanId} for user ${userId} (source: ${source}) ✅`)
 
   return created({ plan_id: newPlanId, plan_name: generatedPlan.plan_name, source })
 })

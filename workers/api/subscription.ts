@@ -278,15 +278,23 @@ subscription.post('/checkout', async (c) => {
   // Create subscription as PENDING — webhook will activate it when payment is confirmed
   // No started_at or renews_at until payment is confirmed (prevents pre-activation)
 
-  await pgQuery(env, `
-    INSERT INTO vfit_subscriptions (id, user_id, plan_type, billing_cycle, started_at, renews_at, price_paid, asaas_subscription_id, payment_status)
-    VALUES ($1, $2, $3, $4, NULL, NULL, $5, $6, 'pending')
-    ON CONFLICT (user_id) DO UPDATE SET
-      plan_type = $3, billing_cycle = $4, started_at = NULL,
-      renews_at = NULL, price_paid = $5, asaas_subscription_id = $6,
-      payment_status = 'pending', canceled_at = NULL, updated_at = NOW()
-  `, [subId, userId, planSlug, planSlug === 'premium' ? 'monthly' : 'annual',
-      finalPrice, payment.id])
+  try {
+    await pgQuery(env, `
+      INSERT INTO vfit_subscriptions (id, user_id, plan_type, billing_cycle, started_at, renews_at, price_paid, asaas_subscription_id, payment_status)
+      VALUES ($1, $2, $3, $4, NULL, NULL, $5, $6, 'pending')
+      ON CONFLICT (user_id) DO UPDATE SET
+        plan_type = $3, billing_cycle = $4, started_at = NULL,
+        renews_at = NULL, price_paid = $5, asaas_subscription_id = $6,
+        payment_status = 'pending', canceled_at = NULL, updated_at = NOW()
+    `, [subId, userId, planSlug, planSlug === 'premium' ? 'monthly' : 'annual',
+        finalPrice, payment.id])
+    console.log(`[Subscription] checkout: subscription ${subId} saved for user ${userId} (plan=${planSlug}, price=${finalPrice})`)
+  } catch (err) {
+    console.error('[Subscription] checkout DB INSERT failed:', err)
+    // Asaas payment was already created — cancel it to avoid orphaned charge
+    try { await cancelAsaasPayment(env, payment.id) } catch { /* best-effort */ }
+    throw new BadRequestError(`Erro ao registrar assinatura. Tente novamente. (${err instanceof Error ? err.message : 'DB error'})`)
+  }
 
   return created({
     subscription_id: subId,
