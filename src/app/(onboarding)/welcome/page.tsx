@@ -28,12 +28,6 @@ const FEATURES: { icon: DSIconName; text: string }[] = [
   { icon: 'zap', text: 'Treinos de 15 a 60 min' },
 ]
 
-const headingFont = {
-  fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-  fontWeight: 900,
-  letterSpacing: '-0.03em',
-}
-
 export default function WelcomePage() {
   const router = useRouter()
   const { reset, currentStep, isCompleted } = useOnboardingStore()
@@ -67,6 +61,15 @@ export default function WelcomePage() {
     router.push('/onboarding')
   }
 
+  const handlePrimaryStudentFlow = () => {
+    if (hasSavedProgress) {
+      handleContinue()
+      return
+    }
+
+    handleStart()
+  }
+
   return (
     <div className="relative flex min-h-dvh flex-col overflow-hidden bg-bg-dark">
       {/* ─── Background image with overlay ─── */}
@@ -83,7 +86,7 @@ export default function WelcomePage() {
       </div>
 
       {/* ─── Content ─── */}
-      <div className="relative z-10 flex flex-1 flex-col items-center justify-between px-6 pb-10 pt-16">
+      <div className="relative z-10 flex flex-1 flex-col items-center px-6 pb-52 pt-16">
         {/* Top: Logo + branding — CSS animation, no JS dependency */}
         <div
           className="flex flex-col items-center"
@@ -105,7 +108,7 @@ export default function WelcomePage() {
 
         {/* Middle: Features — CSS animation with delay */}
         <div
-          className="w-full max-w-sm space-y-3"
+          className="mt-12 w-full max-w-sm space-y-3"
           style={{ animation: 'welcome-slide-up 0.7s ease-out 0.3s both' }}
         >
           <h2 className="mb-5 text-center text-lg font-semibold text-white">
@@ -126,106 +129,61 @@ export default function WelcomePage() {
             </div>
           ))}
         </div>
+      </div>
 
-        {/* Bottom: CTAs — CSS animation with longer delay */}
-        <div
-          className="w-full max-w-sm space-y-3"
-          style={{ animation: 'welcome-slide-up 0.7s ease-out 0.7s both' }}
-        >
-            {/* ─── Role selection cards ─── */}
-            <div className="space-y-2">
-              <p
-                className="text-center text-[11px] font-bold uppercase tracking-widest text-white/40 mb-3"
-                style={{ fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace' }}
+      {/* Bottom: fluxo principal fixo para aluno */}
+      <div
+        className="fixed inset-x-0 bottom-0 z-20"
+        style={{ animation: 'welcome-slide-up 0.7s ease-out 0.7s both' }}
+      >
+        <div className="absolute inset-0 bg-linear-to-t from-[#020810] via-[#020810]/95 to-transparent" />
+
+        <div className="relative mx-auto w-full max-w-sm px-6 pb-[calc(env(safe-area-inset-bottom)+20px)] pt-6">
+          <Button
+            onClick={handlePrimaryStudentFlow}
+            variant="primary"
+            size="lg"
+            className="w-full"
+          >
+            <DSIcon name={hasSavedProgress ? 'play' : 'graduationCap'} size={18} />
+            Continuar
+          </Button>
+
+          <div className="mt-3 text-center text-sm text-white/65">
+            {hasSavedProgress ? (
+              <button
+                onClick={handleStart}
+                className="text-xs font-medium text-white/45 underline-offset-2 transition-colors hover:text-white/70 hover:underline"
               >
-                Como você quer usar o VFIT?
-              </p>
+                Recomeçar do início
+              </button>
+            ) : (
+              <span className="text-xs text-white/45">Plano gratuito em 2 minutos</span>
+            )}
+          </div>
 
-              {/* Personal Trainer */}
-              <Link
-                href="/register/personal?from=welcome"
-                className="group flex items-center gap-3.5 rounded-2xl border border-white/8 bg-white/5 px-4 py-3.5 backdrop-blur-sm transition-all duration-200 hover:bg-white/10 hover:border-white/15 active:scale-[0.98]"
-              >
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-linear-to-br from-brand-primary to-[#16A34A] shadow-[0_4px_12px_rgba(34,197,94,0.3)]">
-                  <DSIcon name="dumbbell" size={20} className="text-white" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <p className="text-sm font-semibold text-white" style={headingFont}>Personal Trainer</p>
-                    <span className="rounded-full bg-brand-primary/20 px-1.5 py-px text-[9px] font-bold uppercase text-brand-primary tracking-wider">PRO</span>
-                  </div>
-                  <p className="text-[11px] text-white/45 mt-0.5 truncate">Gerencie alunos, treinos e cobranças</p>
-                </div>
-                <DSIcon name="arrowRight" size={16} className="text-white/30 transition-transform group-hover:translate-x-0.5" />
-              </Link>
-
-              {/* Nutricionista */}
-              <Link
-                href="/register/personal?type=nutri&from=welcome"
-                className="group flex items-center gap-3.5 rounded-2xl border border-white/8 bg-white/5 px-4 py-3.5 backdrop-blur-sm transition-all duration-200 hover:bg-white/10 hover:border-white/15 active:scale-[0.98]"
-              >
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-linear-to-br from-emerald-400 to-teal-600 shadow-[0_4px_12px_rgba(52,211,153,0.3)]">
-                  <DSIcon name="apple" size={20} className="text-white" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <p className="text-sm font-semibold text-white" style={headingFont}>Nutricionista</p>
-                    <span className="rounded-full bg-emerald-400/20 px-1.5 py-px text-[9px] font-bold uppercase text-emerald-400 tracking-wider">PRO</span>
-                  </div>
-                  <p className="text-[11px] text-white/45 mt-0.5 truncate">Planos alimentares e acompanhamento</p>
-                </div>
-                <DSIcon name="arrowRight" size={16} className="text-white/30 transition-transform group-hover:translate-x-0.5" />
-              </Link>
-
-              {/* Aluno / Atleta */}
-              {hasSavedProgress ? (
-                <button
-                  onClick={handleContinue}
-                  className="group flex w-full items-center gap-3.5 rounded-2xl border border-brand-primary/25 bg-brand-primary/8 px-4 py-3.5 backdrop-blur-sm transition-all duration-200 hover:bg-brand-primary/12 active:scale-[0.98]"
-                >
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-linear-to-br from-brand-primary to-emerald-600 shadow-[0_4px_12px_rgba(34,197,94,0.25)]">
-                    <DSIcon name="play" size={20} className="text-white" />
-                  </div>
-                  <div className="flex-1 min-w-0 text-left">
-                    <p className="text-sm font-semibold text-white" style={headingFont}>Continuar como Aluno</p>
-                    <p className="text-[11px] text-brand-primary/70 mt-0.5">Retomar onde parei</p>
-                  </div>
-                  <div className="flex flex-col items-end gap-0.5">
-                    <DSIcon name="arrowRight" size={16} className="text-brand-primary/60 transition-transform group-hover:translate-x-0.5" />
-                    <button
-                      onClick={(e) => { e.stopPropagation(); handleStart() }}
-                      className="text-[9px] text-white/30 hover:text-white/60 transition-colors"
-                    >
-                      Recomeçar
-                    </button>
-                  </div>
-                </button>
-              ) : (
-                <button
-                  onClick={handleStart}
-                  className="group flex w-full items-center gap-3.5 rounded-2xl border border-brand-primary/20 bg-white/5 px-4 py-3.5 backdrop-blur-sm transition-all duration-200 hover:bg-white/10 hover:border-white/15 active:scale-[0.98]"
-                >
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-linear-to-br from-brand-primary to-emerald-600 shadow-[0_4px_12px_rgba(34,197,94,0.25)]">
-                    <DSIcon name="graduationCap" size={20} className="text-white" />
-                  </div>
-                  <div className="flex-1 min-w-0 text-left">
-                    <div className="flex items-center gap-2">
-                      <p className="text-sm font-semibold text-white" style={headingFont}>Sou Aluno / Atleta</p>
-                      <span className="rounded-full bg-brand-primary/20 px-1.5 py-px text-[9px] font-bold uppercase text-brand-primary tracking-wider">FREE</span>
-                    </div>
-                    <p className="text-[11px] text-white/45 mt-0.5 truncate">Monte seu plano de treino gratuito</p>
-                  </div>
-                  <DSIcon name="arrowRight" size={16} className="text-white/30 transition-transform group-hover:translate-x-0.5" />
-                </button>
-              )}
-            </div>
-
-            <button
-              onClick={() => router.push('/login')}
-              className="w-full py-2 text-center text-sm font-medium text-white/50 transition-colors hover:text-white/80"
+          <div className="mt-4 flex items-center justify-center gap-3 text-sm">
+            <Link
+              href="/register/personal?from=welcome"
+              className="font-medium text-white/60 underline-offset-2 transition-colors hover:text-white hover:underline"
             >
-              Já tenho conta · Entrar
-            </button>
+              Sou Personal
+            </Link>
+            <span className="text-white/25">•</span>
+            <Link
+              href="/register/personal?type=nutri&from=welcome"
+              className="font-medium text-white/60 underline-offset-2 transition-colors hover:text-white hover:underline"
+            >
+              Sou Nutricionista
+            </Link>
+          </div>
+
+          <button
+            onClick={() => router.push('/login')}
+            className="mt-3 w-full py-2 text-center text-sm font-medium text-white/50 transition-colors hover:text-white/80"
+          >
+            Já tenho conta · Entrar
+          </button>
         </div>
       </div>
     </div>

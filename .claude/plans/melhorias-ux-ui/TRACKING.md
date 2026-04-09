@@ -1,16 +1,17 @@
 # 📊 TRACKING — Acompanhamento de Progresso
 
 **Documento vivo:** Atualizar após cada sprint  
-**Última atualização:** 2026-04-08 (release gate completo + deploy final concluído)  
-**Versão atual:** v1.9.8  
+**Última atualização:** 2026-04-09 (onboarding welcome priorizado para aluno + deploy patch)  
+**Versão atual:** v1.9.9  
 
 ---
 
 ## 🎯 Resumo Executivo
 
-### Checkpoint desta sessão (v1.9.8)
+### Checkpoint desta sessão (v1.9.9)
 
 - [x] Onboarding com seleção de perfil na welcome (Personal / Nutri / Aluno)
+- [x] Onboarding welcome priorizado para aluno (CTA principal fixo + links secundários Personal/Nutri)
 - [x] Upload de imagem de capa no fluxo de criar treino
 - [x] Componente MuscleAnatomyCard com placeholder + `image_url`
 - [x] `npm run type-check` sem erros

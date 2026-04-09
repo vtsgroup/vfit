@@ -26,6 +26,21 @@
 - `npm run build` — concluído com sucesso
 
 
+## [v1.9.9] — 09/04/2026 — Onboarding aluno como fluxo principal
+
+### ✨ Onboarding (welcome)
+- Fluxo principal da welcome ajustado para **aluno** com CTA único **"Continuar"**.
+- CTA principal fixado no rodapé para melhorar conversão e previsibilidade em mobile.
+- Opções secundárias movidas para links abaixo do CTA principal:
+  - **Sou Personal** → `/register/personal?from=welcome`
+  - **Sou Nutricionista** → `/register/personal?type=nutri&from=welcome`
+- Estado de progresso salvo preservado para aluno (continuar/recomeçar).
+- Arquivo: [src/app/(onboarding)/welcome/page.tsx](src/app/(onboarding)/welcome/page.tsx)
+
+### 🚀 Deploy
+- Deploy patch publicado via pipeline oficial: **v1.9.9**
+
+
 ## [v1.9.8] — 08/04/2026 — Sprint 16 fechado (release gate + deploy final)
 
 ### ✅ Release gate completo
