@@ -90,6 +90,21 @@ export function useCreateSelfAssessment() {
   })
 }
 
+export function useDeleteSelfAssessment(id: string | null) {
+  const qc = useQueryClient()
+
+  return useMutation({
+    mutationFn: async () => {
+      if (!id) throw new Error('ID da avaliação não informado')
+      await api.delete(`/self-assessments/${id}`)
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['self-assessments'] })
+      qc.invalidateQueries({ queryKey: ['self-assessment', id] })
+    },
+  })
+}
+
 // ── Helpers ────────────────────────────────────────────
 export function getBMIColor(bmi: number): string {
   if (bmi < 18.5) return 'text-blue-400'

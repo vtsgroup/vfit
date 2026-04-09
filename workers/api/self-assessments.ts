@@ -14,7 +14,7 @@ import { Hono } from 'hono'
 import type { AppContext } from '@workers/types'
 import { authMiddleware } from '@workers/middleware/auth'
 import { pgQuery, pgQueryOne, generateId } from '@lib/db'
-import { success, created } from '@lib/response'
+import { success, created, noContent } from '@lib/response'
 import { BadRequestError, NotFoundError } from '@lib/errors'
 
 const app = new Hono<AppContext>()
@@ -130,6 +130,25 @@ app.get('/:id', async (c) => {
   if (!row) throw new NotFoundError('Avaliação não encontrada')
 
   return success(row)
+})
+
+// ── DELETE /:id — Deletar avaliação definitivamente ───────────────
+app.delete('/:id', async (c) => {
+  const userId = c.get('userId')
+  const env = c.env
+  const id = c.req.param('id')
+
+  const { rows } = await pgQuery<{ id: string }>(
+    env,
+    `DELETE FROM self_assessments
+     WHERE id = $1 AND user_id = $2
+     RETURNING id`,
+    [id, userId]
+  )
+
+  if (rows.length === 0) throw new NotFoundError('Avaliação não encontrada')
+
+  return noContent()
 })
 
 // ── POST /from-onboarding — Create assessment from onboarding data ──

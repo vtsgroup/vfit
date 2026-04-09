@@ -7,7 +7,7 @@
 
 'use client'
 
-import { useParams, useRouter } from 'next/navigation'
+import { useParams, usePathname, useRouter } from 'next/navigation'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
 import { useAuthStore } from '@/stores/auth-store'
@@ -21,9 +21,11 @@ import {
 
 export default function TreinoTemplatePage() {
   const router = useRouter()
+  const pathname = usePathname()
   const isHydrated = useAuthStore((s) => s.isHydrated)
   const rawId = useParams<{ id: string }>().id
-  const id = rawId && rawId !== '_' ? rawId : null
+  const fallbackPathId = pathname.split('/').filter(Boolean).at(-1) ?? null
+  const id = rawId && rawId !== '_' ? rawId : (fallbackPathId && fallbackPathId !== '_' ? decodeURIComponent(fallbackPathId) : null)
   const { data: template, isLoading } = useWorkoutTemplateDetail(id)
 
   if (!isHydrated || isLoading) {

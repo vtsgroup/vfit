@@ -6,18 +6,23 @@
 
 'use client'
 
-import { useParams, useRouter } from 'next/navigation'
+import { useParams, usePathname, useRouter } from 'next/navigation'
 import { DSIcon } from '@/components/ui/ds-icon'
-import { useSelfAssessmentDetail, useSelfAssessments, getBMIColor, getActivityLabel, getGoalLabel } from '@/hooks/use-self-assessments'
+import { Button } from '@/components/ui/button'
+import { useSelfAssessmentDetail, useSelfAssessments, useDeleteSelfAssessment, getBMIColor, getActivityLabel, getGoalLabel } from '@/hooks/use-self-assessments'
 import { useAuthStore } from '@/stores/auth-store'
+import { toast } from '@/stores/app-store'
 
 export default function AvaliacaoDetalhePage() {
   const router = useRouter()
+  const pathname = usePathname()
   const isHydrated = useAuthStore((s) => s.isHydrated)
   const rawId = useParams<{ id: string }>().id
-  const id = rawId && rawId !== '_' ? rawId : null
+  const fallbackPathId = pathname.split('/').filter(Boolean).at(-1) ?? null
+  const id = rawId && rawId !== '_' ? rawId : (fallbackPathId && fallbackPathId !== '_' ? decodeURIComponent(fallbackPathId) : null)
   const { data: assessment, isLoading } = useSelfAssessmentDetail(id)
   const { data: allAssessments } = useSelfAssessments(50)
+  const deleteAssessment = useDeleteSelfAssessment(id)
 
   // Find previous assessment for comparison
   const prev = (() => {
@@ -41,6 +46,23 @@ export default function AvaliacaoDetalhePage() {
         <button aria-label="Voltar" onClick={() => router.back()} className="text-brand-primary text-[13px]">Voltar</button>
       </div>
     )
+  }
+
+  function handleDelete() {
+    if (!id) return
+    const confirmed = window.confirm('Tem certeza que deseja deletar definitivamente esta avaliação? Esta ação não pode ser desfeita.')
+    if (!confirmed) return
+
+    deleteAssessment.mutate(undefined, {
+      onSuccess: () => {
+        toast.success('Avaliação deletada com sucesso')
+        router.push('/avaliacoes')
+      },
+      onError: (err) => {
+        const msg = err instanceof Error ? err.message : 'Erro ao deletar avaliação'
+        toast.error(msg)
+      },
+    })
   }
 
   const date = new Date(assessment.created_at)
@@ -174,6 +196,18 @@ export default function AvaliacaoDetalhePage() {
           <p className="text-[13px] text-zinc-300">{assessment.notes}</p>
         </div>
       )}
+
+      <div className="mt-6">
+        <Button
+          variant="danger"
+          className="w-full"
+          loading={deleteAssessment.isPending}
+          onClick={handleDelete}
+        >
+          <DSIcon name="trash2" size={16} />
+          Deletar definitivamente
+        </Button>
+      </div>
     </div>
   )
 }
