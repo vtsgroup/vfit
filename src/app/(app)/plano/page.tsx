@@ -140,8 +140,15 @@ export default function PlanoPage() {
       return
     }
 
-    await autoGenerate.mutateAsync()
-    queryClient.invalidateQueries({ queryKey: ['plans', 'current'] })
+    try {
+      await autoGenerate.mutateAsync()
+      queryClient.invalidateQueries({ queryKey: ['plans', 'current'] })
+    } catch (err) {
+      const message = err instanceof Error ? err.message.toLowerCase() : ''
+      if (message.includes('onboarding') || message.includes('questionário') || message.includes('questionario')) {
+        router.push('/onboarding')
+      }
+    }
   }, [onboardingLoading, onboardingStatus?.completed, router, autoGenerate, queryClient])
 
   // ─── T6: Auto-save plan from sessionStorage (post-onboarding) ───

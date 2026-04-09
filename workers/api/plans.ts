@@ -639,16 +639,21 @@ plans.post('/auto-generate', authMiddleware, async (c) => {
     })
 
     const dynamicMaxTokens = Math.min(2048 + (daysPerWeek * 1024), 8192)
-    const aiResult = await callWorkersAIWithFallback(
-      c.env,
-      '@cf/meta/llama-4-scout-17b-16e-instruct',
-      prompt,
-      {
-        max_tokens: dynamicMaxTokens,
-        temperature: 0.6,
-        fallbackModel: '@cf/meta/llama-3.3-70b-instruct-fp8-fast',
-      }
-    )
+    const aiResult = await Promise.race([
+      callWorkersAIWithFallback(
+        c.env,
+        '@cf/meta/llama-4-scout-17b-16e-instruct',
+        prompt,
+        {
+          max_tokens: dynamicMaxTokens,
+          temperature: 0.6,
+          fallbackModel: '@cf/meta/llama-3.3-70b-instruct-fp8-fast',
+        }
+      ),
+      new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('AI timeout on auto-generate')), 20_000)
+      ),
+    ])
 
     // Extract JSON from AI response
     const raw = aiResult.response

@@ -22,14 +22,15 @@ interface B2COnboardingResponse {
  */
 export function useB2COnboardingCompleted(enabled: boolean) {
   const isReady = useAuthStore((s) => s.isAuthenticated && s.isHydrated)
+  const userId = useAuthStore((s) => s.user?.id)
 
   return useQuery<B2COnboardingResponse>({
-    queryKey: ['b2c-onboarding', 'status'],
+    queryKey: ['b2c-onboarding', 'status', userId || 'anonymous'],
     queryFn: async () => {
       const res = await api.get<B2COnboardingResponse>('/onboarding')
       return res.data
     },
-    enabled: isReady && enabled,
+    enabled: isReady && enabled && !!userId,
     staleTime: 30_000,
   })
 }
