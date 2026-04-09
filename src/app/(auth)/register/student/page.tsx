@@ -22,6 +22,7 @@ import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { useRegisterStudent } from '@/hooks/use-auth'
+import { useCpfValidation } from '@/hooks/use-cpf-validation'
 import { Button } from '@/components/ui/button'
 import { GuestGuard, Turnstile, OAuthButtons, AuthDivider } from '@/components/auth'
 import { ApiClientError } from '@/lib/api-client'
@@ -107,6 +108,7 @@ export default function RegisterStudentPage() {
   })
 
   const register = useRegisterStudent()
+  const cpfValidation = useCpfValidation(form.cpf)
   const fromOnboarding = searchParams.get('from') === 'onboarding'
   const selectedPlanId = searchParams.get('plan') || ''
   const requireCpf = fromOnboarding && !!selectedPlanId && selectedPlanId !== 'free'
@@ -139,7 +141,7 @@ export default function RegisterStudentPage() {
     form.password.length >= 8 &&
     turnstileToken &&
     acceptedTerms &&
-    (!requireCpf || form.cpf.replace(/\D/g, '').length === 11)
+    (!requireCpf || cpfValidation.isValid)
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -407,15 +409,33 @@ export default function RegisterStudentPage() {
                       const raw = e.target.value.replace(/\D/g, '').slice(0, 11)
                       const formatted = raw.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')
                       updateField('cpf', formatted)
+                      cpfValidation.setTouched(true)
                     }}
+                    onBlur={cpfValidation.handleBlur}
                     inputMode="numeric"
                     maxLength={14}
                     autoComplete="off"
-                    className={inputNormal}
+                    className={`${inputNormal} ${
+                      cpfValidation.touched && cpfValidation.hasError
+                        ? 'border-red-500/50 focus:border-red-500 focus:ring-red-400/25'
+                        : cpfValidation.touched && cpfValidation.isValid
+                        ? 'border-emerald-500/50 focus:border-emerald-500 focus:ring-emerald-400/25'
+                        : ''
+                    }`}
                   />
-                  <p className="mt-1.5 text-[10px] text-zinc-500">
-                    Necessário para gerar o pagamento via PIX
-                  </p>
+                  {cpfValidation.touched && cpfValidation.hasError ? (
+                    <p className="mt-1.5 text-[10px] text-red-500">
+                      {cpfValidation.errorMessage}
+                    </p>
+                  ) : cpfValidation.touched && cpfValidation.isValid ? (
+                    <p className="mt-1.5 text-[10px] text-emerald-500">
+                      CPF validado ✓
+                    </p>
+                  ) : (
+                    <p className="mt-1.5 text-[10px] text-zinc-500">
+                      Necessário para gerar o pagamento via PIX
+                    </p>
+                  )}
                 </div>
               )}
 
