@@ -135,8 +135,6 @@ export default function PlanoPage() {
   const hasSavedPending = useRef(false)
 
   const handleGeneratePlan = useCallback(async () => {
-    if (onboardingLoading) return
-
     if (!onboardingStatus?.completed) {
       router.push('/onboarding')
       return
@@ -221,7 +219,7 @@ export default function PlanoPage() {
           <Button
             className="mt-6"
             onClick={handleGeneratePlan}
-            loading={autoGenerate.isPending || onboardingLoading}
+            loading={autoGenerate.isPending}
           >
             <DSIcon name="sparkles" className="h-4 w-4" />
             Gerar Plano com IA
