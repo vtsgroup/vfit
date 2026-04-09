@@ -184,8 +184,8 @@ plans.post('/save', async (c) => {
   await pgQuery(
     c.env,
     `INSERT INTO workout_plans (id, user_id, created_by, name, title, description, status, created_at, updated_at)
-     VALUES ($1, $2, $3, $4, $4, $5, 'active', $6, $6)`,
-    [planId, userId, null, plan.plan_name, plan.description || '', now]
+     VALUES ($1, $2, NULL, $3, $4, $5, 'active', $6, $6)`,
+    [planId, userId, plan.plan_name, plan.plan_name, plan.description || '', now]
   )
 
   // Inserir dias + exercícios
@@ -490,9 +490,9 @@ plans.post('/regenerate', authMiddleware, async (c) => {
   await pgQuery(
     c.env,
     `INSERT INTO workout_plans (id, user_id, created_by, name, title, type, status, total_days, current_day, settings, created_at, updated_at)
-     VALUES ($1, $2, $3, $4, $4, 'ai_generated', 'active', $5, 1, $6, $7, $7)`,
+     VALUES ($1, $2, NULL, $3, $4, 'ai_generated', 'active', $5, 1, $6, $7, $7)`,
     [
-      newPlanId, userId, null, generatedPlan.plan_name,
+      newPlanId, userId, generatedPlan.plan_name, generatedPlan.plan_name,
       generatedPlan.days.length,
       JSON.stringify({
         goal: profile.goal,
@@ -729,9 +729,9 @@ plans.post('/auto-generate', authMiddleware, async (c) => {
     await pgQuery(
       c.env,
       `INSERT INTO workout_plans (id, user_id, created_by, name, title, type, status, total_days, current_day, settings, created_at, updated_at)
-       VALUES ($1, $2, NULL, $3, $3, 'ai_generated', 'active', $4, 1, $5, $6, $6)`,
+       VALUES ($1, $2, NULL, $3, $4, 'ai_generated', 'active', $5, 1, $6, $7, $7)`,
       [
-        newPlanId, userId, generatedPlan.plan_name, daysPerWeek,
+        newPlanId, userId, generatedPlan.plan_name, generatedPlan.plan_name, daysPerWeek,
         JSON.stringify({
           goal: onboarding.goal,
           level: onboarding.experience_level,
