@@ -313,3 +313,27 @@ export function useAutoGeneratePlan(
     retryDelay: 3000,
   })
 }
+
+// ============================================
+// POST /plans/auto-generate — Trigger manual (botão)
+// ============================================
+export function useAutoGeneratePlanMutation() {
+  const queryClient = useQueryClient()
+
+  return useMutation<{ plan_id: string; plan_name: string; source: string; already_exists?: boolean }, Error, void>({
+    mutationFn: async () => {
+      const res = await api.post<{ plan_id: string; plan_name: string; source: string; already_exists?: boolean }>(
+        '/plans/auto-generate',
+        {},
+      )
+      return res.data
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['plans', 'current'] })
+      toast.success('Plano gerado com sucesso!')
+    },
+    onError: (err: Error) => {
+      toast.error(err.message || 'Erro ao gerar plano')
+    },
+  })
+}

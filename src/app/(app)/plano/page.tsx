@@ -13,9 +13,10 @@ import { useRouter } from 'next/navigation'
 import { useQueryClient } from '@tanstack/react-query'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
-import { useCurrentPlan, useSavePlan } from '@/hooks/use-plans'
+import { useCurrentPlan, useSavePlan, useAutoGeneratePlanMutation } from '@/hooks/use-plans'
 import type { PlanDay } from '@/hooks/use-plans'
 import { useAuthStore } from '@/stores/auth-store'
+import { useB2COnboardingCompleted } from '@/hooks/use-b2c-onboarding'
 
 const MUSCLE_EMOJI: Record<string, string> = {
   chest: '🫁',
@@ -127,9 +128,23 @@ export default function PlanoPage() {
   const queryClient = useQueryClient()
   const isReady = useAuthStore((s) => s.isAuthenticated && s.isHydrated)
   const { data: plan, isLoading, error } = useCurrentPlan()
+  const { data: onboardingStatus, isLoading: onboardingLoading } = useB2COnboardingCompleted(isReady)
+  const autoGenerate = useAutoGeneratePlanMutation()
   const [activeDay, setActiveDay] = useState(1)
   const savePlan = useSavePlan()
   const hasSavedPending = useRef(false)
+
+  const handleGeneratePlan = useCallback(async () => {
+    if (onboardingLoading) return
+
+    if (!onboardingStatus?.completed) {
+      router.push('/onboarding')
+      return
+    }
+
+    await autoGenerate.mutateAsync()
+    queryClient.invalidateQueries({ queryKey: ['plans', 'current'] })
+  }, [onboardingLoading, onboardingStatus?.completed, router, autoGenerate, queryClient])
 
   // ─── T6: Auto-save plan from sessionStorage (post-onboarding) ───
   // When user completes onboarding, the generated plan sits in sessionStorage.
@@ -205,7 +220,8 @@ export default function PlanoPage() {
           </p>
           <Button
             className="mt-6"
-            onClick={() => router.push('/welcome')}
+            onClick={handleGeneratePlan}
+            loading={autoGenerate.isPending || onboardingLoading}
           >
             <DSIcon name="sparkles" className="h-4 w-4" />
             Gerar Plano com IA
