@@ -57,16 +57,16 @@ const variantStyles: Record<ButtonVariant, string> = {
 
   secondary: [
     // Light mode: zinc gradient — light top → mid → darker bottom (correct 3D direction)
-    'bg-linear-to-b from-zinc-100 via-zinc-200 to-zinc-400',
+    'bg-linear-to-b from-zinc-200 via-zinc-300 to-zinc-400',
     'text-zinc-800 font-semibold',
-    '[text-shadow:0_1px_1px_rgba(255,255,255,0.6)]',
+    '[text-shadow:0_1px_2px_rgba(255,255,255,0.8)]',
     'border border-t-white/70 border-x-zinc-300/40 border-b-zinc-500/40',
-    'shadow-[0_4px_0_0_#27272a,0_6px_18px_-4px_rgba(39,39,42,0.3),inset_0_1px_0_rgba(255,255,255,0.6)]',
+    'shadow-[0_4px_0_0_#71717a,0_6px_18px_-4px_rgba(113,113,122,0.4),inset_0_1px_0_rgba(255,255,255,0.6)]',
     'hover:-translate-y-0.5',
-    'hover:shadow-[0_6px_0_0_#27272a,0_10px_28px_-4px_rgba(39,39,42,0.35),inset_0_1px_0_rgba(255,255,255,0.65)]',
+    'hover:shadow-[0_4px_0_0_#71717a,0_6px_18px_-4px_rgba(113,113,122,0.6),inset_0_1px_0_rgba(255,255,255,0.65)]',
     'hover:brightness-[1.02]',
     'active:translate-y-[3px] active:scale-[0.98]',
-    'active:shadow-[0_1px_0_0_#27272a,0_2px_6px_-2px_rgba(39,39,42,0.15),inset_0_2px_4px_rgba(0,0,0,0.1)]',
+    'active:shadow-[0_1px_0_0_#71717a,0_2px_6px_-2px_rgba(113,113,122,0.2),inset_0_2px_4px_rgba(0,0,0,0.1)]',
     'active:brightness-95',
     // Dark mode: zinc-400 → 500 → 600 — bright surface for contrast vs #050A12 bg
     'dark:from-zinc-400 dark:via-zinc-500 dark:to-zinc-600',
