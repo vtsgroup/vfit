@@ -7,6 +7,34 @@
 
 ## [Unreleased] — 2026-04-08 — Sprint 11-15 (UX Nutrição/Exercícios)
 
+## [v2.3.0] — 2026-04-10 — Polimento UI (header/nav dark cross-theme + secondary button)
+
+### ✨ UI/UX
+- **Header cross-theme:** [src/components/layout/header.tsx](src/components/layout/header.tsx) recebeu ajuste de contraste para manter o chrome dark consistente também no modo claro.
+- **Tokens globais de chrome:** [src/app/globals.css](src/app/globals.css) foi refinado para manter `ds3-header`, `ds3-action-btn` e `nav-premium` em linguagem visual dark nas duas versões.
+- **Bottom nav mobile:** [src/components/layout/mobile-nav.tsx](src/components/layout/mobile-nav.tsx) e [src/components/navigation/bottom-navigation.tsx](src/components/navigation/bottom-navigation.tsx) passaram a usar base dark fixa com melhor legibilidade dos ícones/labels inativos.
+- **Botão secundário:** [src/components/ui/button.tsx](src/components/ui/button.tsx) foi reajustado para harmonizar gradiente/3D e contraste com o showcase do design system em light e dark.
+
+### ✅ Validação da sessão
+- `npm run lint` ✅ (warnings preexistentes não-bloqueantes)
+- `npm run type-check` ✅
+- `npm run build` ✅
+- Check online pós-deploy:
+  - `curl -I https://vfit.app.br` ✅
+  - `curl https://api.vfit.app.br/health` ✅
+
+### 🚀 Deploy
+- Pipeline oficial executado via task `deploy-vfit-patch-no-whatsapp`.
+- Versão publicada: **v2.3.0**
+- Pages preview: https://15cf4871.vfit.pages.dev
+- Worker Version ID: `d6bcbd6a-92cc-4628-a04a-da90321574b6`
+- WhatsApp notify start/end falhou com `401 invalid_credentials` (deploy seguiu com `--allow-no-whatsapp`).
+
+### 🧪 Smoke auth pós-deploy
+- `npm run smoke:auth:local` ❌
+- Motivo: tokens `SMOKE_*` expirados no preflight JWT + erro de parsing no `.env.local` (`line 12: e: command not found`, `line 13: Pipeline: command not found`).
+- Evidência: [docs/ULTRA-PLANO-MVP-PRODUCAO/AUTH-SMOKE.generated.md](docs/ULTRA-PLANO-MVP-PRODUCAO/AUTH-SMOKE.generated.md)
+
 ## [v2.2.8] — 2026-04-10 — VFIT Ultra v4 (S2–S8) + validação + deploy
 
 ### ✨ UX/UI (S2–S8)
