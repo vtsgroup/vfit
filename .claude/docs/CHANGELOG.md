@@ -7,6 +7,31 @@
 
 ## [Unreleased] — 2026-04-08 — Sprint 11-15 (UX Nutrição/Exercícios)
 
+## [v2.2.8] — 2026-04-10 — VFIT Ultra v4 (S2–S8) + validação + deploy
+
+### ✨ UX/UI (S2–S8)
+- **GlassCard v4:** [src/components/ui/glass-card.tsx](src/components/ui/glass-card.tsx) recebeu variantes `ultra` e `depth`, com suporte a `hoverLift` e `glowColor`.
+- **Card base:** [src/components/ui/card.tsx](src/components/ui/card.tsx) passou a aceitar variantes `ultra`/`depth`.
+- **KPI redesign:** [src/components/progresso/kpi-card.tsx](src/components/progresso/kpi-card.tsx) foi refeito com temas por cor, trend badge e integração com `GlassCard`.
+- **Treinos (B2C):** [src/app/(app)/treinos/page.tsx](src/app/(app)/treinos/page.tsx) recebeu hero premium, grid de KPIs coloridos e refinamento visual de cards.
+- **Plano:** [src/app/(app)/plano/page.tsx](src/app/(app)/plano/page.tsx) removeu hardcoded de cor no escopo alterado, adotou tokens/classes de músculo e melhorou header/tabs.
+- **Exercícios:** [src/app/(app)/exercicios/page.tsx](src/app/(app)/exercicios/page.tsx), [src/components/exercicios/exercise-card.tsx](src/components/exercicios/exercise-card.tsx) e [src/app/(app)/plano/editar/client-page.tsx](src/app/(app)/plano/editar/client-page.tsx) migraram de `MUSCLE_EMOJI` para `DSIcon`.
+- **Navegação:** [src/components/navigation/bottom-navigation.tsx](src/components/navigation/bottom-navigation.tsx) e [src/components/layout/sidebar.tsx](src/components/layout/sidebar.tsx) receberam reforço de microanimações e destaque ativo.
+- **Feedback global:** [src/components/ui/md3-input.tsx](src/components/ui/md3-input.tsx), [src/components/ui/empty-state-ds.tsx](src/components/ui/empty-state-ds.tsx), [src/components/ui/modern-notification.tsx](src/components/ui/modern-notification.tsx) e [src/app/globals.css](src/app/globals.css) ganharam melhorias de foco/erro/animação.
+
+### ✅ Validação executada na sessão
+- `npm run lint` ✅ (warnings preexistentes não-bloqueantes)
+- `npm run type-check` ✅
+- `npm run quality:ci` ✅
+- `npm run build` ✅
+
+### 🚀 Deploy
+- Pipeline oficial executado via task `deploy-vfit-patch-no-whatsapp`.
+- Versão publicada: **v2.2.8**
+- Pages preview: https://b16bf9e3.vfit.pages.dev
+- Worker Version ID: `092624dd-b665-4107-b542-5677d18fdb70`
+- WhatsApp notify start/end falhou com `401 invalid_credentials` (deploy seguiu com `--allow-no-whatsapp`).
+
 ### ✨ Features
 - **Central de mídia de exercícios:** [src/app/dashboard/workouts/media/library/page.tsx](src/app/dashboard/workouts/media/library/page.tsx) foi expandida para operar como central admin de legado D1 + registros R2, com resumo de cobertura, preview rápido, upload contextualizado e listagem de mídias existentes com remoção.
 - **Upload de exercício:** [src/components/workouts/exercise-media-upload.tsx](src/components/workouts/exercise-media-upload.tsx) agora comunica limites reais do endpoint, contexto R2 e arquivos selecionados antes do envio.

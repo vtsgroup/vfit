@@ -5,6 +5,27 @@
 
 ---
 
+## [v2.2.8] — 10/04/2026 — VFIT Ultra v4 (S2–S8) + deploy
+
+### ✨ UI/UX
+- Novas variantes de glass (`ultra`/`depth`) em [src/components/ui/glass-card.tsx](src/components/ui/glass-card.tsx) e [src/components/ui/card.tsx](src/components/ui/card.tsx).
+- Redesign dos KPIs e hero da home de treinos em [src/components/progresso/kpi-card.tsx](src/components/progresso/kpi-card.tsx) e [src/app/(app)/treinos/page.tsx](src/app/(app)/treinos/page.tsx).
+- Remoção de emojis hardcoded no domínio de músculos e padronização com `DSIcon` em [src/app/(app)/exercicios/page.tsx](src/app/(app)/exercicios/page.tsx), [src/components/exercicios/exercise-card.tsx](src/components/exercicios/exercise-card.tsx) e [src/app/(app)/plano/editar/client-page.tsx](src/app/(app)/plano/editar/client-page.tsx).
+- Melhorias de microinterações em [src/components/navigation/bottom-navigation.tsx](src/components/navigation/bottom-navigation.tsx), [src/components/layout/sidebar.tsx](src/components/layout/sidebar.tsx), [src/components/ui/modern-notification.tsx](src/components/ui/modern-notification.tsx), [src/components/ui/md3-input.tsx](src/components/ui/md3-input.tsx) e [src/components/ui/empty-state-ds.tsx](src/components/ui/empty-state-ds.tsx).
+- Novas animações globais de erro/fade em [src/app/globals.css](src/app/globals.css).
+
+### ✅ Qualidade
+- `npm run lint` (warnings não bloqueantes)
+- `npm run type-check`
+- `npm run quality:ci`
+- `npm run build`
+
+### 🚀 Deploy
+- Pipeline oficial executado com sucesso: **v2.2.8**
+- Pages: https://b16bf9e3.vfit.pages.dev
+- Workers: deploy concluído (Version ID `092624dd-b665-4107-b542-5677d18fdb70`)
+
+
 ## [v2.2.7] — 08/04/2026 — Exercícios Premium + Central de Mídia Admin
 
 ### ✨ Features
