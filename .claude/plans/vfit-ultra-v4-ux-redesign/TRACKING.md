@@ -259,7 +259,7 @@ Percentual: 93%
 ## 🔬 Final Validation (pós-sprints)
 
 - [x] T9.1 — `npm run quality:ci` executado com sucesso
-- [ ] T9.2 — `npm run smoke:auth:local` não executado nesta sessão
+- [ ] T9.2 — `npm run smoke:auth:local` executado, mas falhou por tokens SMOKE_* expirados no preflight
 - [x] T9.3 — Build concluído com sucesso
 - [ ] T9.4 — Lighthouse não executado
 - [ ] T9.5 — Auditoria WCAG formal não executada
@@ -302,7 +302,7 @@ Percentual: 93%
 
 ## 📝 Notas
 
-- **Última atualização:** 10/04/2026 — S2-S8 implementados, quality/build/deploy concluídos
+- **Última atualização:** 10/04/2026 — S2-S8 implementados, quality/build/deploy concluídos; smoke auth executado com falha por token expirado
 - **Criado por:** Claude Code (planejamento)
 - **Para começar:** Ler IMPLEMENTATION-GUIDE.md e seguir Sprint 1
 - **Perguntas?** Consultar PLAN.md ou DESIGN-TOKENS.md
