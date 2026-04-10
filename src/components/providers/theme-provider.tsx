@@ -24,6 +24,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const theme = useAppStore((s) => s.theme)
   const setTheme = useAppStore((s) => s.setTheme)
 
+  // Re-resolve on mount/hydration when using system theme
+  useEffect(() => {
+    if (theme === 'system') {
+      setTheme('system')
+    }
+  }, [theme, setTheme])
+
   // Sync resolved theme → <html> class + colorScheme + meta theme-color (TWA/PWA)
   useEffect(() => {
     const root = document.documentElement

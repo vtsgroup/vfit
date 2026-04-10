@@ -1,7 +1,7 @@
 /**
  * src/app/(app)/perfil/tema/page.tsx
  *
- * Tema — Escuro (padrão), Claro, ou Automático (sistema)
+ * Tema — Claro, Escuro, ou Automático (sistema por padrão)
  * Persistência via localStorage
  */
 
@@ -10,18 +10,18 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
+import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { hapticLight, hapticSuccess } from '@/lib/haptics'
+import { useAppStore } from '@/stores/app-store'
 
 type ThemeMode = 'dark' | 'light' | 'auto'
-
-const STORAGE_KEY = 'vfit_theme_mode'
 
 const THEME_OPTIONS: { key: ThemeMode; label: string; desc: string; icon: DSIconName }[] = [
   {
     key: 'dark',
     label: 'Escuro',
-    desc: 'Padrão — melhor para AMOLED',
+    desc: 'Ótimo para AMOLED e baixa luminosidade',
     icon: 'moon',
   },
   {
@@ -33,26 +33,25 @@ const THEME_OPTIONS: { key: ThemeMode; label: string; desc: string; icon: DSIcon
   {
     key: 'auto',
     label: 'Automático',
-    desc: 'Segue o sistema operacional',
+    desc: 'Padrão recomendado — segue o sistema operacional',
     icon: 'settings',
   },
 ]
 
 export default function TemaPage() {
   const router = useRouter()
-  const [theme, setTheme] = useState<ThemeMode>('dark')
+  const appTheme = useAppStore((s) => s.theme)
+  const setAppTheme = useAppStore((s) => s.setTheme)
+  const [theme, setTheme] = useState<ThemeMode>('auto')
 
   useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY) as ThemeMode | null
-    if (saved && ['dark', 'light', 'auto'].includes(saved)) {
-      setTheme(saved)
-    }
-  }, [])
+    setTheme(appTheme === 'system' ? 'auto' : appTheme)
+  }, [appTheme])
 
   const handleSelect = (t: ThemeMode) => {
     hapticLight()
     setTheme(t)
-    localStorage.setItem(STORAGE_KEY, t)
+    setAppTheme(t === 'auto' ? 'system' : t)
   }
 
   const handleSave = () => {
@@ -129,13 +128,13 @@ export default function TemaPage() {
       </div>
 
       {/* Save */}
-      <button
+      <Button
         onClick={handleSave}
-        className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl bg-brand-primary px-6 py-3.5 text-sm font-bold text-black transition-colors hover:bg-brand-primary/90 active:scale-[0.98]"
+        className="mt-6 w-full"
       >
         <DSIcon name="checkCircle" size={16} />
         Salvar
-      </button>
+      </Button>
     </div>
   )
 }

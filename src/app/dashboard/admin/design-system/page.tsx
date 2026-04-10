@@ -459,7 +459,12 @@ function MotionStaggerDemo({ t }: { t: Theme }) {
 // MAIN SHOWCASE
 // ============================================
 export default function ShowcasePage() {
-  const [mode, setMode] = useState<'light' | 'dark'>('dark')
+  const [mode, setMode] = useState<'light' | 'dark'>(() => (
+    typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: light)').matches
+      ? 'light'
+      : 'dark'
+  ))
+  const [autoMode, setAutoMode] = useState(true)
   const [section, setSection] = useState('foundations')
   const [inputVal, setInputVal] = useState('')
   const [textareaVal, setTextareaVal] = useState('')
@@ -500,6 +505,14 @@ export default function ShowcasePage() {
       html.style.colorScheme = restore
     }
   }, [mode])
+
+  useEffect(() => {
+    if (!autoMode) return
+    const mql = window.matchMedia('(prefers-color-scheme: light)')
+    const handler = (e: MediaQueryListEvent) => setMode(e.matches ? 'light' : 'dark')
+    mql.addEventListener('change', handler)
+    return () => mql.removeEventListener('change', handler)
+  }, [autoMode])
 
   const sections = [
     { id: 'foundations', label: 'Foundations', icon: 'sparkles' as DSIconName },
@@ -586,7 +599,7 @@ export default function ShowcasePage() {
             </div>
             <div style={{ display: 'flex', gap: 4, background: t.neutral100, padding: 4, borderRadius: 12, border: `1px solid ${t.borderLight}` }}>
               {([{ id: 'light' as const, Icon: Icons.sun }, { id: 'dark' as const, Icon: Icons.moon }]).map(({ id, Icon }) => (
-                <button key={id} onClick={() => setMode(id)} style={{
+                <button key={id} onClick={() => { setAutoMode(false); setMode(id) }} style={{
                   width: 40, height: 36, borderRadius: 8, border: 'none', cursor: 'pointer',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   background: mode === id ? `linear-gradient(180deg, ${t.primaryLight}, ${t.primary})` : 'transparent',
