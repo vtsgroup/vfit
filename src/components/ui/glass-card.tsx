@@ -14,10 +14,10 @@
 
 'use client'
 
-import { forwardRef, type HTMLAttributes } from 'react'
+import { forwardRef, type CSSProperties, type HTMLAttributes } from 'react'
 import { cn } from '@/lib/utils'
 
-type CardVariant = 'surface' | 'glass' | 'elevated' | 'outline' | 'glow' | 'gradient'
+type CardVariant = 'surface' | 'glass' | 'elevated' | 'outline' | 'glow' | 'gradient' | 'ultra' | 'depth'
 type CardPadding = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 type CardRadius = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl'
 
@@ -27,8 +27,12 @@ interface GlassCardProps extends HTMLAttributes<HTMLDivElement> {
   radius?: CardRadius
   /** Enable hover elevation effect */
   hover?: boolean
+  /** Enable premium hover lift animation */
+  hoverLift?: boolean
   /** Show as clickable (cursor + hover) */
   clickable?: boolean
+  /** Optional glow color for ambient shadow (e.g. rgba(34,197,94,0.10)) */
+  glowColor?: string
   /** Disable the card visually */
   disabled?: boolean
 }
@@ -40,6 +44,8 @@ const VARIANT_STYLES: Record<CardVariant, string> = {
   outline: 'border border-border-light bg-transparent',
   glow: 'surface-card border-brand-primary/20 shadow-[0_0_30px_rgba(61,252,164,0.08)]',
   gradient: 'bg-linear-to-br from-bg-secondary via-bg-secondary to-brand-primary/4 border border-border-light light:from-white light:via-white light:to-emerald-50 light:border-slate-200/60',
+  ultra: 'glass-ultra',
+  depth: 'glass-depth',
 }
 
 const PADDING_STYLES: Record<CardPadding, string> = {
@@ -67,14 +73,26 @@ export const GlassCard = forwardRef<HTMLDivElement, GlassCardProps>(
       padding = 'md',
       radius = 'xl',
       hover = false,
+      hoverLift = false,
       clickable = false,
+      glowColor,
       disabled = false,
       className,
       children,
+      style,
       ...props
     },
     ref
   ) => {
+    const mergedStyle: CSSProperties | undefined = glowColor
+      ? {
+          ...style,
+          boxShadow: style?.boxShadow
+            ? `0 0 0 1px ${glowColor}, ${style.boxShadow}`
+            : `0 0 0 1px ${glowColor}`,
+        }
+      : style
+
     return (
       <div
         ref={ref}
@@ -88,9 +106,11 @@ export const GlassCard = forwardRef<HTMLDivElement, GlassCardProps>(
           // Radius
           RADIUS_STYLES[radius],
           // Hover effect
-          (hover || clickable) && !disabled && [
+          (hover || hoverLift || clickable) && !disabled && [
             'transition-all duration-200 ease-out',
-            'hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.16)] light:hover:shadow-[0_4px_20px_rgba(0,0,0,0.08)]',
+            hoverLift
+              ? 'hover:-translate-y-0.75 hover:shadow-[0_12px_36px_rgba(0,0,0,0.22)] light:hover:shadow-[0_6px_24px_rgba(0,0,0,0.10)]'
+              : 'hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.16)] light:hover:shadow-[0_4px_20px_rgba(0,0,0,0.08)]',
             'hover:border-border-light/80',
           ],
           // Clickable
@@ -99,6 +119,7 @@ export const GlassCard = forwardRef<HTMLDivElement, GlassCardProps>(
           disabled && 'opacity-50 pointer-events-none',
           className
         )}
+        style={mergedStyle}
         {...props}
       >
         {children}

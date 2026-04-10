@@ -8,7 +8,7 @@
 
 'use client'
 
-import { DSIcon } from '@/components/ui/ds-icon'
+import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 import { cn } from '@/lib/utils'
 import type { Exercise, MuscleGroup } from '@/hooks/use-exercises'
 
@@ -34,26 +34,28 @@ const DIFFICULTY_MAP: Record<string, { label: string; tone: string; pill: string
   },
 }
 
-// ============================================
-// Muscle group emoji map
-// ============================================
-
-const MUSCLE_EMOJI: Record<string, string> = {
-  chest: '🫁',
-  back: '🔙',
-  shoulders: '💪',
-  biceps: '💪',
-  triceps: '💪',
-  legs: '🦵',
-  quadriceps: '🦵',
-  hamstrings: '🦵',
-  glutes: '🍑',
-  calves: '🦶',
-  abs: '🧱',
-  core: '🧱',
-  forearms: '🤛',
-  traps: '🔺',
-  full_body: '🏋️',
+const MUSCLE_THEME: Record<string, {
+  icon: DSIconName
+  iconColor: string
+  tintBg: string
+  border: string
+  text: string
+}> = {
+  chest: { icon: 'target', iconColor: 'text-red-300', tintBg: 'bg-red-500/15', border: 'border-red-500/20', text: 'text-red-300' },
+  back: { icon: 'activity', iconColor: 'text-blue-300', tintBg: 'bg-blue-500/15', border: 'border-blue-500/20', text: 'text-blue-300' },
+  shoulders: { icon: 'shield', iconColor: 'text-amber-300', tintBg: 'bg-amber-500/15', border: 'border-amber-500/20', text: 'text-amber-300' },
+  biceps: { icon: 'dumbbell', iconColor: 'text-violet-300', tintBg: 'bg-violet-500/15', border: 'border-violet-500/20', text: 'text-violet-300' },
+  triceps: { icon: 'dumbbell', iconColor: 'text-pink-300', tintBg: 'bg-pink-500/15', border: 'border-pink-500/20', text: 'text-pink-300' },
+  legs: { icon: 'footprints', iconColor: 'text-emerald-300', tintBg: 'bg-emerald-500/15', border: 'border-emerald-500/20', text: 'text-emerald-300' },
+  quadriceps: { icon: 'footprints', iconColor: 'text-emerald-300', tintBg: 'bg-emerald-500/15', border: 'border-emerald-500/20', text: 'text-emerald-300' },
+  hamstrings: { icon: 'footprints', iconColor: 'text-emerald-300', tintBg: 'bg-emerald-500/15', border: 'border-emerald-500/20', text: 'text-emerald-300' },
+  glutes: { icon: 'award', iconColor: 'text-fuchsia-300', tintBg: 'bg-fuchsia-500/15', border: 'border-fuchsia-500/20', text: 'text-fuchsia-300' },
+  calves: { icon: 'footprints', iconColor: 'text-emerald-300', tintBg: 'bg-emerald-500/15', border: 'border-emerald-500/20', text: 'text-emerald-300' },
+  abs: { icon: 'shieldCheck', iconColor: 'text-cyan-300', tintBg: 'bg-cyan-500/15', border: 'border-cyan-500/20', text: 'text-cyan-300' },
+  core: { icon: 'shieldCheck', iconColor: 'text-cyan-300', tintBg: 'bg-cyan-500/15', border: 'border-cyan-500/20', text: 'text-cyan-300' },
+  forearms: { icon: 'dumbbell', iconColor: 'text-violet-300', tintBg: 'bg-violet-500/15', border: 'border-violet-500/20', text: 'text-violet-300' },
+  traps: { icon: 'triangle', iconColor: 'text-amber-300', tintBg: 'bg-amber-500/15', border: 'border-amber-500/20', text: 'text-amber-300' },
+  full_body: { icon: 'dumbbell', iconColor: 'text-brand-primary', tintBg: 'bg-brand-primary/15', border: 'border-brand-primary/20', text: 'text-brand-primary' },
 }
 
 // ============================================
@@ -78,9 +80,8 @@ export function ExerciseCard({
   onClick,
 }: ExerciseCardProps) {
   const diff = DIFFICULTY_MAP[exercise.difficulty] || DIFFICULTY_MAP.beginner
-  const emoji = MUSCLE_EMOJI[exercise.muscle_group_id] || '💪'
+  const theme = MUSCLE_THEME[exercise.muscle_group_id] || MUSCLE_THEME.full_body
   const anatomyImage = muscleGroup?.image_url || exercise.thumbnail_url
-  const muscleColor = muscleGroup?.color_hex || '#22C55E'
   const hasVideo = Boolean(exercise.video_url_vertical || exercise.video_url_horizontal)
 
   let equipment: string[] = []
@@ -94,6 +95,7 @@ export function ExerciseCard({
     <div
       className={cn(
         'group relative overflow-hidden rounded-3xl border border-white/8 bg-white/4 p-3.5 backdrop-blur-xl transition-all duration-300',
+        theme.border,
         'shadow-[0_10px_30px_rgba(0,0,0,0.18),0_1px_0_rgba(255,255,255,0.05)_inset]',
         onClick && 'cursor-pointer hover:-translate-y-0.5 hover:border-brand-primary/18 hover:bg-white/6 hover:shadow-[0_16px_40px_rgba(0,0,0,0.24),0_0_0_1px_rgba(34,197,94,0.08)_inset] active:scale-[0.985]'
       )}
@@ -105,7 +107,7 @@ export function ExerciseCard({
 
       <div className="flex items-start gap-3">
         {/* Visual anatômico / thumb */}
-        <div className="relative h-18 w-18 shrink-0 overflow-hidden rounded-2xl border border-white/8 bg-white/5">
+        <div className={cn('relative h-18 w-18 shrink-0 overflow-hidden rounded-2xl border bg-white/5', theme.border)}>
           {anatomyImage ? (
             <img
               src={anatomyImage}
@@ -113,11 +115,8 @@ export function ExerciseCard({
               className="h-full w-full object-cover"
             />
           ) : (
-            <div
-              className="flex h-full w-full items-center justify-center text-3xl"
-              style={{ background: `linear-gradient(180deg, ${muscleColor}24 0%, rgba(255,255,255,0.02) 100%)` }}
-            >
-              <span>{emoji}</span>
+            <div className={cn('flex h-full w-full items-center justify-center bg-linear-to-b from-white/10 to-transparent', theme.tintBg)}>
+              <DSIcon name={theme.icon} size={28} className={theme.iconColor} />
             </div>
           )}
 
@@ -163,8 +162,7 @@ export function ExerciseCard({
               {diff.label}
             </span>
             <span
-              className="rounded-full border border-white/8 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.08em]"
-              style={{ backgroundColor: `${muscleColor}14`, color: muscleColor }}
+              className={cn('rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.08em]', theme.border, theme.tintBg, theme.text)}
             >
               Anatomia
             </span>
@@ -205,7 +203,7 @@ export function ExerciseCard({
               {exercise.view_count > 0 ? `${exercise.view_count} visualizações` : 'Novo na biblioteca'}
             </span>
             <span className="inline-flex items-center gap-1">
-              <DSIcon name="target" size={12} style={{ color: muscleColor }} />
+              <DSIcon name={theme.icon} size={12} className={theme.iconColor} />
               {muscleGroupName || 'Músculo principal'}
             </span>
           </div>

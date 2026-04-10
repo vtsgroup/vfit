@@ -15,6 +15,8 @@ import Link from 'next/link'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { GlassCard } from '@/components/ui/glass-card'
+import { KPICard } from '@/components/progresso'
 import {
   useWorkoutTemplates,
   getDifficultyLabel,
@@ -28,7 +30,7 @@ import { useWorkoutLogs } from '@/hooks/use-workouts'
 import { useSubscriptionStatus } from '@/hooks/use-vfit-checkout'
 import { useB2COnboardingCompleted } from '@/hooks/use-b2c-onboarding'
 import { useStudentProfile, useLinkPersonalTrainer } from '@/hooks/use-student-app'
-import { useExercises, useMuscleGroups } from '@/hooks/use-exercises'
+import { useExercises, useMuscleGroups, type Exercise } from '@/hooks/use-exercises'
 import { useAuthStore } from '@/stores/auth-store'
 
 const DIFFICULTY_FILTERS = [
@@ -221,7 +223,7 @@ export default function TreinosPage() {
   const todayExercises = todayDay?.exercises ?? []
 
   const exerciseById = useMemo(() => {
-    const map = new Map<string, (typeof exerciseCatalog.exercises)[number]>()
+    const map = new Map<string, Exercise>()
     for (const ex of exerciseCatalog?.exercises ?? []) {
       map.set(ex.id, ex)
     }
@@ -260,6 +262,8 @@ export default function TreinosPage() {
   const totals = mealsData?.totals ?? { calories: 0, protein: 0, carbs: 0, fat: 0 }
   const planPct = plan && plan.total_days > 0 ? Math.round((plan.current_day / plan.total_days) * 100) : 0
   const calPct = targets.calories > 0 ? Math.round((totals.calories / targets.calories) * 100) : 0
+  const proteinPct = targets.protein > 0 ? Math.round((totals.protein / targets.protein) * 100) : 0
+  const carbsPct = targets.carbs > 0 ? Math.round((totals.carbs / targets.carbs) * 100) : 0
 
   return (
     <div className="mx-auto max-w-lg animate-in fade-in-0 slide-in-from-bottom-2 duration-300 px-4 pt-6 pb-24">
@@ -269,7 +273,8 @@ export default function TreinosPage() {
       {/* T7.3 — Card "Treino de Hoje" */}
       {todayDay && (
         <Link href="/plano" className="mb-4 block" onClick={() => hapticLight()}>
-          <div className="glass-card rounded-2xl border border-brand-primary/20 bg-linear-to-br from-brand-primary/8 to-transparent p-4">
+          <GlassCard variant="ultra" padding="md" hoverLift className="rounded-2xl border border-brand-primary/18">
+            <div className="absolute inset-y-3 left-0 w-1 rounded-r-full bg-brand-primary/80" />
             <div className="mb-2 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-primary/15">
@@ -291,70 +296,54 @@ export default function TreinosPage() {
               <span className="text-text-muted">·</span>
               <span>{todayDay.exercises.length} exercícios</span>
             </div>
-          </div>
+            <Button size="sm" className="mt-3 w-full">
+              <DSIcon name="play" size={14} />
+              Continuar treino
+            </Button>
+          </GlassCard>
         </Link>
       )}
 
-      {/* T7.4 + T7.5 + T7.6 — KPI cards (plano + nutrição) */}
+      {/* KPI cards ultra-modernos */}
       <div className="mb-5 grid grid-cols-2 gap-3">
-        {/* T7.5 — Plano progress ring */}
-        <Link href="/plano" className="glass-card block rounded-2xl p-3">
-          <p className="mb-2.5 text-[10px] font-bold uppercase tracking-wider text-text-muted">
-            Plano Atual
-          </p>
-          {plan ? (
-            <div className="flex items-center gap-3">
-              <ProgressRing value={plan.current_day} max={plan.total_days} size={52} stroke={5} color="#10B981">
-                <span className="text-[10px] font-bold text-text-primary">{planPct}%</span>
-              </ProgressRing>
-              <div className="min-w-0">
-                <p className="text-[13px] font-bold text-text-primary">
-                  Dia {plan.current_day}
-                  <span className="font-normal text-text-muted">/{plan.total_days}</span>
-                </p>
-                <p className="truncate text-[11px] text-text-muted">{plan.name}</p>
-              </div>
-            </div>
-          ) : (
-            <div className="flex items-center gap-2 py-1">
-              <DSIcon name="sparkles" size={16} className="text-brand-primary" />
-              <p className="text-[12px] text-text-muted">Gere seu plano</p>
-            </div>
-          )}
-        </Link>
-
-        {/* T7.6 — Nutrição hoje */}
-        <Link href="/nutricao" className="glass-card block rounded-2xl p-3">
-          <p className="mb-2.5 text-[10px] font-bold uppercase tracking-wider text-text-muted">
-            Nutrição Hoje
-          </p>
-          <div className="flex items-center gap-3">
-            <ProgressRing
-              value={totals.calories}
-              max={targets.calories || 2000}
-              size={52}
-              stroke={5}
-              color="#F59E0B"
-            >
-              <span className="text-[10px] font-bold text-text-primary">{calPct}%</span>
-            </ProgressRing>
-            <div className="min-w-0">
-              <p className="text-[13px] font-bold text-text-primary">
-                {Math.round(totals.calories)}
-                <span className="font-normal text-[10px] text-text-muted">kcal</span>
-              </p>
-              <p className="text-[11px] text-text-muted">
-                P:{Math.round(totals.protein)}g · C:{Math.round(totals.carbs)}g
-              </p>
-            </div>
-          </div>
-        </Link>
+        <KPICard
+          icon="footprints"
+          label="Plano"
+          value={planPct}
+          unit="%"
+          color="blue"
+          trend={{ delta: Math.max(1, planPct - 50), isPositive: planPct >= 50 }}
+        />
+        <KPICard
+          icon="flask"
+          label="Proteína"
+          value={Math.round(totals.protein)}
+          unit="g"
+          color="cyan"
+          trend={{ delta: Math.abs(proteinPct - 100), isPositive: proteinPct >= 100 }}
+        />
+        <KPICard
+          icon="moon"
+          label="Carboidratos"
+          value={Math.round(totals.carbs)}
+          unit="g"
+          color="purple"
+          trend={{ delta: Math.abs(carbsPct - 100), isPositive: carbsPct >= 100 }}
+        />
+        <KPICard
+          icon="flame"
+          label="Calorias"
+          value={Math.round(totals.calories)}
+          unit="kcal"
+          color="amber"
+          trend={{ delta: Math.abs(calPct - 100), isPositive: calPct >= 100 }}
+        />
       </div>
 
       {/* T5.9 — Assessment summary card (pós-onboarding) */}
       {latestAssessment ? (
         <Link href="/avaliacoes" className="mb-5 block">
-          <div className="glass-card rounded-2xl p-4">
+          <GlassCard variant="depth" padding="md" hoverLift className="rounded-2xl border border-violet-400/18 bg-linear-to-br from-violet-500/8 to-transparent">
             <div className="mb-3 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-violet-500/15">
@@ -394,7 +383,7 @@ export default function TreinosPage() {
                 {latestAssessment.bmi_category}
               </p>
             )}
-          </div>
+          </GlassCard>
         </Link>
       ) : (
         <Link href="/avaliacoes/nova" className="mb-5 block">
@@ -698,8 +687,9 @@ export default function TreinosPage() {
             <Link
               key={t.id}
               href={`/treinos/${t.id}`}
-              className="glass-card flex items-center gap-3 rounded-2xl p-4 transition-all hover:border-white/12"
+              className="glass-card group relative flex items-center gap-3 overflow-hidden rounded-2xl border border-white/10 bg-linear-to-br from-white/5 to-transparent p-4 transition-all hover:border-white/16"
             >
+              <div className="absolute right-0 top-0 h-20 w-20 rounded-full bg-brand-primary/10 blur-2xl transition-opacity group-hover:opacity-80" />
               <img
                 src={buildPlaceholderImage(t.name || t.category || 'Treino', toneByMuscle(t.category))}
                 alt={`Placeholder treino ${t.name}`}
@@ -709,6 +699,7 @@ export default function TreinosPage() {
               <div className="min-w-0 flex-1">
                 <div className="mb-0.5 flex items-center gap-2">
                   <p className="truncate text-[14px] font-bold text-text-primary">{t.name}</p>
+                  <DSIcon name="activity" size={12} className="text-brand-primary/80" />
                   {t.is_premium && (
                     <DSIcon name="lock" size={12} className="shrink-0 text-yellow-400" />
                   )}

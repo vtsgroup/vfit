@@ -67,6 +67,7 @@ const MD3Input = forwardRef<HTMLInputElement, MD3InputProps>(({
     <div className={cn('relative w-full group', className)}>
       <div className={cn(
         'relative flex items-center rounded-2xl transition-all duration-300 ease-out',
+        isError && 'motion-safe:animate-[field-shake_220ms_ease-in-out_1]',
         variant === 'filled'
           ? cn(
               'rounded-b-none border-b-2',
@@ -87,7 +88,7 @@ const MD3Input = forwardRef<HTMLInputElement, MD3InputProps>(({
                 : focused
                   ? cn(
                       'dark:border-emerald-400/60 light:border-emerald-400/70',
-                      'shadow-[0_0_0_3px_rgba(16,185,129,0.12),0_1px_2px_rgba(0,0,0,0.05)]',
+                      'shadow-[0_0_0_3px_rgba(34,197,94,0.15),0_1px_2px_rgba(0,0,0,0.05)]',
                       'dark:bg-white/7 light:bg-white',
                     )
                   : cn(
@@ -161,7 +162,7 @@ const MD3Input = forwardRef<HTMLInputElement, MD3InputProps>(({
       {/* Helper / Error text */}
       {(helperText || error) && (
         <p className={cn(
-          'mt-1.5 text-[11px] font-medium px-4 tracking-wide',
+          'mt-1.5 px-4 text-[11px] font-medium tracking-wide motion-safe:animate-[helper-fade-in_220ms_ease-out]',
           isError ? 'text-red-400' : 'dark:text-white/40 light:text-slate-500'
         )}>
           {error || helperText}
@@ -200,6 +201,7 @@ const MD3TextArea = forwardRef<HTMLTextAreaElement, MD3TextAreaProps>(({
     <div className={cn('relative w-full', className)}>
       <div className={cn(
         'relative rounded-2xl border transition-all duration-300 ease-out',
+        isError && 'motion-safe:animate-[field-shake_220ms_ease-in-out_1]',
         'dark:bg-white/4 light:bg-white/80',
         'backdrop-blur-sm',
         isError
@@ -207,7 +209,7 @@ const MD3TextArea = forwardRef<HTMLTextAreaElement, MD3TextAreaProps>(({
           : focused
             ? cn(
                 'dark:border-emerald-400/60 light:border-emerald-400/70',
-                'shadow-[0_0_0_3px_rgba(16,185,129,0.12),0_1px_2px_rgba(0,0,0,0.05)]',
+                'shadow-[0_0_0_3px_rgba(34,197,94,0.15),0_1px_2px_rgba(0,0,0,0.05)]',
                 'dark:bg-white/7 light:bg-white',
               )
             : cn(
@@ -254,7 +256,7 @@ const MD3TextArea = forwardRef<HTMLTextAreaElement, MD3TextAreaProps>(({
 
       {(helperText || error) && (
         <p className={cn(
-          'mt-1.5 text-[11px] font-medium px-4 tracking-wide',
+          'mt-1.5 px-4 text-[11px] font-medium tracking-wide motion-safe:animate-[helper-fade-in_220ms_ease-out]',
           isError ? 'text-red-400' : 'dark:text-white/40 light:text-slate-500'
         )}>
           {error || helperText}
@@ -297,7 +299,7 @@ const MD3SearchBar = forwardRef<HTMLInputElement, MD3SearchBarProps>(({
       focused
         ? cn(
             'dark:border-emerald-400/40 light:border-emerald-400/50',
-            'shadow-[0_0_0_3px_rgba(16,185,129,0.1),0_4px_12px_rgba(0,0,0,0.08)]',
+            'shadow-[0_0_0_3px_rgba(34,197,94,0.15),0_4px_12px_rgba(0,0,0,0.08)]',
             'dark:bg-white/8 light:bg-white',
           )
         : cn(

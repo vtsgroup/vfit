@@ -19,7 +19,6 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import { DSIcon } from '@/components/ui/ds-icon'
 import type { DSIconName } from '@/components/ui/ds-icon'
-import { useState } from 'react'
 
 // ============================================
 // Types
@@ -102,10 +101,10 @@ export function NotificationCard({
   return (
     <motion.div
       layout
-      initial={{ opacity: 0, x: 30 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -30, height: 0, marginBottom: 0 }}
-      transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+      initial={{ opacity: 0, y: 12, x: 18, scale: 0.96 }}
+      animate={{ opacity: 1, y: 0, x: 0, scale: 1 }}
+      exit={{ opacity: 0, y: -8, x: -16, scale: 0.96, height: 0, marginBottom: 0 }}
+      transition={{ type: 'spring', stiffness: 420, damping: 28, mass: 0.8 }}
       onClick={() => onClick?.(notification)}
       className={cn(
         'group relative flex items-start gap-3 rounded-xl border dark:border-white/6 light:border-slate-200 p-3.5',
@@ -130,7 +129,11 @@ export function NotificationCard({
             {notification.title}
           </p>
           {!notification.read && (
-            <div className={cn('mt-1.5 h-2 w-2 shrink-0 rounded-full', config.dotColor)} />
+            <motion.div
+              className={cn('mt-1.5 h-2 w-2 shrink-0 rounded-full', config.dotColor)}
+              animate={{ scale: [1, 1.28, 1], opacity: [0.8, 1, 0.8] }}
+              transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
+            />
           )}
         </div>
         <p className="mt-0.5 text-xs dark:text-white/50 light:text-slate-500 line-clamp-2">{notification.description}</p>

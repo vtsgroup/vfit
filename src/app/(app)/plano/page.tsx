@@ -25,6 +25,7 @@ import { useB2COnboardingCompleted } from '@/hooks/use-b2c-onboarding'
 import { useExercises, useMuscleGroups } from '@/hooks/use-exercises'
 import type { MuscleGroup } from '@/hooks/use-exercises'
 import { cn } from '@/lib/utils'
+import type { DSIconName } from '@/components/ui/ds-icon'
 
 // ============================================
 // Constants & Helpers
@@ -49,21 +50,123 @@ const MUSCLE_NAME_MAP: Record<string, string> = {
   traps: 'Trapézio',
 }
 
-/** Fallback colors per muscle group */
-const MUSCLE_COLORS: Record<string, string> = {
-  chest: '#EF4444',
-  back: '#3B82F6',
-  legs: '#F59E0B',
-  shoulders: '#8B5CF6',
-  biceps: '#EC4899',
-  triceps: '#EC4899',
-  core: '#10B981',
-  abs: '#10B981',
-  glutes: '#F97316',
-  cardio: '#EF4444',
-  calves: '#F59E0B',
-  quadriceps: '#F59E0B',
-  hamstrings: '#F59E0B',
+const MUSCLE_STYLES: Record<string, {
+  chipBg: string
+  chipBorder: string
+  iconColor: string
+  mutedBg: string
+  cardBg: string
+  cardBorder: string
+  icon: DSIconName
+}> = {
+  chest: {
+    chipBg: 'bg-(--muscle-peito-light)',
+    chipBorder: 'border-(--muscle-peito-primary)',
+    iconColor: 'text-red-400',
+    mutedBg: 'bg-red-500/15',
+    cardBg: 'bg-(--muscle-peito-light)',
+    cardBorder: 'border-red-500/20',
+    icon: 'target',
+  },
+  back: {
+    chipBg: 'bg-(--muscle-costas-light)',
+    chipBorder: 'border-(--muscle-costas-primary)',
+    iconColor: 'text-blue-400',
+    mutedBg: 'bg-blue-500/15',
+    cardBg: 'bg-(--muscle-costas-light)',
+    cardBorder: 'border-blue-500/20',
+    icon: 'activity',
+  },
+  shoulders: {
+    chipBg: 'bg-(--muscle-ombros-light)',
+    chipBorder: 'border-(--muscle-ombros-primary)',
+    iconColor: 'text-amber-400',
+    mutedBg: 'bg-amber-500/15',
+    cardBg: 'bg-(--muscle-ombros-light)',
+    cardBorder: 'border-amber-500/20',
+    icon: 'shield',
+  },
+  biceps: {
+    chipBg: 'bg-(--muscle-biceps-light)',
+    chipBorder: 'border-(--muscle-biceps-primary)',
+    iconColor: 'text-violet-400',
+    mutedBg: 'bg-violet-500/15',
+    cardBg: 'bg-(--muscle-biceps-light)',
+    cardBorder: 'border-violet-500/20',
+    icon: 'dumbbell',
+  },
+  triceps: {
+    chipBg: 'bg-(--muscle-triceps-light)',
+    chipBorder: 'border-(--muscle-triceps-primary)',
+    iconColor: 'text-pink-400',
+    mutedBg: 'bg-pink-500/15',
+    cardBg: 'bg-(--muscle-triceps-light)',
+    cardBorder: 'border-pink-500/20',
+    icon: 'dumbbell',
+  },
+  legs: {
+    chipBg: 'bg-(--muscle-pernas-light)',
+    chipBorder: 'border-(--muscle-pernas-primary)',
+    iconColor: 'text-emerald-400',
+    mutedBg: 'bg-emerald-500/15',
+    cardBg: 'bg-(--muscle-pernas-light)',
+    cardBorder: 'border-emerald-500/20',
+    icon: 'footprints',
+  },
+  quadriceps: {
+    chipBg: 'bg-(--muscle-pernas-light)',
+    chipBorder: 'border-(--muscle-pernas-primary)',
+    iconColor: 'text-emerald-400',
+    mutedBg: 'bg-emerald-500/15',
+    cardBg: 'bg-(--muscle-pernas-light)',
+    cardBorder: 'border-emerald-500/20',
+    icon: 'footprints',
+  },
+  hamstrings: {
+    chipBg: 'bg-(--muscle-pernas-light)',
+    chipBorder: 'border-(--muscle-pernas-primary)',
+    iconColor: 'text-emerald-400',
+    mutedBg: 'bg-emerald-500/15',
+    cardBg: 'bg-(--muscle-pernas-light)',
+    cardBorder: 'border-emerald-500/20',
+    icon: 'footprints',
+  },
+  calves: {
+    chipBg: 'bg-(--muscle-pernas-light)',
+    chipBorder: 'border-(--muscle-pernas-primary)',
+    iconColor: 'text-emerald-400',
+    mutedBg: 'bg-emerald-500/15',
+    cardBg: 'bg-(--muscle-pernas-light)',
+    cardBorder: 'border-emerald-500/20',
+    icon: 'footprints',
+  },
+  core: {
+    chipBg: 'bg-(--muscle-abdomen-light)',
+    chipBorder: 'border-(--muscle-abdomen-primary)',
+    iconColor: 'text-cyan-400',
+    mutedBg: 'bg-cyan-500/15',
+    cardBg: 'bg-(--muscle-abdomen-light)',
+    cardBorder: 'border-cyan-500/20',
+    icon: 'shieldCheck',
+  },
+  abs: {
+    chipBg: 'bg-(--muscle-abdomen-light)',
+    chipBorder: 'border-(--muscle-abdomen-primary)',
+    iconColor: 'text-cyan-400',
+    mutedBg: 'bg-cyan-500/15',
+    cardBg: 'bg-(--muscle-abdomen-light)',
+    cardBorder: 'border-cyan-500/20',
+    icon: 'shieldCheck',
+  },
+  glutes: {
+    chipBg: 'bg-(--muscle-gluteos-light)',
+    chipBorder: 'border-(--muscle-gluteos-primary)',
+    iconColor: 'text-fuchsia-400',
+    mutedBg: 'bg-fuchsia-500/15',
+    cardBg: 'bg-(--muscle-gluteos-light)',
+    cardBorder: 'border-fuchsia-500/20',
+    icon: 'award',
+  },
 }
 
 const LOCATION_LABELS: Record<string, string> = {
@@ -205,16 +308,13 @@ function MuscleChip({
   muscleGroup?: MuscleGroup
   href?: string
 }) {
-  const color = muscleGroup?.color_hex || MUSCLE_COLORS[muscleKey] || '#22C55E'
+  const tone = MUSCLE_STYLES[muscleKey] || MUSCLE_STYLES.chest
   const label = muscleGroup?.name_pt || MUSCLE_NAME_MAP[muscleKey] || muscleKey
 
   const content = (
     <>
       {/* Anatomy image or icon fallback */}
-      <div
-        className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-xl"
-        style={{ backgroundColor: `${color}12` }}
-      >
+      <div className={cn('flex h-14 w-14 items-center justify-center overflow-hidden rounded-xl', tone.mutedBg)}>
         {muscleGroup?.image_url ? (
           <Image
             src={muscleGroup.image_url}
@@ -224,7 +324,7 @@ function MuscleChip({
             className="h-full w-full object-cover"
           />
         ) : (
-          <DSIcon name="activity" size={24} style={{ color }} />
+          <DSIcon name={tone.icon} size={24} className={tone.iconColor} />
         )}
       </div>
       <span className="text-[11px] font-semibold text-text-primary">{label}</span>
@@ -235,11 +335,11 @@ function MuscleChip({
     return (
       <a
         href={href}
-        className="relative z-10 flex shrink-0 cursor-pointer flex-col items-center gap-1.5 overflow-hidden rounded-2xl border p-3"
-        style={{
-          backgroundColor: `${color}08`,
-          borderColor: `${color}20`,
-        }}
+        className={cn(
+          'relative z-10 flex shrink-0 cursor-pointer flex-col items-center gap-1.5 overflow-hidden rounded-2xl border p-3 transition-all hover:-translate-y-0.5',
+          tone.chipBg,
+          tone.chipBorder
+        )}
       >
         {content}
       </a>
@@ -248,11 +348,11 @@ function MuscleChip({
 
   return (
     <div
-      className="relative flex shrink-0 flex-col items-center gap-1.5 overflow-hidden rounded-2xl border p-3"
-      style={{
-        backgroundColor: `${color}08`,
-        borderColor: `${color}20`,
-      }}
+      className={cn(
+        'relative flex shrink-0 flex-col items-center gap-1.5 overflow-hidden rounded-2xl border p-3',
+        tone.chipBg,
+        tone.chipBorder
+      )}
     >
       {content}
     </div>
@@ -274,16 +374,13 @@ function ExerciseCard({
   muscleGroup?: MuscleGroup
   href?: string
 }) {
-  const color = muscleGroup?.color_hex || MUSCLE_COLORS[exercise.muscle_group || ''] || '#22C55E'
+  const tone = MUSCLE_STYLES[exercise.muscle_group || ''] || MUSCLE_STYLES.chest
   const muscleName = muscleGroup?.name_pt || MUSCLE_NAME_MAP[exercise.muscle_group || ''] || exercise.muscle_group
 
   const content = (
     <>
       {/* Exercise thumbnail / number */}
-      <div
-        className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl"
-        style={{ backgroundColor: `${color}15` }}
-      >
+      <div className={cn('flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl', tone.mutedBg)}>
         {muscleGroup?.image_url ? (
           <Image
             src={muscleGroup.image_url}
@@ -293,7 +390,7 @@ function ExerciseCard({
             className="h-full w-full object-cover opacity-70"
           />
         ) : (
-          <span className="text-lg font-bold" style={{ color }}>
+          <span className={cn('text-lg font-bold', tone.iconColor)}>
             {index + 1}
           </span>
         )}
@@ -341,7 +438,11 @@ function ExerciseCard({
     return (
       <a
         href={href}
-        className="relative z-10 flex w-full cursor-pointer items-center gap-3 rounded-2xl border border-white/6 bg-bg-secondary p-3 text-left transition-all hover:border-white/12"
+        className={cn(
+          'relative z-10 flex w-full cursor-pointer items-center gap-3 rounded-2xl border p-3 text-left transition-all hover:-translate-y-0.5',
+          tone.cardBg,
+          tone.cardBorder
+        )}
       >
         {content}
       </a>
@@ -349,7 +450,7 @@ function ExerciseCard({
   }
 
   return (
-    <div className="flex w-full items-center gap-3 rounded-2xl border border-white/6 bg-bg-secondary p-3 text-left">
+    <div className={cn('flex w-full items-center gap-3 rounded-2xl border p-3 text-left', tone.cardBg, tone.cardBorder)}>
       {content}
     </div>
   )
@@ -530,7 +631,7 @@ export default function PlanoPage() {
         <div className="mb-1 flex items-center justify-between">
           <div>
             <p className="text-xs font-semibold text-brand-primary">{getGreeting()}</p>
-            <h1 className="text-2xl font-black text-text-primary">Meu Plano</h1>
+            <h1 className="bg-linear-to-r from-brand-primary to-brand-mint bg-clip-text text-4xl font-black text-transparent">Meu Plano</h1>
             <p className="mt-1 text-xs text-text-secondary">{getMotivationalPhrase()}</p>
           </div>
           <div className="flex items-center gap-2">
@@ -561,11 +662,11 @@ export default function PlanoPage() {
               }}
               disabled={isLocked}
               className={cn(
-                'flex shrink-0 items-center gap-2 rounded-2xl px-4 py-3 transition-all',
+                'flex shrink-0 items-center gap-2 rounded-2xl px-4 py-3 transition-all duration-300',
                 isLocked
                   ? 'bg-bg-secondary text-text-muted opacity-70'
                   : isActive
-                  ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/25'
+                  ? 'bg-linear-to-b from-brand-primary to-brand-primary-hover text-white shadow-[0_4px_0_0_#166534,0_10px_24px_rgba(34,197,94,0.35)]'
                   : 'bg-bg-secondary text-text-secondary hover:bg-bg-tertiary'
               )}
             >

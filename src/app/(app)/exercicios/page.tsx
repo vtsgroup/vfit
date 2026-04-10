@@ -17,6 +17,7 @@ import { useExercises, useMuscleGroups } from '@/hooks/use-exercises'
 import { useFavoriteExercises } from '@/hooks/use-favorite-exercises'
 import { useImagePrefetch } from '@/hooks/use-image-prefetch'
 import type { MuscleGroup } from '@/hooks/use-exercises'
+import type { DSIconName } from '@/components/ui/ds-icon'
 
 // ============================================
 // Constants
@@ -24,39 +25,39 @@ import type { MuscleGroup } from '@/hooks/use-exercises'
 
 type TabType = 'muscle' | 'equipment' | 'favorites'
 
-const TABS: { id: TabType; label: string; icon: string }[] = [
-  { id: 'muscle', label: 'Por Músculo', icon: '🏋️' },
-  { id: 'equipment', label: 'Equipamento', icon: '🔧' },
-  { id: 'favorites', label: 'Favoritos', icon: '❤️' },
+const TABS: { id: TabType; label: string; icon: DSIconName }[] = [
+  { id: 'muscle', label: 'Por Músculo', icon: 'dumbbell' },
+  { id: 'equipment', label: 'Equipamento', icon: 'wrench' },
+  { id: 'favorites', label: 'Favoritos', icon: 'heart' },
 ]
 
 const EQUIPMENT_CATEGORIES = [
-  { id: 'barbell', label: 'Barra', emoji: '🏋️' },
-  { id: 'dumbbell', label: 'Halteres', emoji: '💪' },
-  { id: 'cable', label: 'Cabos', emoji: '🔗' },
-  { id: 'machine', label: 'Máquinas', emoji: '⚙️' },
-  { id: 'bodyweight', label: 'Peso Corporal', emoji: '🤸' },
-  { id: 'kettlebell', label: 'Kettlebell', emoji: '🔔' },
-  { id: 'band', label: 'Elásticos', emoji: '🎗️' },
-  { id: 'smith', label: 'Smith Machine', emoji: '🏗️' },
+  { id: 'barbell', label: 'Barra', icon: 'dumbbell' as DSIconName },
+  { id: 'dumbbell', label: 'Halteres', icon: 'dumbbell' as DSIconName },
+  { id: 'cable', label: 'Cabos', icon: 'link2' as DSIconName },
+  { id: 'machine', label: 'Máquinas', icon: 'settings' as DSIconName },
+  { id: 'bodyweight', label: 'Peso Corporal', icon: 'activity' as DSIconName },
+  { id: 'kettlebell', label: 'Kettlebell', icon: 'award' as DSIconName },
+  { id: 'band', label: 'Elásticos', icon: 'layers' as DSIconName },
+  { id: 'smith', label: 'Smith Machine', icon: 'building' as DSIconName },
 ]
 
-const MUSCLE_EMOJI: Record<string, string> = {
-  chest: '🫁',
-  back: '🔙',
-  shoulders: '🎯',
-  biceps: '💪',
-  triceps: '🦾',
-  legs: '🦵',
-  quadriceps: '🦵',
-  hamstrings: '🦵',
-  glutes: '🍑',
-  calves: '🦶',
-  abs: '🧱',
-  core: '🧱',
-  forearms: '🤛',
-  traps: '🔺',
-  full_body: '🏋️',
+const MUSCLE_ICON: Record<string, DSIconName> = {
+  chest: 'target',
+  back: 'activity',
+  shoulders: 'shield',
+  biceps: 'dumbbell',
+  triceps: 'dumbbell',
+  legs: 'footprints',
+  quadriceps: 'footprints',
+  hamstrings: 'footprints',
+  glutes: 'award',
+  calves: 'footprints',
+  abs: 'shieldCheck',
+  core: 'shieldCheck',
+  forearms: 'dumbbell',
+  traps: 'triangle',
+  full_body: 'dumbbell',
 }
 
 // ============================================
@@ -195,7 +196,7 @@ export default function ExerciciosPage() {
                 : 'text-zinc-500 hover:text-zinc-300'
             }`}
           >
-            <span className="mr-1">{tab.icon}</span>
+            <span className="mr-1 inline-flex align-middle"><DSIcon name={tab.icon} size={14} /></span>
             {tab.label}
             {tab.id === 'favorites' && favCount > 0 && (
               <span className="ml-1 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500/20 px-1 text-[10px] text-red-400">
@@ -290,8 +291,8 @@ function MuscleTabContent({
               onClick={() => onSelect(mg.id)}
               className="flex items-center gap-3 rounded-2xl border border-white/6 bg-white/3 p-3 text-left transition-all hover:bg-white/6 active:scale-[0.97]"
             >
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/8 text-xl">
-                {MUSCLE_EMOJI[mg.id] || '💪'}
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/8 text-brand-primary">
+                <DSIcon name={MUSCLE_ICON[mg.id] || 'dumbbell'} size={18} />
               </div>
               <div className="min-w-0 flex-1">
                 <p className="truncate text-[13px] font-semibold text-white">
@@ -319,7 +320,7 @@ function MuscleTabContent({
           </button>
 
           <h2 className="mb-3 text-[16px] font-bold text-white">
-            {MUSCLE_EMOJI[selectedMuscle] || '💪'}{' '}
+            <span className="mr-2 inline-flex align-middle text-brand-primary"><DSIcon name={MUSCLE_ICON[selectedMuscle] || 'dumbbell'} size={16} /></span>
             {muscleGroupMap[selectedMuscle]?.name_pt || selectedMuscle}
           </h2>
 
@@ -372,7 +373,7 @@ function EquipmentTabContent({
                 : 'bg-white/4 text-zinc-400 border border-white/6 hover:bg-white/6'
             }`}
           >
-            <span>{eq.emoji}</span>
+            <DSIcon name={eq.icon} size={14} />
             {eq.label}
           </button>
         ))}

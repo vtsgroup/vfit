@@ -18,7 +18,7 @@ interface CardProps extends HTMLAttributes<HTMLDivElement> {
   /** Enable hover lift + glow border effect */
   interactive?: boolean
   /** Surface variant — matches MD3 elevation */
-  variant?: 'default' | 'elevated' | 'outlined' | 'tonal'
+  variant?: 'default' | 'elevated' | 'outlined' | 'tonal' | 'ultra' | 'depth'
 }
 
 const Card = forwardRef<HTMLDivElement, CardProps>(
@@ -29,6 +29,10 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
         'rounded-2xl transition-all duration-250',
         glass
           ? 'glass-premium card-shine'
+          : variant === 'ultra'
+            ? 'glass-ultra'
+            : variant === 'depth'
+              ? 'glass-depth'
           : variant === 'elevated'
             ? 'md3-surface-elevated'
             : variant === 'outlined'

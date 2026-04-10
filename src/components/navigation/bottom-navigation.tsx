@@ -324,8 +324,10 @@ export function BottomNavigation({ notificationCount = 0, fabMenuOpen = false, o
                   {isActive && (
                     <motion.div
                       layoutId="mobile-active-pill"
-                      className="absolute inset-0 rounded-[14px] bg-brand-primary/12"
-                      transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+                      className="absolute inset-0 rounded-[14px] border border-brand-primary/20 bg-brand-primary/12 shadow-[0_0_20px_rgba(34,197,94,0.22)]"
+                      initial={{ scale: 0.92, opacity: 0.7 }}
+                      animate={{ scale: 1.05, opacity: 1 }}
+                      transition={{ type: 'spring', stiffness: 500, damping: 28 }}
                     />
                   )}
                   <div className={cn(
@@ -340,9 +342,14 @@ export function BottomNavigation({ notificationCount = 0, fabMenuOpen = false, o
 
                 {/* Notification badge on Perfil */}
                 {tab.id === 'perfil' && notificationCount > 0 && (
-                  <span className="absolute -right-0.5 top-0 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[9px] font-bold text-white">
+                  <motion.span
+                    initial={{ scale: 0.6, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ type: 'spring', stiffness: 520, damping: 24 }}
+                    className="absolute -right-0.5 top-0 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[9px] font-bold text-white"
+                  >
                     {notificationCount > 99 ? '99+' : notificationCount}
-                  </span>
+                  </motion.span>
                 )}
 
                 <span className={cn(

@@ -15,15 +15,16 @@ import { AddExerciseSheet } from '@/components/treino'
 import { useCurrentPlan, useUpdatePlanExercises, useRemovePlanExercise } from '@/hooks/use-plans'
 import type { PlanExercise } from '@/hooks/use-plans'
 import type { Exercise } from '@/hooks/use-exercises'
+import type { DSIconName } from '@/components/ui/ds-icon'
 
 // ============================================
 // Emoji map
 // ============================================
 
-const MUSCLE_EMOJI: Record<string, string> = {
-  chest: '🫁', back: '🔙', shoulders: '🎯', biceps: '💪', triceps: '🦾',
-  legs: '🦵', quadriceps: '🦵', hamstrings: '🦵', glutes: '🍑', calves: '🦶',
-  abs: '🧱', core: '🧱', forearms: '🤛', traps: '🔺', full_body: '🏋️',
+const MUSCLE_ICON: Record<string, DSIconName> = {
+  chest: 'target', back: 'activity', shoulders: 'shield', biceps: 'dumbbell', triceps: 'dumbbell',
+  legs: 'footprints', quadriceps: 'footprints', hamstrings: 'footprints', glutes: 'award', calves: 'footprints',
+  abs: 'shieldCheck', core: 'shieldCheck', forearms: 'dumbbell', traps: 'triangle', full_body: 'dumbbell',
 }
 
 // ============================================
@@ -287,9 +288,9 @@ export default function EditarPlanoClientPage() {
                 </button>
               </div>
 
-              {/* Emoji */}
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/5 text-xl">
-                {MUSCLE_EMOJI[ex.muscle_group || ''] || '💪'}
+              {/* Muscle icon */}
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/5 text-brand-primary">
+                <DSIcon name={MUSCLE_ICON[ex.muscle_group || ''] || 'dumbbell'} size={18} />
               </div>
 
               {/* Info */}

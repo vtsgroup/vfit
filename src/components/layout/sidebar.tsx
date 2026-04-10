@@ -277,7 +277,7 @@ function SidebarItem({
         className={cn(
           'group relative flex items-center gap-3 rounded-xl px-3 py-2 text-[13px] font-medium transition-all duration-200',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/25',
-          collapsed && 'justify-center',
+          collapsed && 'justify-center border border-white/8 bg-white/4',
           isActive
             ? 'text-white font-semibold'
             : 'text-white/50 hover:bg-white/6 hover:text-white/85 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] active:scale-[0.97] active:bg-white/3'

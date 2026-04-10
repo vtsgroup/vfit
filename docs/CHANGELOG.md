@@ -5,6 +5,26 @@
 
 ---
 
+## [v2.2.7] — 08/04/2026 — Exercícios Premium + Central de Mídia Admin
+
+### ✨ Features
+- **Exercícios — Detalhe Premium:** reescrita completa de [src/app/(app)/exercicios/\[id\]/client-page.tsx](src/app/(app)/exercicios/[id]/client-page.tsx) com hero de mídia real (R2), galeria de fotos/vídeos, `StickyActions`, `MediaModal`, tabs `TargetTab / InstructionsTab / EquipmentTab`, coaching cues e tags.
+- **Exercícios — Detalhe:** `buildGallery()` combina registros `exercise_media` (R2) com campos legacy do D1 (fallback gracioso).
+- **Exercícios — Type:** tipo `Exercise` em [src/hooks/use-exercises.ts](src/hooks/use-exercises.ts) expandido com `transcription_pt`, `transcription_en`, `coaching_cues`, `tags`, `image_urls`.
+- **Admin — Media Center:** [src/app/dashboard/workouts/media/library/page.tsx](src/app/dashboard/workouts/media/library/page.tsx) reescrito como central de mídia completa (upload, listagem R2, preview modal, delete).
+- **Admin — Quick Link:** botão "Mídia de Exercícios" adicionado ao dashboard admin em [src/app/dashboard/admin/page.tsx](src/app/dashboard/admin/page.tsx).
+- **Upload UX:** [src/components/workouts/exercise-media-upload.tsx](src/components/workouts/exercise-media-upload.tsx) com contexto R2, limites reais e nome do arquivo selecionado.
+
+### 🐛 Bugfixes
+- **Suspense boundary:** `useSearchParams()` sem Suspense em `/musculos/detalhe` e `/exercicios/[id]` → corrigido com wrapper `<Suspense>` + skeleton de carregamento.
+
+### 📦 Deploy
+- **v2.2.7** · Pages ✅ · Workers ✅ · Git tag ✅ · Push main ✅
+- Build: 136/136 páginas estáticas, 133 HTML inline-CSS
+- Worker ID: `e22cb060-bded-4ef9-8d4b-5ca505d5ebba`
+
+---
+
 ## [Unreleased] — 08/04/2026 — Sprint 11-15 (UX Nutrição/Exercícios)
 
 ### ✨ Features
