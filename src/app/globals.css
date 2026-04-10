@@ -1758,13 +1758,14 @@ body {
 
 /* ═══ DS v3 HEADER — Frosted glass with backdrop blur ═══ */
 .ds3-header {
-  background: rgba(5, 10, 18, 0.58);
+  background: linear-gradient(180deg, #050A12 0%, #0B1221 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(28px) saturate(180%);
   -webkit-backdrop-filter: blur(28px) saturate(180%);
   transition: box-shadow 300ms ease, background 300ms ease;
 }
 .ds3-header.ds3-header-scrolled {
-  background: rgba(5, 10, 18, 0.74);
+  background: linear-gradient(180deg, #050A12 0%, #0A1324 100%);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
@@ -1780,10 +1781,10 @@ body {
 
 /* VFIT Theme — header uses teal-tinted glass */
 .vfit-theme .ds3-header {
-  background: rgba(15, 43, 43, 0.55);
+  background: linear-gradient(180deg, #050A12 0%, #0B1221 100%);
 }
 .vfit-theme .ds3-header.ds3-header-scrolled {
-  background: rgba(15, 43, 43, 0.75);
+  background: linear-gradient(180deg, #050A12 0%, #0A1324 100%);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(37, 99, 235, 0.04);
 }
 
