@@ -7,6 +7,30 @@
 
 ## [Unreleased] — 2026-04-08 — Sprint 11-15 (UX Nutrição/Exercícios)
 
+## [v2.3.1] — 2026-04-10 — Fix de persistência de tema + polimento cards de treinos
+
+### ✨ UX/UI
+- **Persistência de tema estabilizada:**
+  - [src/stores/app-store.ts](src/stores/app-store.ts): modo `system` agora segue estritamente a preferência do sistema operacional (sem heurística por tempo de uso).
+  - [src/components/providers/theme-provider.tsx](src/components/providers/theme-provider.tsx): sincronização de `resolvedTheme` sem regravar `theme`, evitando fallback inesperado para escuro durante navegação.
+  - [src/app/dashboard/admin/design-system/page.tsx](src/app/dashboard/admin/design-system/page.tsx): removida mutação global de classe no `<html>` para não sobrescrever o tema da aplicação ao entrar/sair do showcase.
+- **Treinos (tela inicial B2C):** [src/app/(app)/treinos/page.tsx](src/app/(app)/treinos/page.tsx) refinado com:
+  - Links internos convertidos para navegação client-side (`Link`) nos cards do treino do dia.
+  - Ajustes de superfície/borda para consistência do Design System em light/dark.
+  - Melhoria de contraste no aviso de carga estimada por IA.
+
+### ✅ Validação
+- `npm run lint` ✅ (warnings preexistentes não-bloqueantes)
+- `npm run type-check` ✅
+- `npm run build` ✅
+
+### 🚀 Deploy
+- Pipeline oficial executado via task `deploy-vfit-patch-no-whatsapp`.
+- Versão publicada: **v2.3.1**
+- Pages preview: https://74778334.vfit.pages.dev
+- Worker Version ID: `b31c7224-7af0-45cc-9f2c-bdec6f330906`
+- WhatsApp notify start/end falhou com `401 invalid_credentials` (deploy seguiu com `--allow-no-whatsapp`).
+
 ## [v2.3.0] — 2026-04-10 — Polimento UI (header/nav dark cross-theme + secondary button)
 
 ### ✨ UI/UX

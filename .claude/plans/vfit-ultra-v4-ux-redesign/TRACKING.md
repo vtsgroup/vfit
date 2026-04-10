@@ -3,7 +3,7 @@
 > **Status:** ✅ Concluído (execução local + deploy)  
 > **Criado:** 10/04/2026  
 > **Objetivo:** 8 sprints de redesign ultra-moderno (glassmorfismo, botões 3D, UX melhorado)  
-> **Última atualização:** 10/04/2026 (polimento visual header/nav + secondary button + deploy v2.3.0)
+> **Última atualização:** 10/04/2026 (fix persistência de tema + cards de treinos + deploy v2.3.1)
 
 ---
 
@@ -273,6 +273,9 @@ Percentual: 93%
 - [x] T9.13 — Polimento visual executado (header dark em light mode + bottom nav dark + secondary button refinado)
 - [x] T9.14 — Deploy patch executado com sucesso (`v2.3.0`)
 - [ ] T9.15 — `npm run smoke:auth:local` pós-deploy falhou por tokens SMOKE_* expirados (preflight JWT)
+- [x] T9.16 — Fix definitivo de persistência de tema (sem fallback indevido para dark ao navegar)
+- [x] T9.17 — Cards de treinos da tela inicial refinados para consistência DS em light/dark
+- [x] T9.18 — Deploy patch executado com sucesso (`v2.3.1`)
 
 **Status:** ✅ Concluído (com pendências de validações manuais/documentadas)
 
@@ -301,12 +304,13 @@ Percentual: 93%
 |------|--------|--------|--------|----------|--------|
 | 10/04/2026 | S2-S8 + Final | v2.2.8 | 2e254b79 | 20+ | ✅ Deploy concluído |
 | 10/04/2026 | Polimento UI + Auditoria | v2.3.0 | 81ec36b1 | 10+ | ✅ Deploy concluído |
+| 10/04/2026 | Persistência de Tema + Treinos | v2.3.1 | 4aadc360 | 4+ | ✅ Deploy concluído |
 
 ---
 
 ## 📝 Notas
 
-- **Última atualização:** 10/04/2026 — polimento de header/nav/botões executado, deploy v2.3.0 concluído, smoke auth pós-deploy com falha por token expirado
+- **Última atualização:** 10/04/2026 — fix de persistência de tema + cards de treinos concluído, deploy v2.3.1 publicado
 - **Criado por:** Claude Code (planejamento)
 - **Para começar:** Ler IMPLEMENTATION-GUIDE.md e seguir Sprint 1
 - **Perguntas?** Consultar PLAN.md ou DESIGN-TOKENS.md
