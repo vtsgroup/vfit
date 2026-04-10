@@ -16,7 +16,7 @@
 
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import {
   // Core UI
@@ -481,31 +481,6 @@ export default function ShowcasePage() {
   const [iconFilter, setIconFilter] = useState('')
   const [toastMsg, setToastMsg] = useState<string | null>(null)
   const t = themes[mode]
-  const originalTheme = useRef<string | null>(null)
-
-  // Sync <html> class with showcase mode so dark:/light: Tailwind variants work
-  useEffect(() => {
-    const html = document.documentElement
-    if (!originalTheme.current) {
-      originalTheme.current = html.classList.contains('light') ? 'light' : 'dark'
-    }
-    if (mode === 'light') {
-      html.classList.remove('dark')
-      html.classList.add('light')
-      html.style.colorScheme = 'light'
-    } else {
-      html.classList.remove('light')
-      html.classList.add('dark')
-      html.style.colorScheme = 'dark'
-    }
-    return () => {
-      const restore = originalTheme.current || 'dark'
-      html.classList.remove('light', 'dark')
-      html.classList.add(restore)
-      html.style.colorScheme = restore
-    }
-  }, [mode])
-
   useEffect(() => {
     if (!autoMode) return
     const mql = window.matchMedia('(prefers-color-scheme: light)')

@@ -22,14 +22,18 @@ import { useAppStore } from '@/stores/app-store'
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const resolvedTheme = useAppStore((s) => s.resolvedTheme)
   const theme = useAppStore((s) => s.theme)
-  const setTheme = useAppStore((s) => s.setTheme)
+  const setResolvedTheme = useAppStore((s) => s.setResolvedTheme)
 
-  // Re-resolve on mount/hydration when using system theme
+  // Resolve theme deterministically from current preference + OS
   useEffect(() => {
-    if (theme === 'system') {
-      setTheme('system')
+    const nextResolved: 'light' | 'dark' = theme === 'system'
+      ? (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark')
+      : theme
+
+    if (nextResolved !== resolvedTheme) {
+      setResolvedTheme(nextResolved)
     }
-  }, [theme, setTheme])
+  }, [theme, resolvedTheme, setResolvedTheme])
 
   // Sync resolved theme → <html> class + colorScheme + meta theme-color (TWA/PWA)
   useEffect(() => {
@@ -71,10 +75,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (theme !== 'system') return
     const mql = window.matchMedia('(prefers-color-scheme: dark)')
-    const handler = () => setTheme('system') // re-resolve
+    const handler = () => setResolvedTheme(mql.matches ? 'dark' : 'light')
     mql.addEventListener('change', handler)
     return () => mql.removeEventListener('change', handler)
-  }, [theme, setTheme])
+  }, [theme, setResolvedTheme])
 
   return <>{children}</>
 }

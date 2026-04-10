@@ -551,7 +551,7 @@ export default function TreinosPage() {
             </span>
           </div>
 
-          <p className="mb-3 text-[11px] text-amber-300">
+          <p className="mb-3 text-[11px] text-amber-700 dark:text-amber-300">
             Carga estimada por IA. Peça para o professor da academia revisar o peso de cada exercício antes de executar.
           </p>
 
@@ -562,10 +562,10 @@ export default function TreinosPage() {
               </p>
               <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
                 {todayMuscles.map((group) => (
-                  <a
+                  <Link
                     key={group.name}
                     href={`/musculos/detalhe?muscle=${encodeURIComponent(group.name)}`}
-                    className="relative z-10 shrink-0 cursor-pointer rounded-xl border border-white/10 bg-white/4 p-2"
+                    className="relative z-10 shrink-0 cursor-pointer rounded-xl border border-border-light bg-bg-secondary/70 p-2 transition-colors hover:bg-bg-secondary"
                   >
                     <img
                       src={group.imageUrl || buildPlaceholderImage(group.name, group.tone)}
@@ -573,14 +573,14 @@ export default function TreinosPage() {
                       className="h-20 w-24 rounded-lg object-cover"
                     />
                     <p className="mt-1 text-center text-[11px] text-text-secondary">{group.name}</p>
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>
           )}
 
           {isSuperAdmin && (
-            <div className="mb-3 rounded-lg border border-white/12 bg-white/4 p-2.5 text-[10px] text-text-secondary">
+            <div className="mb-3 rounded-lg border border-border-light bg-bg-secondary/60 p-2.5 text-[10px] text-text-secondary">
               Você pode editar imagens de grupos musculares em
               {' '}
               <Link href="/dashboard/admin/muscle-groups" className="font-semibold text-brand-primary">
@@ -604,10 +604,10 @@ export default function TreinosPage() {
                 : `/exercicios?q=${encodeURIComponent(ex.exercise_name || ex.muscle_group || 'exercicio')}`
 
               return (
-              <a
+              <Link
                 key={ex.id}
                 href={href}
-                className="relative z-10 flex w-full cursor-pointer items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-2.5 text-left"
+                className="relative z-10 flex w-full cursor-pointer items-center gap-3 rounded-xl border border-border-light bg-bg-secondary/70 p-2.5 text-left transition-colors hover:bg-bg-secondary"
               >
                 <div className="relative shrink-0">
                   <img
@@ -619,7 +619,7 @@ export default function TreinosPage() {
                     <img
                       src={muscleByName.get(normalizeText(ex.muscle_group))?.image_url || buildPlaceholderImage(ex.muscle_group, toneByMuscle(ex.muscle_group))}
                       alt={`Músculo ${ex.muscle_group}`}
-                      className="absolute -right-1 -bottom-1 h-6 w-6 rounded-md border border-white/20 bg-bg-secondary object-cover"
+                      className="absolute -right-1 -bottom-1 h-6 w-6 rounded-md border border-border-light bg-bg-secondary object-cover"
                     />
                   )}
                 </div>
@@ -637,13 +637,13 @@ export default function TreinosPage() {
                   )}
                 </div>
                 <DSIcon name="chevronRight" size={14} className="text-text-muted" />
-              </a>
+              </Link>
               )
             })}
           </div>
         </div>
       ) : (
-        <div className="mb-5 rounded-2xl border border-white/10 bg-white/4 p-4 text-[12px] text-text-muted">
+        <div className="mb-5 rounded-2xl border border-border-light bg-bg-secondary/60 p-4 text-[12px] text-text-muted">
           Ainda não há treino do dia gerado. Gere seu plano com IA para ver o treino pronto de hoje.
         </div>
       )}

@@ -113,15 +113,7 @@ export const useAppStore = create<AppState>()(
         // Antes de trocar, contabiliza o tempo de uso do tema atual.
         get().trackThemeUsageTick()
 
-        const { themeUsageMs } = get()
-
         function resolveSystem(): 'light' | 'dark' {
-          const diff = Math.abs(themeUsageMs.dark - themeUsageMs.light)
-          const threshold = 10 * 60 * 1000 // 10 min
-          if (diff >= threshold) {
-            return themeUsageMs.dark >= themeUsageMs.light ? 'dark' : 'light'
-          }
-
           return typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: light)').matches
             ? 'light'
             : 'dark'
