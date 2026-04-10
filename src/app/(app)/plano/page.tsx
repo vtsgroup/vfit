@@ -19,9 +19,10 @@ import { DSIcon } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
 import { useCurrentPlan, useSavePlan, useAutoGeneratePlanMutation } from '@/hooks/use-plans'
 import type { PlanDay } from '@/hooks/use-plans'
+import { useSubscriptionStatus } from '@/hooks/use-vfit-checkout'
 import { useAuthStore } from '@/stores/auth-store'
 import { useB2COnboardingCompleted } from '@/hooks/use-b2c-onboarding'
-import { useMuscleGroups } from '@/hooks/use-exercises'
+import { useExercises, useMuscleGroups } from '@/hooks/use-exercises'
 import type { MuscleGroup } from '@/hooks/use-exercises'
 import { cn } from '@/lib/utils'
 
@@ -87,6 +88,25 @@ function getGreeting(): string {
   if (h < 12) return 'Bom dia'
   if (h < 18) return 'Boa tarde'
   return 'Boa noite'
+}
+
+function getMotivationalPhrase(): string {
+  const phrases = [
+    'Consistência vence motivação: 1% melhor hoje.',
+    'Seu próximo treino já está pronto. Bora pra cima!',
+    'Cada série conta. Seu futuro agradece.',
+    'Foco no processo. Resultado é consequência.',
+  ]
+  const daySeed = new Date().getDate() % phrases.length
+  return phrases[daySeed]
+}
+
+function normalizeText(value?: string | null) {
+  return (value || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .trim()
 }
 
 // ============================================
@@ -179,21 +199,17 @@ function SharePlanButton({ planName, totalDays }: { planName: string; totalDays:
 function MuscleChip({
   muscleKey,
   muscleGroup,
+  href,
 }: {
   muscleKey: string
   muscleGroup?: MuscleGroup
+  href?: string
 }) {
   const color = muscleGroup?.color_hex || MUSCLE_COLORS[muscleKey] || '#22C55E'
   const label = muscleGroup?.name_pt || MUSCLE_NAME_MAP[muscleKey] || muscleKey
 
-  return (
-    <div
-      className="relative flex shrink-0 flex-col items-center gap-1.5 overflow-hidden rounded-2xl border p-3"
-      style={{
-        backgroundColor: `${color}08`,
-        borderColor: `${color}20`,
-      }}
-    >
+  const content = (
+    <>
       {/* Anatomy image or icon fallback */}
       <div
         className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-xl"
@@ -212,6 +228,33 @@ function MuscleChip({
         )}
       </div>
       <span className="text-[11px] font-semibold text-text-primary">{label}</span>
+    </>
+  )
+
+  if (href) {
+    return (
+      <a
+        href={href}
+        className="relative z-10 flex shrink-0 cursor-pointer flex-col items-center gap-1.5 overflow-hidden rounded-2xl border p-3"
+        style={{
+          backgroundColor: `${color}08`,
+          borderColor: `${color}20`,
+        }}
+      >
+        {content}
+      </a>
+    )
+  }
+
+  return (
+    <div
+      className="relative flex shrink-0 flex-col items-center gap-1.5 overflow-hidden rounded-2xl border p-3"
+      style={{
+        backgroundColor: `${color}08`,
+        borderColor: `${color}20`,
+      }}
+    >
+      {content}
     </div>
   )
 }
@@ -224,16 +267,18 @@ function ExerciseCard({
   exercise,
   index,
   muscleGroup,
+  href,
 }: {
   exercise: PlanDay['exercises'][number]
   index: number
   muscleGroup?: MuscleGroup
+  href?: string
 }) {
   const color = muscleGroup?.color_hex || MUSCLE_COLORS[exercise.muscle_group || ''] || '#22C55E'
   const muscleName = muscleGroup?.name_pt || MUSCLE_NAME_MAP[exercise.muscle_group || ''] || exercise.muscle_group
 
-  return (
-    <div className="flex items-center gap-3 rounded-2xl border border-white/6 bg-bg-secondary p-3 transition-all hover:border-white/12">
+  const content = (
+    <>
       {/* Exercise thumbnail / number */}
       <div
         className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl"
@@ -289,6 +334,23 @@ function ExerciseCard({
           </span>
         )}
       </div>
+    </>
+  )
+
+  if (href) {
+    return (
+      <a
+        href={href}
+        className="relative z-10 flex w-full cursor-pointer items-center gap-3 rounded-2xl border border-white/6 bg-bg-secondary p-3 text-left transition-all hover:border-white/12"
+      >
+        {content}
+      </a>
+    )
+  }
+
+  return (
+    <div className="flex w-full items-center gap-3 rounded-2xl border border-white/6 bg-bg-secondary p-3 text-left">
+      {content}
     </div>
   )
 }
@@ -303,11 +365,14 @@ export default function PlanoPage() {
   const isReady = useAuthStore((s) => s.isAuthenticated && s.isHydrated)
   const { data: plan, isLoading, error } = useCurrentPlan()
   const { data: onboardingStatus, isLoading: onboardingLoading } = useB2COnboardingCompleted(isReady)
+  const { data: subscriptionStatus } = useSubscriptionStatus()
   const autoGenerate = useAutoGeneratePlanMutation()
   const [activeDay, setActiveDay] = useState(1)
   const savePlan = useSavePlan()
   const hasSavedPending = useRef(false)
   const { data: muscleGroups = [] } = useMuscleGroups()
+  const { data: exerciseCatalog } = useExercises({ per_page: 300 })
+  const isPremium = subscriptionStatus?.is_premium ?? false
 
   // Build lookup: muscle_group key → MuscleGroup object
   const muscleGroupMap = useMemo(() => {
@@ -333,6 +398,15 @@ export default function PlanoPage() {
     }
     return map
   }, [muscleGroups])
+
+  const exerciseIdByName = useMemo(() => {
+    const map = new Map<string, string>()
+    for (const ex of exerciseCatalog?.exercises ?? []) {
+      map.set(normalizeText(ex.name_pt), ex.id)
+      map.set(normalizeText(ex.name), ex.id)
+    }
+    return map
+  }, [exerciseCatalog?.exercises])
 
   const handleGeneratePlan = useCallback(async () => {
     if (!onboardingStatus?.completed) {
@@ -383,8 +457,11 @@ export default function PlanoPage() {
   // Dia ativo
   const currentDay: PlanDay | undefined = useMemo(() => {
     if (!plan) return undefined
+    if (!isPremium && activeDay > 1) return plan.days[0]
     return plan.days.find((d) => d.day_number === activeDay) || plan.days[0]
-  }, [plan, activeDay])
+  }, [plan, activeDay, isPremium])
+
+  const canAccessDay = useCallback((dayNumber: number) => isPremium || dayNumber === 1, [isPremium])
 
   // Unique muscle groups for current day
   const dayMuscleKeys = useMemo(() => {
@@ -454,6 +531,7 @@ export default function PlanoPage() {
           <div>
             <p className="text-xs font-semibold text-brand-primary">{getGreeting()}</p>
             <h1 className="text-2xl font-black text-text-primary">Meu Plano</h1>
+            <p className="mt-1 text-xs text-text-secondary">{getMotivationalPhrase()}</p>
           </div>
           <div className="flex items-center gap-2">
             <SharePlanButton planName={plan.name} totalDays={plan.total_days} />
@@ -473,18 +551,29 @@ export default function PlanoPage() {
       <div className="mt-5 flex gap-2 overflow-x-auto px-4 pb-2 scrollbar-hide">
         {plan.days.map((day) => {
           const isActive = day.day_number === activeDay
+          const isLocked = !canAccessDay(day.day_number)
           return (
             <button
               key={day.day_number}
-              onClick={() => setActiveDay(day.day_number)}
+              onClick={() => {
+                if (isLocked) return
+                setActiveDay(day.day_number)
+              }}
+              disabled={isLocked}
               className={cn(
                 'flex shrink-0 items-center gap-2 rounded-2xl px-4 py-3 transition-all',
-                isActive
+                isLocked
+                  ? 'bg-bg-secondary text-text-muted opacity-70'
+                  : isActive
                   ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/25'
                   : 'bg-bg-secondary text-text-secondary hover:bg-bg-tertiary'
               )}
             >
-              <DSIcon name="dumbbell" size={16} className={isActive ? 'text-white' : 'text-text-muted'} />
+              <DSIcon
+                name={isLocked ? 'lock' : 'dumbbell'}
+                size={16}
+                className={isActive ? 'text-white' : 'text-text-muted'}
+              />
               <div className="flex flex-col items-start">
                 <span className="text-[10px] font-medium uppercase leading-tight">Dia</span>
                 <span className="text-base font-bold leading-tight">{day.day_number}</span>
@@ -492,6 +581,40 @@ export default function PlanoPage() {
             </button>
           )
         })}
+      </div>
+
+      {/* ─── Próximos treinos ─── */}
+      <div className="mt-2 px-4">
+        <h3 className="mb-2 text-[11px] font-bold uppercase tracking-wider text-text-muted">Próximos treinos</h3>
+        <div className="space-y-2">
+          {plan.days.slice(0, 5).map((day) => {
+            const locked = !canAccessDay(day.day_number)
+            return (
+              <div
+                key={`next-${day.day_number}`}
+                className="flex items-center justify-between rounded-xl border border-border-primary bg-bg-secondary px-3 py-2"
+              >
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-semibold text-text-primary">Dia {day.day_number} — {day.name}</p>
+                  <p className="text-xs text-text-secondary">{day.exercises.length} exercício{day.exercises.length !== 1 ? 's' : ''}</p>
+                </div>
+                {locked ? (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/10 px-2 py-1 text-[10px] font-semibold text-amber-400">
+                    <DSIcon name="lock" size={12} />
+                    Premium
+                  </span>
+                ) : (
+                  <span className="text-[10px] font-semibold text-brand-primary">Liberado</span>
+                )}
+              </div>
+            )
+          })}
+        </div>
+        {!isPremium && (
+          <p className="mt-2 text-xs text-text-secondary">
+            Plano grátis: acesso somente ao Dia 1. Faça upgrade para liberar todos os dias e gerar novos planos.
+          </p>
+        )}
       </div>
 
       {/* ─── Config Chips (duration, muscles, location) ─── */}
@@ -558,6 +681,7 @@ export default function PlanoPage() {
                     key={key}
                     muscleKey={key}
                     muscleGroup={muscleGroupMap.get(key.toLowerCase())}
+                    href={`/musculos/detalhe?muscle=${encodeURIComponent(key)}`}
                   />
                 ))}
               </div>
@@ -569,40 +693,57 @@ export default function PlanoPage() {
             <h3 className="text-xs font-bold uppercase tracking-wider text-text-muted">
               {currentDay.exercises.length} Exercício{currentDay.exercises.length !== 1 ? 's' : ''}
             </h3>
-            <button
-              type="button"
-              onClick={() => router.push(`/plano/editar?day=${activeDay}`)}
-              className="flex items-center gap-1 text-xs font-medium text-brand-primary hover:text-brand-primary-hover transition-colors"
-            >
-              <DSIcon name="pencil" size={12} />
-              Editar
-            </button>
+            {canAccessDay(activeDay) && (
+              <button
+                type="button"
+                onClick={() => router.push(`/plano/editar?day=${activeDay}`)}
+                className="flex items-center gap-1 text-xs font-medium text-brand-primary hover:text-brand-primary-hover transition-colors"
+              >
+                <DSIcon name="pencil" size={12} />
+                Editar
+              </button>
+            )}
           </div>
 
           {/* ─── Exercise Cards ─── */}
           <div className="space-y-2">
             {currentDay.exercises.map((ex, i) => (
+              (() => {
+                const byId = ex.exercise_id
+                const byName = exerciseIdByName.get(normalizeText(ex.exercise_name || ''))
+                const resolvedId = byId || byName
+                const href = resolvedId
+                  ? `/exercicios/detalhe?id=${encodeURIComponent(resolvedId)}`
+                  : `/exercicios?q=${encodeURIComponent(ex.exercise_name || ex.muscle_group || 'exercicio')}`
+
+                return (
               <ExerciseCard
                 key={ex.id}
                 exercise={ex}
                 index={i}
                 muscleGroup={muscleGroupMap.get((ex.muscle_group || '').toLowerCase())}
+                href={href}
               />
+                )
+              })()
             ))}
           </div>
         </div>
       )}
 
       {/* ─── Floating CTA — INICIAR TREINO ─── */}
-      <div className="fixed inset-x-0 bottom-20 z-30 px-4">
+      <div className="pointer-events-none fixed inset-x-0 bottom-20 z-30 px-4">
         <div className="mx-auto max-w-lg">
           <Button
             size="lg"
-            className="w-full shadow-2xl shadow-brand-primary/30"
+            className="pointer-events-auto w-full shadow-2xl shadow-brand-primary/30"
+            disabled={!canAccessDay(activeDay)}
             onClick={() => router.push('/treino-ativo')}
           >
-            <DSIcon name="play" className="h-5 w-5" />
-            INICIAR TREINO — Dia {activeDay}
+            <DSIcon name={!canAccessDay(activeDay) ? 'lock' : 'play'} className="h-5 w-5" />
+            {!canAccessDay(activeDay)
+              ? 'DIA BLOQUEADO NO PLANO GRÁTIS'
+              : `INICIAR TREINO — Dia ${activeDay}`}
           </Button>
         </div>
       </div>

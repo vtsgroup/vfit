@@ -2,7 +2,21 @@
 
 > Status em tempo real de cada sprint e task.
 > ⬜ = Pendente · 🔄 = Em progresso · ✅ = Concluído · ❌ = Bloqueado
-> **Última atualização:** 07/04/2026 — v1.7.0
+> **Última atualização:** 10/04/2026 — sessão local (sem deploy)
+
+---
+
+## Extensão pós-plano — Exercícios premium (sessão 10/04)
+
+> Escopo incremental após o fechamento do plano original. Esta seção não altera a contagem histórica 144/144; rastreia a nova frente de mídia/admin para exercícios premium.
+
+- [x] EX1.1 — Criar a nova central de mídia em [src/app/dashboard/workouts/media/library/page.tsx](src/app/dashboard/workouts/media/library/page.tsx) com foco em legado D1 + R2
+- [x] EX1.2 — Adicionar resumo operacional com cobertura de mídia legada, status alvo R2 e preview rápido do exercício selecionado
+- [x] EX1.3 — Integrar listagem de registros `exercise_media` com preview em modal e remoção direta na central
+- [x] EX1.4 — Melhorar o card de upload em [src/components/workouts/exercise-media-upload.tsx](src/components/workouts/exercise-media-upload.tsx) com contexto R2 e limites reais do endpoint
+- [x] EX1.5 — Expor atalho super_admin para a central em [src/app/dashboard/admin/page.tsx](src/app/dashboard/admin/page.tsx)
+- [x] EX1.6 — Refatorar [src/app/(app)/exercicios/[id]/client-page.tsx](src/app/(app)/exercicios/[id]/client-page.tsx) para consumir `exercise_media`, substituir placeholders por hero premium e adicionar CTA/galeria moderna
+- [x] EX1.7 — Enriquecer o tipo público de exercício em [src/hooks/use-exercises.ts](src/hooks/use-exercises.ts) com `transcription_pt`, `transcription_en`, `coaching_cues`, `tags` e `image_urls` para suportar a nova experiência
 
 ---
 

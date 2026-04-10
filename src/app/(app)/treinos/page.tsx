@@ -228,6 +228,15 @@ export default function TreinosPage() {
     return map
   }, [exerciseCatalog?.exercises])
 
+  const exerciseIdByName = useMemo(() => {
+    const map = new Map<string, string>()
+    for (const ex of exerciseCatalog?.exercises ?? []) {
+      map.set(normalizeText(ex.name_pt), ex.id)
+      map.set(normalizeText(ex.name), ex.id)
+    }
+    return map
+  }, [exerciseCatalog?.exercises])
+
   const muscleByName = useMemo(() => {
     const map = new Map<string, (typeof muscleGroups)[number]>()
     for (const mg of muscleGroups ?? []) {
@@ -564,9 +573,10 @@ export default function TreinosPage() {
               </p>
               <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
                 {todayMuscles.map((group) => (
-                  <div
+                  <a
                     key={group.name}
-                    className="shrink-0 rounded-xl border border-white/10 bg-white/4 p-2"
+                    href={`/musculos/detalhe?muscle=${encodeURIComponent(group.name)}`}
+                    className="relative z-10 shrink-0 cursor-pointer rounded-xl border border-white/10 bg-white/4 p-2"
                   >
                     <img
                       src={group.imageUrl || buildPlaceholderImage(group.name, group.tone)}
@@ -574,7 +584,7 @@ export default function TreinosPage() {
                       className="h-20 w-24 rounded-lg object-cover"
                     />
                     <p className="mt-1 text-center text-[11px] text-text-secondary">{group.name}</p>
-                  </div>
+                  </a>
                 ))}
               </div>
             </div>
@@ -596,8 +606,20 @@ export default function TreinosPage() {
           )}
 
           <div className="space-y-2">
-            {todayExercises.map((ex) => (
-              <div key={ex.id} className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-2.5">
+            {todayExercises.map((ex) => {
+              const byId = ex.exercise_id
+              const byName = exerciseIdByName.get(normalizeText(ex.exercise_name || ''))
+              const resolvedId = byId || byName
+              const href = resolvedId
+                ? `/exercicios/detalhe?id=${encodeURIComponent(resolvedId)}`
+                : `/exercicios?q=${encodeURIComponent(ex.exercise_name || ex.muscle_group || 'exercicio')}`
+
+              return (
+              <a
+                key={ex.id}
+                href={href}
+                className="relative z-10 flex w-full cursor-pointer items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-2.5 text-left"
+              >
                 <div className="relative shrink-0">
                   <img
                     src={exerciseById.get(ex.exercise_id)?.thumbnail_url || buildPlaceholderImage(ex.exercise_name || ex.muscle_group || 'Exercício', toneByMuscle(ex.muscle_group))}
@@ -625,8 +647,10 @@ export default function TreinosPage() {
                     <p className="text-[10px] text-text-muted">Vídeo disponível</p>
                   )}
                 </div>
-              </div>
-            ))}
+                <DSIcon name="chevronRight" size={14} className="text-text-muted" />
+              </a>
+              )
+            })}
           </div>
         </div>
       ) : (

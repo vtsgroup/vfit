@@ -11,7 +11,7 @@ try {
   console.warn('[SW] OneSignal SW script failed to load (likely ad blocker):', e.message)
 }
 
-const CACHE_VERSION = 'v7'
+const CACHE_VERSION = 'v8'
 const CACHE_STATIC = `vfit-static-${CACHE_VERSION}`
 const CACHE_DYNAMIC = `vfit-dynamic-${CACHE_VERSION}`
 const CACHE_API = `vfit-api-${CACHE_VERSION}`

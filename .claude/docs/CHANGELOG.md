@@ -8,6 +8,11 @@
 ## [Unreleased] — 2026-04-08 — Sprint 11-15 (UX Nutrição/Exercícios)
 
 ### ✨ Features
+- **Central de mídia de exercícios:** [src/app/dashboard/workouts/media/library/page.tsx](src/app/dashboard/workouts/media/library/page.tsx) foi expandida para operar como central admin de legado D1 + registros R2, com resumo de cobertura, preview rápido, upload contextualizado e listagem de mídias existentes com remoção.
+- **Upload de exercício:** [src/components/workouts/exercise-media-upload.tsx](src/components/workouts/exercise-media-upload.tsx) agora comunica limites reais do endpoint, contexto R2 e arquivos selecionados antes do envio.
+- **Admin:** atalho `Mídia de Exercícios` adicionado ao painel em [src/app/dashboard/admin/page.tsx](src/app/dashboard/admin/page.tsx) para acelerar a operação de super admin.
+- **Exercícios premium:** [src/app/(app)/exercicios/[id]/client-page.tsx](src/app/(app)/exercicios/[id]/client-page.tsx) foi redesenhada para priorizar `exercise_media`, com hero de mídia real, galeria/modal, CTAs sticky, tabs premium e remoção dos placeholders centrais da experiência mobile.
+- **Catálogo de exercícios:** [src/hooks/use-exercises.ts](src/hooks/use-exercises.ts) passou a expor `transcription_pt`, `transcription_en`, `coaching_cues`, `tags` e `image_urls` para suportar a nova camada editorial e visual do detalhe do exercício.
 - **Nutrição:** integração de `MacroRingChart` em [src/app/(app)/nutricao/page.tsx](src/app/(app)/nutricao/page.tsx) substituindo o bloco antigo de barras lineares.
 - **Nutrição:** scanner de código de barras integrado no modal de busca com `BarcodeScanner` e shortcut no header da busca.
 - **Nutrição:** câmera com Vision AI integrada via `FoodCamera` + sugestão automática de busca por alimento.

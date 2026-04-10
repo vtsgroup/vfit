@@ -6,7 +6,7 @@
 //   Formulário para upload de vídeo (MP4/WebM) e thumbnail de exercício.
 //   useCreateExerciseMedia cria o registro + useUploadExerciseMedia envia os arquivos para R2.
 //   Preview do vídeo e thumbnail antes do upload.
-//   Validação de tamanho (vídeo max 100MB, thumb max 5MB).
+//   Validação visual alinhada ao endpoint (vídeo max 50MB, thumb max 2MB).
 //
 // Exports principais:
 //   ExerciseMediaUpload — form de upload de mídia de exercício
@@ -64,8 +64,24 @@ export function ExerciseMediaUpload({ exerciseId }: { exerciseId: string }) {
   const isBusy = uploadMutation.isPending || createMutation.isPending
 
   return (
-    <div className="space-y-3 rounded-lg border border-border-light bg-bg-primary p-3">
-      <p className="text-sm font-medium text-text-primary">Upload de mídia do exercício</p>
+    <div className="space-y-4 rounded-2xl border border-border-light bg-bg-primary p-4">
+      <div className="space-y-1">
+        <p className="text-sm font-bold text-text-primary">Upload de mídia do exercício</p>
+        <p className="text-xs text-text-muted">
+          Envie o vídeo e a thumbnail para o R2. Esta mídia será a base da nova tela premium do exercício.
+        </p>
+      </div>
+
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/8 p-3">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-300">Vídeo</p>
+          <p className="mt-1 text-xs text-text-secondary">Formatos: MP4, WebM, MOV · limite real do endpoint: 50MB.</p>
+        </div>
+        <div className="rounded-2xl border border-brand-primary/20 bg-brand-primary/8 p-3">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-brand-primary">Thumbnail</p>
+          <p className="mt-1 text-xs text-text-secondary">PNG, JPG, WebP ou GIF · limite real do endpoint: 2MB.</p>
+        </div>
+      </div>
 
       <div className="space-y-1">
         <label className="text-xs text-text-muted">Vídeo (obrigatório)</label>
@@ -75,6 +91,7 @@ export function ExerciseMediaUpload({ exerciseId }: { exerciseId: string }) {
           onChange={(e) => setVideoFile(e.target.files?.[0] || null)}
           className="block w-full rounded-md border border-border-light bg-bg-secondary p-2 text-xs"
         />
+        {videoFile && <p className="text-[11px] text-text-secondary">Selecionado: {videoFile.name}</p>}
       </div>
 
       <div className="space-y-1">
@@ -85,6 +102,7 @@ export function ExerciseMediaUpload({ exerciseId }: { exerciseId: string }) {
           onChange={(e) => setThumbnailFile(e.target.files?.[0] || null)}
           className="block w-full rounded-md border border-border-light bg-bg-secondary p-2 text-xs"
         />
+        {thumbnailFile && <p className="text-[11px] text-text-secondary">Selecionado: {thumbnailFile.name}</p>}
       </div>
 
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
@@ -118,7 +136,7 @@ export function ExerciseMediaUpload({ exerciseId }: { exerciseId: string }) {
         className="w-full"
       >
         <DSIcon name="uploadCloud" size={16} className="mr-2" />
-        {isBusy ? 'Enviando...' : 'Enviar mídia'}
+        {isBusy ? 'Enviando para o R2...' : 'Enviar mídia para o R2'}
       </Button>
     </div>
   )

@@ -486,7 +486,7 @@ function ExerciseList({
           muscleGroupName={muscleGroupMap[ex.muscle_group_id]?.name_pt}
           isFavorite={isFavorite(ex.id)}
           onToggleFavorite={() => toggleFavorite(ex.id)}
-          onClick={() => router.push(`/exercicios/${ex.id}`)}
+          onClick={() => router.push(`/exercicios/detalhe?id=${encodeURIComponent(ex.id)}`)}
         />
       ))}
     </div>

@@ -10,7 +10,7 @@
  */
 
 import { Hono } from 'hono'
-import type { AppContext } from '@workers/types'
+import type { AppContext, Bindings } from '@workers/types'
 import { pgQuery, pgQueryOne, generateId } from '@lib/db'
 import { success, created } from '@lib/response'
 import { BadRequestError, NotFoundError, InternalError } from '@lib/errors'
@@ -23,6 +23,69 @@ import { authMiddleware } from '@workers/middleware/auth'
 import { notify } from '@lib/onesignal'
 
 const plans = new Hono<AppContext>()
+
+// ============================================
+// Schema auto-healing (B2C compatibility)
+// ============================================
+async function ensureWorkoutPlansB2CCompatibility(env: Bindings) {
+  const statements = [
+    'ALTER TABLE workout_plans ALTER COLUMN created_by DROP NOT NULL',
+    'ALTER TABLE workout_plans ALTER COLUMN title DROP NOT NULL',
+    'ALTER TABLE workout_plans ALTER COLUMN description DROP NOT NULL',
+    'ALTER TABLE workout_plans ALTER COLUMN category DROP NOT NULL',
+    'ALTER TABLE workout_plans ALTER COLUMN duration_weeks DROP NOT NULL',
+    'ALTER TABLE workout_plans ALTER COLUMN workouts_per_week DROP NOT NULL',
+    'ALTER TABLE workout_plans ALTER COLUMN price_brl DROP NOT NULL',
+    'ALTER TABLE workout_plans ALTER COLUMN plan_content DROP NOT NULL',
+    "ALTER TABLE workout_plans ALTER COLUMN price_brl SET DEFAULT 0",
+    "ALTER TABLE workout_plans ALTER COLUMN description SET DEFAULT ''",
+    "ALTER TABLE workout_plans ALTER COLUMN category SET DEFAULT 'b2c'",
+  ]
+
+  for (const statement of statements) {
+    try {
+      await pgQuery(env, statement)
+    } catch (err) {
+      console.warn('[Plans] schema auto-healing warning:', statement, err)
+    }
+  }
+}
+
+async function canGenerateMorePlans(env: Bindings, userId: string): Promise<boolean> {
+  const b2cSub = await pgQueryOne<{ payment_status: string; renews_at: string | null; canceled_at: string | null }>(
+    env,
+    `SELECT payment_status, renews_at, canceled_at
+     FROM vfit_subscriptions
+     WHERE user_id = $1
+     ORDER BY created_at DESC
+     LIMIT 1`,
+    [userId]
+  )
+
+  const b2cPremium = !!b2cSub
+    && b2cSub.payment_status === 'confirmed'
+    && !b2cSub.canceled_at
+    && (!b2cSub.renews_at || new Date(b2cSub.renews_at) > new Date())
+
+  const user = await pgQueryOne<{ subscription_plan: string | null }>(
+    env,
+    'SELECT subscription_plan FROM users WHERE id = $1 LIMIT 1',
+    [userId]
+  )
+
+  const b2bPremium = !!user?.subscription_plan
+    && !['free', 'trial', 'basic', 'essencial'].includes(String(user.subscription_plan).toLowerCase())
+
+  if (b2cPremium || b2bPremium) return true
+
+  const plansCount = await pgQueryOne<{ count: number | string }>(
+    env,
+    'SELECT COUNT(*)::int AS count FROM workout_plans WHERE user_id = $1',
+    [userId]
+  )
+
+  return Number(plansCount?.count || 0) === 0
+}
 
 // ============================================
 // POST /generate — Gerar plano com IA
@@ -172,6 +235,14 @@ plans.post('/save', async (c) => {
   const userId = c.get('userId')
   if (!userId) {
     throw new BadRequestError('Usuário não identificado')
+  }
+
+  // Safety net: garante compatibilidade de schema no banco ativo
+  await ensureWorkoutPlansB2CCompatibility(c.env)
+
+  const canGenerate = await canGenerateMorePlans(c.env, userId)
+  if (!canGenerate) {
+    throw new BadRequestError('Plano grátis já utilizado. Faça upgrade para gerar novos planos.')
   }
 
   const body = await c.req.json()
@@ -407,6 +478,11 @@ plans.patch('/:id/settings', authMiddleware, async (c) => {
 plans.post('/regenerate', authMiddleware, async (c) => {
   const userId = c.get('userId')
 
+  const canGenerate = await canGenerateMorePlans(c.env, userId)
+  if (!canGenerate) {
+    throw new BadRequestError('Usuários grátis podem gerar apenas 1 plano. Faça upgrade para Premium.')
+  }
+
   // Desativar plano atual
   await pgQuery(
     c.env,
@@ -414,6 +490,9 @@ plans.post('/regenerate', authMiddleware, async (c) => {
      WHERE user_id = $1 AND status = 'active'`,
     [userId]
   )
+
+  // Safety net: garante compatibilidade de schema no banco ativo
+  await ensureWorkoutPlansB2CCompatibility(c.env)
 
   // Buscar perfil do onboarding (B2C) ou students (B2B)
   const onboardingProfile = await pgQueryOne<{
@@ -603,6 +682,14 @@ plans.post('/regenerate', authMiddleware, async (c) => {
 plans.post('/auto-generate', authMiddleware, async (c) => {
   const userId = c.get('userId')
   console.log(`[Plans] auto-generate START for user ${userId}`)
+
+  const canGenerate = await canGenerateMorePlans(c.env, userId)
+  if (!canGenerate) {
+    throw new BadRequestError('Plano grátis já utilizado. Faça upgrade para gerar novos planos.')
+  }
+  
+  // Safety net: garante compatibilidade de schema no banco ativo
+  await ensureWorkoutPlansB2CCompatibility(c.env)
 
   const asString = (v: unknown, fallback: string) => (typeof v === 'string' && v.length > 0 ? v : fallback)
   const asNumber = (v: unknown, fallback: number) => {

@@ -26,6 +26,11 @@ export interface Exercise {
   video_url_vertical: string | null
   video_url_horizontal: string | null
   thumbnail_url: string | null
+  transcription_pt: string | null
+  transcription_en: string | null
+  coaching_cues: string | null
+  tags: string | null
+  image_urls: string | null
   difficulty: 'beginner' | 'intermediate' | 'advanced'
   equipment_needed: string // JSON array string
   is_default: number
