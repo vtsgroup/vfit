@@ -50,7 +50,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
     // Update <meta name="theme-color"> dynamically — Chrome TWA/PWA picks this up
     // for status bar color in real-time
-    const topColor = resolvedTheme === 'light' ? '#f6f9fb' : '#050A12'
+    const topColor = '#050A12'
     // Bottom safe area (gesture bar / nav bar) — slightly different shade for depth
     const bottomColor = resolvedTheme === 'light' ? '#f7fbfa' : '#050A12'
 

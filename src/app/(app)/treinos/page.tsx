@@ -27,6 +27,7 @@ import { useCurrentPlan, useAutoGeneratePlan } from '@/hooks/use-plans'
 import { useMealsToday, useNutritionTargets } from '@/hooks/use-vfit-nutrition'
 import { useSelfAssessments, getBMIColor, useAutoAssessmentFromOnboarding } from '@/hooks/use-self-assessments'
 import { useWorkoutLogs } from '@/hooks/use-workouts'
+import { useDailyGoal, useStreak, useXPBalance } from '@/hooks/use-xp'
 import { useSubscriptionStatus } from '@/hooks/use-vfit-checkout'
 import { useB2COnboardingCompleted } from '@/hooks/use-b2c-onboarding'
 import { useStudentProfile, useLinkPersonalTrainer } from '@/hooks/use-student-app'
@@ -167,6 +168,9 @@ export default function TreinosPage() {
   const { data: subscription } = useSubscriptionStatus()
   const isFree = !subscription?.is_premium
   const { data: logsData } = useWorkoutLogs({ per_page: 1 })
+  const { data: xpBalance } = useXPBalance()
+  const { data: dailyGoal } = useDailyGoal()
+  const { data: streak } = useStreak()
   const workoutCount = logsData?.meta?.total ?? 0
   const showUpgradePrompt = isFree && workoutCount >= 3
   const { data: studentProfile } = useStudentProfile()
@@ -534,6 +538,58 @@ export default function TreinosPage() {
           </div>
         </Link>
       )}
+
+      {/* Gamificação — Streak + XP + Meta diária */}
+      <div className="mb-5 rounded-2xl border border-emerald-400/25 bg-linear-to-br from-emerald-500/10 via-bg-secondary to-transparent p-4">
+        <div className="mb-3 flex items-start justify-between gap-3">
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-wider text-emerald-300">Gamificação VFIT</p>
+            <h2 className="mt-1 text-[15px] font-bold text-text-primary">Streak, XP e metas do dia</h2>
+          </div>
+          <span className="rounded-full border border-emerald-400/35 bg-emerald-500/14 px-2.5 py-1 text-[10px] font-bold text-emerald-300">
+            VFIT Coin (em breve)
+          </span>
+        </div>
+
+        <div className="grid grid-cols-3 gap-2.5">
+          <div className="rounded-xl border border-border-light bg-bg-secondary/70 p-2.5">
+            <p className="text-[10px] text-text-muted">XP atual</p>
+            <p className="mt-1 text-[15px] font-extrabold text-emerald-300">{xpBalance?.balance ?? 0}</p>
+            <p className="text-[10px] text-text-secondary">Nível {xpBalance?.level ?? 1}</p>
+          </div>
+          <div className="rounded-xl border border-border-light bg-bg-secondary/70 p-2.5">
+            <p className="text-[10px] text-text-muted">Streak</p>
+            <p className="mt-1 text-[15px] font-extrabold text-amber-300">{streak?.current_streak ?? 0} dias</p>
+            <p className="text-[10px] text-text-secondary">Máx: {streak?.longest_streak ?? 0}</p>
+          </div>
+          <div className="rounded-xl border border-border-light bg-bg-secondary/70 p-2.5">
+            <p className="text-[10px] text-text-muted">Meta diária</p>
+            <p className="mt-1 text-[15px] font-extrabold text-violet-300">
+              {dailyGoal?.earned_xp ?? 0}/{dailyGoal?.target_xp ?? 0}
+            </p>
+            <p className="text-[10px] text-text-secondary">XP de hoje</p>
+          </div>
+        </div>
+
+        <div className="mt-3 rounded-xl border border-border-light bg-bg-secondary/65 p-2.5">
+          <div className="mb-1.5 flex items-center justify-between text-[10px] text-text-secondary">
+            <span>Progresso da meta do dia</span>
+            <span>{Math.round((dailyGoal?.progress ?? 0) * 100)}%</span>
+          </div>
+          <div className="h-2 rounded-full bg-black/20">
+            <div
+              className="h-2 rounded-full bg-linear-to-r from-emerald-400 to-brand-primary transition-all duration-500"
+              style={{ width: `${Math.max(0, Math.min(100, Math.round((dailyGoal?.progress ?? 0) * 100)))}%` }}
+            />
+          </div>
+          <div className="mt-2 flex items-center justify-between text-[10px] text-text-muted">
+            <span>{dailyGoal?.workouts_done ?? 0}/{dailyGoal?.workouts_target ?? 0} treinos hoje</span>
+            <Link href="/progresso/streaks" className="font-semibold text-emerald-300 hover:text-emerald-200">
+              Ver detalhes
+            </Link>
+          </div>
+        </div>
+      </div>
 
       {/* Treino de hoje (IA) */}
       <div className="mb-4 flex items-center justify-between">
