@@ -654,7 +654,7 @@ export function MobileBottomNav() {
       {/* Bottom Navigation Bar */}
       <nav
         aria-label="Navegação principal"
-        className="mobile-bottom-nav fixed -bottom-px left-0 right-0 z-45 rounded-t-[28px] bg-(--pwa-bottom-fill) lg:hidden"
+        className="mobile-bottom-nav fixed -bottom-px left-0 right-0 z-45 rounded-t-[28px] bg-bg-dark lg:hidden"
       >
         {/* Nav card (full width, premium glass) */}
         <div
@@ -673,7 +673,7 @@ export function MobileBottomNav() {
               className="absolute bottom-0 left-0 right-0 z-1"
               style={{
                 height: navBottomPadding,
-                backgroundColor: 'var(--pwa-bottom-fill, #050A12)',
+                backgroundColor: '#050A12',
               }}
             />
           )}
@@ -748,7 +748,7 @@ export function MobileBottomNav() {
                         'relative z-10 transition-all duration-200',
                         isActive
                           ? 'text-brand-primary'
-                          : 'text-text-muted group-hover:text-text-secondary'
+                          : 'text-slate-400 group-hover:text-slate-200'
                       )}>
                         {item.icon(isActive)}
                       </div>
@@ -756,7 +756,7 @@ export function MobileBottomNav() {
 
                     <span className={cn(
                       'relative z-10 mt-0.5 text-[9px] leading-none tracking-[0.3px] transition-all duration-200',
-                      isActive ? 'font-semibold text-brand-primary' : 'font-medium text-text-muted'
+                      isActive ? 'font-semibold text-brand-primary' : 'font-medium text-slate-400'
                     )}>
                       {item.label}
                     </span>
@@ -784,7 +784,7 @@ export function MobileBottomNav() {
                       'relative z-10 transition-all duration-200',
                       isActive
                         ? 'text-brand-primary'
-                        : 'text-text-muted group-hover:text-text-secondary'
+                        : 'text-slate-400 group-hover:text-slate-200'
                     )}>
                       {item.icon(isActive)}
                     </div>
@@ -792,7 +792,7 @@ export function MobileBottomNav() {
 
                   <span className={cn(
                     'relative z-10 mt-0.5 text-[9px] leading-none tracking-[0.3px] transition-all duration-200',
-                    isActive ? 'font-semibold text-brand-primary' : 'font-medium text-text-muted'
+                    isActive ? 'font-semibold text-brand-primary' : 'font-medium text-slate-400'
                   )}>
                     {item.label}
                   </span>

@@ -247,7 +247,7 @@ export function BottomNavigation({ notificationCount = 0, fabMenuOpen = false, o
   return (
     <nav
       aria-label="Navegação principal"
-      className="mobile-bottom-nav fixed -bottom-px left-0 right-0 z-45 rounded-t-[28px] bg-(--pwa-bottom-fill) lg:hidden"
+      className="mobile-bottom-nav fixed -bottom-px left-0 right-0 z-45 rounded-t-[28px] bg-bg-dark lg:hidden"
     >
       <div
         className="relative z-5 w-full overflow-visible rounded-t-[28px] backdrop-blur-2xl backdrop-saturate-200"
@@ -262,7 +262,7 @@ export function BottomNavigation({ notificationCount = 0, fabMenuOpen = false, o
             className="absolute bottom-0 left-0 right-0 z-1"
             style={{
               height: navBottomPadding,
-              backgroundColor: 'var(--pwa-bottom-fill, #050A12)',
+              backgroundColor: '#050A12',
             }}
           />
         )}
@@ -334,7 +334,7 @@ export function BottomNavigation({ notificationCount = 0, fabMenuOpen = false, o
                     'relative z-10 transition-all duration-200',
                     isActive
                       ? 'text-brand-primary'
-                      : 'text-text-muted group-hover:text-text-secondary'
+                      : 'text-slate-400 group-hover:text-slate-200'
                   )}>
                     {tab.icon(isActive)}
                   </div>
@@ -354,7 +354,7 @@ export function BottomNavigation({ notificationCount = 0, fabMenuOpen = false, o
 
                 <span className={cn(
                   'relative z-10 mt-0.5 text-[9px] leading-none tracking-[0.3px] transition-all duration-200',
-                  isActive ? 'font-semibold text-brand-primary' : 'font-medium text-text-muted'
+                  isActive ? 'font-semibold text-brand-primary' : 'font-medium text-slate-400'
                 )}>
                   {tab.label}
                 </span>

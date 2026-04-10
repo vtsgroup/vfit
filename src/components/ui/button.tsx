@@ -56,25 +56,25 @@ const variantStyles: Record<ButtonVariant, string> = {
   ].join(' '),
 
   secondary: [
-    // Light mode: zinc gradient — light top → mid → darker bottom (correct 3D direction)
+    // Light mode: zinc scale aligned with DS showcase (clean neutral + readable contrast)
     'bg-linear-to-b from-zinc-200 via-zinc-300 to-zinc-400',
-    'text-zinc-800 font-semibold',
-    '[text-shadow:0_1px_2px_rgba(255,255,255,0.8)]',
-    'border border-t-white/70 border-x-zinc-300/40 border-b-zinc-500/40',
-    'shadow-[0_4px_0_0_#71717a,0_6px_18px_-4px_rgba(113,113,122,0.4),inset_0_1px_0_rgba(255,255,255,0.6)]',
+    'text-zinc-700 font-semibold',
+    '[text-shadow:0_1px_1px_rgba(255,255,255,0.72)]',
+    'border border-t-white/80 border-x-zinc-300/50 border-b-zinc-400/60',
+    'shadow-[0_4px_0_0_#a1a1aa,0_6px_18px_-4px_rgba(113,113,122,0.32),inset_0_1px_0_rgba(255,255,255,0.68)]',
     'hover:-translate-y-0.5',
-    'hover:shadow-[0_4px_0_0_#71717a,0_6px_18px_-4px_rgba(113,113,122,0.6),inset_0_1px_0_rgba(255,255,255,0.65)]',
+    'hover:shadow-[0_5px_0_0_#a1a1aa,0_10px_24px_-6px_rgba(113,113,122,0.42),inset_0_1px_0_rgba(255,255,255,0.74)]',
     'hover:brightness-[1.02]',
     'active:translate-y-[3px] active:scale-[0.98]',
-    'active:shadow-[0_1px_0_0_#71717a,0_2px_6px_-2px_rgba(113,113,122,0.2),inset_0_2px_4px_rgba(0,0,0,0.1)]',
+    'active:shadow-[0_1px_0_0_#a1a1aa,0_2px_6px_-2px_rgba(113,113,122,0.2),inset_0_2px_4px_rgba(0,0,0,0.1)]',
     'active:brightness-95',
-    // Dark mode: zinc-400 → 500 → 600 — bright surface for contrast vs #050A12 bg
-    'dark:from-zinc-400 dark:via-zinc-500 dark:to-zinc-600',
-    'dark:text-white dark:font-bold dark:[text-shadow:0_1px_2px_rgba(0,0,0,0.4)]',
-    'dark:border-t-zinc-300/30 dark:border-x-zinc-500/20 dark:border-b-zinc-700/50',
-    'dark:shadow-[0_4px_0_0_#18181b,0_6px_18px_-4px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.18)]',
-    'dark:hover:shadow-[0_6px_0_0_#18181b,0_10px_28px_-4px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(255,255,255,0.22)]',
-    'dark:active:shadow-[0_1px_0_0_#18181b,0_2px_8px_-2px_rgba(0,0,0,0.5),inset_0_2px_4px_rgba(0,0,0,0.3)]',
+    // Dark mode: zinc-500/600 with neutral depth and balanced contrast
+    'dark:from-zinc-500 dark:via-zinc-600 dark:to-zinc-700',
+    'dark:text-zinc-100 dark:font-semibold dark:[text-shadow:0_1px_2px_rgba(0,0,0,0.38)]',
+    'dark:border-t-zinc-400/30 dark:border-x-zinc-600/30 dark:border-b-zinc-800/55',
+    'dark:shadow-[0_4px_0_0_#27272a,0_8px_22px_-6px_rgba(0,0,0,0.62),inset_0_1px_0_rgba(255,255,255,0.16)]',
+    'dark:hover:shadow-[0_6px_0_0_#27272a,0_12px_30px_-6px_rgba(0,0,0,0.72),inset_0_1px_0_rgba(255,255,255,0.2)]',
+    'dark:active:shadow-[0_1px_0_0_#27272a,0_2px_8px_-2px_rgba(0,0,0,0.52),inset_0_2px_4px_rgba(0,0,0,0.28)]',
     'focus-visible:ring-zinc-400/40',
   ].join(' '),
 

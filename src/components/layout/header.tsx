@@ -159,15 +159,15 @@ export function Header() {
           <div className="min-w-0 flex flex-col justify-center">
             {/* Breadcrumbs — always visible: 🏠 > Section > Sub-page */}
             <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 mb-0.5">
-              <Link href="/dashboard" className="text-text-muted hover:text-brand-primary transition-colors shrink-0">
+              <Link href="/dashboard" className="text-slate-300 hover:text-brand-primary transition-colors shrink-0">
                 <DSIcon name="home" size={14} />
               </Link>
               {breadcrumbs.length > 0 ? (
                 breadcrumbs.map((item, i) => (
                   <span key={i} className="flex items-center gap-1.5">
-                    <DSIcon name="chevronRight" size={10} className="text-text-secondary/40 shrink-0" />
+                    <DSIcon name="chevronRight" size={10} className="text-slate-500/70 shrink-0" />
                     <Link href={item.href!}
-                      className="text-xs font-medium text-text-muted hover:text-brand-primary transition-colors truncate max-w-32">
+                      className="text-xs font-medium text-slate-300 hover:text-brand-primary transition-colors truncate max-w-32">
                       {item.label}
                     </Link>
                   </span>
@@ -175,15 +175,15 @@ export function Header() {
               ) : (
                 pathname !== '/dashboard' && (
                   <>
-                    <DSIcon name="chevronRight" size={10} className="text-text-secondary/40 shrink-0" />
-                    <span className="text-xs font-medium text-text-secondary truncate max-w-32">
+                    <DSIcon name="chevronRight" size={10} className="text-slate-500/70 shrink-0" />
+                    <span className="text-xs font-medium text-slate-300 truncate max-w-32">
                       {pageTitle}
                     </span>
                   </>
                 )
               )}
             </nav>
-            <h1 className="text-sm font-bold tracking-tight text-text-primary truncate lg:text-base">{pageTitle}</h1>
+            <h1 className="text-sm font-bold tracking-tight text-slate-100 truncate lg:text-base">{pageTitle}</h1>
           </div>
 
           {/* Search — desktop only, inline (DS v3 style) */}
@@ -191,12 +191,12 @@ export function Header() {
             onClick={() => setCommandPaletteOpen(true)}
             className="hidden items-center gap-3 ml-4 lg:flex group cursor-pointer"
           >
-            <DSIcon name="search" size={16} className="text-text-muted group-hover:text-brand-primary transition-colors" />
-            <span className="text-[13px] text-text-muted">Buscar...</span>
+            <DSIcon name="search" size={16} className="text-slate-400 group-hover:text-brand-primary transition-colors" />
+            <span className="text-[13px] text-slate-400">Buscar...</span>
             <div className="flex gap-1 ml-2">
-              <kbd className="rounded-[5px] border border-border-light bg-bg-tertiary px-1.5 py-0.5 text-[11px] text-text-muted"
+              <kbd className="rounded-[5px] border border-white/12 bg-white/6 px-1.5 py-0.5 text-[11px] text-slate-300"
                 style={{ fontFamily: 'inherit' }}>⌘</kbd>
-              <kbd className="rounded-[5px] border border-border-light bg-bg-tertiary px-1.5 py-0.5 text-[11px] text-text-muted"
+              <kbd className="rounded-[5px] border border-white/12 bg-white/6 px-1.5 py-0.5 text-[11px] text-slate-300"
                 style={{ fontFamily: 'inherit' }}>K</kbd>
             </div>
           </button>
@@ -242,10 +242,10 @@ export function Header() {
           </div>
 
           {/* Separator — desktop only */}
-          <div className="hidden lg:block h-6 w-px bg-border-light mx-1" />
+          <div className="hidden lg:block h-6 w-px bg-white/12 mx-1" />
 
           {/* User pill — desktop only (plan badge overlay on avatar) */}
-          <div className="hidden lg:flex items-center gap-2.5 rounded-xl border border-border-light/50 bg-bg-secondary/50 py-1 pl-1 pr-2.5">
+          <div className="hidden lg:flex items-center gap-2.5 rounded-xl border border-white/10 bg-white/5 py-1 pl-1 pr-2.5">
             <AvatarWithPlanBadge
               src={user?.avatar_url}
               name={user?.full_name || 'U'}
@@ -253,8 +253,8 @@ export function Header() {
               linkToPlans
             />
             <div className="flex flex-col min-w-0">
-              <span className="text-xs font-semibold text-text-primary truncate max-w-24 leading-tight">{shortName}</span>
-              <span className="text-[10px] font-semibold text-brand-primary leading-tight">
+              <span className="text-xs font-semibold text-slate-100 truncate max-w-24 leading-tight">{shortName}</span>
+              <span className="text-[10px] font-semibold text-emerald-300 leading-tight">
                 {effectiveType === 'admin' ? 'Administrador' : isPersonalView ? 'Personal' : 'Aluno'}
               </span>
             </div>
@@ -285,7 +285,7 @@ export function Header() {
           {/* Mobile menu button — Hamburger morph → X */}
           <button
             onClick={() => setMobileNavOpen(!mobileNavOpen)}
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] text-text-secondary hover:bg-bg-tertiary active:scale-95 transition-all lg:hidden"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] text-slate-300 hover:bg-white/8 active:scale-95 transition-all lg:hidden"
             aria-label={mobileNavOpen ? 'Fechar menu' : 'Abrir menu'}
           >
             <div className="relative h-5 w-5">
@@ -309,7 +309,7 @@ export function Header() {
       {/* Bottom border — subtle */}
       <div className={cn(
         'absolute bottom-0 left-0 right-0 h-px transition-opacity duration-300',
-        scrolled ? 'bg-border-light opacity-100' : 'bg-border-light/50 opacity-60'
+        scrolled ? 'bg-white/12 opacity-100' : 'bg-white/8 opacity-70'
       )} />
     </header>
   )
