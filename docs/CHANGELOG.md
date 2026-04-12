@@ -5,6 +5,40 @@
 
 ---
 
+## [v2.4.9] — 12/04/2026 — Saques: sync de status + rótulo Rejeitado
+
+### 🐛 Correções
+- Saques em `processing/pending` agora sincronizam com o Asaas ao consultar saldo e histórico, atualizando para `completed`, `failed` ou `cancelled` sem depender apenas do webhook de evento.
+- Status visual `failed` na tela de saques alterado para **Rejeitado**.
+- Histórico de saques ganhou polling automático enquanto houver itens pendentes/processando.
+
+### 🔧 Arquivos
+- [workers/api/payments.ts](../workers/api/payments.ts)
+- [src/hooks/use-payments.ts](../src/hooks/use-payments.ts)
+- [src/app/dashboard/payments/withdraw/page.tsx](../src/app/dashboard/payments/withdraw/page.tsx)
+
+### 🚀 Deploy
+- Pipeline oficial executado: **v2.4.9**
+
+---
+
+## [v2.4.8] — 12/04/2026 — Upload admin + webhook token opcional
+
+### 🐛 Correções
+- Corrigido 404 de upload em grupos musculares: `uploadFile()` agora prefixa `/api/v1` quando endpoint é relativo.
+- Webhook de autorização de saque (`transfer-auth`) passou a aceitar ausência do header de token (token opcional no Asaas). Se header vier, continua validando.
+- Texto da UI de grupos musculares esclarece os dois campos de upload: **imagem estática** e **animação/GIF**.
+
+### 🔧 Arquivos
+- [src/lib/api-client.ts](../src/lib/api-client.ts)
+- [workers/api/payments.ts](../workers/api/payments.ts)
+- [src/app/dashboard/admin/muscle-groups/page.tsx](../src/app/dashboard/admin/muscle-groups/page.tsx)
+
+### 🚀 Deploy
+- Pipeline oficial executado: **v2.4.8**
+
+---
+
 ## [v2.4.7] — 12/04/2026 — UX: erro visual claro em grupos musculares
 
 ### ✨ Melhoria
