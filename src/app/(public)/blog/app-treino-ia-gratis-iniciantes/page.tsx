@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { buildSeoMetadata } from '@/lib/seo'
 import { getPost, getRelatedPosts, BLOG_POSTS } from '@/data/blog-posts'
@@ -82,6 +83,21 @@ export default function AppTreinoIAGratisIniciantesPage() {
         <p>
           Neste guia, você vai entender como escolher um app de treino com IA, o que comparar e por que plataformas como o <strong className="text-white">VFIT</strong> conseguem unir personalização, gamificação e facilidade de uso sem exigir experiência prévia.
         </p>
+        <p>
+          Se quiser ir direto para a experiência de aluno, acesse a{' '}
+          <Link href="/" className="text-brand-primary hover:text-brand-primary-hover underline underline-offset-2">
+            página inicial do VFIT
+          </Link>
+          . Se você for profissional, veja as páginas para{' '}
+          <Link href="/app-personal-trainer" className="text-brand-primary hover:text-brand-primary-hover underline underline-offset-2">
+            personal trainer
+          </Link>{' '}
+          e{' '}
+          <Link href="/nutricionistas" className="text-brand-primary hover:text-brand-primary-hover underline underline-offset-2">
+            nutricionistas
+          </Link>
+          .
+        </p>
       </section>
 
       <section className="grid gap-4 sm:grid-cols-3">
@@ -163,6 +179,20 @@ export default function AppTreinoIAGratisIniciantesPage() {
         <p>
           O ponto mais importante é: comece com o menor compromisso que você consegue manter. Três sessões curtas por semana, bem executadas, são melhores do que tentar um plano impossível logo de início.
         </p>
+      </section>
+
+      <section className="rounded-2xl border border-white/8 bg-white/3 p-6 space-y-4">
+        <h2 className="text-xl font-bold text-white">Próximo passo por perfil</h2>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <TrackedCtaLink href="/welcome" cta="Começar como aluno" placement="blog_iniciante_icp_switcher" pageSegment="blog" event="lp_register_start" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-brand-primary/30">
+            <h3 className="text-sm font-bold text-white">Sou aluno</h3>
+            <p className="mt-1 text-xs text-zinc-400">Inicie grátis e receba seu plano com IA.</p>
+          </TrackedCtaLink>
+          <TrackedCtaLink href="/app-personal-trainer" cta="Sou personal trainer" placement="blog_iniciante_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-brand-primary/30">
+            <h3 className="text-sm font-bold text-white">Sou personal trainer</h3>
+            <p className="mt-1 text-xs text-zinc-400">Veja operação profissional e gestão completa.</p>
+          </TrackedCtaLink>
+        </div>
       </section>
 
       <FaqInline items={faq} />

@@ -29,9 +29,9 @@ const monoLabel = {
 /* ─── Hero slides ─── */
 const HERO_SLIDES = [
   { image: '/images/hero-1.webp', prefix: 'TREINOS QUE', highlight: 'TRANSFORMAM' },
-  { image: '/images/hero-2.webp', prefix: 'ALUNOS SOB', highlight: 'CONTROLE' },
-  { image: '/images/hero-3.webp', prefix: 'COBRANÇAS NO', highlight: 'AUTOMÁTICO' },
-  { image: '/images/hero-4.webp', prefix: 'NEGÓCIO EM', highlight: 'ESCALA' },
+  { image: '/images/hero-2.webp', prefix: 'SEU OBJETIVO', highlight: 'NO FOCO' },
+  { image: '/images/hero-3.webp', prefix: 'RESULTADO COM', highlight: 'MÉTODO' },
+  { image: '/images/hero-4.webp', prefix: 'TREINO E DIETA', highlight: 'ALINHADOS' },
 ]
 
 const HERO_STATS = [
@@ -162,8 +162,8 @@ export function Hero() {
               >
                 <span className="h-1.5 w-1.5 rounded-full bg-brand-primary animate-pulse" />
                 {headlineVariant === 'A'
-                  ? 'Plataforma #1 para Personal Trainers'
-                  : 'IA + Gestão para Escalar seu Atendimento'}
+                  ? 'App de treino com IA para alunos'
+                  : 'Treino inteligente com apoio profissional'}
               </span>
             </div>
           </IntersectionReveal>
@@ -213,8 +213,8 @@ export function Hero() {
           <IntersectionReveal animation="fade-in" delay={150}>
             <p className="mx-auto max-w-xl text-base leading-relaxed text-white/50 sm:text-lg">
               {headlineVariant === 'A'
-                ? 'Crie treinos personalizados com inteligência artificial, gerencie alunos, automatize cobranças e avaliações físicas — tudo em uma única plataforma.'
-                : 'Ganhe velocidade no planejamento, padronize seu método e mantenha seus alunos engajados com uma operação fitness orientada por dados.'}
+                ? 'Receba treinos personalizados com inteligência artificial, acompanhe sua evolução e mantenha constância com gamificação no celular.'
+                : 'Treine com método, acompanhe progresso real e conte com personal e nutricionista no mesmo ecossistema quando precisar.'}
             </p>
           </IntersectionReveal>
 

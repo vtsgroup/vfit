@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { buildSeoMetadata } from '@/lib/seo'
 import { getPost, getRelatedPosts, BLOG_POSTS } from '@/data/blog-posts'
@@ -78,6 +79,17 @@ export default function NutricionistaPersonalTrainerTrabalhoConjuntoPage() {
         <p>
           Para o paciente, isso significa menos mensagens contraditórias, mais clareza sobre prioridades e uma sensação maior de cuidado coordenado. Para os profissionais, significa percepção de valor, retenção mais forte e possibilidade real de indicação mútua.
         </p>
+        <p>
+          Se você quer ver a proposta completa por perfil, acesse a página para{' '}
+          <Link href="/nutricionistas" className="text-brand-primary hover:text-brand-primary-hover underline underline-offset-2">
+            nutricionistas
+          </Link>{' '}
+          e a página para{' '}
+          <Link href="/app-personal-trainer" className="text-brand-primary hover:text-brand-primary-hover underline underline-offset-2">
+            personal trainers
+          </Link>
+          .
+        </p>
       </section>
 
       <section className="grid gap-4 sm:grid-cols-3">
@@ -120,6 +132,24 @@ export default function NutricionistaPersonalTrainerTrabalhoConjuntoPage() {
         <p>
           Para clínicas, consultórios e operações de wellness, a colaboração também pode aumentar ticket médio, indicações e recorrência, porque o serviço passa a ser percebido como mais completo.
         </p>
+      </section>
+
+      <section className="rounded-2xl border border-white/8 bg-white/3 p-6 space-y-4">
+        <h2 className="text-xl font-bold text-white">Próxima rota por perfil</h2>
+        <div className="grid gap-3 sm:grid-cols-3">
+          <TrackedCtaLink href="/nutricionistas" cta="Sou nutricionista" placement="blog_nutri_personal_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-brand-primary/30">
+            <h3 className="text-sm font-bold text-white">Sou nutricionista</h3>
+            <p className="mt-1 text-xs text-zinc-400">Ative área de nutrição e parceria clínica.</p>
+          </TrackedCtaLink>
+          <TrackedCtaLink href="/app-personal-trainer" cta="Sou personal trainer" placement="blog_nutri_personal_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-brand-primary/30">
+            <h3 className="text-sm font-bold text-white">Sou personal trainer</h3>
+            <p className="mt-1 text-xs text-zinc-400">Coordene treino e dieta no mesmo contexto.</p>
+          </TrackedCtaLink>
+          <TrackedCtaLink href="/afiliados" cta="Monetizar com afiliados" placement="blog_nutri_personal_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-brand-primary/30">
+            <h3 className="text-sm font-bold text-white">Monetizar com afiliados</h3>
+            <p className="mt-1 text-xs text-zinc-400">Comissão recorrente por indicação ativa.</p>
+          </TrackedCtaLink>
+        </div>
       </section>
 
       <section className="rounded-2xl border border-brand-primary/20 bg-brand-primary/5 p-6">

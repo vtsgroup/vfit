@@ -18,6 +18,7 @@ import { PageHero } from '@/components/shared/page-hero'
 import { BLOG_POSTS } from '@/data/blog-posts'
 import { BlogListing } from '@/components/blog/blog-listing'
 import { Button } from '@/components/ui/button'
+import { TrackedCtaLink } from '@/components/analytics/tracked-cta-link'
 
 export const metadata: Metadata = buildSeoMetadata({
   title: 'Blog VFIT: IA, gestão e crescimento para fitness e wellness',
@@ -45,6 +46,36 @@ export default function BlogPage() {
       />
 
       <div className="mx-auto max-w-5xl px-6 space-y-12 pb-24">
+        <section className="rounded-2xl border border-white/8 bg-white/3 p-6 backdrop-blur-sm shadow-[0_4px_24px_rgba(0,0,0,0.15)]">
+          <p className="text-xs font-bold tracking-[0.18em] text-brand-primary uppercase">Jornada por perfil</p>
+          <h2 className="mt-2 text-xl font-bold text-white">Escolha a rota certa para seu objetivo</h2>
+          <p className="mt-2 text-sm text-zinc-400">
+            Para melhorar SEO por intenção e levar cada público para a proposta correta, escolha sua página principal antes de seguir na leitura.
+          </p>
+
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <TrackedCtaLink href="/" cta="Sou aluno" placement="blog_hub_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 transition-colors hover:border-brand-primary/30 hover:bg-brand-primary/8">
+              <h3 className="text-sm font-bold text-white">Sou aluno</h3>
+              <p className="mt-1 text-xs text-zinc-400">Treino com IA, evolução e constância no app.</p>
+            </TrackedCtaLink>
+
+            <TrackedCtaLink href="/app-personal-trainer" cta="Sou personal trainer" placement="blog_hub_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 transition-colors hover:border-brand-primary/30 hover:bg-brand-primary/8">
+              <h3 className="text-sm font-bold text-white">Sou personal trainer</h3>
+              <p className="mt-1 text-xs text-zinc-400">IA, gestão, colaboração com nutrição e escala.</p>
+            </TrackedCtaLink>
+
+            <TrackedCtaLink href="/nutricionistas" cta="Sou nutricionista" placement="blog_hub_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 transition-colors hover:border-brand-primary/30 hover:bg-brand-primary/8">
+              <h3 className="text-sm font-bold text-white">Sou nutricionista</h3>
+              <p className="mt-1 text-xs text-zinc-400">Área de nutrição e trabalho conjunto com personal.</p>
+            </TrackedCtaLink>
+
+            <TrackedCtaLink href="/afiliados" cta="Quero ser afiliado" placement="blog_hub_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 transition-colors hover:border-brand-primary/30 hover:bg-brand-primary/8">
+              <h3 className="text-sm font-bold text-white">Quero ser afiliado</h3>
+              <p className="mt-1 text-xs text-zinc-400">Indique e ganhe comissão recorrente.</p>
+            </TrackedCtaLink>
+          </div>
+        </section>
+
         <BlogListing posts={BLOG_POSTS} />
 
         {/* Newsletter CTA */}

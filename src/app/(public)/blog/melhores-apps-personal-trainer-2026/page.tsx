@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { buildSeoMetadata } from '@/lib/seo'
 import { getPost, getRelatedPosts, BLOG_POSTS } from '@/data/blog-posts'
@@ -90,6 +91,17 @@ export default function MelhoresAppsPersonalTrainer2026Page() {
         <p>
           Mais do que perguntar qual plataforma tem mais recursos, o ideal é entender qual combina melhor com sua fase atual. Um personal com 10 alunos tem dores diferentes de quem já atende 80 ou quer vender online.
         </p>
+        <p>
+          Se você está comparando ferramentas para operação profissional, acesse a página dedicada para{' '}
+          <Link href="/app-personal-trainer" className="text-brand-primary hover:text-brand-primary-hover underline underline-offset-2">
+            personal trainers
+          </Link>
+          . Para abordagem interdisciplinar, veja também a página de{' '}
+          <Link href="/nutricionistas" className="text-brand-primary hover:text-brand-primary-hover underline underline-offset-2">
+            integração com nutricionistas
+          </Link>
+          .
+        </p>
       </section>
 
       <section className="space-y-6">
@@ -146,6 +158,24 @@ export default function MelhoresAppsPersonalTrainer2026Page() {
         <p>
           Em geral, o melhor software para personal trainer é o que reduz contexto espalhado. Se você precisa de uma ferramenta para treino, outra para cobrança e outra para engajamento, o custo escondido aparece em tempo, erros e experiência pior para o aluno.
         </p>
+      </section>
+
+      <section className="rounded-2xl border border-white/8 bg-white/3 p-6 space-y-4">
+        <h2 className="text-xl font-bold text-white">Direcione seu próximo passo</h2>
+        <div className="grid gap-3 sm:grid-cols-3">
+          <TrackedCtaLink href="/app-personal-trainer" cta="Avaliar solução para personal" placement="blog_comparativo_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-brand-primary/30">
+            <h3 className="text-sm font-bold text-white">Sou personal trainer</h3>
+            <p className="mt-1 text-xs text-zinc-400">Avalie stack de operação e escala.</p>
+          </TrackedCtaLink>
+          <TrackedCtaLink href="/afiliados" cta="Quero monetizar indicação" placement="blog_comparativo_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-brand-primary/30">
+            <h3 className="text-sm font-bold text-white">Quero monetizar indicação</h3>
+            <p className="mt-1 text-xs text-zinc-400">Ative comissão recorrente por conversão.</p>
+          </TrackedCtaLink>
+          <TrackedCtaLink href="/" cta="Sou aluno" placement="blog_comparativo_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-brand-primary/30">
+            <h3 className="text-sm font-bold text-white">Sou aluno</h3>
+            <p className="mt-1 text-xs text-zinc-400">Conheça a experiência aluno-first da home.</p>
+          </TrackedCtaLink>
+        </div>
       </section>
 
       <section className="rounded-2xl border border-brand-primary/20 bg-brand-primary/5 p-6">

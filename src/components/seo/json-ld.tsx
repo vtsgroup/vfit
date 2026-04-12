@@ -147,7 +147,7 @@ export function FAQSchema() {
         name: 'O que é o VFIT?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'VFIT é o app mais completo para personal trainers no Brasil. Oferece gestão de alunos, treinos com IA, avaliações físicas, cobranças automáticas via PIX/boleto/cartão, gamificação com XP e conquistas, contratos digitais e NF eletrônica.',
+          text: 'VFIT é um app de treinos com IA para alunos, com evolução por dados, gamificação e suporte de profissionais quando necessário.',
         },
       },
       {
@@ -155,7 +155,7 @@ export function FAQSchema() {
         name: 'O VFIT é gratuito?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Sim. O plano Grátis permite até 5 alunos. Os planos pagos são Pro (R$29,90/mês), Pro+ (R$69,90/mês) e Max (R$129,90/mês).',
+          text: 'Sim. O aluno pode começar gratuitamente e sem cartão de crédito. Planos profissionais ficam nas páginas específicas para personal trainer e nutricionista.',
         },
       },
       {
@@ -168,10 +168,10 @@ export function FAQSchema() {
       },
       {
         '@type': 'Question',
-        name: 'Quais formas de pagamento são aceitas?',
+        name: 'Preciso de personal trainer para usar?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Você pode cobrar seus alunos via PIX, boleto bancário ou cartão de crédito. Os pagamentos são processados automaticamente e você acompanha tudo pelo dashboard.',
+          text: 'Não. Você pode usar o VFIT como aluno de forma autônoma. Também pode integrar acompanhamento com personal trainer e nutricionista dentro do ecossistema da plataforma.',
         },
       },
       {
@@ -184,10 +184,10 @@ export function FAQSchema() {
       },
       {
         '@type': 'Question',
-        name: 'Precisa de CREF para usar?',
+        name: 'Personal e nutricionista conseguem trabalhar juntos?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Sim, personal trainers precisam informar seu número de CREF no cadastro. Isso garante que apenas profissionais habilitados utilizem a plataforma.',
+          text: 'Sim. A proposta do VFIT é integrar treino e nutrição em um acompanhamento conjunto para acelerar resultados do aluno.',
         },
       },
     ],

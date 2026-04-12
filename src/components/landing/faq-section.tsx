@@ -38,12 +38,12 @@ const FAQ_ITEMS: FaqItem[] = [
   {
     icon: 'sparkles',
     q: 'O que é o VFIT?',
-    a: 'VFIT é o app de treinos com IA mais completo do Brasil. Cria planos personalizados com inteligência artificial, acompanha evolução com métricas reais, oferece vídeos de exercícios e conecta alunos a personal trainers.',
+    a: 'VFIT é um app de treinos com IA para alunos. Você recebe plano personalizado, acompanha evolução com métricas reais e pode integrar acompanhamento com personal trainer e nutricionista.',
   },
   {
     icon: 'creditCard',
     q: 'É gratuito? Preciso de cartão de crédito?',
-    a: 'Sim. O plano Grátis é gratuito para sempre — até 5 alunos, sem cartão de crédito. Para mais recursos, temos os planos Pro (R$29,90/mês), Pro+ (R$69,90/mês) e Max (R$129,90/mês), com desconto de 20% no plano anual.',
+    a: 'Para alunos, o início é gratuito e sem cartão de crédito. Planos profissionais de operação (personal e nutrição) ficam nas páginas dedicadas para cada perfil.',
   },
   {
     icon: 'brain',
@@ -52,8 +52,8 @@ const FAQ_ITEMS: FaqItem[] = [
   },
   {
     icon: 'creditCard',
-    q: 'Quais formas de pagamento são aceitas para cobrar alunos?',
-    a: 'Você pode cobrar seus alunos via PIX (instantâneo), boleto bancário ou cartão de crédito. Os pagamentos são processados automaticamente pelo Asaas e você acompanha tudo pelo dashboard em tempo real.',
+    q: 'Preciso pagar para usar como aluno?',
+    a: 'Você pode começar como aluno sem cartão de crédito. Quando houver contratação de acompanhamento profissional, as condições aparecem de forma clara no fluxo correspondente.',
   },
   {
     icon: 'smartphone',
@@ -63,7 +63,7 @@ const FAQ_ITEMS: FaqItem[] = [
   {
     icon: 'shield',
     q: 'Preciso ter CREF para usar?',
-    a: 'Sim, personal trainers precisam informar seu número de CREF no cadastro. Isso garante que apenas profissionais habilitados utilizem a plataforma para prescrever treinos.',
+    a: 'Alunos não precisam de CREF. Essa validação é exigida apenas para perfis profissionais que prescrevem treino.',
   },
   {
     icon: 'trophy',
@@ -73,7 +73,7 @@ const FAQ_ITEMS: FaqItem[] = [
   {
     icon: 'heartHandshake',
     q: 'Posso cancelar a qualquer momento?',
-    a: 'Absolutamente. Sem contratos, sem multa, sem burocracia. Cancele seu plano a qualquer momento direto pelo dashboard. Seus dados ficam disponíveis por 90 dias após cancelamento.',
+    a: 'Sim. Você pode encerrar seu uso a qualquer momento. Em contratos profissionais, as regras são exibidas no plano contratado.',
   },
   {
     icon: 'dumbbell',
@@ -92,8 +92,8 @@ const FAQ_ITEMS: FaqItem[] = [
   },
   {
     icon: 'users',
-    q: 'Quantos alunos posso ter na plataforma?',
-    a: 'No plano Grátis você gerencia até 5 alunos. Nos planos pagos — Pro, Pro+ e Max — o número de alunos é ilimitado. Você pode fazer upgrade a qualquer momento sem perder dados.',
+    q: 'Personal trainer e nutricionista conseguem trabalhar juntos?',
+    a: 'Sim. O VFIT foi desenhado para acompanhamento conjunto, com visão compartilhada da evolução do aluno e comunicação entre profissionais para alinhar treino e dieta.',
   },
 ]
 

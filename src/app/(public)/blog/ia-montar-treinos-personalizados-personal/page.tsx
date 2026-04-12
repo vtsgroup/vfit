@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { buildSeoMetadata } from '@/lib/seo'
 import { getPost, getRelatedPosts, BLOG_POSTS } from '@/data/blog-posts'
@@ -80,6 +81,17 @@ export default function IAMontarTreinosPersonalizadosPage() {
         <p>
           Em vez de começar do zero para cada aluno, você pode usar a IA para gerar uma base coerente e concentrar sua energia no que realmente diferencia um bom personal trainer: leitura do caso, adaptação fina, acompanhamento e comunicação.
         </p>
+        <p>
+          Para estruturar essa operação no fluxo certo, veja a página para{' '}
+          <Link href="/app-personal-trainer" className="text-brand-primary hover:text-brand-primary-hover underline underline-offset-2">
+            personal trainers
+          </Link>
+          . Se você atua junto com nutricionista, também vale revisar a página de{' '}
+          <Link href="/nutricionistas" className="text-brand-primary hover:text-brand-primary-hover underline underline-offset-2">
+            colaboração em nutrição
+          </Link>
+          .
+        </p>
       </section>
 
       <section className="space-y-6">
@@ -143,6 +155,24 @@ export default function IAMontarTreinosPersonalizadosPage() {
         <p>
           Se o seu objetivo é usar tecnologia para crescer com qualidade, a pergunta certa não é apenas “qual IA gera texto melhor?”, mas sim “qual sistema me ajuda a operar melhor?”.
         </p>
+      </section>
+
+      <section className="rounded-2xl border border-white/8 bg-white/3 p-6 space-y-4">
+        <h2 className="text-xl font-bold text-white">Rota recomendada por objetivo</h2>
+        <div className="grid gap-3 sm:grid-cols-3">
+          <TrackedCtaLink href="/app-personal-trainer" cta="Operação para personal" placement="blog_ia_personal_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-brand-primary/30">
+            <h3 className="text-sm font-bold text-white">Operação para personal</h3>
+            <p className="mt-1 text-xs text-zinc-400">Gestão, IA, cobrança e colaboração clínica.</p>
+          </TrackedCtaLink>
+          <TrackedCtaLink href="/nutricionistas" cta="Integração com nutrição" placement="blog_ia_personal_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-brand-primary/30">
+            <h3 className="text-sm font-bold text-white">Integração com nutrição</h3>
+            <p className="mt-1 text-xs text-zinc-400">Alinhe treino e dieta no mesmo contexto de aluno.</p>
+          </TrackedCtaLink>
+          <TrackedCtaLink href="/afiliados" cta="Monetizar com afiliados" placement="blog_ia_personal_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-brand-primary/30">
+            <h3 className="text-sm font-bold text-white">Monetizar com afiliados</h3>
+            <p className="mt-1 text-xs text-zinc-400">Ganhe comissão recorrente por indicações.</p>
+          </TrackedCtaLink>
+        </div>
       </section>
 
       <FaqInline items={faq} />
