@@ -5,6 +5,34 @@
 
 ---
 
+## [v2.4.3] — 28/04/2026 — Grupos Musculares totalmente configuráveis
+
+### ✨ Novidades
+- **Grupos musculares dinâmicos**: etiquetas de filtro na tela "Criar Treino" agora são carregadas do banco (D1) em vez de hardcoded → qualquer grupo criado/renomeado no admin aparece automaticamente.
+- **exercise_count no admin**: endpoint `GET /admin/muscle-groups` passou a retornar `exercise_count` via LEFT JOIN, exibido na listagem administrativa.
+- **Nome EN editável**: endpoint `PATCH /admin/muscle-groups/:id` aceitava apenas `name_pt`; agora inclui `name` (EN). UI do modal de edição ganhou campo "Nome EN" ao lado de "Nome PT".
+- **UI renomeada**: botão "Novo Sub-Músculo" → "Novo Grupo"; modal → "Novo Grupo Muscular"; toast → "Grupo muscular criado!".
+
+### 🐛 Correções
+- **Cache KV stale**: chave `muscle-groups:all` (TTL 7d) estava servindo dados antigos (18 grupos flat) sem `parent_id`/sub-grupos. Limpada manualmente via `wrangler kv key delete`. DB já possuía 40 grupos (18 raiz + 22 sub).
+
+### 🔧 Arquivos Modificados
+- [workers/api/admin.ts](../workers/api/admin.ts): LEFT JOIN `exercise_count`; `'name'` adicionado ao allowed list do PATCH
+- [src/hooks/use-muscle-groups.ts](../src/hooks/use-muscle-groups.ts): `Pick` type inclui `'name'`
+- [src/app/dashboard/workouts/create/page.tsx](../src/app/dashboard/workouts/create/page.tsx): `groupLabels` substituído por `useMemo` sobre `useMuscleGroups()`
+- [src/app/dashboard/admin/muscle-groups/page.tsx](../src/app/dashboard/admin/muscle-groups/page.tsx): campo `nameEn` no EditModal; renomeações de UI
+
+### 🚀 Deploy
+- Pipeline oficial executado: **v2.4.3**
+- Pages: https://5c968914.vfit.pages.dev
+- Worker Version ID: `21850989-d172-4ef5-a5a5-414ccda62b68`
+- Commit: `868fea3f` · Tag: `v2.4.3`
+
+### 📌 Nota operacional
+- `gifs/` adicionado ao `.gitignore` (3 zips de GIFs de exercício ~centenas MB cada, nunca devem entrar no git — usar upload via admin `/dashboard/admin/muscle-groups`).
+
+---
+
 ## [v2.4.2] — 28/04/2026 — Hotfix: resiliência KV Cloudflare
 
 ### 🐛 Correções Críticas
