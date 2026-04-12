@@ -23,6 +23,7 @@ import { ArticleNavigation } from '@/components/blog/article-navigation'
 import { ArticleRelated } from '@/components/blog/article-related'
 import { FaqInline } from '@/components/shared/faq-inline'
 import { FAQ_BLOG_IA } from '@/data/faqs'
+import { TrackedCtaLink } from '@/components/analytics/tracked-cta-link'
 
 const post = getPost('ia-personal-trainer')!
 
@@ -97,6 +98,17 @@ export default function IAPersonalTrainerPage() {
         </p>
         <p>
           Neste guia, mostramos como aplicar IA no seu dia a dia de forma prática, desde a avaliação inicial até o acompanhamento semanal, com ferramentas que já existem no mercado brasileiro.
+        </p>
+        <p>
+          Se você quer ir direto para a operação profissional, visite a página de{' '}
+          <Link href="/app-personal-trainer" className="text-brand-primary underline decoration-brand-primary/30 hover:decoration-brand-primary transition-colors">
+            personal trainers
+          </Link>
+          . Para trabalho conjunto com nutrição, acesse também{' '}
+          <Link href="/nutricionistas" className="text-brand-primary underline decoration-brand-primary/30 hover:decoration-brand-primary transition-colors">
+            nutricionistas
+          </Link>
+          .
         </p>
       </section>
 
@@ -248,6 +260,24 @@ export default function IAPersonalTrainerPage() {
       {/* ── FAQ ── */}
       <FaqInline items={FAQ_BLOG_IA} />
 
+      <section className="rounded-2xl border border-white/8 bg-white/3 p-6 space-y-4">
+        <h2 className="text-xl font-bold text-white">Rota recomendada por perfil</h2>
+        <div className="grid gap-3 sm:grid-cols-3">
+          <TrackedCtaLink href="/app-personal-trainer" cta="Sou personal trainer" placement="blog_ia_legacy_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-brand-primary/30">
+            <h3 className="text-sm font-bold text-white">Sou personal trainer</h3>
+            <p className="mt-1 text-xs text-zinc-400">Gestão, IA e operação em escala.</p>
+          </TrackedCtaLink>
+          <TrackedCtaLink href="/nutricionistas" cta="Sou nutricionista" placement="blog_ia_legacy_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-brand-primary/30">
+            <h3 className="text-sm font-bold text-white">Sou nutricionista</h3>
+            <p className="mt-1 text-xs text-zinc-400">Integração com treino e acompanhamento conjunto.</p>
+          </TrackedCtaLink>
+          <TrackedCtaLink href="/afiliados" cta="Quero monetizar indicação" placement="blog_ia_legacy_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-brand-primary/30">
+            <h3 className="text-sm font-bold text-white">Quero monetizar indicação</h3>
+            <p className="mt-1 text-xs text-zinc-400">Ganhe comissão recorrente com afiliados.</p>
+          </TrackedCtaLink>
+        </div>
+      </section>
+
       {/* ── Fontes ── */}
       <section className="rounded-2xl border border-white/8 bg-white/3 p-6">
         <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-zinc-500" style={{ fontFamily: 'ui-monospace, monospace' }}>Fontes e referências</h3>
@@ -276,13 +306,17 @@ export default function IAPersonalTrainerPage() {
         <p className="text-sm text-zinc-400 max-w-md mx-auto leading-relaxed">
           Crie sua conta gratuita no VFIT e gere seu primeiro treino com inteligência artificial em menos de 2 minutos. Sem cartão, sem compromisso.
         </p>
-        <Link
+        <TrackedCtaLink
           href="/register"
+          cta="Criar conta grátis"
+          placement="blog_ia_legacy_cta"
+          pageSegment="blog"
+          event="lp_register_start"
           className="inline-flex items-center gap-2 rounded-xl bg-brand-primary px-6 py-3 text-sm font-bold text-bg-dark hover:bg-brand-primary-hover transition-colors shadow-lg shadow-brand-primary/20"
         >
           Criar conta grátis
           <DSIcon name="arrowRight" size={16} />
-        </Link>
+        </TrackedCtaLink>
       </section>
 
       {/* Navigation */}

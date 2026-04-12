@@ -80,3 +80,4 @@ Percentual: 100%
 - 12/04/2026: Home reposicionada para aluno-first (hero/FAQ/schema) sem preço profissional na landing principal; páginas `/app-personal-trainer` e `/nutricionistas` reforçadas com narrativa de painel colaborativo, chat entre profissionais e monetização por afiliados (módulo `14-REPOSICIONAMENTO-ICP-ALUNO-COLAB-PRO-NUTRI.md`).
 - 12/04/2026: Camada SEO/CRO por ICP aplicada no cluster de blog com roteamento por perfil e links internos estratégicos (`/`, `/app-personal-trainer`, `/nutricionistas`, `/afiliados`) no hub `/blog` e nos 4 artigos pilares.
 - 12/04/2026: Home e páginas ICP de profissionais receberam acesso direto por perfil com CTAs de entrar/cadastrar/termos para acelerar conversão e reduzir fricção operacional.
+- 12/04/2026: Cluster legado do blog (`ia-personal-trainer`, `retencao-alunos-personal`, `cobranca-automatica-personal`) alinhado ao roteamento ICP com links internos estratégicos e tracking de CTA por segmento.

@@ -23,6 +23,7 @@ import { ArticleNavigation } from '@/components/blog/article-navigation'
 import { ArticleRelated } from '@/components/blog/article-related'
 import { FaqInline } from '@/components/shared/faq-inline'
 import { FAQ_BLOG_RETENCAO } from '@/data/faqs'
+import { TrackedCtaLink } from '@/components/analytics/tracked-cta-link'
 
 const post = getPost('retencao-alunos-personal')!
 
@@ -127,6 +128,17 @@ export default function RetencaoAlunosPage() {
         </p>
         <p>
           Neste artigo, detalhamos as <strong className="text-white">5 alavancas mais eficazes</strong> para reduzir o churn (taxa de cancelamento) e aumentar o LTV (Lifetime Value) de cada aluno, com dados de mercado e aplicações práticas.
+        </p>
+        <p>
+          Para aplicar essas estratégias na prática com stack completo, veja a página para{' '}
+          <Link href="/app-personal-trainer" className="text-brand-primary underline decoration-brand-primary/30 hover:decoration-brand-primary transition-colors">
+            personal trainers
+          </Link>
+          {' '}e, quando fizer sentido clínico, a integração com{' '}
+          <Link href="/nutricionistas" className="text-brand-primary underline decoration-brand-primary/30 hover:decoration-brand-primary transition-colors">
+            nutricionistas
+          </Link>
+          .
         </p>
       </section>
 
@@ -242,6 +254,24 @@ export default function RetencaoAlunosPage() {
       {/* ── FAQ ── */}
       <FaqInline items={FAQ_BLOG_RETENCAO} />
 
+      <section className="rounded-2xl border border-white/8 bg-white/3 p-6 space-y-4">
+        <h2 className="text-xl font-bold text-white">Próximo passo por perfil</h2>
+        <div className="grid gap-3 sm:grid-cols-3">
+          <TrackedCtaLink href="/app-personal-trainer" cta="Escalar operação" placement="blog_retencao_legacy_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-emerald-500/30">
+            <h3 className="text-sm font-bold text-white">Escalar operação</h3>
+            <p className="mt-1 text-xs text-zinc-400">Gestão e retenção com dados em tempo real.</p>
+          </TrackedCtaLink>
+          <TrackedCtaLink href="/nutricionistas" cta="Apoio nutricional" placement="blog_retencao_legacy_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-emerald-500/30">
+            <h3 className="text-sm font-bold text-white">Apoio nutricional</h3>
+            <p className="mt-1 text-xs text-zinc-400">Treino + dieta para melhorar adesão do aluno.</p>
+          </TrackedCtaLink>
+          <TrackedCtaLink href="/afiliados" cta="Monetização adicional" placement="blog_retencao_legacy_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-emerald-500/30">
+            <h3 className="text-sm font-bold text-white">Monetização adicional</h3>
+            <p className="mt-1 text-xs text-zinc-400">Comissão recorrente por indicação ativa.</p>
+          </TrackedCtaLink>
+        </div>
+      </section>
+
       {/* ── Fontes ── */}
       <section className="rounded-2xl border border-white/8 bg-white/3 p-6">
         <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-zinc-500" style={{ fontFamily: 'ui-monospace, monospace' }}>Fontes e referências</h3>
@@ -270,13 +300,17 @@ export default function RetencaoAlunosPage() {
         <p className="text-sm text-zinc-400 max-w-md mx-auto leading-relaxed">
           O VFIT tem dashboard de retenção, alertas de queda de engajamento, gamificação integrada e cobrança automática. Tudo num só lugar.
         </p>
-        <Link
+        <TrackedCtaLink
           href="/register"
+          cta="Criar conta grátis"
+          placement="blog_retencao_legacy_cta"
+          pageSegment="blog"
+          event="lp_register_start"
           className="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-6 py-3 text-sm font-bold text-white hover:bg-emerald-600 transition-colors shadow-lg shadow-emerald-500/20"
         >
           Criar conta grátis
           <DSIcon name="arrowRight" size={16} />
-        </Link>
+        </TrackedCtaLink>
       </section>
 
       {/* Navigation */}

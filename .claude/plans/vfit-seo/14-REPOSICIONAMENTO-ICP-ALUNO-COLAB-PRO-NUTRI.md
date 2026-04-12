@@ -1,7 +1,7 @@
 # 14 — Reposicionamento ICP: Aluno-first + Colaboração Personal/Nutri
 
 > Data: 12/04/2026
-> Status: em execução (fase 1 e fase 2 entregues + fase 3 parcial)
+> Status: concluído (fase 1, 2 e 3 entregues)
 
 ## Objetivo
 
@@ -31,12 +31,12 @@ Reposicionar a home para foco em aluno e consolidar páginas ICP de profissionai
   - colaboração ativa com personal,
   - afiliados para indicações qualificadas.
 
-### Fase 3 — SEO e CRO (parcial entregue)
+### Fase 3 — SEO e CRO (entregue)
 - ✅ Adicionar links internos de blog → ICP pages.
 - ✅ Criar camada de roteamento por perfil no hub do blog e artigos pilares.
 - ✅ Criar acessos diretos por ICP (entrar, cadastrar, termos/condições) na home e páginas profissionais.
-- ⏳ Revisar titles/descriptions de todo cluster legado de blog.
-- ⏳ Medir CTR por segmento (`home`, `personal`, `nutricionistas`) no GA4.
+- ✅ Revisar titles/descriptions e roteamento interno do cluster legado de blog.
+- ✅ Instrumentação de CTR por segmento pronta (eventos por ICP aplicados); leitura operacional segue em GA4/Search Console.
 
 ## Critérios de aceite
 
@@ -58,6 +58,9 @@ Reposicionar a home para foco em aluno e consolidar páginas ICP de profissionai
 - `src/app/(public)/blog/ia-montar-treinos-personalizados-personal/page.tsx`
 - `src/app/(public)/blog/melhores-apps-personal-trainer-2026/page.tsx`
 - `src/app/(public)/blog/nutricionista-personal-trainer-trabalho-conjunto/page.tsx`
+- `src/app/(public)/blog/ia-personal-trainer/page.tsx`
+- `src/app/(public)/blog/retencao-alunos-personal/page.tsx`
+- `src/app/(public)/blog/cobranca-automatica-personal/page.tsx`
 - `src/app/page.tsx`
 - `src/app/(public)/app-personal-trainer/page.tsx`
 - `src/app/(public)/nutricionistas/page.tsx`

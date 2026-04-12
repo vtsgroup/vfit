@@ -23,6 +23,7 @@ import { ArticleNavigation } from '@/components/blog/article-navigation'
 import { ArticleRelated } from '@/components/blog/article-related'
 import { FaqInline } from '@/components/shared/faq-inline'
 import { FAQ_BLOG_COBRANCA } from '@/data/faqs'
+import { TrackedCtaLink } from '@/components/analytics/tracked-cta-link'
 
 const post = getPost('cobranca-automatica-personal')!
 
@@ -104,6 +105,17 @@ export default function CobrancaAutomaticaPage() {
         </p>
         <p>
           A cobrança automática resolve isso de forma definitiva: o sistema gera, envia e confirma pagamentos sem que você precise fazer nada. Neste guia, mostramos <strong className="text-white">como configurar em 5 passos</strong> e qual método funciona melhor para cada perfil de aluno.
+        </p>
+        <p>
+          Se quiser ver o fluxo completo de operação profissional, acesse a página para{' '}
+          <Link href="/app-personal-trainer" className="text-brand-primary underline decoration-brand-primary/30 hover:decoration-brand-primary transition-colors">
+            personal trainers
+          </Link>
+          . Para receita adicional além das cobranças, veja também{' '}
+          <Link href="/afiliados" className="text-brand-primary underline decoration-brand-primary/30 hover:decoration-brand-primary transition-colors">
+            programa de afiliados
+          </Link>
+          .
         </p>
       </section>
 
@@ -240,6 +252,24 @@ export default function CobrancaAutomaticaPage() {
       {/* ── FAQ ── */}
       <FaqInline items={FAQ_BLOG_COBRANCA} />
 
+      <section className="rounded-2xl border border-white/8 bg-white/3 p-6 space-y-4">
+        <h2 className="text-xl font-bold text-white">Direcione sua próxima ação</h2>
+        <div className="grid gap-3 sm:grid-cols-3">
+          <TrackedCtaLink href="/app-personal-trainer" cta="Operação profissional" placement="blog_cobranca_legacy_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-amber-500/30">
+            <h3 className="text-sm font-bold text-white">Operação profissional</h3>
+            <p className="mt-1 text-xs text-zinc-400">Gestão + cobrança + IA no mesmo fluxo.</p>
+          </TrackedCtaLink>
+          <TrackedCtaLink href="/afiliados" cta="Monetização por indicação" placement="blog_cobranca_legacy_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-amber-500/30">
+            <h3 className="text-sm font-bold text-white">Monetização por indicação</h3>
+            <p className="mt-1 text-xs text-zinc-400">Comissão recorrente para aumentar receita.</p>
+          </TrackedCtaLink>
+          <TrackedCtaLink href="/" cta="Experiência do aluno" placement="blog_cobranca_legacy_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-amber-500/30">
+            <h3 className="text-sm font-bold text-white">Experiência do aluno</h3>
+            <p className="mt-1 text-xs text-zinc-400">Veja a home com foco em resultado do aluno.</p>
+          </TrackedCtaLink>
+        </div>
+      </section>
+
       {/* ── Fontes ── */}
       <section className="rounded-2xl border border-white/8 bg-white/3 p-6">
         <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-zinc-500" style={{ fontFamily: 'ui-monospace, monospace' }}>Fontes e referências</h3>
@@ -268,13 +298,17 @@ export default function CobrancaAutomaticaPage() {
         <p className="text-sm text-zinc-400 max-w-md mx-auto leading-relaxed">
           Configure cobrança automática com PIX, cartão e boleto em menos de 5 minutos. Integração com Asaas inclusa. Sem taxas de setup.
         </p>
-        <Link
+        <TrackedCtaLink
           href="/register"
+          cta="Começar agora"
+          placement="blog_cobranca_legacy_cta"
+          pageSegment="blog"
+          event="lp_register_start"
           className="inline-flex items-center gap-2 rounded-xl bg-amber-500 px-6 py-3 text-sm font-bold text-white hover:bg-amber-600 transition-colors shadow-lg shadow-amber-500/20"
         >
           Começar agora
           <DSIcon name="arrowRight" size={16} />
-        </Link>
+        </TrackedCtaLink>
       </section>
 
       {/* Navigation */}
