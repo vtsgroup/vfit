@@ -70,12 +70,13 @@ export function buildSeoMetadata({
 }: SeoConfig): Metadata {
   const canonicalUrl = `${SITE_URL}${path}`
   const ogImg = ogImage || DEFAULT_OG_IMAGE
+  const absoluteOgImg = ogImg.startsWith('http') ? ogImg : `${SITE_URL}${ogImg}`
 
   return {
     title,
     description,
     alternates: {
-      canonical: path,
+      canonical: canonicalUrl,
     },
     robots: INDEX_FOLLOW_ROBOTS,
     openGraph: {
@@ -87,7 +88,7 @@ export function buildSeoMetadata({
       description,
       images: [
         {
-          url: ogImg,
+          url: absoluteOgImg,
           width: 1200,
           height: 630,
           alt: `${title} | ${SITE_NAME}`,
@@ -108,7 +109,7 @@ export function buildSeoMetadata({
       card: 'summary_large_image',
       title,
       description,
-      images: [ogImg],
+      images: [absoluteOgImg],
     },
     category: section,
   }

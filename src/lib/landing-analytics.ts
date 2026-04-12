@@ -15,6 +15,7 @@
 
 type LandingEventName =
   | 'lp_view'
+  | 'lp_experiment_view'
   | 'lp_cta_primary_click'
   | 'lp_cta_secondary_click'
   | 'lp_pricing_view'

@@ -19,7 +19,9 @@ export {
   PLANS,
   FEES,
   AFFILIATE_TIERS,
+  AFFILIATE_PROGRAM,
   BADGES,
+  PUBLIC_SOCIAL_PROOF,
   RATE_LIMITS,
   CACHE_TTL,
 } from './constants'

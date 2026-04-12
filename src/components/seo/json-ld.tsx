@@ -155,7 +155,7 @@ export function FAQSchema() {
         name: 'O VFIT é gratuito?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Sim! O plano Essencial é 100% gratuito e permite até 5 alunos com gamificação e Pix. Planos pagos: Trainer (R$29,90/mês), Profissional (R$59,90/mês) e MAX (R$129,90/mês).',
+          text: 'Sim. O plano Grátis permite até 5 alunos. Os planos pagos são Pro (R$29,90/mês), Pro+ (R$69,90/mês) e Max (R$129,90/mês).',
         },
       },
       {

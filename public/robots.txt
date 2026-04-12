@@ -1,5 +1,5 @@
 # VFIT — robots.txt
-# Atualizado: Março 2026
+# Atualizado: Abril 2026
 
 # === Buscadores tradicionais ===
 User-agent: Googlebot
@@ -66,3 +66,4 @@ Disallow: /api/
 # === Sitemaps ===
 Sitemap: https://vfit.app.br/sitemap.xml
 Sitemap: https://vfit.app.br/sitemap-blog.xml
+# LLMs: https://vfit.app.br/llms.txt

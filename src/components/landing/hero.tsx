@@ -9,6 +9,8 @@ import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { IntersectionReveal } from '@/components/ui/intersection-reveal'
 import { trackLandingEvent } from '@/lib/landing-analytics'
+import { getExperimentVariant, trackExperimentViewOnce, type ExperimentVariant } from '@/lib/landing-experiments'
+import { PUBLIC_SOCIAL_PROOF } from '@config/constants'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
 
@@ -33,17 +35,30 @@ const HERO_SLIDES = [
 ]
 
 const HERO_STATS = [
-  { value: '2.500+', label: 'PERSONALS', icon: 'users' as const },
-  { value: '15.000+', label: 'ALUNOS', icon: 'userCheck' as const },
-  { value: '98%', label: 'SATISFAÇÃO', icon: 'star' as const },
+  { value: PUBLIC_SOCIAL_PROOF.active_personals_label, label: 'PERSONALS', icon: 'users' as const },
+  { value: PUBLIC_SOCIAL_PROOF.active_students_label, label: 'ALUNOS', icon: 'userCheck' as const },
+  { value: PUBLIC_SOCIAL_PROOF.satisfaction_label, label: 'SATISFAÇÃO', icon: 'star' as const },
   { value: '24/7', label: 'DISPONÍVEL', icon: 'clock' as const },
 ]
 
 export function Hero() {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [mounted, setMounted] = useState(false)
+  const [headlineVariant, setHeadlineVariant] = useState<ExperimentVariant>('A')
+  const [ctaVariant, setCtaVariant] = useState<ExperimentVariant>('A')
 
-  useEffect(() => { setMounted(true) }, [])
+  useEffect(() => {
+    setMounted(true)
+
+    const headline = getExperimentVariant('home_headline_v1')
+    const cta = getExperimentVariant('home_cta_v1')
+
+    setHeadlineVariant(headline)
+    setCtaVariant(cta)
+
+    trackExperimentViewOnce('home_headline_v1', headline)
+    trackExperimentViewOnce('home_cta_v1', cta)
+  }, [])
 
   const nextSlide = useCallback(() => {
     setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length)
@@ -146,7 +161,9 @@ export function Hero() {
                 style={monoLabel}
               >
                 <span className="h-1.5 w-1.5 rounded-full bg-brand-primary animate-pulse" />
-                Plataforma #1 para Personal Trainers
+                {headlineVariant === 'A'
+                  ? 'Plataforma #1 para Personal Trainers'
+                  : 'IA + Gestão para Escalar seu Atendimento'}
               </span>
             </div>
           </IntersectionReveal>
@@ -195,9 +212,9 @@ export function Hero() {
           {/* Subtitle */}
           <IntersectionReveal animation="fade-in" delay={150}>
             <p className="mx-auto max-w-xl text-base leading-relaxed text-white/50 sm:text-lg">
-              Crie treinos personalizados com inteligência artificial, gerencie
-              alunos, automatize cobranças e avaliações físicas — tudo em uma
-              única plataforma.
+              {headlineVariant === 'A'
+                ? 'Crie treinos personalizados com inteligência artificial, gerencie alunos, automatize cobranças e avaliações físicas — tudo em uma única plataforma.'
+                : 'Ganhe velocidade no planejamento, padronize seu método e mantenha seus alunos engajados com uma operação fitness orientada por dados.'}
             </p>
           </IntersectionReveal>
 
@@ -207,13 +224,22 @@ export function Hero() {
               <Link
                 href="/welcome"
                 onClick={() => {
-                  trackLandingEvent('lp_cta_primary_click', { placement: 'hero', cta: 'comecar_agora' })
-                  trackLandingEvent('lp_register_start', { placement: 'hero' })
+                  trackLandingEvent('lp_cta_primary_click', {
+                    placement: 'hero',
+                    cta: ctaVariant === 'A' ? 'comecar_agora' : 'testar_agora',
+                    experiment_id: 'home_cta_v1',
+                    experiment_variant: ctaVariant,
+                  })
+                  trackLandingEvent('lp_register_start', {
+                    placement: 'hero',
+                    experiment_id: 'home_cta_v1',
+                    experiment_variant: ctaVariant,
+                  })
                 }}
               >
                 <Button variant="primary" size="lg" className="px-10 text-sm uppercase" style={monoLabel}>
                   <DSIcon name="sparkles" size={16} />
-                  COMEÇAR GRÁTIS
+                  {ctaVariant === 'A' ? 'COMEÇAR GRÁTIS' : 'TESTAR AGORA'}
                 </Button>
               </Link>
 

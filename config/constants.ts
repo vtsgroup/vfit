@@ -21,6 +21,17 @@ export const APP_CONFIG = {
 } as const
 
 // ============================================
+// Public Social Proof (B1)
+// ============================================
+export const PUBLIC_SOCIAL_PROOF = {
+  active_personals_label: '2.500+',
+  active_students_label: '15.000+',
+  satisfaction_label: '98%',
+  average_rating_label: '4.9',
+  total_reviews_label: '150+',
+} as const
+
+// ============================================
 // Subscription Plans
 // ============================================
 export const PLANS = {
@@ -186,6 +197,17 @@ export const AFFILIATE_TIERS = {
     min_referrals: 15,
     color: '#FFD700',
   },
+} as const
+
+// ============================================
+// Affiliate Program Model (B2)
+// ============================================
+export const AFFILIATE_PROGRAM = {
+  recurring_commission: true,
+  payout_method: 'Pix',
+  payout_frequency: 'Mensal',
+  commission_note:
+    'Comissão recorrente ativa enquanto a assinatura indicada permanecer ativa e adimplente.',
 } as const
 
 // ============================================

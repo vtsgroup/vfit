@@ -20,9 +20,9 @@ import { BlogListing } from '@/components/blog/blog-listing'
 import { Button } from '@/components/ui/button'
 
 export const metadata: Metadata = buildSeoMetadata({
-  title: 'Blog VFIT: gestão, IA e crescimento para personal trainer',
+  title: 'Blog VFIT: IA, gestão e crescimento para fitness e wellness',
   description:
-    'Artigos práticos sobre gestão de alunos, inteligência artificial aplicada a treinos, retenção de clientes e cobrança automatizada para personal trainers.',
+    'Artigos práticos sobre IA, gestão de alunos, retenção, cobrança automática e crescimento para personal trainers, nutricionistas e operações fitness.',
   path: '/blog',
   ogImage: '/og/og-blog.png',
 })
@@ -38,8 +38,8 @@ export default function BlogPage() {
       />
 
       <PageHero
-        title="Insights para Personal Trainers"
-        subtitle="Dicas, tutoriais e novidades para ajudar você a crescer como personal trainer."
+        title="Insights para Fitness e Wellness"
+        subtitle="Conteúdo prático para personal trainers, nutricionistas e operações fitness crescerem com IA, retenção e melhor gestão."
         badge="Blog"
         breadcrumbs={[{ label: 'Blog', href: '/blog' }]}
       />

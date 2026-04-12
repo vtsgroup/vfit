@@ -43,7 +43,7 @@ const FAQ_ITEMS: FaqItem[] = [
   {
     icon: 'creditCard',
     q: 'É gratuito? Preciso de cartão de crédito?',
-    a: 'Sim! O plano Essencial é gratuito para sempre — até 5 alunos, sem cartão de crédito. Para mais recursos, temos os planos Trainer (R$29,90/mês), Profissional (R$59,90/mês) e Max (R$129,90/mês), com desconto de 20% no plano anual.',
+    a: 'Sim. O plano Grátis é gratuito para sempre — até 5 alunos, sem cartão de crédito. Para mais recursos, temos os planos Pro (R$29,90/mês), Pro+ (R$69,90/mês) e Max (R$129,90/mês), com desconto de 20% no plano anual.',
   },
   {
     icon: 'brain',
@@ -93,7 +93,7 @@ const FAQ_ITEMS: FaqItem[] = [
   {
     icon: 'users',
     q: 'Quantos alunos posso ter na plataforma?',
-    a: 'No plano Essencial (gratuito) você gerencia até 5 alunos. Nos planos pagos — Trainer, Profissional e Max — o número de alunos é ilimitado. Você pode fazer upgrade a qualquer momento sem perder dados.',
+    a: 'No plano Grátis você gerencia até 5 alunos. Nos planos pagos — Pro, Pro+ e Max — o número de alunos é ilimitado. Você pode fazer upgrade a qualquer momento sem perder dados.',
   },
 ]
 

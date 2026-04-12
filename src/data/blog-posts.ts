@@ -63,6 +63,66 @@ export const CATEGORY_ACCENT: Record<BlogCategory, string> = {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: 'app-treino-ia-gratis-iniciantes',
+    title: 'App de treino com IA grátis: guia completo para iniciantes em 2026',
+    excerpt:
+      'Entenda como escolher um app de treino com IA, quais recursos realmente importam para iniciantes e como começar grátis com segurança e consistência.',
+    image: '/blog/hero-treino-iniciante.webp',
+    ogImage: '/og/og-blog.png',
+    category: 'Fitness',
+    author: BLOG_AUTHOR,
+    date: '12 Abr 2026',
+    dateISO: '2026-04-12T09:00:00-03:00',
+    modifiedISO: '2026-04-12T09:00:00-03:00',
+    readingTime: '9 min',
+    tags: ['App de treino com IA', 'Treino para iniciantes', 'Treino personalizado', 'Aplicativo fitness'],
+  },
+  {
+    slug: 'ia-montar-treinos-personalizados-personal',
+    title: 'Como usar IA para montar treinos personalizados em menos de 2 minutos',
+    excerpt:
+      'Tutorial prático para personal trainers usarem IA na geração de treinos, revisão técnica e publicação com velocidade sem perder qualidade.',
+    image: '/blog/hero-ia-personal-trainer.webp',
+    ogImage: '/og/og-blog-ia.png',
+    category: 'Tecnologia',
+    author: BLOG_AUTHOR,
+    date: '12 Abr 2026',
+    dateISO: '2026-04-12T10:00:00-03:00',
+    modifiedISO: '2026-04-12T10:00:00-03:00',
+    readingTime: '8 min',
+    tags: ['IA para montar treinos', 'Software para personal trainer', 'Treino personalizado', 'Automação fitness'],
+  },
+  {
+    slug: 'melhores-apps-personal-trainer-2026',
+    title: 'Melhores apps para personal trainer em 2026: comparativo completo',
+    excerpt:
+      'Compare apps para personal trainer por gestão, IA, cobrança, experiência do aluno e potencial de escala antes de escolher sua plataforma.',
+    image: '/blog/hero-blog-index.webp',
+    ogImage: '/og/og-blog.png',
+    category: 'Negócios',
+    author: BLOG_AUTHOR,
+    date: '12 Abr 2026',
+    dateISO: '2026-04-12T11:00:00-03:00',
+    modifiedISO: '2026-04-12T11:00:00-03:00',
+    readingTime: '10 min',
+    tags: ['Melhor app para personal trainer', 'Comparativo software fitness', 'Gestão personal trainer', 'Plataforma fitness'],
+  },
+  {
+    slug: 'nutricionista-personal-trainer-trabalho-conjunto',
+    title: 'Nutricionista e personal trainer: como trabalhar juntos e multiplicar resultados',
+    excerpt:
+      'Veja como alinhar treino e nutrição, melhorar adesão do paciente e criar uma operação colaborativa entre nutricionista e personal trainer.',
+    image: '/blog/hero-nutricao-personal.webp',
+    ogImage: '/og/og-blog.png',
+    category: 'Engajamento',
+    author: BLOG_AUTHOR,
+    date: '12 Abr 2026',
+    dateISO: '2026-04-12T12:00:00-03:00',
+    modifiedISO: '2026-04-12T12:00:00-03:00',
+    readingTime: '8 min',
+    tags: ['Nutricionista e personal trainer', 'Integração treino e nutrição', 'Parceria fitness', 'Pacientes'],
+  },
+  {
     slug: 'ia-personal-trainer',
     title: 'IA para personal trainer: como aplicar no dia a dia com qualidade',
     excerpt:
