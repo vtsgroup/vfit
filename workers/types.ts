@@ -37,10 +37,11 @@ export type Bindings = {
   KV_CACHE: KVNamespace
   KV_SESSIONS: KVNamespace
   KV_RATE_LIMIT: KVNamespace
+  KV_IMAGES: KVNamespace   // Image storage fallback quando R2 não está habilitado
 
-  // R2 Buckets
-  R2_VIDEOS: R2Bucket
-  R2_IMAGES: R2Bucket
+  // R2 Buckets (opcional — requer R2 habilitado no CF Dashboard)
+  R2_VIDEOS?: R2Bucket
+  R2_IMAGES?: R2Bucket
 
   // Queues (opcionais — desabilitadas temporariamente)
   EMAIL_QUEUE?: Queue

@@ -2353,10 +2353,14 @@ adminRoutes.patch('/muscle-groups/:id', requireSuperAdmin, async (c) => {
   return success({ muscle_group: updated })
 })
 
-// POST /admin/muscle-groups/:id/image — Upload de imagem do músculo para R2
+// POST /admin/muscle-groups/:id/image — Upload de imagem do músculo para R2 (ou KV como fallback)
 adminRoutes.post('/muscle-groups/:id/image', requireSuperAdmin, async (c) => {
   const { id } = c.req.param()
   const type = (c.req.query('type') || 'image') as 'image' | 'animation'
+
+  if (!c.env.R2_IMAGES && !c.env.KV_IMAGES) {
+    return c.json({ error: { message: 'Armazenamento não configurado (R2 e KV indisponíveis)', code: 'STORAGE_UNAVAILABLE' } }, 503)
+  }
 
   const existing = await c.env.DB
     .prepare('SELECT id FROM muscle_groups WHERE id = ?')
@@ -2382,10 +2386,19 @@ adminRoutes.post('/muscle-groups/:id/image', requireSuperAdmin, async (c) => {
   const body = await c.req.arrayBuffer()
   if (body.byteLength > 20 * 1024 * 1024) throw new BadRequestError('Arquivo máximo: 20 MB')
 
-  await c.env.R2_IMAGES.put(key, body, { httpMetadata: { contentType } })
+  let url: string
 
-  const base = (c.env.R2_IMAGES_URL || 'https://images.vfit.app.br').replace(/\/+$/, '')
-  const url = `${base}/${key}`
+  if (c.env.R2_IMAGES) {
+    // R2 disponível — comportamento original
+    await c.env.R2_IMAGES.put(key, body, { httpMetadata: { contentType } })
+    const base = (c.env.R2_IMAGES_URL || 'https://images.vfit.app.br').replace(/\/+$/, '')
+    url = `${base}/${key}`
+  } else {
+    // Fallback: KV_IMAGES — serve via GET /images/:key
+    await c.env.KV_IMAGES.put(key, body, { metadata: { contentType } })
+    const workerBase = 'https://api.vfit.app.br'
+    url = `${workerBase}/images/${key}`
+  }
 
   await c.env.DB
     .prepare(`UPDATE muscle_groups SET ${field} = ? WHERE id = ?`)

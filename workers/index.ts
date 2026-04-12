@@ -444,6 +444,27 @@ app.get('/api/v1/assessments/share/:token', async (c) => {
 })
 
 // ============================================
+// IMAGE SERVING — KV fallback quando R2 não está habilitado
+// GET /images/:key* — serve imagens armazenadas no KV_IMAGES
+// ============================================
+app.get('/images/*', async (c) => {
+  const key = c.req.path.replace(/^\/images\//, '')
+  if (!key) return c.json({ error: 'Key obrigatória' }, 400)
+
+  const value = await c.env.KV_IMAGES.getWithMetadata<{ contentType: string }>(key, 'arrayBuffer')
+  if (!value.value) return c.json({ error: 'Imagem não encontrada' }, 404)
+
+  const contentType = value.metadata?.contentType || 'application/octet-stream'
+  return new Response(value.value as ArrayBuffer, {
+    headers: {
+      'Content-Type': contentType,
+      'Cache-Control': 'public, max-age=31536000, immutable',
+      'Access-Control-Allow-Origin': '*',
+    },
+  })
+})
+
+// ============================================
 // AUTH ROUTES (public + protected)
 // ============================================
 app.route('/api/v1/auth', authRoutes)
