@@ -17,6 +17,7 @@ export type { MuscleGroup }
 interface AdminMuscleGroupsResponse {
   muscle_groups: (MuscleGroup & { exercise_count: number })[]
   total: number
+  source?: 'admin' | 'public-fallback'
 }
 
 export function useMuscleGroupsAdmin() {
@@ -27,7 +28,10 @@ export function useMuscleGroupsAdmin() {
     queryFn: async () => {
       try {
         const res = await api.get<AdminMuscleGroupsResponse>('/admin/muscle-groups')
-        return res.data
+        return {
+          ...res.data,
+          source: 'admin',
+        } satisfies AdminMuscleGroupsResponse
       } catch (error) {
         if (!(error instanceof ApiClientError) || ![401, 403, 404].includes(error.status)) {
           throw error
@@ -42,6 +46,7 @@ export function useMuscleGroupsAdmin() {
         return {
           muscle_groups: muscleGroups,
           total: muscleGroups.length,
+          source: 'public-fallback',
         } satisfies AdminMuscleGroupsResponse
       }
     },

@@ -467,8 +467,9 @@ export default function AdminMuscleGroupsPage() {
   const isSA = useAuthStore((s) => s.isSuperAdmin)
   const isSuperAdmin = isSA()
 
-  const { data, isLoading, refetch } = useMuscleGroupsAdmin()
+  const { data, isLoading, isError, error, refetch } = useMuscleGroupsAdmin()
   const groups = (data?.muscle_groups ?? []) as AdminMuscleGroup[]
+  const isFallbackMode = data?.source === 'public-fallback'
 
   const [editTarget, setEditTarget] = useState<AdminMuscleGroup | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<AdminMuscleGroup | null>(null)
@@ -545,6 +546,35 @@ export default function AdminMuscleGroupsPage() {
             </div>
           </div>
         </div>
+
+        {isFallbackMode && (
+          <div className="rounded-xl border border-amber-400/20 bg-amber-400/5 px-4 py-3">
+            <div className="flex items-start gap-2">
+              <DSIcon name="warning" size={16} className="mt-0.5 shrink-0 text-amber-400" />
+              <div className="space-y-0.5">
+                <p className="text-sm font-medium text-amber-400">Modo fallback ativo</p>
+                <p className="text-xs text-text-muted">
+                  A rota administrativa não respondeu corretamente. A tela carregou os grupos pelo endpoint público.
+                  Você pode visualizar os grupos já cadastrados, mas ações de super admin podem falhar até a rota admin normalizar.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {isError && (
+          <div className="rounded-xl border border-red-500/20 bg-red-500/8 px-4 py-3">
+            <div className="flex items-start gap-2">
+              <DSIcon name="warning" size={16} className="mt-0.5 shrink-0 text-red-400" />
+              <div className="space-y-0.5">
+                <p className="text-sm font-medium text-red-400">Erro ao carregar grupos musculares</p>
+                <p className="text-xs text-text-muted">
+                  {(error as Error | null)?.message || 'Falha inesperada ao consultar a API.'}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Search */}
         <div className="relative">
