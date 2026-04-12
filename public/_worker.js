@@ -50,6 +50,15 @@ export default {
     const url = new URL(request.url);
     let { pathname } = url;
 
+    // Legacy domain canonical redirect (host-level)
+    // iapersonal.app.br/* -> vfit.app.br/* (preserve path + query)
+    if (url.hostname === 'iapersonal.app.br' || url.hostname === 'www.iapersonal.app.br') {
+      const redirectUrl = new URL(request.url);
+      redirectUrl.protocol = 'https:';
+      redirectUrl.hostname = 'vfit.app.br';
+      return Response.redirect(redirectUrl.toString(), 301);
+    }
+
     // Remove trailing slash (except root) — emit real HTTP 308 redirect
     // so CF Pages doesn't loop between file/directory resolution
     if (pathname.length > 1 && pathname.endsWith('/')) {

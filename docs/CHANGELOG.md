@@ -5,6 +5,24 @@
 
 ---
 
+## [Unreleased] — 12/04/2026 — Paridade admin de saques + redirect domínio legado
+
+### 🐛 Correções
+- Endpoint `GET /api/v1/admin/transfers` agora sincroniza saques `pending/processing` com o Asaas em tempo de leitura, atualizando `status`, `failed_reason` e `completed_at` quando necessário.
+- Hook `useAdminTransfers` ganhou polling automático de 60s apenas enquanto houver saques em aberto (`pending`/`processing`).
+- Status `failed` na aba de saques do admin foi alinhado para **Rejeitado** (paridade com dashboard pessoal).
+
+### 🌐 Redirects
+- Worker do Pages agora aplica redirect 301 de host legado: `iapersonal.app.br/*` e `www.iapersonal.app.br/*` → `https://vfit.app.br/*` preservando path e query string.
+
+### 🔧 Arquivos
+- [workers/api/admin.ts](../workers/api/admin.ts)
+- [src/hooks/use-admin.ts](../src/hooks/use-admin.ts)
+- [src/app/dashboard/admin/payments/page.tsx](../src/app/dashboard/admin/payments/page.tsx)
+- [public/_worker.js](../public/_worker.js)
+
+---
+
 ## [v2.4.9] — 12/04/2026 — Saques: sync de status + rótulo Rejeitado
 
 ### 🐛 Correções

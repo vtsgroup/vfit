@@ -44,6 +44,7 @@ import {
   getBalance,
   getPaymentStatistics,
   createPixTransfer,
+  getTransfer,
 } from '@lib/asaas'
 import { FEES } from '@config/constants'
 import { createMiddleware } from 'hono/factory'
@@ -1629,7 +1630,24 @@ adminRoutes.get('/transfers', async (c) => {
   const countResult = await pgQueryOne<{ count: number }>(
     c.env, 'SELECT COUNT(*)::int as count FROM pix_transfers')
 
-  const { rows } = await pgQuery(
+  const { rows } = await pgQuery<{
+    id: string
+    personal_id: string
+    asaas_transfer_id: string | null
+    pix_key: string
+    pix_key_type: string
+    amount: number
+    fee: number
+    net_amount: number
+    status: string
+    failed_reason: string | null
+    requested_at: string
+    completed_at: string | null
+    created_at: string
+    updated_at: string
+    personal_name: string | null
+    personal_email: string | null
+  }>(
     c.env,
     `SELECT pt.id, pt.personal_id, pt.asaas_transfer_id, pt.pix_key, pt.pix_key_type,
             pt.amount::float, pt.fee::float, pt.net_amount::float,
@@ -1642,6 +1660,55 @@ adminRoutes.get('/transfers', async (c) => {
      LIMIT $1 OFFSET $2`,
     [perPage, offset]
   )
+
+  const mapAsaasTransferStatus = (status: string): 'pending' | 'processing' | 'completed' | 'failed' | 'cancelled' => {
+    if (status === 'DONE') return 'completed'
+    if (status === 'FAILED') return 'failed'
+    if (status === 'CANCELLED') return 'cancelled'
+    if (status === 'BANK_PROCESSING') return 'processing'
+    return 'pending'
+  }
+
+  if (c.env.ASAAS_API_KEY) {
+    const pendingWithAsaas = rows
+      .filter((t) => (t.status === 'pending' || t.status === 'processing') && t.asaas_transfer_id)
+      .slice(0, 50)
+
+    if (pendingWithAsaas.length > 0) {
+      const now = new Date().toISOString()
+      const results = await Promise.allSettled(
+        pendingWithAsaas.map(async (transfer) => {
+          const asaasTransfer = await getTransfer(c.env, transfer.asaas_transfer_id!)
+          return { transfer, asaasTransfer }
+        })
+      )
+
+      for (const result of results) {
+        if (result.status !== 'fulfilled') continue
+
+        const { transfer, asaasTransfer } = result.value
+        const newStatus = mapAsaasTransferStatus(asaasTransfer.status)
+        if (newStatus === transfer.status) continue
+
+        const completedAt = newStatus === 'completed' ? now : null
+        await pgQuery(c.env, `
+          UPDATE pix_transfers
+          SET status = $1,
+              completed_at = CASE WHEN $2::text IS NULL THEN completed_at ELSE $2::timestamptz END,
+              failed_reason = $3,
+              updated_at = $4
+          WHERE id = $5
+        `, [newStatus, completedAt, asaasTransfer.failReason || null, now, transfer.id])
+
+        const localTransfer = rows.find((t) => t.id === transfer.id)
+        if (localTransfer) {
+          localTransfer.status = newStatus
+          if (completedAt) localTransfer.completed_at = completedAt
+          if (asaasTransfer.failReason) localTransfer.failed_reason = asaasTransfer.failReason
+        }
+      }
+    }
+  }
 
   return success({
     transfers: rows,
@@ -2228,6 +2295,7 @@ adminRoutes.delete('/feedback/:id', requireSuperAdmin, async (c) => {
   await pgQuery(c.env, 'DELETE FROM feedback_suggestions WHERE id = $1', [id])
 
   return noContent()
+})
 
 // ============================================================
 // SUPER ADMIN — Gestão de Muscle Groups (anatomia)
@@ -2370,5 +2438,4 @@ adminRoutes.delete('/muscle-groups/:id', requireSuperAdmin, async (c) => {
     .run()
 
   return noContent()
-})
 })

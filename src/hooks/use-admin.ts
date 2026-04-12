@@ -526,6 +526,14 @@ export function useAdminTransfers(params: { page?: number } = {}) {
       return res.data
     },
     enabled: isReady,
+    refetchInterval: (query) => {
+      if (!isReady) return false
+      const data = query.state.data as { transfers: AdminTransfer[] } | undefined
+      const hasPendingTransfers = Boolean(
+        data?.transfers?.some((t) => t.status === 'pending' || t.status === 'processing')
+      )
+      return hasPendingTransfers ? 60_000 : false
+    },
     ...APP_QUERY_CACHE.list,
   })
 }

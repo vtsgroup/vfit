@@ -64,7 +64,7 @@ const transferStatusConfig: Record<string, { label: string; color: string; icon:
   pending: { label: 'Pendente', color: 'bg-warning/10 text-warning', icon: 'clock' },
   processing: { label: 'Processando', color: 'bg-info/10 text-info', icon: 'clock' },
   completed: { label: 'Concluído', color: 'bg-success/10 text-success', icon: 'checkCircle2' },
-  failed: { label: 'Falhou', color: 'bg-error/10 text-error', icon: 'xCircle' },
+  failed: { label: 'Rejeitado', color: 'bg-error/10 text-error', icon: 'xCircle' },
   cancelled: { label: 'Cancelado', color: 'bg-text-muted/10 text-text-muted', icon: 'xCircle' },
 }
 
