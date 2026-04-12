@@ -57,6 +57,7 @@ import { Badge } from '@/components/ui/badge'
 import { StyledSelect } from '@/components/ui/styled-select'
 import { toast } from '@/stores/app-store'
 import { useScrollLock } from '@/hooks/use-scroll-lock'
+import { useMuscleGroups } from '@/hooks/use-exercises'
 import { motion, AnimatePresence } from 'framer-motion'
 
 interface SelectedExercise {
@@ -1861,27 +1862,13 @@ function ExercisePicker({
   title?: string
 }) {
   const [muscleFilter, setMuscleFilter] = useState('')
+  const { data: muscleGroupsData } = useMuscleGroups()
 
-  const groupLabels: Record<string, string> = {
-    chest: 'Peito',
-    back: 'Costas',
-    shoulders: 'Ombros',
-    biceps: 'Bíceps',
-    triceps: 'Tríceps',
-    forearms: 'Antebraços',
-    quadriceps: 'Quadríceps',
-    hamstrings: 'Posteriores',
-    glutes: 'Glúteos',
-    calves: 'Panturrilhas',
-    abs: 'Abdominais',
-    obliques: 'Oblíquos',
-    traps: 'Trapézio',
-    core: 'Core',
-    'full-body': 'Corpo Inteiro',
-    adductors: 'Adutores',
-    abductors: 'Abdutores',
-    'lower-back': 'Lombar',
-  }
+  // Nomes dinâmicos do banco — nenhum hardcode
+  const groupLabels = useMemo(
+    () => Object.fromEntries((muscleGroupsData ?? []).map((g) => [g.id, g.name_pt])),
+    [muscleGroupsData]
+  )
 
   const filteredExercises = useMemo(
     () => exercises.filter((ex) => !muscleFilter || ex.muscle_group_id === muscleFilter),

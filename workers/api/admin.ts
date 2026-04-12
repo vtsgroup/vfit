@@ -2238,10 +2238,13 @@ adminRoutes.delete('/feedback/:id', requireSuperAdmin, async (c) => {
 // GET /admin/muscle-groups — Listar todos (raízes + sub-músculos)
 adminRoutes.get('/muscle-groups', requireSuperAdmin, async (c) => {
   const results = await c.env.DB
-    .prepare(`SELECT id, name, name_pt, parent_id, icon_svg, image_url, animation_url,
-                     color_hex, description, display_order
-              FROM muscle_groups
-              ORDER BY display_order, name_pt`)
+    .prepare(`SELECT mg.id, mg.name, mg.name_pt, mg.parent_id, mg.icon_svg, mg.image_url,
+                     mg.animation_url, mg.color_hex, mg.description, mg.display_order,
+                     COUNT(ex.id) AS exercise_count
+              FROM muscle_groups mg
+              LEFT JOIN exercises ex ON ex.muscle_group_id = mg.id
+              GROUP BY mg.id
+              ORDER BY mg.display_order, mg.name_pt`)
     .all()
   return success({ muscle_groups: results.results })
 })
@@ -2262,7 +2265,7 @@ adminRoutes.patch('/muscle-groups/:id', requireSuperAdmin, async (c) => {
   const { id } = c.req.param()
   const body = await c.req.json() as Record<string, unknown>
 
-  const allowed = ['name_pt', 'description', 'image_url', 'animation_url', 'color_hex', 'display_order', 'parent_id']
+  const allowed = ['name', 'name_pt', 'description', 'image_url', 'animation_url', 'color_hex', 'display_order', 'parent_id']
   const entries = Object.entries(body).filter(([k]) => allowed.includes(k))
   if (entries.length === 0) throw new BadRequestError('Nenhum campo editável enviado')
 

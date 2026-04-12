@@ -218,6 +218,7 @@ interface EditModalProps {
 
 function EditModal({ group, onClose }: EditModalProps) {
   const update = useUpdateMuscleGroup()
+  const [nameEn, setNameEn] = useState(group?.name ?? '')
   const [namePt, setNamePt] = useState(group?.name_pt ?? '')
   const [description, setDescription] = useState(group?.description ?? '')
   const [colorHex, setColorHex] = useState(group?.color_hex ?? '')
@@ -230,6 +231,7 @@ function EditModal({ group, onClose }: EditModalProps) {
       await update.mutateAsync({
         id: group!.id,
         data: {
+          name: nameEn.trim() || undefined,
           name_pt: namePt.trim() || undefined,
           description: description.trim() || undefined,
           color_hex: colorHex.trim() || undefined,
@@ -246,17 +248,25 @@ function EditModal({ group, onClose }: EditModalProps) {
   return (
     <Modal onClose={onClose} title={`Editar: ${group.name_pt}`}>
       <div className="space-y-4 p-4">
-        <MD3Input
-          label="Nome PT"
-          value={namePt}
-          onChange={(e) => setNamePt(e.target.value)}
-          placeholder="Ex: Peito Superior"
-        />
+        <div className="flex gap-3">
+          <MD3Input
+            label="Nome EN"
+            value={nameEn}
+            onChange={(e) => setNameEn(e.target.value)}
+            placeholder="Ex: Upper Chest"
+          />
+          <MD3Input
+            label="Nome PT"
+            value={namePt}
+            onChange={(e) => setNamePt(e.target.value)}
+            placeholder="Ex: Peito Superior"
+          />
+        </div>
         <MD3Input
           label="Descrição"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          placeholder="Descrição breve"
+          placeholder="Descrição breve (opcional)"
         />
         <div className="flex gap-3">
           <MD3Input
@@ -322,7 +332,7 @@ function CreateModal({ parentGroups, onClose }: CreateModalProps) {
         parent_id: parentId || undefined,
         color_hex: colorHex.trim() || undefined,
       })
-      toast.success('Sub-músculo criado!')
+      toast.success('Grupo muscular criado!')
       onClose()
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Erro ao criar')
@@ -330,7 +340,7 @@ function CreateModal({ parentGroups, onClose }: CreateModalProps) {
   }
 
   return (
-    <Modal onClose={onClose} title="Novo Sub-Músculo">
+    <Modal onClose={onClose} title="Novo Grupo Muscular">
       <div className="space-y-4 p-4">
         <div className="flex gap-3">
           <MD3Input
@@ -516,7 +526,7 @@ export default function AdminMuscleGroupsPage() {
             {isSuperAdmin && (
               <Button size="sm" onClick={() => setShowCreate(true)}>
                 <DSIcon name="plus" size={14} />
-                Novo Sub-Músculo
+                Novo Grupo
               </Button>
             )}
           </div>

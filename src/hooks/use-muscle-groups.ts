@@ -43,7 +43,7 @@ export function useUpdateMuscleGroup() {
       data,
     }: {
       id: string
-      data: Partial<Pick<MuscleGroup, 'name_pt' | 'description' | 'image_url' | 'animation_url' | 'color_hex' | 'display_order' | 'parent_id'>>
+      data: Partial<Pick<MuscleGroup, 'name' | 'name_pt' | 'description' | 'image_url' | 'animation_url' | 'color_hex' | 'display_order' | 'parent_id'>>
     }) => api.patch<{ muscle_group: MuscleGroup }>(`/admin/muscle-groups/${id}`, data),
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: ['admin', 'muscle-groups'] })
