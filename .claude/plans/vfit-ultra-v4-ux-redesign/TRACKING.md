@@ -3,7 +3,7 @@
 > **Status:** ✅ Concluído (execução local + deploy)  
 > **Criado:** 10/04/2026  
 > **Objetivo:** 8 sprints de redesign ultra-moderno (glassmorfismo, botões 3D, UX melhorado)  
-> **Última atualização:** 10/04/2026 (fix persistência de tema + cards de treinos + deploy v2.3.1)
+> **Última atualização:** 10/04/2026 (theme-color/topo dark fix + header light escuro + deploys v2.3.2/v2.3.3)
 
 ---
 
@@ -12,8 +12,8 @@
 ```
 Sprints Completos: 8/8 (100%)
 Tasks Totais: 136
-Tasks Concluídas: 126
-Percentual: 93%
+Tasks Concluídas: 128
+Percentual: 94%
 ```
 
 ---
@@ -276,6 +276,9 @@ Percentual: 93%
 - [x] T9.16 — Fix definitivo de persistência de tema (sem fallback indevido para dark ao navegar)
 - [x] T9.17 — Cards de treinos da tela inicial refinados para consistência DS em light/dark
 - [x] T9.18 — Deploy patch executado com sucesso (`v2.3.1`)
+- [x] T9.19 — Theme color superior unificado em dark fixo + painel XP/streak/meta diária adicionado em Treinos
+- [x] T9.20 — Header no light ajustado para dark opaco/degradê (sem aparência cinza translúcida)
+- [x] T9.21 — Deploys patch executados com sucesso (`v2.3.2` e `v2.3.3`)
 
 **Status:** ✅ Concluído (com pendências de validações manuais/documentadas)
 
@@ -294,7 +297,7 @@ Percentual: 93%
 | S7 | 13 | 8 | 62% | ✅ |
 | S8 | 16 | 11 | 69% | ✅ |
 | **Final** | **12** | **7** | **58%** | **✅** |
-| **TOTAL** | **136** | **126** | **93%** | **✅** |
+| **TOTAL** | **136** | **128** | **94%** | **✅** |
 
 ---
 
@@ -305,12 +308,14 @@ Percentual: 93%
 | 10/04/2026 | S2-S8 + Final | v2.2.8 | 2e254b79 | 20+ | ✅ Deploy concluído |
 | 10/04/2026 | Polimento UI + Auditoria | v2.3.0 | 81ec36b1 | 10+ | ✅ Deploy concluído |
 | 10/04/2026 | Persistência de Tema + Treinos | v2.3.1 | 4aadc360 | 4+ | ✅ Deploy concluído |
+| 10/04/2026 | Theme color fixo + XP/Streak Treinos | v2.3.2 | a9e15f97 | 7+ | ✅ Deploy concluído |
+| 10/04/2026 | Header light dark opaco/degradê | v2.3.3 | 20f90f52 | 4+ | ✅ Deploy concluído |
 
 ---
 
 ## 📝 Notas
 
-- **Última atualização:** 10/04/2026 — fix de persistência de tema + cards de treinos concluído, deploy v2.3.1 publicado
+- **Última atualização:** 10/04/2026 — theme-color/topo dark unificado, header light corrigido para dark opaco/degradê, deploys v2.3.2 e v2.3.3 publicados
 - **Criado por:** Claude Code (planejamento)
 - **Para começar:** Ler IMPLEMENTATION-GUIDE.md e seguir Sprint 1
 - **Perguntas?** Consultar PLAN.md ou DESIGN-TOKENS.md

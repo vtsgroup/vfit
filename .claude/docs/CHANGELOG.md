@@ -7,6 +7,36 @@
 
 ## [Unreleased] — 2026-04-08 — Sprint 11-15 (UX Nutrição/Exercícios)
 
+## [v2.3.3] — 2026-04-10 — Header do light alinhado ao theme-color dark
+
+### ✨ UX/UI
+- **Header no modo light agora segue visual dark do topo (sem cinza translúcido):**
+  - [src/app/globals.css](src/app/globals.css): `ds3-header` e `vfit-theme .ds3-header` migrados para fundo opaco com degradê dark (`#050A12` → `#0B1221`), mantendo consistência com `theme-color` superior.
+  - Estado com scroll também ajustado para degradê dark mais profundo (`#050A12` → `#0A1324`).
+
+### 🚀 Deploy
+- Pipeline oficial executado via task `deploy-vfit-patch-no-whatsapp`.
+- Versão publicada: **v2.3.3**
+- Pages preview: https://111ff16d.vfit.pages.dev
+- Worker Version ID: `3f407dc4-967a-48e7-9bc6-61e139edfa4e`
+- WhatsApp notify start/end falhou com `401 invalid_credentials` (deploy seguiu com `--allow-no-whatsapp`).
+
+## [v2.3.2] — 2026-04-10 — Theme color superior dark fixo + card de gamificação em Treinos
+
+### ✨ UX/UI
+- **Chrome superior unificado em dark:**
+  - [src/components/providers/theme-provider.tsx](src/components/providers/theme-provider.tsx): `theme-color` superior fixado em `#050A12`.
+  - [src/app/layout.tsx](src/app/layout.tsx): anti-flicker inicial com `theme-color` superior fixo em `#050A12`.
+  - [src/app/globals.css](src/app/globals.css): token `--pwa-top-fill` no light alinhado ao dark (`#050A12`).
+- **Treinos (B2C):** [src/app/(app)/treinos/page.tsx](src/app/(app)/treinos/page.tsx) recebeu painel de gamificação com XP atual, streak, meta diária, barra de progresso e CTA para `/progresso/streaks`.
+
+### 🚀 Deploy
+- Pipeline oficial executado via task `deploy-vfit-patch-no-whatsapp`.
+- Versão publicada: **v2.3.2**
+- Pages preview: https://f7679bb2.vfit.pages.dev
+- Worker Version ID: `3ca65595-e85f-4f66-a902-1e71243c3c9b`
+- WhatsApp notify start/end falhou com `401 invalid_credentials` (deploy seguiu com `--allow-no-whatsapp`).
+
 ## [v2.3.1] — 2026-04-10 — Fix de persistência de tema + polimento cards de treinos
 
 ### ✨ UX/UI

@@ -208,6 +208,11 @@ export interface UserSessionData extends SessionData {
   sessionId: string
 }
 
+function isKvDailyWriteLimitError(error: unknown): boolean {
+  const message = error instanceof Error ? error.message : String(error || '')
+  return /limit exceeded for the day/i.test(message)
+}
+
 // ============================================
 // TOTP HELPERS (2FA)
 // ============================================
@@ -353,14 +358,17 @@ export async function createSession(
   sessionId: string,
   data: SessionData
 ): Promise<void> {
-  await kv.put(`session:${sessionId}`, JSON.stringify(data), {
-    expirationTtl: SESSION_TTL,
-  })
-
-  // Índice por usuário para listagem/revogação remota de sessões
-  await kv.put(`user-sessions:${data.userId}:${sessionId}`, data.createdAt, {
-    expirationTtl: SESSION_TTL,
-  })
+  try {
+    await kv.put(`session:${sessionId}`, JSON.stringify(data), {
+      expirationTtl: SESSION_TTL,
+    })
+  } catch (error) {
+    if (isKvDailyWriteLimitError(error)) {
+      console.warn('[Auth] KV session write skipped (daily write limit reached)')
+      return
+    }
+    throw error
+  }
 }
 
 /**
@@ -380,10 +388,18 @@ export async function revokeSession(
   kv: KVNamespace,
   sessionId: string
 ): Promise<void> {
-  const existing = await getSession(kv, sessionId)
-  await kv.delete(`session:${sessionId}`)
-  if (existing?.userId) {
-    await kv.delete(`user-sessions:${existing.userId}:${sessionId}`)
+  try {
+    const existing = await getSession(kv, sessionId)
+    await kv.delete(`session:${sessionId}`)
+    if (existing?.userId) {
+      await kv.delete(`user-sessions:${existing.userId}:${sessionId}`)
+    }
+  } catch (error) {
+    if (isKvDailyWriteLimitError(error)) {
+      console.warn('[Auth] KV session revoke skipped (daily write limit reached)')
+      return
+    }
+    throw error
   }
 }
 
@@ -439,9 +455,17 @@ export async function blacklistToken(
   tokenHash: string,
   ttlSeconds = ACCESS_TOKEN_TTL
 ): Promise<void> {
-  await kv.put(`blacklist:${tokenHash}`, '1', {
-    expirationTtl: ttlSeconds,
-  })
+  try {
+    await kv.put(`blacklist:${tokenHash}`, '1', {
+      expirationTtl: ttlSeconds,
+    })
+  } catch (error) {
+    if (isKvDailyWriteLimitError(error)) {
+      console.warn('[Auth] KV token blacklist skipped (daily write limit reached)')
+      return
+    }
+    throw error
+  }
 }
 
 // ============================================
