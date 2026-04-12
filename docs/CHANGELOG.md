@@ -5,6 +5,22 @@
 
 ---
 
+## [v2.4.7] — 12/04/2026 — UX: erro visual claro em grupos musculares
+
+### ✨ Melhoria
+- A tela de [Grupos Musculares](src/app/dashboard/admin/muscle-groups/page.tsx) agora mostra aviso explícito quando estiver em **fallback público** e erro visual claro quando a consulta falhar de verdade.
+
+### 🔧 Arquivos modificados
+- [src/hooks/use-muscle-groups.ts](../src/hooks/use-muscle-groups.ts): resposta agora informa `source: 'admin' | 'public-fallback'`
+- [src/app/dashboard/admin/muscle-groups/page.tsx](../src/app/dashboard/admin/muscle-groups/page.tsx): banners de fallback e erro adicionados
+
+### 🚀 Deploy
+- Pipeline oficial executado: **v2.4.7**
+- Pages: https://822f5d33.vfit.pages.dev
+- Worker Version ID: `c8049f08-de55-4259-ae4d-922a14afab11`
+
+---
+
 ## [v2.4.6] — 12/04/2026 — Hotfix: listagem de grupos musculares no admin
 
 ### 🐛 Correção crítica
