@@ -56,6 +56,7 @@ import {
   createSubscription as createAsaasSubscription,
   cancelSubscription as cancelAsaasSubscription,
   createPixTransfer,
+  getTransfer,
   getBalance,
   mapPaymentMethod,
   mapBillingCycle,
@@ -1543,6 +1544,26 @@ payments.get('/balance', requireType('personal'), async (c) => {
   const userRole = c.get('userRole')
   const isSuperAdmin = userRole === 'super_admin'
 
+  // Sincronizar saques pendentes/processando com Asaas para evitar travar em "processando"
+  const { rows: pendingTransfers } = await pgQuery<{
+    id: string
+    personal_id: string
+    amount: number
+    status: string
+    asaas_transfer_id: string | null
+  }>(
+    c.env,
+    `SELECT id, personal_id, amount, status, asaas_transfer_id
+     FROM pix_transfers
+     WHERE personal_id = $1
+       AND status IN ('pending', 'processing')
+       AND asaas_transfer_id IS NOT NULL
+     ORDER BY created_at DESC
+     LIMIT 20`,
+    [personalId]
+  )
+  await syncPendingTransfersStatus(c.env, pendingTransfers)
+
   // Calcular saldo baseado em pagamentos confirmados - saques feitos
   const { rows } = await pgQuery<{
     total_received: number; total_withdrawn: number
@@ -1718,6 +1739,14 @@ payments.get('/transfers', requireType('personal'), async (c) => {
      FROM pix_transfers WHERE personal_id = $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3`,
     [personalId, perPage, offset]
   )
+
+  await syncPendingTransfersStatus(c.env, rows as Array<{
+    id: string
+    personal_id: string
+    amount: number
+    status: string
+    asaas_transfer_id: string | null
+  }>)
 
   return success({
     transfers: rows,
@@ -2951,6 +2980,7 @@ async function buildPaymentsPdf(
  * consulta a API Asaas em paralelo e atualiza o DB + array in-memory.
  */
 const MAX_SYNC_PER_REQUEST = 10
+const MAX_TRANSFER_SYNC_PER_REQUEST = 10
 
 async function syncPendingPaymentsStatus(
   env: Bindings,
@@ -3027,6 +3057,73 @@ async function syncPendingPaymentsStatus(
   }
 
   return payments
+}
+
+type TransferSyncRow = {
+  id: string
+  personal_id: string
+  amount: number
+  status: string
+  asaas_transfer_id: string | null
+}
+
+function mapAsaasTransferStatus(status: string): 'pending' | 'processing' | 'completed' | 'failed' | 'cancelled' {
+  if (status === 'DONE') return 'completed'
+  if (status === 'FAILED') return 'failed'
+  if (status === 'CANCELLED') return 'cancelled'
+  if (status === 'BANK_PROCESSING') return 'processing'
+  return 'pending'
+}
+
+async function syncPendingTransfersStatus(
+  env: Bindings,
+  transfers: TransferSyncRow[]
+): Promise<TransferSyncRow[]> {
+  if (!env.ASAAS_API_KEY) return transfers
+
+  const pendingWithAsaas = transfers.filter(
+    (t) => (t.status === 'pending' || t.status === 'processing') && t.asaas_transfer_id
+  )
+
+  if (pendingWithAsaas.length === 0) return transfers
+
+  const toCheck = pendingWithAsaas.slice(0, MAX_TRANSFER_SYNC_PER_REQUEST)
+  const results = await Promise.allSettled(
+    toCheck.map(async (transfer) => {
+      const asaasTransfer = await getTransfer(env, transfer.asaas_transfer_id!)
+      return { transfer, asaasTransfer }
+    })
+  )
+
+  const now = new Date().toISOString()
+
+  for (const result of results) {
+    if (result.status !== 'fulfilled') continue
+
+    const { transfer, asaasTransfer } = result.value
+    const newStatus = mapAsaasTransferStatus(asaasTransfer.status)
+
+    if (newStatus === transfer.status) continue
+
+    const completedAt = newStatus === 'completed' ? now : null
+    await pgQuery(env, `
+      UPDATE pix_transfers
+      SET status = $1,
+          completed_at = CASE WHEN $2::text IS NULL THEN completed_at ELSE $2::timestamptz END,
+          failed_reason = $3,
+          updated_at = $4
+      WHERE id = $5
+    `, [newStatus, completedAt, asaasTransfer.failReason || null, now, transfer.id])
+
+    const idx = transfers.findIndex((t) => t.id === transfer.id)
+    if (idx !== -1) {
+      ;(transfers[idx] as { status: string }).status = newStatus
+    }
+
+    console.log(`[SyncTransfers] Transfer ${transfer.id} updated: ${transfer.status} -> ${newStatus}`)
+  }
+
+  return transfers
 }
 
 export { payments as paymentsRoutes, syncPendingPaymentsStatus }

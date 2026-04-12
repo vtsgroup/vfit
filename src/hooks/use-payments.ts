@@ -387,6 +387,12 @@ export function useTransfers(params: { page?: number } = {}) {
     },
     enabled: isReady,
     ...APP_QUERY_CACHE.list,
+    refetchInterval: (query) => {
+      const hasPending = (query.state.data?.transfers ?? []).some(
+        (transfer) => transfer.status === 'pending' || transfer.status === 'processing'
+      )
+      return hasPending ? 15_000 : false
+    },
   })
 }
 
