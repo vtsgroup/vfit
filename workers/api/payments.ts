@@ -575,15 +575,29 @@ payments.post('/webhooks/asaas/transfer-auth', async (c) => {
   const body = await c.req.json()
 
   try {
-    const type = body.type as string // TRANSFER, BILL, PIX_QR_CODE, etc.
-    const transferData = body.transfer
+    const transferData = body?.transfer ?? ((body?.object === 'transfer' && body?.id) ? body : null)
+    const payloadType = body?.type as string | undefined
+    const payloadObject = body?.object as string | undefined
+    const payloadOperationType = (body?.operationType ?? transferData?.operationType) as string | undefined
 
-    console.log(`[Transfer Auth] Received type=${type}, transfer_id=${transferData?.id}, value=${transferData?.value}`)
+    console.log(
+      `[Transfer Auth] Received type=${payloadType}, object=${payloadObject}, operationType=${payloadOperationType}, transfer_id=${transferData?.id}, value=${transferData?.value}`
+    )
 
-    // Só autorizamos transferências (tipo TRANSFER)
-    if (type !== 'TRANSFER' || !transferData?.id) {
-      console.warn(`[Transfer Auth] REFUSED — unsupported type: ${type}`)
-      return c.json({ status: 'REFUSED', refuseReason: `Tipo não suportado: ${type}` })
+    // Asaas pode enviar dois formatos:
+    // 1) body.transfer + body.type = 'TRANSFER'
+    // 2) objeto direto da transferência: { object: 'transfer', type: 'BANK_ACCOUNT', operationType: 'PIX', id: '...' }
+    const isWrappedTransfer = payloadType === 'TRANSFER' && !!body?.transfer?.id
+    const isDirectTransferObject = payloadObject === 'transfer' && !!body?.id
+
+    if ((!isWrappedTransfer && !isDirectTransferObject) || !transferData?.id) {
+      console.warn(
+        `[Transfer Auth] REFUSED — unsupported payload: type=${payloadType}, object=${payloadObject}, operationType=${payloadOperationType}`
+      )
+      return c.json({
+        status: 'REFUSED',
+        refuseReason: `Payload não suportado: type=${payloadType ?? 'unknown'}, object=${payloadObject ?? 'unknown'}`,
+      })
     }
 
     // Buscar a transferência na nossa tabela pix_transfers pelo asaas_transfer_id
