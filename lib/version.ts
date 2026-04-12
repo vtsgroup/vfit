@@ -1,6 +1,6 @@
 // Auto-generated - do not edit manually
 // Updated via: npm run version:patch
 
-export const APP_VERSION = '2.4.5'
-export const BUILD_DATE = '2026-04-12T22:00:43.705Z'
-export const BUILD_NUMBER = 1776031243706
+export const APP_VERSION = '2.4.6'
+export const BUILD_DATE = '2026-04-12T22:07:03.757Z'
+export const BUILD_NUMBER = 1776031623758

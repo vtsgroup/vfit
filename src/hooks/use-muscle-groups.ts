@@ -4,7 +4,7 @@
 // =============================================================================
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { api } from '@/lib/api-client'
+import { ApiClientError, api } from '@/lib/api-client'
 import { useAuthStore } from '@/stores/auth-store'
 import type { MuscleGroup } from './use-exercises'
 
@@ -25,8 +25,25 @@ export function useMuscleGroupsAdmin() {
   return useQuery({
     queryKey: ['admin', 'muscle-groups'],
     queryFn: async () => {
-      const res = await api.get<AdminMuscleGroupsResponse>('/admin/muscle-groups')
-      return res.data
+      try {
+        const res = await api.get<AdminMuscleGroupsResponse>('/admin/muscle-groups')
+        return res.data
+      } catch (error) {
+        if (!(error instanceof ApiClientError) || ![401, 403, 404].includes(error.status)) {
+          throw error
+        }
+
+        const fallback = await api.get<MuscleGroup[]>('/muscle-groups')
+        const muscleGroups = (fallback.data ?? []).map((group) => ({
+          ...group,
+          exercise_count: 0,
+        }))
+
+        return {
+          muscle_groups: muscleGroups,
+          total: muscleGroups.length,
+        } satisfies AdminMuscleGroupsResponse
+      }
     },
     enabled: isReady,
     staleTime: 30 * 1000,
