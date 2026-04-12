@@ -5,6 +5,26 @@
 
 ---
 
+## [v2.4.6] — 12/04/2026 — Hotfix: listagem de grupos musculares no admin
+
+### 🐛 Correção crítica
+- **Sintoma**: a tela de [Grupos Musculares](src/app/dashboard/admin/muscle-groups/page.tsx) aparecia vazia apesar de os dados já existirem no backend.
+- **Causa imediata**: a listagem administrativa podia falhar em `GET /api/v1/admin/muscle-groups`, deixando a tela sem fallback.
+- **Correção**: o hook administrativo agora tenta `/admin/muscle-groups` primeiro e, em erro `401/403/404`, faz fallback automático para `/muscle-groups`.
+
+### ✅ Validação
+- API pública confirmada com **40 grupos**: **18 raízes** + **22 sub-músculos**.
+
+### 🔧 Arquivo modificado
+- [src/hooks/use-muscle-groups.ts](../src/hooks/use-muscle-groups.ts): fallback resiliente da listagem admin para o endpoint público
+
+### 🚀 Deploy
+- Pipeline oficial executado: **v2.4.6**
+- Pages: https://063c936a.vfit.pages.dev
+- Worker Version ID: `d1d5aa6c-1285-4f09-a0ea-0c30a987d758`
+
+---
+
 ## [v2.4.5] — 12/04/2026 — Hotfix: autorização de saque Asaas
 
 ### 🐛 Correção crítica
