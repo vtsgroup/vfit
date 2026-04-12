@@ -29,28 +29,28 @@ const COLOR_THEMES = {
     cardBg: 'bg-(--kpi-passos-light)',
     cardBorder: 'border-(--kpi-passos-border)',
     iconBg: 'bg-(--kpi-passos-icon-bg)',
-    iconColor: 'text-blue-300',
+    iconColor: 'text-blue-600 dark:text-blue-300',
     hoverShadow: 'hover:shadow-(--shadow-kpi-blue)',
   },
   cyan: {
     cardBg: 'bg-(--kpi-agua-light)',
     cardBorder: 'border-(--kpi-agua-border)',
     iconBg: 'bg-(--kpi-agua-icon-bg)',
-    iconColor: 'text-cyan-300',
+    iconColor: 'text-cyan-600 dark:text-cyan-300',
     hoverShadow: 'hover:shadow-(--shadow-kpi-cyan)',
   },
   purple: {
     cardBg: 'bg-(--kpi-sono-light)',
     cardBorder: 'border-(--kpi-sono-border)',
     iconBg: 'bg-(--kpi-sono-icon-bg)',
-    iconColor: 'text-violet-300',
+    iconColor: 'text-violet-600 dark:text-violet-300',
     hoverShadow: 'hover:shadow-(--shadow-kpi-purple)',
   },
   amber: {
     cardBg: 'bg-(--kpi-calorias-light)',
     cardBorder: 'border-(--kpi-calorias-border)',
     iconBg: 'bg-(--kpi-calorias-icon-bg)',
-    iconColor: 'text-amber-300',
+    iconColor: 'text-amber-600 dark:text-amber-300',
     hoverShadow: 'hover:shadow-(--shadow-kpi-amber)',
   },
   green: {
@@ -64,7 +64,7 @@ const COLOR_THEMES = {
     cardBg: 'bg-red-500/8',
     cardBorder: 'border-red-500/20',
     iconBg: 'bg-red-500/15',
-    iconColor: 'text-red-300',
+    iconColor: 'text-red-600 dark:text-red-300',
     hoverShadow: 'hover:shadow-(--shadow-kpi-red)',
   },
 } as const
@@ -89,18 +89,20 @@ export function KPICard({ icon, label, value, unit, color = 'green', iconBg, tre
         <DSIcon name={icon} size={20} className={hasTheme ? theme.iconColor : color} />
       </div>
       <div>
-        <p className="text-xl leading-none font-black text-white">
+        <p className="text-xl leading-none font-black text-text-primary">
           {value}
-          {unit && <span className="ml-0.5 text-[12px] font-medium text-zinc-400">{unit}</span>}
+          {unit && <span className="ml-0.5 text-[12px] font-medium text-text-secondary">{unit}</span>}
         </p>
-        <p className="mt-1 text-[11px] font-medium text-zinc-400">{label}</p>
+        <p className="mt-1 text-[11px] font-medium text-text-secondary">{label}</p>
       </div>
 
       {trend && (
         <div
           className={cn(
             'mt-3 inline-flex w-fit items-center gap-1 rounded-full px-2 py-1 text-[10px] font-semibold',
-            trend.isPositive ? 'bg-emerald-500/15 text-emerald-300' : 'bg-red-500/15 text-red-300'
+            trend.isPositive
+              ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300'
+              : 'bg-red-500/15 text-red-700 dark:text-red-300'
           )}
         >
           <span>{trend.isPositive ? '↑' : '↓'}</span>

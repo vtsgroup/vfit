@@ -189,6 +189,21 @@
   --kpi-sono-icon-bg: rgba(139, 92, 246, 0.15);
   --kpi-calorias-icon-bg: rgba(217, 119, 6, 0.15);
 
+  /* Glass v4 — light mode (corrige cards escurecidos) */
+  --glass-v4-bg: rgba(255, 255, 255, 0.92);
+  --glass-v4-border-top: rgba(255, 255, 255, 0.95);
+  --glass-v4-border-bottom: rgba(15, 23, 42, 0.10);
+  --glass-v4-shine: linear-gradient(135deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0) 55%);
+  --glass-v4-blur: blur(20px) saturate(145%);
+  --glass-v4-shadow: 0 6px 22px rgba(15, 23, 42, 0.10), 0 2px 8px rgba(15, 23, 42, 0.06), inset 0 1px 0 rgba(255,255,255,0.85), inset 0 -1px 0 rgba(15,23,42,0.04);
+
+  --glass-depth-bg: rgba(255, 255, 255, 0.90);
+  --glass-depth-border-top: rgba(255, 255, 255, 0.92);
+  --glass-depth-border-left: rgba(255, 255, 255, 0.78);
+  --glass-depth-border-bottom: rgba(15, 23, 42, 0.10);
+  --glass-depth-border-right: rgba(15, 23, 42, 0.08);
+  --glass-depth-shadow: 0 8px 24px rgba(15, 23, 42, 0.10), 0 2px 8px rgba(15, 23, 42, 0.06), inset 0 1px 0 rgba(255,255,255,0.8);
+
   --muscle-peito-primary: #ef4444;
   --muscle-costas-primary: #3b82f6;
   --muscle-ombros-primary: #f59e0b;
@@ -1581,14 +1596,14 @@ body {
 }
 
 .glass-depth {
-  background: rgba(11, 18, 33, 0.65);
+  background: var(--glass-depth-bg, rgba(11, 18, 33, 0.65));
   backdrop-filter: blur(32px) saturate(180%);
   -webkit-backdrop-filter: blur(32px) saturate(180%);
-  border-top: 1px solid rgba(255,255,255,0.16);
-  border-left: 1px solid rgba(255,255,255,0.10);
-  border-bottom: 1px solid rgba(0,0,0,0.20);
-  border-right: 1px solid rgba(0,0,0,0.15);
-  box-shadow: 4px 4px 12px rgba(0,0,0,0.35), -2px -2px 8px rgba(255,255,255,0.03), inset 0 1px 0 rgba(255,255,255,0.10);
+  border-top: 1px solid var(--glass-depth-border-top, rgba(255,255,255,0.16));
+  border-left: 1px solid var(--glass-depth-border-left, rgba(255,255,255,0.10));
+  border-bottom: 1px solid var(--glass-depth-border-bottom, rgba(0,0,0,0.20));
+  border-right: 1px solid var(--glass-depth-border-right, rgba(0,0,0,0.15));
+  box-shadow: var(--glass-depth-shadow, 4px 4px 12px rgba(0,0,0,0.35), -2px -2px 8px rgba(255,255,255,0.03), inset 0 1px 0 rgba(255,255,255,0.10));
 }
 
 /* Sprint 1: Foundation utilities */

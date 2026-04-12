@@ -17,12 +17,16 @@
 'use client'
 
 import { useEffect } from 'react'
+import { usePathname } from 'next/navigation'
 import { useAppStore } from '@/stores/app-store'
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname()
   const resolvedTheme = useAppStore((s) => s.resolvedTheme)
   const theme = useAppStore((s) => s.theme)
   const setResolvedTheme = useAppStore((s) => s.setResolvedTheme)
+  const isOnboardingRoute = pathname === '/welcome' || pathname.startsWith('/onboarding')
+  const effectiveTheme: 'light' | 'dark' = isOnboardingRoute ? 'dark' : resolvedTheme
 
   // Resolve theme deterministically from current preference + OS
   useEffect(() => {
@@ -38,7 +42,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   // Sync resolved theme → <html> class + colorScheme + meta theme-color (TWA/PWA)
   useEffect(() => {
     const root = document.documentElement
-    if (resolvedTheme === 'light') {
+    if (effectiveTheme === 'light') {
       root.classList.remove('dark')
       root.classList.add('light')
       root.style.colorScheme = 'light'
@@ -52,7 +56,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     // for status bar color in real-time
     const topColor = '#050A12'
     // Bottom safe area (gesture bar / nav bar) — slightly different shade for depth
-    const bottomColor = resolvedTheme === 'light' ? '#f7fbfa' : '#050A12'
+    const bottomColor = effectiveTheme === 'light' ? '#f7fbfa' : '#050A12'
 
     // CRITICAL: Set html background-color to fill bottom safe area (iOS gesture bar / Android nav bar)
     root.style.backgroundColor = bottomColor
@@ -69,7 +73,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"][media]').forEach((el) => {
       el.content = topColor
     })
-  }, [resolvedTheme])
+  }, [effectiveTheme])
 
   // Listen for OS color scheme changes when theme === 'system'
   useEffect(() => {
