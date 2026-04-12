@@ -5,6 +5,38 @@
 
 ---
 
+## [v2.4.5] — 12/04/2026 — Hotfix: autorização de saque Asaas
+
+### 🐛 Correção crítica
+- **Root cause**: o webhook de autorização de saque do Asaas enviou o payload real da transferência no formato direto (`object: "transfer"`, `type: "BANK_ACCOUNT"`, `operationType: "PIX"`), mas o endpoint só aceitava o formato antigo com `body.type = 'TRANSFER'` e `body.transfer`.
+- **Impacto**: o endpoint respondia `{"status":"REFUSED","refuseReason":"Tipo não suportado: BANK_ACCOUNT"}` e o Asaas marcava a transferência como **"Autorização externa foi recusada"**.
+- **Correção**: o endpoint agora aceita os dois formatos de payload e continua validando `id` e token `asaas-access-token` antes de aprovar.
+
+### ✅ Validação
+- Requisição de teste com o payload real da transferência `fe2040ef-a7da-4e7f-a9e0-53faea243265` retornou `{"status":"APPROVED"}` após o deploy.
+
+### 🔧 Arquivo modificado
+- [workers/api/payments.ts](../workers/api/payments.ts): webhook [autorização de saque](../workers/api/payments.ts#L563-L637) ajustado para aceitar payload direto e payload legado
+
+### 🚀 Deploy
+- Pipeline oficial executado: **v2.4.5**
+- Pages: https://dd5b3b3d.vfit.pages.dev
+- Worker Version ID: `1a93f231-8b4e-42ee-a436-c90e8e932516`
+
+---
+
+## [v2.4.4] — 12/04/2026 — Webhook Asaas: nova key + token seguro
+
+### 🔐 Segurança
+- **Nova API Key Asaas**: `ASAAS_API_KEY` atualizada no secret manager do Cloudflare.
+- **Token Webhook dedicado**: `ASAAS_WEBHOOK_TOKEN` criado e armazenado para o header `asaas-access-token`.
+- **URL atualizada**: webhook configurado em `https://api.vfit.app.br/api/v1/payments/webhooks/asaas/transfer-auth` no lugar da URL legada `personaliai-api`.
+
+### 🚀 Deploy
+- Pipeline oficial executado: **v2.4.4**
+
+---
+
 ## [v2.4.3] — 28/04/2026 — Grupos Musculares totalmente configuráveis
 
 ### ✨ Novidades
