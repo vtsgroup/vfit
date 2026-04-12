@@ -5,6 +5,29 @@
 
 ---
 
+## [v2.4.2] — 28/04/2026 — Hotfix: resiliência KV Cloudflare
+
+### 🐛 Correções Críticas
+- **Root cause**: Cota de writes do KV Cloudflare Free (1.000/dia) esgotada → `kv.put()` sem try/catch → 500 em todos os endpoints que tentavam escrever cache → página `/admin/config` completamente inacessível.
+- **Amplificação**: `useAllConfig` sem `retry: false` → TanStack Query retentando centenas de vezes → infinito loop de requests → esgotando cota ainda mais rápido.
+
+### 🔧 Arquivos Corrigidos (8 fixes)
+- [workers/api/config.ts](../workers/api/config.ts): 3× `kv.put()` nos endpoints públicos `/plans/b2b`, `/plans/b2c`, `/config/:category` → wrapped em `try {} catch {}` (fail silently)
+- [workers/middleware/auth.ts](../workers/middleware/auth.ts): `KV_SESSIONS.get('blacklist:...')` → isolated try/catch com fail-open (KV indisponível não derruba auth)
+- [src/hooks/use-platform-config.ts](../src/hooks/use-platform-config.ts): `useAllConfig()` → adicionado `retry: false` (erros 5xx não geram retentativas)
+- [workers/api/payments.ts](../workers/api/payments.ts): 3× `kv.put()` nos endpoints `/dashboard/summary`, `/dashboard/chart`, `/dashboard/pending` → wrapped em `try {} catch {}`
+
+### 🚀 Deploy
+- Pipeline oficial executado: **v2.4.2**
+- Pages: https://9cee5ba2.vfit.pages.dev
+- Worker Version ID: `ed04cd27-d994-47b2-83c9-45bffeb1ecc8`
+- Validação pós-deploy: `GET /api/v1/config/plans/b2b` → 200 ✅ | `GET /api/v1/config/config/all` → 200 ✅
+
+### ⚠️ Atenção (não resolvido nesta versão)
+- `rateLimitMiddleware` ainda escreve em `KV_RATE_LIMIT` a cada request `/api/*`. Com tráfego moderado pode esgotar 1.000 writes/dia. Solução definitiva: migrar para CF Rate Limiting nativo (Sprint futura).
+
+---
+
 ## [v2.2.8] — 10/04/2026 — VFIT Ultra v4 (S2–S8) + deploy
 
 ### ✨ UI/UX
