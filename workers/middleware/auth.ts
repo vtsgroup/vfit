@@ -54,10 +54,17 @@ export const authMiddleware = createMiddleware<AppContext>(async (c, next) => {
     const payload = await verifyJWT(token, c.env.JWT_SECRET)
 
     // Check if token is blacklisted (forced logout)
+    // KV.get wrapped in its own try/catch: quota/network failure → fail open (allow request)
     const tokenHash = await hashToken(token)
-    const blacklisted = await c.env.KV_SESSIONS.get(`blacklist:${tokenHash}`)
-    if (blacklisted) {
-      throw new UnauthorizedError('Sessão encerrada')
+    try {
+      const blacklisted = await c.env.KV_SESSIONS.get(`blacklist:${tokenHash}`)
+      if (blacklisted) {
+        throw new UnauthorizedError('Sessão encerrada')
+      }
+    } catch (kvErr) {
+      if (kvErr instanceof UnauthorizedError) throw kvErr
+      // KV unavailable — skip blacklist check (fail open)
+      console.warn('[Auth] KV blacklist check failed (fail open):', (kvErr as Error)?.message)
     }
 
     const pathname = new URL(c.req.url).pathname

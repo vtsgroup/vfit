@@ -80,8 +80,8 @@ configRoutes.get('/plans/b2b', async (c) => {
 
   const plans = (result.results ?? []).map(parsePlanB2B)
 
-  // Cache for 1 hour
-  await kv.put(CK.b2b, JSON.stringify(plans), { expirationTtl: 3600 })
+  // Cache for 1 hour — fail silently if KV quota exceeded
+  try { await kv.put(CK.b2b, JSON.stringify(plans), { expirationTtl: 3600 }) } catch {}
 
   return success(plans)
 })
@@ -102,7 +102,8 @@ configRoutes.get('/plans/b2c', async (c) => {
 
   const plans = (result.results ?? []).map(parsePlanB2C)
 
-  await kv.put(CK.b2c, JSON.stringify(plans), { expirationTtl: 3600 })
+  // Cache for 1 hour — fail silently if KV quota exceeded
+  try { await kv.put(CK.b2c, JSON.stringify(plans), { expirationTtl: 3600 }) } catch {}
 
   return success(plans)
 })
@@ -126,7 +127,8 @@ configRoutes.get('/config/:category', async (c) => {
 
   const configs = (result.results ?? []).map(parseConfig)
 
-  await kv.put(cacheKey, JSON.stringify(configs), { expirationTtl: 3600 })
+  // Cache for 1 hour — fail silently if KV quota exceeded
+  try { await kv.put(cacheKey, JSON.stringify(configs), { expirationTtl: 3600 }) } catch {}
 
   return success(configs)
 })

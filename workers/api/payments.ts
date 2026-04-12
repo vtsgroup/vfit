@@ -1254,7 +1254,7 @@ payments.get('/dashboard', requireType('personal'), async (c) => {
     top_students: topStudentsRows,
   }
 
-  await c.env.KV_CACHE.put(cacheKey, JSON.stringify(payload), { expirationTtl: 300 })
+  try { await c.env.KV_CACHE.put(cacheKey, JSON.stringify(payload), { expirationTtl: 300 }) } catch {}
   return success(payload)
 })
 
@@ -1309,7 +1309,7 @@ payments.get('/dashboard/chart', requireType('personal'), async (c) => {
     monthly_12_months: monthlyRows,
   }
 
-  await c.env.KV_CACHE.put(cacheKey, JSON.stringify(payload), { expirationTtl: 300 })
+  try { await c.env.KV_CACHE.put(cacheKey, JSON.stringify(payload), { expirationTtl: 300 }) } catch {}
   return success(payload)
 })
 
@@ -1390,7 +1390,7 @@ payments.get('/dashboard/pending', requireType('personal'), async (c) => {
     },
   }
 
-  await c.env.KV_CACHE.put(cacheKey, JSON.stringify(payload), { expirationTtl: 300 })
+  try { await c.env.KV_CACHE.put(cacheKey, JSON.stringify(payload), { expirationTtl: 300 }) } catch {}
   return success(payload)
 })
 

@@ -171,6 +171,7 @@ export function useAllConfig() {
     },
     enabled: isReady,
     staleTime: 60 * 1000, // 1 min for admin
+    retry: false,          // server errors (500) não melhoram com retry
   })
 }
 
