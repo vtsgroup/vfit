@@ -567,7 +567,9 @@ payments.post('/webhooks/asaas/transfer-auth', async (c) => {
     .filter(Boolean)
     .map((token) => token.trim())
 
-  if (!accessToken || !expectedTokens.includes(accessToken)) {
+  // O token é opcional na configuração do Asaas.
+  // Se vier preenchido, validamos. Se não vier, seguimos com as validações do payload.
+  if (accessToken && !expectedTokens.includes(accessToken)) {
     console.error('[Transfer Auth] Unauthorized — invalid token')
     return c.json({ status: 'REFUSED', refuseReason: 'Token de autenticação inválido' }, 200)
   }

@@ -387,7 +387,12 @@ export const api = {
     }
     if (token) headers['Authorization'] = `Bearer ${token}`
 
-    const url = `${API_BASE_URL}${endpoint}`
+    let normalizedEndpoint = endpoint
+    if (!endpoint.startsWith('/api/') && !endpoint.startsWith('http')) {
+      normalizedEndpoint = `/api/v1${endpoint}`
+    }
+
+    const url = normalizedEndpoint.startsWith('http') ? normalizedEndpoint : `${API_BASE_URL}${normalizedEndpoint}`
     const res = await fetch(url, {
       method: 'POST',
       headers,

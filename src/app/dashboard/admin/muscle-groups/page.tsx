@@ -540,8 +540,8 @@ export default function AdminMuscleGroupsPage() {
             <div className="space-y-0.5">
               <p className="text-sm font-medium text-amber-400">Imagens genéricas por enquanto</p>
               <p className="text-xs text-text-muted">
-                Clique no quadrado de imagem ou animação para fazer upload via R2. As imagens ficam disponíveis
-                imediatamente em todos os treinos da plataforma.
+                O primeiro quadro é a imagem estática do grupo muscular. O segundo quadro é a animação/GIF.
+                Clique em cada quadro para fazer upload via R2. Os arquivos ficam disponíveis imediatamente em todos os treinos da plataforma.
               </p>
             </div>
           </div>
