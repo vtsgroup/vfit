@@ -1061,28 +1061,18 @@ Todas as seções da landing tiveram `py-24` → `py-16` no mobile:
 - Zero errors · 81 static pages
 
 ---
-
 ## [v6.4.0] — 19/03/2026 — Fix: Simulation Role Isolation (10 pages)
 
 ### Bug Fix — Admin UI leak during simulation
 - **Problema:** Super admin simulando como aluno ainda via opções de admin (listas admin, botão "Vender Plano", etc.)
 - **Causa raiz:** 10 páginas do dashboard checavam `user.role` / `user.user_type` direto da auth store, ignorando `useEffectiveUserView()`
-
 ### Páginas corrigidas (10)
 | Página | O que mudou |
 |--------|-------------|
 | `students/page.tsx` | `userRole === 'admin'` → `hasAdminCapabilities && !isSimulationActive` (12 pontos) |
-| `assessments/page.tsx` | `user?.role === 'admin'` → `isPersonalView` |
-| `dashboard/page.tsx` | `user?.user_type !== 'personal'` → `effectiveType !== 'personal'` |
-| `marketplace/page.tsx` | `useAuthStore(s => s.isPersonal)` → `isPersonalView` |
 | `logs/page.tsx` | `isAdmin() + isSuperAdmin()` → `hasAdminCapabilities && !isSimulationActive` |
 | `payments/page.tsx` | `user?.user_type === 'student'` → `isStudentView` |
-| `exercises/page.tsx` | `userType === 'student'` → `isStudentView` (2 pontos) |
-| `payments/create/page.tsx` | `isAdmin()` → `hasAdminCapabilities && !isSimulationActive` |
-| `settings/page.tsx` | `user?.user_type === 'personal'` → `isPersonalView` |
-| `plans/page.tsx` | `isSuperAdmin()` → `hasAdminCapabilities && !isSimulationActive` |
 
-### Padrão aplicado
 - `hasAdminCapabilities && !isSimulationActive` → features admin-only
 - `isPersonalView` → features de personal trainer
 - `isStudentView` → features de aluno
