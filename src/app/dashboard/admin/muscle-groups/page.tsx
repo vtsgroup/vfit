@@ -2,10 +2,10 @@
  * src/app/dashboard/admin/muscle-groups/page.tsx
  *
  * Admin Grupos Musculares — Super Admin
- * Edita imagem, animação, cor e sub-músculos de cada grupo muscular
+ * Edita imagem masculina/feminina, cor e sub-músculos de cada grupo muscular
  *
  * Exports: AdminMuscleGroupsPage
- * Features: Auth: super_admin only · imagem/animação upload via R2 · CRUD sub-músculos
+ * Features: Auth: super_admin only · imagem masc/fem upload via R2/KV · CRUD sub-músculos
  */
 
 // ============================================
@@ -121,20 +121,20 @@ function MuscleGroupRow({
 }) {
   const uploadImage = useUploadMuscleGroupImage()
 
-  const [uploadingImage, setUploadingImage] = useState(false)
-  const [uploadingAnim, setUploadingAnim] = useState(false)
+  const [uploadingMale, setUploadingMale] = useState(false)
+  const [uploadingFemale, setUploadingFemale] = useState(false)
 
-  async function handleUpload(file: File, type: 'image' | 'animation') {
-    if (type === 'image') setUploadingImage(true)
-    else setUploadingAnim(true)
+  async function handleUpload(file: File, type: 'male' | 'female') {
+    if (type === 'male') setUploadingMale(true)
+    else setUploadingFemale(true)
     try {
       await uploadImage.mutateAsync({ id: group.id, file, type })
-      toast.success(type === 'image' ? 'Imagem atualizada!' : 'Animação atualizada!')
+      toast.success(type === 'male' ? 'Imagem masculina atualizada!' : 'Imagem feminina atualizada!')
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Erro no upload')
     } finally {
-      if (type === 'image') setUploadingImage(false)
-      else setUploadingAnim(false)
+      if (type === 'male') setUploadingMale(false)
+      else setUploadingFemale(false)
     }
   }
 
@@ -150,23 +150,23 @@ function MuscleGroupRow({
         <div className="h-4 w-0.5 shrink-0 rounded-full bg-border-light" />
       )}
 
-      {/* Imagem */}
+      {/* Imagem masculina */}
       <ImageCell
-        url={group.image_url}
-        alt={group.name_pt}
-        onUpload={(f) => handleUpload(f, 'image')}
-        uploading={uploadingImage}
+        url={group.image_male_url || group.image_url}
+        alt={`${group.name_pt} masculino`}
+        onUpload={(f) => handleUpload(f, 'male')}
+        uploading={uploadingMale}
       />
 
-      {/* Animação */}
+      {/* Imagem feminina */}
       <div className="hidden sm:flex shrink-0 flex-col items-center gap-0.5">
         <ImageCell
-          url={group.animation_url}
-          alt={`${group.name_pt} animação`}
-          onUpload={(f) => handleUpload(f, 'animation')}
-          uploading={uploadingAnim}
+          url={group.image_female_url || group.image_url}
+          alt={`${group.name_pt} feminino`}
+          onUpload={(f) => handleUpload(f, 'female')}
+          uploading={uploadingFemale}
         />
-        <span className="text-[9px] text-text-muted">anim</span>
+        <span className="text-[9px] text-text-muted">fem</span>
       </div>
 
       {/* Info */}
@@ -538,10 +538,10 @@ export default function AdminMuscleGroupsPage() {
           <div className="flex items-start gap-2">
             <DSIcon name="info" size={16} className="mt-0.5 shrink-0 text-amber-400" />
             <div className="space-y-0.5">
-              <p className="text-sm font-medium text-amber-400">Imagens genéricas por enquanto</p>
+              <p className="text-sm font-medium text-amber-400">Imagens por gênero (sem animação)</p>
               <p className="text-xs text-text-muted">
-                O primeiro quadro é a imagem estática do grupo muscular. O segundo quadro é a animação/GIF.
-                Clique em cada quadro para fazer upload via R2. Os arquivos ficam disponíveis imediatamente em todos os treinos da plataforma.
+                O primeiro quadro é a imagem masculina e o segundo é a feminina.
+                Clique em cada quadro para upload. Os arquivos ficam disponíveis imediatamente em todos os treinos da plataforma.
               </p>
             </div>
           </div>
@@ -591,10 +591,10 @@ export default function AdminMuscleGroupsPage() {
         {/* Legenda colunas */}
         <div className="hidden items-center gap-3 px-3 sm:flex">
           <div className="h-12 w-12 shrink-0 text-center text-[10px] font-semibold uppercase tracking-wider text-text-muted">
-            Img
+            Masc
           </div>
           <div className="hidden h-12 w-12 shrink-0 text-center text-[10px] font-semibold uppercase tracking-wider text-text-muted sm:block">
-            Anim
+            Fem
           </div>
           <div className="flex-1 text-[10px] font-semibold uppercase tracking-wider text-text-muted">Nome</div>
           {isSuperAdmin && (

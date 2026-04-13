@@ -65,7 +65,7 @@ export function useUpdateMuscleGroup() {
       data,
     }: {
       id: string
-      data: Partial<Pick<MuscleGroup, 'name' | 'name_pt' | 'description' | 'image_url' | 'animation_url' | 'color_hex' | 'display_order' | 'parent_id'>>
+      data: Partial<Pick<MuscleGroup, 'name' | 'name_pt' | 'description' | 'image_url' | 'animation_url' | 'image_male_url' | 'image_female_url' | 'color_hex' | 'display_order' | 'parent_id'>>
     }) => api.patch<{ muscle_group: MuscleGroup }>(`/admin/muscle-groups/${id}`, data),
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: ['admin', 'muscle-groups'] })
@@ -74,7 +74,7 @@ export function useUpdateMuscleGroup() {
   })
 }
 
-// POST /admin/muscle-groups/:id/image — upload raw File, ?type=image|animation
+// POST /admin/muscle-groups/:id/image — upload raw File, ?type=male|female
 export function useUploadMuscleGroupImage() {
   const qc = useQueryClient()
 
@@ -86,7 +86,7 @@ export function useUploadMuscleGroupImage() {
     }: {
       id: string
       file: File
-      type?: 'image' | 'animation'
+      type?: 'male' | 'female'
     }) => api.uploadFile<{ url: string; field: string }>(`/admin/muscle-groups/${id}/image?type=${type}`, file),
     onSuccess: (_data, { id }) => {
       void qc.invalidateQueries({ queryKey: ['admin', 'muscle-groups'] })

@@ -422,7 +422,7 @@ export default function AdminDashboardPage() {
           {isSuperAdmin && <QuickLink href="/dashboard/payments/withdraw" icon="dollar" label="Saques PIX" desc="Transferências e saldo" />}
           {isSuperAdmin && <QuickLink href="/dashboard/admin/smoke" icon="key" label="Smoke Tokens" desc="Gerar tokens p/ smoke" />}
           {isSuperAdmin && <QuickLink href="/dashboard/admin/config" icon="settings" label="Configuração" desc="Planos, preços, taxas" />}
-          {isSuperAdmin && <QuickLink href="/dashboard/admin/muscle-groups" icon="activity" label="Grupos Musculares" desc="Imagens, animações, cores" />}
+          {isSuperAdmin && <QuickLink href="/dashboard/admin/muscle-groups" icon="activity" label="Grupos Musculares" desc="Imagens masc/fem, cores" />}
           {isSuperAdmin && <QuickLink href="/dashboard/workouts/media/library" icon="images" label="Mídia de Exercícios" desc="R2, vídeos, thumbs" />}
         </div>
       </div>

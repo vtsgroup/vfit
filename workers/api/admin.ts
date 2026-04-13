@@ -2299,7 +2299,7 @@ adminRoutes.delete('/feedback/:id', requireSuperAdmin, async (c) => {
 
 // ============================================================
 // SUPER ADMIN — Gestão de Muscle Groups (anatomia)
-// Editar name_pt, image_url, animation_url, parent_id via painel
+// Editar name_pt, image_male_url, image_female_url, parent_id via painel
 // DB: D1 (vfit-exercises) — acesso via c.env.DB
 // ============================================================
 
@@ -2307,7 +2307,8 @@ adminRoutes.delete('/feedback/:id', requireSuperAdmin, async (c) => {
 adminRoutes.get('/muscle-groups', requireSuperAdmin, async (c) => {
   const results = await c.env.DB
     .prepare(`SELECT mg.id, mg.name, mg.name_pt, mg.parent_id, mg.icon_svg, mg.image_url,
-                     mg.animation_url, mg.color_hex, mg.description, mg.display_order,
+             mg.animation_url, mg.image_male_url, mg.image_female_url,
+             mg.color_hex, mg.description, mg.display_order,
                      COUNT(ex.id) AS exercise_count
               FROM muscle_groups mg
               LEFT JOIN exercises ex ON ex.muscle_group_id = mg.id
@@ -2333,7 +2334,18 @@ adminRoutes.patch('/muscle-groups/:id', requireSuperAdmin, async (c) => {
   const { id } = c.req.param()
   const body = await c.req.json() as Record<string, unknown>
 
-  const allowed = ['name', 'name_pt', 'description', 'image_url', 'animation_url', 'color_hex', 'display_order', 'parent_id']
+  const allowed = [
+    'name',
+    'name_pt',
+    'description',
+    'image_url',
+    'animation_url',
+    'image_male_url',
+    'image_female_url',
+    'color_hex',
+    'display_order',
+    'parent_id',
+  ]
   const entries = Object.entries(body).filter(([k]) => allowed.includes(k))
   if (entries.length === 0) throw new BadRequestError('Nenhum campo editável enviado')
 
@@ -2353,10 +2365,10 @@ adminRoutes.patch('/muscle-groups/:id', requireSuperAdmin, async (c) => {
   return success({ muscle_group: updated })
 })
 
-// POST /admin/muscle-groups/:id/image — Upload de imagem do músculo para R2 (ou KV como fallback)
+// POST /admin/muscle-groups/:id/image — Upload de imagem do músculo (male/female) para R2/KV
 adminRoutes.post('/muscle-groups/:id/image', requireSuperAdmin, async (c) => {
   const { id } = c.req.param()
-  const type = (c.req.query('type') || 'image') as 'image' | 'animation'
+  const type = (c.req.query('type') || 'male') as 'male' | 'female' | 'image' | 'animation'
 
   if (!c.env.R2_IMAGES && !c.env.KV_IMAGES) {
     return c.json({ error: { message: 'Armazenamento não configurado (R2 e KV indisponíveis)', code: 'STORAGE_UNAVAILABLE' } }, 503)
@@ -2380,7 +2392,13 @@ adminRoutes.post('/muscle-groups/:id/image', requireSuperAdmin, async (c) => {
     'video/mp4': 'mp4', 'video/webm': 'webm',
   }
   const ext = extMap[contentType.split(';')[0].trim()] ?? 'jpg'
-  const field = type === 'animation' ? 'animation_url' : 'image_url'
+  const field = type === 'female'
+    ? 'image_female_url'
+    : type === 'animation'
+      ? 'animation_url'
+      : type === 'image'
+        ? 'image_url'
+        : 'image_male_url'
   const key = `muscles/${id}/${field}.${ext}`
 
   const body = await c.req.arrayBuffer()

@@ -49,6 +49,8 @@ export interface MuscleGroup {
   // Anatomy / media fields (added in migration 0003)
   image_url: string | null
   animation_url: string | null
+  image_male_url: string | null
+  image_female_url: string | null
   color_hex: string | null
   parent_id: string | null
   sub_muscles?: MuscleGroup[]
