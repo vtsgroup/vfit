@@ -9,7 +9,8 @@ workers_dev = true
 # Routes (custom domain) — Ativado em 20/02/2026
 # ============================================
 routes = [
-  { pattern = "api.vfit.app.br/*", zone_name = "vfit.app.br" }
+  { pattern = "api.vfit.app.br/*", zone_name = "vfit.app.br" },
+  { pattern = "images.vfit.app.br/*", zone_name = "vfit.app.br" }
 ]
 
 # ============================================

@@ -444,20 +444,53 @@ app.get('/api/v1/assessments/share/:token', async (c) => {
 })
 
 // ============================================
-// IMAGE SERVING — KV fallback quando R2 não está habilitado
-// GET /images/:key* — serve imagens armazenadas no KV_IMAGES
+// IMAGE CDN — images.vfit.app.br
+// Serve binários do R2 (quando disponível) ou KV_IMAGES.
+// GET /* — key = pathname sem a barra inicial
+// GET /images/* — retrocompat com api.vfit.app.br/images/* (chave sem prefixo /images/)
 // ============================================
-app.get('/images/*', async (c) => {
-  const key = c.req.path.replace(/^\/images\//, '')
+app.use('*', async (c, next) => {
+  const hostname = new URL(c.req.url).hostname
+  if (hostname !== 'images.vfit.app.br') return next()
+
+  const key = c.req.path.replace(/^\//, '')
   if (!key) return c.json({ error: 'Key obrigatória' }, 400)
 
+  // R2 tem prioridade quando habilitado
+  if (c.env.R2_IMAGES) {
+    const obj = await c.env.R2_IMAGES.get(key)
+    if (!obj) return c.json({ error: 'Imagem não encontrada' }, 404)
+    return new Response(obj.body, {
+      headers: {
+        'Content-Type': obj.httpMetadata?.contentType || 'application/octet-stream',
+        'Cache-Control': 'public, max-age=31536000, immutable',
+        'Access-Control-Allow-Origin': '*',
+      },
+    })
+  }
+
+  // Fallback: KV_IMAGES
   const value = await c.env.KV_IMAGES.getWithMetadata<{ contentType: string }>(key, 'arrayBuffer')
   if (!value.value) return c.json({ error: 'Imagem não encontrada' }, 404)
 
-  const contentType = value.metadata?.contentType || 'application/octet-stream'
   return new Response(value.value as ArrayBuffer, {
     headers: {
-      'Content-Type': contentType,
+      'Content-Type': value.metadata?.contentType || 'application/octet-stream',
+      'Cache-Control': 'public, max-age=31536000, immutable',
+      'Access-Control-Allow-Origin': '*',
+    },
+  })
+})
+
+// Retrocompat: api.vfit.app.br/images/* (para URLs já salvas no DB com domínio antigo)
+app.get('/images/*', async (c) => {
+  const key = c.req.path.replace(/^\/images\//, '')
+  if (!key) return c.json({ error: 'Key obrigatória' }, 400)
+  const value = await c.env.KV_IMAGES.getWithMetadata<{ contentType: string }>(key, 'arrayBuffer')
+  if (!value.value) return c.json({ error: 'Imagem não encontrada' }, 404)
+  return new Response(value.value as ArrayBuffer, {
+    headers: {
+      'Content-Type': value.metadata?.contentType || 'application/octet-stream',
       'Cache-Control': 'public, max-age=31536000, immutable',
       'Access-Control-Allow-Origin': '*',
     },

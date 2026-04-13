@@ -2394,10 +2394,9 @@ adminRoutes.post('/muscle-groups/:id/image', requireSuperAdmin, async (c) => {
     const base = (c.env.R2_IMAGES_URL || 'https://images.vfit.app.br').replace(/\/+$/, '')
     url = `${base}/${key}`
   } else {
-    // Fallback: KV_IMAGES — serve via GET /images/:key
+    // Fallback: KV_IMAGES — serve via images.vfit.app.br (já na CSP)
     await c.env.KV_IMAGES.put(key, body, { metadata: { contentType } })
-    const workerBase = 'https://api.vfit.app.br'
-    url = `${workerBase}/images/${key}`
+    url = `https://images.vfit.app.br/${key}`
   }
 
   await c.env.DB
