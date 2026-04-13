@@ -93,6 +93,43 @@ import { nutritionistRoutes } from './api/nutritionist'
 const app = new Hono<AppContext>()
 
 // ============================================
+// IMAGE CDN — images.vfit.app.br
+// DEVE vir ANTES do secureHeaders para evitar Cross-Origin-Resource-Policy: same-origin
+// ============================================
+app.use('*', async (c, next) => {
+  const hostname = new URL(c.req.url).hostname
+  if (hostname !== 'images.vfit.app.br') return next()
+
+  const key = c.req.path.replace(/^\//, '')
+  if (!key) return c.json({ error: 'Key obrigatória' }, 400)
+
+  if (c.env.R2_IMAGES) {
+    const obj = await c.env.R2_IMAGES.get(key)
+    if (!obj) return c.json({ error: 'Imagem não encontrada' }, 404)
+    return new Response(obj.body, {
+      headers: {
+        'Content-Type': obj.httpMetadata?.contentType || 'application/octet-stream',
+        'Cache-Control': 'public, max-age=31536000, immutable',
+        'Access-Control-Allow-Origin': '*',
+        'Cross-Origin-Resource-Policy': 'cross-origin',
+      },
+    })
+  }
+
+  const value = await c.env.KV_IMAGES.getWithMetadata<{ contentType: string }>(key, 'arrayBuffer')
+  if (!value.value) return c.json({ error: 'Imagem não encontrada' }, 404)
+
+  return new Response(value.value as ArrayBuffer, {
+    headers: {
+      'Content-Type': value.metadata?.contentType || 'application/octet-stream',
+      'Cache-Control': 'public, max-age=31536000, immutable',
+      'Access-Control-Allow-Origin': '*',
+      'Cross-Origin-Resource-Policy': 'cross-origin',
+    },
+  })
+})
+
+// ============================================
 // GLOBAL MIDDLEWARE (ordem importa!)
 // ============================================
 app.use('*', requestIdMiddleware)
@@ -444,45 +481,7 @@ app.get('/api/v1/assessments/share/:token', async (c) => {
 })
 
 // ============================================
-// IMAGE CDN — images.vfit.app.br
-// Serve binários do R2 (quando disponível) ou KV_IMAGES.
-// GET /* — key = pathname sem a barra inicial
-// GET /images/* — retrocompat com api.vfit.app.br/images/* (chave sem prefixo /images/)
-// ============================================
-app.use('*', async (c, next) => {
-  const hostname = new URL(c.req.url).hostname
-  if (hostname !== 'images.vfit.app.br') return next()
-
-  const key = c.req.path.replace(/^\//, '')
-  if (!key) return c.json({ error: 'Key obrigatória' }, 400)
-
-  // R2 tem prioridade quando habilitado
-  if (c.env.R2_IMAGES) {
-    const obj = await c.env.R2_IMAGES.get(key)
-    if (!obj) return c.json({ error: 'Imagem não encontrada' }, 404)
-    return new Response(obj.body, {
-      headers: {
-        'Content-Type': obj.httpMetadata?.contentType || 'application/octet-stream',
-        'Cache-Control': 'public, max-age=31536000, immutable',
-        'Access-Control-Allow-Origin': '*',
-      },
-    })
-  }
-
-  // Fallback: KV_IMAGES
-  const value = await c.env.KV_IMAGES.getWithMetadata<{ contentType: string }>(key, 'arrayBuffer')
-  if (!value.value) return c.json({ error: 'Imagem não encontrada' }, 404)
-
-  return new Response(value.value as ArrayBuffer, {
-    headers: {
-      'Content-Type': value.metadata?.contentType || 'application/octet-stream',
-      'Cache-Control': 'public, max-age=31536000, immutable',
-      'Access-Control-Allow-Origin': '*',
-    },
-  })
-})
-
-// Retrocompat: api.vfit.app.br/images/* (para URLs já salvas no DB com domínio antigo)
+// Retrocompat: api.vfit.app.br/images/* (para URLs antigas no DB)
 app.get('/images/*', async (c) => {
   const key = c.req.path.replace(/^\/images\//, '')
   if (!key) return c.json({ error: 'Key obrigatória' }, 400)
