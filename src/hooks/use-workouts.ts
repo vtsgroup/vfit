@@ -318,6 +318,10 @@ export interface D1MuscleGroup {
   icon_svg: string | null
   description: string | null
   display_order: number
+  parent_id: string | null
+  image_url?: string | null
+  image_male_url?: string | null
+  image_female_url?: string | null
 }
 
 export function useMuscleGroups() {

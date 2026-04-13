@@ -107,6 +107,13 @@ export default function ExercisesPage() {
     return counts
   }, [allExercises])
 
+  const visibleMuscleGroups = useMemo(() => {
+    return muscleGroups
+      .filter((g) => !g.parent_id)
+      .filter((g) => (groupCounts[g.id] || 0) > 0)
+      .sort((a, b) => a.display_order - b.display_order)
+  }, [muscleGroups, groupCounts])
+
   // Filter by difficulty locally
   const filteredExercises = useMemo(() => {
     let result = exercises
@@ -150,7 +157,7 @@ export default function ExercisesPage() {
                 ? `${favoriteExercises.length} exercício${favoriteExercises.length !== 1 ? 's' : ''} favoritados`
                 : selectedGroup
                   ? `${filteredExercises.length} exercício${filteredExercises.length !== 1 ? 's' : ''}`
-                  : `${muscleGroups.length} grupos musculares · ${allExercises.length} exercícios`
+                  : `${visibleMuscleGroups.length} grupos musculares · ${allExercises.length} exercícios`
               }
             </p>
           </div>
@@ -232,7 +239,7 @@ export default function ExercisesPage() {
                 </div>
               ) : (
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-                  {muscleGroups.map((group, idx) => (
+                  {visibleMuscleGroups.map((group, idx) => (
                     <MuscleGroupCard
                       key={group.id}
                       group={group}
