@@ -42,6 +42,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   // Sync resolved theme → <html> class + colorScheme + meta theme-color (TWA/PWA)
   useEffect(() => {
     const root = document.documentElement
+    root.classList.add('theme-switching')
+
     if (effectiveTheme === 'light') {
       root.classList.remove('dark')
       root.classList.add('light')
@@ -73,6 +75,15 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"][media]').forEach((el) => {
       el.content = topColor
     })
+
+    const rafId = window.requestAnimationFrame(() => {
+      root.classList.remove('theme-switching')
+    })
+
+    return () => {
+      window.cancelAnimationFrame(rafId)
+      root.classList.remove('theme-switching')
+    }
   }, [effectiveTheme])
 
   // Listen for OS color scheme changes when theme === 'system'

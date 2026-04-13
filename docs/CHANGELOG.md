@@ -7,6 +7,22 @@
 
 ## [Unreleased] — 12/04/2026 — Paridade admin de saques + redirect domínio legado
 
+### 🐛 Hotfix — 13/04/2026 — imagens de músculo + troca de tema instantânea
+- Upload de imagem em grupos musculares agora aplica versionamento de URL (`?v=timestamp`) para quebrar cache e refletir atualização sem delay.
+- Upload de imagem masculina/feminina passa a manter `image_url` sincronizada para compatibilidade com telas legadas.
+- Telas de treino/plano agora usam fallback de imagem por gênero (`image_female_url` → `image_male_url` → `image_url`).
+- Hook de grupos musculares reduz tempo de cache e força refetch em mount/focus para atualização mais rápida.
+- Tokens de glassmorphism no dark foram corrigidos para eliminar regressão visual.
+- Troca de tema light/dark agora é instantânea: transições/animações são desativadas durante o switch.
+
+### 🔧 Arquivos
+- [workers/api/admin.ts](../workers/api/admin.ts)
+- [src/app/(app)/treinos/page.tsx](../src/app/(app)/treinos/page.tsx)
+- [src/app/(app)/plano/page.tsx](../src/app/(app)/plano/page.tsx)
+- [src/hooks/use-exercises.ts](../src/hooks/use-exercises.ts)
+- [src/components/providers/theme-provider.tsx](../src/components/providers/theme-provider.tsx)
+- [src/app/globals.css](../src/app/globals.css)
+
 ### 🐛 Correções
 - Endpoint `GET /api/v1/admin/transfers` agora sincroniza saques `pending/processing` com o Asaas em tempo de leitura, atualizando `status`, `failed_reason` e `completed_at` quando necessário.
 - Hook `useAdminTransfers` ganhou polling automático de 60s apenas enquanto houver saques em aberto (`pending`/`processing`).

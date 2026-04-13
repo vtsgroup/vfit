@@ -212,6 +212,10 @@ function normalizeText(value?: string | null) {
     .trim()
 }
 
+function getMuscleImageUrl(muscleGroup?: MuscleGroup) {
+  return muscleGroup?.image_female_url || muscleGroup?.image_male_url || muscleGroup?.image_url || null
+}
+
 // ============================================
 // Share Plan Button
 // ============================================
@@ -315,9 +319,9 @@ function MuscleChip({
     <>
       {/* Anatomy image or icon fallback */}
       <div className={cn('flex h-14 w-14 items-center justify-center overflow-hidden rounded-xl', tone.mutedBg)}>
-        {muscleGroup?.image_url ? (
+        {getMuscleImageUrl(muscleGroup) ? (
           <Image
-            src={muscleGroup.image_url}
+            src={getMuscleImageUrl(muscleGroup) as string}
             alt={label}
             width={56}
             height={56}
@@ -381,9 +385,9 @@ function ExerciseCard({
     <>
       {/* Exercise thumbnail / number */}
       <div className={cn('flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl', tone.mutedBg)}>
-        {muscleGroup?.image_url ? (
+        {getMuscleImageUrl(muscleGroup) ? (
           <Image
-            src={muscleGroup.image_url}
+            src={getMuscleImageUrl(muscleGroup) as string}
             alt={muscleName || ''}
             width={48}
             height={48}
@@ -558,11 +562,8 @@ export default function PlanoPage() {
   // Dia ativo
   const currentDay: PlanDay | undefined = useMemo(() => {
     if (!plan) return undefined
-    if (!isPremium && activeDay > 1) return plan.days[0]
     return plan.days.find((d) => d.day_number === activeDay) || plan.days[0]
-  }, [plan, activeDay, isPremium])
-
-  const canAccessDay = useCallback((dayNumber: number) => isPremium || dayNumber === 1, [isPremium])
+  }, [plan, activeDay])
 
   // Unique muscle groups for current day
   const dayMuscleKeys = useMemo(() => {
@@ -652,26 +653,21 @@ export default function PlanoPage() {
       <div className="mt-5 flex gap-2 overflow-x-auto px-4 pb-2 scrollbar-hide">
         {plan.days.map((day) => {
           const isActive = day.day_number === activeDay
-          const isLocked = !canAccessDay(day.day_number)
           return (
             <button
               key={day.day_number}
               onClick={() => {
-                if (isLocked) return
                 setActiveDay(day.day_number)
               }}
-              disabled={isLocked}
               className={cn(
                 'flex shrink-0 items-center gap-2 rounded-2xl px-4 py-3 transition-all duration-300',
-                isLocked
-                  ? 'bg-bg-secondary text-text-muted opacity-70'
-                  : isActive
+                isActive
                   ? 'bg-linear-to-b from-brand-primary to-brand-primary-hover text-white shadow-[0_4px_0_0_#166534,0_10px_24px_rgba(34,197,94,0.35)]'
                   : 'bg-bg-secondary text-text-secondary hover:bg-bg-tertiary'
               )}
             >
               <DSIcon
-                name={isLocked ? 'lock' : 'dumbbell'}
+                name="dumbbell"
                 size={16}
                 className={isActive ? 'text-white' : 'text-text-muted'}
               />
@@ -689,7 +685,6 @@ export default function PlanoPage() {
         <h3 className="mb-2 text-[11px] font-bold uppercase tracking-wider text-text-muted">Próximos treinos</h3>
         <div className="space-y-2">
           {plan.days.slice(0, 5).map((day) => {
-            const locked = !canAccessDay(day.day_number)
             return (
               <div
                 key={`next-${day.day_number}`}
@@ -699,21 +694,14 @@ export default function PlanoPage() {
                   <p className="truncate text-sm font-semibold text-text-primary">Dia {day.day_number} — {day.name}</p>
                   <p className="text-xs text-text-secondary">{day.exercises.length} exercício{day.exercises.length !== 1 ? 's' : ''}</p>
                 </div>
-                {locked ? (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/10 px-2 py-1 text-[10px] font-semibold text-amber-400">
-                    <DSIcon name="lock" size={12} />
-                    Premium
-                  </span>
-                ) : (
-                  <span className="text-[10px] font-semibold text-brand-primary">Liberado</span>
-                )}
+                <span className="text-[10px] font-semibold text-brand-primary">Liberado</span>
               </div>
             )
           })}
         </div>
         {!isPremium && (
           <p className="mt-2 text-xs text-text-secondary">
-            Plano grátis: acesso somente ao Dia 1. Faça upgrade para liberar todos os dias e gerar novos planos.
+            Plano grátis: todos os dias do plano atual estão liberados. Faça upgrade para gerar novos planos e liberar recursos premium.
           </p>
         )}
       </div>
@@ -794,16 +782,14 @@ export default function PlanoPage() {
             <h3 className="text-xs font-bold uppercase tracking-wider text-text-muted">
               {currentDay.exercises.length} Exercício{currentDay.exercises.length !== 1 ? 's' : ''}
             </h3>
-            {canAccessDay(activeDay) && (
-              <button
-                type="button"
-                onClick={() => router.push(`/plano/editar?day=${activeDay}`)}
-                className="flex items-center gap-1 text-xs font-medium text-brand-primary hover:text-brand-primary-hover transition-colors"
-              >
-                <DSIcon name="pencil" size={12} />
-                Editar
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={() => router.push(`/plano/editar?day=${activeDay}`)}
+              className="flex items-center gap-1 text-xs font-medium text-brand-primary hover:text-brand-primary-hover transition-colors"
+            >
+              <DSIcon name="pencil" size={12} />
+              Editar
+            </button>
           </div>
 
           {/* ─── Exercise Cards ─── */}
@@ -838,13 +824,10 @@ export default function PlanoPage() {
           <Button
             size="lg"
             className="pointer-events-auto w-full shadow-2xl shadow-brand-primary/30"
-            disabled={!canAccessDay(activeDay)}
             onClick={() => router.push('/treino-ativo')}
           >
-            <DSIcon name={!canAccessDay(activeDay) ? 'lock' : 'play'} className="h-5 w-5" />
-            {!canAccessDay(activeDay)
-              ? 'DIA BLOQUEADO NO PLANO GRÁTIS'
-              : `INICIAR TREINO — Dia ${activeDay}`}
+            <DSIcon name="play" className="h-5 w-5" />
+            {`INICIAR TREINO — Dia ${activeDay}`}
           </Button>
         </div>
       </div>

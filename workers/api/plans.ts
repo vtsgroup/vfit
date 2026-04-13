@@ -94,21 +94,12 @@ plans.post('/generate', async (c) => {
   const body = await c.req.json()
   const input = generatePlanInputSchema.parse(body)
 
-  // Free plan limit: 1 plan per month (skip check if no auth)
+  // Regra de limite (quando autenticado): usuário grátis pode ter apenas 1 plano no total.
   const userId = c.get('jwtPayload')?.sub
   if (userId) {
-    const user = await pgQueryOne<{ subscription_plan: string }>(c.env,
-      'SELECT subscription_plan FROM users WHERE id = $1', [userId]
-    )
-    const isPremium = user?.subscription_plan && user.subscription_plan !== 'free'
-    if (!isPremium) {
-      const count = await pgQueryOne<{ count: string }>(c.env, `
-        SELECT COUNT(*) as count FROM workout_plans
-        WHERE user_id = $1 AND created_at >= date_trunc('month', NOW())
-      `, [userId])
-      if (parseInt(count?.count || '0') >= 1) {
-        throw new BadRequestError('Limite gratuito atingido. Assine o Premium para planos ilimitados.')
-      }
+    const canGenerate = await canGenerateMorePlans(c.env, userId)
+    if (!canGenerate) {
+      throw new BadRequestError('Plano grátis já utilizado. Faça upgrade para gerar novos planos.')
     }
   }
 
@@ -1058,20 +1049,28 @@ plans.get('/limits', authMiddleware, async (c) => {
   )
   const isPremium = user?.subscription_plan && user.subscription_plan !== 'free'
 
-  // Count plans generated this month
-  const count = await pgQueryOne<{ count: string }>(c.env, `
-    SELECT COUNT(*) as count FROM workout_plans
+  // Count plans generated (total e mês atual para telemetria/UI)
+  const totalCount = await pgQueryOne<{ count: string | number }>(c.env, `
+    SELECT COUNT(*)::int as count FROM workout_plans
+    WHERE user_id = $1
+  `, [userId])
+
+  const monthCount = await pgQueryOne<{ count: string | number }>(c.env, `
+    SELECT COUNT(*)::int as count FROM workout_plans
     WHERE user_id = $1 AND created_at >= date_trunc('month', NOW())
   `, [userId])
 
-  const plansThisMonth = parseInt(count?.count || '0')
+  const plansTotal = Number(totalCount?.count || 0)
+  const plansThisMonth = Number(monthCount?.count || 0)
   const maxPlans = isPremium ? -1 : 1
+  const canGenerate = isPremium || plansTotal < 1
 
   return success({
+    plans_total: plansTotal,
     plans_this_month: plansThisMonth,
     max_plans: maxPlans,
     is_premium: !!isPremium,
-    can_generate: isPremium || plansThisMonth < 1,
+    can_generate: canGenerate,
   })
 })
 

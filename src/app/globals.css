@@ -668,6 +668,21 @@
 /* Dark mode — base values are already dark, .dark class kept for compatibility */
 .dark {
   --chart-dot-stroke: #1a1a1e;
+
+  /* Glass tokens (fix regressão: cards claros no dark mode) */
+  --glass-v4-bg: rgba(11, 18, 33, 0.55);
+  --glass-v4-border-top: rgba(255, 255, 255, 0.18);
+  --glass-v4-border-bottom: rgba(255, 255, 255, 0.04);
+  --glass-v4-shine: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 50%);
+  --glass-v4-blur: blur(40px) saturate(220%) brightness(1.08);
+  --glass-v4-shadow: 0 8px 40px rgba(0,0,0,0.45), 0 2px 8px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.10);
+
+  --glass-depth-bg: rgba(11, 18, 33, 0.65);
+  --glass-depth-border-top: rgba(255, 255, 255, 0.14);
+  --glass-depth-border-left: rgba(255, 255, 255, 0.08);
+  --glass-depth-border-bottom: rgba(255, 255, 255, 0.04);
+  --glass-depth-border-right: rgba(255, 255, 255, 0.04);
+  --glass-depth-shadow: 0 10px 28px rgba(0,0,0,0.42), 0 2px 8px rgba(0,0,0,0.24), inset 0 1px 0 rgba(255,255,255,0.10);
 }
 
 /* System preference fallback — base is already dark, only chart-dot-stroke needed */
@@ -2616,6 +2631,14 @@ html.light {
     background: white !important;
     color: black !important;
     font-size: 11pt !important;
+  /* Theme switch instantâneo (light/dark) */
+  .theme-switching,
+  .theme-switching *,
+  .theme-switching *::before,
+  .theme-switching *::after {
+    transition: none !important;
+    animation: none !important;
+  }
     line-height: 1.4 !important;
   }
 

@@ -2405,22 +2405,32 @@ adminRoutes.post('/muscle-groups/:id/image', requireSuperAdmin, async (c) => {
   if (body.byteLength > 20 * 1024 * 1024) throw new BadRequestError('Arquivo máximo: 20 MB')
 
   let url: string
+  const versionTag = Date.now()
 
   if (c.env.R2_IMAGES) {
     // R2 disponível — comportamento original
     await c.env.R2_IMAGES.put(key, body, { httpMetadata: { contentType } })
     const base = (c.env.R2_IMAGES_URL || 'https://images.vfit.app.br').replace(/\/+$/, '')
-    url = `${base}/${key}`
+    url = `${base}/${key}?v=${versionTag}`
   } else {
     // Fallback: KV_IMAGES — serve via images.vfit.app.br (já na CSP)
     await c.env.KV_IMAGES.put(key, body, { metadata: { contentType } })
-    url = `https://images.vfit.app.br/${key}`
+    url = `https://images.vfit.app.br/${key}?v=${versionTag}`
   }
 
-  await c.env.DB
-    .prepare(`UPDATE muscle_groups SET ${field} = ? WHERE id = ?`)
-    .bind(url, id)
-    .run()
+  // Compatibilidade: quando fizer upload male/female, atualizar image_url também
+  // para telas legadas que ainda leem apenas image_url.
+  if (field === 'image_male_url' || field === 'image_female_url') {
+    await c.env.DB
+      .prepare(`UPDATE muscle_groups SET ${field} = ?, image_url = ? WHERE id = ?`)
+      .bind(url, url, id)
+      .run()
+  } else {
+    await c.env.DB
+      .prepare(`UPDATE muscle_groups SET ${field} = ? WHERE id = ?`)
+      .bind(url, id)
+      .run()
+  }
 
   return success({ [field]: url })
 })

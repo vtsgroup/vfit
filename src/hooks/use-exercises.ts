@@ -103,7 +103,9 @@ export function useMuscleGroups() {
       const res = await api.get<MuscleGroup[]>('/muscle-groups')
       return res.data
     },
-    staleTime: 30 * 60 * 1000, // 30min — very stable data
+    staleTime: 2 * 60 * 1000, // 2min — permite refletir updates de mídia sem delay longo
+    refetchOnMount: 'always',
+    refetchOnWindowFocus: true,
   })
 }
 

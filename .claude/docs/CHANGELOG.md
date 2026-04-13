@@ -7,6 +7,14 @@
 
 ## [Unreleased] — 2026-04-08 — Sprint 11-15 (UX Nutrição/Exercícios)
 
+### 🐛 Hotfix — Imagens de grupos musculares + tema instantâneo (2026-04-13)
+- **Cache-busting de mídia no upload admin:** [workers/api/admin.ts](workers/api/admin.ts) agora salva URLs com `?v=timestamp` ao subir imagem (male/female/image), reduzindo stale cache em CDN/app.
+- **Compatibilidade legada de imagem:** uploads `male/female` também atualizam `image_url` em [workers/api/admin.ts](workers/api/admin.ts), garantindo atualização imediata em telas que ainda consomem fallback legado.
+- **Fallback completo de imagem por gênero no app:** [src/app/(app)/treinos/page.tsx](src/app/(app)/treinos/page.tsx) e [src/app/(app)/plano/page.tsx](src/app/(app)/plano/page.tsx) agora priorizam `image_female_url` → `image_male_url` → `image_url`.
+- **Refetch mais rápido de grupos musculares:** [src/hooks/use-exercises.ts](src/hooks/use-exercises.ts) passou para `staleTime` menor (2 min) com `refetchOnMount: 'always'`.
+- **Glassmorphism dark/light corrigido:** [src/app/globals.css](src/app/globals.css) recebeu override de tokens de glass no `.dark`, eliminando regressão visual no modo escuro.
+- **Troca de tema instantânea:** [src/components/providers/theme-provider.tsx](src/components/providers/theme-provider.tsx) aplica classe transitória `theme-switching` e [src/app/globals.css](src/app/globals.css) desativa transições/animações nesse momento para mudança imediata entre light/dark.
+
 ### ✨ SEO / Growth
 - **Reposicionamento ICP da home para aluno-first:** [src/app/page.tsx](src/app/page.tsx), [src/components/landing/hero.tsx](src/components/landing/hero.tsx), [src/components/landing/faq-section.tsx](src/components/landing/faq-section.tsx) e [src/components/seo/json-ld.tsx](src/components/seo/json-ld.tsx) foram ajustados para remover foco comercial de personal na landing principal, priorizando narrativa para aluno e redirecionando oferta profissional para páginas dedicadas.
 - **Colaboração Personal + Nutricionista reforçada nas ICP pages:** [src/app/(public)/app-personal-trainer/page.tsx](src/app/(public)/app-personal-trainer/page.tsx) e [src/app/(public)/nutricionistas/page.tsx](src/app/(public)/nutricionistas/page.tsx) agora explicam painel conjunto, comunicação entre profissionais no contexto do aluno, alinhamento treino+dieta e monetização via afiliados.

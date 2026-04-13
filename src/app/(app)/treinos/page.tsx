@@ -70,6 +70,14 @@ function normalizeText(value?: string | null) {
     .trim()
 }
 
+function getMuscleImageUrl(mg?: {
+  image_female_url?: string | null
+  image_male_url?: string | null
+  image_url?: string | null
+} | null) {
+  return mg?.image_female_url || mg?.image_male_url || mg?.image_url || null
+}
+
 // ── T7.5 — Progress Ring SVG (T11.8: memo) ──────────────────────────
 const ProgressRing = memo(function ProgressRing({
   value,
@@ -257,7 +265,7 @@ export default function TreinosPage() {
       const match = muscleByName.get(normalizeText(name))
       return {
         name,
-        imageUrl: match?.image_url ?? null,
+        imageUrl: getMuscleImageUrl(match),
         tone: toneByMuscle(name),
       }
     })
@@ -673,7 +681,7 @@ export default function TreinosPage() {
                   />
                   {!!ex.muscle_group && (
                     <img
-                      src={muscleByName.get(normalizeText(ex.muscle_group))?.image_url || buildPlaceholderImage(ex.muscle_group, toneByMuscle(ex.muscle_group))}
+                      src={getMuscleImageUrl(muscleByName.get(normalizeText(ex.muscle_group))) || buildPlaceholderImage(ex.muscle_group, toneByMuscle(ex.muscle_group))}
                       alt={`Músculo ${ex.muscle_group}`}
                       className="absolute -right-1 -bottom-1 h-6 w-6 rounded-md border border-border-light bg-bg-secondary object-cover"
                     />
