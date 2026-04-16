@@ -359,9 +359,14 @@ export async function createSession(
   data: SessionData
 ): Promise<void> {
   try {
-    await kv.put(`session:${sessionId}`, JSON.stringify(data), {
-      expirationTtl: SESSION_TTL,
-    })
+    await Promise.all([
+      kv.put(`session:${sessionId}`, JSON.stringify(data), {
+        expirationTtl: SESSION_TTL,
+      }),
+      kv.put(`user-sessions:${data.userId}:${sessionId}`, '1', {
+        expirationTtl: SESSION_TTL,
+      }),
+    ])
   } catch (error) {
     if (isKvDailyWriteLimitError(error)) {
       console.warn('[Auth] KV session write skipped (daily write limit reached)')

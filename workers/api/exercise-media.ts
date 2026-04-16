@@ -33,6 +33,34 @@ import {
   uploadExerciseMediaQuerySchema,
 } from '@workers/schemas/exercise-media'
 
+// T3.10 — Audit trail helper: stores to KV with 90-day TTL (no DB migration needed)
+async function logMediaAudit(
+  kv: KVNamespace,
+  data: { exerciseId: string; action: 'upload' | 'remove'; adminId: string; url?: string; key?: string }
+) {
+  try {
+    const id = `media-audit:${data.exerciseId}:${Date.now()}`
+    await kv.put(id, JSON.stringify({ ...data, ts: new Date().toISOString() }), { expirationTtl: 90 * 24 * 3600 })
+  } catch { /* best-effort */ }
+}
+
+async function invalidateExerciseCatalogCache(kv: KVNamespace, exerciseId: string) {
+  await Promise.allSettled([
+    kv.delete(`exercises:detail:${exerciseId}`),
+    kv.delete(`exercises:list:1:50:`),
+    kv.delete(`exercises:list:1:100:`),
+    kv.delete(`exercises:list:1:300:`),
+  ])
+}
+
+async function updateExerciseCatalogImageUrls(env: AppContext['Bindings'], exerciseId: string, imageUrls: string[] | null) {
+  await env.DB.prepare(
+    'UPDATE exercises SET image_urls = ? WHERE id = ?'
+  ).bind(imageUrls ? JSON.stringify(imageUrls) : null, exerciseId).run()
+
+  await invalidateExerciseCatalogCache(env.KV_CACHE, exerciseId)
+}
+
 const mediaRoutes = new Hono<AppContext>()
 
 mediaRoutes.use('*', authMiddleware)
@@ -127,6 +155,45 @@ mediaRoutes.put('/:exerciseId/media/:id', requireType('personal', 'admin', 'supe
 })
 
 // ============================================
+// DELETE /exercises/:exerciseId/media/image (T3.6 — remove thumbnail from R2 + clear D1)
+// NOTE: must be declared before /media/:id to avoid route shadowing.
+// ============================================
+mediaRoutes.delete('/:exerciseId/media/image', requireType('admin', 'super_admin'), async (c) => {
+  const exerciseId = c.req.param('exerciseId')
+
+  // Find current image_urls from D1
+  let currentUrls: string[] = []
+  try {
+    const row = await c.env.DB.prepare(
+      'SELECT image_urls FROM exercises WHERE id = ?'
+    ).bind(exerciseId).first<{ image_urls: string | null }>()
+    currentUrls = JSON.parse(row?.image_urls || '[]')
+  } catch { /* best-effort */ }
+
+  const base = normalizePublicBase(c.env.R2_IMAGES_URL, 'https://images.vfit.app.br')
+  for (const url of currentUrls) {
+    try {
+      const key = url.replace(`${base}/`, '')
+      if (key && !key.startsWith('http') && c.env.R2_IMAGES) {
+        await c.env.R2_IMAGES.delete(key)
+      }
+    } catch { /* best-effort */ }
+  }
+
+  await updateExerciseCatalogImageUrls(c.env, exerciseId, null)
+
+  c.executionCtx.waitUntil(
+    logMediaAudit(c.env.KV_CACHE, {
+      exerciseId,
+      action: 'remove',
+      adminId: c.get('jwtPayload')?.sub ?? 'unknown',
+    })
+  )
+
+  return noContent()
+})
+
+// ============================================
 // DELETE /exercises/:exerciseId/media/:id (soft delete)
 // ============================================
 mediaRoutes.delete('/:exerciseId/media/:id', requireType('personal', 'admin', 'super_admin'), async (c) => {
@@ -153,6 +220,7 @@ mediaRoutes.delete('/:exerciseId/media/:id', requireType('personal', 'admin', 's
 // ============================================
 mediaRoutes.post('/:exerciseId/media/upload', requireType('personal', 'admin', 'super_admin'), async (c) => {
   const exerciseId = c.req.param('exerciseId')
+  const userRole = c.get('userRole') as string | undefined
   const parsedQuery = uploadExerciseMediaQuerySchema.parse({
     type: c.req.query('type') || undefined,
     key: c.req.query('key') || undefined,
@@ -162,6 +230,10 @@ mediaRoutes.post('/:exerciseId/media/upload', requireType('personal', 'admin', '
   const body = await c.req.arrayBuffer()
 
   if (parsedQuery.type === 'video') {
+        if (!c.env.R2_VIDEOS) {
+          throw new BadRequestError('R2_VIDEOS binding ausente')
+        }
+
     if (!contentType.startsWith('video/')) {
       throw new BadRequestError('Arquivo de vídeo deve usar Content-Type video/*')
     }
@@ -200,6 +272,10 @@ mediaRoutes.post('/:exerciseId/media/upload', requireType('personal', 'admin', '
   const ext = pickExtensionFromContentType(contentType, 'jpg')
   const key = parsedQuery.key || `exercise-media/${exerciseId}/thumbnails/${generateId()}.${ext}`
 
+  if (!c.env.R2_IMAGES) {
+    throw new BadRequestError('R2_IMAGES binding ausente')
+  }
+
   await c.env.R2_IMAGES.put(key, body, {
     httpMetadata: { contentType },
     customMetadata: {
@@ -209,17 +285,35 @@ mediaRoutes.post('/:exerciseId/media/upload', requireType('personal', 'admin', '
   })
 
   const base = normalizePublicBase(c.env.R2_IMAGES_URL, 'https://images.vfit.app.br')
+  const thumbnailUrl = `${base}/${key}`
+
+  const shouldSyncCatalogImage = userRole === 'admin' || userRole === 'super_admin'
+
+  if (shouldSyncCatalogImage) {
+    await updateExerciseCatalogImageUrls(c.env, exerciseId, [thumbnailUrl])
+
+    c.executionCtx.waitUntil(
+      logMediaAudit(c.env.KV_CACHE, {
+        exerciseId,
+        action: 'upload',
+        adminId: c.get('jwtPayload')?.sub ?? 'unknown',
+        url: thumbnailUrl,
+        key,
+      })
+    )
+  }
+
   return created({
     type: 'thumbnail',
     key,
     content_type: contentType,
     size_bytes: body.byteLength,
-    url: `${base}/${key}`,
+    url: thumbnailUrl,
   })
 })
 
 export { mediaRoutes as exerciseMediaRoutes }
-
+// (end of exercise-media routes)
 interface ExerciseMediaRow {
   id: string
   exercise_id: string

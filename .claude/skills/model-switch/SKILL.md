@@ -1,3 +1,8 @@
+---
+name: model-switch
+description: Quick model switching guidance for cost-quality tradeoffs between Haiku, Sonnet, and Opus. Use when deciding model escalation strategy or choosing the right model for a coding task.
+---
+
 # Model Switch — Haiku ↔ Sonnet ↔ Opus
 
 Quick switching between 3 models for optimal token economy + quality.

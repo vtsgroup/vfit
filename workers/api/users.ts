@@ -370,9 +370,11 @@ users.delete('/me', async (c) => {
 
   // 3. Remover fotos do R2 (best-effort)
   try {
-    const listed = await c.env.R2_IMAGES.list({ prefix: `profiles/${userId}/` })
-    for (const obj of listed.objects) {
-      await c.env.R2_IMAGES.delete(obj.key)
+    if (c.env.R2_IMAGES) {
+      const listed = await c.env.R2_IMAGES.list({ prefix: `profiles/${userId}/` })
+      for (const obj of listed.objects) {
+        await c.env.R2_IMAGES.delete(obj.key)
+      }
     }
   } catch { /* best-effort */ }
 
@@ -567,6 +569,10 @@ users.put('/me/photo/upload', async (c) => {
   const body = await c.req.arrayBuffer()
   if (body.byteLength > 20 * 1024 * 1024) {
     throw new BadRequestError('Arquivo excede 20MB')
+  }
+
+  if (!c.env.R2_IMAGES) {
+    throw new BadRequestError('R2_IMAGES binding ausente')
   }
 
   // Upload para R2

@@ -168,7 +168,7 @@ export function StudentHeader() {
           {/* Bell — with absolute positioned badge (same as dashboard) */}
           <div className="relative">
             <Link
-              href="/perfil/notificacoes"
+              href="/dashboard/notifications"
               className="ds3-action-btn flex"
               title={unreadCount > 0 ? `${unreadCount} não lida(s)` : 'Notificações'}
               aria-label={unreadCount > 0 ? `${unreadCount} notificações não lidas` : 'Notificações'}

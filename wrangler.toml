@@ -67,20 +67,15 @@ binding = "KV_IMAGES"
 id = "18053a73020242bcba036299d09426b9"
 
 # ============================================
-# R2 Buckets (temporariamente desabilitado)
-#
-# Contexto: conta Cloudflare retornando erros 10042/10136
-# "Please enable R2 through the Cloudflare Dashboard"
-#
-# Reativar estes bindings assim que o R2 for habilitado na conta.
+# R2 Buckets
 # ============================================
-# [[r2_buckets]]
-# binding = "R2_VIDEOS"
-# bucket_name = "personal-ia-videos"  # R2 buckets cannot be renamed
+[[r2_buckets]]
+binding = "R2_VIDEOS"
+bucket_name = "personal-ia-videos"  # R2 buckets cannot be renamed
 
-# [[r2_buckets]]
-# binding = "R2_IMAGES"
-# bucket_name = "personal-ia-images"  # R2 buckets cannot be renamed
+[[r2_buckets]]
+binding = "R2_IMAGES"
+bucket_name = "personal-ia-images"  # R2 buckets cannot be renamed
 
 # ============================================
 # Cloudflare Stream (Sprint E — exercise videos)

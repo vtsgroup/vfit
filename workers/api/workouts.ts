@@ -1583,6 +1583,10 @@ workouts.post('/:id/cover-image', requireType('personal'), async (c) => {
     throw new BadRequestError('Imagem deve ter no máximo 10 MB')
   }
 
+  if (!c.env.R2_IMAGES) {
+    throw new BadRequestError('R2_IMAGES binding ausente')
+  }
+
   await c.env.R2_IMAGES.put(key, body, { httpMetadata: { contentType } })
 
   const base = (c.env.R2_IMAGES_URL || 'https://images.vfit.app.br').replace(/\/+$/, '')
@@ -1608,7 +1612,11 @@ workouts.delete('/:id/cover-image', requireType('personal'), async (c) => {
 
   // Remove todos os formatos possíveis (jpg, png, webp)
   for (const ext of ['jpg', 'png', 'webp']) {
-    try { await c.env.R2_IMAGES.delete(`workouts/${workoutId}/cover.${ext}`) } catch { /* best-effort */ }
+    try {
+      if (c.env.R2_IMAGES) {
+        await c.env.R2_IMAGES.delete(`workouts/${workoutId}/cover.${ext}`)
+      }
+    } catch { /* best-effort */ }
   }
 
   const now = new Date().toISOString()
@@ -1656,6 +1664,10 @@ workouts.post('/:id/exercises/:eid/video', requireType('personal'), async (c) =>
     throw new BadRequestError('Vídeo deve ter no máximo 100 MB')
   }
 
+  if (!c.env.R2_IMAGES) {
+    throw new BadRequestError('R2_IMAGES binding ausente')
+  }
+
   await c.env.R2_IMAGES.put(key, body, { httpMetadata: { contentType } })
 
   const base = (c.env.R2_IMAGES_URL || 'https://images.vfit.app.br').replace(/\/+$/, '')
@@ -1694,7 +1706,9 @@ workouts.delete('/:id/exercises/:eid/video', requireType('personal'), async (c) 
   if (exRow.custom_video_url?.includes('images.vfit.app.br')) {
     try {
       const urlParts = new URL(exRow.custom_video_url)
-      await c.env.R2_IMAGES.delete(urlParts.pathname.replace(/^\//, ''))
+      if (c.env.R2_IMAGES) {
+        await c.env.R2_IMAGES.delete(urlParts.pathname.replace(/^\//, ''))
+      }
     } catch { /* best-effort */ }
   }
 

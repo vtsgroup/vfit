@@ -550,7 +550,7 @@ export default function AdminMuscleGroupsPage() {
         {isFallbackMode && (
           <div className="rounded-xl border border-amber-400/20 bg-amber-400/5 px-4 py-3">
             <div className="flex items-start gap-2">
-              <DSIcon name="warning" size={16} className="mt-0.5 shrink-0 text-amber-400" />
+              <DSIcon name="alertTriangle" size={16} className="mt-0.5 shrink-0 text-amber-400" />
               <div className="space-y-0.5">
                 <p className="text-sm font-medium text-amber-400">Modo fallback ativo</p>
                 <p className="text-xs text-text-muted">
@@ -565,7 +565,7 @@ export default function AdminMuscleGroupsPage() {
         {isError && (
           <div className="rounded-xl border border-red-500/20 bg-red-500/8 px-4 py-3">
             <div className="flex items-start gap-2">
-              <DSIcon name="warning" size={16} className="mt-0.5 shrink-0 text-red-400" />
+              <DSIcon name="alertTriangle" size={16} className="mt-0.5 shrink-0 text-red-400" />
               <div className="space-y-0.5">
                 <p className="text-sm font-medium text-red-400">Erro ao carregar grupos musculares</p>
                 <p className="text-xs text-text-muted">

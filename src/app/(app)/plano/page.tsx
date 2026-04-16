@@ -479,6 +479,18 @@ export default function PlanoPage() {
   const { data: exerciseCatalog } = useExercises({ per_page: 300 })
   const isPremium = subscriptionStatus?.is_premium ?? false
 
+  // Check if active day was already completed today (same-day blocking — T1.5-T1.8)
+  const isDayCompletedToday = useMemo(() => {
+    if (!plan) return false
+    const today = new Date().toISOString().slice(0, 10)
+    const key = `vfit_day_completed_${plan.id}_${activeDay}`
+    try {
+      return localStorage.getItem(key) === today
+    } catch {
+      return false
+    }
+  }, [plan, activeDay])
+
   // Build lookup: muscle_group key → MuscleGroup object
   const muscleGroupMap = useMemo(() => {
     const map = new Map<string, MuscleGroup>()
@@ -653,6 +665,9 @@ export default function PlanoPage() {
       <div className="mt-5 flex gap-2 overflow-x-auto px-4 pb-2 scrollbar-hide">
         {plan.days.map((day) => {
           const isActive = day.day_number === activeDay
+          const today = new Date().toISOString().slice(0, 10)
+          let completedToday = false
+          try { completedToday = localStorage.getItem(`vfit_day_completed_${plan.id}_${day.day_number}`) === today } catch { /* noop */ }
           return (
             <button
               key={day.day_number}
@@ -663,16 +678,18 @@ export default function PlanoPage() {
                 'flex shrink-0 items-center gap-2 rounded-2xl px-4 py-3 transition-all duration-300',
                 isActive
                   ? 'bg-linear-to-b from-brand-primary to-brand-primary-hover text-white shadow-[0_4px_0_0_#166534,0_10px_24px_rgba(34,197,94,0.35)]'
+                  : completedToday
+                  ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-500'
                   : 'bg-bg-secondary text-text-secondary hover:bg-bg-tertiary'
               )}
             >
               <DSIcon
-                name="dumbbell"
+                name={completedToday ? 'checkCircle' : 'dumbbell'}
                 size={16}
-                className={isActive ? 'text-white' : 'text-text-muted'}
+                className={isActive ? 'text-white' : completedToday ? 'text-emerald-500' : 'text-text-muted'}
               />
               <div className="flex flex-col items-start">
-                <span className="text-[10px] font-medium uppercase leading-tight">Dia</span>
+                <span className="text-[10px] font-medium uppercase leading-tight">{completedToday && !isActive ? 'Feito' : 'Dia'}</span>
                 <span className="text-base font-bold leading-tight">{day.day_number}</span>
               </div>
             </button>
@@ -821,14 +838,21 @@ export default function PlanoPage() {
       {/* ─── Floating CTA — INICIAR TREINO ─── */}
       <div className="pointer-events-none fixed inset-x-0 bottom-20 z-30 px-4">
         <div className="mx-auto max-w-lg">
-          <Button
-            size="lg"
-            className="pointer-events-auto w-full shadow-2xl shadow-brand-primary/30"
-            onClick={() => router.push('/treino-ativo')}
-          >
-            <DSIcon name="play" className="h-5 w-5" />
-            {`INICIAR TREINO — Dia ${activeDay}`}
-          </Button>
+          {isDayCompletedToday ? (
+            <div className="pointer-events-auto flex w-full items-center justify-center gap-2 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 py-4 text-sm font-bold text-emerald-500">
+              <DSIcon name="checkCircle" className="h-5 w-5" />
+              Treino do Dia {activeDay} Concluído ✓
+            </div>
+          ) : (
+            <Button
+              size="lg"
+              className="pointer-events-auto w-full"
+              onClick={() => router.push('/treino-ativo')}
+            >
+              <DSIcon name="play" className="h-5 w-5" />
+              {`INICIAR TREINO — Dia ${activeDay}`}
+            </Button>
+          )}
         </div>
       </div>
     </div>

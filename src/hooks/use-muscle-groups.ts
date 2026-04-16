@@ -82,7 +82,7 @@ export function useUploadMuscleGroupImage() {
     mutationFn: ({
       id,
       file,
-      type = 'image',
+      type = 'male',
     }: {
       id: string
       file: File

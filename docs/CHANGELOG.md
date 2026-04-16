@@ -7,6 +7,37 @@
 
 ## [Unreleased] — 12/04/2026 — Paridade admin de saques + redirect domínio legado
 
+### 🐛 Hotfix — 16/04/2026 — QA gate + estabilidade de testes + mídia de exercícios
+- Corrigido índice de sessões em KV no helper de auth: `createSession` voltou a registrar `user-sessions:{userId}:{sessionId}`, restaurando listagem de sessões por usuário.
+- Endpoint de mídia recebeu remoção explícita de imagem de exercício: `DELETE /exercises/:exerciseId/media/image` (remove objetos do R2, limpa `image_urls` no D1 e invalida KV cache).
+- Incluída trilha de auditoria de mídia em KV com TTL de 90 dias para ações de upload/remoção.
+- UI admin de exercícios ganhou ação de remover imagem (botão `X` com estado de loading).
+- Upload de thumbnail deixou de sincronizar `exercises.image_urls` para usuários `personal`; a atualização do catálogo D1 agora roda apenas para atores `admin`/`super_admin`, evitando sobrescrita indevida do catálogo compartilhado pela central de mídia pessoal.
+- Remoção/upload de imagem no admin passaram a concluir a atualização do D1 e a invalidação de cache antes da resposta HTTP, eliminando race condition com o refetch imediato da tela admin.
+- Ajustes de QA E2E no fluxo de treinos: asserts estabilizados e injeção de auth de aluno para rotas de progresso.
+- Corrigida precedência de rota em mídia de exercícios: `DELETE /exercises/:exerciseId/media/image` agora é declarado antes de `/:id` para evitar shadowing.
+- Endpoints workers que usam R2 receberam guards explícitos para bindings opcionais (`R2_IMAGES`/`R2_VIDEOS`) e mensagens de erro claras.
+
+### ✅ QA operacional desta sessão
+- `npm run smoke:auth:local` → **8 passed, 0 failed, 2 skipped**.
+- `node scripts/smoke-notifications.mjs` com token admin → **8 notificações criadas, 0 falhas**.
+- `npm run test` → **360 passed, 0 failed**.
+- `npx playwright test tests/e2e/workout.spec.ts --project=chromium` → **6 passed**.
+- `npm run test:e2e:a11y -- --project=mobile-chrome` → **6 passed, 1 skipped**.
+- Checklist visual light/dark + mobile concluído com evidências em `.claude/tmp/qa-visual-2026-04-16`.
+- `npm run quality:ci` aprovado (docs gate + security audit + lint sem erros + type-check + tests + build).
+
+### ⚠️ Observação operacional
+- Validação T4.4/T4.5 em produção apontou incidente de infra no worker ativo (`R2_IMAGES` indefinido em upload de mídia), bloqueando confirmação end-to-end em produção até ajuste de binding/deploy.
+- Causa raiz confirmada: bindings `R2_IMAGES` e `R2_VIDEOS` estavam comentados em [wrangler.toml](../wrangler.toml). Reativados e validados com `npx wrangler deploy --dry-run`, que agora resolve ambos os buckets corretamente.
+
+### 🔧 Arquivos
+- [lib/auth-helpers.ts](../lib/auth-helpers.ts)
+- [workers/api/exercise-media.ts](../workers/api/exercise-media.ts)
+- [src/app/dashboard/admin/exercises/page.tsx](../src/app/dashboard/admin/exercises/page.tsx)
+- [tests/e2e/workout.spec.ts](../tests/e2e/workout.spec.ts)
+- [docs/ULTRA-PLANO-MVP-PRODUCAO/AUTH-SMOKE.generated.md](../docs/ULTRA-PLANO-MVP-PRODUCAO/AUTH-SMOKE.generated.md)
+
 ### 🐛 Hotfix — 13/04/2026 — imagens de músculo + troca de tema instantânea
 - Upload de imagem em grupos musculares agora aplica versionamento de URL (`?v=timestamp`) para quebrar cache e refletir atualização sem delay.
 - Upload de imagem masculina/feminina passa a manter `image_url` sincronizada para compatibilidade com telas legadas.

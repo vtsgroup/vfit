@@ -131,9 +131,15 @@ export default function TreinoAtivoPage() {
   const handleFinish = useCallback(() => {
     completeWorkout()
     releaseWakeLock()
+    // Persist day completion for same-day blocking
+    if (workout) {
+      const today = new Date().toISOString().slice(0, 10)
+      const key = `vfit_day_completed_${workout.plan_id}_${workout.day_number}`
+      localStorage.setItem(key, today)
+    }
     // TODO Sprint 15: navigate to completion screen
     router.push('/plano')
-  }, [completeWorkout, router])
+  }, [completeWorkout, router, workout])
 
   const handleCancel = useCallback(() => {
     cancelWorkout()
@@ -434,7 +440,7 @@ export default function TreinoAtivoPage() {
           {allCompleted && nextEx ? (
             <Button
               size="lg"
-              className="w-full shadow-2xl shadow-brand-primary/30"
+              className="w-full"
               onClick={() => { nextExercise(); hapticSuccess() }}
             >
               <DSIcon name="chevronRight" className="h-5 w-5" />
@@ -443,7 +449,7 @@ export default function TreinoAtivoPage() {
           ) : allCompleted && !nextEx ? (
             <Button
               size="lg"
-              className="w-full shadow-2xl shadow-brand-primary/30"
+              className="w-full"
               onClick={handleFinish}
             >
               <DSIcon name="check" className="h-5 w-5" />

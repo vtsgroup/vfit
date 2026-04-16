@@ -1085,7 +1085,7 @@ assessments.delete('/:id', requireType('personal'), async (c) => {
         for (const photo of photos) {
           if (photo.url) {
             const key = extractR2Key(photo.url)
-            if (key) {
+            if (key && c.env.R2_IMAGES) {
               await c.env.R2_IMAGES.delete(key)
             }
           }
@@ -1161,6 +1161,10 @@ assessments.put('/:id/photos/upload', requireType('personal', 'admin', 'super_ad
     throw new BadRequestError('Arquivo excede 10MB')
   }
 
+  if (!c.env.R2_IMAGES) {
+    throw new BadRequestError('R2_IMAGES binding ausente')
+  }
+
   await c.env.R2_IMAGES.put(key, body, {
     httpMetadata: { contentType },
     customMetadata: { assessment_id: id, type: photoType },
@@ -1212,7 +1216,7 @@ assessments.delete('/:id/photos/:idx', requireType('personal', 'admin', 'super_a
   // Remover do R2
   if (removed?.url) {
     const key = extractR2Key(removed.url)
-    if (key) {
+    if (key && c.env.R2_IMAGES) {
       await c.env.R2_IMAGES.delete(key)
     }
   }
