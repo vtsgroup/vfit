@@ -32,9 +32,9 @@ export default function PerfilPage() {
   }
 
   return (
-    <div className="mx-auto max-w-lg px-4 pt-6 pb-24">
+    <div className="mx-auto max-w-lg px-4 pt-0 pb-24">
       {/* Profile header */}
-      <div className="mb-5 flex items-center gap-4">
+      <div className="-mx-4 mb-5 flex items-center gap-4 rounded-b-3xl border-b border-white/8 bg-slate-950/95 px-4 py-5 backdrop-blur-md">
         <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-white/8 text-brand-primary">
           {user?.avatar_url ? (
             <Image
@@ -49,23 +49,23 @@ export default function PerfilPage() {
           )}
         </div>
         <div className="min-w-0 flex-1">
-          <h1 className="truncate text-lg font-black text-text-primary">
+          <h1 className="truncate text-lg font-black text-white">
             {user?.full_name || 'Visitante'}
           </h1>
-          <p className="text-[12px] text-text-muted">{user?.email || 'Sem conta'}</p>
+          <p className="text-[12px] text-white/60">{user?.email || 'Sem conta'}</p>
           <span className={`mt-1 inline-block rounded-full px-2 py-0.5 text-[10px] font-semibold ${
             isPremium
-              ? 'bg-brand-primary/15 text-brand-primary'
-              : 'bg-white/8 text-text-muted'
+              ? 'bg-brand-primary/20 text-emerald-300'
+              : 'bg-white/8 text-white/65'
           }`}>
             {isPremium ? '⭐ PREMIUM' : 'CONTA BÁSICA'}
           </span>
         </div>
         <Link
           href="/perfil/editar"
-          className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5"
+          className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/6 text-white/70 transition-colors hover:text-white"
         >
-          <DSIcon name="edit3" size={18} className="text-text-secondary" />
+          <DSIcon name="edit3" size={18} />
         </Link>
       </div>
 

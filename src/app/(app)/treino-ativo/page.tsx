@@ -177,34 +177,34 @@ export default function TreinoAtivoPage() {
   return (
     <div className="mx-auto min-h-screen max-w-lg bg-bg-primary pb-32">
       {/* ─── Header ─── */}
-      <div className="sticky top-0 z-20 border-b border-border-primary bg-bg-primary/90 px-4 py-3 backdrop-blur-xl">
+      <div className="sticky top-0 z-20 border-b border-white/8 bg-slate-950/95 px-4 py-3 backdrop-blur-xl">
         <div className="flex items-center justify-between">
           <button
             type="button"
             onClick={() => setShowCancelConfirm(true)}
-            className="flex h-9 w-9 items-center justify-center rounded-xl text-text-muted hover:text-red-400 transition-colors"
+            className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/6 text-white/70 transition-colors hover:text-white"
           >
             <DSIcon name="x" size={20} />
           </button>
           <div className="text-center">
-            <p className="text-[10px] font-medium uppercase text-text-muted">
+            <p className="text-[10px] font-medium uppercase text-white/55">
               Dia {workout.day_number} — {workout.day_name}
             </p>
-            <p className="text-xl font-black tabular-nums text-text-primary">
+            <p className="text-xl font-black tabular-nums text-white">
               {formatTimer(elapsed)}
             </p>
           </div>
           <button
             type="button"
             onClick={handleFinish}
-            className="rounded-lg bg-brand-primary/10 px-3 py-1.5 text-xs font-bold text-brand-primary"
+            className="rounded-lg border border-brand-primary/30 bg-brand-primary/18 px-3 py-1.5 text-xs font-bold text-emerald-300"
           >
             Finalizar
           </button>
         </div>
 
         {/* Progress bar */}
-        <div className="mt-2 h-1 overflow-hidden rounded-full bg-bg-tertiary">
+        <div className="mt-2 h-1 overflow-hidden rounded-full bg-white/10">
           <div
             className="h-full rounded-full bg-brand-primary transition-all duration-500"
             style={{ width: `${(completedExercises / totalExercises) * 100}%` }}

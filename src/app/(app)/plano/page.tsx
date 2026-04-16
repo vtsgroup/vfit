@@ -641,24 +641,26 @@ export default function PlanoPage() {
     <div className="mx-auto max-w-lg pb-32">
       {/* ─── Header ─── */}
       <div className="px-4 pt-6">
-        <div className="mb-1 flex items-center justify-between">
-          <div>
-            <p className="text-xs font-semibold text-brand-primary">{getGreeting()}</p>
-            <h1 className="bg-linear-to-r from-brand-primary to-brand-mint bg-clip-text text-4xl font-black text-transparent">Meu Plano</h1>
-            <p className="mt-1 text-xs text-text-secondary">{getMotivationalPhrase()}</p>
+        <div className="mb-4 overflow-hidden rounded-[2rem] border border-white/10 bg-slate-950/95 p-6 shadow-[0_24px_80px_rgba(15,23,42,0.24)] backdrop-blur-sm">
+          <div className="mb-6 flex items-center justify-between gap-4">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-300/90">{getGreeting()}</p>
+              <h1 className="text-4xl font-black text-white">Meu Plano</h1>
+              <p className="mt-1 max-w-xl text-sm text-emerald-200/80">{getMotivationalPhrase()}</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <SharePlanButton planName={plan.name} totalDays={plan.total_days} />
+              <button
+                type="button"
+                onClick={() => router.push('/plano/ajustes')}
+                className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white/75 transition-colors duration-200 hover:bg-white/10 hover:text-white"
+              >
+                <DSIcon name="settings" size={20} />
+              </button>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <SharePlanButton planName={plan.name} totalDays={plan.total_days} />
-            <button
-              type="button"
-              onClick={() => router.push('/plano/ajustes')}
-              className="flex h-10 w-10 items-center justify-center rounded-xl border border-border-primary bg-bg-secondary text-text-muted hover:text-text-primary transition-all"
-            >
-              <DSIcon name="settings" size={20} />
-            </button>
-          </div>
+          <p className="text-sm text-emerald-200/70">{plan.name}</p>
         </div>
-        <p className="text-sm text-text-secondary">{plan.name}</p>
       </div>
 
       {/* ─── Day Tabs (BeFit style) ─── */}

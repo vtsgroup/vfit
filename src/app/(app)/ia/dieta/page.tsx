@@ -157,13 +157,17 @@ export default function DietaIAPage() {
   return (
     <div className="flex min-h-screen flex-col bg-bg-primary pb-24">
       {/* Header */}
-      <header className="sticky top-14 z-20 flex items-center gap-3 bg-bg-primary/80 px-4 py-3 backdrop-blur-lg">
-        <button aria-label="Voltar" onClick={() => router.back()} className="p-1">
-          <DSIcon name="arrowLeft" className="h-5 w-5 text-text-primary" />
+      <header className="sticky top-14 z-20 flex items-center gap-3 border-b border-white/8 bg-slate-950/95 px-4 py-3 backdrop-blur-xl">
+        <button
+          aria-label="Voltar"
+          onClick={() => router.back()}
+          className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/6 text-white/70 transition-colors hover:text-white"
+        >
+          <DSIcon name="arrowLeft" className="h-5 w-5" />
         </button>
         <div className="flex items-center gap-2">
-          <DSIcon name="apple" className="h-5 w-5 text-brand-primary" />
-          <h1 className="text-lg font-bold text-text-primary">Dieta Personalizada</h1>
+          <DSIcon name="apple" className="h-5 w-5 text-emerald-400" />
+          <h1 className="text-lg font-bold text-white">Dieta Personalizada</h1>
         </div>
       </header>
 

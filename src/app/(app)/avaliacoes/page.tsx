@@ -86,17 +86,17 @@ export default function AvaliacoesPage() {
   }, [showPersonalQr, personalInviteLink])
 
   return (
-    <div className="mx-auto max-w-lg px-4 pt-4 pb-24">
+    <div className="mx-auto max-w-lg px-4 pt-0 pb-24">
       {/* Header */}
-      <div className="mb-5 flex items-center gap-3">
+      <div className="-mx-4 mb-5 flex items-center gap-3 rounded-b-3xl border-b border-white/8 bg-slate-950/95 px-4 py-5 backdrop-blur-md">
         <button
           aria-label="Voltar"
           onClick={() => router.back()}
-          className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5"
+          className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/6 text-white/70 transition-colors hover:text-white"
         >
-          <DSIcon name="arrowLeft" size={20} className="text-text-secondary" />
+          <DSIcon name="arrowLeft" size={20} />
         </button>
-        <h1 className="flex-1 text-lg font-bold text-text-primary">Avaliações Físicas</h1>
+        <h1 className="flex-1 text-lg font-bold text-white">Avaliações Físicas</h1>
         <Link href="/avaliacoes/nova">
           <Button size="sm">
             <DSIcon name="plus" size={16} />

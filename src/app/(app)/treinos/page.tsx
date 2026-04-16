@@ -278,16 +278,16 @@ export default function TreinosPage() {
   const carbsPct = targets.carbs > 0 ? Math.round((totals.carbs / targets.carbs) * 100) : 0
 
   return (
-    <div className="mx-auto max-w-lg animate-in fade-in-0 slide-in-from-bottom-2 duration-300 px-4 pt-6 pb-24">
+    <div className="mx-auto max-w-lg animate-in fade-in-0 slide-in-from-bottom-2 duration-300 px-4 pt-0 pb-24">
       {/* ─── Header ─── */}
-      <div className="mb-5">
-        <p className="text-xs font-semibold text-brand-primary">
+      <div className="-mx-4 mb-5 rounded-b-3xl border-b border-white/8 bg-slate-950/95 px-4 py-5 backdrop-blur-md">
+        <p className="text-xs font-semibold text-emerald-400">
           {(() => { const h = new Date().getHours(); return h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite' })()}
         </p>
         <h1 className="bg-linear-to-r from-brand-primary to-brand-mint bg-clip-text text-4xl font-black text-transparent">
           Treinos
         </h1>
-        <p className="mt-1 text-xs text-text-secondary">Recursos personalizados para você</p>
+        <p className="mt-1 text-xs text-emerald-200/80">Recursos personalizados para você</p>
       </div>
 
       {/* T7.3 — Card "Treino de Hoje" */}

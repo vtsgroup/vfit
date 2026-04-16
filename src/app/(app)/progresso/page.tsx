@@ -50,11 +50,12 @@ export default function ProgressoPage() {
   )
 
   return (
-    <div className="mx-auto max-w-lg px-4 pt-6 pb-24">
+    <div className="mx-auto max-w-lg px-4 pt-0 pb-24">
       {/* Header */}
-      <div className="mb-5">
-        <h1 className="text-2xl font-black text-text-primary leading-tight">Progresso</h1>
-        <p className="mt-1 text-[13px] text-text-muted">Acompanhe sua evolução</p>
+      <div className="-mx-4 mb-5 rounded-b-3xl border-b border-white/8 bg-slate-950/95 px-4 py-5 backdrop-blur-md">
+        <p className="text-xs font-semibold text-emerald-400">Sua consistência em foco</p>
+        <h1 className="text-2xl leading-tight font-black text-white">Progresso</h1>
+        <p className="mt-1 text-[13px] text-white/70">Acompanhe sua evolução</p>
       </div>
 
       {/* Streak card — links to /progresso/streaks */}

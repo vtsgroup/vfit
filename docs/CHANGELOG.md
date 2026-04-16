@@ -7,6 +7,19 @@
 
 ## [Unreleased] — 12/04/2026 — Paridade admin de saques + redirect domínio legado
 
+### 🎨 UI — 16/04/2026 — headers escuros consistentes no app do aluno
+- Header hero da área do aluno foi alinhado ao visual escuro já adotado em `/plano`, incluindo contraste reforçado para light mode com textos claros e subtítulos em tons claros de verde/branco.
+- Todos os sticky headers secundários do app passaram a usar fundo escuro consistente com o theme color, borda sutil e controles com contraste claro para navegação segura em light mode.
+- Headers principais de `treinos`, `progresso`, `avaliações` e `perfil` receberam o mesmo tratamento visual para evitar quebra de linguagem entre telas.
+
+### 🔧 Arquivos
+- [src/app/(app)/plano/page.tsx](../src/app/(app)/plano/page.tsx)
+- [src/app/(app)/treinos/page.tsx](../src/app/(app)/treinos/page.tsx)
+- [src/app/(app)/progresso/page.tsx](../src/app/(app)/progresso/page.tsx)
+- [src/app/(app)/treino-ativo/page.tsx](../src/app/(app)/treino-ativo/page.tsx)
+- [src/app/(app)/avaliacoes/page.tsx](../src/app/(app)/avaliacoes/page.tsx)
+- [src/app/(app)/perfil/page.tsx](../src/app/(app)/perfil/page.tsx)
+
 ### 🐛 Hotfix — 16/04/2026 — QA gate + estabilidade de testes + mídia de exercícios
 - Corrigido índice de sessões em KV no helper de auth: `createSession` voltou a registrar `user-sessions:{userId}:{sessionId}`, restaurando listagem de sessões por usuário.
 - Endpoint de mídia recebeu remoção explícita de imagem de exercício: `DELETE /exercises/:exerciseId/media/image` (remove objetos do R2, limpa `image_urls` no D1 e invalida KV cache).

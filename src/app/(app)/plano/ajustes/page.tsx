@@ -103,17 +103,17 @@ export default function AjustesPlanoPage() {
   return (
     <div className="mx-auto max-w-lg pb-32">
       {/* ─── Header ─── */}
-      <div className="sticky top-14 z-20 border-b border-border-primary bg-bg-primary/80 px-4 py-3 backdrop-blur-xl">
+      <div className="sticky top-14 z-20 border-b border-white/8 bg-slate-950/95 px-4 py-3 backdrop-blur-xl">
         <div className="flex items-center justify-between">
           <button
             aria-label="Voltar"
             type="button"
             onClick={() => router.back()}
-            className="flex h-9 w-9 items-center justify-center rounded-xl text-text-muted hover:text-text-primary transition-colors"
+            className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/6 text-white/70 transition-colors hover:text-white"
           >
             <DSIcon name="chevronLeft" size={22} />
           </button>
-          <h1 className="text-base font-bold text-text-primary">Ajustes do Plano</h1>
+          <h1 className="text-base font-bold text-white">Ajustes do Plano</h1>
           <div className="w-9" />
         </div>
       </div>
