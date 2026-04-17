@@ -22,6 +22,11 @@
 - Aplicado gradiente no topo com acento da cor da marca e transição para azul escuro no corpo do header, preservando efeito glass e safe-area.
 - Breadcrumbs, título e badge de notificação do header foram ajustados para contraste claro consistente sobre fundo escuro também no light mode.
 
+### 🎨 UI — 16/04/2026 — notificações reais no app do aluno + ajuste fino do header
+- Header do aluno passou a enviar o clique do sino para `/perfil/notificacoes`, eliminando o redirecionamento indevido para fluxo de dashboard/home.
+- Página `/perfil/notificacoes` foi convertida de preferências locais para inbox real conectado à API (listar, marcar como lida, marcar todas, remover e abrir links de destino).
+- Divisor inferior do header foi suavizado para 1px com opacidade baixa e o gradiente superior foi ajustado para tonalidade azul-escura, removendo o viés esverdeado.
+
 ### 🔧 Arquivos
 - [src/app/(app)/plano/page.tsx](../src/app/(app)/plano/page.tsx)
 - [src/app/(app)/treinos/page.tsx](../src/app/(app)/treinos/page.tsx)
@@ -32,6 +37,7 @@
 - [src/app/(app)/perfil/assinatura/page.tsx](../src/app/(app)/perfil/assinatura/page.tsx)
 - [src/components/navigation/student-header.tsx](../src/components/navigation/student-header.tsx)
 - [src/app/globals.css](../src/app/globals.css)
+- [src/app/(app)/perfil/notificacoes/page.tsx](../src/app/(app)/perfil/notificacoes/page.tsx)
 
 ### 🐛 Hotfix — 16/04/2026 — QA gate + estabilidade de testes + mídia de exercícios
 - Corrigido índice de sessões em KV no helper de auth: `createSession` voltou a registrar `user-sessions:{userId}:{sessionId}`, restaurando listagem de sessões por usuário.

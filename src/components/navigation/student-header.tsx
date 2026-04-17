@@ -131,7 +131,7 @@ export function StudentHeader() {
           <div className="min-w-0 flex flex-col justify-center">
             {/* Breadcrumbs — home icon > section > sub-page (same as dashboard) */}
             <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 mb-0.5">
-              <Link href="/treinos" className="text-white/60 hover:text-emerald-300 transition-colors shrink-0">
+              <Link href="/treinos" className="text-white/60 hover:text-sky-300 transition-colors shrink-0">
                 <DSIcon name="home" size={14} />
               </Link>
               {breadcrumbs.length > 0 ? (
@@ -140,7 +140,7 @@ export function StudentHeader() {
                     <DSIcon name="chevronRight" size={10} className="text-white/35 shrink-0" />
                     <Link
                       href={item.href!}
-                      className="text-xs font-medium text-white/70 hover:text-emerald-300 transition-colors truncate max-w-32"
+                      className="text-xs font-medium text-white/70 hover:text-sky-300 transition-colors truncate max-w-32"
                     >
                       {item.label}
                     </Link>
@@ -168,7 +168,7 @@ export function StudentHeader() {
           {/* Bell — with absolute positioned badge (same as dashboard) */}
           <div className="relative">
             <Link
-              href="/dashboard/notifications"
+              href="/perfil/notificacoes"
               className="ds3-action-btn flex"
               title={unreadCount > 0 ? `${unreadCount} não lida(s)` : 'Notificações'}
               aria-label={unreadCount > 0 ? `${unreadCount} notificações não lidas` : 'Notificações'}
@@ -197,7 +197,7 @@ export function StudentHeader() {
       {/* Bottom border — subtle, fades in on scroll (same as dashboard) */}
       <div className={cn(
         'absolute bottom-0 left-0 right-0 h-px transition-opacity duration-300',
-        scrolled ? 'bg-border-light opacity-100' : 'bg-border-light/50 opacity-60'
+        scrolled ? 'bg-white/40 opacity-100' : 'bg-white/30 opacity-85'
       )} />
     </header>
   )

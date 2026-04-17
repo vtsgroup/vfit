@@ -1801,7 +1801,7 @@ body {
   left: 0;
   right: 0;
   height: 34px;
-  background: linear-gradient(180deg, rgba(16, 185, 129, 0.06) 0%, rgba(16, 185, 129, 0) 100%);
+  background: linear-gradient(180deg, rgba(59, 130, 246, 0.10) 0%, rgba(59, 130, 246, 0) 100%);
   pointer-events: none;
 }
 .ds3-header.ds3-header-scrolled {
@@ -1819,7 +1819,7 @@ body {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
-/* VFIT Theme — header uses teal-tinted glass */
+/* VFIT Theme — header uses dark blue glass */
 .vfit-theme .ds3-header {
   background: linear-gradient(180deg, rgba(4, 9, 22, 0.98) 0%, rgba(5, 10, 18, 0.96) 32%, rgba(2, 6, 23, 0.99) 100%);
 }
