@@ -17,6 +17,11 @@
 - Cards de preço mensal/anual agora mantêm contraste correto em light mode, com valor principal legível, labels secundárias consistentes e estados selecionado/não selecionado mais claros.
 - Campo de CPF, card de status atual, bloco de PIX e seção de cancelamento foram alinhados aos tokens semânticos de tema para evitar regressões visuais em versões claras.
 
+### 🎨 UI — 16/04/2026 — header fixo superior sempre escuro (light + dark)
+- Header fixo do app do aluno (área com notificações + avatar) agora mantém assinatura visual escura em todos os temas, alinhada à bottom navbar premium.
+- Aplicado gradiente no topo com acento da cor da marca e transição para azul escuro no corpo do header, preservando efeito glass e safe-area.
+- Breadcrumbs, título e badge de notificação do header foram ajustados para contraste claro consistente sobre fundo escuro também no light mode.
+
 ### 🔧 Arquivos
 - [src/app/(app)/plano/page.tsx](../src/app/(app)/plano/page.tsx)
 - [src/app/(app)/treinos/page.tsx](../src/app/(app)/treinos/page.tsx)
@@ -25,6 +30,8 @@
 - [src/app/(app)/avaliacoes/page.tsx](../src/app/(app)/avaliacoes/page.tsx)
 - [src/app/(app)/perfil/page.tsx](../src/app/(app)/perfil/page.tsx)
 - [src/app/(app)/perfil/assinatura/page.tsx](../src/app/(app)/perfil/assinatura/page.tsx)
+- [src/components/navigation/student-header.tsx](../src/components/navigation/student-header.tsx)
+- [src/app/globals.css](../src/app/globals.css)
 
 ### 🐛 Hotfix — 16/04/2026 — QA gate + estabilidade de testes + mídia de exercícios
 - Corrigido índice de sessões em KV no helper de auth: `createSession` voltou a registrar `user-sessions:{userId}:{sessionId}`, restaurando listagem de sessões por usuário.

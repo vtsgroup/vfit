@@ -131,16 +131,16 @@ export function StudentHeader() {
           <div className="min-w-0 flex flex-col justify-center">
             {/* Breadcrumbs — home icon > section > sub-page (same as dashboard) */}
             <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 mb-0.5">
-              <Link href="/treinos" className="text-text-muted hover:text-brand-primary transition-colors shrink-0">
+              <Link href="/treinos" className="text-white/60 hover:text-emerald-300 transition-colors shrink-0">
                 <DSIcon name="home" size={14} />
               </Link>
               {breadcrumbs.length > 0 ? (
                 breadcrumbs.map((item, i) => (
                   <span key={i} className="flex items-center gap-1.5">
-                    <DSIcon name="chevronRight" size={10} className="text-text-secondary/40 shrink-0" />
+                    <DSIcon name="chevronRight" size={10} className="text-white/35 shrink-0" />
                     <Link
                       href={item.href!}
-                      className="text-xs font-medium text-text-muted hover:text-brand-primary transition-colors truncate max-w-32"
+                      className="text-xs font-medium text-white/70 hover:text-emerald-300 transition-colors truncate max-w-32"
                     >
                       {item.label}
                     </Link>
@@ -149,15 +149,15 @@ export function StudentHeader() {
               ) : (
                 !isTabRoot(pathname) && pageTitle && (
                   <>
-                    <DSIcon name="chevronRight" size={10} className="text-text-secondary/40 shrink-0" />
-                    <span className="text-xs font-medium text-text-secondary truncate max-w-32">
+                    <DSIcon name="chevronRight" size={10} className="text-white/35 shrink-0" />
+                    <span className="text-xs font-medium text-white/75 truncate max-w-32">
                       {pageTitle}
                     </span>
                   </>
                 )
               )}
             </nav>
-            <h1 className="text-sm font-bold tracking-tight text-text-primary truncate">
+            <h1 className="text-sm font-bold tracking-tight text-white truncate">
               {pageTitle}
             </h1>
           </div>
@@ -176,7 +176,7 @@ export function StudentHeader() {
               <DSIcon name="bell" size={16} />
             </Link>
             {unreadCount > 0 && (
-              <div className="absolute -top-0.5 -right-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-brand-primary text-[9px] font-bold text-white border-2 border-bg-page notification-pulse">
+              <div className="absolute -top-0.5 -right-0.5 flex h-4 min-w-4 items-center justify-center rounded-full border-2 border-slate-950 bg-brand-primary text-[9px] font-bold text-white notification-pulse">
                 {unreadCount > 99 ? '99+' : unreadCount}
               </div>
             )}
