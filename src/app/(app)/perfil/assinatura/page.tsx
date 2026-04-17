@@ -152,15 +152,15 @@ export default function AssinaturaPage() {
   }
 
   return (
-    <div className="mx-auto max-w-lg px-4 pt-4 pb-24">
+    <div className="mx-auto max-w-lg px-4 pt-0 pb-24">
       {/* Header */}
-      <div className="mb-6 flex items-center gap-3">
+      <div className="-mx-4 mb-6 flex items-center gap-3 rounded-b-3xl border-b border-white/8 bg-slate-950/95 px-4 py-5 backdrop-blur-md">
         <button
           aria-label="Voltar"
           onClick={() => router.back()}
-          className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5"
+          className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/6 text-white/70 transition-colors hover:text-white"
         >
-          <DSIcon name="arrowLeft" size={20} className="text-zinc-400" />
+          <DSIcon name="arrowLeft" size={20} />
         </button>
         <h1 className="text-lg font-bold text-white">Minha Assinatura</h1>
       </div>
@@ -168,18 +168,18 @@ export default function AssinaturaPage() {
       {/* Current plan status */}
       <div className={`mb-6 rounded-2xl border p-5 ${
         isPremium
-          ? 'border-brand-primary/30 bg-white/3'
-          : 'border-white/5 bg-white/2'
+          ? 'border-brand-primary/25 bg-brand-primary/6'
+          : 'border-border-primary bg-bg-secondary'
       }`}>
         <div className="mb-3 flex items-center gap-3">
           <div className={`flex h-11 w-11 items-center justify-center rounded-xl ${
-            isPremium ? 'bg-brand-primary/15 text-brand-primary' : 'bg-zinc-800 text-zinc-400'
+            isPremium ? 'bg-brand-primary/15 text-brand-primary' : 'bg-bg-tertiary text-text-secondary'
           }`}>
             <DSIcon name={isPremium ? 'crown' : 'user'} size={22} />
           </div>
           <div>
-            <p className="text-[15px] font-bold text-white">{PLAN_DISPLAY[currentPlan].name}</p>
-            <p className="text-[11px] text-zinc-500">
+            <p className="text-[15px] font-bold text-text-primary">{PLAN_DISPLAY[currentPlan].name}</p>
+            <p className="text-[11px] text-text-secondary">
               {isPremium && subStatus?.renews_at
                 ? `Ativo · Renova em ${new Date(subStatus.renews_at).toLocaleDateString('pt-BR')}`
                 : 'Conta gratuita'}
@@ -190,7 +190,7 @@ export default function AssinaturaPage() {
           {PLAN_DISPLAY[currentPlan].features.map((f) => (
             <div key={f} className="flex items-center gap-2">
               <DSIcon name="check" size={14} className="shrink-0 text-brand-primary" />
-              <span className="text-[12px] text-zinc-400">{f}</span>
+              <span className="text-[12px] text-text-secondary">{f}</span>
             </div>
           ))}
         </div>
@@ -202,8 +202,8 @@ export default function AssinaturaPage() {
           <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-brand-primary/20">
             <DSIcon name="check" size={28} className="text-brand-primary" />
           </div>
-          <h2 className="text-lg font-bold text-white">Pagamento Confirmado! 🎉</h2>
-          <p className="mt-1 text-[13px] text-zinc-400">
+          <h2 className="text-lg font-bold text-text-primary">Pagamento Confirmado! 🎉</h2>
+          <p className="mt-1 text-[13px] text-text-secondary">
             Sua assinatura Premium foi ativada com sucesso.
           </p>
           <Button
@@ -218,8 +218,8 @@ export default function AssinaturaPage() {
 
       {/* PIX QR Code Display */}
       {pixData && (
-        <div className="mb-6 rounded-2xl border border-brand-primary/30 bg-white/3 p-5">
-          <h2 className="mb-3 text-center text-[15px] font-bold text-white">
+        <div className="mb-6 rounded-2xl border border-brand-primary/25 bg-bg-secondary p-5">
+          <h2 className="mb-3 text-center text-[15px] font-bold text-text-primary">
             <DSIcon name="qrcode" size={18} className="mr-2 inline text-brand-primary" />
             Pague via PIX
           </h2>
@@ -239,12 +239,12 @@ export default function AssinaturaPage() {
             <DSIcon name={copied ? 'check' : 'copy'} size={16} />
             {copied ? 'Copiado!' : 'Copiar código PIX'}
           </Button>
-          <p className="mt-2 text-center text-[10px] text-zinc-600">
+          <p className="mt-2 text-center text-[10px] text-text-secondary">
             Após o pagamento, sua assinatura será ativada automaticamente
           </p>
           <div className="mt-3 flex items-center justify-center gap-2">
             <div className="h-2 w-2 animate-pulse rounded-full bg-brand-primary" />
-            <span className="text-[11px] text-zinc-500">Aguardando pagamento...</span>
+            <span className="text-[11px] text-text-secondary">Aguardando pagamento...</span>
           </div>
         </div>
       )}
@@ -252,7 +252,7 @@ export default function AssinaturaPage() {
       {/* Upgrade section (free users, paywall redirect, or super_admin testing) */}
       {showUpgrade && (
         <>
-          <h2 className="mb-3 text-[13px] font-bold uppercase tracking-wider text-zinc-500">
+          <h2 className="mb-3 text-[13px] font-bold uppercase tracking-wider text-text-secondary">
             Upgrade para Premium
           </h2>
 
@@ -270,8 +270,8 @@ export default function AssinaturaPage() {
                   }}
                   className={`relative w-full rounded-2xl border p-4 text-left transition-all ${
                     isSelected
-                      ? 'border-brand-primary/50 bg-white/3'
-                      : 'border-white/5 bg-white/2 hover:border-white/10'
+                      ? 'border-brand-primary/40 bg-brand-primary/7 shadow-lg shadow-brand-primary/6'
+                      : 'border-border-primary bg-bg-secondary hover:bg-bg-tertiary hover:border-brand-primary/18'
                   }`}
                 >
                   {isBest && (
@@ -281,14 +281,14 @@ export default function AssinaturaPage() {
                   )}
                   <div className="flex items-center gap-3">
                     <div className={`flex h-5 w-5 items-center justify-center rounded-full border-2 ${
-                      isSelected ? 'border-brand-primary bg-brand-primary' : 'border-zinc-600'
+                      isSelected ? 'border-brand-primary bg-brand-primary' : 'border-text-muted'
                     }`}>
                       {isSelected && <DSIcon name="check" size={12} className="text-black" />}
                     </div>
                     <div className="flex-1">
-                      <p className="text-[14px] font-bold text-white">{p.name}</p>
-                      <p className="text-[12px] text-zinc-500">
-                        <span className="text-lg font-black text-white">{p.price}</span>
+                      <p className="text-[14px] font-bold text-text-primary">{p.name}</p>
+                      <p className="text-[12px] text-text-secondary">
+                        <span className="text-lg font-black text-text-primary">{p.price}</span>
                         {p.priceDetail}
                       </p>
                     </div>
@@ -306,7 +306,7 @@ export default function AssinaturaPage() {
               value={cpf}
               onChange={(e) => setCpf(e.target.value.replace(/\D/g, '').replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4'))}
               maxLength={14}
-              className="w-full rounded-xl border border-white/10 bg-white/3 px-4 py-3 text-[14px] text-white placeholder:text-zinc-600"
+              className="w-full rounded-xl border border-border-primary bg-bg-secondary px-4 py-3 text-[14px] text-text-primary placeholder:text-text-muted"
             />
           </div>
 
@@ -319,7 +319,7 @@ export default function AssinaturaPage() {
             <DSIcon name="crown" size={18} />
             Assinar {PLAN_DISPLAY[selectedPlan].name}
           </Button>
-          <p className="text-center text-[10px] text-zinc-600">
+          <p className="text-center text-[10px] text-text-secondary">
             Cancele a qualquer momento · Pagamento seguro via PIX
           </p>
         </>
@@ -331,14 +331,14 @@ export default function AssinaturaPage() {
           {!showCancel ? (
             <button
               onClick={() => setShowCancel(true)}
-              className="text-[12px] text-zinc-600 transition-colors hover:text-red-400"
+              className="text-[12px] text-text-secondary transition-colors hover:text-red-500"
             >
               Cancelar assinatura
             </button>
           ) : (
             <div className="rounded-2xl border border-red-500/20 bg-red-500/5 p-4">
-              <p className="mb-2 text-[14px] font-bold text-white">Tem certeza?</p>
-              <p className="mb-4 text-[12px] text-zinc-400">
+              <p className="mb-2 text-[14px] font-bold text-text-primary">Tem certeza?</p>
+              <p className="mb-4 text-[12px] text-text-secondary">
                 Ao cancelar, você perde acesso aos recursos Premium ao final do período atual.
                 Seus dados serão mantidos.
               </p>

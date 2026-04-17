@@ -12,6 +12,11 @@
 - Todos os sticky headers secundários do app passaram a usar fundo escuro consistente com o theme color, borda sutil e controles com contraste claro para navegação segura em light mode.
 - Headers principais de `treinos`, `progresso`, `avaliações` e `perfil` receberam o mesmo tratamento visual para evitar quebra de linguagem entre telas.
 
+### 🎨 UI — 16/04/2026 — assinatura Premium legível em light mode
+- Corrigida a página de assinatura Premium do app do aluno para usar superfícies e textos theme-aware em vez de cores hardcoded para dark mode.
+- Cards de preço mensal/anual agora mantêm contraste correto em light mode, com valor principal legível, labels secundárias consistentes e estados selecionado/não selecionado mais claros.
+- Campo de CPF, card de status atual, bloco de PIX e seção de cancelamento foram alinhados aos tokens semânticos de tema para evitar regressões visuais em versões claras.
+
 ### 🔧 Arquivos
 - [src/app/(app)/plano/page.tsx](../src/app/(app)/plano/page.tsx)
 - [src/app/(app)/treinos/page.tsx](../src/app/(app)/treinos/page.tsx)
@@ -19,6 +24,7 @@
 - [src/app/(app)/treino-ativo/page.tsx](../src/app/(app)/treino-ativo/page.tsx)
 - [src/app/(app)/avaliacoes/page.tsx](../src/app/(app)/avaliacoes/page.tsx)
 - [src/app/(app)/perfil/page.tsx](../src/app/(app)/perfil/page.tsx)
+- [src/app/(app)/perfil/assinatura/page.tsx](../src/app/(app)/perfil/assinatura/page.tsx)
 
 ### 🐛 Hotfix — 16/04/2026 — QA gate + estabilidade de testes + mídia de exercícios
 - Corrigido índice de sessões em KV no helper de auth: `createSession` voltou a registrar `user-sessions:{userId}:{sessionId}`, restaurando listagem de sessões por usuário.
