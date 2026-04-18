@@ -206,7 +206,7 @@ migrations/                 # SQL migrations (hyperdrive/ + d1/)
 ### R2_VIDEOS
 | Campo | Valor |
 |-------|-------|
-| **Bucket Name** | `personal-ia-videos` |
+| **Bucket Name** | `vfit-videos` |
 | **Binding** | `R2_VIDEOS` |
 | **Custom Domain** | `videos.vfit.app.br` |
 | **Storage Class** | Standard |
@@ -215,7 +215,7 @@ migrations/                 # SQL migrations (hyperdrive/ + d1/)
 ### R2_IMAGES
 | Campo | Valor |
 |-------|-------|
-| **Bucket Name** | `personal-ia-images` |
+| **Bucket Name** | `vfit-images` |
 | **Binding** | `R2_IMAGES` |
 | **Custom Domain** | `images.vfit.app.br` |
 | **Storage Class** | Standard |

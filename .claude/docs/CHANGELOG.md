@@ -7,6 +7,12 @@
 
 ## [Unreleased] — 2026-04-08 — Sprint 11-15 (UX Nutrição/Exercícios)
 
+### 🗂️ Infra — R2 buckets vfit-* provisionados (2026-04-18)
+- Criados novos buckets R2 `vfit-images` e `vfit-videos` (região ENAM) na conta Cloudflare de produção.
+- Atualizado [wrangler.toml](wrangler.toml) para bindings ativos `R2_IMAGES -> vfit-images` e `R2_VIDEOS -> vfit-videos`.
+- Atualizada documentação de infraestrutura em [STACK.md](.claude/docs/STACK.md), [BACKEND.md](.claude/docs/BACKEND.md) e [DEPLOY.md](.claude/docs/DEPLOY.md).
+- Buckets legados `personal-ia-images` e `personal-ia-videos` foram mantidos temporariamente para migração segura dos objetos e rollback.
+
 ### 🐛 Hotfix — Imagens de grupos musculares + tema instantâneo (2026-04-13)
 - **Cache-busting de mídia no upload admin:** [workers/api/admin.ts](workers/api/admin.ts) agora salva URLs com `?v=timestamp` ao subir imagem (male/female/image), reduzindo stale cache em CDN/app.
 - **Compatibilidade legada de imagem:** uploads `male/female` também atualizam `image_url` em [workers/api/admin.ts](workers/api/admin.ts), garantindo atualização imediata em telas que ainda consomem fallback legado.

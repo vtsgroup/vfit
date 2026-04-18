@@ -69,3 +69,51 @@ Itens identificados durante reviews e planejamento, capturados com contexto sufi
 **Depends on:** Workers AI multimodal GA no Cloudflare.
 
 ---
+
+### TODO-005 — ROLLOUT.md com gate e rollback S4→S5
+
+**What:** Criar runbook `ROLLOUT.md` para a onda Ultra v4 com critérios objetivos de gate S4→S5 e procedimento de rollback.
+
+**Why:** O plano cita gate e rollout guard, mas sem thresholds operacionais a decisão fica subjetiva e arriscada em produção.
+
+**Pros:** Go/no-go auditável, rollback rápido, menor risco de regressão visual silenciosa.
+
+**Cons:** Exige alinhamento de métricas e owners; adiciona disciplina operacional antes de deploy.
+
+**Context:** Revisão de arquitetura do plano Ultra v4 encontrou ausência de critérios formais para avançar de S4 para S5. Outside voice reforçou a lacuna como risco alto.
+
+**Depends on / blocked by:** Definição de métricas em GA4/Sentry/Lighthouse CI e responsáveis por aprovação.
+
+---
+
+### TODO-006 — Pipeline de regressão visual com gate
+
+**What:** Implementar pipeline de regressão visual com Playwright snapshots (desktop/mobile) e threshold de diffs para bloquear rollout quando excedido.
+
+**Why:** TRACKING aponta vários itens de validação visual em device como não executados formalmente; hoje não há evidência robusta de não-regressão.
+
+**Pros:** Detecta drift visual cedo, aumenta confiança no redesign de UI, reduz bugs percebidos pelo usuário final.
+
+**Cons:** Custo inicial de baseline e manutenção de snapshots em mudanças visuais intencionais.
+
+**Context:** Plano Ultra v4 altera tokens, variantes de card, estados de botão e navegação; sem gate visual, regressões de contraste/layout podem chegar em produção.
+
+**Depends on / blocked by:** Baseline de screenshots por rota crítica e política de aprovação de diffs.
+
+---
+
+### TODO-007 — Feature flag para `SECONDARY_BUTTON_V4`
+
+**What:** Introduzir flag de rollout para a variante nova de botão secundário (`SECONDARY_BUTTON_V4`) com fallback para estilo anterior.
+
+**Why:** Mudança global em `secondary` afeta múltiplas superfícies; sem flag, rollback depende de novo deploy emergencial.
+
+**Pros:** Rollout gradual, kill switch imediato, experimentação segura por segmento.
+
+**Cons:** Complexidade extra temporária no componente e no controle de configuração.
+
+**Context:** Sprint S1 altera gradiente/sombra/contraste do botão secundário no design system inteiro; outside voice classificou como risco alto sem mecanismo de rollback.
+
+**Depends on / blocked by:** Convenção de feature flags do frontend e runbook de rollback da onda Ultra v4.
+
+---

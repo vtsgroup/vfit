@@ -66,6 +66,6 @@ console.log('Workers:', workers.success ? `✅ ${workers.result?.length} scripts
 console.log('\n--- Tentando criar bucket R2 ---')
 const createBucket = await cfFetch(`/accounts/${ACCOUNT_ID}/r2/buckets`, {
   method: 'POST',
-  body: JSON.stringify({ name: 'personal-ia-images', location: 'ENAM' })
+  body: JSON.stringify({ name: 'vfit-images', location: 'ENAM' })
 })
 console.log('Create bucket:', createBucket.success ? '✅ Criado!' : `❌ ${createBucket.errors?.[0]?.message} (code: ${createBucket.errors?.[0]?.code})`)

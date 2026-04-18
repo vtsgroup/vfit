@@ -30,6 +30,13 @@ analytics_engine_datasets = [
 binding = "AI"
 
 # ============================================
+# Runtime vars (media public URLs)
+# ============================================
+[vars]
+R2_IMAGES_URL = "https://images.iapersonal.app.br"
+R2_VIDEOS_URL = "https://videos.iapersonal.app.br"
+
+# ============================================
 # D1 Database (Cold Data - Exercise Library)
 # ============================================
 [[d1_databases]]
@@ -71,11 +78,11 @@ id = "18053a73020242bcba036299d09426b9"
 # ============================================
 [[r2_buckets]]
 binding = "R2_VIDEOS"
-bucket_name = "personal-ia-videos"  # R2 buckets cannot be renamed
+bucket_name = "vfit-videos"
 
 [[r2_buckets]]
 binding = "R2_IMAGES"
-bucket_name = "personal-ia-images"  # R2 buckets cannot be renamed
+bucket_name = "vfit-images"
 
 # ============================================
 # Cloudflare Stream (Sprint E — exercise videos)

@@ -625,8 +625,8 @@ dispatchCalendarReminders(env, { windowsMinutes: number[], toleranceMinutes: num
 | `KV_CACHE` | KV | `e7147f88...` |
 | `KV_SESSIONS` | KV | `91d34b67...` |
 | `KV_RATE_LIMIT` | KV | `d94c62b1...` |
-| `R2_VIDEOS` | R2 | `personal-ia-videos` |
-| `R2_IMAGES` | R2 | `personal-ia-images` |
+| `R2_VIDEOS` | R2 | `vfit-videos` |
+| `R2_IMAGES` | R2 | `vfit-images` |
 | `ANALYTICS` | Analytics Engine | Dataset padrão |
 
 ### Secrets (produção)

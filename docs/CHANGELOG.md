@@ -7,6 +7,16 @@
 
 ## [Unreleased] — 12/04/2026 — Paridade admin de saques + redirect domínio legado
 
+### 🗂️ Infra — 18/04/2026 — migração R2 para buckets vfit-*
+- Buckets legados removidos: `personal-ia-images` e `personal-ia-videos`.
+- Buckets novos ativos em produção: `vfit-images` e `vfit-videos`.
+- Worker alinhado para URLs públicas de mídia via vars em `wrangler.toml`.
+- CORS e mapeamento operacional de mídia ajustados para os novos buckets na conta Cloudflare ativa.
+
+### 🔧 Arquivos
+- [wrangler.toml](../wrangler.toml)
+- [scripts/check-cf-services.mjs](../scripts/check-cf-services.mjs)
+
 ### 🎨 UI — 16/04/2026 — headers escuros consistentes no app do aluno
 - Header hero da área do aluno foi alinhado ao visual escuro já adotado em `/plano`, incluindo contraste reforçado para light mode com textos claros e subtítulos em tons claros de verde/branco.
 - Todos os sticky headers secundários do app passaram a usar fundo escuro consistente com o theme color, borda sutil e controles com contraste claro para navegação segura em light mode.

@@ -231,8 +231,8 @@ backups/
 | KV Cache | `e7147f8855184a4a8f72307756596df4` |
 | KV Sessions | `91d34b6725564de39e8ed891e742e76d` |
 | KV Rate Limit | `d94c62b1e8f248a6bd1ea6a11e18f09c` |
-| R2 Videos | `personal-ia-videos` |
-| R2 Images | `personal-ia-images` |
+| R2 Videos | `vfit-videos` |
+| R2 Images | `vfit-images` |
 
 ---
 

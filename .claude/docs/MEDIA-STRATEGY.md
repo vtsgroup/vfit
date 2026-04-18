@@ -70,8 +70,8 @@ public/
 
 | Bucket | Binding | Domínio Custom | Status |
 |--------|---------|---------------|--------|
-| `personal-ia-videos` | `R2_VIDEOS` | `videos.vfit.app.br` | ✅ Ativo (TLS 1.2, CORS configurado) |
-| `personal-ia-images` | `R2_IMAGES` | `images.vfit.app.br` | ✅ Ativo (TLS 1.2, CORS configurado) |
+| `vfit-videos` | `R2_VIDEOS` | `videos.vfit.app.br` | ✅ Ativo (TLS 1.2, CORS configurado) |
+| `vfit-images` | `R2_IMAGES` | `images.vfit.app.br` | ✅ Ativo (TLS 1.2, CORS configurado) |
 
 ### Estrutura de Keys
 
@@ -362,8 +362,8 @@ async function getExerciseVideo(exerciseId: string): Promise<string> {
 ## 🔧 Setup Checklist
 
 ### ✅ Já Configurado
-- [x] R2 bucket `personal-ia-videos` (binding R2_VIDEOS)
-- [x] R2 bucket `personal-ia-images` (binding R2_IMAGES)
+- [x] R2 bucket `vfit-videos` (binding R2_VIDEOS)
+- [x] R2 bucket `vfit-images` (binding R2_IMAGES)
 - [x] Workers types com R2Bucket bindings
 - [x] API endpoints para upload (exercise-media.ts, users.ts, assessments.ts)
 - [x] Auth BG video em Pages (public/videos/gym-bg.mp4)
@@ -372,18 +372,18 @@ async function getExerciseVideo(exerciseId: string): Promise<string> {
 - [x] **R2 Public Access — images**: `images.vfit.app.br` habilitado (12/03/2026)
   ```bash
   # Fix aplicado via CLI:
-  npx wrangler r2 bucket domain remove personal-ia-images --domain images.vfit.app.br --force
-  npx wrangler r2 bucket domain add personal-ia-images --domain images.vfit.app.br --zone-id 71e8d150d12015b016231950337b075e --min-tls 1.2 --force
+  npx wrangler r2 bucket domain remove vfit-images --domain images.vfit.app.br --force
+  npx wrangler r2 bucket domain add vfit-images --domain images.vfit.app.br --zone-id 71e8d150d12015b016231950337b075e --min-tls 1.2 --force
   # CORS configurado via: config/r2-cors.json
-  npx wrangler r2 bucket cors set personal-ia-images --file config/r2-cors.json
+  npx wrangler r2 bucket cors set vfit-images --file config/r2-cors.json
   ```
 - [x] **R2 Public Access — videos**: `videos.vfit.app.br` habilitado (12/03/2026)
   ```bash
   # Mesmo procedimento do images:
-  npx wrangler r2 bucket domain remove personal-ia-videos --domain videos.vfit.app.br --force
-  npx wrangler r2 bucket domain add personal-ia-videos --domain videos.vfit.app.br --zone-id 71e8d150d12015b016231950337b075e --min-tls 1.2 --force
+  npx wrangler r2 bucket domain remove vfit-videos --domain videos.vfit.app.br --force
+  npx wrangler r2 bucket domain add vfit-videos --domain videos.vfit.app.br --zone-id 71e8d150d12015b016231950337b075e --min-tls 1.2 --force
   # CORS: config/r2-cors-videos.json (inclui Content-Range para streaming)
-  npx wrangler r2 bucket cors set personal-ia-videos --file config/r2-cors-videos.json
+  npx wrangler r2 bucket cors set vfit-videos --file config/r2-cors-videos.json
   ```
 - [ ] **Wrangler re-login**: Conta atual diferente do projeto
   ```bash
