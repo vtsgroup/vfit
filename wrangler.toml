@@ -33,8 +33,8 @@ binding = "AI"
 # Runtime vars (media public URLs)
 # ============================================
 [vars]
-R2_IMAGES_URL = "https://images.iapersonal.app.br"
-R2_VIDEOS_URL = "https://videos.iapersonal.app.br"
+R2_IMAGES_URL = "https://images.vfit.app.br"
+R2_VIDEOS_URL = "https://videos.vfit.app.br"
 
 # ============================================
 # D1 Database (Cold Data - Exercise Library)
