@@ -10,6 +10,7 @@
 'use client'
 
 import Image from 'next/image'
+import { useAuthStore } from '@/stores/auth-store'
 import { cn } from '@/lib/utils'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { useMuscleGroups } from '@/hooks/use-exercises'
@@ -98,15 +99,7 @@ export function MuscleAnatomyCard({
     .filter(Boolean) as MuscleGroup[]
 
   // Detecta super admin
-  let isSuperAdmin = false
-  try {
-    if (typeof window !== 'undefined') {
-      // Import dinâmico para evitar SSR crash
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const store = require('@/stores/auth-store')
-      isSuperAdmin = store.useAuthStore.getState?.().isSuperAdmin?.() || false
-    }
-  } catch {}
+  const isSuperAdmin = typeof window !== 'undefined' && useAuthStore.getState?.().isSuperAdmin?.()
 
   return (
     <div className={cn('space-y-3', className)}>
@@ -117,24 +110,30 @@ export function MuscleAnatomyCard({
         </p>
 
         {primaryMuscle ? (
-          (isSuperAdmin ? (primaryMuscle.image_male_url || primaryMuscle.image_url) : (primaryMuscle.image_female_url || primaryMuscle.image_male_url || primaryMuscle.image_url)) ? (
-            <div className={cn('relative w-full overflow-hidden rounded-xl', cfg.img)}>
-              <Image
-                src={isSuperAdmin ? (primaryMuscle.image_male_url || primaryMuscle.image_url) : (primaryMuscle.image_female_url || primaryMuscle.image_male_url || primaryMuscle.image_url)}
-                alt={primaryMuscle.name_pt || primaryMuscle.name}
-                fill
-                className="object-cover"
-              />
-              {/* Overlay label */}
-              <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/70 to-transparent px-3 pb-2 pt-6">
-                <p className="text-sm font-semibold text-white">
-                  {primaryMuscle.name_pt || primaryMuscle.name}
-                </p>
-              </div>
-            </div>
-          ) : (
-            <MusclePlaceholder muscle={primaryMuscle} sizeClass={cfg.img} />
-          )
+          (() => {
+            const src = isSuperAdmin
+              ? primaryMuscle.image_male_url || primaryMuscle.image_url
+              : primaryMuscle.image_female_url || primaryMuscle.image_male_url || primaryMuscle.image_url
+            if (src && typeof src === 'string') {
+              return (
+                <div className={cn('relative w-full overflow-hidden rounded-xl', cfg.img)}>
+                  <Image
+                    src={src}
+                    alt={primaryMuscle.name_pt || primaryMuscle.name}
+                    fill
+                    className="object-cover"
+                  />
+                  {/* Overlay label */}
+                  <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/70 to-transparent px-3 pb-2 pt-6">
+                    <p className="text-sm font-semibold text-white">
+                      {primaryMuscle.name_pt || primaryMuscle.name}
+                    </p>
+                  </div>
+                </div>
+              )
+            }
+            return <MusclePlaceholder muscle={primaryMuscle} sizeClass={cfg.img} />
+          })()
         ) : (
           <MusclePlaceholder muscle={primaryMuscle} sizeClass={cfg.img} />
         )}
