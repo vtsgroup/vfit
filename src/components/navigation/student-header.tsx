@@ -116,7 +116,7 @@ export function StudentHeader() {
     <header
       className={cn(
         'ds3-header fixed left-0 right-0 z-30 backdrop-blur-2xl backdrop-saturate-180 transition-all duration-300',
-        'bg-linear-to-b from-vfit-primary-500 to-vfit-primary-700',
+        'bg-gradient-to-b from-[#0B1627] via-[#0A1220] to-[#050A12]',
         scrolled && 'ds3-header-scrolled'
       )}
       style={{
