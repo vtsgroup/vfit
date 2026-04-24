@@ -130,7 +130,14 @@ export function CtaSection() {
                 trackLandingEvent('lp_register_start', { placement: 'cta_section' })
               }}
             >
-              <Button variant="primary" size="lg" className="px-12 text-sm uppercase" style={monoLabel}>
+              <Button
+                variant="primary"
+                size="lg"
+                className="px-12 text-sm uppercase"
+                style={monoLabel}
+                aria-label="Começar grátis"
+                data-testid="landing-cta-register"
+              >
                 <DSIcon name="sparkles" size={16} />
                 COMEÇAR GRÁTIS
               </Button>
@@ -141,7 +148,14 @@ export function CtaSection() {
               href="/login"
               onClick={() => trackLandingEvent('lp_cta_secondary_click', { placement: 'cta_section', cta: 'ja_tenho_conta' })}
             >
-              <Button variant="outline" size="lg" className="px-10 text-xs uppercase" style={monoLabel}>
+              <Button
+                variant="outline"
+                size="lg"
+                className="px-10 text-xs uppercase"
+                style={monoLabel}
+                aria-label="Já tenho conta"
+                data-testid="landing-cta-login"
+              >
                 <DSIcon name="logIn" size={14} />
                 JÁ TENHO CONTA
               </Button>

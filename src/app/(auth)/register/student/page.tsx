@@ -45,6 +45,11 @@ const monoLabel = {
 const inputBase = 'w-full h-13 rounded-2xl border backdrop-blur-sm px-4 text-[15px] transition-all duration-300 focus:outline-none'
 const inputNormal = `${inputBase} bg-white/95 text-zinc-900 placeholder:text-zinc-400 border-white/20 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-400/25 focus:bg-white shadow-sm`
 
+function seededUnit(seed: number): number {
+  const x = Math.sin(seed * 12.9898) * 43758.5453
+  return x - Math.floor(x)
+}
+
 /* ─── Personal Trainer info type ─── */
 interface PersonalInfo {
   personal_name: string
@@ -167,12 +172,12 @@ export default function RegisterStudentPage() {
   const particles = useMemo(() =>
     Array.from({ length: 15 }, (_, i) => ({
       id: i,
-      size: 2 + Math.random() * 3,
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-      duration: 18 + Math.random() * 20,
-      delay: Math.random() * -15,
-      opacity: 0.15 + Math.random() * 0.25,
+      size: 2 + seededUnit(i * 7 + 1) * 3,
+      x: seededUnit(i * 7 + 2) * 100,
+      y: seededUnit(i * 7 + 3) * 100,
+      duration: 18 + seededUnit(i * 7 + 4) * 20,
+      delay: seededUnit(i * 7 + 5) * -15,
+      opacity: 0.15 + seededUnit(i * 7 + 6) * 0.25,
     })),
   [])
 

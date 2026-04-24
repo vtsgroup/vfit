@@ -193,14 +193,12 @@ export default function NutricaoPage() {
   return (
     <div className="flex min-h-screen flex-col bg-bg-primary pb-24">
       <div className="space-y-5 px-4 pt-1">
-        {/* Action button */}
+        {/* Primary action */}
         <div className="flex justify-end">
-          <button
-            onClick={() => setShowSearch(true)}
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-primary/12 text-brand-primary transition-colors hover:bg-brand-primary/20"
-          >
-            <DSIcon name="plus" size={18} />
-          </button>
+          <Button size="sm" onClick={() => setShowSearch(true)}>
+            <DSIcon name="plus" size={16} />
+            Adicionar
+          </Button>
         </div>
 
         {/* ═══ Date Navigation ═══ */}

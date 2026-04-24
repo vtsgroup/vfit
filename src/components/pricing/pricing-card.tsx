@@ -55,7 +55,12 @@ export function PricingCard({ plan, isAnnual }: PricingCardProps) {
       </span>
 
       {/* Name */}
-      <h3 className="mt-2 text-xl font-bold text-white">{plan.name}</h3>
+      <h3
+        className="mt-2 text-xl font-bold text-white"
+        data-testid={`plan-name-${plan.slug}`}
+      >
+        {plan.name}
+      </h3>
 
       {/* Price */}
       <div className="mt-4 flex items-baseline gap-1">

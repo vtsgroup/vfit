@@ -414,6 +414,8 @@ function RegisterForm({ slug }: { personalId: string; slug: string }) {
           type="text"
           inputMode="numeric"
           placeholder="CPF"
+          aria-label="CPF"
+          data-testid="register-cpf"
           value={form.cpf}
           onChange={(e) => {
             setForm({ ...form, cpf: maskCpf(e.target.value) })
@@ -442,6 +444,8 @@ function RegisterForm({ slug }: { personalId: string; slug: string }) {
         <input
           type="text"
           placeholder="Nome completo"
+          aria-label="Nome completo"
+          data-testid="register-fullname"
           value={form.full_name}
           onChange={(e) => {
             setForm({ ...form, full_name: e.target.value })
@@ -476,6 +480,8 @@ function RegisterForm({ slug }: { personalId: string; slug: string }) {
         <input
           type="email"
           placeholder="Email"
+          aria-label="Email"
+          data-testid="register-email"
           value={form.email}
           onChange={(e) => setForm({ ...form, email: e.target.value })}
           className={inputBase}
@@ -489,6 +495,8 @@ function RegisterForm({ slug }: { personalId: string; slug: string }) {
           type="tel"
           inputMode="numeric"
           placeholder="WhatsApp (opcional)"
+          aria-label="WhatsApp"
+          data-testid="register-phone"
           value={form.phone}
           onChange={(e) => setForm({ ...form, phone: maskPhone(e.target.value) })}
           className={inputBase}
@@ -501,6 +509,8 @@ function RegisterForm({ slug }: { personalId: string; slug: string }) {
         <input
           type={showPassword ? 'text' : 'password'}
           placeholder="Senha"
+          aria-label="Senha"
+          data-testid="register-password"
           value={form.password}
           onChange={(e) => setForm({ ...form, password: e.target.value })}
           className={inputBase}
@@ -520,6 +530,8 @@ function RegisterForm({ slug }: { personalId: string; slug: string }) {
         <input
           type={showPassword ? 'text' : 'password'}
           placeholder="Confirmar senha"
+          aria-label="Confirmar senha"
+          data-testid="register-confirm-password"
           value={form.confirmPassword}
           onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
           className={cn(
@@ -566,6 +578,8 @@ function RegisterForm({ slug }: { personalId: string; slug: string }) {
       {/* ─── Submit ─── */}
       <button
         type="submit"
+        aria-label="Criar minha conta"
+        data-testid="register-submit"
         disabled={register.isPending}
         className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-2xl bg-linear-to-r from-emerald-500 to-emerald-600 px-6 py-4 text-sm font-bold text-white shadow-lg shadow-emerald-500/20 transition-all hover:shadow-xl hover:shadow-emerald-500/30 disabled:opacity-50"
       >

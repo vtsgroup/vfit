@@ -39,8 +39,19 @@
 - **Decisões de negócio fechadas (B1/B2/B3):** [13-DECISOES-NEGOCIO-B1-B2-B3.md](.claude/plans/vfit-seo/13-DECISOES-NEGOCIO-B1-B2-B3.md) oficializa números públicos, modelo de comissão de afiliados e narrativa de nutrição integrada.
 - **Constantes canônicas de mercado:** [config/constants.ts](config/constants.ts), [src/components/landing/hero.tsx](src/components/landing/hero.tsx), [src/app/(public)/afiliados/page.tsx](src/app/(public)/afiliados/page.tsx), [src/app/(public)/nutricionistas/page.tsx](src/app/(public)/nutricionistas/page.tsx) e [public/llms.txt](public/llms.txt) foram alinhados ao novo baseline comercial/SEO.
 
+
+
+
+### 🚀 Entrega pública R2 finalizada e infra limpa (2026-04-24)
+- **Domínios públicos ativos:** `images.vfit.app.br` e `videos.vfit.app.br` mapeados e propagados via Cloudflare R2, com CNAME e bindings validados.
+- **Remoção de domínios legados:** `images.iapersonal.app.br` e `videos.iapersonal.app.br` removidos dos buckets e DNS, eliminando riscos de fallback ou conflito.
+- **Documentação completa:** `.claude/plans/mobile-qa-lancamento-maximo/R2-SETUP.md`, `.claude/docs/MEDIA-STRATEGY.md`, `.claude/docs/STACK.md` detalham buckets, bindings, domínios, CORS, cache, PWA e próximos passos para entrega pública de mídia via R2.
+- **Checklist de readiness:** Validado contra plano mestre, TRACKING.md e auditoria manual.
+- **Pronto para deploy:** Todos os testes, flows e infra validados. Go/no-go liberado.
+
 ### ✅ Validação da sessão
-- `npm run build` ✅
+`npm run build` ✅
+`npm run quality:ci` ✅
 
 ## [v2.3.3] — 2026-04-10 — Header do light alinhado ao theme-color dark
 

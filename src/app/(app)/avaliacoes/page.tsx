@@ -88,7 +88,7 @@ export default function AvaliacoesPage() {
   return (
     <div className="mx-auto max-w-lg px-4 pt-0 pb-24">
       {/* Header */}
-      <div className="-mx-4 mb-5 flex items-center gap-3 rounded-b-3xl border-b border-white/8 bg-slate-950/95 px-4 py-5 backdrop-blur-md">
+      <div className="-mx-4 mb-5 flex items-center gap-3 rounded-b-3xl bg-slate-950/95 px-4 py-5 backdrop-blur-md">
         <button
           aria-label="Voltar"
           onClick={() => router.back()}

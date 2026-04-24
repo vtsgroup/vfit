@@ -123,7 +123,7 @@ const variantStyles: Record<ButtonVariant, string> = {
 
   warning: [
     'bg-linear-to-b from-amber-400 via-amber-500 to-amber-600',
-    'text-white font-bold',
+    'text-slate-900 dark:text-white font-bold',
     '[text-shadow:0_1px_2px_rgba(0,0,0,0.2)]',
     'border border-t-amber-300/40 border-x-amber-500/30 border-b-amber-700/50',
     'shadow-[0_4px_0_0_#b45309,0_6px_20px_-4px_rgba(245,158,11,0.45),inset_0_1px_0_rgba(255,255,255,0.2)]',
@@ -137,7 +137,7 @@ const variantStyles: Record<ButtonVariant, string> = {
 
   workout: [
     'bg-linear-to-b from-emerald-400 via-emerald-500 to-emerald-600',
-    'text-white font-bold',
+    'text-slate-900 dark:text-white font-bold',
     'border border-t-emerald-300/40 border-x-emerald-500/30 border-b-emerald-700/50',
     'shadow-[0_4px_0_0_#065F46,0_6px_20px_-4px_rgba(16,185,129,0.45),0_0_30px_-8px_rgba(16,185,129,0.2),inset_0_1px_0_rgba(255,255,255,0.2)]',
     'hover:-translate-y-0.5',
@@ -149,7 +149,7 @@ const variantStyles: Record<ButtonVariant, string> = {
 
   assessment: [
     'bg-linear-to-b from-violet-400 via-violet-500 to-violet-600',
-    'text-white font-bold',
+    'text-slate-900 dark:text-white font-bold',
     'border border-t-violet-300/40 border-x-violet-500/30 border-b-violet-700/50',
     'shadow-[0_4px_0_0_#4C1D95,0_6px_20px_-4px_rgba(139,92,246,0.45),0_0_30px_-8px_rgba(139,92,246,0.2),inset_0_1px_0_rgba(255,255,255,0.2)]',
     'hover:-translate-y-0.5',
@@ -161,7 +161,7 @@ const variantStyles: Record<ButtonVariant, string> = {
 
   payment: [
     'bg-linear-to-b from-amber-400 via-amber-500 to-amber-600',
-    'text-white font-bold',
+    'text-slate-900 dark:text-white font-bold',
     'border border-t-amber-300/40 border-x-amber-500/30 border-b-amber-700/50',
     'shadow-[0_4px_0_0_#92400E,0_6px_20px_-4px_rgba(245,158,11,0.45),0_0_30px_-8px_rgba(245,158,11,0.2),inset_0_1px_0_rgba(255,255,255,0.2)]',
     'hover:-translate-y-0.5',

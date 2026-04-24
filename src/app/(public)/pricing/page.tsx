@@ -188,13 +188,22 @@ export default function PricingPage() {
           </p>
           <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
             <Link href="/register">
-              <Button size="lg">
+              <Button
+                size="lg"
+                aria-label="Começar grátis"
+                data-testid="pricing-cta-register"
+              >
                 Começar grátis
                 <DSIcon name="arrowRight" size={16} />
               </Button>
             </Link>
             <Link href="/contato">
-              <Button variant="outline" size="lg">
+              <Button
+                variant="outline"
+                size="lg"
+                aria-label="Falar com vendas"
+                data-testid="pricing-cta-sales"
+              >
                 Falar com vendas
               </Button>
             </Link>

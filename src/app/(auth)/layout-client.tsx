@@ -153,18 +153,23 @@ function FeatureChip({ icon, label }: { icon: React.ReactNode; label: string }) 
   )
 }
 
+function seededUnit(seed: number): number {
+  const x = Math.sin(seed * 12.9898) * 43758.5453
+  return x - Math.floor(x)
+}
+
 /* ─── Cinematic CSS Background — smooth aurora + floating particles ─── */
 function CinematicBackground() {
   // Generate stable particles with useMemo (no re-renders)
   const particles = useMemo(() =>
     Array.from({ length: 20 }, (_, i) => ({
       id: i,
-      size: 2 + Math.random() * 4,
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-      duration: 15 + Math.random() * 25,
-      delay: Math.random() * -20,
-      opacity: 0.15 + Math.random() * 0.35,
+      size: (2 + seededUnit(i * 7 + 1) * 4).toFixed(4),
+      x: (seededUnit(i * 7 + 2) * 100).toFixed(4),
+      y: (seededUnit(i * 7 + 3) * 100).toFixed(4),
+      duration: (15 + seededUnit(i * 7 + 4) * 25).toFixed(4),
+      delay: (seededUnit(i * 7 + 5) * -20).toFixed(4),
+      opacity: (0.15 + seededUnit(i * 7 + 6) * 0.35).toFixed(4),
     })),
   [])
 
@@ -219,13 +224,17 @@ function CinematicBackground() {
           key={p.id}
           className="absolute rounded-full bg-brand-primary/60"
           style={{
-            width: p.size,
-            height: p.size,
+            width: `${p.size}px`,
+            height: `${p.size}px`,
             left: `${p.x}%`,
             top: `${p.y}%`,
             opacity: p.opacity,
-            filter: `blur(${p.size > 4 ? 1 : 0}px)`,
-            animation: `particleFloat ${p.duration}s ease-in-out ${p.delay}s infinite`,
+            filter: `blur(${Number(p.size) > 4 ? 1 : 0}px)`,
+            animationName: 'particleFloat',
+            animationDuration: `${p.duration}s`,
+            animationTimingFunction: 'ease-in-out',
+            animationDelay: `${p.delay}s`,
+            animationIterationCount: 'infinite',
           }}
         />
       ))}

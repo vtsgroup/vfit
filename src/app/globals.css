@@ -1828,14 +1828,17 @@ body {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(37, 99, 235, 0.04);
 }
 
-/* Light mode header — keep same dark signature as bottom nav */
+/* Light mode header — frosted light surface */
 .light .ds3-header {
-  background: linear-gradient(180deg, rgba(4, 9, 22, 0.98) 0%, rgba(5, 10, 18, 0.96) 32%, rgba(2, 6, 23, 0.99) 100%);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.97) 0%, rgba(248, 250, 251, 0.95) 50%, rgba(241, 244, 246, 0.93) 100%);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+}
+.light .ds3-header::before {
+  background: linear-gradient(180deg, rgba(34, 197, 94, 0.08) 0%, rgba(34, 197, 94, 0) 100%);
 }
 .light .ds3-header.ds3-header-scrolled {
-  background: linear-gradient(180deg, rgba(4, 9, 22, 0.99) 0%, rgba(5, 10, 18, 0.97) 30%, rgba(2, 6, 23, 0.995) 100%);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.99) 0%, rgba(248, 250, 251, 0.97) 45%, rgba(241, 244, 246, 0.95) 100%);
+  box-shadow: 0 6px 24px rgba(15, 23, 42, 0.10), 0 1px 0 rgba(255, 255, 255, 0.85) inset;
 }
 
 /* DS v3 Action buttons — 36×36 individual pills */
@@ -1856,6 +1859,18 @@ body {
   background: rgba(255, 255, 255, 0.1);
   color: #f8fafc;
   border-color: rgba(34, 197, 94, 0.24);
+}
+.light .ds3-action-btn {
+  border: 1px solid rgba(15, 23, 42, 0.10);
+  background: rgba(255, 255, 255, 0.82);
+  color: #475569;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.07);
+}
+.light .ds3-action-btn:hover {
+  background: #ffffff;
+  color: #0f172a;
+  border-color: rgba(34, 197, 94, 0.30);
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.12);
 }
 /* VFIT Theme — action btn hover uses brand tint */
 .vfit-theme .ds3-action-btn:hover {

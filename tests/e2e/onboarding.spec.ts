@@ -15,8 +15,11 @@ test.describe('Onboarding B2C — Public pages', () => {
 
   test('pricing page renders plans', async ({ page }) => {
     await page.goto('/pricing')
-    // Should show plan cards
-    await expect(page.getByText(/Pro|Grátis|Max/i)).toBeVisible({ timeout: 10000 })
+    // Should show plan cards by testid
+    await expect(page.getByTestId('plan-name-essencial')).toBeVisible({ timeout: 10000 })
+    await expect(page.getByTestId('plan-name-pro')).toBeVisible({ timeout: 10000 })
+    await expect(page.getByTestId('plan-name-pro-plus')).toBeVisible({ timeout: 10000 })
+    await expect(page.getByTestId('plan-name-max')).toBeVisible({ timeout: 10000 })
   })
 })
 

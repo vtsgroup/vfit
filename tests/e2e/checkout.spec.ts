@@ -37,11 +37,11 @@ function injectAuth(page: import('@playwright/test').Page) {
 test.describe('Checkout — Public', () => {
   test('pricing page shows plan options', async ({ page }) => {
     await page.goto('/pricing')
-
-    // Should show at least one plan name
-    await expect(
-      page.locator('text=/Pro|Grátis|Max|Pro\\+|Profissional/i').first()
-    ).toBeVisible({ timeout: 10000 })
+    // Should show all plan names by testid
+    await expect(page.getByTestId('plan-name-essencial')).toBeVisible({ timeout: 10000 })
+    await expect(page.getByTestId('plan-name-pro')).toBeVisible({ timeout: 10000 })
+    await expect(page.getByTestId('plan-name-pro-plus')).toBeVisible({ timeout: 10000 })
+    await expect(page.getByTestId('plan-name-max')).toBeVisible({ timeout: 10000 })
   })
 
   test('pricing page has CTA buttons', async ({ page }) => {
