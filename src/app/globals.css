@@ -260,6 +260,11 @@
 
   /* VFIT Base Color System — Gradients */
   --gradient-vfit-primary: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  /* TWA theme color gradient for header/hero */
+  --vfit-primary-400: #60a5fa;
+  --vfit-primary-500: #3b82f6;
+  --vfit-primary-600: #2563eb;
+  --vfit-primary-700: #1d4ed8;
   --gradient-vfit-secondary: linear-gradient(135deg, #64748b 0%, #334155 100%);
   --gradient-vfit-accent: linear-gradient(135deg, #eab308 0%, #a16207 100%);
   --gradient-vfit-card: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);

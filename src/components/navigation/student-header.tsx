@@ -116,6 +116,7 @@ export function StudentHeader() {
     <header
       className={cn(
         'ds3-header fixed left-0 right-0 z-30 backdrop-blur-2xl backdrop-saturate-180 transition-all duration-300',
+        'bg-gradient-to-b from-vfit-primary-500 to-vfit-primary-700',
         scrolled && 'ds3-header-scrolled'
       )}
       style={{
@@ -194,11 +195,11 @@ export function StudentHeader() {
         </div>
       </div>
 
-      {/* Bottom border — subtle, fades in on scroll (same as dashboard) */}
-      <div className={cn(
+      {/* Bottom border removed for seamless gradient */}
+      {/* <div className={cn(
         'absolute bottom-0 left-0 right-0 h-px transition-opacity duration-300',
         scrolled ? 'bg-white/40 opacity-100' : 'bg-white/30 opacity-85'
-      )} />
+      )} /> */}
     </header>
   )
 }
