@@ -116,9 +116,17 @@ export function StudentHeader() {
     <header
       className={cn(
         'ds3-header fixed left-0 right-0 z-30 backdrop-blur-2xl backdrop-saturate-180 transition-all duration-300',
-        'bg-gradient-to-b from-[#0B1627] via-[#0A1220] to-[#050A12]',
+        'border-b-0',
         scrolled && 'ds3-header-scrolled'
       )}
+      style={{
+        ...{
+          background: 'linear-gradient(#050a12, #0f1a2c 32%, #0b1627)',
+          borderBottom: 0
+        },
+        top: 'var(--demo-banner-offset, 0px)',
+        paddingTop: 'env(safe-area-inset-top, 0px)',
+      }}
       style={{
         top: 'var(--demo-banner-offset, 0px)',
         paddingTop: 'env(safe-area-inset-top, 0px)',
