@@ -56,7 +56,7 @@ export function NotificationCard({
     <div
       className={cn(
         // Surface — DS v3 Card
-        'relative rounded-2xl border bg-bg-primary',
+        'relative rounded-2xl border bg-bg-secondary',
         'border-border-light',
         'shadow-sm',
         'dark:shadow-md',

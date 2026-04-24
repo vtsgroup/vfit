@@ -116,7 +116,7 @@ export function StudentHeader() {
     <header
       className={cn(
         'ds3-header fixed left-0 right-0 z-30 backdrop-blur-2xl backdrop-saturate-180 transition-all duration-300',
-        'bg-gradient-to-b from-vfit-primary-500 to-vfit-primary-700',
+        'bg-linear-to-b from-vfit-primary-500 to-vfit-primary-700',
         scrolled && 'ds3-header-scrolled'
       )}
       style={{
@@ -132,8 +132,8 @@ export function StudentHeader() {
           <div className="min-w-0 flex flex-col justify-center">
             {/* Breadcrumbs — home icon > section > sub-page (same as dashboard) */}
             <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 mb-0.5">
-              <Link href="/treinos" className="text-white/60 hover:text-sky-300 transition-colors shrink-0">
-                <DSIcon name="home" size={14} />
+              <Link href="/treinos" className="text-white/80 hover:text-sky-300 transition-colors shrink-0">
+                <DSIcon name="home" size={14} className="text-white" />
               </Link>
               {breadcrumbs.length > 0 ? (
                 breadcrumbs.map((item, i) => (
@@ -174,7 +174,7 @@ export function StudentHeader() {
               title={unreadCount > 0 ? `${unreadCount} não lida(s)` : 'Notificações'}
               aria-label={unreadCount > 0 ? `${unreadCount} notificações não lidas` : 'Notificações'}
             >
-              <DSIcon name="bell" size={16} />
+              <DSIcon name="bell" size={16} className="text-white dark:text-white" />
             </Link>
             {unreadCount > 0 && (
               <div className="absolute -top-0.5 -right-0.5 flex h-4 min-w-4 items-center justify-center rounded-full border-2 border-slate-950 bg-brand-primary text-[9px] font-bold text-white notification-pulse">

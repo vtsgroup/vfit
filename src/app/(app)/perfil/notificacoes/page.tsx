@@ -144,7 +144,7 @@ export default function NotificacoesPage() {
 
   return (
     <div className="mx-auto max-w-lg px-4 pt-0 pb-24">
-      <div className="-mx-4 mb-5 rounded-b-3xl border-b border-white/8 bg-slate-950/95 px-4 py-5 backdrop-blur-md">
+      <div className="-mx-4 mb-5 rounded-b-3xl border-b-0 bg-gradient-to-b from-vfit-primary-500 to-vfit-primary-700 px-4 py-5 backdrop-blur-md shadow-lg">
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <button
@@ -162,11 +162,11 @@ export default function NotificacoesPage() {
 
           {items.length > 0 && (
             <Button
-              variant="outline"
+              variant="primary"
               size="sm"
               onClick={() => markAllRead.mutate()}
               loading={markAllRead.isPending}
-              className="border-white/15 bg-white/6 text-white hover:bg-white/10"
+              className=""
             >
               <DSIcon name="checkCheck" size={14} />
               Ler tudo
@@ -174,12 +174,14 @@ export default function NotificacoesPage() {
           )}
         </div>
 
-        <div className="mt-4 inline-flex rounded-xl border border-white/10 bg-white/6 p-1">
+        <div className="mt-4 inline-flex rounded-xl border border-white/10 bg-bg-secondary/80 p-1">
           <button
             onClick={() => setTab('unread')}
             className={cn(
               'rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors',
-              tab === 'unread' ? 'bg-brand-primary/25 text-emerald-300' : 'text-white/70 hover:text-white'
+              tab === 'unread'
+                ? 'bg-brand-primary/90 text-white shadow'
+                : 'text-white/80 hover:text-white/100'
             )}
           >
             Não lidas {unread?.unread_count ? `(${unread.unread_count})` : ''}
@@ -188,7 +190,9 @@ export default function NotificacoesPage() {
             onClick={() => setTab('all')}
             className={cn(
               'rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors',
-              tab === 'all' ? 'bg-brand-primary/25 text-emerald-300' : 'text-white/70 hover:text-white'
+              tab === 'all'
+                ? 'bg-brand-primary/90 text-white shadow'
+                : 'text-white/80 hover:text-white/100'
             )}
           >
             Todas
