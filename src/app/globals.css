@@ -1830,9 +1830,9 @@ body {
 
 /* Light mode header — frosted light surface */
 .light .ds3-header {
-  /* Azul theme color igual ao dark, mas translúcido para light */
-  background: linear-gradient(180deg, rgba(4, 9, 22, 0.90) 0%, rgba(5, 10, 18, 0.88) 32%, rgba(2, 6, 23, 0.92) 100%);
-  border-bottom: 1px solid rgba(37, 99, 235, 0.08); /* azul theme color */
+  /* Gradiente azul escuro theme color, igual ao dark */
+  background: linear-gradient(#050A12, #0f1a2c 32%, #0f1a2b);
+  border-bottom: 0;
 }
 .light .ds3-header::before {
   background: linear-gradient(180deg, rgba(59, 130, 246, 0.10) 0%, rgba(59, 130, 246, 0) 100%); /* azul theme color */
