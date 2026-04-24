@@ -75,6 +75,19 @@ function getMuscleImageUrl(mg?: {
   image_male_url?: string | null
   image_url?: string | null
 } | null) {
+  // Detecta super admin pelo Zustand store
+  let isSuperAdmin = false
+  try {
+    if (typeof window !== 'undefined') {
+      // Import dinâmico para evitar SSR crash
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const store = require('@/stores/auth-store')
+      isSuperAdmin = store.useAuthStore.getState?.().isSuperAdmin?.() || false
+    }
+  } catch {}
+  if (isSuperAdmin) {
+    return mg?.image_male_url || mg?.image_url || mg?.image_female_url || null
+  }
   return mg?.image_female_url || mg?.image_male_url || mg?.image_url || null
 }
 

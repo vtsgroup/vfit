@@ -97,6 +97,17 @@ export function MuscleAnatomyCard({
     .map((id) => allGroups.find((m) => m.id === id))
     .filter(Boolean) as MuscleGroup[]
 
+  // Detecta super admin
+  let isSuperAdmin = false
+  try {
+    if (typeof window !== 'undefined') {
+      // Import dinâmico para evitar SSR crash
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const store = require('@/stores/auth-store')
+      isSuperAdmin = store.useAuthStore.getState?.().isSuperAdmin?.() || false
+    }
+  } catch {}
+
   return (
     <div className={cn('space-y-3', className)}>
       {/* ─── Primary muscle image ─── */}
@@ -105,21 +116,25 @@ export function MuscleAnatomyCard({
           Músculo Principal
         </p>
 
-        {primaryMuscle?.image_url ? (
-          <div className={cn('relative w-full overflow-hidden rounded-xl', cfg.img)}>
-            <Image
-              src={primaryMuscle.image_url}
-              alt={primaryMuscle.name_pt || primaryMuscle.name}
-              fill
-              className="object-cover"
-            />
-            {/* Overlay label */}
-            <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/70 to-transparent px-3 pb-2 pt-6">
-              <p className="text-sm font-semibold text-white">
-                {primaryMuscle.name_pt || primaryMuscle.name}
-              </p>
+        {primaryMuscle ? (
+          (isSuperAdmin ? (primaryMuscle.image_male_url || primaryMuscle.image_url) : (primaryMuscle.image_female_url || primaryMuscle.image_male_url || primaryMuscle.image_url)) ? (
+            <div className={cn('relative w-full overflow-hidden rounded-xl', cfg.img)}>
+              <Image
+                src={isSuperAdmin ? (primaryMuscle.image_male_url || primaryMuscle.image_url) : (primaryMuscle.image_female_url || primaryMuscle.image_male_url || primaryMuscle.image_url)}
+                alt={primaryMuscle.name_pt || primaryMuscle.name}
+                fill
+                className="object-cover"
+              />
+              {/* Overlay label */}
+              <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/70 to-transparent px-3 pb-2 pt-6">
+                <p className="text-sm font-semibold text-white">
+                  {primaryMuscle.name_pt || primaryMuscle.name}
+                </p>
+              </div>
             </div>
-          </div>
+          ) : (
+            <MusclePlaceholder muscle={primaryMuscle} sizeClass={cfg.img} />
+          )
         ) : (
           <MusclePlaceholder muscle={primaryMuscle} sizeClass={cfg.img} />
         )}
