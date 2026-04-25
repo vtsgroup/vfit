@@ -13,7 +13,7 @@ function StudentHeader() {
         'border-b-0'
       )}
       style={{
-        background: 'linear-gradient(to bottom, #050A12 0px, #0a1530 38px, #15305a 54%, #10213a 75%, #0b1627 100%)',
+        background: 'linear-gradient(to bottom, #050A12 0%, #050A12 20%, #0b1627 100%)',
         backgroundColor: '#050A12',
         borderBottom: 0,
         top: 'var(--demo-banner-offset, 0px)',
