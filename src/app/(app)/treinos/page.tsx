@@ -531,10 +531,10 @@ export default function TreinosPage() {
               <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-emerald-400/70">Gamificação VFIT</p>
               <h2 className="mt-0.5 text-[17px] font-black tracking-tight text-white">Streak, XP e metas</h2>
             </div>
-            <div className="flex items-center gap-1.5 rounded-full border border-amber-400/25 bg-amber-500/10 px-2.5 py-1">
-              <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-amber-400" />
-              <span className="text-[10px] font-bold text-amber-300">VFIT Coin em breve</span>
-            </div>
+              <Link href="/progresso/streaks" className="flex items-center gap-1.5 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-2.5 py-1 transition-all hover:bg-emerald-500/20">
+              <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
+              <span className="text-[10px] font-bold text-emerald-300">Nv. {xpBalance?.level ?? 1}</span>
+            </Link>
           </div>
 
           {/* 3 main stat cards */}

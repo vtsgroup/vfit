@@ -14,6 +14,7 @@ import { DSIcon } from '@/components/ui/ds-icon'
 import { useAuthStore } from '@/stores/auth-store'
 import { AvatarWithPlanBadge } from '@/components/ui/avatar-plan-badge'
 import { useUnreadCount } from '@/hooks/use-student-app'
+import { useXPBalance } from '@/hooks/use-xp'
 
 const ROUTE_MAP: Record<string, string> = {
   '/treinos': 'Treinos',
@@ -84,6 +85,7 @@ export function StudentHeader() {
 
   const { data: unread } = useUnreadCount()
   const unreadCount = unread?.unread_count ?? 0
+  const { data: xpData } = useXPBalance()
 
   const pageTitle = getPageTitle(pathname)
   const breadcrumbs = getBreadcrumbs(pathname)
@@ -167,6 +169,16 @@ export function StudentHeader() {
               </div>
             )}
           </div>
+
+          {/* XP Coin chip */}
+          <Link
+            href="/progresso/streaks"
+            className="flex items-center gap-1 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-2 py-1 transition-all hover:bg-emerald-500/20 hover:border-emerald-400/40"
+            title={`${xpData?.balance ?? 0} XP — Nível ${xpData?.level ?? 1}`}
+          >
+            <span className="text-[11px] font-black leading-none text-emerald-300">⚡</span>
+            <span className="text-[11px] font-bold tabular-nums leading-none text-emerald-300">{xpData?.balance ?? 0}</span>
+          </Link>
 
           <div className="shrink-0">
             <AvatarWithPlanBadge src={user?.avatar_url} name={user?.full_name || 'U'} size="sm" linkToPlans />
