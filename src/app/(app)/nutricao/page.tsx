@@ -192,6 +192,20 @@ export default function NutricaoPage() {
 
   return (
     <div className="flex min-h-screen flex-col bg-bg-primary pb-24">
+      {/* ─── Hero ─── */}
+      <div
+        className="mx-0 mb-5 rounded-b-3xl border-b-0 px-4 py-5 backdrop-blur-md"
+        style={{ background: 'linear-gradient(to bottom, #0b1d36 0%, #0c1f38 20%, #0b1c35 40%, #0a1830 65%, #071628 85%, #050A12 100%)', boxShadow: '0 6px 28px 0 rgba(5,10,18,0.6)' }}
+      >
+        <p className="text-xs font-semibold text-emerald-400">
+          {(() => { const h = new Date().getHours(); return h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite' })()}
+        </p>
+        <h1 className="bg-linear-to-r from-vfit-primary-100 to-vfit-primary-400 bg-clip-text text-4xl font-black text-transparent">
+          Nutrição
+        </h1>
+        <p className="mt-1 text-xs text-emerald-200/80">Refeições e macros do dia</p>
+      </div>
+
       <div className="space-y-5 px-4 pt-1">
         {/* Primary action */}
         <div className="flex justify-end">

@@ -13,6 +13,7 @@
 import { useState, useMemo, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { cn } from '@/lib/utils'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -230,7 +231,14 @@ export default function TreinosPage() {
   return (
     <div className="mx-auto max-w-lg animate-in fade-in-0 slide-in-from-bottom-2 duration-300 px-4 pt-0 pb-24">
       {/* ─── Header ─── */}
-      <div className="-mx-4 mb-5 rounded-b-3xl border-b-0 bg-linear-to-b from-[#0B1627] via-[#0A1220] to-[#050A12] px-4 py-5 backdrop-blur-md shadow-[0_4px_24px_0_rgba(10,18,32,0.45)]">
+      <div
+        className="-mx-4 mb-5 rounded-b-3xl border-b-0 px-4 py-5 backdrop-blur-md"
+        style={{
+          // Starts where student-header ends (#0b1d36 ≈ #0b1627), fades to match page bg
+          background: 'linear-gradient(to bottom, #0b1d36 0%, #0c1f38 20%, #0b1c35 40%, #0a1830 65%, #071628 85%, #050A12 100%)',
+          boxShadow: '0 6px 28px 0 rgba(5,10,18,0.6)',
+        }}
+      >
         <p className="text-xs font-semibold text-emerald-400">
           {(() => { const h = new Date().getHours(); return h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite' })()}
         </p>
@@ -508,56 +516,136 @@ export default function TreinosPage() {
         </Link>
       )}
 
-      {/* Gamificação — Streak + XP + Meta diária */}
-      <div className="mb-5 rounded-2xl border border-emerald-400/25 bg-linear-to-br from-emerald-500/10 via-bg-secondary to-transparent p-4">
-        <div className="mb-3 flex items-start justify-between gap-3">
-          <div>
-            <p className="text-[11px] font-bold uppercase tracking-wider text-emerald-300">Gamificação VFIT</p>
-            <h2 className="mt-1 text-[15px] font-bold text-text-primary">Streak, XP e metas do dia</h2>
+      {/* ── Gamificação VFIT — Hub Redesigned ── */}
+      <div
+        className="-mx-4 mb-6 overflow-hidden"
+        style={{ background: 'linear-gradient(160deg, #04111f 0%, #071628 45%, #040e1a 100%)' }}
+      >
+        {/* Top accent line */}
+        <div className="h-px w-full" style={{ background: 'linear-gradient(to right, transparent, rgba(34,197,94,0.5) 40%, rgba(139,92,246,0.4) 60%, transparent)' }} />
+
+        <div className="px-4 pt-4 pb-5">
+          {/* Header */}
+          <div className="mb-4 flex items-start justify-between gap-2">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-emerald-400/70">Gamificação VFIT</p>
+              <h2 className="mt-0.5 text-[17px] font-black tracking-tight text-white">Streak, XP e metas</h2>
+            </div>
+            <div className="flex items-center gap-1.5 rounded-full border border-amber-400/25 bg-amber-500/10 px-2.5 py-1">
+              <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-amber-400" />
+              <span className="text-[10px] font-bold text-amber-300">VFIT Coin em breve</span>
+            </div>
           </div>
-          <span className="rounded-full border border-emerald-400/35 bg-emerald-500/14 px-2.5 py-1 text-[10px] font-bold text-emerald-300">
-            VFIT Coin (em breve)
-          </span>
+
+          {/* 3 main stat cards */}
+          <div className="mb-3 grid grid-cols-3 gap-2">
+            {/* XP */}
+            <div className="relative overflow-hidden rounded-2xl p-3" style={{ background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.18)' }}>
+              <div className="absolute -right-3 -top-3 h-12 w-12 rounded-full" style={{ background: 'radial-gradient(circle, rgba(16,185,129,0.25) 0%, transparent 70%)' }} />
+              <DSIcon name="zap" size={13} className="mb-2 text-emerald-400" />
+              <p className="text-[9px] font-medium uppercase tracking-wider text-emerald-300/60">XP atual</p>
+              <p className="mt-0.5 text-xl font-black leading-none text-emerald-300">{xpBalance?.balance ?? 0}</p>
+              <div className="mt-2">
+                <div className="mb-0.5 flex justify-between">
+                  <span className="text-[9px] text-white/30">Nv {xpBalance?.level ?? 1}</span>
+                  <span className="text-[9px] text-white/30">Nv {(xpBalance?.level ?? 1) + 1}</span>
+                </div>
+                <div className="h-1 overflow-hidden rounded-full bg-white/8">
+                  <div
+                    className="h-1 rounded-full bg-linear-to-r from-emerald-500 to-emerald-300 transition-all duration-700"
+                    style={{ width: `${Math.min(100, ((xpBalance?.balance ?? 0) % 100))}%` }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Streak */}
+            <div className="relative overflow-hidden rounded-2xl p-3" style={{ background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.18)' }}>
+              <div className="absolute -right-3 -top-3 h-12 w-12 rounded-full" style={{ background: 'radial-gradient(circle, rgba(245,158,11,0.25) 0%, transparent 70%)' }} />
+              <DSIcon name="flame" size={13} className="mb-2 text-amber-400" />
+              <p className="text-[9px] font-medium uppercase tracking-wider text-amber-300/60">Streak</p>
+              <div className="mt-0.5 flex items-end gap-1">
+                <p className="text-xl font-black leading-none text-amber-300">{streak?.current_streak ?? 0}</p>
+                <p className="mb-0.5 text-[10px] font-bold text-amber-400/60">dias</p>
+              </div>
+              <p className="mt-2 text-[9px] text-white/30">Recorde: {streak?.longest_streak ?? 0} dias</p>
+            </div>
+
+            {/* Meta diária */}
+            <div className="relative overflow-hidden rounded-2xl p-3" style={{ background: 'rgba(139,92,246,0.08)', border: '1px solid rgba(139,92,246,0.18)' }}>
+              <div className="absolute -right-3 -top-3 h-12 w-12 rounded-full" style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.25) 0%, transparent 70%)' }} />
+              <DSIcon name="target" size={13} className="mb-2 text-violet-400" />
+              <p className="text-[9px] font-medium uppercase tracking-wider text-violet-300/60">Meta diária</p>
+              <div className="mt-0.5 flex items-end gap-0.5">
+                <p className="text-xl font-black leading-none text-violet-300">{dailyGoal?.earned_xp ?? 0}</p>
+                <p className="mb-0.5 text-[11px] font-bold text-white/25">/{dailyGoal?.target_xp ?? 0}</p>
+              </div>
+              <p className="mt-2 text-[9px] text-white/30">XP hoje</p>
+            </div>
+          </div>
+
+          {/* Progress bar */}
+          <div className="rounded-2xl p-3.5" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)' }}>
+            <div className="mb-2.5 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <DSIcon name="trophy" size={13} className="text-emerald-400" />
+                <span className="text-[11px] font-semibold text-white/70">Meta do dia</span>
+              </div>
+              <span className="text-[12px] font-black text-emerald-300">{Math.round((dailyGoal?.progress ?? 0) * 100)}%</span>
+            </div>
+            <div className="relative h-3 overflow-hidden rounded-full" style={{ background: 'rgba(255,255,255,0.07)' }}>
+              <div
+                className="h-full rounded-full transition-all duration-700 ease-out"
+                style={{
+                  width: `${Math.max(2, Math.min(100, Math.round((dailyGoal?.progress ?? 0) * 100)))}%`,
+                  background: 'linear-gradient(90deg, #10b981 0%, #34d399 60%, #6ee7b7 100%)',
+                  boxShadow: '0 0 8px rgba(52,211,153,0.5)',
+                }}
+              />
+            </div>
+            <div className="mt-2 flex items-center justify-between">
+              <span className="text-[10px] text-white/35">{dailyGoal?.workouts_done ?? 0}/{dailyGoal?.workouts_target ?? 0} treinos hoje</span>
+              <Link href="/progresso/streaks" className="text-[10px] font-bold text-emerald-400 transition-colors hover:text-emerald-300">
+                Ver detalhes →
+              </Link>
+            </div>
+          </div>
+
+          {/* Weekly activity dots */}
+          <div className="mt-3 flex items-center justify-between">
+            <p className="text-[10px] font-medium text-white/30">Semana</p>
+            <div className="flex gap-1.5">
+              {(['D','S','T','Q','Q','S','S'] as const).map((day, i) => {
+                const todayIdx = new Date().getDay()
+                const isToday = i === todayIdx
+                const isPast = i < todayIdx
+                const hasActivity = isPast && (streak?.current_streak ?? 0) > 0
+                return (
+                  <div key={i} className="flex flex-col items-center gap-1">
+                    <div
+                      className={cn(
+                        'h-6 w-6 rounded-lg text-[8px] font-bold flex items-center justify-center transition-all',
+                        isToday ? 'text-white' : hasActivity ? 'text-emerald-300' : 'text-white/25'
+                      )}
+                      style={
+                        isToday
+                          ? { background: 'rgba(16,185,129,0.9)', boxShadow: '0 0 8px rgba(16,185,129,0.6)' }
+                          : hasActivity
+                          ? { background: 'rgba(16,185,129,0.2)', border: '1px solid rgba(16,185,129,0.3)' }
+                          : { background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.06)' }
+                      }
+                    >
+                      {day}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-2.5">
-          <div className="rounded-xl border border-border-light bg-bg-secondary/70 p-2.5">
-            <p className="text-[10px] text-text-muted">XP atual</p>
-            <p className="mt-1 text-[15px] font-extrabold text-emerald-300">{xpBalance?.balance ?? 0}</p>
-            <p className="text-[10px] text-text-secondary">Nível {xpBalance?.level ?? 1}</p>
-          </div>
-          <div className="rounded-xl border border-border-light bg-bg-secondary/70 p-2.5">
-            <p className="text-[10px] text-text-muted">Streak</p>
-            <p className="mt-1 text-[15px] font-extrabold text-amber-300">{streak?.current_streak ?? 0} dias</p>
-            <p className="text-[10px] text-text-secondary">Máx: {streak?.longest_streak ?? 0}</p>
-          </div>
-          <div className="rounded-xl border border-border-light bg-bg-secondary/70 p-2.5">
-            <p className="text-[10px] text-text-muted">Meta diária</p>
-            <p className="mt-1 text-[15px] font-extrabold text-violet-300">
-              {dailyGoal?.earned_xp ?? 0}/{dailyGoal?.target_xp ?? 0}
-            </p>
-            <p className="text-[10px] text-text-secondary">XP de hoje</p>
-          </div>
-        </div>
-
-        <div className="mt-3 rounded-xl border border-border-light bg-bg-secondary/65 p-2.5">
-          <div className="mb-1.5 flex items-center justify-between text-[10px] text-text-secondary">
-            <span>Progresso da meta do dia</span>
-            <span>{Math.round((dailyGoal?.progress ?? 0) * 100)}%</span>
-          </div>
-          <div className="h-2 rounded-full bg-black/20">
-            <div
-              className="h-2 rounded-full bg-linear-to-r from-emerald-400 to-brand-primary transition-all duration-500"
-              style={{ width: `${Math.max(0, Math.min(100, Math.round((dailyGoal?.progress ?? 0) * 100)))}%` }}
-            />
-          </div>
-          <div className="mt-2 flex items-center justify-between text-[10px] text-text-muted">
-            <span>{dailyGoal?.workouts_done ?? 0}/{dailyGoal?.workouts_target ?? 0} treinos hoje</span>
-            <Link href="/progresso/streaks" className="font-semibold text-emerald-300 hover:text-emerald-200">
-              Ver detalhes
-            </Link>
-          </div>
-        </div>
+        {/* Bottom separator */}
+        <div className="h-px w-full" style={{ background: 'linear-gradient(to right, transparent, rgba(255,255,255,0.06) 50%, transparent)' }} />
       </div>
 
       {/* Treino de hoje (IA) */}

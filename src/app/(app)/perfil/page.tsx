@@ -34,7 +34,10 @@ export default function PerfilPage() {
   return (
     <div className="mx-auto max-w-lg px-4 pt-0 pb-24">
       {/* Profile header */}
-      <div className="-mx-4 mb-5 flex items-center gap-4 rounded-b-3xl border-b border-white/8 bg-slate-950/95 px-4 py-5 backdrop-blur-md">
+      <div
+        className="-mx-4 mb-5 flex items-center gap-4 rounded-b-3xl border-b-0 px-4 py-5 backdrop-blur-md"
+        style={{ background: 'linear-gradient(to bottom, #0b1d36 0%, #0c1f38 20%, #0b1c35 40%, #0a1830 65%, #071628 85%, #050A12 100%)', boxShadow: '0 6px 28px 0 rgba(5,10,18,0.6)' }}
+      >
         <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-white/8 text-brand-primary">
           {user?.avatar_url ? (
             <Image

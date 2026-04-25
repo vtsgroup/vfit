@@ -104,9 +104,9 @@ export function StudentHeader() {
         scrolled && 'ds3-header-scrolled'
       )}
       style={{
-        // Ultra-smooth gradient: many alpha stops for seamless blend, no banding
+        // Dark top → medium navy bottom, seamlessly connecting to hero (#0b1627)
         background:
-          'linear-gradient(to bottom, #050A12 0%, #060c17 12%, #07101e 22%, #081323 32%, #091628 42%, #0a182c 52%, #0b1a30 62%, #0c1c33 72%, #0c1d35 82%, #0b1c30 92%, #0b1627 100%)',
+          'linear-gradient(to bottom, #050A12 0%, #060d1a 18%, #071120 36%, #08152a 54%, #091830 72%, #0a1b33 88%, #0b1d36 100%)',
         backgroundColor: '#050A12',
         borderBottom: 0,
         top: 'var(--demo-banner-offset, 0px)',
