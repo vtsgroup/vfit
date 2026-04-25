@@ -120,7 +120,7 @@ export function StudentHeader() {
         scrolled && 'ds3-header-scrolled'
       )}
       style={{
-        background: 'linear-gradient(#050a12, #0f1a2c 32%, #0b1627)',
+        background: 'linear-gradient(to bottom, #050A12 0px, #050A12 16px, #0f1a2c 32%, #0b1627 100%)',
         borderBottom: 0,
         top: 'var(--demo-banner-offset, 0px)',
         paddingTop: 'env(safe-area-inset-top, 0px)',
