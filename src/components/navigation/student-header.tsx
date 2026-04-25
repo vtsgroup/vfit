@@ -104,26 +104,15 @@ export function StudentHeader() {
         scrolled && 'ds3-header-scrolled'
       )}
       style={{
-        background: 'linear-gradient(to bottom, #050A12 0px, #050A12 28px, #0f1a2c 45%, #14213d 70%, #0b1627 100%)',
+        // Keep exact top/bottom colors and smooth the middle transition to avoid banding.
+        background:
+          'linear-gradient(to bottom, #050A12 0px, #050A12 24px, #071024 34%, #0a1630 50%, #112041 68%, #0f1d36 82%, #0b1627 100%)',
         backgroundColor: '#050A12',
         borderBottom: 0,
         top: 'var(--demo-banner-offset, 0px)',
         paddingTop: 'env(safe-area-inset-top, 0px)',
       }}
     >
-      <div
-        style={{
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          top: 0,
-          height: 18,
-          background: 'linear-gradient(to bottom, #050A12 0%, rgba(5,10,18,0.92) 65%, rgba(5,10,18,0) 100%)',
-          pointerEvents: 'none',
-          zIndex: 1,
-        }}
-      />
-
       <div className="relative z-2 flex h-14 items-center justify-between px-4">
         <div className="flex min-w-0 flex-1 items-center gap-3">
           <div className="flex min-w-0 flex-col justify-center">

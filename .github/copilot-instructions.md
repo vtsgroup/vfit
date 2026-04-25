@@ -12,7 +12,7 @@
 # Cost Optimization — GitHub Copilot
 
 > **Seção exclusiva para GitHub Copilot.** Claude Code não precisa desta seção.
-> Princípio central: Modelos com multiplicador `0×` são ilimitados em planos pagos.
+> Princípio central: Haiku 4.5 é o padrão real para dev. Modelos `0×` têm prioridade absoluta quando a tarefa cabe neles.
 
 ---
 
@@ -52,7 +52,7 @@ Antes de escolher modelo, seguir SEMPRE esta ordem:
 		    ↓ NÃO
 	┌───────────────────────────────────────────────────┐
 	│ 4. IA POR ÚLTIMO                                 │
-	│ → 0× primeiro, escalar com evidência             │
+	│ → 0× primeiro → Haiku 4.5 → Sonnet → Opus       │
 	└───────────────────────────────────────────────────┘
 ```
 
@@ -60,67 +60,102 @@ Antes de escolher modelo, seguir SEMPRE esta ordem:
 
 ## Escalonamento Obrigatório
 
-| Etapa | Modelo | Quando entrar | Quando sair |
-|------|--------|---------------|-------------|
-| 1 | `GPT-5 mini` (`0×`) | Perguntas rápidas, docs, busca orientada, análise simples | Exige implementação/refatoração real |
-| 2 | `GPT-4.1` (`0×`) | Edições pequenas e controladas | Escopo cresceu para multi-arquivo |
-| 3 | `Raptor mini` (`0×`) | Boilerplate e completions | Precisa raciocínio de implementação |
-| 4 | `GPT-5.3-Codex` (`1×`) | Features/refactors moderados, multi-arquivo | Tarefa concluída ou simplificada |
+```
+Tarefa simples / docs / busca / contexto longo
+        ↓
+   Modelo 0× (gratuito)
+   GPT-5 mini → Raptor (264k ctx)
+        ↓ falhou ou exige raciocínio real?
+   Claude Haiku 4.5 (0.33×)  ← PADRÃO para ~85% das tarefas de dev
+        ↓ falhou? escopo multi-arquivo?
+   Claude Sonnet 4.5 / 4.6 (1×)  ← apenas quando Haiku não resolve
+        ↓ falhou? bug crítico? 10+ arquivos?
+   Claude Opus 4.6 / 4.7 (3×)  ← emergência — último recurso
+```
 
-Regras:
-
-- Não pular do terminal/docs direto para modelo `1×` sem motivo objetivo.
-- Escalar somente quando a etapa anterior falhar para o objetivo atual.
-- Voltar para `0×` assim que o trabalho voltar a ser simples.
+**Regras de ouro:**
+- Nunca pular de `0×` direto para Sonnet sem tentar Haiku primeiro.
+- Nunca usar Opus se Sonnet consegue resolver.
+- Voltar para modelo mais barato assim que o escopo diminuir.
+- Modelos `0×` têm prioridade absoluta — usar sempre que a tarefa couber.
 
 ---
 
-## Modelos Zero-Cost (Multiplier `0×`)
+## Modelos Zero-Cost (`0×`) — Sempre Tentar Primeiro
 
-| Modelo | Disponível em | Ideal para |
-|--------|--------------|------------|
-| **GPT-5 mini** | Free · Pro · Pro+ | 90% das tarefas diárias · padrão de fallback |
-| **GPT-4.1** | Free · Pro · Pro+ | Código controlado · edições simples |
-| **Raptor mini** *(preview)* | Free · Pro · Pro+ | Completions inline · boilerplate |
+| Modelo | Janela de Contexto | Ideal para |
+|--------|:-----------------:|------------|
+| **GPT-5 mini** | padrão | Perguntas rápidas · docs · busca orientada · fallback geral |
+| **Raptor** *(preview)* | **264k tokens** | Contexto longo · boilerplate · completions inline |
+
+> 💡 **Raptor tem a maior janela de contexto entre os modelos gratuitos** (264k tokens, 64k output).
+> Para tarefas simples que exigem muito contexto, **preferir Raptor** sobre GPT-5 mini.
 
 ---
 
 ## Hierarquia de Multiplicadores
 
-| Tier | `×` | Modelos |
-|------|:---:|---------|
-| 🟢 ZERO | `0×` | GPT-5 mini · GPT-4.1 · Raptor mini |
-| 🟡 Ultra-baixo | `0.25×` | Grok Code Fast 1 |
-| 🟡 Baixo | `0.33×` | Claude Haiku 4.5 · Gemini 3 Flash · GPT-5.1-Codex-Mini |
-| 🔵 Padrão | `1×` | Claude Sonnet 4/4.5/4.6 · Gemini 2.5/3/3.1 Pro · GPT-5.1/5.2/5.3-Codex |
-| 🔴 Caro | `3×` | Claude Opus 4.5 · Claude Opus 4.6 |
-| ⛔ Proibido | `30×` | Claude Opus 4.6 Fast Mode (Pro+ only) |
+| Tier | `×` | Modelos | Quando usar |
+|------|:---:|---------|-------------|
+| 🟢 **ZERO** | `0×` | GPT-5 mini · Raptor | Tudo que couber aqui — sem custo |
+| 🟡 **Baixo** | `0.33×` | **Claude Haiku 4.5** | **Padrão real para dev** — ~85% das tarefas |
+| 🔵 **Padrão** | `1×` | Claude Sonnet 4.5 · Claude Sonnet 4.6 | Quando Haiku falha ou escopo é multi-arquivo |
+| 🔴 **Caro** | `3×` | Claude Opus 4.5 · Claude Opus 4.6 | Emergência crítica — último recurso |
+| ⛔ **Proibido** | `30×` | Claude Opus 4.6 Fast Mode *(Pro+ only)* | **Nunca usar** |
 
 ---
 
 ## Decisão por Tipo de Tarefa
 
+### 🟢 Gratuito (`0×`) — Prioridade máxima
+
 | Tarefa | Modelo | `×` |
 |--------|--------|:---:|
 | Perguntas sobre docs · "onde está X?" | GPT-5 mini | `0×` |
-| Explicações conceituais · debugging simples | GPT-5 mini | `0×` |
-| Edições CSS · texto · ajustes isolados | GPT-4.1 | `0×` |
-| Completions inline · boilerplate | Raptor mini | `0×` |
-| Análise de UI · imagens · diagramas | Gemini 3 Flash | `0.33×` |
-| Debugging com stack trace claro | Claude Haiku 4.5 | `0.33×` |
-| Agentic tasks longas · automações | Grok Code Fast 1 | `0.25×` |
-| Refatoração 1–4 arquivos | Claude Sonnet 4.5 / GPT-5.2-Codex | `1×` |
-| Features novas · 5–10 arquivos | Claude Sonnet 4.6 / GPT-5.3-Codex | `1×` |
-| Raciocínio multi-arquivo (10+) · migrations | Claude Opus 4.6 | `3×` |
-| Debug crítico sem contexto | Claude Opus 4.6 | `3×` |
+| Explicações conceituais simples | GPT-5 mini | `0×` |
+| Debugging óbvio · erro simples sem contexto | GPT-5 mini | `0×` |
+| Completions inline · boilerplate | Raptor | `0×` |
+| Tarefa simples com **muito contexto** (>50k tokens) | Raptor | `0×` |
+
+### 🟡 Claude Haiku 4.5 (`0.33×`) — Padrão para dev real
+
+| Tarefa | `×` |
+|--------|:---:|
+| Debugging com stack trace · erro com contexto | `0.33×` |
+| Refatoração simples · 1 arquivo | `0.33×` |
+| Implementação de feature pequena | `0.33×` |
+| Código com lógica moderada · validações | `0.33×` |
+| Geração de testes · documentação de código | `0.33×` |
+| Review de código · sugestões de melhoria | `0.33×` |
+| API integration simples · schemas Zod | `0.33×` |
+| Análise de UI · lógica de componentes | `0.33×` |
+
+### 🔵 Claude Sonnet 4.5 / 4.6 (`1×`) — Apenas quando Haiku falha
+
+| Tarefa | Modelo | `×` |
+|--------|--------|:---:|
+| Refatoração 2–4 arquivos com dependências cruzadas | Sonnet 4.5 | `1×` |
+| Features novas complexas · 5–10 arquivos | Sonnet 4.6 | `1×` |
+| Arquitetura · design patterns · decisões técnicas | Sonnet 4.6 | `1×` |
+| Haiku tentou e falhou objetivamente | Sonnet 4.5 | `1×` |
+
+### 🔴 Claude Opus (`3×`) — Emergência crítica
+
+| Tarefa | Modelo | `×` |
+|--------|--------|:---:|
+| Raciocínio multi-arquivo (10+) · migrations complexas | Opus 4.6 | `3×` |
+| Debug crítico sem contexto · bug impossível de reproduzir | Opus 4.6 | `3×` |
+| Sonnet tentou e não conseguiu resolver | Opus 4.6 | `3×` |
 
 ---
 
 ## Regras de Economia
 
-**NUNCA use Opus para:** perguntas conceituais, consultas de docs, CSS, ajustes de texto
+**NUNCA use Opus para:** perguntas conceituais, consultas de docs, CSS, ajustes de texto, qualquer coisa que Haiku resolva.
 
-**Reserve Opus apenas para:** refatorações multi-arquivo (5+), features complexas, migrations, debugging sem contexto
+**NUNCA use Sonnet para:** tarefas que Haiku resolve — debug simples, feature pequena, refatoração de 1 arquivo.
+
+**Reserve Opus apenas para:** raciocínio multi-arquivo real (10+), migrations críticas, debugging impossível, quando Sonnet falhou.
 
 ### Regras de Eficiência de Tokens
 
@@ -157,7 +192,8 @@ Antes de chamar qualquer modelo:
 | Leitura ampla sem foco | 5x | Ler apenas ranges úteis |
 | Busca vaga | 2x | Regex específica com `rg`/`grep_search` |
 | Edição sequencial repetida | 3x+ | Patch único em lote |
-| Escalar cedo para `1×` | 8x | Tentar `0×` primeiro |
+| Escalar cedo para Sonnet | 3x | Tentar Haiku primeiro |
+| Escalar cedo para `1×` | 8x | Tentar `0×` + Haiku primeiro |
 
 #### Padrões econômicos
 
@@ -173,10 +209,14 @@ Antes de chamar qualquer modelo:
 
 - "Qual arquivo / componente exato?"
 - "A resposta já está em `.claude/docs/`?"
-- "GPT-5 mini já tentou e falhou?"
+- "GPT-5 mini / Raptor já tentou e falhou?"
+- "Haiku já tentou e falhou?" ← obrigatório antes de Sonnet
+- "Sonnet já tentou e falhou?" ← obrigatório antes de Opus
 - "O erro tem stack trace legível?"
 
-> Se qualquer resposta for "sim" → use `0×` ou `0.33×` primeiro.
+> Se qualquer resposta for "sim" para os dois primeiros → use `0×` primeiro.
+> Se Haiku não foi tentado → não usar Sonnet.
+> Se Sonnet não foi tentado → não usar Opus.
 
 ### Smoke Test de Roteamento (Gate rápido)
 
@@ -186,117 +226,9 @@ Executar estes 5 prompts e validar roteamento:
 2. "Qual o schema da tabela Y?" → docs
 3. "Revisa meu PR" → skill (`/review-pr`)
 4. "Explique esse trecho curto" → modelo `0×`
-5. "Refatore 6 arquivos" → modelo `1×` (ou superior, se realmente necessário)
+5. "Refatore 6 arquivos" → Sonnet `1×` (após Haiku falhar)
 
 Critério mínimo: 4/5 corretos.
-
----
-
-## Skills Reference (Expert-Level)
-
-| Skill | Quando usar | Economia estimada |
-|---|---|---|
-| `/deploy` | Deploy/release padronizado | 80% |
-| `/commit` | Commit message + commit seguro | 70% |
-| `/bump-version` | Versionamento sem deploy | 70% |
-| `/ship` | Fluxo completo de entrega | 75% |
-| `/review-pr` | Review pré-merge focado em bug/runtime | 50% |
-| `/review` | Pre-landing review estrutural | 50% |
-| `/qa` | QA sistemático (quick/full/regression) | 60% |
-| `/gstack` | Dogfooding rápido em browser headless | 60% |
-| `/browse` | Navegação e validação visual rápida | 55% |
-| `/setup-browser-cookies` | QA autenticado com sessão real | 50% |
-| `/cloudflare-web-perf` | Core Web Vitals/Lighthouse/perf | 65% |
-| `/cloudflare-workers-best-practices` | Revisão de Workers em produção | 60% |
-| `/cloudflare-wrangler` | Comandos/config de Wrangler corretos | 60% |
-| `/vercel-react-best-practices` | Otimização React/Next.js | 65% |
-| `/vercel-composition-patterns` | Refatoração de composição de componentes | 55% |
-| `/ui-ux-pro-max` | Design UI/UX de alta qualidade | 70% |
-| `/frontend-design` | Construção visual frontend distinta | 70% |
-| `/web-design-guidelines` | Auditoria de UI/acessibilidade/UX | 55% |
-| `/plan-eng-review` | Planejamento técnico de execução | 60% |
-| `/plan-ceo-review` | Reframing de produto/escopo | 55% |
-| `/retro` | Retrospectiva e melhoria contínua | 50% |
-| `/gstack-upgrade` | Upgrade do gstack com segurança | 50% |
-| `/mem-search` | Busca histórica no Claude-Mem (quando instalado) | 60% |
-
----
-
-## Memory Strategy (Auto Memory + Claude-Mem)
-
-1. Memória nativa (`/memory`)
-- Guardar fatos estáveis: comandos, padrões, gotchas recorrentes.
-- Manter índice curto e tópico.
-
-2. Claude-Mem (opcional)
-- Instalar com `npx claude-mem install` ou via `/plugin marketplace`.
-- Evitar `npm install -g claude-mem` para setup de plugin.
-
-3. Fluxo recomendado `/mem-search`
-- `search` para índice compacto.
-- `timeline` para contexto cronológico.
-- `get_observations` apenas para IDs filtrados.
-
-4. Quando usar `/mem-search`
-- Bugs recorrentes.
-- Onboarding em área legada.
-- Investigação de regressão.
-- Recuperação de contexto pós-incidente.
-
----
-
-## Workflows Recomendados
-
-### Feature (economia ~75%)
-
-1. Planejar com `/plan-eng-review`
-2. Implementar com menor diff possível
-3. Otimizar com `/vercel-react-best-practices` (quando React/Next)
-4. Revisar com `/review-pr`
-5. Testar com `/qa` ou `/gstack`
-6. Entregar com `/commit` + `/deploy`
-
-### Bugfix (economia ~65%)
-
-1. Reproduzir com terminal e logs
-2. Corrigir com escopo mínimo
-3. Validar com `/qa` modo quick
-4. Entregar com fluxo de release aprovado do projeto
-
-### UI/UX (economia ~70%)
-
-1. Estratégia com `/plan-ceo-review`
-2. Implementar com `/ui-ux-pro-max` + `/frontend-design`
-3. Auditar com `/web-design-guidelines`
-4. Testar visual com `/gstack`/`/browse`
-5. Entregar com fluxo de release aprovado do projeto
-
-### Performance (economia ~80%)
-
-1. Medir com `/cloudflare-web-perf`
-2. Corrigir gargalos
-3. Revalidar com `/cloudflare-web-perf`
-4. Entregar com fluxo de release aprovado do projeto
-
----
-
-## Project Isolation Guardrails (NUNCA CONFUNDIR PROJETOS)
-
-Regras obrigatórias para evitar mistura entre repositórios:
-
-1. Sempre validar o nome do projeto e paths antes de qualquer ação.
-2. Nunca reutilizar comandos de deploy, DB, Workers ou docs de outro projeto sem confirmar equivalência.
-3. Tratar IDs, domínios, bindings, tabelas e scripts como project-specific por padrão.
-4. Se houver dúvida de contexto, pausar e revalidar em `.claude/docs/STACK.md` e `.claude/docs/DEPLOY.md`.
-
-Checklist rápido anti-confusão:
-
-- [ ] Estou no workspace correto?
-- [ ] O comando pertence a este projeto?
-- [ ] O arquivo/endpoint existe neste repositório?
-- [ ] Os nomes de serviço (D1/KV/R2/Workers) batem com este projeto?
-
-Regra de ouro: cada projeto é uma fonte de verdade independente.
 
 ---
 
@@ -304,9 +236,9 @@ Regra de ouro: cada projeto é uma fonte de verdade independente.
 
 | Plano | Preço | Premium Requests | Modelos |
 |-------|------:|:----------------:|---------|
-| **Free** | $0 | 50/mês | Haiku 4.5 · GPT-4.1 · GPT-5 mini · Raptor mini |
+| **Free** | $0 | 50/mês | Claude Haiku 4.5 · GPT-5 mini · Raptor |
 | **Pro** | $10/mês | 300/mês | Todos exceto Opus Fast Mode |
-| **Pro+** | $39/mês | 1.500/mês | TODOS incluindo Opus Fast Mode |
+| **Pro+** | $39/mês | 1.500/mês | TODOS incluindo Opus Fast Mode *(não usar)* |
 
 > Requests `0×` **não consomem** o limite de premium requests.
 
