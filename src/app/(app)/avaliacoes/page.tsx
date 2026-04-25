@@ -9,7 +9,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { DSIcon } from '@/components/ui/ds-icon'
+import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useSelfAssessments, getBMIColor } from '@/hooks/use-self-assessments'
@@ -31,9 +31,38 @@ function DeltaBadge({ current, previous, unit, invert }: {
     : (isPositive ? 'text-brand-primary' : 'text-red-400')
 
   return (
-    <span className={`ml-1 text-[10px] font-semibold ${color}`}>
+    <span className={`ml-1 text-[10px] font-semibold tabular-nums ${color}`}>
       {isPositive ? '↑' : '↓'}{Math.abs(diff)}{unit}
     </span>
+  )
+}
+
+/** Premium stat tile — used inside assessment cards */
+function StatTile({ icon, label, value, unit, delta, valueClass }: {
+  icon: DSIconName
+  label: string
+  value: string
+  unit: string
+  delta?: React.ReactNode
+  valueClass?: string
+}) {
+  return (
+    <div
+      className="rounded-xl px-2.5 py-2"
+      style={{
+        background: 'rgba(255,255,255,0.03)',
+        border: '1px solid rgba(255,255,255,0.06)',
+      }}
+    >
+      <div className="mb-1 flex items-center gap-1.5">
+        <DSIcon name={icon} size={11} className="text-text-muted" />
+        <p className="text-[10px] font-semibold uppercase tracking-wider text-text-muted">{label}</p>
+      </div>
+      <p className={`text-[15px] font-black tabular-nums leading-tight ${valueClass ?? 'text-text-primary'}`}>
+        {value}{unit && <span className="text-[10px] font-medium text-text-muted"> {unit}</span>}
+        {delta}
+      </p>
+    </div>
   )
 }
 
@@ -86,20 +115,30 @@ export default function AvaliacoesPage() {
   }, [showPersonalQr, personalInviteLink])
 
   return (
-    <div className="mx-auto max-w-lg px-4 pt-0 pb-24">
-      {/* Header */}
+    <div className="relative mx-auto max-w-lg px-4 pt-0 pb-24">
+      {/* Ambient gradient mesh */}
       <div
-        className="-mx-4 mb-5 flex items-center gap-3 rounded-b-3xl border-b-0 px-4 py-5 backdrop-blur-md"
-        style={{ background: 'linear-gradient(to bottom, #0b1d36 0%, #0c1f38 20%, #0b1c35 40%, #0a1830 65%, #071628 85%, #050A12 100%)', boxShadow: '0 6px 28px 0 rgba(5,10,18,0.6)' }}
-      >
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-100 opacity-50"
+        style={{
+          background:
+            'radial-gradient(ellipse 70% 50% at 50% 0%, rgba(34,197,94,0.14) 0%, rgba(34,197,94,0.04) 35%, transparent 70%)',
+        }}
+      />
+
+      {/* Header — clean, no overpowering gradient */}
+      <div className="mb-5 flex items-center gap-3 pt-4">
         <button
           aria-label="Voltar"
           onClick={() => router.back()}
-          className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/6 text-white/70 transition-colors hover:text-white"
+          className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/6 text-white/75 transition-all hover:border-white/18 hover:bg-white/10 hover:text-white"
         >
-          <DSIcon name="arrowLeft" size={20} />
+          <DSIcon name="arrowLeft" size={18} />
         </button>
-        <h1 className="flex-1 text-lg font-bold text-white">Avaliações Físicas</h1>
+        <div className="flex-1">
+          <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-text-muted">Acompanhamento</p>
+          <h1 className="text-[20px] font-black tracking-tight text-text-primary">Avaliações físicas</h1>
+        </div>
         <Link href="/avaliacoes/nova">
           <Button size="sm">
             <DSIcon name="plus" size={16} />
@@ -108,22 +147,32 @@ export default function AvaliacoesPage() {
         </Link>
       </div>
 
-      <div className="mb-5 rounded-2xl border border-brand-primary/20 bg-linear-to-br from-brand-primary/8 to-transparent p-4">
-        <div className="mb-3 flex items-start justify-between gap-3">
-          <div>
-            <p className="text-[11px] font-bold uppercase tracking-wider text-brand-primary">
-              Avaliação Completa com Personal
+      <div
+        className="mb-5 overflow-hidden rounded-2xl border border-brand-primary/22 p-4"
+        style={{
+          background:
+            'linear-gradient(135deg, rgba(34,197,94,0.10) 0%, rgba(34,197,94,0.03) 60%, transparent 100%)',
+          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04), 0 8px 24px -12px rgba(34,197,94,0.18)',
+        }}
+      >
+        <div className="mb-3 flex items-start gap-3">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-brand-primary/30 bg-brand-primary/12">
+            <DSIcon name="userPlus" size={18} className="text-brand-primary" />
+          </div>
+          <div className="flex-1">
+            <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-brand-primary">
+              Avaliação completa com personal
             </p>
-            <p className="mt-1 text-[13px] text-text-secondary">
-              Convide um personal para revisar e completar sua avaliação física.
+            <p className="mt-1 text-[13px] leading-relaxed text-text-secondary">
+              Convide um personal trainer para revisar e validar sua avaliação física.
             </p>
             {studentProfile?.personal_name && (
-              <p className="mt-1 text-[12px] font-semibold text-success">
-                Personal vinculado: {studentProfile.personal_name}
+              <p className="mt-1.5 inline-flex items-center gap-1 text-[12px] font-semibold text-success">
+                <DSIcon name="checkCircle" size={12} />
+                Vinculado a {studentProfile.personal_name}
               </p>
             )}
           </div>
-          <DSIcon name="userPlus" size={18} className="text-brand-primary" />
         </div>
 
         <div className="mb-3 flex gap-2">
@@ -197,85 +246,105 @@ export default function AvaliacoesPage() {
         </div>
       )}
 
-      {/* Empty */}
+      {/* Empty — premium */}
       {!isLoading && (!assessments || assessments.length === 0) && (
         <div className="flex flex-col items-center gap-4 py-16 text-center">
-          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/8">
-            <DSIcon name="clipboardList" size={32} className="text-brand-primary" />
+          <div
+            className="relative flex h-20 w-20 items-center justify-center rounded-2xl"
+            style={{
+              background: 'radial-gradient(circle at 30% 30%, rgba(34,197,94,0.22) 0%, rgba(22,101,52,0.12) 60%, rgba(5,10,18,0.6) 100%)',
+              border: '1px solid rgba(74,222,128,0.32)',
+              boxShadow: '0 0 30px rgba(34,197,94,0.22), inset 0 1px 0 rgba(255,255,255,0.08)',
+            }}
+          >
+            <DSIcon name="clipboardList" size={32} className="text-emerald-300" />
           </div>
-          <h2 className="text-[16px] font-bold text-text-primary">Nenhuma avaliação ainda</h2>
-          <p className="max-w-65 text-[13px] text-text-muted">
-            Faça sua primeira auto-avaliação para acompanhar sua evolução corporal.
-          </p>
+          <div>
+            <h2 className="text-[18px] font-black tracking-tight text-text-primary">Sua jornada começa aqui</h2>
+            <p className="mx-auto mt-2 max-w-72 text-[13px] leading-relaxed text-text-muted">
+              Faça sua primeira avaliação e descubra seu IMC, percentual de gordura e veja sua evolução ao longo do tempo.
+            </p>
+          </div>
           <Link href="/avaliacoes/nova">
             <Button>
               <DSIcon name="plus" size={18} />
-              Fazer Avaliação
+              Fazer minha avaliação
             </Button>
           </Link>
         </div>
       )}
 
-      {/* List */}
+      {/* List — refined */}
       {assessments && assessments.length > 0 && (
         <div className="space-y-3">
           {assessments.map((a, i) => {
             const date = new Date(a.created_at)
             const isFirst = i === 0
-            // Previous assessment for delta comparison (list is desc by date)
             const prev = assessments[i + 1] ?? null
             return (
               <Link
                 key={a.id}
                 href={`/avaliacoes/${a.id}`}
-                className={`glass-card block rounded-2xl p-4 transition-all hover:border-white/12 ${
-                  isFirst
-                    ? 'border-brand-primary/15'
-                    : ''
-                }`}
+                className="group relative block overflow-hidden rounded-2xl p-4 transition-all"
+                style={{
+                  background: isFirst
+                    ? 'linear-gradient(135deg, rgba(34,197,94,0.08) 0%, rgba(255,255,255,0.03) 100%)'
+                    : 'linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.02) 100%)',
+                  border: isFirst ? '1px solid rgba(34,197,94,0.28)' : '1px solid rgba(255,255,255,0.08)',
+                  boxShadow: isFirst
+                    ? 'inset 0 1px 0 rgba(255,255,255,0.04), 0 6px 20px -12px rgba(34,197,94,0.25)'
+                    : 'inset 0 1px 0 rgba(255,255,255,0.04)',
+                }}
               >
-                <div className="mb-2 flex items-center justify-between">
+                <div className="mb-3 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     {isFirst && (
-                      <span className="rounded-full bg-brand-primary/15 px-2 py-0.5 text-[9px] font-bold text-brand-primary">
-                        MAIS RECENTE
+                      <span className="inline-flex items-center gap-1 rounded-full border border-brand-primary/30 bg-brand-primary/12 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-brand-primary">
+                        <span className="h-1.5 w-1.5 rounded-full bg-brand-primary" />
+                        Mais recente
                       </span>
                     )}
-                    <span className="text-[12px] text-text-muted">
+                    <span className="text-[11px] font-medium text-text-muted">
                       {date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
                     </span>
                   </div>
-                  <DSIcon name="chevronRight" size={16} className="text-text-muted" />
+                  <DSIcon name="chevronRight" size={16} className="text-text-muted transition-transform group-hover:translate-x-0.5" />
                 </div>
 
-                <div className="grid grid-cols-3 gap-3">
-                  <div>
-                    <p className="text-[11px] text-text-muted">Peso</p>
-                    <p className="text-[16px] font-bold text-text-primary">
-                      {a.weight_kg}<span className="text-[11px] text-text-muted"> kg</span>
-                      {prev && <DeltaBadge current={a.weight_kg} previous={prev.weight_kg} unit="kg" />}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-[11px] text-text-muted">IMC</p>
-                    <p className={`text-[16px] font-bold ${getBMIColor(a.bmi)}`}>
-                      {a.bmi}
-                      {prev && <DeltaBadge current={a.bmi} previous={prev.bmi} unit="" />}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-[11px] text-text-muted">Gordura</p>
-                    <p className="text-[16px] font-bold text-text-primary">
-                      {a.body_fat_percentage ? `${a.body_fat_percentage}%` : '—'}
-                      {prev && a.body_fat_percentage && prev.body_fat_percentage && (
+                <div className="grid grid-cols-3 gap-2">
+                  <StatTile
+                    icon="scale"
+                    label="Peso"
+                    value={a.weight_kg.toString()}
+                    unit="kg"
+                    delta={prev ? <DeltaBadge current={a.weight_kg} previous={prev.weight_kg} unit="kg" /> : null}
+                  />
+                  <StatTile
+                    icon="activity"
+                    label="IMC"
+                    value={a.bmi.toString()}
+                    unit=""
+                    valueClass={getBMIColor(a.bmi)}
+                    delta={prev ? <DeltaBadge current={a.bmi} previous={prev.bmi} unit="" /> : null}
+                  />
+                  <StatTile
+                    icon="percent"
+                    label="Gordura"
+                    value={a.body_fat_percentage ? a.body_fat_percentage.toString() : '—'}
+                    unit={a.body_fat_percentage ? '%' : ''}
+                    delta={
+                      prev && a.body_fat_percentage && prev.body_fat_percentage ? (
                         <DeltaBadge current={a.body_fat_percentage} previous={prev.body_fat_percentage} unit="%" invert />
-                      )}
-                    </p>
-                  </div>
+                      ) : null
+                    }
+                  />
                 </div>
 
                 {a.bmi_category && (
-                  <p className="mt-2 text-[11px] text-text-muted">{a.bmi_category}</p>
+                  <p className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-white/8 bg-white/4 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-text-secondary">
+                    <span className="h-1.5 w-1.5 rounded-full bg-current opacity-60" />
+                    {a.bmi_category}
+                  </p>
                 )}
               </Link>
             )

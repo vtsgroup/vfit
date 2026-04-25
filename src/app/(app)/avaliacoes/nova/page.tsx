@@ -11,7 +11,7 @@
 
 import { useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { DSIcon } from '@/components/ui/ds-icon'
+import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
 import { useCreateSelfAssessment, getBMIColor, getActivityLabel, getGoalLabel } from '@/hooks/use-self-assessments'
 import type { SelfAssessmentInput } from '@/hooks/use-self-assessments'
@@ -25,11 +25,11 @@ const ACTIVITY_LEVELS = [
   { value: 'very_active', label: 'Muito ativo', desc: '2x por dia ou trabalho físico' },
 ]
 
-const GOALS = [
-  { value: 'lose_weight', label: 'Perder peso', emoji: '🔥' },
-  { value: 'gain_muscle', label: 'Ganhar massa muscular', emoji: '💪' },
-  { value: 'maintain', label: 'Manter a forma', emoji: '⚡' },
-  { value: 'improve_health', label: 'Melhorar saúde geral', emoji: '❤️' },
+const GOALS: Array<{ value: string; label: string; icon: DSIconName }> = [
+  { value: 'lose_weight', label: 'Perder peso', icon: 'flame' },
+  { value: 'gain_muscle', label: 'Ganhar massa muscular', icon: 'dumbbell' },
+  { value: 'maintain', label: 'Manter a forma', icon: 'zap' },
+  { value: 'improve_health', label: 'Melhorar saúde geral', icon: 'heart' },
 ]
 
 export default function NovaAvaliacaoPage() {
@@ -189,21 +189,40 @@ export default function NovaAvaliacaoPage() {
           <h2 className="mb-1 text-[15px] font-bold text-white">Seu objetivo</h2>
           <p className="mb-4 text-[12px] text-zinc-500">O que você quer alcançar?</p>
 
-          <div className="mb-6 grid grid-cols-2 gap-2">
-            {GOALS.map((g) => (
-              <button
-                key={g.value}
-                onClick={() => { hapticLight(); setGoal(g.value) }}
-                className={`flex flex-col items-center gap-2 rounded-xl border px-3 py-4 transition-all ${
-                  goal === g.value
-                    ? 'border-brand-primary/50 bg-brand-primary/5'
-                    : 'border-white/5 bg-white/2 hover:border-white/10'
-                }`}
-              >
-                <span className="text-2xl">{g.emoji}</span>
-                <span className="text-[12px] font-medium text-zinc-300">{g.label}</span>
-              </button>
-            ))}
+          <div className="mb-6 grid grid-cols-2 gap-2.5">
+            {GOALS.map((g) => {
+              const selected = goal === g.value
+              return (
+                <button
+                  key={g.value}
+                  onClick={() => { hapticLight(); setGoal(g.value) }}
+                  className={`group flex flex-col items-center gap-2.5 rounded-2xl border px-3 py-4 transition-all ${
+                    selected
+                      ? 'border-brand-primary/45 bg-brand-primary/8'
+                      : 'border-white/8 bg-white/3 hover:border-white/14 hover:bg-white/5'
+                  }`}
+                >
+                  <div
+                    className={`flex h-10 w-10 items-center justify-center rounded-xl border transition-colors ${
+                      selected
+                        ? 'border-brand-primary/40 bg-brand-primary/15'
+                        : 'border-white/8 bg-white/4'
+                    }`}
+                  >
+                    <DSIcon
+                      name={g.icon}
+                      size={18}
+                      className={selected ? 'text-brand-primary' : 'text-text-secondary'}
+                    />
+                  </div>
+                  <span className={`text-[12px] font-semibold leading-tight text-center ${
+                    selected ? 'text-text-primary' : 'text-zinc-300'
+                  }`}>
+                    {g.label}
+                  </span>
+                </button>
+              )
+            })}
           </div>
 
           <Button
@@ -221,59 +240,121 @@ export default function NovaAvaliacaoPage() {
       {/* Step 3: Resultado */}
       {step === 3 && result && (
         <div className="flex flex-col items-center pt-4">
-          <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-3xl bg-brand-primary/15 text-brand-primary">
-            <DSIcon name="checkCircle2" size={40} />
+          <div
+            className="relative mb-5 flex h-24 w-24 items-center justify-center"
+          >
+            <div
+              aria-hidden
+              className="absolute inset-0 rounded-full blur-2xl"
+              style={{ background: 'radial-gradient(circle, rgba(34,197,94,0.45) 0%, transparent 70%)' }}
+            />
+            <div
+              className="relative flex h-20 w-20 items-center justify-center rounded-full"
+              style={{
+                background: 'radial-gradient(circle at 30% 30%, rgba(34,197,94,0.32) 0%, rgba(22,101,52,0.20) 60%, rgba(5,10,18,0.85) 100%)',
+                border: '1px solid rgba(74,222,128,0.4)',
+                boxShadow: '0 0 30px rgba(34,197,94,0.3), inset 0 1px 0 rgba(255,255,255,0.1)',
+              }}
+            >
+              <DSIcon name="checkCircle2" size={36} className="text-emerald-300" />
+            </div>
           </div>
-          <h2 className="mb-1 text-[18px] font-black text-white">Avaliação Concluída!</h2>
-          <p className="mb-6 text-[13px] text-zinc-500">Confira seus resultados</p>
+          <h2 className="text-[22px] font-black tracking-tight text-text-primary">Avaliação concluída</h2>
+          <p className="mt-1 mb-6 text-[13px] font-medium text-text-secondary">Aqui estão seus resultados</p>
 
           {/* Result card */}
-          <div className="mb-6 w-full rounded-2xl border border-white/5 bg-white/2 p-5">
-            <div className="mb-4 grid grid-cols-3 gap-4 text-center">
+          <div
+            className="mb-5 w-full overflow-hidden rounded-2xl p-5"
+            style={{
+              background: 'linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%)',
+              border: '1px solid rgba(255,255,255,0.08)',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)',
+            }}
+          >
+            <div className="mb-4 grid grid-cols-3 gap-3 text-center">
               <div>
-                <p className="text-[11px] text-zinc-600">Peso</p>
-                <p className="text-xl font-black text-white">{weightKg}<span className="text-[11px] text-zinc-500"> kg</span></p>
+                <div className="mx-auto mb-1.5 flex h-8 w-8 items-center justify-center rounded-lg border border-white/8 bg-white/4">
+                  <DSIcon name="scale" size={14} className="text-text-secondary" />
+                </div>
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-text-muted">Peso</p>
+                <p className="mt-0.5 text-[18px] font-black tabular-nums text-text-primary">
+                  {weightKg}<span className="text-[11px] font-medium text-text-muted"> kg</span>
+                </p>
               </div>
               <div>
-                <p className="text-[11px] text-zinc-600">IMC</p>
-                <p className={`text-xl font-black ${getBMIColor(result.bmi)}`}>{result.bmi}</p>
+                <div className="mx-auto mb-1.5 flex h-8 w-8 items-center justify-center rounded-lg border border-white/8 bg-white/4">
+                  <DSIcon name="activity" size={14} className="text-text-secondary" />
+                </div>
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-text-muted">IMC</p>
+                <p className={`mt-0.5 text-[18px] font-black tabular-nums ${getBMIColor(result.bmi)}`}>
+                  {result.bmi}
+                </p>
               </div>
               <div>
-                <p className="text-[11px] text-zinc-600">Gordura</p>
-                <p className="text-xl font-black text-white">
+                <div className="mx-auto mb-1.5 flex h-8 w-8 items-center justify-center rounded-lg border border-white/8 bg-white/4">
+                  <DSIcon name="percent" size={14} className="text-text-secondary" />
+                </div>
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-text-muted">Gordura</p>
+                <p className="mt-0.5 text-[18px] font-black tabular-nums text-text-primary">
                   {result.body_fat_percentage ? `${result.body_fat_percentage}%` : '—'}
                 </p>
               </div>
             </div>
 
-            <div className="rounded-xl bg-white/3 px-4 py-3 text-center">
-              <p className="text-[11px] text-zinc-500">Classificação</p>
-              <p className={`text-[14px] font-bold ${getBMIColor(result.bmi)}`}>
-                {result.bmi_category}
-              </p>
+            <div
+              className="flex items-center justify-between gap-3 rounded-xl px-4 py-3"
+              style={{
+                background: 'rgba(34,197,94,0.06)',
+                border: '1px solid rgba(34,197,94,0.18)',
+              }}
+            >
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-text-muted">Classificação IMC</p>
+                <p className={`mt-0.5 text-[14px] font-black ${getBMIColor(result.bmi)}`}>
+                  {result.bmi_category}
+                </p>
+              </div>
+              <DSIcon name="checkCircle" size={20} className="text-brand-primary" />
             </div>
           </div>
 
           {/* Info cards */}
-          <div className="mb-6 w-full space-y-2">
-            <div className="flex items-center gap-3 rounded-xl bg-white/2 px-4 py-3">
-              <DSIcon name="activity" size={18} className="text-zinc-500" />
-              <div>
-                <p className="text-[11px] text-zinc-600">Nível de atividade</p>
-                <p className="text-[13px] font-medium text-zinc-300">{getActivityLabel(activityLevel)}</p>
+          <div className="mb-6 grid w-full grid-cols-2 gap-2.5">
+            <div
+              className="flex items-center gap-2.5 rounded-2xl px-3 py-3"
+              style={{
+                background: 'rgba(255,255,255,0.04)',
+                border: '1px solid rgba(255,255,255,0.08)',
+              }}
+            >
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-violet-400/30 bg-violet-500/10">
+                <DSIcon name="activity" size={14} className="text-violet-300" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-text-muted">Atividade</p>
+                <p className="truncate text-[12px] font-bold text-text-primary">{getActivityLabel(activityLevel)}</p>
               </div>
             </div>
-            <div className="flex items-center gap-3 rounded-xl bg-white/2 px-4 py-3">
-              <DSIcon name="target" size={18} className="text-zinc-500" />
-              <div>
-                <p className="text-[11px] text-zinc-600">Objetivo</p>
-                <p className="text-[13px] font-medium text-zinc-300">{getGoalLabel(goal)}</p>
+            <div
+              className="flex items-center gap-2.5 rounded-2xl px-3 py-3"
+              style={{
+                background: 'rgba(255,255,255,0.04)',
+                border: '1px solid rgba(255,255,255,0.08)',
+              }}
+            >
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-amber-400/30 bg-amber-500/10">
+                <DSIcon name="target" size={14} className="text-amber-300" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-text-muted">Objetivo</p>
+                <p className="truncate text-[12px] font-bold text-text-primary">{getGoalLabel(goal)}</p>
               </div>
             </div>
           </div>
 
           <Button onClick={() => router.push('/avaliacoes')} className="w-full">
-            Ver Minhas Avaliações
+            Ver minhas avaliações
+            <DSIcon name="arrowRight" size={16} />
           </Button>
         </div>
       )}
