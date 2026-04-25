@@ -220,11 +220,11 @@ const variantStyles: Record<ButtonVariant, string> = {
 }
 
 const sizeStyles: Record<ButtonSize, string> = {
-  sm: 'h-10 px-3.5 text-sm gap-1.5 rounded-[13px]',
-  md: 'h-12 px-5 text-sm gap-2 rounded-[15px]',
-  lg: 'h-14 px-7 text-base gap-2.5 rounded-[15px]',
-  icon: 'h-11 w-11 rounded-[13px]',
-  'icon-lg': 'h-14 w-14 rounded-[15px]',
+  sm: 'h-11 px-4 text-sm gap-1.5 rounded-xl',
+  md: 'h-13 px-6 text-sm gap-2 rounded-2xl',
+  lg: 'h-16 px-8 text-base gap-2.5 rounded-2xl',
+  icon: 'h-11 w-11 rounded-xl',
+  'icon-lg': 'h-14 w-14 rounded-2xl',
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
