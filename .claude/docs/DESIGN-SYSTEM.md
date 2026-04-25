@@ -3,6 +3,15 @@
 > Paleta web (Next.js), contrastes WCAG, componentes UI, tokens CSS.
 > Para design system mobile (React Native), ver `.claude/vfit-design-system.md`.
 
+## Atualização — 100% Polish & Premium Variants (13/04/2026) ✨
+
+- **Button Sizes:** Aumentadas para melhor touch target — `sm: h-11`, `md: h-13`, `lg: h-16` (moderna "pílula" com `rounded-xl/2xl`)
+- **Variantes Premium:** `gradient` (multi-color glow para CTAs principais) e `glass` (glassmorphism para overlays)
+- **Landing Page:** Botões principais agora `size="lg" variant="gradient"` com glow de emerald
+- **Spacing Tokens:** Padronizados em globals.css — `--card-padding: 1.5rem`, `--section-gap: 6rem`, `--card-gap: 1rem`
+- **Landing Sections:** p-padding aumentado de `p-4/p-5` para `p-6/p-8` (respira visualmente melhor)
+- **Button Gap:** Aumentado de `gap-2` para `gap-3/gap-4` (melhor alinhamento visual em mobile/desktop)
+
 ## Atualização — Hotfix visual (08/04/2026)
 
 - Destaques principais revertidos para **VFIT Green** (brand primary)

@@ -67,13 +67,13 @@ export default function Home() {
       <main id="main-content">
         <Hero />
         <section className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
-          <div className="surface-card rounded-2xl p-4 sm:p-6">
+          <div className="surface-card rounded-2xl p-6 sm:p-8">
             <p className="mb-2 text-xs font-bold tracking-wider text-brand-primary uppercase">Escolha seu caminho</p>
             <h2 className="text-xl font-black text-text-primary sm:text-2xl">VFIT para alunos, profissionais e parceiros</h2>
             <p className="mt-2 text-sm text-text-secondary">
               Se você é profissional de fitness ou quer monetizar indicações, acesse a página específica do seu perfil.
             </p>
-            <div className="mt-4 flex flex-wrap gap-2">
+            <div className="mt-6 flex flex-wrap gap-3 sm:gap-4">
               <TrackedCtaLink href="/app-personal-trainer" cta="Sou Personal Trainer" placement="segment_switcher_home" pageSegment="home" event="lp_cta_secondary_click"><Button size="sm" variant="secondary">Sou Personal Trainer</Button></TrackedCtaLink>
               <TrackedCtaLink href="/nutricionistas" cta="Sou Nutricionista" placement="segment_switcher_home" pageSegment="home" event="lp_cta_secondary_click"><Button size="sm" variant="outline">Sou Nutricionista</Button></TrackedCtaLink>
               <TrackedCtaLink href="/afiliados" cta="Quero ser Afiliado" placement="segment_switcher_home" pageSegment="home" event="lp_cta_secondary_click"><Button size="sm" variant="ghost">Quero ser Afiliado</Button></TrackedCtaLink>
@@ -83,7 +83,7 @@ export default function Home() {
         <Features />
         <div className="h-px bg-linear-to-r from-transparent via-brand-primary/20 to-transparent" />
         <section className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6">
-          <div className="surface-card rounded-2xl p-5 sm:p-6">
+          <div className="surface-card rounded-2xl p-6 sm:p-8">
             <p className="text-xs font-bold tracking-wider text-brand-primary uppercase">Acesso para aluno</p>
             <h2 className="mt-2 text-xl font-black text-text-primary sm:text-2xl">Treine com IA de forma gratuita e evolua com acompanhamento real</h2>
             <p className="mt-2 text-sm text-text-secondary">
@@ -91,7 +91,7 @@ export default function Home() {
               Profissionais têm páginas dedicadas com planos e operação completa.
             </p>
 
-            <div className="mt-4 grid gap-3 md:grid-cols-3">
+            <div className="mt-6 grid gap-4 md:grid-cols-3">
               <article className="rounded-xl border border-white/8 bg-white/4 p-4">
                 <h3 className="text-sm font-bold text-text-primary uppercase tracking-wider">Aluno</h3>
                 <p className="mt-2 text-sm text-text-secondary">Começa grátis, recebe treino personalizado e acompanha progresso no app.</p>
@@ -106,10 +106,10 @@ export default function Home() {
               </article>
             </div>
 
-            <div className="mt-4 flex flex-wrap gap-2">
-              <TrackedCtaLink href="/welcome" cta="Sou aluno" placement="home_access_section" pageSegment="home" event="lp_register_start"><Button>Sou aluno</Button></TrackedCtaLink>
-              <TrackedCtaLink href="/app-personal-trainer" cta="Sou personal trainer" placement="home_access_section" pageSegment="home" event="lp_cta_secondary_click"><Button variant="outline">Sou personal trainer</Button></TrackedCtaLink>
-              <TrackedCtaLink href="/nutricionistas" cta="Sou nutricionista" placement="home_access_section" pageSegment="home" event="lp_cta_secondary_click"><Button variant="ghost">Sou nutricionista</Button></TrackedCtaLink>
+            <div className="mt-6 flex flex-wrap gap-3 sm:gap-4">
+              <TrackedCtaLink href="/welcome" cta="Sou aluno" placement="home_access_section" pageSegment="home" event="lp_register_start"><Button size="lg" variant="gradient">Sou aluno</Button></TrackedCtaLink>
+              <TrackedCtaLink href="/app-personal-trainer" cta="Sou personal trainer" placement="home_access_section" pageSegment="home" event="lp_cta_secondary_click"><Button size="md" variant="outline">Personal trainer</Button></TrackedCtaLink>
+              <TrackedCtaLink href="/nutricionistas" cta="Sou nutricionista" placement="home_access_section" pageSegment="home" event="lp_cta_secondary_click"><Button size="md" variant="soft">Nutricionista</Button></TrackedCtaLink>
             </div>
 
             <div className="mt-6 grid gap-3 md:grid-cols-3">
