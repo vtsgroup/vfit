@@ -56,21 +56,21 @@ const variantStyles: Record<ButtonVariant, string> = {
   ].join(' '),
 
   secondary: [
-    // Light mode: slate blue-gray with clear 3D contrast
-    'bg-linear-to-b from-slate-200 via-slate-300 to-slate-400',
-    'text-slate-800 font-semibold',
-    '[text-shadow:0_1px_1px_rgba(255,255,255,0.74)]',
-    'border border-t-white/82 border-x-slate-300/55 border-b-slate-500/62',
-    'shadow-[0_4px_0_0_#475569,0_7px_20px_-6px_rgba(71,85,105,0.34),inset_0_1px_0_rgba(255,255,255,0.7)]',
+    // Light mode: graphite slate (blue-gray escuro) — premium e sóbrio
+    'bg-linear-to-b from-slate-600 via-slate-700 to-slate-800',
+    'text-white font-semibold',
+    '[text-shadow:0_1px_2px_rgba(0,0,0,0.32)]',
+    'border border-t-slate-500/55 border-x-slate-700/40 border-b-slate-900/65',
+    'shadow-[0_4px_0_0_#0f172a,0_8px_22px_-6px_rgba(15,23,42,0.45),inset_0_1px_0_rgba(255,255,255,0.18)]',
     'hover:-translate-y-0.5',
-    'hover:shadow-[0_5px_0_0_#475569,0_10px_26px_-6px_rgba(71,85,105,0.42),inset_0_1px_0_rgba(255,255,255,0.76)]',
-    'hover:brightness-[1.02]',
+    'hover:shadow-[0_6px_0_0_#0f172a,0_12px_30px_-6px_rgba(15,23,42,0.55),inset_0_1px_0_rgba(255,255,255,0.22)]',
+    'hover:brightness-[1.06]',
     'active:translate-y-[3px] active:scale-[0.98]',
-    'active:shadow-[0_1px_0_0_#475569,0_2px_7px_-2px_rgba(71,85,105,0.24),inset_0_2px_4px_rgba(0,0,0,0.1)]',
+    'active:shadow-[0_1px_0_0_#0f172a,0_2px_8px_-2px_rgba(15,23,42,0.36),inset_0_2px_4px_rgba(0,0,0,0.28)]',
     'active:brightness-95',
-    // Dark mode: graphite slate with blue-gray undertone
+    // Dark mode: graphite ligeiramente mais claro para destacar do bg
     'dark:from-slate-500 dark:via-slate-600 dark:to-slate-700',
-    'dark:text-slate-100 dark:font-semibold dark:[text-shadow:0_1px_2px_rgba(0,0,0,0.38)]',
+    'dark:text-slate-100 dark:[text-shadow:0_1px_2px_rgba(0,0,0,0.38)]',
     'dark:border-t-slate-400/30 dark:border-x-slate-600/35 dark:border-b-slate-900/62',
     'dark:shadow-[0_4px_0_0_#1e293b,0_8px_22px_-6px_rgba(15,23,42,0.56),inset_0_1px_0_rgba(255,255,255,0.14)]',
     'dark:hover:shadow-[0_6px_0_0_#1e293b,0_12px_30px_-6px_rgba(15,23,42,0.62),inset_0_1px_0_rgba(255,255,255,0.18)]',
@@ -220,11 +220,11 @@ const variantStyles: Record<ButtonVariant, string> = {
 }
 
 const sizeStyles: Record<ButtonSize, string> = {
-  sm: 'h-10 px-3.5 text-sm gap-1.5 rounded-[11px]',
-  md: 'h-12 px-5 text-sm gap-2 rounded-[13px]',
-  lg: 'h-14 px-7 text-base gap-2.5 rounded-[13px]',
-  icon: 'h-11 w-11 rounded-[11px]',
-  'icon-lg': 'h-14 w-14 rounded-[13px]',
+  sm: 'h-10 px-3.5 text-sm gap-1.5 rounded-[13px]',
+  md: 'h-12 px-5 text-sm gap-2 rounded-[15px]',
+  lg: 'h-14 px-7 text-base gap-2.5 rounded-[15px]',
+  icon: 'h-11 w-11 rounded-[13px]',
+  'icon-lg': 'h-14 w-14 rounded-[15px]',
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
