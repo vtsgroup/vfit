@@ -1806,7 +1806,8 @@ body {
   left: 0;
   right: 0;
   height: 34px;
-  background: linear-gradient(180deg, rgba(59, 130, 246, 0.10) 0%, rgba(59, 130, 246, 0) 100%);
+  /* Removed blue tint — must match theme-color #050A12 exactly */
+  background: transparent;
   pointer-events: none;
 }
 .ds3-header.ds3-header-scrolled {
@@ -1840,7 +1841,7 @@ body {
   border-bottom: 0;
 }
 .light .ds3-header::before {
-  background: linear-gradient(180deg, rgba(59, 130, 246, 0.10) 0%, rgba(59, 130, 246, 0) 100%); /* azul theme color */
+  background: transparent;
 }
 .light .ds3-header.ds3-header-scrolled {
   background: linear-gradient(180deg, rgba(4, 9, 22, 0.96) 0%, rgba(5, 10, 18, 0.94) 30%, rgba(2, 6, 23, 0.98) 100%);

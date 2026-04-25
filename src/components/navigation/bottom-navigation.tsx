@@ -133,13 +133,13 @@ function PerfilIcon({ active }: { active: boolean }) {
 
 function AISparkleIcon() {
   return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-      {/* Main sparkle — center */}
-      <path d="M12 2L13.5 8.5L20 10L13.5 11.5L12 18L10.5 11.5L4 10L10.5 8.5L12 2Z" fill="#0a0f0a" />
-      {/* Small sparkle — top right */}
-      <path d="M19 2L19.75 4.25L22 5L19.75 5.75L19 8L18.25 5.75L16 5L18.25 4.25L19 2Z" fill="#0a0f0a" opacity="0.7" />
-      {/* Small sparkle — bottom left */}
-      <path d="M7 16L7.5 17.5L9 18L7.5 18.5L7 20L6.5 18.5L5 18L6.5 17.5L7 16Z" fill="#0a0f0a" opacity="0.5" />
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      {/* Main 4-pointed star — refined proportions */}
+      <path d="M12 2.5L13.6 8.8L20 10.5L13.6 12.2L12 18.5L10.4 12.2L4 10.5L10.4 8.8L12 2.5Z" fill="rgba(3,12,5,0.90)" />
+      {/* Secondary sparkle — top right */}
+      <path d="M19 3L19.8 5.2L22 6L19.8 6.8L19 9L18.2 6.8L16 6L18.2 5.2L19 3Z" fill="rgba(3,12,5,0.68)" />
+      {/* Accent dot — bottom left */}
+      <circle cx="6.5" cy="17.5" r="1.2" fill="rgba(3,12,5,0.42)" />
     </svg>
   )
 }
@@ -278,14 +278,14 @@ export function BottomNavigation({ notificationCount = 0, fabMenuOpen = false, o
                 <div
                   key={tab.id}
                   className="relative flex flex-col items-center"
-                  style={{ marginTop: -20 }}
+                  style={{ marginTop: -16 }}
                 >
                   <button
                     onClick={() => {
                       haptic()
                       onFabPress?.()
                     }}
-                    className="fab-ring relative flex h-13 w-13 items-center justify-center rounded-full border-none transition-all duration-300 active:scale-90"
+                    className="fab-ring relative flex h-11 w-11 items-center justify-center rounded-full border-none transition-all duration-300 active:scale-90"
                     style={{
                       background: fabMenuOpen
                         ? 'linear-gradient(135deg, #2ae88d, #1cc770)'

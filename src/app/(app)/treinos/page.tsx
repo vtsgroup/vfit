@@ -519,7 +519,7 @@ export default function TreinosPage() {
       {/* ── Gamificação VFIT — Hub Redesigned ── */}
       <div
         className="-mx-4 mb-6 overflow-hidden"
-        style={{ background: 'linear-gradient(160deg, #04111f 0%, #071628 45%, #040e1a 100%)' }}
+        style={{ background: 'linear-gradient(160deg, #040f1c 0%, #061425 45%, #030c18 100%)' }}
       >
         {/* Top accent line */}
         <div className="h-px w-full" style={{ background: 'linear-gradient(to right, transparent, rgba(34,197,94,0.5) 40%, rgba(139,92,246,0.4) 60%, transparent)' }} />
@@ -544,7 +544,7 @@ export default function TreinosPage() {
               <div className="absolute -right-3 -top-3 h-12 w-12 rounded-full" style={{ background: 'radial-gradient(circle, rgba(16,185,129,0.25) 0%, transparent 70%)' }} />
               <DSIcon name="zap" size={13} className="mb-2 text-emerald-400" />
               <p className="text-[9px] font-medium uppercase tracking-wider text-emerald-300/60">XP atual</p>
-              <p className="mt-0.5 text-xl font-black leading-none text-emerald-300">{xpBalance?.balance ?? 0}</p>
+              <p className="mt-0.5 text-xl font-black leading-none text-emerald-300" style={{ textShadow: '0 0 12px rgba(52,211,153,0.5)' }}>{xpBalance?.balance ?? 0}</p>
               <div className="mt-2">
                 <div className="mb-0.5 flex justify-between">
                   <span className="text-[9px] text-white/30">Nv {xpBalance?.level ?? 1}</span>
@@ -565,7 +565,7 @@ export default function TreinosPage() {
               <DSIcon name="flame" size={13} className="mb-2 text-amber-400" />
               <p className="text-[9px] font-medium uppercase tracking-wider text-amber-300/60">Streak</p>
               <div className="mt-0.5 flex items-end gap-1">
-                <p className="text-xl font-black leading-none text-amber-300">{streak?.current_streak ?? 0}</p>
+                <p className="text-xl font-black leading-none text-amber-300" style={{ textShadow: '0 0 12px rgba(245,158,11,0.5)' }}>{streak?.current_streak ?? 0}</p>
                 <p className="mb-0.5 text-[10px] font-bold text-amber-400/60">dias</p>
               </div>
               <p className="mt-2 text-[9px] text-white/30">Recorde: {streak?.longest_streak ?? 0} dias</p>
@@ -577,7 +577,7 @@ export default function TreinosPage() {
               <DSIcon name="target" size={13} className="mb-2 text-violet-400" />
               <p className="text-[9px] font-medium uppercase tracking-wider text-violet-300/60">Meta diária</p>
               <div className="mt-0.5 flex items-end gap-0.5">
-                <p className="text-xl font-black leading-none text-violet-300">{dailyGoal?.earned_xp ?? 0}</p>
+                <p className="text-xl font-black leading-none text-violet-300" style={{ textShadow: '0 0 12px rgba(139,92,246,0.5)' }}>{dailyGoal?.earned_xp ?? 0}</p>
                 <p className="mb-0.5 text-[11px] font-bold text-white/25">/{dailyGoal?.target_xp ?? 0}</p>
               </div>
               <p className="mt-2 text-[9px] text-white/30">XP hoje</p>

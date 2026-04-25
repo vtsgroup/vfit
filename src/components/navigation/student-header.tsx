@@ -149,6 +149,20 @@ export function StudentHeader() {
         </div>
 
         <div className="flex shrink-0 items-center gap-2">
+          {/* XP chip — same glass style as bell, left of notifications */}
+          <Link
+            href="/progresso/streaks"
+            className="flex h-9 items-center gap-1.5 rounded-[10px] border border-emerald-500/20 bg-emerald-500/8 px-2.5 text-slate-200 transition-all hover:border-emerald-400/35 hover:bg-emerald-500/14"
+            title={`${xpData?.balance ?? 0} XP — Nível ${xpData?.level ?? 1}`}
+            aria-label={`${xpData?.balance ?? 0} XP, nível ${xpData?.level ?? 1}`}
+            style={{ boxShadow: 'inset 0 1px 0 rgba(52,211,153,0.06)' }}
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M13 2L4.5 13.5H11L10 22L20.5 10H14L13 2Z" fill="#34d399" />
+            </svg>
+            <span className="text-[11px] font-bold tabular-nums leading-none text-emerald-300">{xpData?.balance ?? 0}</span>
+          </Link>
+
           <div className="relative">
             <Link
               href="/perfil/notificacoes"
@@ -169,16 +183,6 @@ export function StudentHeader() {
               </div>
             )}
           </div>
-
-          {/* XP Coin chip */}
-          <Link
-            href="/progresso/streaks"
-            className="flex items-center gap-1 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-2 py-1 transition-all hover:bg-emerald-500/20 hover:border-emerald-400/40"
-            title={`${xpData?.balance ?? 0} XP — Nível ${xpData?.level ?? 1}`}
-          >
-            <span className="text-[11px] font-black leading-none text-emerald-300">⚡</span>
-            <span className="text-[11px] font-bold tabular-nums leading-none text-emerald-300">{xpData?.balance ?? 0}</span>
-          </Link>
 
           <div className="shrink-0">
             <AvatarWithPlanBadge src={user?.avatar_url} name={user?.full_name || 'U'} size="sm" linkToPlans />
