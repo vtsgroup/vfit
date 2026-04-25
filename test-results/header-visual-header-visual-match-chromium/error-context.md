@@ -38,7 +38,7 @@
       - region "Hero principal" [ref=e34]:
         - generic [ref=e46]:
           - generic [ref=e47]:
-            - generic [ref=e50]: App de treino com IA para alunos
+            - generic [ref=e50]: Treino inteligente com apoio profissional
             - generic [ref=e52]:
               - heading "TREINOS QUE TRANSFORMAM" [level=1] [ref=e54]:
                 - text: TREINOS QUE
@@ -57,14 +57,14 @@
               - button "Slide 2" [ref=e64]
               - button "Slide 3" [ref=e65]
               - button "Slide 4" [ref=e66]
-            - paragraph [ref=e68]: Receba treinos personalizados com inteligência artificial, acompanhe sua evolução e mantenha constância com gamificação no celular.
+            - paragraph [ref=e68]: Treine com método, acompanhe progresso real e conte com personal e nutricionista no mesmo ecossistema quando precisar.
             - generic [ref=e70]:
-              - link "TESTAR AGORA" [ref=e71] [cursor=pointer]:
+              - link "COMEÇAR GRÁTIS" [ref=e71] [cursor=pointer]:
                 - /url: /welcome
-                - button "TESTAR AGORA" [ref=e72]:
+                - button "COMEÇAR GRÁTIS" [ref=e72]:
                   - generic [ref=e73]:
                     - img [ref=e74]
-                    - text: TESTAR AGORA
+                    - text: COMEÇAR GRÁTIS
               - link "VER DEMONSTRAÇÃO" [ref=e76] [cursor=pointer]:
                 - /url: "#how-it-works"
                 - button "VER DEMONSTRAÇÃO" [ref=e77]:
