@@ -7,6 +7,13 @@
 
 ## [Unreleased] — 2026-04-08 — Sprint 11-15 (UX Nutrição/Exercícios)
 
+### 🎨 UI — Botões secondary/radius/3D (2026-04-25)
+- **Button system atualizado:** [src/components/ui/button.tsx](src/components/ui/button.tsx) recebeu novo `secondary` em paleta azure (light/dark), com contraste superior e destaque visual mais claro como ação secundária.
+- **Raio canônico global:** `sm/icon` agora usam `rounded-[10px]`; `md/lg/icon-lg` usam `rounded-xl`, removendo excesso de arredondamento.
+- **3D mais definido:** reforço de borda superior fina + base inferior com maior contraste no `secondary`.
+- **Treinos — card Personal Trainer:** [src/app/(app)/treinos/page.tsx](src/app/(app)/treinos/page.tsx) migrou botões `Copiar link`, `Email`, `WhatsApp` para `variant="secondary"`; `QR Code` alterna `secondary`↔`workout` quando ativo.
+- **Doc oficial sincronizada:** [.claude/docs/DESIGN-SYSTEM.md](.claude/docs/DESIGN-SYSTEM.md) atualizado com regras canônicas de secondary, radius e 3D.
+
 ### 🗂️ Infra — R2 buckets vfit-* provisionados (2026-04-18)
 - Criados novos buckets R2 `vfit-images` e `vfit-videos` (região ENAM) na conta Cloudflare de produção.
 - Atualizado [wrangler.toml](wrangler.toml) para bindings ativos `R2_IMAGES -> vfit-images` e `R2_VIDEOS -> vfit-videos`.

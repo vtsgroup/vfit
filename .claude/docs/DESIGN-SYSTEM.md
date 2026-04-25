@@ -10,6 +10,13 @@
 - Tokens globais de marca e glow retornaram para paleta verde em `globals.css`
 - Build e regressão Playwright não-Chrome validados após o ajuste
 
+## Atualização — Botões Secondary + Radius (25/04/2026)
+
+- `Button.secondary` migrou de zinc neutro para **Azure Glass 3D** (mais legível e destacado como ação secundária).
+- Radius canônico reduzido para evitar pílulas excessivamente arredondadas.
+- Sistema 3D padronizado com linha superior fina + base inferior com contraste forte.
+- Botões de ação no card "Personal Trainer" (Treinos) atualizados para `variant="secondary"`.
+
 ---
 
 ## Cores & Contraste (Web — Tema Atual)
@@ -32,14 +39,14 @@
 
 > ⚠️ `text-muted` em light mode (2.56:1) — APENAS para placeholders/captions decorativos, NUNCA para texto informativo.
 
-### Botões — Escala Zinc
+### Botões — Escala Azure (Canônico)
 
 | Variant | Light (bg → text) | Dark (bg → text) |
 |---------|-------------------|-------------------|
-| **secondary** | `zinc-300` (#d4d4d8) → `zinc-700` · 12.08:1 AAA | `zinc-600` (#52525b) → `zinc-100` · 6.99:1 AA |
+| **secondary** | `sky-100→200→300` → `sky-900` · contraste alto | `sky-700→800→blue-900` → `sky-50` · contraste alto |
 | **outline** | `zinc-200` (#e4e4e7) → `zinc-600` · 13.62:1 AAA | `zinc-500` (#71717a) → `zinc-100` · 4.37:1 AA-lg |
 
-> **Por que zinc?** Slate tem subtom azul (+18 RGB) que compete com verde da marca. Zinc é neutro (+4 RGB), como Apple HIG System Gray.
+> `secondary` agora é canônico em **azure** para maior diferenciação visual de CTA primário sem perder legibilidade.
 
 ### ❌ NUNCA em Light Mode (contraste < 3:1 vs branco)
 
@@ -72,7 +79,7 @@ Dark:  superfície → shadow zinc-800 (#27272a) — funciona universal
 | Variant | Uso |
 |---------|-----|
 | `primary` (default) | CTA principal — verde com depth 3D |
-| `secondary` | Ação secundária — zinc neutro |
+| `secondary` | Ação secundária destacada — azure glass 3D |
 | `outline` | Ação terciária — borda com hover |
 | `ghost` | Ação sutil — sem borda, hover leve |
 | `ghost-danger` | Ação destrutiva sutil |
@@ -89,6 +96,19 @@ Dark:  superfície → shadow zinc-800 (#27272a) — funciona universal
 | `md` (default) | h-12 |
 | `lg` | h-14 |
 | `icon` | h-11 w-11 |
+
+### Radius Canônico (OBRIGATÓRIO)
+
+- `sm` e `icon`: `rounded-[10px]`
+- `md`, `lg`, `icon-lg`: `rounded-xl`
+- Evitar `rounded-full`/`rounded-2xl` em botões de texto (somente casos especiais: chips/toggles)
+
+### 3D Canônico (OBRIGATÓRIO)
+
+- Linha superior fina: `border-t-*` com opacidade maior
+- Laterais suaves: `border-x-*`
+- Base inferior contrastada: `border-b-*` + `shadow` com offset vertical
+- Press state sempre reduz profundidade (`active:translate-y` + shadow curta)
 
 ### Props
 

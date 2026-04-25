@@ -413,7 +413,7 @@ export default function TreinosPage() {
 
         <div className="flex flex-wrap gap-2">
           <Button
-            variant="outline"
+            variant="secondary"
             size="sm"
             onClick={() => navigator.clipboard.writeText(personalInviteLink)}
           >
@@ -421,7 +421,7 @@ export default function TreinosPage() {
             Copiar link
           </Button>
           <Button
-            variant="outline"
+            variant="secondary"
             size="sm"
             onClick={() => window.open(`mailto:?subject=${encodeURIComponent('Convite para VFIT — Personal Trainer')}&body=${encodeURIComponent(`Olá! Quero te convidar para acompanhar minha avaliação completa no VFIT.\n\nCadastre-se aqui: ${personalInviteLink}`)}`, '_blank')}
           >
@@ -429,7 +429,7 @@ export default function TreinosPage() {
             Email
           </Button>
           <Button
-            variant="outline"
+            variant="secondary"
             size="sm"
             onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(`Olá! Quero te convidar para me acompanhar no VFIT e realizar minha avaliação completa.\n\nCadastro: ${personalInviteLink}`)}`, '_blank')}
           >
@@ -437,7 +437,7 @@ export default function TreinosPage() {
             WhatsApp
           </Button>
           <Button
-            variant={showPersonalQr ? 'secondary' : 'outline'}
+            variant={showPersonalQr ? 'workout' : 'secondary'}
             size="sm"
             onClick={() => setShowPersonalQr((v) => !v)}
           >
