@@ -111,7 +111,7 @@ function RankRow({ entry, maxXp }: { entry: RankEntry; maxXp: number }) {
       </div>
 
       <div className="shrink-0 text-right">
-        <div className="text-[10px] sm:text-xs font-bold text-brand-primary" style={monoLabel}>{entry.xp.toLocaleString()} XP</div>
+        <div className="text-[10px] sm:text-xs font-bold text-brand-primary" style={monoLabel}>{entry.xp.toLocaleString('pt-BR')} XP</div>
         <div className="mt-0.5 hidden items-center justify-end gap-1 text-[10px] text-white/30 sm:flex" style={monoLabel}>
                     <DSIcon name="flame" size={12} className="text-orange-400/60" />
           {entry.streak}d · {entry.extra}

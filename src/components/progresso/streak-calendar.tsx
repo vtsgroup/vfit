@@ -153,64 +153,71 @@ export function StreakCalendar({ days, weeks = 52 }: StreakCalendarProps) {
   const cellSize = 10
   const gap = 2
   const labelWidth = 16 // weekday labels column
+  const monthLabelHeight = 14 // matches mb-1 + text-[9px] line-height visual
 
   return (
-    <div className="w-full" data-streak-calendar>
-      {/* Month labels */}
-      <div className="mb-1 flex" style={{ paddingLeft: labelWidth + gap }}>
-        {monthLabels.map((m, i) => {
-          const nextCol = monthLabels[i + 1]?.colIndex ?? columns.length
-          const span = nextCol - m.colIndex
-
-          return (
-            <span
-              key={`${m.label}-${m.colIndex}`}
-              className="text-[9px] font-medium text-text-muted leading-none"
-              style={{ width: span * (cellSize + gap), flexShrink: 0 }}
-            >
-              {span >= 3 ? m.label : ''}
-            </span>
-          )
-        })}
-      </div>
-
-      {/* Grid */}
+    <div className="w-full overflow-hidden" data-streak-calendar>
+      {/* Layout: weekday labels (fixed) + scrollable area (month labels + grid) */}
       <div className="relative flex">
-        {/* Weekday labels */}
-        <div
-          className="flex flex-col shrink-0"
-          style={{ width: labelWidth, gap }}
-        >
-          {WEEKDAY_LABELS.map((label, i) => (
-            <span
-              key={i}
-              className="text-[8px] font-medium text-text-muted leading-none flex items-center justify-end pr-1"
-              style={{ height: cellSize }}
-            >
-              {i % 2 === 1 ? label : ''}
-            </span>
-          ))}
+        {/* Weekday labels — fixed column, includes spacer matching month-labels row */}
+        <div className="flex flex-col shrink-0" style={{ width: labelWidth }}>
+          {/* Spacer to align with month labels row */}
+          <div style={{ height: monthLabelHeight }} />
+          <div className="flex flex-col" style={{ gap }}>
+            {WEEKDAY_LABELS.map((label, i) => (
+              <span
+                key={i}
+                className="text-[8px] font-medium text-text-muted leading-none flex items-center justify-end pr-1"
+                style={{ height: cellSize }}
+              >
+                {i % 2 === 1 ? label : ''}
+              </span>
+            ))}
+          </div>
         </div>
 
-        {/* Columns (weeks) */}
-        <div className="flex overflow-x-auto scrollbar-hide" style={{ gap }}>
-          {columns.map((week, wi) => (
-            <div key={wi} className="flex flex-col" style={{ gap }}>
-              {week.map((cell) => (
-                <div
-                  key={cell.date}
-                  className={`rounded-[2px] transition-colors ${
-                    cell.isFuture
-                      ? 'bg-transparent'
-                      : INTENSITY_CLASSES[getIntensityLevel(cell.count)]
-                  } ${cell.isToday ? 'ring-1 ring-brand-primary/50' : ''}`}
-                  style={{ width: cellSize, height: cellSize }}
-                  onPointerEnter={(e) => !cell.isFuture && handleCellEnter(e, cell.date, cell.count)}
-                  onPointerLeave={handleCellLeave}
-                />
-              ))}
-            </div>
-          ))}
+        {/* Scrollable region — month labels + columns scroll together */}
+        <div
+          className="flex-1 min-w-0 overflow-x-auto scrollbar-hide"
+          style={{ paddingLeft: gap }}
+        >
+          {/* Month labels — share scroller with grid */}
+          <div className="flex" style={{ height: monthLabelHeight }}>
+            {monthLabels.map((m, i) => {
+              const nextCol = monthLabels[i + 1]?.colIndex ?? columns.length
+              const span = nextCol - m.colIndex
+              return (
+                <span
+                  key={`${m.label}-${m.colIndex}`}
+                  className="text-[9px] font-medium text-text-muted leading-none shrink-0"
+                  style={{ width: span * (cellSize + gap) }}
+                >
+                  {span >= 3 ? m.label : ''}
+                </span>
+              )
+            })}
+          </div>
+
+          {/* Columns (weeks) */}
+          <div className="flex" style={{ gap }}>
+            {columns.map((week, wi) => (
+              <div key={wi} className="flex flex-col shrink-0" style={{ gap }}>
+                {week.map((cell) => (
+                  <div
+                    key={cell.date}
+                    className={`rounded-[2px] transition-colors ${
+                      cell.isFuture
+                        ? 'bg-transparent'
+                        : INTENSITY_CLASSES[getIntensityLevel(cell.count)]
+                    } ${cell.isToday ? 'ring-1 ring-brand-primary/50' : ''}`}
+                    style={{ width: cellSize, height: cellSize }}
+                    onPointerEnter={(e) => !cell.isFuture && handleCellEnter(e, cell.date, cell.count)}
+                    onPointerLeave={handleCellLeave}
+                  />
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Tooltip */}
