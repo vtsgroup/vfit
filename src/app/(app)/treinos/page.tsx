@@ -10,8 +10,9 @@
 
 'use client'
 
-import { useState, useMemo, useEffect, memo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -70,83 +71,19 @@ function normalizeText(value?: string | null) {
     .trim()
 }
 
-function getMuscleImageUrl(mg?: {
+function getMuscleImageUrl(
+  mg?: {
   image_female_url?: string | null
   image_male_url?: string | null
   image_url?: string | null
-} | null) {
-  // Detecta super admin pelo Zustand store
-  let isSuperAdmin = false
-  try {
-    if (typeof window !== 'undefined') {
-      // Import dinâmico para evitar SSR crash
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const store = require('@/stores/auth-store')
-      isSuperAdmin = store.useAuthStore.getState?.().isSuperAdmin?.() || false
-    }
-  } catch {}
+} | null,
+  isSuperAdmin = false
+) {
   if (isSuperAdmin) {
     return mg?.image_male_url || mg?.image_url || mg?.image_female_url || null
   }
   return mg?.image_female_url || mg?.image_male_url || mg?.image_url || null
 }
-
-// ── T7.5 — Progress Ring SVG (T11.8: memo) ──────────────────────────
-const ProgressRing = memo(function ProgressRing({
-  value,
-  max,
-  size = 52,
-  stroke = 5,
-  color = '#10B981',
-  children,
-}: {
-  value: number
-  max: number
-  size?: number
-  stroke?: number
-  color?: string
-  children?: React.ReactNode
-}) {
-  const radius = (size - stroke * 2) / 2
-  const circumference = 2 * Math.PI * radius
-  const pct = max > 0 ? Math.min(value / max, 1) : 0
-  const dashOffset = circumference * (1 - pct)
-
-  return (
-    <div className="relative shrink-0" style={{ width: size, height: size }}>
-      <svg
-        width={size}
-        height={size}
-        viewBox={`0 0 ${size} ${size}`}
-        className="absolute inset-0 -rotate-90"
-      >
-        <circle
-          cx={size / 2}
-          cy={size / 2}
-          r={radius}
-          fill="none"
-          stroke="rgba(255,255,255,0.07)"
-          strokeWidth={stroke}
-        />
-        <circle
-          cx={size / 2}
-          cy={size / 2}
-          r={radius}
-          fill="none"
-          stroke={color}
-          strokeWidth={stroke}
-          strokeDasharray={`${circumference} ${circumference}`}
-          strokeDashoffset={dashOffset}
-          strokeLinecap="round"
-          style={{ transition: 'stroke-dashoffset 0.6s ease' }}
-        />
-      </svg>
-      <div className="absolute inset-0 flex items-center justify-center">
-        {children}
-      </div>
-    </div>
-  )
-})
 
 export default function TreinosPage() {
   const user = useAuthStore((s) => s.user)
@@ -278,11 +215,11 @@ export default function TreinosPage() {
       const match = muscleByName.get(normalizeText(name))
       return {
         name,
-        imageUrl: getMuscleImageUrl(match),
+        imageUrl: getMuscleImageUrl(match, isSuperAdmin),
         tone: toneByMuscle(name),
       }
     })
-  }, [todayDay?.muscle_groups, muscleByName])
+  }, [todayDay?.muscle_groups, muscleByName, isSuperAdmin])
 
   const totals = mealsData?.totals ?? { calories: 0, protein: 0, carbs: 0, fat: 0 }
   const planPct = plan && plan.total_days > 0 ? Math.round((plan.current_day / plan.total_days) * 100) : 0
@@ -504,9 +441,12 @@ export default function TreinosPage() {
         {showPersonalQr && (
           <div className="mt-4 flex justify-center">
             {personalInviteQrUrl ? (
-              <img
+              <Image
                 src={personalInviteQrUrl}
                 alt="QR Code convite personal"
+                width={176}
+                height={176}
+                unoptimized
                 className="h-44 w-44 rounded-xl border border-white/12 bg-white p-2"
               />
             ) : (
@@ -652,9 +592,12 @@ export default function TreinosPage() {
                     href={`/musculos/detalhe?muscle=${encodeURIComponent(group.name)}`}
                     className="relative z-10 shrink-0 cursor-pointer rounded-xl border border-border-light bg-bg-secondary/70 p-2 transition-colors hover:bg-bg-secondary"
                   >
-                    <img
+                    <Image
                       src={group.imageUrl || buildPlaceholderImage(group.name, group.tone)}
                       alt={`Grupo muscular ${group.name}`}
+                      width={96}
+                      height={80}
+                      unoptimized
                       className="h-20 w-24 rounded-lg object-cover"
                     />
                     <p className="mt-1 text-center text-[11px] text-text-secondary">{group.name}</p>
@@ -695,15 +638,21 @@ export default function TreinosPage() {
                 className="relative z-10 flex w-full cursor-pointer items-center gap-3 rounded-xl border border-border-light bg-bg-secondary/70 p-2.5 text-left transition-colors hover:bg-bg-secondary"
               >
                 <div className="relative shrink-0">
-                  <img
+                  <Image
                     src={exerciseById.get(ex.exercise_id)?.thumbnail_url || buildPlaceholderImage(ex.exercise_name || ex.muscle_group || 'Exercício', toneByMuscle(ex.muscle_group))}
                     alt={ex.exercise_name || 'Exercício'}
+                    width={64}
+                    height={48}
+                    unoptimized
                     className="h-12 w-16 rounded-lg object-cover"
                   />
                   {!!ex.muscle_group && (
-                    <img
-                      src={getMuscleImageUrl(muscleByName.get(normalizeText(ex.muscle_group))) || buildPlaceholderImage(ex.muscle_group, toneByMuscle(ex.muscle_group))}
+                    <Image
+                      src={getMuscleImageUrl(muscleByName.get(normalizeText(ex.muscle_group)), isSuperAdmin) || buildPlaceholderImage(ex.muscle_group, toneByMuscle(ex.muscle_group))}
                       alt={`Músculo ${ex.muscle_group}`}
+                      width={24}
+                      height={24}
+                      unoptimized
                       className="absolute -right-1 -bottom-1 h-6 w-6 rounded-md border border-border-light bg-bg-secondary object-cover"
                     />
                   )}
@@ -775,9 +724,12 @@ export default function TreinosPage() {
               className="glass-card group relative flex items-center gap-3 overflow-hidden rounded-2xl border border-white/10 bg-linear-to-br from-white/5 to-transparent p-4 transition-all hover:border-white/16"
             >
               <div className="absolute right-0 top-0 h-20 w-20 rounded-full bg-brand-primary/10 blur-2xl transition-opacity group-hover:opacity-80" />
-              <img
+              <Image
                 src={buildPlaceholderImage(t.name || t.category || 'Treino', toneByMuscle(t.category))}
                 alt={`Placeholder treino ${t.name}`}
+                width={56}
+                height={56}
+                unoptimized
                 className="h-14 w-14 shrink-0 rounded-xl object-cover"
               />
 

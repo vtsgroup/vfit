@@ -144,7 +144,7 @@ export default function NotificacoesPage() {
 
   return (
     <div className="mx-auto max-w-lg px-4 pt-0 pb-24">
-      <div className="-mx-4 mb-5 rounded-b-3xl border-b-0 bg-gradient-to-b from-vfit-primary-500 to-vfit-primary-700 px-4 py-5 backdrop-blur-md shadow-lg">
+      <div className="-mx-4 mb-5 rounded-b-3xl border-b-0 bg-linear-to-b from-vfit-primary-500 to-vfit-primary-700 px-4 py-5 backdrop-blur-md shadow-lg">
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <button
@@ -181,7 +181,7 @@ export default function NotificacoesPage() {
               'rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors',
               tab === 'unread'
                 ? 'bg-brand-primary/90 text-white shadow'
-                : 'text-white/80 hover:text-white/100'
+                : 'text-white/80 hover:text-white'
             )}
           >
             Não lidas {unread?.unread_count ? `(${unread.unread_count})` : ''}
@@ -192,7 +192,7 @@ export default function NotificacoesPage() {
               'rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors',
               tab === 'all'
                 ? 'bg-brand-primary/90 text-white shadow'
-                : 'text-white/80 hover:text-white/100'
+                : 'text-white/80 hover:text-white'
             )}
           >
             Todas
