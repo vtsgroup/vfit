@@ -104,9 +104,9 @@ export function StudentHeader() {
         scrolled && 'ds3-header-scrolled'
       )}
       style={{
-        // Keep exact top/bottom colors and smooth the middle transition to avoid banding.
+        // Smoother gradient with alpha transitions for refined blending
         background:
-          'linear-gradient(to bottom, #050A12 0px, #050A12 24px, #071024 34%, #0a1630 50%, #112041 68%, #0f1d36 82%, #0b1627 100%)',
+          'linear-gradient(to bottom, #050A12 0px, #050a12b5 24px, #07102400 34%, #0a16303d 50%, #11204191 68%, #0f1d369e 82%, #0b1627 100%)',
         backgroundColor: '#050A12',
         borderBottom: 0,
         top: 'var(--demo-banner-offset, 0px)',
@@ -154,7 +154,7 @@ export function StudentHeader() {
               title={unreadCount > 0 ? `${unreadCount} nao lida(s)` : 'Notificacoes'}
               aria-label={unreadCount > 0 ? `${unreadCount} notificacoes nao lidas` : 'Notificacoes'}
             >
-              <DSIcon name="bell" size={16} className="text-white dark:text-white" />
+              <DSIcon name="bell" size={16} className="text-white drop-shadow-md" />
             </Link>
 
             {unreadCount > 0 && (
