@@ -127,6 +127,17 @@ export function StudentHeader() {
         paddingTop: 'env(safe-area-inset-top, 0px)',
       }}
     >
+      {/* Overlay fixo para garantir topo sólido theme color em qualquer ambiente */}
+      <div style={{
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        height: 48,
+        background: '#050A12',
+        pointerEvents: 'none',
+        zIndex: 1,
+      }} />
       {/* ═══ DS v3 NAVBAR — same as dashboard ═══ */}
       <div className="flex h-14 items-center justify-between px-4">
 
