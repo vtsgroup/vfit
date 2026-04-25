@@ -13,6 +13,7 @@
 - **3D mais definido:** reforço de borda superior fina + base inferior com maior contraste no `secondary`.
 - **Treinos — card Personal Trainer:** [src/app/(app)/treinos/page.tsx](src/app/(app)/treinos/page.tsx) migrou botões `Copiar link`, `Email`, `WhatsApp` para `variant="secondary"`; `QR Code` alterna `secondary`↔`workout` quando ativo.
 - **Doc oficial sincronizada:** [.claude/docs/DESIGN-SYSTEM.md](.claude/docs/DESIGN-SYSTEM.md) atualizado com regras canônicas de secondary, radius e 3D.
+- **Ajuste fino visual (feedback):** paleta `secondary` recalibrada para `slate blue-gray` (removido azul saturado) e radius levemente maior: `sm/icon` `10px→11px`, `md/lg/icon-lg` `12px→13px`.
 
 ### 🗂️ Infra — R2 buckets vfit-* provisionados (2026-04-18)
 - Criados novos buckets R2 `vfit-images` e `vfit-videos` (região ENAM) na conta Cloudflare de produção.

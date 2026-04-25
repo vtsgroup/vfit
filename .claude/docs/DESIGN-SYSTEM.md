@@ -12,7 +12,7 @@
 
 ## Atualização — Botões Secondary + Radius (25/04/2026)
 
-- `Button.secondary` migrou de zinc neutro para **Azure Glass 3D** (mais legível e destacado como ação secundária).
+- `Button.secondary` migrou para **Slate Blue-Gray 3D** (cinza escuro/azulado com contraste forte e visual mais sóbrio).
 - Radius canônico reduzido para evitar pílulas excessivamente arredondadas.
 - Sistema 3D padronizado com linha superior fina + base inferior com contraste forte.
 - Botões de ação no card "Personal Trainer" (Treinos) atualizados para `variant="secondary"`.
@@ -39,14 +39,14 @@
 
 > ⚠️ `text-muted` em light mode (2.56:1) — APENAS para placeholders/captions decorativos, NUNCA para texto informativo.
 
-### Botões — Escala Azure (Canônico)
+### Botões — Escala Slate Blue-Gray (Canônico)
 
 | Variant | Light (bg → text) | Dark (bg → text) |
 |---------|-------------------|-------------------|
-| **secondary** | `sky-100→200→300` → `sky-900` · contraste alto | `sky-700→800→blue-900` → `sky-50` · contraste alto |
+| **secondary** | `slate-200→300→400` → `slate-800` · contraste alto | `slate-500→600→700` → `slate-100` · contraste alto |
 | **outline** | `zinc-200` (#e4e4e7) → `zinc-600` · 13.62:1 AAA | `zinc-500` (#71717a) → `zinc-100` · 4.37:1 AA-lg |
 
-> `secondary` agora é canônico em **azure** para maior diferenciação visual de CTA primário sem perder legibilidade.
+> `secondary` agora é canônico em **slate blue-gray** para manter contraste perfeito e evitar saturação excessiva.
 
 ### ❌ NUNCA em Light Mode (contraste < 3:1 vs branco)
 
@@ -79,7 +79,7 @@ Dark:  superfície → shadow zinc-800 (#27272a) — funciona universal
 | Variant | Uso |
 |---------|-----|
 | `primary` (default) | CTA principal — verde com depth 3D |
-| `secondary` | Ação secundária destacada — azure glass 3D |
+| `secondary` | Ação secundária destacada — slate blue-gray 3D |
 | `outline` | Ação terciária — borda com hover |
 | `ghost` | Ação sutil — sem borda, hover leve |
 | `ghost-danger` | Ação destrutiva sutil |
@@ -99,8 +99,8 @@ Dark:  superfície → shadow zinc-800 (#27272a) — funciona universal
 
 ### Radius Canônico (OBRIGATÓRIO)
 
-- `sm` e `icon`: `rounded-[10px]`
-- `md`, `lg`, `icon-lg`: `rounded-xl`
+- `sm` e `icon`: `rounded-[11px]`
+- `md`, `lg`, `icon-lg`: `rounded-[13px]`
 - Evitar `rounded-full`/`rounded-2xl` em botões de texto (somente casos especiais: chips/toggles)
 
 ### 3D Canônico (OBRIGATÓRIO)
