@@ -1,0 +1,1360 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - link "Pular para o conteúdo" [ref=e3] [cursor=pointer]:
+      - /url: "#main-content"
+    - banner [ref=e4]:
+      - navigation [ref=e5]:
+        - link "VFIT - Início" [ref=e7] [cursor=pointer]:
+          - /url: /
+          - img "VFIT" [ref=e9]
+        - generic [ref=e11]:
+          - link "Plataforma" [ref=e13] [cursor=pointer]:
+            - /url: /#features
+            - text: Plataforma
+            - img [ref=e14]
+          - link "Recursos" [ref=e17] [cursor=pointer]:
+            - /url: /#how-it-works
+            - text: Recursos
+            - img [ref=e18]
+          - link "Preços" [ref=e21] [cursor=pointer]:
+            - /url: /pricing
+          - link "FAQ" [ref=e23] [cursor=pointer]:
+            - /url: /#faq
+          - link "Contato" [ref=e25] [cursor=pointer]:
+            - /url: /contato
+        - generic [ref=e26]:
+          - link "Entrar" [ref=e27] [cursor=pointer]:
+            - /url: /login
+            - button "Entrar" [ref=e28]:
+              - generic [ref=e29]: Entrar
+          - link "Começar Grátis" [ref=e30] [cursor=pointer]:
+            - /url: /welcome
+            - button "Começar Grátis" [ref=e31]:
+              - generic [ref=e32]: Começar Grátis
+    - main [ref=e33]:
+      - region "Hero principal" [ref=e34]:
+        - generic [ref=e46]:
+          - generic [ref=e47]:
+            - generic [ref=e50]: App de treino com IA para alunos
+            - generic [ref=e52]:
+              - heading "TREINOS QUE TRANSFORMAM" [level=1] [ref=e54]:
+                - text: TREINOS QUE
+                - text: TRANSFORMAM
+              - heading "SEU OBJETIVO NO FOCO" [level=1] [ref=e56]:
+                - text: SEU OBJETIVO
+                - text: NO FOCO
+              - heading "RESULTADO COM MÉTODO" [level=1] [ref=e58]:
+                - text: RESULTADO COM
+                - text: MÉTODO
+              - heading "TREINO E DIETA ALINHADOS" [level=1] [ref=e60]:
+                - text: TREINO E DIETA
+                - text: ALINHADOS
+            - generic [ref=e62]:
+              - button "Slide 1" [ref=e63]
+              - button "Slide 2" [ref=e64]
+              - button "Slide 3" [ref=e65]
+              - button "Slide 4" [ref=e66]
+            - paragraph [ref=e68]: Receba treinos personalizados com inteligência artificial, acompanhe sua evolução e mantenha constância com gamificação no celular.
+            - generic [ref=e70]:
+              - link "TESTAR AGORA" [ref=e71] [cursor=pointer]:
+                - /url: /welcome
+                - button "TESTAR AGORA" [ref=e72]:
+                  - generic [ref=e73]:
+                    - img [ref=e74]
+                    - text: TESTAR AGORA
+              - link "VER DEMONSTRAÇÃO" [ref=e76] [cursor=pointer]:
+                - /url: "#how-it-works"
+                - button "VER DEMONSTRAÇÃO" [ref=e77]:
+                  - generic [ref=e78]:
+                    - img [ref=e79]
+                    - text: VER DEMONSTRAÇÃO
+            - generic [ref=e82]:
+              - generic [ref=e83]:
+                - img [ref=e84]
+                - text: PLANO GRATUITO
+              - generic [ref=e86]:
+                - img [ref=e87]
+                - text: SEM CARTÃO
+              - generic [ref=e89]:
+                - img [ref=e90]
+                - text: CANCELE QUANDO QUISER
+          - generic [ref=e95]:
+            - generic [ref=e96]:
+              - img [ref=e97]
+              - generic [ref=e102]: 2.500+
+              - generic [ref=e103]: PERSONALS
+            - generic [ref=e104]:
+              - img [ref=e105]
+              - generic [ref=e109]: 15.000+
+              - generic [ref=e110]: ALUNOS
+            - generic [ref=e111]:
+              - img [ref=e112]
+              - generic [ref=e114]: 98%
+              - generic [ref=e115]: SATISFAÇÃO
+            - generic [ref=e116]:
+              - img [ref=e117]
+              - generic [ref=e120]: 24/7
+              - generic [ref=e121]: DISPONÍVEL
+      - generic [ref=e123]:
+        - paragraph [ref=e124]: Escolha seu caminho
+        - heading "VFIT para alunos, profissionais e parceiros" [level=2] [ref=e125]
+        - paragraph [ref=e126]: Se você é profissional de fitness ou quer monetizar indicações, acesse a página específica do seu perfil.
+        - generic [ref=e127]:
+          - link "Sou Personal Trainer" [ref=e128] [cursor=pointer]:
+            - /url: /app-personal-trainer
+            - button "Sou Personal Trainer" [ref=e129]:
+              - generic [ref=e130]: Sou Personal Trainer
+          - link "Sou Nutricionista" [ref=e131] [cursor=pointer]:
+            - /url: /nutricionistas
+            - button "Sou Nutricionista" [ref=e132]:
+              - generic [ref=e133]: Sou Nutricionista
+          - link "Quero ser Afiliado" [ref=e134] [cursor=pointer]:
+            - /url: /afiliados
+            - button "Quero ser Afiliado" [ref=e135]:
+              - generic [ref=e136]: Quero ser Afiliado
+      - region "Funcionalidades da plataforma" [ref=e137]:
+        - generic [ref=e139]:
+          - generic [ref=e141]:
+            - generic [ref=e142]: A Plataforma
+            - heading "Tudo que você precisa, nada que não precisa" [level=2] [ref=e144]
+            - paragraph [ref=e145]: Operacional, cobrança e IA no mesmo lugar. Sem malabarismos, sem planilhas soltas.
+          - generic [ref=e147]:
+            - button "PARA PERSONALS" [ref=e148]
+            - button "PARA ALUNOS" [ref=e149]
+          - generic [ref=e150]:
+            - generic [ref=e154]:
+              - generic [ref=e155]:
+                - img [ref=e157]
+                - generic [ref=e159]: EXCLUSIVO
+              - heading "Treinos com IA" [level=3] [ref=e160]
+              - paragraph [ref=e161]: Gere treinos personalizados em segundos com periodização, progressão e adaptação automática por IA.
+              - generic [ref=e162]:
+                - generic [ref=e163]: Periodização automática
+                - generic [ref=e165]: Substituição inteligente
+                - generic [ref=e167]: 500+ exercícios
+            - generic [ref=e172]:
+              - generic [ref=e173]:
+                - img [ref=e175]
+                - generic [ref=e180]: ILIMITADO
+              - heading "Gestão de Alunos" [level=3] [ref=e181]
+              - paragraph [ref=e182]: Cadastre, organize e acompanhe todos os seus alunos em um só lugar com histórico completo.
+              - generic [ref=e183]:
+                - generic [ref=e184]: Perfil completo
+                - generic [ref=e186]: Histórico de treinos
+                - generic [ref=e188]: Chat integrado
+            - generic [ref=e193]:
+              - generic [ref=e194]:
+                - img [ref=e196]
+                - generic [ref=e198]: PIX INTEGRADO
+              - heading "Cobranças Automáticas" [level=3] [ref=e199]
+              - paragraph [ref=e200]: PIX automático, boletos e cartão de crédito. Receba pagamentos sem esforço com split automático.
+              - generic [ref=e201]:
+                - generic [ref=e202]: PIX instantâneo
+                - generic [ref=e204]: Boleto e cartão
+                - generic [ref=e206]: Split automático
+            - generic [ref=e211]:
+              - generic [ref=e212]:
+                - img [ref=e214]
+                - generic [ref=e216]: PDF AUTOMÁTICO
+              - heading "Avaliações Físicas" [level=3] [ref=e217]
+              - paragraph [ref=e218]: Anamnese completa, composição corporal, fotos comparativas e relatórios profissionais em PDF.
+              - generic [ref=e219]:
+                - generic [ref=e220]: Composição corporal
+                - generic [ref=e222]: Fotos comparativas
+                - generic [ref=e224]: Relatório PDF
+            - generic [ref=e229]:
+              - generic [ref=e230]:
+                - img [ref=e232]
+                - generic [ref=e238]: NOVO
+              - heading "Gamificação & XP" [level=3] [ref=e239]
+              - paragraph [ref=e240]: Pontos, badges, rankings e conquistas que mantém seus alunos motivados e engajados todos os dias.
+              - generic [ref=e241]:
+                - generic [ref=e242]: Rankings semanais
+                - generic [ref=e244]: Badges exclusivos
+                - generic [ref=e246]: Sistema XP
+            - generic [ref=e251]:
+              - generic [ref=e252]:
+                - img [ref=e254]
+                - generic [ref=e256]: OFFLINE
+              - heading "App PWA Nativo" [level=3] [ref=e257]
+              - paragraph [ref=e258]: Instale no celular como app nativo. Funciona offline, push notifications e experiência fluida.
+              - generic [ref=e259]:
+                - generic [ref=e260]: Funciona offline
+                - generic [ref=e262]: Push notifications
+                - generic [ref=e264]: Instala no celular
+          - generic [ref=e267]:
+            - generic [ref=e268]:
+              - img [ref=e269]
+              - text: LGPD COMPLIANT
+            - generic [ref=e272]:
+              - img [ref=e273]
+              - text: 99.9% UPTIME
+            - generic [ref=e276]:
+              - img [ref=e277]
+              - text: CRIPTOGRAFIA E2E
+        - generic [ref=e281]:
+          - generic [ref=e283]:
+            - text: COMO FUNCIONA
+            - heading "Comece em 3 passos" [level=2] [ref=e284]
+          - generic [ref=e285]:
+            - generic [ref=e287]:
+              - generic: "01"
+              - generic [ref=e288]:
+                - img [ref=e290]
+                - heading "Crie sua conta" [level=3] [ref=e293]
+                - paragraph [ref=e294]: Cadastro em 30 segundos. Plano Essencial gratuito para sempre, sem cartão de crédito.
+            - generic [ref=e296]:
+              - generic: "02"
+              - generic [ref=e297]:
+                - img [ref=e299]
+                - heading "Cadastre seus alunos" [level=3] [ref=e304]
+                - paragraph [ref=e305]: Adicione alunos manualmente ou envie convites por link direto pelo app.
+            - generic [ref=e307]:
+              - generic: "03"
+              - generic [ref=e308]:
+                - img [ref=e310]
+                - heading "Gere treinos com IA" [level=3] [ref=e322]
+                - paragraph [ref=e323]: Defina os objetivos e deixe a inteligência artificial criar treinos perfeitos.
+      - generic [ref=e327]:
+        - paragraph [ref=e328]: Acesso para aluno
+        - heading "Treine com IA de forma gratuita e evolua com acompanhamento real" [level=2] [ref=e329]
+        - paragraph [ref=e330]: A home do VFIT é para quem quer resultado no treino. O aluno começa sem cartão e acompanha evolução pelo celular. Profissionais têm páginas dedicadas com planos e operação completa.
+        - generic [ref=e331]:
+          - article [ref=e332]:
+            - heading "Aluno" [level=3] [ref=e333]
+            - paragraph [ref=e334]: Começa grátis, recebe treino personalizado e acompanha progresso no app.
+          - article [ref=e335]:
+            - heading "Personal Trainer" [level=3] [ref=e336]
+            - paragraph [ref=e337]: Gestão de alunos, IA, cobrança e plano profissional em página dedicada.
+          - article [ref=e338]:
+            - heading "Nutricionista" [level=3] [ref=e339]
+            - paragraph [ref=e340]: Acompanhamento nutricional integrado ao contexto de treino do aluno.
+        - generic [ref=e341]:
+          - link "Sou aluno" [ref=e342] [cursor=pointer]:
+            - /url: /welcome
+            - button "Sou aluno" [ref=e343]:
+              - generic [ref=e344]: Sou aluno
+          - link "Sou personal trainer" [ref=e345] [cursor=pointer]:
+            - /url: /app-personal-trainer
+            - button "Sou personal trainer" [ref=e346]:
+              - generic [ref=e347]: Sou personal trainer
+          - link "Sou nutricionista" [ref=e348] [cursor=pointer]:
+            - /url: /nutricionistas
+            - button "Sou nutricionista" [ref=e349]:
+              - generic [ref=e350]: Sou nutricionista
+        - generic [ref=e351]:
+          - article [ref=e352]:
+            - heading "Aluno" [level=3] [ref=e353]
+            - generic [ref=e354]:
+              - link "Entrar" [ref=e355] [cursor=pointer]:
+                - /url: /login
+                - button "Entrar" [ref=e356]:
+                  - generic [ref=e357]: Entrar
+              - link "Cadastrar" [ref=e358] [cursor=pointer]:
+                - /url: /register/student
+                - button "Cadastrar" [ref=e359]:
+                  - generic [ref=e360]: Cadastrar
+              - link "Termos" [ref=e361] [cursor=pointer]:
+                - /url: /termos
+                - button "Termos" [ref=e362]:
+                  - generic [ref=e363]: Termos
+          - article [ref=e364]:
+            - heading "Personal Trainer" [level=3] [ref=e365]
+            - generic [ref=e366]:
+              - link "Entrar" [ref=e367] [cursor=pointer]:
+                - /url: /login
+                - button "Entrar" [ref=e368]:
+                  - generic [ref=e369]: Entrar
+              - link "Cadastrar" [ref=e370] [cursor=pointer]:
+                - /url: /register/personal
+                - button "Cadastrar" [ref=e371]:
+                  - generic [ref=e372]: Cadastrar
+              - link "Termos" [ref=e373] [cursor=pointer]:
+                - /url: /termos
+                - button "Termos" [ref=e374]:
+                  - generic [ref=e375]: Termos
+          - article [ref=e376]:
+            - heading "Nutricionista" [level=3] [ref=e377]
+            - generic [ref=e378]:
+              - link "Entrar" [ref=e379] [cursor=pointer]:
+                - /url: /login
+                - button "Entrar" [ref=e380]:
+                  - generic [ref=e381]: Entrar
+              - link "Cadastrar" [ref=e382] [cursor=pointer]:
+                - /url: /register/personal?type=nutri
+                - button "Cadastrar" [ref=e383]:
+                  - generic [ref=e384]: Cadastrar
+              - link "Termos" [ref=e385] [cursor=pointer]:
+                - /url: /termos
+                - button "Termos" [ref=e386]:
+                  - generic [ref=e387]: Termos
+      - region "Depoimentos e como funciona" [ref=e389]:
+        - generic [ref=e391]:
+          - generic [ref=e394]: /DEPOIMENTOS
+          - heading "QUEM USA, RECOMENDA" [level=2] [ref=e396]
+          - paragraph [ref=e398]: Mais de 2.500 personal trainers e 850 mil alunos já transformaram sua rotina.
+          - generic [ref=e401]:
+            - button "PERSONAL TRAINERS" [ref=e402]
+            - button "ALUNOS" [ref=e403]
+        - generic [ref=e406]:
+          - generic [ref=e408] [cursor=pointer]:
+            - img
+            - generic [ref=e410]:
+              - generic [ref=e411]:
+                - img [ref=e412]
+                - img [ref=e414]
+                - img [ref=e416]
+                - img [ref=e418]
+                - img [ref=e420]
+              - generic [ref=e422]: "5.0"
+            - blockquote [ref=e423]:
+              - text: “
+              - generic [ref=e424]:
+                - text: A IA gera treinos incríveis em segundos. Meus alunos adoram a personalização e eu
+                - strong [ref=e425]: economizo horas por semana
+              - text: .”
+            - generic [ref=e427]:
+              - img "Carlos Mendes" [ref=e429]
+              - generic [ref=e430]:
+                - generic [ref=e431]: Carlos Mendes
+                - generic [ref=e432]: Personal Trainer · São Paulo
+          - generic [ref=e434] [cursor=pointer]:
+            - img
+            - generic [ref=e436]:
+              - generic [ref=e437]:
+                - img [ref=e438]
+                - img [ref=e440]
+                - img [ref=e442]
+                - img [ref=e444]
+                - img [ref=e446]
+              - generic [ref=e448]: "5.0"
+            - blockquote [ref=e449]:
+              - text: “
+              - generic [ref=e450]:
+                - text: O sistema de cobranças automáticas
+                - strong [ref=e451]: mudou meu negócio
+              - text: . Não perco mais tempo cobrando alunos individualmente.”
+            - generic [ref=e453]:
+              - img "Ana Beatriz" [ref=e455]
+              - generic [ref=e456]:
+                - generic [ref=e457]: Ana Beatriz
+                - generic [ref=e458]: Personal Trainer · Rio de Janeiro
+          - generic [ref=e460] [cursor=pointer]:
+            - img
+            - generic [ref=e462]:
+              - generic [ref=e463]:
+                - img [ref=e464]
+                - img [ref=e466]
+                - img [ref=e468]
+                - img [ref=e470]
+                - img [ref=e472]
+              - generic [ref=e474]: "5.0"
+            - blockquote [ref=e475]:
+              - text: “
+              - generic [ref=e476]:
+                - text: Comecei com 10 alunos e
+                - strong [ref=e477]: hoje tenho 85
+              - text: usando a plataforma. A gestão ficou muito mais organizada.”
+            - generic [ref=e479]:
+              - img "Rafael Santos" [ref=e481]
+              - generic [ref=e482]:
+                - generic [ref=e483]: Rafael Santos
+                - generic [ref=e484]: Personal Trainer · Belo Horizonte
+          - generic [ref=e486] [cursor=pointer]:
+            - img
+            - generic [ref=e488]:
+              - generic [ref=e489]:
+                - img [ref=e490]
+                - img [ref=e492]
+                - img [ref=e494]
+                - img [ref=e496]
+                - img [ref=e498]
+              - generic [ref=e500]: "5.0"
+            - blockquote [ref=e501]:
+              - text: “
+              - generic [ref=e502]:
+                - text: O marketplace é genial. Já vendi
+                - strong [ref=e503]: mais de 200 programas
+              - text: de treino para pessoas que nem são meus alunos.”
+            - generic [ref=e505]:
+              - img "Juliana Costa" [ref=e507]
+              - generic [ref=e508]:
+                - generic [ref=e509]: Juliana Costa
+                - generic [ref=e510]: Personal Trainer · Curitiba
+          - generic [ref=e512] [cursor=pointer]:
+            - img
+            - generic [ref=e514]:
+              - generic [ref=e515]:
+                - img [ref=e516]
+                - img [ref=e518]
+                - img [ref=e520]
+                - img [ref=e522]
+                - img [ref=e524]
+              - generic [ref=e526]: "5.0"
+            - blockquote [ref=e527]:
+              - text: “
+              - generic [ref=e528]:
+                - text: Implementamos para todos os
+                - strong [ref=e529]: 12 personais da academia
+              - text: . O relatório admin é fantástico.”
+            - generic [ref=e531]:
+              - img "Pedro Oliveira" [ref=e533]
+              - generic [ref=e534]:
+                - generic [ref=e535]: Pedro Oliveira
+                - generic [ref=e536]: Dono de Academia · Salvador
+          - generic [ref=e538] [cursor=pointer]:
+            - img
+            - generic [ref=e540]:
+              - generic [ref=e541]:
+                - img [ref=e542]
+                - img [ref=e544]
+                - img [ref=e546]
+                - img [ref=e548]
+                - img [ref=e550]
+              - generic [ref=e552]: "5.0"
+            - blockquote [ref=e553]:
+              - text: “
+              - generic [ref=e554]:
+                - text: A avaliação física automatizada impressiona os alunos. Gero relatórios profissionais em
+                - strong [ref=e555]: menos de 2 minutos
+              - text: .”
+            - generic [ref=e557]:
+              - img "Fernanda Lima" [ref=e559]
+              - generic [ref=e560]:
+                - generic [ref=e561]: Fernanda Lima
+                - generic [ref=e562]: Personal Trainer · Brasília
+          - generic [ref=e564] [cursor=pointer]:
+            - img
+            - generic [ref=e566]:
+              - generic [ref=e567]:
+                - img [ref=e568]
+                - img [ref=e570]
+                - img [ref=e572]
+                - img [ref=e574]
+                - img [ref=e576]
+              - generic [ref=e578]: "5.0"
+            - blockquote [ref=e579]:
+              - text: “
+              - generic [ref=e580]:
+                - text: A gamificação com XP e conquistas engajou demais meus alunos. A retenção
+                - strong [ref=e581]: aumentou 40%
+              - text: em 3 meses.”
+            - generic [ref=e583]:
+              - img "Marcos Vieira" [ref=e585]
+              - generic [ref=e586]:
+                - generic [ref=e587]: Marcos Vieira
+                - generic [ref=e588]: Personal Trainer · Florianópolis
+          - generic [ref=e590] [cursor=pointer]:
+            - img
+            - generic [ref=e592]:
+              - generic [ref=e593]:
+                - img [ref=e594]
+                - img [ref=e596]
+                - img [ref=e598]
+                - img [ref=e600]
+                - img [ref=e602]
+              - generic [ref=e604]: "5.0"
+            - blockquote [ref=e605]:
+              - text: “
+              - generic [ref=e606]:
+                - text: Antes eu usava 3 apps diferentes. Agora
+                - strong [ref=e607]: tudo está num lugar só
+              - text: ": treinos, pagamentos e evolução dos alunos.”"
+            - generic [ref=e609]:
+              - img "Patrícia Souza" [ref=e611]
+              - generic [ref=e612]:
+                - generic [ref=e613]: Patrícia Souza
+                - generic [ref=e614]: Personal Trainer · Porto Alegre
+          - generic [ref=e616] [cursor=pointer]:
+            - img
+            - generic [ref=e618]:
+              - generic [ref=e619]:
+                - img [ref=e620]
+                - img [ref=e622]
+                - img [ref=e624]
+                - img [ref=e626]
+                - img [ref=e628]
+              - generic [ref=e630]: "5.0"
+            - blockquote [ref=e631]:
+              - text: “
+              - generic [ref=e632]:
+                - text: O Pix automático foi revolucionário. Recebo de
+                - strong [ref=e633]: 95% dos alunos
+              - text: no dia certo sem precisar cobrar ninguém.”
+            - generic [ref=e635]:
+              - img "Diego Almeida" [ref=e637]
+              - generic [ref=e638]:
+                - generic [ref=e639]: Diego Almeida
+                - generic [ref=e640]: Personal Trainer · Recife
+          - generic [ref=e642] [cursor=pointer]:
+            - img
+            - generic [ref=e644]:
+              - generic [ref=e645]:
+                - img [ref=e646]
+                - img [ref=e648]
+                - img [ref=e650]
+                - img [ref=e652]
+                - img [ref=e654]
+              - generic [ref=e656]: "5.0"
+            - blockquote [ref=e657]:
+              - text: “
+              - generic [ref=e658]:
+                - text: Minha produtividade
+                - strong [ref=e659]: triplicou
+              - text: . A IA monta o treino e eu só ajusto os detalhes. Atendo 3x mais alunos.”
+            - generic [ref=e661]:
+              - img "Camila Borges" [ref=e663]
+              - generic [ref=e664]:
+                - generic [ref=e665]: Camila Borges
+                - generic [ref=e666]: Personal Trainer · Goiânia
+          - generic [ref=e668] [cursor=pointer]:
+            - img
+            - generic [ref=e670]:
+              - generic [ref=e671]:
+                - img [ref=e672]
+                - img [ref=e674]
+                - img [ref=e676]
+                - img [ref=e678]
+                - img [ref=e680]
+              - generic [ref=e682]: "5.0"
+            - blockquote [ref=e683]:
+              - text: “
+              - generic [ref=e684]:
+                - text: A IA gera treinos incríveis em segundos. Meus alunos adoram a personalização e eu
+                - strong [ref=e685]: economizo horas por semana
+              - text: .”
+            - generic [ref=e687]:
+              - img "Carlos Mendes" [ref=e689]
+              - generic [ref=e690]:
+                - generic [ref=e691]: Carlos Mendes
+                - generic [ref=e692]: Personal Trainer · São Paulo
+          - generic [ref=e694] [cursor=pointer]:
+            - img
+            - generic [ref=e696]:
+              - generic [ref=e697]:
+                - img [ref=e698]
+                - img [ref=e700]
+                - img [ref=e702]
+                - img [ref=e704]
+                - img [ref=e706]
+              - generic [ref=e708]: "5.0"
+            - blockquote [ref=e709]:
+              - text: “
+              - generic [ref=e710]:
+                - text: O sistema de cobranças automáticas
+                - strong [ref=e711]: mudou meu negócio
+              - text: . Não perco mais tempo cobrando alunos individualmente.”
+            - generic [ref=e713]:
+              - img "Ana Beatriz" [ref=e715]
+              - generic [ref=e716]:
+                - generic [ref=e717]: Ana Beatriz
+                - generic [ref=e718]: Personal Trainer · Rio de Janeiro
+          - generic [ref=e720] [cursor=pointer]:
+            - img
+            - generic [ref=e722]:
+              - generic [ref=e723]:
+                - img [ref=e724]
+                - img [ref=e726]
+                - img [ref=e728]
+                - img [ref=e730]
+                - img [ref=e732]
+              - generic [ref=e734]: "5.0"
+            - blockquote [ref=e735]:
+              - text: “
+              - generic [ref=e736]:
+                - text: Comecei com 10 alunos e
+                - strong [ref=e737]: hoje tenho 85
+              - text: usando a plataforma. A gestão ficou muito mais organizada.”
+            - generic [ref=e739]:
+              - img "Rafael Santos" [ref=e741]
+              - generic [ref=e742]:
+                - generic [ref=e743]: Rafael Santos
+                - generic [ref=e744]: Personal Trainer · Belo Horizonte
+          - generic [ref=e746] [cursor=pointer]:
+            - img
+            - generic [ref=e748]:
+              - generic [ref=e749]:
+                - img [ref=e750]
+                - img [ref=e752]
+                - img [ref=e754]
+                - img [ref=e756]
+                - img [ref=e758]
+              - generic [ref=e760]: "5.0"
+            - blockquote [ref=e761]:
+              - text: “
+              - generic [ref=e762]:
+                - text: O marketplace é genial. Já vendi
+                - strong [ref=e763]: mais de 200 programas
+              - text: de treino para pessoas que nem são meus alunos.”
+            - generic [ref=e765]:
+              - img "Juliana Costa" [ref=e767]
+              - generic [ref=e768]:
+                - generic [ref=e769]: Juliana Costa
+                - generic [ref=e770]: Personal Trainer · Curitiba
+          - generic [ref=e772] [cursor=pointer]:
+            - img
+            - generic [ref=e774]:
+              - generic [ref=e775]:
+                - img [ref=e776]
+                - img [ref=e778]
+                - img [ref=e780]
+                - img [ref=e782]
+                - img [ref=e784]
+              - generic [ref=e786]: "5.0"
+            - blockquote [ref=e787]:
+              - text: “
+              - generic [ref=e788]:
+                - text: Implementamos para todos os
+                - strong [ref=e789]: 12 personais da academia
+              - text: . O relatório admin é fantástico.”
+            - generic [ref=e791]:
+              - img "Pedro Oliveira" [ref=e793]
+              - generic [ref=e794]:
+                - generic [ref=e795]: Pedro Oliveira
+                - generic [ref=e796]: Dono de Academia · Salvador
+          - generic [ref=e798] [cursor=pointer]:
+            - img
+            - generic [ref=e800]:
+              - generic [ref=e801]:
+                - img [ref=e802]
+                - img [ref=e804]
+                - img [ref=e806]
+                - img [ref=e808]
+                - img [ref=e810]
+              - generic [ref=e812]: "5.0"
+            - blockquote [ref=e813]:
+              - text: “
+              - generic [ref=e814]:
+                - text: A avaliação física automatizada impressiona os alunos. Gero relatórios profissionais em
+                - strong [ref=e815]: menos de 2 minutos
+              - text: .”
+            - generic [ref=e817]:
+              - img "Fernanda Lima" [ref=e819]
+              - generic [ref=e820]:
+                - generic [ref=e821]: Fernanda Lima
+                - generic [ref=e822]: Personal Trainer · Brasília
+          - generic [ref=e824] [cursor=pointer]:
+            - img
+            - generic [ref=e826]:
+              - generic [ref=e827]:
+                - img [ref=e828]
+                - img [ref=e830]
+                - img [ref=e832]
+                - img [ref=e834]
+                - img [ref=e836]
+              - generic [ref=e838]: "5.0"
+            - blockquote [ref=e839]:
+              - text: “
+              - generic [ref=e840]:
+                - text: A gamificação com XP e conquistas engajou demais meus alunos. A retenção
+                - strong [ref=e841]: aumentou 40%
+              - text: em 3 meses.”
+            - generic [ref=e843]:
+              - img "Marcos Vieira" [ref=e845]
+              - generic [ref=e846]:
+                - generic [ref=e847]: Marcos Vieira
+                - generic [ref=e848]: Personal Trainer · Florianópolis
+          - generic [ref=e850] [cursor=pointer]:
+            - img
+            - generic [ref=e852]:
+              - generic [ref=e853]:
+                - img [ref=e854]
+                - img [ref=e856]
+                - img [ref=e858]
+                - img [ref=e860]
+                - img [ref=e862]
+              - generic [ref=e864]: "5.0"
+            - blockquote [ref=e865]:
+              - text: “
+              - generic [ref=e866]:
+                - text: Antes eu usava 3 apps diferentes. Agora
+                - strong [ref=e867]: tudo está num lugar só
+              - text: ": treinos, pagamentos e evolução dos alunos.”"
+            - generic [ref=e869]:
+              - img "Patrícia Souza" [ref=e871]
+              - generic [ref=e872]:
+                - generic [ref=e873]: Patrícia Souza
+                - generic [ref=e874]: Personal Trainer · Porto Alegre
+          - generic [ref=e876] [cursor=pointer]:
+            - img
+            - generic [ref=e878]:
+              - generic [ref=e879]:
+                - img [ref=e880]
+                - img [ref=e882]
+                - img [ref=e884]
+                - img [ref=e886]
+                - img [ref=e888]
+              - generic [ref=e890]: "5.0"
+            - blockquote [ref=e891]:
+              - text: “
+              - generic [ref=e892]:
+                - text: O Pix automático foi revolucionário. Recebo de
+                - strong [ref=e893]: 95% dos alunos
+              - text: no dia certo sem precisar cobrar ninguém.”
+            - generic [ref=e895]:
+              - img "Diego Almeida" [ref=e897]
+              - generic [ref=e898]:
+                - generic [ref=e899]: Diego Almeida
+                - generic [ref=e900]: Personal Trainer · Recife
+          - generic [ref=e902] [cursor=pointer]:
+            - img
+            - generic [ref=e904]:
+              - generic [ref=e905]:
+                - img [ref=e906]
+                - img [ref=e908]
+                - img [ref=e910]
+                - img [ref=e912]
+                - img [ref=e914]
+              - generic [ref=e916]: "5.0"
+            - blockquote [ref=e917]:
+              - text: “
+              - generic [ref=e918]:
+                - text: Minha produtividade
+                - strong [ref=e919]: triplicou
+              - text: . A IA monta o treino e eu só ajusto os detalhes. Atendo 3x mais alunos.”
+            - generic [ref=e921]:
+              - img "Camila Borges" [ref=e923]
+              - generic [ref=e924]:
+                - generic [ref=e925]: Camila Borges
+                - generic [ref=e926]: Personal Trainer · Goiânia
+        - link "COMEÇAR GRÁTIS" [ref=e930] [cursor=pointer]:
+          - /url: /welcome
+          - button "COMEÇAR GRÁTIS" [ref=e931]:
+            - generic [ref=e932]:
+              - img [ref=e933]
+              - text: COMEÇAR GRÁTIS
+      - region "Números da plataforma" [ref=e936]:
+        - generic [ref=e937]:
+          - generic [ref=e940]: /NÚMEROS
+          - heading "RESULTADOS QUE FALAM" [level=2] [ref=e942]
+          - paragraph [ref=e944]: Números reais de uma plataforma que cresce todos os dias.
+          - generic [ref=e945]:
+            - generic [ref=e947]:
+              - img [ref=e949]
+              - generic [ref=e954]:
+                - generic [ref=e955]: "0"
+                - generic [ref=e956]: +
+              - generic [ref=e957]: Personal Trainers
+              - generic [ref=e958]: profissionais ativos na plataforma
+            - generic [ref=e960]:
+              - img [ref=e962]
+              - generic [ref=e965]:
+                - generic [ref=e966]: "0"
+                - generic [ref=e967]: +
+              - generic [ref=e968]: Alunos Gerenciados
+              - generic [ref=e969]: treinando com acompanhamento digital
+            - generic [ref=e971]:
+              - img [ref=e973]
+              - generic [ref=e985]:
+                - generic [ref=e986]: "0"
+                - generic [ref=e987]: +
+              - generic [ref=e988]: Treinos Gerados
+              - generic [ref=e989]: criados com inteligência artificial
+            - generic [ref=e991]:
+              - img [ref=e993]
+              - generic [ref=e995]:
+                - generic [ref=e996]: "0"
+                - generic [ref=e997]: "%"
+              - generic [ref=e998]: Satisfação
+              - generic [ref=e999]: dos personais recomendam a plataforma
+            - generic [ref=e1001]:
+              - img [ref=e1003]
+              - generic [ref=e1005]:
+                - generic [ref=e1006]: R$
+                - generic [ref=e1007]: "0"
+              - generic [ref=e1008]: Cobranças Processadas
+              - generic [ref=e1009]: em pagamentos automáticos / mês
+            - generic [ref=e1011]:
+              - img [ref=e1013]
+              - generic [ref=e1015]:
+                - generic [ref=e1016]: "0"
+                - generic [ref=e1017]: "%"
+              - generic [ref=e1018]: Menos Evasão
+              - generic [ref=e1019]: com gamificação e acompanhamento
+      - region "Sistema de gamificação" [ref=e1020]:
+        - generic [ref=e1021]:
+          - generic [ref=e1024]: /GAMIFICAÇÃO
+          - heading "RANKING DE CAMPEÕES" [level=2] [ref=e1026]
+          - paragraph [ref=e1028]: Motivação através de competição saudável. XP, badges e rankings mantêm alunos e personals engajados.
+          - generic [ref=e1029]:
+            - generic [ref=e1031]:
+              - generic [ref=e1032]:
+                - generic [ref=e1033]:
+                  - img [ref=e1035]
+                  - generic [ref=e1038]: TOP PERSONALS
+                - generic [ref=e1039]: MENSAL
+              - generic [ref=e1040]:
+                - generic [ref=e1041]:
+                  - img [ref=e1043]
+                  - generic [ref=e1050]:
+                    - generic [ref=e1051]: Carlos M.
+                    - generic [ref=e1052]: LV 15
+                  - generic [ref=e1056]:
+                    - generic [ref=e1057]: 12,480 XP
+                    - generic [ref=e1058]:
+                      - img [ref=e1059]
+                      - text: 42d · 38 alunos
+                - generic [ref=e1061]:
+                  - img [ref=e1063]
+                  - generic [ref=e1070]:
+                    - generic [ref=e1071]: Ana Paula R.
+                    - generic [ref=e1072]: LV 14
+                  - generic [ref=e1076]:
+                    - generic [ref=e1077]: 11,200 XP
+                    - generic [ref=e1078]:
+                      - img [ref=e1079]
+                      - text: 35d · 31 alunos
+                - generic [ref=e1081]:
+                  - img [ref=e1083]
+                  - generic [ref=e1087]:
+                    - generic [ref=e1088]: Lucas S.
+                    - generic [ref=e1089]: LV 12
+                  - generic [ref=e1093]:
+                    - generic [ref=e1094]: 9,870 XP
+                    - generic [ref=e1095]:
+                      - img [ref=e1096]
+                      - text: 28d · 27 alunos
+                - generic [ref=e1098]:
+                  - img [ref=e1100]
+                  - generic [ref=e1103]:
+                    - generic [ref=e1104]: Fernanda L.
+                    - generic [ref=e1105]: LV 11
+                  - generic [ref=e1109]:
+                    - generic [ref=e1110]: 8,650 XP
+                    - generic [ref=e1111]:
+                      - img [ref=e1112]
+                      - text: 21d · 24 alunos
+                - generic [ref=e1114]:
+                  - img [ref=e1116]
+                  - generic [ref=e1119]:
+                    - generic [ref=e1120]: Rafael T.
+                    - generic [ref=e1121]: LV 10
+                  - generic [ref=e1125]:
+                    - generic [ref=e1126]: 7,340 XP
+                    - generic [ref=e1127]:
+                      - img [ref=e1128]
+                      - text: 18d · 19 alunos
+            - generic [ref=e1131]:
+              - generic [ref=e1132]:
+                - generic [ref=e1133]:
+                  - img [ref=e1135]
+                  - generic [ref=e1141]: TOP ALUNOS
+                - generic [ref=e1142]: MENSAL
+              - generic [ref=e1143]:
+                - generic [ref=e1144]:
+                  - img [ref=e1146]
+                  - generic [ref=e1153]:
+                    - generic [ref=e1154]: Mariana C.
+                    - generic [ref=e1155]: LV 12
+                  - generic [ref=e1159]:
+                    - generic [ref=e1160]: 8,920 XP
+                    - generic [ref=e1161]:
+                      - img [ref=e1162]
+                      - text: 60d · 145 treinos
+                - generic [ref=e1164]:
+                  - img [ref=e1166]
+                  - generic [ref=e1173]:
+                    - generic [ref=e1174]: Pedro H.
+                    - generic [ref=e1175]: LV 10
+                  - generic [ref=e1179]:
+                    - generic [ref=e1180]: 7,650 XP
+                    - generic [ref=e1181]:
+                      - img [ref=e1182]
+                      - text: 45d · 120 treinos
+                - generic [ref=e1184]:
+                  - img [ref=e1186]
+                  - generic [ref=e1190]:
+                    - generic [ref=e1191]: Juliana A.
+                    - generic [ref=e1192]: LV 9
+                  - generic [ref=e1196]:
+                    - generic [ref=e1197]: 6,890 XP
+                    - generic [ref=e1198]:
+                      - img [ref=e1199]
+                      - text: 33d · 98 treinos
+                - generic [ref=e1201]:
+                  - img [ref=e1203]
+                  - generic [ref=e1206]:
+                    - generic [ref=e1207]: Bruno F.
+                    - generic [ref=e1208]: LV 8
+                  - generic [ref=e1212]:
+                    - generic [ref=e1213]: 5,430 XP
+                    - generic [ref=e1214]:
+                      - img [ref=e1215]
+                      - text: 22d · 76 treinos
+                - generic [ref=e1217]:
+                  - img [ref=e1219]
+                  - generic [ref=e1222]:
+                    - generic [ref=e1223]: Camila D.
+                    - generic [ref=e1224]: LV 7
+                  - generic [ref=e1228]:
+                    - generic [ref=e1229]: 4,710 XP
+                    - generic [ref=e1230]:
+                      - img [ref=e1231]
+                      - text: 15d · 61 treinos
+          - generic [ref=e1234]:
+            - paragraph [ref=e1235]: CONQUISTAS DISPONÍVEIS
+            - generic [ref=e1236]:
+              - generic [ref=e1237]:
+                - img [ref=e1239]
+                - generic [ref=e1241]:
+                  - generic [ref=e1242]: STREAK 7D
+                  - generic [ref=e1243]: Treine 7 dias seguidos
+              - generic [ref=e1244]:
+                - img [ref=e1246]
+                - generic [ref=e1252]:
+                  - generic [ref=e1253]: FIRST 100
+                  - generic [ref=e1254]: 100 treinos completados
+              - generic [ref=e1255]:
+                - img [ref=e1257]
+                - generic [ref=e1261]:
+                  - generic [ref=e1262]: META BATIDA
+                  - generic [ref=e1263]: Alcance sua meta mensal
+              - generic [ref=e1264]:
+                - img [ref=e1266]
+                - generic [ref=e1268]:
+                  - generic [ref=e1269]: VELOCISTA
+                  - generic [ref=e1270]: Complete 5 treinos/semana
+              - generic [ref=e1271]:
+                - img [ref=e1273]
+                - generic [ref=e1275]:
+                  - generic [ref=e1276]: TOP 10
+                  - generic [ref=e1277]: Fique no Top 10 do ranking
+              - generic [ref=e1278]:
+                - img [ref=e1280]
+                - generic [ref=e1283]:
+                  - generic [ref=e1284]: NÍVEL 10
+                  - generic [ref=e1285]: Alcance o nível 10
+      - region "Blog" [ref=e1287]:
+        - generic [ref=e1289]:
+          - generic [ref=e1292]: /BLOG
+          - heading "CONTEÚDO PARA CRESCER" [level=2] [ref=e1294]
+          - generic [ref=e1295]:
+            - link "Como a Inteligência Artificial Está Revolucionando o Personal Training 5 MIN TECNOLOGIA FEV 20, 2026 Como a Inteligência Artificial Está Revolucionando o Personal Training Descubra como a IA está transformando a forma de prescrever treinos, acompanhar alunos e escalar seu negócio fitness. LER ARTIGO" [ref=e1297] [cursor=pointer]:
+              - /url: /blog/ia-personal-trainer
+              - generic [ref=e1298]:
+                - img "Como a Inteligência Artificial Está Revolucionando o Personal Training" [ref=e1299]
+                - generic [ref=e1301]:
+                  - img [ref=e1302]
+                  - text: 5 MIN
+              - generic [ref=e1305]:
+                - generic [ref=e1306]:
+                  - generic [ref=e1307]:
+                    - img [ref=e1308]
+                    - text: TECNOLOGIA
+                  - generic [ref=e1311]: FEV 20, 2026
+                - heading "Como a Inteligência Artificial Está Revolucionando o Personal Training" [level=3] [ref=e1312]
+                - paragraph [ref=e1313]: Descubra como a IA está transformando a forma de prescrever treinos, acompanhar alunos e escalar seu negócio fitness.
+                - generic [ref=e1315]:
+                  - text: LER ARTIGO
+                  - img [ref=e1316]
+            - 'link "Cobrança Automática para Personal Trainers: Elimine a Inadimplência 5 MIN GESTÃO FEV 15, 2026 Cobrança Automática para Personal Trainers: Elimine a Inadimplência PIX, boleto e cartão no automático. Aprenda como automatizar cobranças e nunca mais perder receita por esquecimento. LER ARTIGO" [ref=e1319] [cursor=pointer]':
+              - /url: /blog/cobranca-automatica-personal
+              - generic [ref=e1320]:
+                - 'img "Cobrança Automática para Personal Trainers: Elimine a Inadimplência" [ref=e1321]'
+                - generic [ref=e1323]:
+                  - img [ref=e1324]
+                  - text: 5 MIN
+              - generic [ref=e1327]:
+                - generic [ref=e1328]:
+                  - generic [ref=e1329]:
+                    - img [ref=e1330]
+                    - text: GESTÃO
+                  - generic [ref=e1331]: FEV 15, 2026
+                - 'heading "Cobrança Automática para Personal Trainers: Elimine a Inadimplência" [level=3] [ref=e1332]'
+                - paragraph [ref=e1333]: PIX, boleto e cartão no automático. Aprenda como automatizar cobranças e nunca mais perder receita por esquecimento.
+                - generic [ref=e1335]:
+                  - text: LER ARTIGO
+                  - img [ref=e1336]
+            - 'link "Retenção de Alunos: 7 Estratégias Comprovadas Para Fidelizar Clientes 5 MIN RETENÇÃO FEV 10, 2026 Retenção de Alunos: 7 Estratégias Comprovadas Para Fidelizar Clientes Gamificação, acompanhamento e experiência personalizada. Conheça as estratégias que reduzem evasão em até 60%. LER ARTIGO" [ref=e1339] [cursor=pointer]':
+              - /url: /blog/retencao-alunos-personal
+              - generic [ref=e1340]:
+                - 'img "Retenção de Alunos: 7 Estratégias Comprovadas Para Fidelizar Clientes" [ref=e1341]'
+                - generic [ref=e1343]:
+                  - img [ref=e1344]
+                  - text: 5 MIN
+              - generic [ref=e1347]:
+                - generic [ref=e1348]:
+                  - generic [ref=e1349]:
+                    - img [ref=e1350]
+                    - text: RETENÇÃO
+                  - generic [ref=e1355]: FEV 10, 2026
+                - 'heading "Retenção de Alunos: 7 Estratégias Comprovadas Para Fidelizar Clientes" [level=3] [ref=e1356]'
+                - paragraph [ref=e1357]: Gamificação, acompanhamento e experiência personalizada. Conheça as estratégias que reduzem evasão em até 60%.
+                - generic [ref=e1359]:
+                  - text: LER ARTIGO
+                  - img [ref=e1360]
+          - link "VISITE NOSSO BLOG" [ref=e1364] [cursor=pointer]:
+            - /url: /blog
+            - button "VISITE NOSSO BLOG" [ref=e1365]:
+              - generic [ref=e1366]:
+                - text: VISITE NOSSO BLOG
+                - img [ref=e1367]
+      - region "Sobre a VFIT" [ref=e1369]:
+        - generic [ref=e1371]:
+          - generic [ref=e1374]: /QUEM SOMOS
+          - heading "FEITO POR QUEM ENTENDE" [level=2] [ref=e1376]
+          - paragraph [ref=e1378]: A VFIT nasceu da união entre tecnologia, inteligência artificial e paixão pelo fitness. Criada e liderada por Victor Duarte, a plataforma é projetada para ser a melhor ferramenta para personal trainers do Brasil.
+          - generic [ref=e1379]:
+            - generic [ref=e1381]:
+              - generic [ref=e1382]:
+                - img "VTS GROUP — Software House especializada em desenvolvimento web e inteligência artificial" [ref=e1383]
+                - generic [ref=e1384]:
+                  - heading "VTS GROUP" [level=3] [ref=e1385]
+                  - paragraph [ref=e1386]: SOFTWARE HOUSE · DESDE 2023
+              - paragraph [ref=e1387]:
+                - text: A VTS GROUP é uma empresa de tecnologia especializada em desenvolvimento web, automação com inteligência artificial e sistemas financeiros de alta performance. Com atuação global e sede no Brasil, entregamos soluções digitais escaláveis que transformam negócios — operando como
+                - emphasis [ref=e1388]: trade name
+                - text: de Victor Duarte há mais de uma década e formalizada como pessoa jurídica em 2023.
+              - paragraph [ref=e1389]: A VFIT é nosso produto flagship — uma plataforma completa que integra gestão operacional, pagamentos instantâneos via Pix, inteligência artificial e gamificação para revolucionar o mercado de personal trainers no Brasil.
+              - paragraph [ref=e1390]: Nossa infraestrutura é 100% serverless e distribuída globalmente pela Cloudflare, garantindo latência mínima, alta disponibilidade e segurança de nível enterprise. Utilizamos PostgreSQL gerenciado, cache inteligente em edge e processamento de pagamentos em tempo real — tudo projetado para escalar sem limites.
+              - generic [ref=e1391]:
+                - generic [ref=e1392]:
+                  - generic [ref=e1393]:
+                    - img [ref=e1394]
+                    - generic [ref=e1396]: INOVAÇÃO
+                    - generic [ref=e1397]: Tecnologia de ponta aplicada ao mercado fitness
+                  - generic [ref=e1398]:
+                    - img [ref=e1399]
+                    - generic [ref=e1403]: FOCO
+                    - generic [ref=e1404]: Cada solução é construída para resolver problemas reais
+                  - generic [ref=e1405]:
+                    - img [ref=e1406]
+                    - generic [ref=e1408]: MOTIVAÇÃO
+                    - generic [ref=e1409]: Gamificação que engaja e retém profissionais
+                  - generic [ref=e1410]:
+                    - img [ref=e1411]
+                    - generic [ref=e1414]: CRESCIMENTO
+                    - generic [ref=e1415]: Ferramentas projetadas para escalar seu negócio
+                - generic [ref=e1416]:
+                  - paragraph [ref=e1417]: VTS GROUP · CNPJ 51.430.605/0001-53
+                  - paragraph [ref=e1418]:
+                    - link "vts.victor.pt" [ref=e1419] [cursor=pointer]:
+                      - /url: https://vts.victor.pt
+                    - generic [ref=e1420]: ·
+                    - link "victor.pt" [ref=e1421] [cursor=pointer]:
+                      - /url: https://victor.pt
+            - generic [ref=e1422]:
+              - generic [ref=e1424]:
+                - heading "EQUIPE" [level=3] [ref=e1425]
+                - generic [ref=e1428]:
+                  - img "Victor Duarte" [ref=e1429]
+                  - generic [ref=e1430]:
+                    - heading "Victor Duarte" [level=4] [ref=e1431]
+                    - paragraph [ref=e1432]: FUNDADOR, CEO & CTO
+                    - paragraph [ref=e1433]: Desenvolvedor Full-Stack com mais de 15 anos de experiência no mercado de tecnologia. Pioneiro na primeira integração de API Pix com plataformas esportivas do Brasil. Lidera toda a arquitetura de software, engenharia de sistemas, infraestrutura cloud e estratégia de produto do VFIT.
+              - generic [ref=e1435]:
+                - heading "NOSSA STACK" [level=3] [ref=e1436]
+                - generic [ref=e1437]:
+                  - generic [ref=e1438]:
+                    - img [ref=e1439]
+                    - generic [ref=e1441]: Next.js
+                  - generic [ref=e1442]:
+                    - img [ref=e1443]
+                    - generic [ref=e1447]: React
+                  - generic [ref=e1448]:
+                    - img [ref=e1449]
+                    - generic [ref=e1452]: TypeScript
+                  - generic [ref=e1453]:
+                    - img [ref=e1454]
+                    - generic [ref=e1458]: Tailwind
+                  - generic [ref=e1459]:
+                    - img [ref=e1460]
+                    - generic [ref=e1462]: Cloudflare
+                  - generic [ref=e1463]:
+                    - img [ref=e1464]
+                    - generic [ref=e1468]: PostgreSQL
+                  - generic [ref=e1469]:
+                    - img [ref=e1470]
+                    - generic [ref=e1474]: Zustand
+                  - generic [ref=e1475]:
+                    - img [ref=e1476]
+                    - generic [ref=e1488]: AI/ML
+                - paragraph [ref=e1490]: EDGE-FIRST · SERVERLESS · GLOBALLY DISTRIBUTED
+      - region "Chamada para ação" [ref=e1492]:
+        - generic [ref=e1496]:
+          - generic [ref=e1499]: /COMECE AGORA
+          - heading "TRANSFORME SEU NEGÓCIO DE PERSONAL TRAINER" [level=2] [ref=e1501]:
+            - text: TRANSFORME SEU NEGÓCIO
+            - text: DE PERSONAL TRAINER
+          - paragraph [ref=e1503]: Junte-se a milhares de profissionais. Teste grátis, sem cartão.
+          - generic [ref=e1505]:
+            - link "Começar grátis" [ref=e1506] [cursor=pointer]:
+              - /url: /welcome
+              - button "Começar grátis" [ref=e1507]:
+                - generic [ref=e1508]:
+                  - img [ref=e1509]
+                  - text: COMEÇAR GRÁTIS
+            - link "Já tenho conta" [ref=e1511] [cursor=pointer]:
+              - /url: /login
+              - button "Já tenho conta" [ref=e1512]:
+                - generic [ref=e1513]:
+                  - img [ref=e1514]
+                  - text: JÁ TENHO CONTA
+          - generic [ref=e1518]:
+            - generic [ref=e1519]:
+              - img [ref=e1520]
+              - text: PLANO GRATUITO
+            - generic [ref=e1522]:
+              - img [ref=e1523]
+              - text: SEM CARTÃO
+            - generic [ref=e1525]:
+              - img [ref=e1526]
+              - text: CANCELE QUANDO QUISER
+      - region "Perguntas frequentes" [ref=e1528]:
+        - generic [ref=e1530]:
+          - generic [ref=e1532]:
+            - img [ref=e1533]
+            - generic [ref=e1536]: /FAQ
+          - heading "PERGUNTAS FREQUENTES" [level=2] [ref=e1538]
+          - generic [ref=e1540]:
+            - generic [ref=e1541]:
+              - button "01 O que é o VFIT?" [expanded] [ref=e1542]:
+                - generic [ref=e1543]: "01"
+                - img [ref=e1545]
+                - generic [ref=e1547]: O que é o VFIT?
+                - img [ref=e1549]
+              - region "01 O que é o VFIT?" [ref=e1552]:
+                - paragraph [ref=e1554]: VFIT é um app de treinos com IA para alunos. Você recebe plano personalizado, acompanha evolução com métricas reais e pode integrar acompanhamento com personal trainer e nutricionista.
+            - generic [ref=e1555]:
+              - button "02 É gratuito? Preciso de cartão de crédito?" [ref=e1556]:
+                - generic [ref=e1557]: "02"
+                - img [ref=e1559]
+                - generic [ref=e1561]: É gratuito? Preciso de cartão de crédito?
+                - img [ref=e1563]
+              - region "02 É gratuito? Preciso de cartão de crédito?":
+                - paragraph [ref=e1564]: Para alunos, o início é gratuito e sem cartão de crédito. Planos profissionais de operação (personal e nutrição) ficam nas páginas dedicadas para cada perfil.
+            - generic [ref=e1565]:
+              - button "03 Como funciona a geração de treinos por IA?" [ref=e1566]:
+                - generic [ref=e1567]: "03"
+                - img [ref=e1569]
+                - generic [ref=e1579]: Como funciona a geração de treinos por IA?
+                - img [ref=e1581]
+              - region "03 Como funciona a geração de treinos por IA?":
+                - paragraph [ref=e1582]: Nosso sistema de IA analisa o perfil do aluno (nível, objetivos, restrições, histórico) e gera um treino completo e personalizado com exercícios, séries, repetições e descanso. Você pode ajustar tudo antes de enviar ao aluno.
+            - generic [ref=e1583]:
+              - button "04 Preciso pagar para usar como aluno?" [ref=e1584]:
+                - generic [ref=e1585]: "04"
+                - img [ref=e1587]
+                - generic [ref=e1589]: Preciso pagar para usar como aluno?
+                - img [ref=e1591]
+              - region "04 Preciso pagar para usar como aluno?":
+                - paragraph [ref=e1592]: Você pode começar como aluno sem cartão de crédito. Quando houver contratação de acompanhamento profissional, as condições aparecem de forma clara no fluxo correspondente.
+            - generic [ref=e1593]:
+              - button "05 Funciona no celular? Preciso instalar algo?" [ref=e1594]:
+                - generic [ref=e1595]: "05"
+                - img [ref=e1597]
+                - generic [ref=e1599]: Funciona no celular? Preciso instalar algo?
+                - img [ref=e1601]
+              - region "05 Funciona no celular? Preciso instalar algo?":
+                - paragraph [ref=e1602]: Sim! VFIT é uma PWA (Progressive Web App) que funciona como um app nativo no celular. Pode ser instalado na tela inicial do iPhone e Android, funciona rápido e até offline.
+            - generic [ref=e1603]:
+              - button "06 Preciso ter CREF para usar?" [ref=e1604]:
+                - generic [ref=e1605]: "06"
+                - img [ref=e1607]
+                - generic [ref=e1609]: Preciso ter CREF para usar?
+                - img [ref=e1611]
+              - region "06 Preciso ter CREF para usar?":
+                - paragraph [ref=e1612]: Alunos não precisam de CREF. Essa validação é exigida apenas para perfis profissionais que prescrevem treino.
+            - generic [ref=e1613]:
+              - button "07 O que é o sistema de gamificação?" [ref=e1614]:
+                - generic [ref=e1615]: "07"
+                - img [ref=e1617]
+                - generic [ref=e1623]: O que é o sistema de gamificação?
+                - img [ref=e1625]
+              - region "07 O que é o sistema de gamificação?":
+                - paragraph [ref=e1626]: Nosso sistema de XP, badges e rankings mantém alunos e profissionais engajados. Alunos ganham pontos ao completar treinos, bater metas e manter streaks. Personals sobem de nível conforme engajam seus alunos.
+            - generic [ref=e1627]:
+              - button "08 Posso cancelar a qualquer momento?" [ref=e1628]:
+                - generic [ref=e1629]: "08"
+                - img [ref=e1631]
+                - generic [ref=e1633]: Posso cancelar a qualquer momento?
+                - img [ref=e1635]
+              - region "08 Posso cancelar a qualquer momento?":
+                - paragraph [ref=e1636]: Sim. Você pode encerrar seu uso a qualquer momento. Em contratos profissionais, as regras são exibidas no plano contratado.
+            - generic [ref=e1637]:
+              - button "09 Os alunos conseguem acessar os treinos pelo celular?" [ref=e1638]:
+                - generic [ref=e1639]: "09"
+                - img [ref=e1641]
+                - generic [ref=e1647]: Os alunos conseguem acessar os treinos pelo celular?
+                - img [ref=e1649]
+              - region "09 Os alunos conseguem acessar os treinos pelo celular?":
+                - paragraph [ref=e1650]: Sim! Cada aluno recebe acesso à plataforma com login próprio. Eles visualizam treinos, marcam exercícios como concluídos, acompanham evolução e recebem notificações — tudo pelo celular.
+            - generic [ref=e1651]:
+              - button "10 Consigo gerar avaliações físicas e relatórios?" [ref=e1652]:
+                - generic [ref=e1653]: "10"
+                - img [ref=e1655]
+                - generic [ref=e1658]: Consigo gerar avaliações físicas e relatórios?
+                - img [ref=e1660]
+              - region "10 Consigo gerar avaliações físicas e relatórios?":
+                - paragraph [ref=e1661]: Sim. A plataforma oferece avaliações físicas completas com composição corporal, medidas antropométricas e histórico evolutivo. Você pode gerar PDFs profissionais para entregar aos alunos.
+            - generic [ref=e1662]:
+              - button "11 Meus dados e de meus alunos estão seguros?" [ref=e1663]:
+                - generic [ref=e1664]: "11"
+                - img [ref=e1666]
+                - generic [ref=e1669]: Meus dados e de meus alunos estão seguros?
+                - img [ref=e1671]
+              - region "11 Meus dados e de meus alunos estão seguros?":
+                - paragraph [ref=e1672]: Totalmente. Usamos criptografia de ponta a ponta, servidores Cloudflare com infraestrutura global, e banco de dados Neon PostgreSQL com backups automáticos. Sua conta é protegida por autenticação JWT segura.
+            - generic [ref=e1673]:
+              - button "12 Personal trainer e nutricionista conseguem trabalhar juntos?" [ref=e1674]:
+                - generic [ref=e1675]: "12"
+                - img [ref=e1677]
+                - generic [ref=e1682]: Personal trainer e nutricionista conseguem trabalhar juntos?
+                - img [ref=e1684]
+              - region "12 Personal trainer e nutricionista conseguem trabalhar juntos?":
+                - paragraph [ref=e1685]: Sim. O VFIT foi desenhado para acompanhamento conjunto, com visão compartilhada da evolução do aluno e comunicação entre profissionais para alinhar treino e dieta.
+    - contentinfo [ref=e1686]:
+      - generic [ref=e1689]:
+        - generic [ref=e1690]:
+          - heading "Pronto para revolucionar seu negócio?" [level=3] [ref=e1691]
+          - paragraph [ref=e1692]: Comece grátis. Sem cartão de crédito. Cancele quando quiser.
+        - link "Criar Conta Grátis" [ref=e1693] [cursor=pointer]:
+          - /url: /register/personal
+          - button "Criar Conta Grátis" [ref=e1694]:
+            - generic [ref=e1695]:
+              - img [ref=e1696]
+              - text: Criar Conta Grátis
+      - generic [ref=e1703]:
+        - generic [ref=e1704]:
+          - link "VFIT" [ref=e1705] [cursor=pointer]:
+            - /url: /
+            - img "VFIT" [ref=e1706]
+          - paragraph [ref=e1707]: A plataforma mais completa para personal trainers. Crie treinos com IA, gerencie alunos e automatize cobranças.
+          - generic [ref=e1708]:
+            - link "contato@vfit.app.br" [ref=e1709] [cursor=pointer]:
+              - /url: mailto:contato@vfit.app.br
+              - img [ref=e1710]
+              - text: contato@vfit.app.br
+            - generic [ref=e1713]:
+              - img [ref=e1714]
+              - text: São Paulo, Brasil
+          - generic [ref=e1717]:
+            - link "Instagram" [ref=e1718] [cursor=pointer]:
+              - /url: https://instagram.com/vfitapp
+              - img [ref=e1719]
+            - link "X (Twitter)" [ref=e1722] [cursor=pointer]:
+              - /url: https://x.com/vfit_app
+              - img [ref=e1723]
+            - link "LinkedIn" [ref=e1725] [cursor=pointer]:
+              - /url: https://linkedin.com/company/vfit
+              - img [ref=e1726]
+        - generic [ref=e1728]:
+          - paragraph [ref=e1729]: Produto
+          - list [ref=e1730]:
+            - listitem [ref=e1731]:
+              - link "Recursos" [ref=e1732] [cursor=pointer]:
+                - /url: /#features
+            - listitem [ref=e1733]:
+              - link "Planos e Preços" [ref=e1734] [cursor=pointer]:
+                - /url: /pricing
+            - listitem [ref=e1735]:
+              - link "Depoimentos" [ref=e1736] [cursor=pointer]:
+                - /url: /#testimonials
+            - listitem [ref=e1737]:
+              - link "Gamificação" [ref=e1738] [cursor=pointer]:
+                - /url: /#gamification
+            - listitem [ref=e1739]:
+              - link "Blog" [ref=e1740] [cursor=pointer]:
+                - /url: /blog
+        - generic [ref=e1741]:
+          - paragraph [ref=e1742]: Recursos
+          - list [ref=e1743]:
+            - listitem [ref=e1744]:
+              - link "Central de Ajuda" [ref=e1745] [cursor=pointer]:
+                - /url: /contato
+            - listitem [ref=e1746]:
+              - link "Como Funciona" [ref=e1747] [cursor=pointer]:
+                - /url: /#features
+            - listitem [ref=e1748]:
+              - link "FAQ" [ref=e1749] [cursor=pointer]:
+                - /url: /#faq
+            - listitem [ref=e1750]:
+              - link "Status do Sistema" [ref=e1751] [cursor=pointer]:
+                - /url: https://www.cloudflarestatus.com
+                - text: Status do Sistema
+                - img [ref=e1752]
+        - generic [ref=e1756]:
+          - paragraph [ref=e1757]: Empresa
+          - list [ref=e1758]:
+            - listitem [ref=e1759]:
+              - link "Sobre Nós" [ref=e1760] [cursor=pointer]:
+                - /url: /#about
+            - listitem [ref=e1761]:
+              - link "Carreiras" [ref=e1762] [cursor=pointer]:
+                - /url: /carreiras
+            - listitem [ref=e1763]:
+              - link "Contato" [ref=e1764] [cursor=pointer]:
+                - /url: /contato
+        - generic [ref=e1765]:
+          - paragraph [ref=e1766]: Legal
+          - list [ref=e1767]:
+            - listitem [ref=e1768]:
+              - link "Termos de Uso" [ref=e1769] [cursor=pointer]:
+                - /url: /termos
+            - listitem [ref=e1770]:
+              - link "Política de Privacidade" [ref=e1771] [cursor=pointer]:
+                - /url: /privacidade
+            - listitem [ref=e1772]:
+              - link "LGPD" [ref=e1773] [cursor=pointer]:
+                - /url: /lgpd
+            - listitem [ref=e1774]:
+              - link "Cookies" [ref=e1775] [cursor=pointer]:
+                - /url: /cookies
+            - listitem [ref=e1776]:
+              - link "Excluir Conta" [ref=e1777] [cursor=pointer]:
+                - /url: /excluir-conta
+      - generic [ref=e1779]:
+        - generic [ref=e1780]:
+          - img [ref=e1781]
+          - generic [ref=e1783]: CREF Verificado
+        - generic [ref=e1784]:
+          - img [ref=e1785]
+          - generic [ref=e1788]: SSL Criptografado
+        - generic [ref=e1789]:
+          - img [ref=e1790]
+          - generic [ref=e1792]: LGPD Conforme
+        - generic [ref=e1797]: Sistemas Online
+      - generic [ref=e1799]:
+        - paragraph [ref=e1800]: © 2026 VFIT — VTS DEVELOPMENT
+        - paragraph [ref=e1801]:
+          - text: FEITO COM
+          - img [ref=e1802]
+          - text: NO BRASIL
+        - button "Voltar ao topo" [ref=e1804]:
+          - text: VOLTAR AO TOPO
+          - img [ref=e1806]
+  - alert [ref=e1808]
+  - generic [ref=e1811]:
+    - generic [ref=e1813]:
+      - generic [ref=e1814]:
+        - img [ref=e1816]
+        - generic [ref=e1818]:
+          - heading "Cookies & Privacidade" [level=3] [ref=e1819]
+          - paragraph [ref=e1820]: LGPD Compliant • v2.0
+      - button "Fechar" [ref=e1821]:
+        - img [ref=e1822]
+    - generic [ref=e1825]:
+      - paragraph [ref=e1826]:
+        - text: Usamos cookies
+        - strong [ref=e1827]: estritamente necessários
+        - text: para o funcionamento da plataforma. Analytics opera via
+        - strong [ref=e1828]: Cloudflare Analytics Engine
+        - text: (server-side, privacy-first) sem rastreamento pessoal.
+      - button "Personalizar cookies" [ref=e1829]:
+        - img [ref=e1830]
+        - text: Personalizar cookies
+      - generic [ref=e1832]:
+        - generic [ref=e1833]:
+          - link "Privacidade" [ref=e1834] [cursor=pointer]:
+            - /url: /privacidade
+          - generic [ref=e1835]: •
+          - link "Cookies" [ref=e1836] [cursor=pointer]:
+            - /url: /cookies
+          - generic [ref=e1837]: •
+          - link "Termos" [ref=e1838] [cursor=pointer]:
+            - /url: /termos
+        - button "Aceitar todos" [ref=e1840]
+```
