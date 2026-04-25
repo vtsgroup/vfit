@@ -54,14 +54,14 @@ function MusclePlaceholder({
 
   return (
     <div
-      className={cn('w-full rounded-xl flex flex-col items-center justify-center gap-2', sizeClass)}
-      style={{ backgroundColor: `${color}14`, border: `1.5px solid ${color}30` }}
+      className={cn('w-full rounded-2xl flex flex-col items-center justify-center gap-2 border transition-all hover:scale-105 hover:shadow-lg', sizeClass)}
+      style={{ backgroundColor: `${color}18`, border: `2px solid ${color}40`, boxShadow: `0 4px 12px ${color}22` }}
     >
       <div
-        className="flex h-10 w-10 items-center justify-center rounded-xl"
-        style={{ backgroundColor: `${color}22` }}
+        className="flex h-11 w-11 items-center justify-center rounded-xl transition-transform hover:scale-110"
+        style={{ backgroundColor: `${color}25` }}
       >
-        <DSIcon name="activity" size={20} style={{ color }} />
+        <DSIcon name="activity" size={22} style={{ color }} />
       </div>
       {muscle && (
         <p className="text-xs font-semibold" style={{ color }}>

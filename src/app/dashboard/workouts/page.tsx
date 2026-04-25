@@ -431,15 +431,16 @@ function WorkoutCard({ workout }: { workout: WorkoutListItem }) {
     <motion.div
       whileHover={{ y: -2 }}
       transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+      className="group"
     >
-    <GlassCard variant="surface" padding="none" hover>
+    <GlassCard variant="surface" padding="none" hover className="border border-brand-primary/20 hover:border-brand-primary/40 transition-colors">
     <Link
       href={`/dashboard/workouts/view?id=${workout.id}`}
       className={cn(
-        'flex items-center gap-3 p-4 transition-all duration-200 sm:gap-4',
-        workout.status === 'active' && 'border-l-4 border-l-emerald-500',
-        workout.status === 'completed' && 'border-l-4 border-l-violet-500',
-        workout.is_template && 'border-l-4 border-l-purple-500',
+        'flex items-center gap-3 p-4 transition-all duration-200 sm:gap-4 group-hover:bg-brand-primary/5',
+        workout.status === 'active' && 'border-l-4 border-l-emerald-500 group-hover:border-l-emerald-400',
+        workout.status === 'completed' && 'border-l-4 border-l-violet-500 group-hover:border-l-violet-400',
+        workout.is_template && 'border-l-4 border-l-purple-500 group-hover:border-l-purple-400',
       )}
     >
       {/* Cover Image or Icon */}
