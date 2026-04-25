@@ -104,9 +104,9 @@ export function StudentHeader() {
         scrolled && 'ds3-header-scrolled'
       )}
       style={{
-        // Smoother gradient with alpha transitions for refined blending
+        // Ultra-smooth gradient: many alpha stops for seamless blend, no banding
         background:
-          'linear-gradient(to bottom, #050A12 0px, #050a12b5 24px, #07102400 34%, #0a16303d 50%, #11204191 68%, #0f1d369e 82%, #0b1627 100%)',
+          'linear-gradient(to bottom, #050A12 0%, #060c17 12%, #07101e 22%, #081323 32%, #091628 42%, #0a182c 52%, #0b1a30 62%, #0c1c33 72%, #0c1d35 82%, #0b1c30 92%, #0b1627 100%)',
         backgroundColor: '#050A12',
         borderBottom: 0,
         top: 'var(--demo-banner-offset, 0px)',
@@ -150,15 +150,19 @@ export function StudentHeader() {
           <div className="relative">
             <Link
               href="/perfil/notificacoes"
-              className="ds3-action-btn flex"
+              className="flex h-9 w-9 items-center justify-center rounded-[10px] border border-white/12 bg-white/5 text-slate-200 transition-all hover:bg-white/10 hover:text-white hover:border-emerald-500/30"
               title={unreadCount > 0 ? `${unreadCount} nao lida(s)` : 'Notificacoes'}
               aria-label={unreadCount > 0 ? `${unreadCount} notificacoes nao lidas` : 'Notificacoes'}
+              style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)' }}
             >
-              <DSIcon name="bell" size={16} className="text-white drop-shadow-md" />
+              <DSIcon name="bell" size={16} className="text-white" />
             </Link>
 
             {unreadCount > 0 && (
-              <div className="notification-pulse absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full border-2 border-slate-950 bg-brand-primary text-[9px] font-bold text-white">
+              <div
+                className="notification-pulse absolute -right-1 -top-1 flex h-4.5 min-w-4.5 items-center justify-center rounded-full border-2 border-[#0a1628] bg-brand-primary px-1 text-[10px] font-bold text-white"
+                style={{ boxShadow: '0 0 0 1px rgba(34,197,94,0.4), 0 2px 6px rgba(34,197,94,0.5)' }}
+              >
                 {unreadCount > 99 ? '99+' : unreadCount}
               </div>
             )}

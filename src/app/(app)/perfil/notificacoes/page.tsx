@@ -51,22 +51,23 @@ function NotificationCard({
     <Wrapper
       {...(notification.link ? { type: 'button' as const, onClick: () => onOpen(), 'aria-label': notification.title } : {})}
       className={cn(
-        'group flex w-full items-center gap-3 rounded-2xl border border-white/10 border-l-3 bg-white/4 px-4 py-3 text-left',
+        'group flex w-full items-center gap-3 rounded-2xl border border-l-3 px-4 py-3 text-left',
+        'border-slate-200 bg-white dark:border-white/10 dark:bg-white/4',
         'transition-[transform,box-shadow] duration-200 ease-out hover:-translate-y-0.5 hover:shadow-lg',
-        isRead ? 'border-l-white/15' : iconConfig.accent,
+        isRead ? 'border-l-slate-300 dark:border-l-white/15' : iconConfig.accent,
         notification.link && 'cursor-pointer'
       )}
     >
-      <div className={cn('flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px]', isRead ? 'bg-white/6' : iconConfig.bg)}>
-        <DSIcon name={isRead ? 'bell' : iconConfig.icon} size={18} className={cn(isRead ? 'text-white/60' : iconConfig.color)} />
+      <div className={cn('flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px]', isRead ? 'bg-slate-100 dark:bg-white/6' : iconConfig.bg)}>
+        <DSIcon name={isRead ? 'bell' : iconConfig.icon} size={18} className={cn(isRead ? 'text-slate-500 dark:text-white/60' : iconConfig.color)} />
       </div>
 
       <div className="min-w-0 flex-1">
-        <p className={cn('text-sm leading-snug', isRead ? 'text-white/80' : 'font-semibold text-white')}>
+        <p className={cn('text-sm leading-snug', isRead ? 'text-slate-700 dark:text-white/80' : 'font-semibold text-slate-900 dark:text-white')}>
           {notification.title}
         </p>
-        <p className="mt-0.5 line-clamp-2 text-xs leading-snug text-white/65">{notification.message}</p>
-        <p className="mt-0.5 text-xs text-white/45">{new Date(notification.created_at).toLocaleString('pt-BR')}</p>
+        <p className="mt-0.5 line-clamp-2 text-xs leading-snug text-slate-600 dark:text-white/65">{notification.message}</p>
+        <p className="mt-0.5 text-xs text-slate-400 dark:text-white/45">{new Date(notification.created_at).toLocaleString('pt-BR')}</p>
       </div>
 
       <div className="flex shrink-0 gap-2">
@@ -74,7 +75,7 @@ function NotificationCard({
           <button
             onClick={(e) => { e.stopPropagation(); onRead() }}
             aria-label="Marcar como lida"
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/6 text-white/70 transition-colors hover:border-emerald-500/40 hover:text-emerald-300"
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-slate-500 transition-colors hover:border-emerald-500/40 hover:text-emerald-600 dark:border-white/10 dark:bg-white/6 dark:text-white/70 dark:hover:text-emerald-300"
           >
             <DSIcon name="check" size={16} />
           </button>
@@ -83,7 +84,7 @@ function NotificationCard({
         <button
           onClick={(e) => { e.stopPropagation(); onDelete() }}
           aria-label="Remover notificação"
-          className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/6 text-white/70 transition-colors hover:border-red-500/40 hover:text-red-300"
+          className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-slate-500 transition-colors hover:border-red-500/40 hover:text-red-600 dark:border-white/10 dark:bg-white/6 dark:text-white/70 dark:hover:text-red-300"
         >
           <DSIcon name="trash" size={16} />
         </button>
@@ -144,7 +145,13 @@ export default function NotificacoesPage() {
 
   return (
     <div className="mx-auto max-w-lg px-4 pt-0 pb-24">
-      <div className="-mx-4 mb-5 rounded-b-3xl border-b-0 bg-linear-to-b from-vfit-primary-500 to-vfit-primary-700 px-4 py-5 backdrop-blur-md shadow-lg">
+      <div
+        className="-mx-4 mb-5 rounded-b-3xl border-b-0 px-4 py-5 backdrop-blur-md shadow-lg"
+        style={{
+          background:
+            'linear-gradient(to bottom, #050A12 0%, #081323 35%, #0a1830 70%, #0b1c33 100%)',
+        }}
+      >
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <button
@@ -201,12 +208,12 @@ export default function NotificacoesPage() {
       </div>
 
       {isLoading && items.length === 0 ? (
-        <div className="py-10 text-center text-white/60">Carregando notificações...</div>
+        <div className="py-10 text-center text-slate-500 dark:text-white/60">Carregando notificações...</div>
       ) : items.length === 0 ? (
-        <div className="rounded-2xl border border-white/8 bg-white/4 p-6 text-center">
-          <DSIcon name="bellOff" size={22} className="mx-auto mb-2 text-white/60" />
-          <p className="text-sm font-semibold text-white">Nenhuma notificação</p>
-          <p className="mt-1 text-xs text-white/60">Você está em dia.</p>
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 text-center dark:border-white/8 dark:bg-white/4">
+          <DSIcon name="bellOff" size={22} className="mx-auto mb-2 text-slate-400 dark:text-white/60" />
+          <p className="text-sm font-semibold text-slate-900 dark:text-white">Nenhuma notificação</p>
+          <p className="mt-1 text-xs text-slate-500 dark:text-white/60">Você está em dia.</p>
         </div>
       ) : (
         <div className="space-y-3">
