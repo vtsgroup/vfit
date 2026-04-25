@@ -11,8 +11,8 @@
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import { DSIcon } from '@/components/ui/ds-icon'
-import { KPICard, MiniBarChart } from '@/components/progresso'
-import { useProgressSummary, useProgressChart, useStreak } from '@/hooks/use-progress'
+import { KPICard, MiniBarChart, ProgressoPageSkeleton } from '@/components/progresso'
+import { useProgressSummary, useProgressChart, useStreak, useTopExercises, useExerciseProgress, type TopExercise } from '@/hooks/use-progress'
 
 const PERIODS = [
   { key: 'last', label: 'Último' },
@@ -23,6 +23,59 @@ const PERIODS = [
 
 type PeriodKey = (typeof PERIODS)[number]['key']
 
+// ─── S2.5: Exercise progression mini-card ──────────────────────────────────────
+function ExerciseProgressCard({ exercise }: { exercise: TopExercise }) {
+  const { data: progress } = useExerciseProgress(exercise.exercise_id, '3m')
+
+  const chartData = progress?.weight_history
+    ?.filter(p => p.max_weight > 0)
+    .map(p => ({ label: p.date.slice(5), value: p.max_weight })) ?? []
+
+  const hasTrend = chartData.length >= 2
+  const first = chartData[0]?.value ?? 0
+  const last = chartData[chartData.length - 1]?.value ?? 0
+  const trendPct = hasTrend && first > 0 ? Math.round(((last - first) / first) * 100) : 0
+  const isUp = trendPct >= 0
+
+  return (
+    <div className="glass-card rounded-2xl p-4">
+      <div className="mb-3 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-primary/12">
+            <DSIcon name="dumbbell" size={13} className="text-brand-primary" />
+          </div>
+          <p className="text-[13px] font-semibold text-text-primary line-clamp-1">{exercise.exercise_name}</p>
+        </div>
+        <div className="flex items-center gap-2 shrink-0">
+          {hasTrend && (
+            <span className={`text-[11px] font-bold ${isUp ? 'text-emerald-400' : 'text-red-400'}`}>
+              {isUp ? '+' : ''}{trendPct}%
+            </span>
+          )}
+          {exercise.max_weight && exercise.max_weight > 0 && (
+            <span className="text-[11px] text-text-muted">{exercise.max_weight}kg</span>
+          )}
+        </div>
+      </div>
+
+      {chartData.length > 1 ? (
+        <MiniBarChart data={chartData} color="#22C55E" height={64} />
+      ) : (
+        <div className="flex h-16 items-center justify-center rounded-xl bg-white/3">
+          <p className="text-[11px] text-text-muted">
+            {exercise.session_count} treino{exercise.session_count !== 1 ? 's' : ''} registrado{exercise.session_count !== 1 ? 's' : ''}
+          </p>
+        </div>
+      )}
+
+      <p className="mt-1.5 text-right text-[10px] text-text-muted">
+        {exercise.session_count} sessões · último: {new Date(exercise.last_performed).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })}
+      </p>
+    </div>
+  )
+}
+// ───────────────────────────────────────────────────────────────────────────────
+
 export default function ProgressoPage() {
   const [period, setPeriod] = useState<PeriodKey>('week')
   const [offset, setOffset] = useState(0)
@@ -30,6 +83,7 @@ export default function ProgressoPage() {
   const { data: summary, isLoading: loadingSummary } = useProgressSummary(period, offset)
   const { data: chart, isLoading: loadingChart } = useProgressChart(period, offset)
   const { data: streak } = useStreak()
+  const { data: topExercisesData } = useTopExercises(4)
 
   const kpis = summary?.kpis
   const hasData = kpis && kpis.workouts > 0
@@ -129,12 +183,8 @@ export default function ProgressoPage() {
         </div>
       )}
 
-      {/* Loading state */}
-      {loadingSummary && (
-        <div className="flex items-center justify-center py-12">
-          <DSIcon name="loader" size={24} className="animate-spin text-brand-primary" />
-        </div>
-      )}
+      {/* Loading state — skeleton instead of spinner */}
+      {loadingSummary && <ProgressoPageSkeleton />}
 
       {/* Empty state */}
       {!loadingSummary && !hasData && (
@@ -223,6 +273,21 @@ export default function ProgressoPage() {
             </div>
           )}
         </>
+      )}
+
+      {/* S2.5 — Exercise progression charts */}
+      {topExercisesData && topExercisesData.exercises.length > 0 && (
+        <div className="mt-5">
+          <div className="mb-3 flex items-center justify-between">
+            <h2 className="text-[13px] font-bold text-text-primary">Evolução por exercício</h2>
+            <span className="text-[11px] text-text-muted">Últimos 3 meses</span>
+          </div>
+          <div className="space-y-3">
+            {topExercisesData.exercises.map((ex) => (
+              <ExerciseProgressCard key={ex.exercise_id} exercise={ex} />
+            ))}
+          </div>
+        </div>
       )}
 
       {/* Quick links */}

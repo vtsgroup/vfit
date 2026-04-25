@@ -480,6 +480,52 @@ progress.get('/exercise/:id', async (c) => {
 })
 
 // ============================================
+// ============================================
+// GET /top-exercises — Most-practiced exercises
+// ============================================
+progress.get('/top-exercises', async (c) => {
+  const userId = c.get('userId')
+  const env = c.env
+  const limit = Math.min(parseInt(c.req.query('limit') || '5', 10), 10)
+
+  const result = await pgQuery<{
+    exercise_id: string
+    exercise_name: string
+    session_count: string
+    max_weight: string | null
+    last_performed: string
+  }>(
+    env,
+    `SELECT 
+      el.exercise_id,
+      COALESCE(e.name_pt, e.name, el.exercise_id) as exercise_name,
+      COUNT(DISTINCT ws.id)::text as session_count,
+      MAX(el.weight_kg)::text as max_weight,
+      MAX(ws.started_at)::text as last_performed
+    FROM exercise_logs el
+    JOIN workout_sessions ws ON ws.id = el.session_id
+    LEFT JOIN exercises e ON e.id = el.exercise_id
+    WHERE ws.user_id = $1
+      AND ws.status = 'completed'
+      AND ws.started_at >= NOW() - interval '90 days'
+    GROUP BY el.exercise_id, e.name_pt, e.name
+    ORDER BY COUNT(DISTINCT ws.id) DESC
+    LIMIT $2`,
+    [userId, limit]
+  )
+
+  return c.json(success({
+    exercises: result.rows.map(r => ({
+      exercise_id: r.exercise_id,
+      exercise_name: r.exercise_name,
+      session_count: parseInt(r.session_count, 10),
+      max_weight: r.max_weight ? parseFloat(r.max_weight) : null,
+      last_performed: r.last_performed,
+    })),
+  }))
+})
+
+// ============================================
 // GET /heatmap — Calendário de consistência
 // ============================================
 progress.get('/heatmap', async (c) => {

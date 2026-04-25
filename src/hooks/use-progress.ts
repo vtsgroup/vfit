@@ -172,3 +172,29 @@ export function useHeatmap() {
     staleTime: 10 * 60 * 1000, // 10 min
   })
 }
+
+// ============================================
+// Sprint 40 — S2.5: Top exercises for progression charts
+// ============================================
+
+export interface TopExercise {
+  exercise_id: string
+  exercise_name: string
+  session_count: number
+  max_weight: number | null
+  last_performed: string
+}
+
+export function useTopExercises(limit = 5) {
+  const isReady = useAuthStore((s) => s.isAuthenticated && s.isHydrated)
+
+  return useQuery<{ exercises: TopExercise[] }>({
+    queryKey: ['progress', 'top-exercises', limit],
+    queryFn: async () => {
+      const res = await api.get<{ exercises: TopExercise[] }>(`/progress/top-exercises?limit=${limit}`)
+      return res.data
+    },
+    enabled: isReady,
+    staleTime: 5 * 60 * 1000,
+  })
+}

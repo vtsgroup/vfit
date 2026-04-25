@@ -137,8 +137,7 @@ export default function TreinoAtivoPage() {
       const key = `vfit_day_completed_${workout.plan_id}_${workout.day_number}`
       localStorage.setItem(key, today)
     }
-    // TODO Sprint 15: navigate to completion screen
-    router.push('/plano')
+    router.push('/treino-ativo/concluido')
   }, [completeWorkout, router, workout])
 
   const handleCancel = useCallback(() => {

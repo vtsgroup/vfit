@@ -181,12 +181,51 @@ interface FetchOptions extends Omit<RequestInit, 'body'> {
   body?: unknown
   params?: Record<string, string | number | boolean | undefined>
   auth?: boolean // default true
+  /** Skip in-flight deduplication for this request (useful for mutations disguised as GETs) */
+  noDedup?: boolean
+}
+
+// In-flight GET deduplication: same URL+params → same Promise (never fires twice concurrently)
+const _inFlight = new Map<string, Promise<ApiResponse<unknown>>>()
+
+function buildDedupKey(method: string, url: string): string {
+  return `${method}:${url}`
 }
 
 async function apiFetch<T = unknown>(
   endpoint: string,
   options: FetchOptions = {}
 ): Promise<ApiResponse<T>> {
+  const method = (options.method || 'GET').toUpperCase()
+  // Only deduplicate GET requests without noDedup flag
+  if (method === 'GET' && !options.noDedup && !_demoMode) {
+    // Build dedup key from normalized url + sorted params
+    let normalizedEndpoint = endpoint
+    if (!endpoint.startsWith('/api/') && !endpoint.startsWith('http')) {
+      normalizedEndpoint = `/api/v1${endpoint}`
+    }
+    const url = new URL(
+      normalizedEndpoint.startsWith('http')
+        ? normalizedEndpoint
+        : `https://placeholder${normalizedEndpoint}`
+    )
+    if (options.params) {
+      const sorted = Object.entries(options.params)
+        .filter(([, v]) => v !== undefined)
+        .sort(([a], [b]) => a.localeCompare(b))
+      sorted.forEach(([k, v]) => url.searchParams.set(k, String(v)))
+    }
+    const key = buildDedupKey('GET', url.pathname + url.search)
+    if (_inFlight.has(key)) {
+      return _inFlight.get(key)! as Promise<ApiResponse<T>>
+    }
+    const promise = apiFetchInternal<T>(endpoint, options, 0).finally(() => {
+      _inFlight.delete(key)
+    }) as Promise<ApiResponse<unknown>>
+    _inFlight.set(key, promise)
+    return promise as Promise<ApiResponse<T>>
+  }
+
   return apiFetchInternal<T>(endpoint, options, 0)
 }
 

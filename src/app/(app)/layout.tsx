@@ -81,6 +81,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   // Use effective user view to support admin simulation
   const { effectiveType, isSimulationActive } = useEffectiveUserView()
 
+  // Immersive routes: hide global header + bottom nav (active workout has its own dark sticky header)
+  const isImmersiveRoute = pathname?.startsWith('/treino-ativo') ?? false
+
   // Check onboarding status — for students AND admins simulating as student
   const isEffectiveStudent = effectiveType === 'student'
   const { data: onboardingStatus, isLoading: onboardingLoading } = useB2COnboardingCompleted(
@@ -123,11 +126,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <OneSignalProvider>
       <div className="min-h-screen bg-bg-primary">
-        {/* Fixed Header (v4) */}
-        <StudentHeader />
+        {/* Fixed Header (v4) — hidden on immersive routes */}
+        {!isImmersiveRoute && <StudentHeader />}
 
-        {/* Main content — padding for fixed header top + bottom nav */}
-        <main className="pt-(--pt-student) pb-(--pb-nav)">
+        {/* Main content — padding for fixed header top + bottom nav (zeroed on immersive routes) */}
+        <main className={isImmersiveRoute ? '' : 'pt-(--pt-student) pb-(--pb-nav)'}>
           <PullToRefresh onRefresh={handleRefresh}>
             <ErrorBoundary>
               <AnimatePresence mode="wait" initial={false}>
@@ -145,15 +148,19 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </PullToRefresh>
         </main>
 
-        {/* Bottom Navigation (v4) + FAB AI Menu */}
-        <BottomNavigation
-          fabMenuOpen={fabMenuOpen}
-          onFabPress={() => setFabMenuOpen((prev) => !prev)}
-        />
-        <StudentFabMenu
-          open={fabMenuOpen}
-          onClose={() => setFabMenuOpen(false)}
-        />
+        {/* Bottom Navigation (v4) + FAB AI Menu — hidden on immersive routes */}
+        {!isImmersiveRoute && (
+          <>
+            <BottomNavigation
+              fabMenuOpen={fabMenuOpen}
+              onFabPress={() => setFabMenuOpen((prev) => !prev)}
+            />
+            <StudentFabMenu
+              open={fabMenuOpen}
+              onClose={() => setFabMenuOpen(false)}
+            />
+          </>
+        )}
         <ToastContainer />
       </div>
     </OneSignalProvider>

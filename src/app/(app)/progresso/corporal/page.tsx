@@ -10,14 +10,82 @@ import { useState, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
-import { MiniBarChart } from '@/components/progresso'
+import { MiniBarChart, BarChartSkeleton } from '@/components/progresso'
 import {
   useMeasurementHistory,
   useLatestMeasurement,
   useSaveMeasurement,
   getBMICategory,
   type MeasurementInput,
+  type BodyMeasurement,
 } from '@/hooks/use-measurements'
+
+// ─── S2.1: Transformation comparison card ─────────────────────────────────────
+function DeltaBadge({ first, current, unit = '', invertColor = false }: {
+  first: number | null
+  current: number | null
+  unit?: string
+  invertColor?: boolean // true when lower = better (weight, fat%, waist)
+}) {
+  if (first == null || current == null || first === 0) return null
+  const delta = parseFloat((current - first).toFixed(1))
+  if (delta === 0) return <span className="text-[10px] text-text-muted">sem mudança</span>
+  const isGood = invertColor ? delta < 0 : delta > 0
+  return (
+    <span className={`text-[11px] font-bold ${isGood ? 'text-emerald-400' : 'text-red-400'}`}>
+      {delta > 0 ? '+' : ''}{delta}{unit}
+    </span>
+  )
+}
+
+function TransformationCard({ first, current }: { first: BodyMeasurement; current: BodyMeasurement }) {
+  const daysSince = Math.round(
+    (new Date(current.measured_at).getTime() - new Date(first.measured_at).getTime()) / (1000 * 60 * 60 * 24)
+  )
+
+  const metrics = [
+    { label: 'Peso', firstVal: first.weight_kg, currentVal: current.weight_kg, unit: 'kg', invertColor: true },
+    { label: 'Gordura', firstVal: first.body_fat_percentage, currentVal: current.body_fat_percentage, unit: '%', invertColor: true },
+    { label: 'Cintura', firstVal: first.waist_cm, currentVal: current.waist_cm, unit: 'cm', invertColor: true },
+    { label: 'IMC', firstVal: first.bmi, currentVal: current.bmi, unit: '', invertColor: true },
+  ].filter(m => m.firstVal != null && m.currentVal != null)
+
+  if (metrics.length === 0) return null
+
+  return (
+    <div className="rounded-2xl border border-emerald-500/20 bg-linear-to-br from-emerald-500/6 to-transparent p-4">
+      <div className="mb-3 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-500/15">
+            <DSIcon name="trendingUp" size={13} className="text-emerald-400" />
+          </div>
+          <span className="text-[12px] font-bold text-emerald-400">Sua transformação</span>
+        </div>
+        <span className="text-[10px] text-text-muted">{daysSince} dias de progresso</span>
+      </div>
+
+      <div className="grid grid-cols-2 gap-2">
+        {metrics.map((m) => (
+          <div key={m.label} className="rounded-xl border border-white/6 bg-white/3 p-3">
+            <p className="mb-1.5 text-[10px] font-medium uppercase tracking-wide text-text-muted">{m.label}</p>
+            <div className="flex items-baseline gap-2">
+              <span className="text-[11px] text-text-muted line-through">{m.firstVal}{m.unit}</span>
+              <span className="text-[15px] font-black text-text-primary">{m.currentVal}{m.unit}</span>
+            </div>
+            <div className="mt-1">
+              <DeltaBadge first={m.firstVal} current={m.currentVal} unit={m.unit} invertColor={m.invertColor} />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <p className="mt-2 text-[10px] text-text-muted text-center">
+        Comparando {new Date(first.measured_at).toLocaleDateString('pt-BR')} → {new Date(current.measured_at).toLocaleDateString('pt-BR')}
+      </p>
+    </div>
+  )
+}
+// ───────────────────────────────────────────────────────────────────────────────
 
 type Tab = 'resumo' | 'registrar' | 'historico'
 
@@ -38,6 +106,12 @@ export default function CorporalPage() {
       label: new Date(m.measured_at).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
       value: m.weight_kg || 0,
     }))
+  }, [history])
+
+  // Transformation data (first vs latest)
+  const firstMeasurement = useMemo(() => {
+    if (!history || history.length < 2) return null
+    return [...history].sort((a, b) => new Date(a.measured_at).getTime() - new Date(b.measured_at).getTime())[0]
   }, [history])
 
   return (
@@ -80,8 +154,13 @@ export default function CorporalPage() {
 
       {/* Loading */}
       {isLoading && (
-        <div className="flex items-center justify-center py-12">
-          <DSIcon name="loader" size={24} className="animate-spin text-brand-primary" />
+        <div className="space-y-4">
+          <BarChartSkeleton bars={7} />
+          <div className="grid grid-cols-2 gap-3">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="animate-pulse h-[84px] rounded-2xl bg-white/5" />
+            ))}
+          </div>
         </div>
       )}
 
@@ -107,6 +186,11 @@ export default function CorporalPage() {
                   </div>
                 )}
               </div>
+
+              {/* Transformation card — only shown when >= 2 measurements */}
+              {firstMeasurement && latest && firstMeasurement.id !== latest.id && (
+                <TransformationCard first={firstMeasurement} current={latest} />
+              )}
 
               {/* Body measurements */}
               {(latest.chest_cm || latest.waist_cm || latest.hip_cm || latest.arm_left_cm || latest.thigh_left_cm) && (

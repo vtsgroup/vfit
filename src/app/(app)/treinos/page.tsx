@@ -29,7 +29,7 @@ import { useCurrentPlan, useAutoGeneratePlan } from '@/hooks/use-plans'
 import { useMealsToday, useNutritionTargets } from '@/hooks/use-vfit-nutrition'
 import { useSelfAssessments, getBMIColor, useAutoAssessmentFromOnboarding } from '@/hooks/use-self-assessments'
 import { useWorkoutLogs } from '@/hooks/use-workouts'
-import { useDailyGoal, useStreak, useXPBalance } from '@/hooks/use-xp'
+import { useDailyGoal, useStreak, useXPBalance, type StreakResponse } from '@/hooks/use-xp'
 import { useSubscriptionStatus } from '@/hooks/use-vfit-checkout'
 import { useB2COnboardingCompleted } from '@/hooks/use-b2c-onboarding'
 import { useStudentProfile, useLinkPersonalTrainer } from '@/hooks/use-student-app'
@@ -42,6 +42,141 @@ const DIFFICULTY_FILTERS = [
   { value: 'intermediate', label: 'Intermediário' },
   { value: 'advanced', label: 'Avançado' },
 ]
+
+// ─── S1.1: Today Workout Card with Urgency UX ─────────────────────────────────
+interface TodayDayShape {
+  name: string
+  muscle_groups: string[]
+  estimated_duration_min: number
+  exercises: unknown[]
+}
+
+function getUrgencyState(streak: StreakResponse | null): {
+  workedOutToday: boolean
+  daysSince: number
+  urgencyLevel: 'done' | 'normal' | 'warning' | 'critical'
+  urgencyText: string
+  streakEmoji: string
+} {
+  if (!streak?.last_activity_date) {
+    return { workedOutToday: false, daysSince: -1, urgencyLevel: 'normal', urgencyText: 'Comece hoje!', streakEmoji: '💪' }
+  }
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const last = new Date(streak.last_activity_date)
+  last.setHours(0, 0, 0, 0)
+  const diffDays = Math.round((today.getTime() - last.getTime()) / (1000 * 60 * 60 * 24))
+  const workedOutToday = diffDays === 0
+
+  if (workedOutToday) {
+    return { workedOutToday: true, daysSince: 0, urgencyLevel: 'done', urgencyText: 'Treino feito hoje!', streakEmoji: '🔥' }
+  } else if (diffDays === 1) {
+    const level = streak.current_streak >= 3 ? 'warning' : 'normal'
+    return { workedOutToday: false, daysSince: 1, urgencyLevel: level, urgencyText: streak.current_streak >= 3 ? `Não quebre ${streak.current_streak} dias de streak!` : 'Treine hoje para começar um streak!', streakEmoji: '⚡' }
+  } else if (diffDays === 2) {
+    return { workedOutToday: false, daysSince: 2, urgencyLevel: 'warning', urgencyText: `2 dias sem treinar — volte agora!`, streakEmoji: '⚠️' }
+  } else {
+    return { workedOutToday: false, daysSince: diffDays, urgencyLevel: 'critical', urgencyText: `${diffDays} dias parado — hora de voltar!`, streakEmoji: '🚨' }
+  }
+}
+
+function TodayWorkoutCard({
+  todayDay,
+  planCurrentDay,
+  streak,
+}: {
+  todayDay: TodayDayShape
+  planCurrentDay: number
+  streak: StreakResponse | null
+}) {
+  const urgency = getUrgencyState(streak)
+
+  const borderColor = urgency.urgencyLevel === 'done'
+    ? 'border-emerald-500/40'
+    : urgency.urgencyLevel === 'critical'
+      ? 'border-red-500/50'
+      : urgency.urgencyLevel === 'warning'
+        ? 'border-amber-400/50'
+        : 'border-brand-primary/25'
+
+  const accentBar = urgency.urgencyLevel === 'done'
+    ? 'bg-emerald-400'
+    : urgency.urgencyLevel === 'critical'
+      ? 'bg-red-400 animate-pulse'
+      : urgency.urgencyLevel === 'warning'
+        ? 'bg-amber-400'
+        : 'bg-brand-primary/80'
+
+  const urgencyBadgeClass = urgency.urgencyLevel === 'done'
+    ? 'bg-emerald-500/15 text-emerald-400'
+    : urgency.urgencyLevel === 'critical'
+      ? 'bg-red-500/15 text-red-400'
+      : urgency.urgencyLevel === 'warning'
+        ? 'bg-amber-500/15 text-amber-400'
+        : 'bg-brand-primary/15 text-brand-primary'
+
+  return (
+    <div className="mb-4 block" onClick={() => hapticLight()}>
+      <Link href="/plano">
+        <div className={`glass-card relative overflow-hidden rounded-2xl border p-4 transition-all active:scale-[0.98] ${borderColor}`}>
+          <div className={`absolute inset-y-3 left-0 w-1 rounded-r-full ${accentBar}`} />
+
+          {/* Header row */}
+          <div className="mb-2.5 flex items-center justify-between pl-1">
+            <div className="flex items-center gap-2">
+              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-primary/15">
+                <DSIcon name="dumbbell" size={14} className="text-brand-primary" />
+              </div>
+              <span className="text-[11px] font-bold uppercase tracking-wider text-brand-primary">
+                Treino de Hoje · Dia {planCurrentDay}
+              </span>
+            </div>
+            <DSIcon name="chevronRight" size={14} className="text-text-muted" />
+          </div>
+
+          {/* Workout name */}
+          <p className="mb-1.5 pl-1 text-[16px] font-bold text-text-primary">{todayDay.name}</p>
+
+          {/* Meta info */}
+          <div className="mb-2.5 flex flex-wrap items-center gap-x-2 gap-y-1 pl-1 text-[12px] text-text-secondary">
+            {todayDay.muscle_groups.length > 0 && (
+              <span>{todayDay.muscle_groups.slice(0, 3).join(' · ')}</span>
+            )}
+            {todayDay.muscle_groups.length > 0 && <span className="text-text-muted">·</span>}
+            <span>{todayDay.estimated_duration_min}min</span>
+            <span className="text-text-muted">·</span>
+            <span>{todayDay.exercises.length} exercícios</span>
+          </div>
+
+          {/* Urgency badge */}
+          {urgency.urgencyLevel !== 'normal' && (
+            <div className={`mb-3 ml-1 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold ${urgencyBadgeClass}`}>
+              <span>{urgency.streakEmoji}</span>
+              <span>{urgency.urgencyText}</span>
+              {streak && streak.current_streak > 0 && urgency.urgencyLevel !== 'done' && (
+                <span className="ml-0.5 opacity-70">· {streak.current_streak} dias</span>
+              )}
+            </div>
+          )}
+
+          {/* CTA button */}
+          {urgency.workedOutToday ? (
+            <div className="flex items-center gap-2 rounded-xl border border-emerald-500/20 bg-emerald-500/8 px-3 py-2">
+              <DSIcon name="check" size={14} className="text-emerald-400" />
+              <span className="text-[12px] font-semibold text-emerald-400">Concluído hoje 🎉 — treinar de novo?</span>
+            </div>
+          ) : (
+            <Button size="sm" className="mt-0.5 w-full">
+              <DSIcon name="play" size={14} />
+              {urgency.urgencyLevel === 'critical' ? 'Voltar a treinar agora' : 'Iniciar treino'}
+            </Button>
+          )}
+        </div>
+      </Link>
+    </div>
+  )
+}
+// ─────────────────────────────────────────────────────────────────────────────
 
 function buildPlaceholderImage(label: string, tone: 'green' | 'blue' | 'orange' | 'violet' = 'green') {
   const safe = (label || 'Exercício').slice(0, 18)
@@ -248,38 +383,13 @@ export default function TreinosPage() {
         <p className="mt-1 text-xs text-emerald-200/80">Recursos personalizados para você</p>
       </div>
 
-      {/* T7.3 — Card "Treino de Hoje" */}
+      {/* S1.1 — Card "Treino de Hoje" com urgência */}
       {todayDay && (
-        <Link href="/plano" className="mb-4 block" onClick={() => hapticLight()}>
-          <GlassCard variant="ultra" padding="md" hoverLift className="rounded-2xl border border-brand-primary/18">
-            <div className="absolute inset-y-3 left-0 w-1 rounded-r-full bg-brand-primary/80" />
-            <div className="mb-2 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-primary/15">
-                  <DSIcon name="dumbbell" size={14} className="text-brand-primary" />
-                </div>
-                <span className="text-[11px] font-bold uppercase tracking-wider text-brand-primary">
-                  Treino de Hoje · Dia {plan?.current_day}
-                </span>
-              </div>
-              <DSIcon name="chevronRight" size={14} className="text-text-muted" />
-            </div>
-            <p className="mb-1.5 text-[15px] font-bold text-text-primary">{todayDay.name}</p>
-            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[12px] text-text-secondary">
-              {todayDay.muscle_groups.length > 0 && (
-                <span>{todayDay.muscle_groups.slice(0, 3).join(' · ')}</span>
-              )}
-              {todayDay.muscle_groups.length > 0 && <span className="text-text-muted">·</span>}
-              <span>{todayDay.estimated_duration_min}min</span>
-              <span className="text-text-muted">·</span>
-              <span>{todayDay.exercises.length} exercícios</span>
-            </div>
-            <Button size="sm" className="mt-3 w-full">
-              <DSIcon name="play" size={14} />
-              Continuar treino
-            </Button>
-          </GlassCard>
-        </Link>
+        <TodayWorkoutCard
+          todayDay={todayDay}
+          planCurrentDay={plan?.current_day ?? 1}
+          streak={streak ?? null}
+        />
       )}
 
       {/* KPI cards ultra-modernos */}
