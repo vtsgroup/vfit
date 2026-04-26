@@ -133,13 +133,13 @@ function PerfilIcon({ active }: { active: boolean }) {
 
 function AISparkleIcon() {
   return (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       {/* Main 4-pointed star — refined proportions */}
-      <path d="M12 2.5L13.6 8.8L20 10.5L13.6 12.2L12 18.5L10.4 12.2L4 10.5L10.4 8.8L12 2.5Z" fill="rgba(3,12,5,0.90)" />
+      <path d="M12 2.5L13.6 8.8L20 10.5L13.6 12.2L12 18.5L10.4 12.2L4 10.5L10.4 8.8L12 2.5Z" fill="rgba(3,12,5,0.92)" />
       {/* Secondary sparkle — top right */}
-      <path d="M19 3L19.8 5.2L22 6L19.8 6.8L19 9L18.2 6.8L16 6L18.2 5.2L19 3Z" fill="rgba(3,12,5,0.68)" />
+      <path d="M19 3L19.8 5.2L22 6L19.8 6.8L19 9L18.2 6.8L16 6L18.2 5.2L19 3Z" fill="rgba(3,12,5,0.72)" />
       {/* Accent dot — bottom left */}
-      <circle cx="6.5" cy="17.5" r="1.2" fill="rgba(3,12,5,0.42)" />
+      <circle cx="6.5" cy="17.5" r="1.2" fill="rgba(3,12,5,0.46)" />
     </svg>
   )
 }
@@ -278,21 +278,21 @@ export function BottomNavigation({ notificationCount = 0, fabMenuOpen = false, o
                 <div
                   key={tab.id}
                   className="relative flex flex-col items-center"
-                  style={{ marginTop: -16 }}
+                  style={{ marginTop: -22 }}
                 >
                   <button
                     onClick={() => {
                       haptic()
                       onFabPress?.()
                     }}
-                    className="fab-ring relative flex h-11 w-11 items-center justify-center rounded-full border-none transition-all duration-300 active:scale-90"
+                    className="fab-ring relative flex h-14 w-14 items-center justify-center rounded-full border-none transition-all duration-300 active:scale-90"
                     style={{
                       background: fabMenuOpen
-                        ? 'linear-gradient(135deg, #2ae88d, #1cc770)'
-                        : 'linear-gradient(135deg, #3DFCA4, #28e08a)',
+                        ? 'linear-gradient(135deg, #16a34a, #15803d)'
+                        : 'linear-gradient(135deg, #34d399, #22c55e 55%, #16a34a)',
                       boxShadow: fabMenuOpen
-                        ? '0 8px 32px rgba(61, 252, 164, 0.45), 0 4px 12px rgba(61, 252, 164, 0.25), 0 0 0 1px rgba(255,255,255,0.12) inset'
-                        : undefined,
+                        ? '0 10px 36px rgba(34, 197, 94, 0.55), 0 4px 14px rgba(34, 197, 94, 0.35), 0 0 0 1px rgba(255,255,255,0.16) inset'
+                        : '0 10px 32px rgba(34, 197, 94, 0.5), 0 4px 12px rgba(34, 197, 94, 0.3), 0 0 0 1px rgba(255,255,255,0.18) inset',
                       animation: fabMenuOpen ? 'none' : 'fab-pulse 3.2s ease-in-out infinite',
                       cursor: 'pointer',
                     }}
@@ -305,7 +305,7 @@ export function BottomNavigation({ notificationCount = 0, fabMenuOpen = false, o
                       {tab.icon(false)}
                     </motion.div>
                   </button>
-                  <span className="mt-0.5 text-[9px] font-semibold leading-none tracking-wide text-brand-primary">
+                  <span className="mt-1 text-[9px] font-semibold leading-none tracking-wide text-brand-primary">
                     {tab.label}
                   </span>
                 </div>

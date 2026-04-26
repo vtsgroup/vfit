@@ -99,30 +99,66 @@ export default function AvaliacaoDetalhePage() {
   ]
 
   return (
-    <div className="mx-auto max-w-lg px-4 pt-4 pb-24">
-      {/* Header */}
-      <div className="mb-5 flex items-center gap-3">
-        <button
-          aria-label="Voltar"
-          onClick={() => router.back()}
-          className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5"
-        >
-          <DSIcon name="arrowLeft" size={20} className="text-zinc-400" />
-        </button>
-        <div>
-          <h1 className="text-lg font-bold text-white">Avaliação</h1>
-          <p className="text-[11px] text-zinc-500">
-            {date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}
-          </p>
+    <div className="mx-auto max-w-lg pb-24">
+      {/* ─── Premium Hero ─── */}
+      <div
+        className="relative -mb-2 overflow-hidden rounded-b-3xl px-4 pt-5 pb-7 backdrop-blur-md"
+        style={{ background: 'linear-gradient(to bottom, #0b1d36 0%, #0c1f38 20%, #0b1c35 40%, #0a1830 65%, #071628 85%, #050A12 100%)', boxShadow: '0 6px 28px 0 rgba(5,10,18,0.6)' }}
+      >
+        {/* Ambient mesh */}
+        <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_85%_15%,rgba(34,197,94,0.20),transparent_55%),radial-gradient(circle_at_15%_85%,rgba(59,130,246,0.16),transparent_55%)]" />
+
+        <div className="relative z-1 mb-4 flex items-center gap-3">
+          <button
+            aria-label="Voltar"
+            onClick={() => router.back()}
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/6 text-white/80 transition-colors hover:bg-white/10"
+          >
+            <DSIcon name="arrowLeft" size={18} />
+          </button>
+          <div className="flex-1 min-w-0">
+            <p className="text-[11px] font-bold uppercase tracking-wider text-emerald-400">
+              Avaliação física
+            </p>
+            <h1 className="text-xl font-black text-white leading-tight">
+              {date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}
+            </h1>
+          </div>
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-primary/15 ring-1 ring-brand-primary/30">
+            <DSIcon name="clipboardList" size={18} className="text-brand-primary" />
+          </div>
+        </div>
+
+        {/* Hero stats — premium tiles */}
+        <div className="relative z-1 grid grid-cols-3 gap-2.5">
+          <HeroStat icon="scale" label="Peso" value={`${assessment.weight_kg}`} unit="kg" tone="emerald" />
+          <HeroStat
+            icon="activity"
+            label="IMC"
+            value={`${assessment.bmi}`}
+            tone="blue"
+            valueClass={getBMIColor(assessment.bmi)}
+          />
+          <HeroStat
+            icon="percent"
+            label="Gordura"
+            value={assessment.body_fat_percentage ? `${assessment.body_fat_percentage}` : '—'}
+            unit={assessment.body_fat_percentage ? '%' : ''}
+            tone="amber"
+          />
         </div>
       </div>
 
-      {/* Main stats */}
-      <div className="mb-4 rounded-2xl border border-brand-primary/20 bg-brand-primary/8 p-4">
-        <p className="text-[11px] font-bold uppercase tracking-wider text-brand-primary">
-          Melhorar esta avaliação com personal
-        </p>
-        <p className="mt-1 text-[12px] text-zinc-400">
+      <div className="mt-5 space-y-5 px-4">
+      {/* Personal trainer invite */}
+      <div className="rounded-2xl border border-brand-primary/20 bg-brand-primary/8 p-4">
+        <div className="mb-1 flex items-center gap-2">
+          <DSIcon name="userPlus" size={14} className="text-brand-primary" />
+          <p className="text-[11px] font-bold uppercase tracking-wider text-brand-primary">
+            Melhorar com personal
+          </p>
+        </div>
+        <p className="text-[12px] text-zinc-400">
           Convide e vincule um personal trainer para completar sua avaliação.
         </p>
         {studentProfile?.personal_name && (
@@ -171,24 +207,10 @@ export default function AvaliacaoDetalhePage() {
         </div>
       </div>
 
-      <div className="mb-5 grid grid-cols-3 gap-3">
-        <StatCard label="Peso" value={`${assessment.weight_kg}`} unit="kg" />
-        <StatCard
-          label="IMC"
-          value={`${assessment.bmi}`}
-          colorClass={getBMIColor(assessment.bmi)}
-        />
-        <StatCard
-          label="Gordura"
-          value={assessment.body_fat_percentage ? `${assessment.body_fat_percentage}` : '—'}
-          unit={assessment.body_fat_percentage ? '%' : ''}
-        />
-      </div>
-
       {/* BMI category */}
-      <div className="mb-5 rounded-2xl border border-white/5 bg-white/2 p-4 text-center">
-        <p className="mb-1 text-[11px] text-zinc-600">Classificação IMC</p>
-        <p className={`text-[16px] font-bold ${getBMIColor(assessment.bmi)}`}>
+      <div className="rounded-2xl border border-white/8 bg-white/3 p-4 text-center">
+        <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-zinc-500">Classificação IMC</p>
+        <p className={`text-[18px] font-black ${getBMIColor(assessment.bmi)}`}>
           {assessment.bmi_category}
         </p>
         <BMIBar bmi={assessment.bmi} />
@@ -196,9 +218,12 @@ export default function AvaliacaoDetalhePage() {
 
       {/* Evolution vs previous */}
       {prev && (
-        <div className="mb-5">
-          <h3 className="mb-3 text-[13px] font-bold uppercase tracking-wider text-zinc-500">Evolução</h3>
-          <div className="rounded-2xl border border-white/5 bg-white/2 p-4">
+        <div>
+          <h3 className="mb-3 flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-zinc-500">
+            <DSIcon name="trendingUp" size={12} className="text-brand-primary" />
+            Evolução
+          </h3>
+          <div className="rounded-2xl border border-white/8 bg-white/3 p-4">
             <p className="mb-3 text-[11px] text-zinc-600">
               vs. {new Date(prev.created_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })}
             </p>
@@ -235,39 +260,50 @@ export default function AvaliacaoDetalhePage() {
       )}
 
       {/* Activity + goal */}
-      <div className="mb-5 grid grid-cols-2 gap-3">
-        <div className="rounded-xl bg-white/2 p-3">
-          <p className="text-[11px] text-zinc-600">Atividade</p>
-          <p className="text-[13px] font-semibold text-zinc-300">{getActivityLabel(assessment.activity_level)}</p>
+      <div className="grid grid-cols-2 gap-3">
+        <div className="rounded-xl border border-white/6 bg-white/3 p-3">
+          <div className="mb-1 flex items-center gap-1.5">
+            <DSIcon name="zap" size={11} className="text-amber-400" />
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500">Atividade</p>
+          </div>
+          <p className="text-[13px] font-semibold text-zinc-200">{getActivityLabel(assessment.activity_level)}</p>
         </div>
-        <div className="rounded-xl bg-white/2 p-3">
-          <p className="text-[11px] text-zinc-600">Objetivo</p>
-          <p className="text-[13px] font-semibold text-zinc-300">{getGoalLabel(assessment.goal)}</p>
+        <div className="rounded-xl border border-white/6 bg-white/3 p-3">
+          <div className="mb-1 flex items-center gap-1.5">
+            <DSIcon name="target" size={11} className="text-brand-primary" />
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500">Objetivo</p>
+          </div>
+          <p className="text-[13px] font-semibold text-zinc-200">{getGoalLabel(assessment.goal)}</p>
         </div>
       </div>
 
       {/* Measurements */}
-      <h3 className="mb-3 text-[13px] font-bold uppercase tracking-wider text-zinc-500">Medidas</h3>
-      <div className="rounded-2xl border border-white/5 bg-white/2 divide-y divide-white/5">
-        {measurements.map((m) => (
-          <div key={m.label} className="flex items-center justify-between px-4 py-2.5">
-            <span className="text-[13px] text-zinc-400">{m.label}</span>
-            <span className="text-[14px] font-semibold text-white">
-              {m.value !== null ? `${m.value} ${m.unit}` : '—'}
-            </span>
-          </div>
-        ))}
+      <div>
+        <h3 className="mb-3 flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-zinc-500">
+          <DSIcon name="ruler" size={12} className="text-brand-primary" />
+          Medidas
+        </h3>
+        <div className="rounded-2xl border border-white/8 bg-white/3 divide-y divide-white/5">
+          {measurements.map((m) => (
+            <div key={m.label} className="flex items-center justify-between px-4 py-2.5">
+              <span className="text-[13px] text-zinc-400">{m.label}</span>
+              <span className="text-[14px] font-semibold text-white tabular-nums">
+                {m.value !== null ? `${m.value} ${m.unit}` : '—'}
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Notes */}
       {assessment.notes && (
-        <div className="mt-5 rounded-xl bg-white/2 p-4">
-          <p className="mb-1 text-[11px] text-zinc-600">Notas</p>
+        <div className="rounded-xl border border-white/6 bg-white/3 p-4">
+          <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-zinc-500">Notas</p>
           <p className="text-[13px] text-zinc-300">{assessment.notes}</p>
         </div>
       )}
 
-      <div className="mt-6">
+      <div className="pt-1">
         <Button
           variant="danger"
           className="w-full"
@@ -278,6 +314,42 @@ export default function AvaliacaoDetalhePage() {
           Deletar definitivamente
         </Button>
       </div>
+      </div>
+    </div>
+  )
+}
+
+function HeroStat({
+  icon,
+  label,
+  value,
+  unit,
+  tone,
+  valueClass,
+}: {
+  icon: 'scale' | 'activity' | 'percent'
+  label: string
+  value: string
+  unit?: string
+  tone: 'emerald' | 'blue' | 'amber'
+  valueClass?: string
+}) {
+  const toneStyles = {
+    emerald: { bg: 'bg-emerald-500/12', ring: 'ring-emerald-400/30', icon: 'text-emerald-300', glow: 'shadow-[0_0_30px_-8px_rgba(16,185,129,0.5)]' },
+    blue: { bg: 'bg-blue-500/12', ring: 'ring-blue-400/30', icon: 'text-blue-300', glow: 'shadow-[0_0_30px_-8px_rgba(59,130,246,0.5)]' },
+    amber: { bg: 'bg-amber-500/12', ring: 'ring-amber-400/30', icon: 'text-amber-300', glow: 'shadow-[0_0_30px_-8px_rgba(245,158,11,0.5)]' },
+  }[tone]
+
+  return (
+    <div className={`relative flex flex-col items-center rounded-2xl border border-white/8 bg-white/4 px-2 py-3 backdrop-blur-sm ${toneStyles.glow}`}>
+      <div className={`mb-1.5 flex h-8 w-8 items-center justify-center rounded-lg ${toneStyles.bg} ring-1 ${toneStyles.ring}`}>
+        <DSIcon name={icon} size={14} className={toneStyles.icon} />
+      </div>
+      <p className={`text-2xl font-black leading-none tabular-nums ${valueClass ?? 'text-white'}`}>
+        {value}
+        {unit && <span className="ml-0.5 text-[10px] font-semibold text-zinc-400"> {unit}</span>}
+      </p>
+      <p className="mt-1 text-[10px] font-medium uppercase tracking-wider text-zinc-500">{label}</p>
     </div>
   )
 }

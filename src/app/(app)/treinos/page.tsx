@@ -14,7 +14,7 @@ import { useState, useMemo, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { cn } from '@/lib/utils'
-import { DSIcon } from '@/components/ui/ds-icon'
+import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { GlassCard } from '@/components/ui/glass-card'
@@ -56,10 +56,10 @@ function getUrgencyState(streak: StreakResponse | null): {
   daysSince: number
   urgencyLevel: 'done' | 'normal' | 'warning' | 'critical'
   urgencyText: string
-  streakEmoji: string
+  streakIcon: DSIconName
 } {
   if (!streak?.last_activity_date) {
-    return { workedOutToday: false, daysSince: -1, urgencyLevel: 'normal', urgencyText: 'Comece hoje!', streakEmoji: '💪' }
+    return { workedOutToday: false, daysSince: -1, urgencyLevel: 'normal', urgencyText: 'Comece hoje!', streakIcon: 'dumbbell' }
   }
   const today = new Date()
   today.setHours(0, 0, 0, 0)
@@ -69,14 +69,14 @@ function getUrgencyState(streak: StreakResponse | null): {
   const workedOutToday = diffDays === 0
 
   if (workedOutToday) {
-    return { workedOutToday: true, daysSince: 0, urgencyLevel: 'done', urgencyText: 'Treino feito hoje!', streakEmoji: '🔥' }
+    return { workedOutToday: true, daysSince: 0, urgencyLevel: 'done', urgencyText: 'Treino feito hoje!', streakIcon: 'flame' }
   } else if (diffDays === 1) {
     const level = streak.current_streak >= 3 ? 'warning' : 'normal'
-    return { workedOutToday: false, daysSince: 1, urgencyLevel: level, urgencyText: streak.current_streak >= 3 ? `Não quebre ${streak.current_streak} dias de streak!` : 'Treine hoje para começar um streak!', streakEmoji: '⚡' }
+    return { workedOutToday: false, daysSince: 1, urgencyLevel: level, urgencyText: streak.current_streak >= 3 ? `Não quebre ${streak.current_streak} dias de streak!` : 'Treine hoje para começar um streak!', streakIcon: 'zap' }
   } else if (diffDays === 2) {
-    return { workedOutToday: false, daysSince: 2, urgencyLevel: 'warning', urgencyText: `2 dias sem treinar — volte agora!`, streakEmoji: '⚠️' }
+    return { workedOutToday: false, daysSince: 2, urgencyLevel: 'warning', urgencyText: `2 dias sem treinar — volte agora!`, streakIcon: 'alertTriangle' }
   } else {
-    return { workedOutToday: false, daysSince: diffDays, urgencyLevel: 'critical', urgencyText: `${diffDays} dias parado — hora de voltar!`, streakEmoji: '🚨' }
+    return { workedOutToday: false, daysSince: diffDays, urgencyLevel: 'critical', urgencyText: `${diffDays} dias parado — hora de voltar!`, streakIcon: 'alertCircle' }
   }
 }
 
@@ -151,7 +151,7 @@ function TodayWorkoutCard({
           {/* Urgency badge */}
           {urgency.urgencyLevel !== 'normal' && (
             <div className={`mb-3 ml-1 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold ${urgencyBadgeClass}`}>
-              <span>{urgency.streakEmoji}</span>
+              <DSIcon name={urgency.streakIcon} size={12} />
               <span>{urgency.urgencyText}</span>
               {streak && streak.current_streak > 0 && urgency.urgencyLevel !== 'done' && (
                 <span className="ml-0.5 opacity-70">· {streak.current_streak} dias</span>
@@ -162,8 +162,8 @@ function TodayWorkoutCard({
           {/* CTA button */}
           {urgency.workedOutToday ? (
             <div className="flex items-center gap-2 rounded-xl border border-emerald-500/20 bg-emerald-500/8 px-3 py-2">
-              <DSIcon name="check" size={14} className="text-emerald-400" />
-              <span className="text-[12px] font-semibold text-emerald-400">Concluído hoje 🎉 — treinar de novo?</span>
+              <DSIcon name="checkCircle2" size={14} className="text-emerald-400" />
+              <span className="text-[12px] font-semibold text-emerald-400">Concluído hoje — treinar de novo?</span>
             </div>
           ) : (
             <Button size="sm" className="mt-0.5 w-full">

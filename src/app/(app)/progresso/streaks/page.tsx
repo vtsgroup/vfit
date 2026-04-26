@@ -8,7 +8,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { DSIcon } from '@/components/ui/ds-icon'
+import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 import { useStreak, useHeatmap } from '@/hooks/use-progress'
 import { StreakCalendar } from '@/components/progresso'
 
@@ -16,15 +16,21 @@ import { StreakCalendar } from '@/components/progresso'
 // Milestone thresholds
 // ============================================
 
-const MILESTONES = [
-  { days: 3, label: '3 dias', icon: '🔥', color: 'text-orange-400', bg: 'bg-orange-400/10' },
-  { days: 7, label: '1 semana', icon: '⚡', color: 'text-yellow-400', bg: 'bg-yellow-400/10' },
-  { days: 14, label: '2 semanas', icon: '💪', color: 'text-emerald-400', bg: 'bg-emerald-400/10' },
-  { days: 30, label: '1 mês', icon: '🏆', color: 'text-amber-400', bg: 'bg-amber-400/10' },
-  { days: 60, label: '2 meses', icon: '🌟', color: 'text-purple-400', bg: 'bg-purple-400/10' },
-  { days: 90, label: '3 meses', icon: '👑', color: 'text-brand-primary', bg: 'bg-brand-primary/10' },
-  { days: 180, label: '6 meses', icon: '💎', color: 'text-brand-primary', bg: 'bg-brand-primary/10' },
-  { days: 365, label: '1 ano', icon: '🏅', color: 'text-rose-400', bg: 'bg-rose-400/10' },
+const MILESTONES: ReadonlyArray<{
+  days: number
+  label: string
+  icon: DSIconName
+  color: string
+  bg: string
+}> = [
+  { days: 3, label: '3 dias', icon: 'flame', color: 'text-orange-400', bg: 'bg-orange-400/10' },
+  { days: 7, label: '1 semana', icon: 'zap', color: 'text-yellow-400', bg: 'bg-yellow-400/10' },
+  { days: 14, label: '2 semanas', icon: 'dumbbell', color: 'text-emerald-400', bg: 'bg-emerald-400/10' },
+  { days: 30, label: '1 mês', icon: 'trophy', color: 'text-amber-400', bg: 'bg-amber-400/10' },
+  { days: 60, label: '2 meses', icon: 'sparkles', color: 'text-purple-400', bg: 'bg-purple-400/10' },
+  { days: 90, label: '3 meses', icon: 'crown', color: 'text-brand-primary', bg: 'bg-brand-primary/10' },
+  { days: 180, label: '6 meses', icon: 'award', color: 'text-brand-primary', bg: 'bg-brand-primary/10' },
+  { days: 365, label: '1 ano', icon: 'medal', color: 'text-rose-400', bg: 'bg-rose-400/10' },
 ] as const
 
 export default function StreaksPage() {
@@ -69,22 +75,32 @@ export default function StreaksPage() {
       {!loadingStreak && !loadingHeatmap && (
         <>
           {/* Hero streak card */}
-          <div className="glass-card mb-5 rounded-2xl p-5 text-center">
-            <div className="mb-2 text-4xl">🔥</div>
-            <p className="text-5xl font-black text-text-primary leading-none">{currentStreak}</p>
-            <p className="mt-1 text-[13px] font-medium text-text-muted">
+          <div className="glass-card mb-5 rounded-2xl p-6 text-center relative overflow-hidden">
+            {/* Ambient glow */}
+            <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_50%_0%,rgba(251,146,60,0.18),transparent_60%)]" />
+            <div className="relative z-1 mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-2xl bg-orange-400/12 ring-1 ring-orange-400/25 shadow-[0_0_40px_-8px_rgba(251,146,60,0.4)]">
+              <DSIcon name="flame" size={32} className="text-orange-400" />
+            </div>
+            <p className="relative z-1 text-5xl font-black text-text-primary leading-none tabular-nums">{currentStreak}</p>
+            <p className="relative z-1 mt-1 text-[13px] font-medium text-text-muted">
               {currentStreak === 1 ? 'dia seguido' : 'dias seguidos'}
             </p>
 
             {/* Progress to next milestone */}
             {nextMilestone && (
-              <div className="mt-4">
-                <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-[10px] text-text-muted">
-                    {prevMilestone ? `${prevMilestone.icon} ${prevMilestone.label}` : 'Início'}
+              <div className="relative z-1 mt-5">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="inline-flex items-center gap-1 text-[10px] text-text-muted">
+                    {prevMilestone ? (
+                      <>
+                        <DSIcon name={prevMilestone.icon} size={11} className={prevMilestone.color} />
+                        {prevMilestone.label}
+                      </>
+                    ) : 'Início'}
                   </span>
-                  <span className="text-[10px] text-text-muted">
-                    {nextMilestone.icon} {nextMilestone.label}
+                  <span className="inline-flex items-center gap-1 text-[10px] text-text-muted">
+                    <DSIcon name={nextMilestone.icon} size={11} className={nextMilestone.color} />
+                    {nextMilestone.label}
                   </span>
                 </div>
                 <div className="h-2 rounded-full bg-white/6 overflow-hidden">
@@ -156,13 +172,13 @@ export default function StreaksPage() {
                 return (
                   <div
                     key={m.days}
-                    className={`flex flex-col items-center gap-1 rounded-xl p-2.5 transition-all ${
+                    className={`flex flex-col items-center gap-1.5 rounded-xl p-2.5 transition-all ${
                       achieved
                         ? `${m.bg} border border-white/10`
                         : 'bg-white/3 opacity-40 grayscale'
                     }`}
                   >
-                    <span className="text-lg">{m.icon}</span>
+                    <DSIcon name={m.icon} size={20} className={achieved ? m.color : 'text-text-muted'} />
                     <span className={`text-[10px] font-bold ${achieved ? m.color : 'text-text-muted'}`}>
                       {m.label}
                     </span>

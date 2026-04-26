@@ -56,12 +56,13 @@ export default function PerfilPage() {
             {user?.full_name || 'Visitante'}
           </h1>
           <p className="text-[12px] text-white/60">{user?.email || 'Sem conta'}</p>
-          <span className={`mt-1 inline-block rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+          <span className={`mt-1 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold ${
             isPremium
               ? 'bg-brand-primary/20 text-emerald-300'
               : 'bg-white/8 text-white/65'
           }`}>
-            {isPremium ? '⭐ PREMIUM' : 'CONTA BÁSICA'}
+            {isPremium && <DSIcon name="crown" size={10} />}
+            {isPremium ? 'PREMIUM' : 'CONTA BÁSICA'}
           </span>
         </div>
         <Link
@@ -120,7 +121,7 @@ export default function PerfilPage() {
 
       {/* ACADEMIA Section */}
       <SectionTitle title="ACADEMIA" />
-      <div className="mb-5 space-y-0.5">
+      <div className="mb-5 overflow-hidden rounded-2xl border border-white/8 bg-white/3 backdrop-blur-sm">
         <MenuItem icon="ruler" label="Unidades de medida" subtitle="Métrico (kg/cm)" href="/perfil/unidades" />
         <MenuItem icon="dumbbell" label="Equipamentos" subtitle="Selecione sua academia" href="/perfil/equipamentos" />
         <MenuItem icon="clock" label="Descanso padrão" subtitle="60 segundos" href="/perfil/descanso" />
@@ -129,14 +130,14 @@ export default function PerfilPage() {
 
       {/* APP Section */}
       <SectionTitle title="APP" />
-      <div className="mb-5 space-y-0.5">
+      <div className="mb-5 overflow-hidden rounded-2xl border border-white/8 bg-white/3 backdrop-blur-sm">
         <MenuItem icon="settings" label="Notificações" href="/perfil/notificacoes" />
         <MenuItem icon="moon" label="Tema" subtitle="Escuro" href="/perfil/tema" />
       </div>
 
       {/* CONTA Section */}
       <SectionTitle title="CONTA" />
-      <div className="mb-5 space-y-0.5">
+      <div className="mb-5 overflow-hidden rounded-2xl border border-white/8 bg-white/3 backdrop-blur-sm">
         <MenuItem icon="edit3" label="Editar perfil" href="/perfil/editar" />
         <MenuItem icon="creditCard" label="Minha assinatura" href="/perfil/assinatura" />
         <MenuItem icon="shield" label="Privacidade" href="/privacidade" />
@@ -187,11 +188,13 @@ function MenuItem({
   return (
     <Link
       href={href}
-      className="flex items-center gap-3 rounded-xl px-3 py-3 text-text-secondary hover:bg-white/4 hover:text-text-primary transition-all"
+      className="flex items-center gap-3 border-b border-white/5 px-4 py-3.5 text-text-secondary transition-all last:border-b-0 hover:bg-white/4 hover:text-text-primary"
     >
-      <DSIcon name={icon} size={20} />
+      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/5">
+        <DSIcon name={icon} size={18} className="text-brand-primary" />
+      </div>
       <div className="flex-1 min-w-0">
-        <span className="text-[14px] font-medium text-text-secondary">{label}</span>
+        <span className="text-[14px] font-medium text-text-primary">{label}</span>
         {subtitle && <p className="text-[11px] text-text-muted">{subtitle}</p>}
       </div>
       <DSIcon name="chevronRight" size={16} className="text-text-muted" />

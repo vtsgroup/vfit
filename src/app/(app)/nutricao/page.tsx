@@ -194,27 +194,35 @@ export default function NutricaoPage() {
     <div className="flex min-h-screen flex-col bg-bg-primary pb-24">
       {/* ─── Hero ─── */}
       <div
-        className="mb-5 rounded-b-3xl border-b-0 px-4 py-5 backdrop-blur-md"
+        className="relative mb-5 overflow-hidden rounded-b-3xl border-b-0 px-4 py-5 backdrop-blur-md"
         style={{ background: 'linear-gradient(to bottom, #0b1d36 0%, #0c1f38 20%, #0b1c35 40%, #0a1830 65%, #071628 85%, #050A12 100%)', boxShadow: '0 6px 28px 0 rgba(5,10,18,0.6)' }}
       >
-        <p className="text-xs font-semibold text-emerald-400">
-          {(() => { const h = new Date().getHours(); return h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite' })()}
-        </p>
-        <h1 className="bg-linear-to-r from-vfit-primary-100 to-vfit-primary-400 bg-clip-text text-4xl font-black text-transparent">
-          Nutrição
-        </h1>
-        <p className="mt-1 text-xs text-emerald-200/80">Refeições e macros do dia</p>
+        {/* Ambient glow */}
+        <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_85%_25%,rgba(34,197,94,0.18),transparent_55%)]" />
+
+        <div className="relative z-1 flex items-start justify-between gap-3">
+          <div className="min-w-0 flex-1">
+            <p className="text-xs font-semibold text-emerald-400">
+              {(() => { const h = new Date().getHours(); return h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite' })()}
+            </p>
+            <h1 className="bg-linear-to-r from-vfit-primary-100 to-vfit-primary-400 bg-clip-text text-4xl font-black text-transparent">
+              Nutrição
+            </h1>
+            <p className="mt-1 text-xs text-emerald-200/80">Refeições e macros do dia</p>
+          </div>
+
+          {/* Adicionar dentro do hero */}
+          <button
+            onClick={() => setShowSearch(true)}
+            className="shrink-0 inline-flex items-center gap-1.5 rounded-xl border border-emerald-400/30 bg-emerald-500/15 px-3 py-2 text-[12px] font-semibold text-emerald-200 backdrop-blur-md transition-all hover:bg-emerald-500/25 hover:border-emerald-400/50 active:scale-95"
+          >
+            <DSIcon name="plus" size={14} />
+            Adicionar
+          </button>
+        </div>
       </div>
 
       <div className="space-y-5 px-4 pt-1">
-        {/* Primary action */}
-        <div className="flex justify-end">
-          <Button size="sm" onClick={() => setShowSearch(true)}>
-            <DSIcon name="plus" size={16} />
-            Adicionar
-          </Button>
-        </div>
-
         {/* ═══ Date Navigation ═══ */}
         <div className="flex items-center justify-between">
           <button

@@ -56,26 +56,26 @@ const variantStyles: Record<ButtonVariant, string> = {
   ].join(' '),
 
   secondary: [
-    // Light mode: graphite slate (blue-gray escuro) — premium e sóbrio
-    'bg-linear-to-b from-slate-600 via-slate-700 to-slate-800',
-    'text-white font-semibold',
-    '[text-shadow:0_1px_2px_rgba(0,0,0,0.32)]',
-    'border border-t-slate-500/55 border-x-slate-700/40 border-b-slate-900/65',
-    'shadow-[0_4px_0_0_#0f172a,0_8px_22px_-6px_rgba(15,23,42,0.45),inset_0_1px_0_rgba(255,255,255,0.18)]',
+    // Light mode: graphite emerald-tinted — sóbrio com sinergia com a marca
+    'bg-linear-to-b from-zinc-700 via-zinc-800 to-zinc-900',
+    'text-zinc-50 font-semibold',
+    '[text-shadow:0_1px_2px_rgba(0,0,0,0.34)]',
+    'border border-t-emerald-400/25 border-x-zinc-700/40 border-b-emerald-900/55',
+    'shadow-[0_4px_0_0_#052e16,0_8px_22px_-6px_rgba(6,78,59,0.42),0_0_24px_-12px_rgba(34,197,94,0.35),inset_0_1px_0_rgba(255,255,255,0.16)]',
     'hover:-translate-y-0.5',
-    'hover:shadow-[0_6px_0_0_#0f172a,0_12px_30px_-6px_rgba(15,23,42,0.55),inset_0_1px_0_rgba(255,255,255,0.22)]',
-    'hover:brightness-[1.06]',
+    'hover:shadow-[0_6px_0_0_#052e16,0_12px_30px_-6px_rgba(6,78,59,0.55),0_0_32px_-10px_rgba(34,197,94,0.45),inset_0_1px_0_rgba(255,255,255,0.22)]',
+    'hover:brightness-[1.08]',
     'active:translate-y-[3px] active:scale-[0.98]',
-    'active:shadow-[0_1px_0_0_#0f172a,0_2px_8px_-2px_rgba(15,23,42,0.36),inset_0_2px_4px_rgba(0,0,0,0.28)]',
+    'active:shadow-[0_1px_0_0_#052e16,0_2px_8px_-2px_rgba(6,78,59,0.36),inset_0_2px_4px_rgba(0,0,0,0.28)]',
     'active:brightness-95',
-    // Dark mode: graphite ligeiramente mais claro para destacar do bg
-    'dark:from-slate-500 dark:via-slate-600 dark:to-slate-700',
-    'dark:text-slate-100 dark:[text-shadow:0_1px_2px_rgba(0,0,0,0.38)]',
-    'dark:border-t-slate-400/30 dark:border-x-slate-600/35 dark:border-b-slate-900/62',
-    'dark:shadow-[0_4px_0_0_#1e293b,0_8px_22px_-6px_rgba(15,23,42,0.56),inset_0_1px_0_rgba(255,255,255,0.14)]',
-    'dark:hover:shadow-[0_6px_0_0_#1e293b,0_12px_30px_-6px_rgba(15,23,42,0.62),inset_0_1px_0_rgba(255,255,255,0.18)]',
-    'dark:active:shadow-[0_1px_0_0_#1e293b,0_2px_8px_-2px_rgba(15,23,42,0.44),inset_0_2px_4px_rgba(0,0,0,0.28)]',
-    'focus-visible:ring-slate-400/40',
+    // Dark mode: levemente mais claro com tinte emerald sutil
+    'dark:from-zinc-600 dark:via-zinc-700 dark:to-zinc-800',
+    'dark:text-zinc-50',
+    'dark:border-t-emerald-400/22 dark:border-x-zinc-700/40 dark:border-b-emerald-900/60',
+    'dark:shadow-[0_4px_0_0_#022c22,0_8px_22px_-6px_rgba(6,78,59,0.55),0_0_28px_-12px_rgba(34,197,94,0.32),inset_0_1px_0_rgba(255,255,255,0.14)]',
+    'dark:hover:shadow-[0_6px_0_0_#022c22,0_12px_30px_-6px_rgba(6,78,59,0.62),0_0_36px_-10px_rgba(34,197,94,0.42),inset_0_1px_0_rgba(255,255,255,0.18)]',
+    'dark:active:shadow-[0_1px_0_0_#022c22,0_2px_8px_-2px_rgba(6,78,59,0.44),inset_0_2px_4px_rgba(0,0,0,0.28)]',
+    'focus-visible:ring-emerald-400/35',
   ].join(' '),
 
   outline: [
