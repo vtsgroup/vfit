@@ -158,7 +158,7 @@ export default function CorporalPage() {
           <BarChartSkeleton bars={7} />
           <div className="grid grid-cols-2 gap-3">
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="animate-pulse h-[84px] rounded-2xl bg-white/5" />
+              <div key={i} className="animate-pulse h-21 rounded-2xl bg-white/5" />
             ))}
           </div>
         </div>

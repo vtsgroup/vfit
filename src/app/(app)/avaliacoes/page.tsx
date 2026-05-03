@@ -137,7 +137,7 @@ export default function AvaliacoesPage() {
         </button>
         <div className="flex-1">
           <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-text-muted">Acompanhamento</p>
-          <h1 className="text-[20px] font-black tracking-tight text-text-primary">Avaliações físicas</h1>
+          <h1 className="text-display-heading font-black tracking-tight text-text-primary">Avaliações físicas</h1>
         </div>
         <Link href="/avaliacoes/nova">
           <Button size="sm">

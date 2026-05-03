@@ -1615,6 +1615,10 @@ body {
   box-shadow: 0 12px 48px rgba(0,0,0,0.55), 0 3px 10px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.18), inset 0 -1px 0 rgba(0,0,0,0.15);
 }
 
+.light .glass-ultra:hover {
+  box-shadow: 0 12px 34px rgba(37,99,235,0.12), 0 4px 12px rgba(15,23,42,0.08), inset 0 1px 0 rgba(255,255,255,0.92), inset 0 -1px 0 rgba(15,23,42,0.04);
+}
+
 .glass-depth {
   background: var(--glass-depth-bg, rgba(11, 18, 33, 0.65));
   backdrop-filter: blur(32px) saturate(180%);
@@ -1643,6 +1647,18 @@ body {
   border-color: rgba(255, 255, 255, 0.14);
   box-shadow: var(--shadow-surface-hover);
   transform: translateY(-2px);
+}
+
+.light .glass-card {
+  background: rgba(255,255,255,0.88);
+  border-color: rgba(148,163,184,0.24);
+  box-shadow: 0 8px 26px rgba(15,23,42,0.06), inset 0 1px 0 rgba(255,255,255,0.92);
+}
+
+.light .glass-card:hover {
+  background: rgba(255,255,255,0.96);
+  border-color: rgba(59,130,246,0.22);
+  box-shadow: 0 12px 34px rgba(37,99,235,0.10), 0 4px 12px rgba(15,23,42,0.06), inset 0 1px 0 rgba(255,255,255,0.96);
 }
 
 .btn-primary {
@@ -2555,7 +2571,7 @@ html.light {
   z-index: 1;
 }
 
-/* Light mode: bottom gradient should be pure white */
+/* Light mode: bottom gradient should preserve the premium navy student nav */
 .light .mobile-bottom-nav::after {
   background: linear-gradient(to top, #050A12 0%, #050A12 30%, transparent 100%);
 }

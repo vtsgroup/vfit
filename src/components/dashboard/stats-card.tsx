@@ -192,7 +192,7 @@ export function StatsGridSkeleton({ count = 4 }: { count?: number }) {
       {Array.from({ length: count }).map((_, i) => (
         <div key={i} className="rounded-2xl border border-border-light bg-kpi-dark backdrop-blur-xl p-3 sm:p-5 overflow-hidden relative">
           {/* Shimmer overlay */}
-          <div className="absolute inset-0 -translate-x-full animate-[shimmer_2s_linear_infinite] bg-linear-to-r from-transparent via-brand-primary/4 to-transparent" />
+          <div className="absolute inset-0 -translate-x-full animate-shimmer bg-linear-to-r from-transparent via-brand-primary/4 to-transparent" />
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <div className="h-3 sm:h-4 w-16 sm:w-20 rounded bg-black/6 dark:bg-white/6" />

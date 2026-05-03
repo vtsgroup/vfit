@@ -205,7 +205,7 @@ export function StreakCalendar({ days, weeks = 52 }: StreakCalendarProps) {
                 {week.map((cell) => (
                   <div
                     key={cell.date}
-                    className={`rounded-[2px] transition-colors ${
+                    className={`rounded-xs transition-colors ${
                       cell.isFuture
                         ? 'bg-transparent'
                         : INTENSITY_CLASSES[getIntensityLevel(cell.count)]
@@ -246,7 +246,7 @@ export function StreakCalendar({ days, weeks = 52 }: StreakCalendarProps) {
           {INTENSITY_CLASSES.map((cls, i) => (
             <div
               key={i}
-              className={`rounded-[2px] ${cls}`}
+              className={`rounded-xs ${cls}`}
               style={{ width: cellSize, height: cellSize }}
             />
           ))}

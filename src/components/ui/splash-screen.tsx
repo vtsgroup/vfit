@@ -17,7 +17,7 @@
 
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { cn } from '@/lib/utils'
 
 const VFIT_LETTERS = 'VFIT'.split('')
@@ -75,6 +75,9 @@ export function SplashScreen({ isReady }: { isReady?: boolean }) {
   const [phase, setPhase] = useState<'init' | 'icon' | 'typing' | 'breathe' | 'exit' | 'done'>('init')
   const [typedCount, setTypedCount] = useState(0)
   const [shouldShow, setShouldShow] = useState(false)
+  const [minAnimationComplete, setMinAnimationComplete] = useState(false)
+  const bootStartedRef = useRef(false)
+  const ready = isReady ?? true
 
   // Stable particle positions
   const particles = useMemo(() =>
@@ -90,9 +93,20 @@ export function SplashScreen({ isReady }: { isReady?: boolean }) {
   [])
 
   useEffect(() => {
-    // Only show once per session
+    if (bootStartedRef.current) return
+    bootStartedRef.current = true
+
+    // Depois da primeira abertura da sessão, ainda cobrimos validações de auth.
+    // Sem isso, o app pode ficar em branco enquanto AuthProvider checa /auth/me.
     if (sessionStorage.getItem(SPLASH_KEY)) {
-      setPhase('done')
+      if (ready) {
+        setPhase('done')
+        return
+      }
+      setShouldShow(true)
+      setTypedCount(VFIT_LETTERS.length)
+      setPhase('breathe')
+      setMinAnimationComplete(true)
       return
     }
 
@@ -115,20 +129,38 @@ export function SplashScreen({ isReady }: { isReady?: boolean }) {
 
     // Breathe phase
     const tBreathe = setTimeout(() => setPhase('breathe'), 100 + BREATHE_START)
-    // Exit
-    const tExit = setTimeout(() => setPhase('exit'), 100 + BREATHE_START + 200)
-    // Done
-    const tDone = setTimeout(() => setPhase('done'), 100 + SPLASH_TOTAL)
+    const tMinDone = setTimeout(() => setMinAnimationComplete(true), 100 + BREATHE_START + 200)
 
     return () => {
       clearTimeout(tIcon)
       clearTimeout(tTyping)
       letterTimers.forEach(clearTimeout)
       clearTimeout(tBreathe)
-      clearTimeout(tExit)
-      clearTimeout(tDone)
+      clearTimeout(tMinDone)
     }
-  }, [])
+  }, [ready])
+
+  useEffect(() => {
+    if (!shouldShow || !ready || !minAnimationComplete || phase === 'exit' || phase === 'done') return
+
+    setPhase('exit')
+    const tDone = setTimeout(() => setPhase('done'), 700)
+
+    return () => clearTimeout(tDone)
+  }, [minAnimationComplete, phase, ready, shouldShow])
+
+  useEffect(() => {
+    if (!shouldShow || phase === 'exit' || phase === 'done') return
+
+    // Hard safety valve: never let auth/network edge cases trap the user behind splash.
+    // The app content behind it is guarded independently by AuthProvider/AuthGate.
+    const tFallback = setTimeout(() => {
+      setPhase('exit')
+      setTimeout(() => setPhase('done'), 700)
+    }, SPLASH_TOTAL + 1800)
+
+    return () => clearTimeout(tFallback)
+  }, [phase, shouldShow])
 
   if (phase === 'done' || !shouldShow) return null
 
@@ -140,7 +172,7 @@ export function SplashScreen({ isReady }: { isReady?: boolean }) {
     <div
       className={cn(
         'dark fixed inset-0 z-9999 flex items-center justify-center',
-        'transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]',
+        'transition-all duration-700 ease-out-expo',
         isExiting ? 'opacity-0 scale-105' : 'opacity-100 scale-100'
       )}
       style={{ colorScheme: 'dark' }}
@@ -213,7 +245,7 @@ export function SplashScreen({ isReady }: { isReady?: boolean }) {
           className={cn(
             'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full',
             'border border-brand-primary/15',
-            'transition-all duration-1200 ease-[cubic-bezier(0.16,1,0.3,1)]',
+            'transition-all duration-1200 ease-out-expo',
             phase === 'init' && 'h-20 w-20 opacity-0',
             (phase === 'icon' || phase === 'typing') && !allTyped && 'h-44 w-44 opacity-100',
             allTyped && 'h-72 w-72 opacity-40',
@@ -226,7 +258,7 @@ export function SplashScreen({ isReady }: { isReady?: boolean }) {
           className={cn(
             'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full',
             'border border-brand-primary/8',
-            'transition-all duration-1400 ease-[cubic-bezier(0.16,1,0.3,1)]',
+            'transition-all duration-1400 ease-out-expo',
             phase === 'init' && 'h-10 w-10 opacity-0',
             (phase === 'icon' || phase === 'typing') && !allTyped && 'h-56 w-56 opacity-60',
             allTyped && 'h-96 w-96 opacity-25',

@@ -20,13 +20,33 @@ import { useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import { useAppStore } from '@/stores/app-store'
 
+const STUDENT_LIGHT_ROUTES = [
+  '/treinos',
+  '/treino-ativo',
+  '/plano',
+  '/nutricao',
+  '/ia',
+  '/avaliacoes',
+  '/perfil',
+  '/progresso',
+  '/exercicios',
+  '/musculos',
+  '/social',
+]
+
+function isStudentLightRoute(pathname: string | null) {
+  if (!pathname) return false
+  return STUDENT_LIGHT_ROUTES.some((route) => pathname === route || pathname.startsWith(`${route}/`))
+}
+
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const resolvedTheme = useAppStore((s) => s.resolvedTheme)
   const theme = useAppStore((s) => s.theme)
   const setResolvedTheme = useAppStore((s) => s.setResolvedTheme)
   const isOnboardingRoute = pathname === '/welcome' || pathname.startsWith('/onboarding')
-  const effectiveTheme: 'light' | 'dark' = isOnboardingRoute ? 'dark' : resolvedTheme
+  const isB2CStudentRoute = isStudentLightRoute(pathname)
+  const effectiveTheme: 'light' | 'dark' = isOnboardingRoute ? 'dark' : isB2CStudentRoute ? 'light' : resolvedTheme
 
   // Resolve theme deterministically from current preference + OS
   useEffect(() => {
@@ -56,9 +76,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
     // Update <meta name="theme-color"> dynamically — Chrome TWA/PWA picks this up
     // for status bar color in real-time
-    const topColor = '#050A12'
+    const topColor = effectiveTheme === 'light' ? '#f8fbff' : '#050A12'
     // Bottom safe area (gesture bar / nav bar) — slightly different shade for depth
-    const bottomColor = effectiveTheme === 'light' ? '#f7fbfa' : '#050A12'
+    const bottomColor = effectiveTheme === 'light' ? '#f8fbff' : '#050A12'
 
     // CRITICAL: Set html background-color to fill bottom safe area (iOS gesture bar / Android nav bar)
     root.style.backgroundColor = bottomColor

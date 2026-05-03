@@ -15,6 +15,7 @@ import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import { NO_INDEX_ROBOTS } from '@/lib/seo'
 import { AuthLayoutClient } from './layout-client'
+import { AuthPageProviders } from '@/components/providers/auth-page-providers'
 
 export const metadata: Metadata = {
   robots: NO_INDEX_ROBOTS,
@@ -22,10 +23,12 @@ export const metadata: Metadata = {
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <AuthLayoutClient>
-      <Suspense fallback={<div className="flex min-h-dvh items-center justify-center"><div className="h-8 w-8 animate-spin rounded-full border-2 border-white/10 border-t-brand-primary" /></div>}>
-        {children}
-      </Suspense>
-    </AuthLayoutClient>
+    <AuthPageProviders>
+      <AuthLayoutClient>
+        <Suspense fallback={<div className="flex min-h-dvh items-center justify-center"><div className="h-8 w-8 animate-spin rounded-full border-2 border-white/10 border-t-brand-primary" /></div>}>
+          {children}
+        </Suspense>
+      </AuthLayoutClient>
+    </AuthPageProviders>
   )
 }

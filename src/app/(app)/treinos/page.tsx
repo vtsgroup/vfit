@@ -367,20 +367,15 @@ export default function TreinosPage() {
     <div className="mx-auto max-w-lg animate-in fade-in-0 slide-in-from-bottom-2 duration-300 px-4 pt-0 pb-24">
       {/* ─── Header ─── */}
       <div
-        className="-mx-4 mb-5 rounded-b-3xl border-b-0 px-4 py-5 backdrop-blur-md"
-        style={{
-          // Starts where student-header ends (#0b1d36 ≈ #0b1627), fades to match page bg
-          background: 'linear-gradient(to bottom, #0b1d36 0%, #0c1f38 20%, #0b1c35 40%, #0a1830 65%, #071628 85%, #050A12 100%)',
-          boxShadow: '0 6px 28px 0 rgba(5,10,18,0.6)',
-        }}
+        className="-mx-4 mb-5 rounded-b-3xl border-b border-sky-100 bg-linear-to-b from-white via-sky-50 to-bg-primary px-4 py-5 shadow-[0_10px_30px_-22px_rgba(37,99,235,0.35)]"
       >
-        <p className="text-xs font-semibold text-emerald-400">
+        <p className="text-xs font-semibold text-sky-600">
           {(() => { const h = new Date().getHours(); return h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite' })()}
         </p>
-        <h1 className="bg-linear-to-r from-vfit-primary-100 to-vfit-primary-400 bg-clip-text text-4xl font-black text-transparent">
+        <h1 className="bg-linear-to-r from-slate-950 to-sky-700 bg-clip-text text-4xl font-black text-transparent">
           Treinos
         </h1>
-        <p className="mt-1 text-xs text-emerald-200/80">Recursos personalizados para você</p>
+        <p className="mt-1 text-xs text-slate-500">Recursos personalizados para você</p>
       </div>
 
       {/* S1.1 — Card "Treino de Hoje" com urgência */}
@@ -489,12 +484,12 @@ export default function TreinosPage() {
       )}
 
       {/* Convite/Vínculo com Personal Trainer */}
-      <div className="mb-5 rounded-2xl border border-brand-primary/20 bg-linear-to-br from-brand-primary/8 to-transparent p-4">
-        <div className="mb-3 flex items-start justify-between gap-3">
+      <details className="group mb-5 rounded-2xl border border-brand-primary/20 bg-linear-to-br from-brand-primary/8 to-white p-4 shadow-[0_12px_30px_-26px_rgba(16,185,129,0.42)]">
+        <summary className="flex cursor-pointer list-none items-start justify-between gap-3 [&::-webkit-details-marker]:hidden">
           <div>
             <p className="text-[11px] font-bold uppercase tracking-wider text-brand-primary">Personal Trainer</p>
             <p className="mt-1 text-[13px] text-text-secondary">
-              Convide um personal para sua avaliação completa ou vincule por código.
+              Vincule um profissional quando quiser acompanhamento real.
             </p>
             {studentProfile?.personal_name && (
               <p className="mt-1 text-[12px] font-semibold text-success">
@@ -502,8 +497,15 @@ export default function TreinosPage() {
               </p>
             )}
           </div>
-          <DSIcon name="userPlus" size={18} className="text-brand-primary" />
-        </div>
+          <div className="flex items-center gap-2">
+            <span className="rounded-full bg-brand-primary/10 px-2.5 py-1 text-[10px] font-bold text-brand-primary">
+              Opcional
+            </span>
+            <DSIcon name="chevronRight" size={16} className="text-brand-primary transition-transform group-open:rotate-90" />
+          </div>
+        </summary>
+
+        <div className="mt-4 border-t border-brand-primary/10 pt-4">
 
         <div className="mb-3 flex gap-2">
           <Input
@@ -574,7 +576,8 @@ export default function TreinosPage() {
             )}
           </div>
         )}
-      </div>
+        </div>
+      </details>
 
       {/* Quick actions */}
       <div className="mb-5 grid grid-cols-2 gap-3">
@@ -627,10 +630,19 @@ export default function TreinosPage() {
       )}
 
       {/* ── Gamificação VFIT — Hub Redesigned ── */}
-      <div
-        className="-mx-4 mb-6 overflow-hidden"
-        style={{ background: 'linear-gradient(160deg, #040f1c 0%, #061425 45%, #030c18 100%)' }}
-      >
+      <details className="group -mx-4 mb-6 overflow-hidden border-y border-emerald-100 bg-white">
+        <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-4 [&::-webkit-details-marker]:hidden">
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-emerald-600">Gamificação VFIT</p>
+            <h2 className="mt-0.5 text-[17px] font-black tracking-tight text-slate-950">Streak, XP e metas</h2>
+          </div>
+          <div className="flex items-center gap-2 rounded-full border border-emerald-100 bg-emerald-50 px-3 py-1.5">
+            <span className="text-[11px] font-bold text-emerald-700">Nv. {xpBalance?.level ?? 1}</span>
+            <DSIcon name="chevronRight" size={14} className="text-emerald-600 transition-transform group-open:rotate-90" />
+          </div>
+        </summary>
+
+      <div className="overflow-hidden bg-linear-to-br from-slate-950 via-slate-900 to-emerald-950">
         {/* Top accent line */}
         <div className="h-px w-full" style={{ background: 'linear-gradient(to right, transparent, rgba(34,197,94,0.5) 40%, rgba(139,92,246,0.4) 60%, transparent)' }} />
 
@@ -757,6 +769,7 @@ export default function TreinosPage() {
         {/* Bottom separator */}
         <div className="h-px w-full" style={{ background: 'linear-gradient(to right, transparent, rgba(255,255,255,0.06) 50%, transparent)' }} />
       </div>
+      </details>
 
       {/* Treino de hoje (IA) */}
       <div className="mb-4 flex items-center justify-between">

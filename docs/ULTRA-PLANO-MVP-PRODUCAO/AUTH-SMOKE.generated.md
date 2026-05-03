@@ -1,9 +1,9 @@
 # Authenticated Smoke Report (Gerado automaticamente)
 
-> Gerado em: 2026-04-24T04:49:25.346Z
+> Gerado em: 2026-05-03T09:39:29.383Z
 > Base URL: https://api.vfit.app.br
-> test_run_id: run-20260424044925-auth
-> session_id: session-smoke-1777006165
+> test_run_id: run-20260503093929-auth
+> session_id: session-smoke-1777801169
 
 ## Como executar (sem vazar token)
 
@@ -23,12 +23,12 @@ Opção 3 — UI (super_admin)
 - Abra `https://vfit.app.br/dashboard/admin/smoke` e gere tokens temporários para colar no terminal usando `read -s`.
 
 ## Configuração de tokens
-- Personal token: informado
-- Student token: informado
-- Admin token: informado
-- Personal préflight: válido
-- Student préflight: válido
-- Admin préflight: válido
+- Personal token: ausente
+- Student token: ausente
+- Admin token: ausente
+- Personal préflight: expirado
+- Student préflight: expirado
+- Admin préflight: expirado
 
 ## Configuração operacional
 - allow_mutations: false
@@ -36,23 +36,16 @@ Opção 3 — UI (super_admin)
 - retries(GET): 1
 
 ## Resumo
-- Passou: **8**
+- Passou: **0**
 - Falhou: **0**
-- Skipped: **2**
+- Skipped: **3**
 
 ## Execuções
 | Fluxo | Método | Rota | Status | HTTP | Latência (ms) | request_id | Observação |
 |---|---|---|---|---:|---:|---|---|
-| Personal: auth/me | GET | /api/v1/auth/me | passed | 200 | 1074.4 | 9f127b37b985e0fd-GIG | - |
-| Personal: students list (seed) | GET | /api/v1/students?page=1&per_page=1 | passed | 200 | 664.81 | 9f127b3dfba7e0fd-GIG | - |
-| Personal: seed student_id | GET | /api/v1/students?page=1&per_page=1 | skipped | - | 0 | - | nenhum aluno disponível para smoke autenticado |
-| Student: auth/me | GET | /api/v1/auth/me | passed | 200 | 643.87 | 9f127b422d44e0fd-GIG | - |
-| Payments: my list | GET | /api/v1/payments/my?page=1&per_page=5 | passed | 200 | 625.25 | 9f127b463f09e0fd-GIG | - |
-| Checkout auth route: pix (expect not-found on fake/isolated payment) | POST | /api/v1/payments/c9098c86-c21a-47ab-84fd-51b869ef7d93/pay | passed | 404 | 664.03 | 9f127b4a18b7e0fd-GIG | - |
-| Checkout auth route: boleto (expect not-found on fake/isolated payment) | POST | /api/v1/payments/c9098c86-c21a-47ab-84fd-51b869ef7d93/pay | passed | 404 | 468.44 | 9f127b4e4a2be0fd-GIG | - |
-| Checkout auth route: credit_card (expect not-found on fake/isolated payment) | POST | /api/v1/payments/c9098c86-c21a-47ab-84fd-51b869ef7d93/pay | passed | 404 | 466.02 | 9f127b513b37e0fd-GIG | - |
-| Admin: feedback list | GET | /api/v1/admin/feedback?page=1&per_page=5 | passed | 200 | 699.8 | 9f127b541ccee0fd-GIG | - |
-| Admin: feedback detail (from user smoke) | GET | /api/v1/admin/feedback/{feedback_id} | skipped | - | 0 | - | mutations desabilitadas; feedback_id não é gerado (SMOKE_ALLOW_MUTATIONS=1 para habilitar) |
+| Personal: auth/me | GET | /api/v1/auth/me | skipped | - | 0 | - | token não informado para este fluxo |
+| Student: auth/me | GET | /api/v1/auth/me | skipped | - | 0 | - | token não informado para este fluxo |
+| Admin: feedback list | GET | /api/v1/admin/feedback?page=1&per_page=5 | skipped | - | 0 | - | token não informado para este fluxo |
 
 ## Evidências de contexto
 - student_id utilizado: (não definido)

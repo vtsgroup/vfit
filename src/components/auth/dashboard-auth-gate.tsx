@@ -68,5 +68,20 @@ export function DashboardAuthGate({ children }: { children: React.ReactNode }) {
     )
   }
 
+  // Student autenticado vindo do PWA/start_url não deve ver shell do dashboard.
+  // Mantém uma tela estável até o replace para /treinos concluir.
+  if (userType === 'student') {
+    return (
+      <div className="flex min-h-dvh items-center justify-center bg-bg-dark">
+        <div className="flex flex-col items-center gap-4">
+          <div className="relative h-12 w-12">
+            <div className="absolute inset-0 animate-spin rounded-full border-2 border-white/10 border-t-brand-primary" />
+          </div>
+          <p className="text-sm text-white/40 font-medium">Abrindo app do aluno...</p>
+        </div>
+      </div>
+    )
+  }
+
   return <>{children}</>
 }

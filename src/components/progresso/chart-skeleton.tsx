@@ -13,7 +13,7 @@ const shimmer = 'animate-pulse bg-white/5'
 /** Single KPI card skeleton */
 export function KPICardSkeleton() {
   return (
-    <div className={`${shimmer} h-[84px] rounded-2xl`} />
+    <div className={`${shimmer} h-21 rounded-2xl`} />
   )
 }
 

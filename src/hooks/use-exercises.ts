@@ -89,8 +89,13 @@ export function useExercises(params?: {
   return useQuery<ExercisesResult>({
     queryKey: ['exercises', params?.muscle_group, params?.difficulty, params?.q, params?.page, params?.per_page],
     queryFn: async () => {
-      const res = await api.get<Exercise[]>(`/exercises${qs ? `?${qs}` : ''}`)
-      return { exercises: res.data, meta: res.meta as ExercisesResult['meta'] }
+      const res = await api.get<Exercise[] | { exercises?: Exercise[] }>(`/exercises${qs ? `?${qs}` : ''}`)
+      const exercises = Array.isArray(res.data)
+        ? res.data
+        : Array.isArray(res.data?.exercises)
+          ? res.data.exercises
+          : []
+      return { exercises, meta: res.meta as ExercisesResult['meta'] }
     },
     staleTime: 10 * 60 * 1000, // 10min — cold data
   })
@@ -100,8 +105,9 @@ export function useMuscleGroups() {
   return useQuery<MuscleGroup[]>({
     queryKey: ['muscle-groups'],
     queryFn: async () => {
-      const res = await api.get<MuscleGroup[]>('/muscle-groups')
-      return res.data
+      const res = await api.get<MuscleGroup[] | { muscle_groups?: MuscleGroup[] }>('/muscle-groups')
+      if (Array.isArray(res.data)) return res.data
+      return Array.isArray(res.data?.muscle_groups) ? res.data.muscle_groups : []
     },
     staleTime: 2 * 60 * 1000, // 2min — permite refletir updates de mídia sem delay longo
     refetchOnMount: 'always',

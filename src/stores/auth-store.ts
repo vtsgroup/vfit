@@ -99,7 +99,7 @@ interface AuthState {
   updateUser: (partial: Partial<User>) => void
   setLoading: (loading: boolean) => void
   setHydrated: () => void
-  setSessionReady: () => void
+  setSessionReady: (ready?: boolean) => void
 
   // Computed helpers
   isPersonal: () => boolean
@@ -183,7 +183,7 @@ export const useAuthStore = create<AuthState>()(
 
       setHydrated: () => set({ isHydrated: true, isLoading: false }),
 
-      setSessionReady: () => set({ isSessionReady: true }),
+      setSessionReady: (ready = true) => set({ isSessionReady: ready }),
 
       // Computed helpers
       isPersonal: () => get().user?.user_type === 'personal',

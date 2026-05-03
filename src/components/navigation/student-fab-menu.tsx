@@ -11,6 +11,7 @@
 
 'use client'
 
+import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { DSIcon } from '@/components/ui/ds-icon'
@@ -110,6 +111,15 @@ interface StudentFabMenuProps {
 export function StudentFabMenu({ open, onClose }: StudentFabMenuProps) {
   const router = useRouter()
 
+  useEffect(() => {
+    if (!open) return
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [open, onClose])
+
   const handleAction = (action: FabAction) => {
     haptic()
     onClose()
@@ -130,7 +140,7 @@ export function StudentFabMenu({ open, onClose }: StudentFabMenuProps) {
               haptic()
               onClose()
             }}
-            className="fixed inset-0 z-40 bg-black/68 backdrop-blur-xl lg:hidden"
+            className="fixed inset-0 z-40 bg-slate-950/28 backdrop-blur-lg lg:hidden"
             style={{ backdropFilter: 'blur(16px) saturate(140%)', WebkitBackdropFilter: 'blur(16px) saturate(140%)' }}
           />
 
@@ -147,7 +157,7 @@ export function StudentFabMenu({ open, onClose }: StudentFabMenuProps) {
             }}
           >
             <div
-              className="rounded-[22px] p-2 bg-white shadow-[0_8px_24px_rgba(0,0,0,0.1)] border border-black/8 dark:bg-[rgba(14,16,18,0.92)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.4)] dark:border-white/10"
+              className="rounded-[22px] border border-sky-100 bg-white/96 p-2 shadow-[0_20px_60px_-28px_rgba(37,99,235,0.45),0_10px_24px_-18px_rgba(15,23,42,0.28)]"
               style={{ backdropFilter: 'blur(28px) saturate(185%)', WebkitBackdropFilter: 'blur(28px) saturate(185%)' }}
             >
               {/* Header */}
@@ -168,7 +178,7 @@ export function StudentFabMenu({ open, onClose }: StudentFabMenuProps) {
                     onClick={() => handleAction(action)}
                     className="flex flex-col items-center gap-2 rounded-xl border-none bg-transparent px-2 py-3.5 transition-all duration-300 hover:bg-brand-primary/8 hover:shadow-[0_8px_22px_rgba(16,185,129,0.12)] active:scale-[0.95]"
                   >
-                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-brand-primary/12 text-brand-primary shadow-[0_2px_8px_rgba(16,185,129,0.12)] border border-brand-primary/15">
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-brand-primary/15 bg-brand-primary/12 text-brand-primary shadow-[0_2px_8px_rgba(16,185,129,0.12)]">
                       {action.icon}
                     </div>
                     <span className="text-center text-[11px] font-semibold leading-tight text-text-primary">
@@ -188,7 +198,7 @@ export function StudentFabMenu({ open, onClose }: StudentFabMenuProps) {
                   }}
                   className="flex flex-col items-center gap-2 rounded-xl border-none bg-transparent px-2 py-3.5 transition-all duration-300 hover:bg-red-500/8 active:scale-[0.95]"
                 >
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-white/5 text-text-muted border border-border-light/30">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 text-slate-500">
                     <DSIcon name="x" size={20} />
                   </div>
                   <span className="text-center text-[11px] font-semibold leading-tight text-text-muted">

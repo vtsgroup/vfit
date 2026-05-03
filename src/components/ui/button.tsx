@@ -56,17 +56,17 @@ const variantStyles: Record<ButtonVariant, string> = {
   ].join(' '),
 
   secondary: [
-    // Light mode: graphite emerald-tinted — sóbrio com sinergia com a marca
-    'bg-linear-to-b from-zinc-700 via-zinc-800 to-zinc-900',
-    'text-zinc-50 font-semibold',
-    '[text-shadow:0_1px_2px_rgba(0,0,0,0.34)]',
-    'border border-t-emerald-400/25 border-x-zinc-700/40 border-b-emerald-900/55',
-    'shadow-[0_4px_0_0_#052e16,0_8px_22px_-6px_rgba(6,78,59,0.42),0_0_24px_-12px_rgba(34,197,94,0.35),inset_0_1px_0_rgba(255,255,255,0.16)]',
+    // Light mode: neutral zinc 3D — lighter for student mobile and secondary CTAs
+    'bg-linear-to-b from-white via-zinc-100 to-zinc-200',
+    'text-zinc-800 font-semibold',
+    '[text-shadow:0_1px_1px_rgba(255,255,255,0.8)]',
+    'border border-t-white/85 border-x-zinc-200/60 border-b-zinc-400/50',
+    'shadow-[0_4px_0_0_#a1a1aa,0_8px_22px_-10px_rgba(63,63,70,0.30),inset_0_1px_0_rgba(255,255,255,0.85)]',
     'hover:-translate-y-0.5',
-    'hover:shadow-[0_6px_0_0_#052e16,0_12px_30px_-6px_rgba(6,78,59,0.55),0_0_32px_-10px_rgba(34,197,94,0.45),inset_0_1px_0_rgba(255,255,255,0.22)]',
-    'hover:brightness-[1.08]',
+    'hover:shadow-[0_6px_0_0_#a1a1aa,0_12px_30px_-10px_rgba(63,63,70,0.36),inset_0_1px_0_rgba(255,255,255,0.92)]',
+    'hover:brightness-[1.03]',
     'active:translate-y-[3px] active:scale-[0.98]',
-    'active:shadow-[0_1px_0_0_#052e16,0_2px_8px_-2px_rgba(6,78,59,0.36),inset_0_2px_4px_rgba(0,0,0,0.28)]',
+    'active:shadow-[0_1px_0_0_#a1a1aa,0_2px_8px_-4px_rgba(63,63,70,0.22),inset_0_2px_4px_rgba(0,0,0,0.08)]',
     'active:brightness-95',
     // Dark mode: levemente mais claro com tinte emerald sutil
     'dark:from-zinc-600 dark:via-zinc-700 dark:to-zinc-800',

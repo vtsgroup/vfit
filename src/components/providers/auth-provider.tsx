@@ -38,7 +38,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const timeout = setTimeout(() => {
       if (!isReady) {
         setHydrated()
-        setSessionReady()
         setIsReady(true)
       }
     }, 1000)
@@ -58,6 +57,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (!isHydrated) return
 
     let cancelled = false
+    setIsSessionChecked(false)
+    setSessionReady(false)
 
     async function validatePersistedSession() {
       if (!isAuthenticated || !tokens?.access_token) {
@@ -89,7 +90,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => {
       cancelled = true
     }
-  }, [isHydrated, isAuthenticated, tokens?.access_token, tokens?.refresh_token, logout])
+  }, [isHydrated, isAuthenticated, tokens?.access_token, tokens?.refresh_token, logout, setSessionReady])
 
   // Logger global (invisível): captura window errors/unhandledrejection.
   useEffect(() => {

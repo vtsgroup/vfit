@@ -93,7 +93,7 @@ function AnimatedLogo() {
           width={120}
           height={32}
           className="h-8 w-auto transition-transform duration-300 group-hover:scale-105 sm:h-7"
-          style={{ filter: 'drop-shadow(0 0 8px rgba(16,185,129,0.35))' }}
+          style={{ filter: 'drop-shadow(0 0 8px rgba(59,130,246,0.38))' }}
           priority
         />
       </div>
@@ -171,7 +171,7 @@ export function Navbar() {
         <nav className="mx-auto max-w-7xl flex items-center justify-between px-5 py-3 lg:px-6">
 
           {/* ===== Left: Animated Logo ===== */}
-          <div className={`transition-all duration-500 ${scrolled ? 'drop-shadow-[0_0_8px_rgba(16,185,129,0.25)]' : ''}`}>
+          <div className={`transition-all duration-500 ${scrolled ? 'drop-shadow-[0_0_8px_rgba(59,130,246,0.28)]' : ''}`}>
             <AnimatedLogo />
           </div>
 
@@ -237,8 +237,8 @@ export function Navbar() {
                           onClick={() => setActiveDropdown(null)}
                           className="flex items-start gap-3 rounded-xl px-3.5 py-3 transition-all duration-150 hover:bg-white/6 group"
                         >
-                          <div className="mt-0.5 shrink-0 flex h-9 w-9 items-center justify-center rounded-xl bg-white/4 ring-1 ring-white/8 transition-all duration-200 group-hover:bg-brand-primary/10 group-hover:ring-brand-primary/25 group-hover:shadow-[0_0_16px_rgba(16,185,129,0.15)]">
-                            <DSIcon name={sub.icon} size={16} className="text-white/40 transition-colors group-hover:text-brand-primary" />
+                          <div className="mt-0.5 shrink-0 flex h-9 w-9 items-center justify-center rounded-xl bg-white/4 ring-1 ring-white/8 transition-all duration-200 group-hover:bg-sky-500/10 group-hover:ring-sky-400/25 group-hover:shadow-[0_0_16px_rgba(59,130,246,0.18)]">
+                            <DSIcon name={sub.icon} size={16} className="text-white/40 transition-colors group-hover:text-sky-300" />
                           </div>
                           <div className="flex-1">
                             <div className="flex items-center gap-2">
@@ -246,7 +246,7 @@ export function Navbar() {
                                 {sub.label}
                               </span>
                               {sub.tag && (
-                                <span className="rounded-md bg-brand-primary/15 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-brand-primary">
+                                <span className="rounded-md bg-sky-400/15 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-sky-300">
                                   {sub.tag}
                                 </span>
                               )}
@@ -306,10 +306,10 @@ export function Navbar() {
                   cta: 'entrar_mobile_header',
                 })
               }
-              className="group relative inline-flex h-8 items-center gap-1.5 rounded-xl border border-white/15 bg-white/8 px-3.5 text-[11px] font-bold uppercase tracking-wider text-white/90 backdrop-blur-sm transition-all duration-200 active:scale-95 hover:border-brand-primary/40 hover:bg-brand-primary/10 hover:text-white hover:shadow-[0_0_16px_rgba(16,185,129,0.15)]"
+              className="group relative inline-flex h-8 items-center gap-1.5 rounded-xl border border-white/15 bg-white/8 px-3.5 text-[11px] font-bold uppercase tracking-wider text-white/90 backdrop-blur-sm transition-all duration-200 active:scale-95 hover:border-sky-400/40 hover:bg-sky-500/10 hover:text-white hover:shadow-[0_0_16px_rgba(59,130,246,0.18)]"
               style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08)' }}
             >
-              <DSIcon name="logIn" size={13} className="text-brand-primary/70 transition-colors duration-200 group-hover:text-brand-primary" />
+              <DSIcon name="logIn" size={13} className="text-sky-300/80 transition-colors duration-200 group-hover:text-sky-200" />
               Entrar
             </Link>
             <Link
@@ -384,7 +384,7 @@ export function Navbar() {
               width={100}
               height={26}
               className="h-6 w-auto"
-              style={{ filter: 'drop-shadow(0 0 6px rgba(16,185,129,0.3))' }}
+              style={{ filter: 'drop-shadow(0 0 6px rgba(59,130,246,0.3))' }}
             />
           </Link>
           <button
@@ -432,8 +432,8 @@ export function Navbar() {
                             onClick={closeMobile}
                             className="flex items-center gap-3 rounded-lg px-3 py-2.5 transition-all duration-150 hover:bg-white/6 group"
                           >
-                            <div className="shrink-0 flex h-8 w-8 items-center justify-center rounded-lg bg-white/4 ring-1 ring-white/6 transition-all group-hover:bg-brand-primary/10 group-hover:ring-brand-primary/20">
-                              <DSIcon name={sub.icon} size={14} className="text-white/40 group-hover:text-brand-primary transition-colors" />
+                            <div className="shrink-0 flex h-8 w-8 items-center justify-center rounded-lg bg-white/4 ring-1 ring-white/6 transition-all group-hover:bg-sky-500/10 group-hover:ring-sky-400/20">
+                              <DSIcon name={sub.icon} size={14} className="text-white/40 group-hover:text-sky-300 transition-colors" />
                             </div>
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-1.5">
@@ -441,7 +441,7 @@ export function Navbar() {
                                   {sub.label}
                                 </span>
                                 {sub.tag && (
-                                  <span className="rounded bg-brand-primary/15 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider text-brand-primary">
+                                  <span className="rounded bg-sky-400/15 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider text-sky-300">
                                     {sub.tag}
                                   </span>
                                 )}

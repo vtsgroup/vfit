@@ -78,7 +78,11 @@ export function GuestGuard({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!isHydrated) return
     if (isAuthenticated) {
-      const dest = user?.role === 'admin' || user?.role === 'super_admin' ? '/dashboard/admin' : '/dashboard'
+      const dest = user?.role === 'admin' || user?.role === 'super_admin'
+        ? '/dashboard/admin'
+        : user?.user_type === 'student'
+          ? '/treinos'
+          : '/dashboard'
       router.replace(dest)
     }
   }, [isAuthenticated, isHydrated, user, router])

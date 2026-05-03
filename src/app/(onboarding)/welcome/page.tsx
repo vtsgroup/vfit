@@ -41,7 +41,14 @@ export default function WelcomePage() {
   useEffect(() => {
     if (!isHydrated) return
     if (isAuthenticated) {
-      router.replace('/dashboard')
+      const userType = useAuthStore.getState().user?.user_type
+      if (userType === 'student') {
+        router.replace('/treinos')
+      } else if (userType === 'admin') {
+        router.replace('/dashboard/admin')
+      } else {
+        router.replace('/dashboard')
+      }
       return
     }
     // If biometric auto-unlock is enabled AND not in cooldown, redirect to login with biometric trigger

@@ -149,7 +149,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" suppressHydrationWarning>
+    <html lang="pt-BR" data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
         {/* Preload logo SVG — evita FOIT e melhora LCP */}
         <link rel="preload" href="/images/vfit-logo-white.svg" as="image" type="image/svg+xml" />

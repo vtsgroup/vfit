@@ -19,7 +19,9 @@ import { StudentFabMenu } from '@/components/navigation/student-fab-menu'
 import { ErrorBoundary } from '@/components/ui/error-boundary'
 import { PullToRefresh } from '@/components/ui/pull-to-refresh'
 import { OneSignalProvider } from '@/components/providers/onesignal-provider'
+import { AuthProvider } from '@/components/providers/auth-provider'
 import { ToastContainer } from '@/components/layout/toast-container'
+import { SplashOrchestrator } from '@/components/layout/splash-orchestrator'
 import { useAuthStore } from '@/stores/auth-store'
 import { useB2COnboardingCompleted } from '@/hooks/use-b2c-onboarding'
 import { useEffectiveUserView } from '@/hooks/use-effective-user-view'
@@ -69,7 +71,20 @@ function migrateLocalStorageKeys() {
   localStorage.setItem('vfit_keys_migrated', '1')
 }
 
-export default function AppLayout({ children }: { children: React.ReactNode }) {
+function AppRouteLoader({ message }: { message: string }) {
+  return (
+    <div className="flex min-h-dvh items-center justify-center bg-sky-50 px-6">
+      <div className="flex flex-col items-center gap-4 text-center">
+        <div className="relative flex h-14 w-14 items-center justify-center rounded-3xl border border-sky-100 bg-white shadow-[0_18px_50px_rgba(14,165,233,0.16)]">
+          <div className="h-8 w-8 animate-spin rounded-full border-3 border-sky-100 border-t-sky-500" />
+        </div>
+        <p className="text-sm font-semibold text-slate-600">{message}</p>
+      </div>
+    </div>
+  )
+}
+
+function AppShell({ children }: { children: React.ReactNode }) {
   const router = useRouter()
   const pathname = usePathname()
   const queryClient = useQueryClient()
@@ -123,6 +138,25 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     router.replace('/onboarding')
   }, [isHydrated, isAuthenticated, isEffectiveStudent, onboardingLoading, onboardingStatus, pathname, router])
 
+  const isGuest = typeof window !== 'undefined' && localStorage.getItem('vfit_guest_mode') === 'true'
+  const isRedirectingToWelcome = isHydrated && !isAuthenticated && !isGuest
+  const isRedirectingToDashboard = isHydrated && isAuthenticated && userType === 'personal' && !isSimulationActive
+  const isRedirectingToOnboarding =
+    isHydrated &&
+    isAuthenticated &&
+    isEffectiveStudent &&
+    !onboardingLoading &&
+    onboardingStatus?.completed === false &&
+    pathname !== '/perfil/assinatura' &&
+    pathname !== '/perfil/editar' &&
+    pathname !== '/perfil/sobre'
+
+  if (!isHydrated) return <AppRouteLoader message="Preparando seu app..." />
+  if (isRedirectingToWelcome) return <AppRouteLoader message="Abrindo boas-vindas..." />
+  if (isRedirectingToDashboard) return <AppRouteLoader message="Abrindo painel profissional..." />
+  if (isEffectiveStudent && onboardingLoading) return <AppRouteLoader message="Carregando sua experiência..." />
+  if (isRedirectingToOnboarding) return <AppRouteLoader message="Abrindo personalização inicial..." />
+
   return (
     <OneSignalProvider>
       <div className="min-h-screen bg-bg-primary">
@@ -164,5 +198,16 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <ToastContainer />
       </div>
     </OneSignalProvider>
+  )
+}
+
+export default function AppLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <>
+      <SplashOrchestrator />
+      <AuthProvider>
+        <AppShell>{children}</AppShell>
+      </AuthProvider>
+    </>
   )
 }
