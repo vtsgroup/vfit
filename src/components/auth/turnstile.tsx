@@ -44,6 +44,11 @@ interface TurnstileProps {
 
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '0x4AAAAAACbwFTxZJC74DsMB'
 
+function shouldBypassTurnstileLocally() {
+  if (typeof window === 'undefined') return false
+  return /^(localhost|127\.0\.0\.1|0\.0\.0\.0)$/.test(window.location.hostname)
+}
+
 // How many invisible failures before escalating to interactive
 const INVISIBLE_MAX_RETRIES = 2
 
@@ -54,6 +59,8 @@ export const Turnstile = forwardRef<TurnstileRef, TurnstileProps>(
     const retryCountRef = useRef(0)
     const [mode, setMode] = useState<'invisible' | 'interactive'>('invisible')
     const [isVerified, setIsVerified] = useState(false)
+    const [isEnvironmentChecked, setIsEnvironmentChecked] = useState(false)
+    const [bypassLocal, setBypassLocal] = useState(false)
     const modeRef = useRef<'invisible' | 'interactive'>('invisible')
 
     // Expose reset + execute to parent via ref
@@ -76,12 +83,6 @@ export const Turnstile = forwardRef<TurnstileRef, TurnstileProps>(
       },
     }))
 
-    useEffect(() => {
-      if (!TURNSTILE_SITE_KEY) {
-        console.warn('[Turnstile] NEXT_PUBLIC_TURNSTILE_SITE_KEY não configurada')
-      }
-    }, [])
-
     const cleanupWidget = useCallback(() => {
       try {
         if (widgetIdRef.current && window.turnstile) {
@@ -95,6 +96,25 @@ export const Turnstile = forwardRef<TurnstileRef, TurnstileProps>(
         // noop
       }
     }, [])
+
+    useEffect(() => {
+      const shouldBypass = shouldBypassTurnstileLocally()
+      setBypassLocal(shouldBypass)
+      setIsEnvironmentChecked(true)
+
+      if (shouldBypass) {
+        cleanupWidget()
+        onVerify('dev-turnstile-bypass')
+      }
+    }, [cleanupWidget, onVerify])
+
+    useEffect(() => {
+      if (!isEnvironmentChecked) return
+      if (bypassLocal) return
+      if (!TURNSTILE_SITE_KEY) {
+        console.warn('[Turnstile] NEXT_PUBLIC_TURNSTILE_SITE_KEY não configurada')
+      }
+    }, [isEnvironmentChecked, bypassLocal])
 
     const renderWidget = useCallback((targetMode: 'invisible' | 'interactive') => {
       if (!TURNSTILE_SITE_KEY || !containerRef.current || !window.turnstile) return
@@ -157,6 +177,8 @@ export const Turnstile = forwardRef<TurnstileRef, TurnstileProps>(
     }, [onVerify, onExpire, onError, cleanupWidget])
 
     useEffect(() => {
+      if (!isEnvironmentChecked) return
+      if (bypassLocal) return
       const startMode = modeRef.current === 'interactive' ? 'interactive' : 'invisible'
       const initRender = () => renderWidget(startMode)
 
@@ -196,13 +218,15 @@ export const Turnstile = forwardRef<TurnstileRef, TurnstileProps>(
 
         cleanupWidget()
       }
-    }, [renderWidget, cleanupWidget])
+    }, [isEnvironmentChecked, bypassLocal, renderWidget, cleanupWidget])
+
+    if (!isEnvironmentChecked || bypassLocal) return null
 
     // Invisible mode: container is empty (0px). Interactive: shows the checkbox.
     return (
       <div
         ref={containerRef}
-        className={mode === 'invisible' ? '' : 'flex justify-center w-full animate-blur-in [&>iframe]:w-full! [&>div]:w-full!'}
+        className={mode === 'invisible' ? '' : 'flex min-h-18 w-full items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white/95 p-2 shadow-[0_10px_30px_rgba(2,8,16,0.22)] animate-blur-in [&>iframe]:w-full! [&>div]:w-full!'}
         style={{ opacity: mode === 'invisible' && !isVerified ? 0 : 1 }}
       />
     )

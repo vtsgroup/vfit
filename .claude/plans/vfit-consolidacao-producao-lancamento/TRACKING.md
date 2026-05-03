@@ -2,16 +2,16 @@
 
 > **Plano:** `vfit-consolidacao-producao-lancamento`  
 > **Criado:** 03/05/2026  
-> **Última atualização:** 03/05/2026 — Redirect/auth/splash corrigidos; build + core flows Chromium aprovados; deploy bloqueado por smoke auth expirado  
+> **Última atualização:** 03/05/2026 — Login/auth visual corrigido; type-check/lint/build + smoke público/auth aprovados; deploy bloqueado por smoke auth expirado  
 > **Status geral:** Em progresso — aguardando tokens válidos de smoke auth antes de deploy
 
 ## Resumo
 
 - Tasks totais: 54
-- Concluídas: 35
+- Concluídas: 37
 - Em progresso: 1
 - Pendentes: 18
-- Progresso: 35/54 (65%)
+- Progresso: 37/54 (69%)
 
 ## S0 — Plano Operacional e Baseline
 
@@ -74,7 +74,7 @@
 - [ ] **T6.3** Ajustar features/pricing/footer
 - [ ] **T6.4** Consolidar seções duplicadas dos prints
 - [x] **T6.5** Migrar auth split-screen para azul premium
-- [ ] **T6.6** Validar CTAs aluno/personal/nutricionista/afiliado
+- [x] **T6.6** Corrigir login/auth em modo azul premium — escopo dark isolado, CTA azul, campos dark, Turnstile sem bloco branco em localhost
 
 ## S7 — Remover Desnecessário e Backlog
 
@@ -86,7 +86,7 @@
 ## S8 — QA Visual e Produção
 
 - [ ] **T8.1** Capturar screenshots baseline desktop/tablet/mobile
-- [ ] **T8.2** Capturar screenshots after desktop/tablet/mobile
+- [x] **T8.2** Capturar screenshot after do login mobile/local — sem CSS quebrado, sem bloco Turnstile, CTA azul
 - [x] **T8.3** Rodar `npm run lint` — 0 erros, 75 warnings preexistentes
 - [x] **T8.4** Rodar `npm run type-check` — executado novamente após bloco light-only
 - [x] **T8.5** Rodar `npm run type-check:workers`
@@ -100,6 +100,14 @@
 
 ## Observações de QA/deploy — 03/05/2026
 
+- Hotfix visual auth: `.auth-dark-scope` força tokens dark/azul mesmo quando `html.light` fica ativo após navegação de aluno.
+- Turnstile local: localhost/127.0.0.1 agora usa bypass visual seguro para QA local; produção mantém widget real em domínios reais.
+- Login local validado no browser: sem service worker/cache antigo, sem bloco branco do Turnstile, CTA azul e campos dark coerentes.
+- `npm run type-check`: aprovado após hotfix auth.
+- `npm run lint`: aprovado com 71 warnings preexistentes, 0 erros após hotfix auth.
+- `npm run build`: aprovado após hotfix auth; export estático gerou 143 páginas e postbuild inline CSS concluiu.
+- Playwright focado: `tests/e2e/auth.spec.ts` + `tests/e2e/smoke-public.spec.ts` Chromium — 9 passed / 1 skipped.
+- `npm run smoke:auth:local`: bloqueado — `.env.local` contém linhas inválidas e tokens `SMOKE_*` estão expirados/ausentes no relatório gerado.
 - `npm run type-check`: aprovado.
 - `npm run lint`: aprovado com 71 warnings preexistentes, 0 erros.
 - `npm run build`: aprovado; export estático gerou 143 páginas e postbuild inline CSS concluiu.

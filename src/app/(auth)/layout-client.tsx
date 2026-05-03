@@ -382,7 +382,7 @@ export function AuthLayoutClient({ children }: { children: ReactNode }) {
         }
       `}</style>
 
-      <div className="dark flex min-h-screen bg-bg-primary" style={{ colorScheme: 'dark', paddingTop: 'env(safe-area-inset-top, 0px)', paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
+      <div className="auth-dark-scope dark flex min-h-screen bg-bg-primary" style={{ colorScheme: 'dark', paddingTop: 'env(safe-area-inset-top, 0px)', paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
         {/* ─── LEFT PANEL — Cinematic aurora background + image slideshow ─── */}
         <div className="hidden lg:flex lg:w-[48%] xl:w-1/2 relative overflow-hidden">
           {/* Image slideshow with crossfade + Ken Burns */}

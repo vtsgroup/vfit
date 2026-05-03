@@ -168,13 +168,6 @@ export default function LoginPage() {
       )}
 
       <div className="animate-blur-in">
-        {/* Turnstile — invisible-first, fallback to interactive */}
-        <Turnstile
-          ref={turnstileRef}
-          onVerify={handleTurnstileVerify}
-          onExpire={handleTurnstileExpire}
-        />
-
         {/* ─── Alerts ─── */}
         {alertMsg && (
           <div className="mb-5 flex items-center gap-2.5 rounded-2xl border border-brand-primary/20 bg-brand-primary/6 px-4 py-3">
@@ -203,7 +196,7 @@ export default function LoginPage() {
           >
             Entrar
           </h1>
-          <p className="mt-1 text-[12px] text-zinc-600">
+          <p className="mt-1 text-[12px] text-slate-400">
             Evolua com inteligência — login unificado
           </p>
         </div>
@@ -249,7 +242,7 @@ export default function LoginPage() {
               onChange={handleIdentifierChange}
               autoComplete="username"
               required
-              className="w-full h-11 rounded-xl border border-zinc-200/80 bg-white px-4 text-[14px] text-zinc-900 placeholder:text-zinc-400 shadow-[0_1px_3px_rgba(0,0,0,0.06),inset_0_1px_2px_rgba(0,0,0,0.04)] transition-all duration-200 focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20"
+              className="w-full h-11 rounded-xl border border-sky-400/20 bg-slate-950/70 px-4 text-[14px] text-white placeholder:text-slate-500 shadow-[0_1px_3px_rgba(0,0,0,0.28),inset_0_1px_2px_rgba(255,255,255,0.03)] transition-all duration-200 focus:outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-400/25"
             />
           </div>
 
@@ -266,13 +259,13 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete="current-password"
                 required
-                className="w-full h-11 rounded-xl border border-zinc-200/80 bg-white px-4 pr-12 text-[14px] text-zinc-900 placeholder:text-zinc-400 shadow-[0_1px_3px_rgba(0,0,0,0.06),inset_0_1px_2px_rgba(0,0,0,0.04)] transition-all duration-200 focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20"
+                className="w-full h-11 rounded-xl border border-sky-400/20 bg-slate-950/70 px-4 pr-12 text-[14px] text-white placeholder:text-slate-500 shadow-[0_1px_3px_rgba(0,0,0,0.28),inset_0_1px_2px_rgba(255,255,255,0.03)] transition-all duration-200 focus:outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-400/25"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
-                className="absolute right-1.5 top-1/2 -translate-y-1/2 p-2 text-zinc-400 hover:text-zinc-600 transition-colors rounded-lg hover:bg-zinc-100"
+                className="absolute right-1.5 top-1/2 -translate-y-1/2 p-2 text-slate-400 hover:text-sky-200 transition-colors rounded-lg hover:bg-white/6"
                 tabIndex={-1}
               >
                 {showPassword ? <DSIcon name="eyeOff" size={16} /> : <DSIcon name="eye" size={16} />}
@@ -300,11 +293,18 @@ export default function LoginPage() {
                   placeholder="000000"
                   value={twoFactorCode}
                   onChange={(e) => setTwoFactorCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                  className="w-full h-12 rounded-xl border border-amber-300/40 bg-amber-50 px-4 text-[15px] text-zinc-900 placeholder:text-amber-300 tracking-[0.35em] text-center shadow-[0_1px_3px_rgba(0,0,0,0.06)] transition-all duration-200 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20"
+                  className="w-full h-12 rounded-xl border border-amber-300/30 bg-amber-950/20 px-4 text-[15px] text-white placeholder:text-amber-300/45 tracking-[0.35em] text-center shadow-[0_1px_3px_rgba(0,0,0,0.24)] transition-all duration-200 focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20"
                 />
               </div>
             </div>
           )}
+
+          {/* Turnstile — invisible-first; if it falls back to interactive, keep it in the form flow */}
+          <Turnstile
+            ref={turnstileRef}
+            onVerify={handleTurnstileVerify}
+            onExpire={handleTurnstileExpire}
+          />
 
           {/* Remember + Forgot */}
           <div className="flex items-center justify-between">
@@ -342,7 +342,7 @@ export default function LoginPage() {
             size="lg"
             disabled={!isFormFilled}
             loading={login.isPending}
-            className="w-full uppercase tracking-wider font-black"
+            className="auth-submit-cta w-full uppercase tracking-wider font-black"
           >
             ENTRAR
             <DSIcon name="arrowRight" size={16} />
