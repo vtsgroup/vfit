@@ -14,6 +14,7 @@ Consolidar o VFIT para lançamento com foco no fluxo essencial: cadastro → onb
 - Personal/admin: mantêm **dark premium** atual.
 - Páginas públicas e auth: migrar para **azul premium**.
 - App interno: verde VFIT segue como cor de ação/progresso.
+- Login/auth: **sem bypass de visitante**; tráfego sem conta deve converter para cadastro, não para exploração gratuita.
 - Escopo: MVP perfeito primeiro; fase 2 documentada como backlog.
 
 ## CEO Review
@@ -23,6 +24,7 @@ Consolidar o VFIT para lançamento com foco no fluxo essencial: cadastro → onb
 3. A métrica central do lançamento é ativação: onboarding concluído, plano criado, treino iniciado/concluído.
 4. Azul público/auth transmite confiança e tecnologia; verde fica para energia/ação dentro do produto.
 5. Qualquer entrada de menu incompleta ou “em breve” deve sair do caminho principal do MVP.
+6. O login deve preservar foco comercial: usuário existente entra; usuário novo cria conta. Não há CTA paralelo para “explorar sem conta”.
 
 ## Eng Review
 
@@ -31,6 +33,7 @@ Consolidar o VFIT para lançamento com foco no fluxo essencial: cadastro → onb
 3. Preservar regras críticas: auth guard em React Query, Tailwind v4 canônico, `Button` em CTAs e `DSIcon` em ícones.
 4. Validar com editor diagnostics, lint, type-check, testes, build, a11y, smoke auth e release gate.
 5. Deploy somente com confirmação explícita e via pipeline oficial.
+6. Remover guest CTA sem apagar rotas internas nesta etapa: menor risco, sem migration, sem impacto em fallback/links legados; rotas guest ficam ocultas do funil principal e podem ser depreciadas em S7.
 
 ## Design Review
 

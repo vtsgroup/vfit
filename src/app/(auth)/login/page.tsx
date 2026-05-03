@@ -18,7 +18,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react'
 import Link from 'next/link'
-import { useSearchParams, useRouter } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
 import { useLogin } from '@/hooks/use-auth'
@@ -51,7 +51,6 @@ function maskCpf(value: string): string {
 
 export default function LoginPage() {
   const searchParams = useSearchParams()
-  const router = useRouter()
   const registered = searchParams.get('registered')
   const reset = searchParams.get('reset')
   const verified = searchParams.get('verified')
@@ -359,39 +358,21 @@ export default function LoginPage() {
           )}
         </form>
 
-        {/* ─── Register link + Trust badges ─── */}
-        <div className="mt-3 flex items-center justify-between">
-          <p className="text-[13px] text-zinc-500">
-            Sem conta?{' '}
-            <Link href="/register" className="font-bold text-brand-primary hover:text-brand-primary/80 transition-colors">
-              Criar grátis
+        {/* ─── Register link + Trust badges — sales-focused, no guest bypass ─── */}
+        <div className="mt-4 rounded-2xl border border-sky-400/15 bg-sky-400/5 px-4 py-3 text-center">
+          <p className="text-[13px] text-slate-400">
+            Novo por aqui?{' '}
+            <Link href="/register" className="font-black text-brand-primary hover:text-brand-primary/80 transition-colors">
+              Comece grátis agora
             </Link>
           </p>
-          <span className="flex items-center gap-1.5 text-[9px] text-zinc-700" style={monoLabel}>
-            <DSIcon name="shield" size={12} /> SSL · LGPD
+          <span className="mt-2 flex items-center justify-center gap-1.5 text-[9px] text-slate-600" style={monoLabel}>
+            <DSIcon name="shield" size={12} /> SSL · LGPD · SEM CARTÃO NO CADASTRO
           </span>
         </div>
 
-        {/* ─── Guest mode — Continuar sem login ─── */}
-        <button
-          type="button"
-          onClick={() => {
-            if (typeof window !== 'undefined') {
-              localStorage.setItem('vfit_guest_mode', 'true')
-              localStorage.setItem('vfit_guest_started_at', new Date().toISOString())
-            }
-            router.push('/guest/explore')
-          }}
-          className="mt-3 w-full rounded-xl border border-white/8 bg-white/3 py-2.5 text-[12px] font-medium text-zinc-500 hover:text-zinc-300 hover:bg-white/6 transition-all duration-200"
-        >
-          <span className="flex items-center justify-center gap-2">
-            <DSIcon name="eye" size={14} />
-            Explorar sem conta
-          </span>
-        </button>
-
         {/* Version */}
-        <p className="mt-2 text-center text-[9px] text-zinc-800 select-none" style={monoLabel}>
+        <p className="mt-3 text-center text-[9px] text-zinc-800 select-none" style={monoLabel}>
           v{APP_VERSION}
         </p>
       </div>

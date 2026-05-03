@@ -7,6 +7,11 @@
 
 ## [Unreleased] — 2026-04-08 — Sprint 11-15 (UX Nutrição/Exercícios)
 
+### 🎯 Conversão — Login focado em cadastro (2026-05-03)
+- **Removido bypass de visitante do login:** [src/app/(auth)/login/page.tsx](src/app/(auth)/login/page.tsx) não exibe mais “Explorar sem conta”, mantendo o funil focado em entrar ou criar conta.
+- **CTA de cadastro reforçado:** bloco final do login agora direciona novos usuários para “Comece grátis agora” com prova de segurança (`SSL · LGPD · SEM CARTÃO NO CADASTRO`).
+- **Decisão CEO/Eng documentada:** [.claude/plans/vfit-consolidacao-producao-lancamento/PLAN.md](.claude/plans/vfit-consolidacao-producao-lancamento/PLAN.md) e [.claude/plans/vfit-consolidacao-producao-lancamento/TRACKING.md](.claude/plans/vfit-consolidacao-producao-lancamento/TRACKING.md) foram atualizados para tratar guest exploration como fora do funil principal de venda.
+
 ### 🎨 UI — Botões secondary/radius/3D (2026-04-25)
 - **Button system atualizado:** [src/components/ui/button.tsx](src/components/ui/button.tsx) recebeu novo `secondary` em paleta azure (light/dark), com contraste superior e destaque visual mais claro como ação secundária.
 - **Raio canônico global:** `sm/icon` agora usam `rounded-[10px]`; `md/lg/icon-lg` usam `rounded-xl`, removendo excesso de arredondamento.

@@ -2,16 +2,16 @@
 
 > **Plano:** `vfit-consolidacao-producao-lancamento`  
 > **Criado:** 03/05/2026  
-> **Última atualização:** 03/05/2026 — Login/auth visual corrigido; type-check/lint/build + smoke público/auth aprovados; deploy bloqueado por smoke auth expirado  
+> **Última atualização:** 03/05/2026 — Login sem exploração grátis; funil auth focado em conversão; deploy bloqueado por smoke auth expirado  
 > **Status geral:** Em progresso — aguardando tokens válidos de smoke auth antes de deploy
 
 ## Resumo
 
 - Tasks totais: 54
-- Concluídas: 37
+- Concluídas: 38
 - Em progresso: 1
-- Pendentes: 18
-- Progresso: 37/54 (69%)
+- Pendentes: 17
+- Progresso: 38/54 (70%)
 
 ## S0 — Plano Operacional e Baseline
 
@@ -79,7 +79,7 @@
 ## S7 — Remover Desnecessário e Backlog
 
 - [ ] **T7.1** Identificar menus incompletos/coming soon
-- [ ] **T7.2** Definir o que esconder no MVP
+- [x] **T7.2** Esconder bypass de visitante no login — removido “Explorar sem conta” para priorizar cadastro/venda
 - [ ] **T7.3** Mover fase 2 para backlog documentado
 - [ ] **T7.4** Revisar copy pública e nomes legados
 
@@ -101,6 +101,7 @@
 ## Observações de QA/deploy — 03/05/2026
 
 - Hotfix visual auth: `.auth-dark-scope` força tokens dark/azul mesmo quando `html.light` fica ativo após navegação de aluno.
+- Funil de venda: login não exibe mais “Explorar sem conta”; usuário novo recebe CTA único para cadastro grátis com prova de segurança.
 - Turnstile local: localhost/127.0.0.1 agora usa bypass visual seguro para QA local; produção mantém widget real em domínios reais.
 - Login local validado no browser: sem service worker/cache antigo, sem bloco branco do Turnstile, CTA azul e campos dark coerentes.
 - `npm run type-check`: aprovado após hotfix auth.
