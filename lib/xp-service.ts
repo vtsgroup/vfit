@@ -750,13 +750,28 @@ export async function getOrCreateDailyGoal(
 
   // Create today's goal (ON CONFLICT handles race conditions)
   const id = generateId()
-  await pgQuery(
-    env,
-    `INSERT INTO user_daily_goals (id, student_id, goal_date, target_xp, workouts_target)
-     VALUES ($1, $2, $3, $4, $5)
-     ON CONFLICT (student_id, goal_date) DO NOTHING`,
-    [id, studentId, goalDate, 50, 1]
-  )
+  try {
+    await pgQuery(
+      env,
+      `INSERT INTO user_daily_goals (id, student_id, goal_date, target_xp, workouts_target)
+       VALUES ($1, $2, $3, $4, $5)
+       ON CONFLICT (student_id, goal_date) DO NOTHING`,
+      [id, studentId, goalDate, 50, 1]
+    )
+  } catch {
+    // User not in students table (e.g., admin) — return default without persisting
+    return {
+      id,
+      student_id: studentId,
+      goal_date: goalDate,
+      target_xp: 50,
+      earned_xp: 0,
+      completed: false,
+      completed_at: null,
+      workouts_target: 1,
+      workouts_done: 0,
+    }
+  }
 
   // Re-fetch in case another request created the row concurrently
   const created = await pgQueryOne<DailyGoal>(
@@ -889,13 +904,17 @@ export async function getOrCreateStreak(
         max_freezes: 1,
       }
 
-      await pgQuery(
-        env,
-        `INSERT INTO xp_streaks (id, student_id, current_streak, longest_streak, last_milestone_awarded)
-     VALUES ($1, $2, $3, $4, $5)
-     ON CONFLICT (student_id) DO NOTHING`,
-        [generateId(), studentId, streak.current_streak, streak.longest_streak, 0]
-      )
+      try {
+        await pgQuery(
+          env,
+          `INSERT INTO xp_streaks (id, student_id, current_streak, longest_streak, last_milestone_awarded)
+       VALUES ($1, $2, $3, $4, $5)
+       ON CONFLICT (student_id) DO NOTHING`,
+          [generateId(), studentId, streak.current_streak, streak.longest_streak, 0]
+        )
+      } catch {
+        // User not in students table (e.g., admin viewing student data) — return default
+      }
 
       return streak
     },
