@@ -661,16 +661,16 @@ export function MobileBottomNav() {
           className="relative z-5 w-full overflow-visible rounded-t-[28px] backdrop-blur-2xl backdrop-saturate-200"
           style={{ paddingBottom: navBottomPadding }}
         >
-          {/* Premium glass background — Apple Dynamic Island inspired */}
+          {/* Premium glass background — Apple Dynamic Island inspired — NEVER blocks taps */}
           <div
-            className="nav-premium absolute inset-0 rounded-t-[28px]"
+            className="nav-premium pointer-events-none absolute inset-0 rounded-t-[28px]"
           />
 
           {/* PWA Standalone: solid theme fill for bottom safe area — prevents
               glass-to-solid seam between nav and system gesture bar */}
           {pwaInfo.standalone && (
             <div
-              className="absolute bottom-0 left-0 right-0 z-1"
+              className="pointer-events-none absolute bottom-0 left-0 right-0 z-1"
               style={{
                 height: navBottomPadding,
                 backgroundColor: '#050A12',

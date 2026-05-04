@@ -253,13 +253,13 @@ export function BottomNavigation({ notificationCount = 0, fabMenuOpen = false, o
         className="relative z-5 w-full overflow-visible rounded-t-[28px] backdrop-blur-2xl backdrop-saturate-200"
         style={{ paddingBottom: navBottomPadding }}
       >
-        {/* Premium glass background */}
-        <div className="nav-premium absolute inset-0 rounded-t-[28px]" />
+        {/* Premium glass background — NEVER blocks touches */}
+        <div className="nav-premium pointer-events-none absolute inset-0 rounded-t-[28px]" />
 
         {/* PWA Standalone: solid fill for bottom safe area */}
         {pwaInfo.standalone && (
           <div
-            className="absolute bottom-0 left-0 right-0 z-1"
+            className="pointer-events-none absolute bottom-0 left-0 right-0 z-1"
             style={{
               height: navBottomPadding,
               backgroundColor: '#050A12',
@@ -295,6 +295,8 @@ export function BottomNavigation({ notificationCount = 0, fabMenuOpen = false, o
                         : '0 10px 32px rgba(34, 197, 94, 0.5), 0 4px 12px rgba(34, 197, 94, 0.3), 0 0 0 1px rgba(255,255,255,0.18) inset',
                       animation: fabMenuOpen ? 'none' : 'fab-pulse 3.2s ease-in-out infinite',
                       cursor: 'pointer',
+                      touchAction: 'manipulation',
+                      WebkitTapHighlightColor: 'transparent',
                     }}
                     aria-label={fabMenuOpen ? 'Fechar menu IA' : 'Abrir menu IA'}
                   >
@@ -320,6 +322,7 @@ export function BottomNavigation({ notificationCount = 0, fabMenuOpen = false, o
                 prefetch={true}
                 onClick={haptic}
                 className="group relative flex min-w-10 flex-1 flex-col items-center active:scale-[0.88] transition-all duration-200"
+                style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
               >
                 <div className="relative flex h-9 w-9 items-center justify-center">
                   {isActive && (
