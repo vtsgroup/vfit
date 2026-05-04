@@ -42,15 +42,15 @@ const variantStyles: Record<ButtonVariant, string> = {
     '[text-shadow:0_1px_2px_rgba(0,0,0,0.2)]',
     // Border: lighter top edge, darker bottom — glass edge
     'border border-t-emerald-300/50 border-x-emerald-500/30 border-b-emerald-700/50',
-    // 3D depth + ambient glow + inner highlight
-    'shadow-[0_4px_0_0_#166534,0_6px_20px_-4px_rgba(16,185,129,0.5),0_0_0_0_transparent,inset_0_1px_0_rgba(255,255,255,0.25)]',
-    // Hover: lift + stronger glow
+    // 3D depth solido + inner highlight (sem ambient glow verde)
+    'shadow-[0_4px_0_0_#166534,inset_0_1px_0_rgba(255,255,255,0.25)]',
+    // Hover: lift (sem glow blur)
     'hover:-translate-y-0.5',
-    'hover:shadow-[0_6px_0_0_#166534,0_10px_30px_-4px_rgba(16,185,129,0.6),0_0_60px_-10px_rgba(16,185,129,0.25),inset_0_1px_0_rgba(255,255,255,0.3)]',
+    'hover:shadow-[0_6px_0_0_#166534,inset_0_1px_0_rgba(255,255,255,0.3)]',
     'hover:brightness-105',
     // Active: press down + inner shadow
     'active:translate-y-[3px] active:scale-[0.98]',
-    'active:shadow-[0_1px_0_0_#166534,0_2px_8px_-2px_rgba(16,185,129,0.3),0_0_0_0_transparent,inset_0_2px_6px_rgba(0,0,0,0.15)]',
+    'active:shadow-[0_1px_0_0_#166534,inset_0_2px_6px_rgba(0,0,0,0.15)]',
     'active:brightness-95',
     'focus-visible:ring-emerald-400/40',
   ].join(' '),
