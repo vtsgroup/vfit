@@ -310,7 +310,7 @@ export default function TreinoConcluido() {
         <div
           className={`grid grid-cols-2 gap-3 transition-all duration-500 delay-100 ${statsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
         >
-          <StatCard icon="clock" iconColor="text-sky-300" label="Duração" value={formatDuration(summary.duration_seconds)} />
+          <StatCard icon="clock" iconColor="text-emerald-300" label="Duração" value={formatDuration(summary.duration_seconds)} />
           <StatCard icon="activity" iconColor="text-violet-300" label="Sets" value={`${summary.total_sets}`} />
           <StatCard icon="dumbbell" iconColor="text-brand-primary" label="Volume" value={summary.total_volume_kg > 0 ? `${summary.total_volume_kg.toLocaleString('pt-BR')} kg` : `${summary.total_reps} reps`} />
           <StatCard icon="flame" iconColor="text-amber-300" label="Calorias" value={`~${summary.estimated_calories}`} />

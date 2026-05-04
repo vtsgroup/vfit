@@ -119,7 +119,7 @@ export function StudentHeader() {
         <div className="flex min-w-0 flex-1 items-center gap-3">
           <div className="flex min-w-0 flex-col justify-center">
             <nav aria-label="Breadcrumb" className="mb-0.5 flex items-center gap-1.5">
-              <Link href="/treinos" className="shrink-0 text-white/80 transition-colors hover:text-sky-300">
+              <Link href="/treinos" className="shrink-0 text-white/80 transition-colors hover:text-emerald-300">
                 <DSIcon name="home" size={14} className="text-white" />
               </Link>
 
@@ -129,7 +129,7 @@ export function StudentHeader() {
                       <DSIcon name="chevronRight" size={10} className="shrink-0 text-white/35" />
                       <Link
                         href={item.href!}
-                        className="max-w-32 truncate text-xs font-medium text-white/70 transition-colors hover:text-sky-300"
+                        className="max-w-32 truncate text-xs font-medium text-white/70 transition-colors hover:text-emerald-300"
                       >
                         {item.label}
                       </Link>

@@ -157,7 +157,7 @@ export function StudentFabMenu({ open, onClose }: StudentFabMenuProps) {
             }}
           >
             <div
-              className="rounded-[22px] border border-sky-100 bg-white/96 p-2 shadow-[0_20px_60px_-28px_rgba(37,99,235,0.45),0_10px_24px_-18px_rgba(15,23,42,0.28)]"
+              className="rounded-[22px] border border-emerald-100 bg-white/96 p-2 shadow-[0_20px_60px_-28px_rgba(34,197,94,0.35),0_10px_24px_-18px_rgba(15,23,42,0.28)]"
               style={{ backdropFilter: 'blur(28px) saturate(185%)', WebkitBackdropFilter: 'blur(28px) saturate(185%)' }}
             >
               {/* Header */}

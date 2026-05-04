@@ -241,7 +241,7 @@ export default function LoginPage() {
               onChange={handleIdentifierChange}
               autoComplete="username"
               required
-              className="w-full h-11 rounded-xl border border-sky-400/20 bg-slate-950/70 px-4 text-[14px] text-white placeholder:text-slate-500 shadow-[0_1px_3px_rgba(0,0,0,0.28),inset_0_1px_2px_rgba(255,255,255,0.03)] transition-all duration-200 focus:outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-400/25"
+              className="w-full h-11 rounded-xl border border-emerald-400/20 bg-slate-950/70 px-4 text-[14px] text-white placeholder:text-slate-500 shadow-[0_1px_3px_rgba(0,0,0,0.28),inset_0_1px_2px_rgba(255,255,255,0.03)] transition-all duration-200 focus:outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/25"
             />
           </div>
 
@@ -258,13 +258,13 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete="current-password"
                 required
-                className="w-full h-11 rounded-xl border border-sky-400/20 bg-slate-950/70 px-4 pr-12 text-[14px] text-white placeholder:text-slate-500 shadow-[0_1px_3px_rgba(0,0,0,0.28),inset_0_1px_2px_rgba(255,255,255,0.03)] transition-all duration-200 focus:outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-400/25"
+                className="w-full h-11 rounded-xl border border-emerald-400/20 bg-slate-950/70 px-4 pr-12 text-[14px] text-white placeholder:text-slate-500 shadow-[0_1px_3px_rgba(0,0,0,0.28),inset_0_1px_2px_rgba(255,255,255,0.03)] transition-all duration-200 focus:outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/25"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
-                className="absolute right-1.5 top-1/2 -translate-y-1/2 p-2 text-slate-400 hover:text-sky-200 transition-colors rounded-lg hover:bg-white/6"
+                className="absolute right-1.5 top-1/2 -translate-y-1/2 p-2 text-slate-400 hover:text-emerald-300 transition-colors rounded-lg hover:bg-white/6"
                 tabIndex={-1}
               >
                 {showPassword ? <DSIcon name="eyeOff" size={16} /> : <DSIcon name="eye" size={16} />}
@@ -359,7 +359,7 @@ export default function LoginPage() {
         </form>
 
         {/* ─── Register link + Trust badges — sales-focused, no guest bypass ─── */}
-        <div className="mt-4 rounded-2xl border border-sky-400/15 bg-sky-400/5 px-4 py-3 text-center">
+        <div className="mt-4 rounded-2xl border border-emerald-400/15 bg-emerald-400/5 px-4 py-3 text-center">
           <p className="text-[13px] text-slate-400">
             Novo por aqui?{' '}
             <Link href="/register" className="font-black text-brand-primary hover:text-brand-primary/80 transition-colors">

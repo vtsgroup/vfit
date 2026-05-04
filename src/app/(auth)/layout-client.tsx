@@ -70,8 +70,8 @@ function ImageSlideshow() {
       ))}
       {/* Dark overlay to keep text readable */}
       <div className="absolute inset-0 bg-[#020810]/75" />
-      {/* Public/auth blue cinematic tint */}
-      <div className="absolute inset-0 bg-linear-to-br from-[#020810]/50 via-sky-500/8 to-[#020810]/60" />
+      {/* Public/auth green cinematic tint */}
+      <div className="absolute inset-0 bg-linear-to-br from-[#020810]/50 via-emerald-500/8 to-[#020810]/60" />
     </div>
   )
 }
@@ -128,7 +128,7 @@ function AnimatedAuthLogo({ size = 'large' }: { size?: 'large' | 'small' }) {
 
         {/* Typing cursor */}
         <span
-          className="inline-block w-[2.5px] rounded-full bg-sky-400 ml-px transition-opacity duration-300"
+          className="inline-block w-[2.5px] rounded-full bg-brand-primary ml-px transition-opacity duration-300"
           style={{
             height: cursorH,
             opacity: typedCount < VFIT_LETTERS.length ? 1 : 0,
@@ -144,7 +144,7 @@ function AnimatedAuthLogo({ size = 'large' }: { size?: 'large' | 'small' }) {
 function FeatureChip({ icon, label }: { icon: React.ReactNode; label: string }) {
   return (
     <div className="flex items-center gap-1.5 rounded-full border border-white/8 bg-white/4 backdrop-blur-sm px-3 py-1 text-[10px] font-medium text-zinc-300 select-none transition-all hover:border-white/15 hover:bg-white/7">
-      <span className="text-sky-300/80">{icon}</span>
+      <span className="text-emerald-300/80">{icon}</span>
       <span style={{ fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace', fontWeight: 700, letterSpacing: '0.1em' }}>
         {label}
       </span>
@@ -177,20 +177,20 @@ function CinematicBackground() {
       {/* Base deep dark gradient */}
       <div className="absolute inset-0 bg-linear-to-br from-[#020810]/70 via-[#071022]/50 to-[#030B15]/70" />
 
-      {/* Aurora layer 1 — slow drift, blue */}
+      {/* Aurora layer 1 — slow drift, green */}
       <div
         className="absolute inset-0 opacity-40"
         style={{
-          background: 'radial-gradient(ellipse 120% 60% at 20% 80%, rgba(59,130,246,0.20) 0%, transparent 60%)',
+          background: 'radial-gradient(ellipse 120% 60% at 20% 80%, rgba(34,197,94,0.15) 0%, transparent 60%)',
           animation: 'auroraDrift1 25s ease-in-out infinite alternate',
         }}
       />
 
-      {/* Aurora layer 2 — slow drift, cyan/blue */}
+      {/* Aurora layer 2 — slow drift, emerald */}
       <div
         className="absolute inset-0 opacity-30"
         style={{
-          background: 'radial-gradient(ellipse 100% 50% at 80% 30%, rgba(14,165,233,0.16) 0%, transparent 55%)',
+          background: 'radial-gradient(ellipse 100% 50% at 80% 30%, rgba(16,185,129,0.12) 0%, transparent 55%)',
           animation: 'auroraDrift2 30s ease-in-out infinite alternate',
         }}
       />
@@ -199,7 +199,7 @@ function CinematicBackground() {
       <div
         className="absolute inset-0 opacity-20"
         style={{
-          background: 'radial-gradient(ellipse 80% 40% at 50% 60%, rgba(56,189,248,0.10) 0%, transparent 50%)',
+          background: 'radial-gradient(ellipse 80% 40% at 50% 60%, rgba(34,197,94,0.08) 0%, transparent 50%)',
           animation: 'auroraDrift3 20s ease-in-out infinite alternate',
         }}
       />
@@ -209,9 +209,9 @@ function CinematicBackground() {
         className="absolute inset-0 opacity-25"
         style={{
           background: `
-            radial-gradient(circle at 15% 25%, rgba(59,130,246,0.13) 0%, transparent 40%),
-            radial-gradient(circle at 85% 75%, rgba(59,130,246,0.12) 0%, transparent 35%),
-            radial-gradient(circle at 50% 10%, rgba(14,165,233,0.10) 0%, transparent 45%)
+            radial-gradient(circle at 15% 25%, rgba(34,197,94,0.10) 0%, transparent 40%),
+            radial-gradient(circle at 85% 75%, rgba(16,185,129,0.09) 0%, transparent 35%),
+            radial-gradient(circle at 50% 10%, rgba(52,211,153,0.08) 0%, transparent 45%)
           `,
           animation: 'auroraMesh 35s ease-in-out infinite alternate',
         }}
@@ -221,7 +221,7 @@ function CinematicBackground() {
       {particles.map((p) => (
         <div
           key={p.id}
-          className="absolute rounded-full bg-sky-400/60"
+          className="absolute rounded-full bg-emerald-400/60"
           style={{
             width: `${p.size}px`,
             height: `${p.size}px`,
@@ -278,7 +278,7 @@ function TestimonialCarousel() {
         >
           {[...AUTH_TESTIMONIALS, ...AUTH_TESTIMONIALS].map((t, i) => (
             <div key={i} className="shrink-0 w-65 xl:w-70">
-              <div className="h-45 flex flex-col rounded-2xl bg-white p-4 shadow-[0_4px_20px_rgba(59,130,246,0.12),0_1px_6px_rgba(0,0,0,0.06)] transition-shadow duration-300 hover:shadow-[0_8px_30px_rgba(59,130,246,0.24)]">
+              <div className="h-45 flex flex-col rounded-2xl bg-white p-4 shadow-[0_4px_20px_rgba(34,197,94,0.08),0_1px_6px_rgba(0,0,0,0.06)] transition-shadow duration-300 hover:shadow-[0_8px_30px_rgba(34,197,94,0.18)]">
                 {/* Stars + rating */}
                 <div className="flex items-center gap-1.5 mb-2">
                   <div className="flex gap-0.5">
@@ -300,7 +300,7 @@ function TestimonialCarousel() {
 
                 {/* Author */}
                 <div className="mt-2 flex items-center gap-2 pt-2.5 border-t border-zinc-100">
-                  <div className="h-7 w-7 rounded-full bg-linear-to-br from-sky-500 to-cyan-400 flex items-center justify-center text-[9px] font-bold text-white shadow-sm">
+                  <div className="h-7 w-7 rounded-full bg-linear-to-br from-emerald-500 to-green-400 flex items-center justify-center text-[9px] font-bold text-white shadow-sm">
                     {t.avatar}
                   </div>
                   <div className="min-w-0 flex-1">
@@ -395,7 +395,7 @@ export function AuthLayoutClient({ children }: { children: ReactNode }) {
           <div
             className="absolute inset-0 opacity-[0.03]"
             style={{
-              backgroundImage: 'linear-gradient(rgba(59,130,246,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,0.3) 1px, transparent 1px)',
+              backgroundImage: 'linear-gradient(rgba(34,197,94,0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(34,197,94,0.2) 1px, transparent 1px)',
               backgroundSize: '80px 80px',
               animation: 'authGridScroll 20s linear infinite',
             }}
@@ -403,7 +403,7 @@ export function AuthLayoutClient({ children }: { children: ReactNode }) {
 
           {/* Floating gradient orbs */}
           <div
-            className="absolute top-[15%] -left-16 h-72 w-72 rounded-full bg-sky-500/14 blur-[100px]"
+            className="absolute top-[15%] -left-16 h-72 w-72 rounded-full bg-emerald-500/12 blur-[100px]"
             style={{ animation: 'authFloat 8s ease-in-out infinite' }}
           />
           <div
@@ -419,7 +419,7 @@ export function AuthLayoutClient({ children }: { children: ReactNode }) {
             {/* Tagline + features */}
             <div className="max-w-lg">
               <p
-                className="text-[10px] uppercase text-sky-300/90 mb-3"
+                className="text-[10px] uppercase text-emerald-300/90 mb-3"
                 style={{ fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace', fontWeight: 700, letterSpacing: '0.15em' }}
               >
                 PLATAFORMA #1 PARA PERSONAL TRAINERS
@@ -429,7 +429,7 @@ export function AuthLayoutClient({ children }: { children: ReactNode }) {
                 style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', fontWeight: 900, letterSpacing: '-0.03em' }}
               >
                 Treinos, alunos e{' '}
-                <span className="text-transparent bg-clip-text bg-linear-to-r from-sky-300 via-cyan-300 to-blue-500">
+                <span className="text-transparent bg-clip-text bg-linear-to-r from-emerald-300 via-green-300 to-emerald-500">
                   cobranças
                 </span>
               </h2>
@@ -483,16 +483,16 @@ export function AuthLayoutClient({ children }: { children: ReactNode }) {
 
         {/* ─── GRADIENT BORDER SEPARATOR ─── */}
         <div className="hidden lg:block relative w-px">
-          <div className="absolute inset-0 bg-linear-to-b from-transparent via-sky-400/45 to-transparent" />
-          <div className="absolute inset-0 bg-linear-to-b from-transparent via-sky-400/25 to-transparent blur-[3px]" />
+          <div className="absolute inset-0 bg-linear-to-b from-transparent via-emerald-400/45 to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-b from-transparent via-emerald-400/25 to-transparent blur-[3px]" />
         </div>
 
         {/* ─── RIGHT PANEL — Form ─── */}
         <div className="flex w-full lg:w-[52%] xl:w-1/2 flex-col relative">
           {/* Ambient glow */}
           <div className="pointer-events-none absolute inset-0 overflow-hidden">
-            <div className="absolute -top-40 right-[-10%] h-96 w-96 rounded-full bg-sky-500/4 blur-[120px]" />
-            <div className="absolute bottom-[-10%] left-[-5%] h-60 w-60 rounded-full bg-cyan-400/3 blur-[100px]" />
+            <div className="absolute -top-40 right-[-10%] h-96 w-96 rounded-full bg-emerald-500/4 blur-[120px]" />
+            <div className="absolute bottom-[-10%] left-[-5%] h-60 w-60 rounded-full bg-emerald-400/3 blur-[100px]" />
           </div>
 
           {/* Subtle grid on right panel */}

@@ -36,9 +36,9 @@ export default function TemaPage() {
         </div>
       </div>
 
-      <div className="rounded-3xl border border-sky-100 bg-linear-to-br from-white to-sky-50 p-5 shadow-[0_18px_45px_-32px_rgba(37,99,235,0.45)]">
+      <div className="rounded-3xl border border-emerald-100 bg-linear-to-br from-white to-emerald-50 p-5 shadow-[0_18px_45px_-32px_rgba(34,197,94,0.25)]">
         <div className="mb-4 flex items-center gap-4">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-100 text-sky-700">
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700">
             <DSIcon name="sun" size={24} />
           </div>
           <div className="flex-1">
