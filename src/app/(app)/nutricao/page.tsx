@@ -304,7 +304,7 @@ export default function NutricaoPage() {
 
           <div className="flex flex-wrap gap-2">
             <Button
-              variant="outline"
+              variant="ghost"
               size="sm"
               onClick={() => navigator.clipboard.writeText(nutritionInviteLink)}
             >
@@ -312,7 +312,7 @@ export default function NutricaoPage() {
               Copiar link
             </Button>
             <Button
-              variant="outline"
+              variant="ghost"
               size="sm"
               onClick={() => window.open(`mailto:?subject=${encodeURIComponent('Convite VFIT — Nutricionista')}&body=${encodeURIComponent(`Olá! Quero te convidar para me acompanhar no VFIT na parte nutricional.\n\nContato/cadastro: ${nutritionInviteLink}`)}`, '_blank')}
             >
@@ -320,7 +320,7 @@ export default function NutricaoPage() {
               Email
             </Button>
             <Button
-              variant="outline"
+              variant="ghost"
               size="sm"
               onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(`Olá! Quero te convidar para meu acompanhamento nutricional no VFIT.\n\nContato/cadastro: ${nutritionInviteLink}`)}`, '_blank')}
             >
@@ -328,7 +328,7 @@ export default function NutricaoPage() {
               WhatsApp
             </Button>
             <Button
-              variant={showNutritionQr ? 'secondary' : 'outline'}
+              variant={showNutritionQr ? 'secondary' : 'ghost'}
               size="sm"
               onClick={() => setShowNutritionQr((v) => !v)}
             >

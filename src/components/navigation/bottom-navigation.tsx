@@ -317,6 +317,7 @@ export function BottomNavigation({ notificationCount = 0, fabMenuOpen = false, o
               <Link
                 key={tab.id}
                 href={tab.href}
+                prefetch={true}
                 onClick={haptic}
                 className="group relative flex min-w-10 flex-1 flex-col items-center active:scale-[0.88] transition-all duration-200"
               >

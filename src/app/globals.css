@@ -19,7 +19,7 @@
   --safe-area-bottom: env(safe-area-inset-bottom, 0px);
   --header-h-student: 3.5rem;
   --header-h-personal: 4rem;
-  --bottomnav-h: 5.5rem;
+  --bottomnav-h: 4.25rem;
   --pt-student: calc(var(--header-h-student) + var(--safe-area-top));
   --pb-nav: calc(var(--bottomnav-h) + var(--safe-area-bottom));
   --pt-personal: calc(var(--header-h-personal) + var(--safe-area-top) + var(--demo-banner-offset, 0px));

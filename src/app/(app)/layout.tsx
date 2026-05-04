@@ -73,12 +73,12 @@ function migrateLocalStorageKeys() {
 
 function AppRouteLoader({ message }: { message: string }) {
   return (
-    <div className="flex min-h-dvh items-center justify-center bg-sky-50 px-6">
+    <div className="flex min-h-dvh items-center justify-center bg-[#050A12] px-6">
       <div className="flex flex-col items-center gap-4 text-center">
-        <div className="relative flex h-14 w-14 items-center justify-center rounded-3xl border border-sky-100 bg-white shadow-[0_18px_50px_rgba(14,165,233,0.16)]">
-          <div className="h-8 w-8 animate-spin rounded-full border-3 border-sky-100 border-t-sky-500" />
+        <div className="relative flex h-14 w-14 items-center justify-center rounded-3xl border border-brand-primary/20 bg-[#0f2010] shadow-[0_18px_50px_rgba(34,197,94,0.10)]">
+          <div className="h-8 w-8 animate-spin rounded-full border-3 border-brand-primary/20 border-t-brand-primary" />
         </div>
-        <p className="text-sm font-semibold text-slate-600">{message}</p>
+        <p className="text-sm font-semibold text-slate-400">{message}</p>
       </div>
     </div>
   )

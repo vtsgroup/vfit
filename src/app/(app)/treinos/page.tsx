@@ -43,6 +43,23 @@ const DIFFICULTY_FILTERS = [
   { value: 'advanced', label: 'Avançado' },
 ]
 
+const MOTIVATIONAL_PHRASES = [
+  'Cada rep conta. Hoje é o dia.',
+  'Consistência bate talento.',
+  'O melhor treino é o que você faz.',
+  'Progresso, não perfeição.',
+  'Força se constrói dia a dia.',
+  'Você é mais forte do que pensa.',
+  'Foco. Treino. Evolução.',
+  'Supere o ontem.',
+  'Disciplina é liberdade.',
+  'Um passo de cada vez.',
+  'Movimento cria momentum.',
+  'Resultados exigem presença.',
+  'Pequenas vitórias somam grandes mudanças.',
+  'Sua melhor versão está em construção.',
+]
+
 // Tradução de IDs de grupos musculares para português
 const MUSCLE_PT: Record<string, string> = {
   chest: 'Peito', back: 'Costas', shoulders: 'Ombros', biceps: 'Bíceps',
@@ -132,7 +149,7 @@ function TodayWorkoutCard({
     <div className="mb-4 block" onClick={() => hapticLight()}>
       <Link href="/plano">
         <div className={`glass-card relative overflow-hidden rounded-2xl border p-4 transition-all active:scale-[0.98] ${borderColor}`}>
-          <div className={`absolute inset-y-3 left-0 w-1 rounded-r-full ${accentBar}`} />
+
 
           {/* Header row */}
           <div className="mb-2.5 flex items-center justify-between pl-1">
@@ -377,19 +394,20 @@ export default function TreinosPage() {
   const carbsPct = targets.carbs > 0 ? Math.round((totals.carbs / targets.carbs) * 100) : 0
 
   return (
-    <div className="mx-auto max-w-lg animate-in fade-in-0 slide-in-from-bottom-2 duration-300 px-4 pt-0 pb-24">
+    <div className="mx-auto max-w-lg animate-in fade-in-0 slide-in-from-bottom-2 duration-300 px-4 pt-0 pb-4">
       {/* ─── Hero ─── */}
       <div
         className="-mx-4 mb-5 overflow-hidden rounded-b-3xl px-4 py-5"
         style={{ background: 'linear-gradient(to bottom, #0b1d36 0%, #0c1f38 20%, #0b1c35 40%, #0a1830 65%, #071628 85%, #050A12 100%)', boxShadow: '0 6px 28px 0 rgba(5,10,18,0.6)' }}
       >
-        <p className="text-xs font-semibold text-sky-400">
+        <p className="text-xs font-semibold text-emerald-400">
           {(() => { const h = new Date().getHours(); return h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite' })()}
         </p>
-        <h1 className="bg-linear-to-r from-white to-sky-200 bg-clip-text text-4xl font-black text-transparent">
+        <h1 className="bg-linear-to-r from-white to-emerald-300/80 bg-clip-text text-4xl font-black text-transparent">
           Treinos
         </h1>
-        <p className="mt-1 text-xs text-sky-200/60">Recursos personalizados para você</p>
+        <p className="mt-1 text-xs text-emerald-400/60">Recursos personalizados para você</p>
+        <p className="mt-2 text-[11px] italic text-white/35">{MOTIVATIONAL_PHRASES[Math.floor(Date.now() / 86400000) % MOTIVATIONAL_PHRASES.length]}</p>
       </div>
 
       {/* S1.1 — Card "Treino de Hoje" com urgência */}
@@ -408,7 +426,7 @@ export default function TreinosPage() {
           label="Plano"
           value={planPct}
           unit="%"
-          color="blue"
+          color="green"
           trend={{ delta: Math.max(1, planPct - 50), isPositive: planPct >= 50 }}
         />
         <KPICard
@@ -416,7 +434,7 @@ export default function TreinosPage() {
           label="Proteína"
           value={Math.round(totals.protein)}
           unit="g"
-          color="cyan"
+          color="green"
           trend={{ delta: Math.abs(proteinPct - 100), isPositive: proteinPct >= 100 }}
         />
         <KPICard
