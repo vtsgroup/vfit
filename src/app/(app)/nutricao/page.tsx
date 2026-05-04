@@ -214,7 +214,7 @@ export default function NutricaoPage() {
           {/* Adicionar dentro do hero */}
           <button
             onClick={() => setShowSearch(true)}
-            className="shrink-0 inline-flex items-center gap-1.5 rounded-xl border border-emerald-400/30 bg-emerald-500/15 px-3 py-2 text-[12px] font-semibold text-emerald-200 backdrop-blur-md transition-all hover:bg-emerald-500/25 hover:border-emerald-400/50 active:scale-95"
+            className="shrink-0 inline-flex items-center gap-1.5 rounded-xl border border-white/14 bg-white/8 px-3 py-2 text-[12px] font-semibold text-white/85 backdrop-blur-md transition-all hover:bg-white/14 hover:border-white/22 active:scale-95"
           >
             <DSIcon name="plus" size={14} />
             Adicionar

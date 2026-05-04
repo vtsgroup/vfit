@@ -127,50 +127,54 @@ export default function ExerciciosPage() {
   // ============================================
 
   return (
-    <div className="mx-auto max-w-lg px-4 pb-28 pt-6">
-      {/* Header */}
-      <div className="mb-5">
-        <div className="flex items-center justify-between">
+    <div className="mx-auto max-w-lg pb-28 pt-0">
+      {/* ─── Hero ─── */}
+      <div
+        className="mb-5 overflow-hidden rounded-b-3xl px-4 py-5"
+        style={{ background: 'linear-gradient(to bottom, #0b1d36 0%, #0c1f38 20%, #0b1c35 40%, #0a1830 65%, #071628 85%, #050A12 100%)', boxShadow: '0 6px 28px 0 rgba(5,10,18,0.6)' }}
+      >
+        <div className="flex items-end justify-between gap-3">
           <div>
-            <h1 className="text-2xl font-black text-white leading-tight">Exercícios</h1>
-            <p className="mt-0.5 text-[13px] text-zinc-500">
-              {exercisesData?.meta?.total || 0} exercícios disponíveis
+            <p className="text-xs font-semibold text-violet-300">Biblioteca</p>
+            <h1 className="bg-linear-to-r from-white to-violet-200 bg-clip-text text-4xl font-black text-transparent leading-tight">Exercícios</h1>
+            <p className="mt-1 text-xs text-white/55">
+              {exercisesData?.meta?.total || 0} disponíveis
             </p>
           </div>
           <button
             type="button"
             onClick={() => setShowSearch(!showSearch)}
-            className={`flex h-10 w-10 items-center justify-center rounded-xl border transition-all ${
+            className={`shrink-0 flex h-9 w-9 items-center justify-center rounded-[10px] border transition-all ${
               showSearch
-                ? 'border-brand-primary/30 bg-brand-primary/10 text-brand-primary'
-                : 'border-white/8 bg-white/3 text-zinc-400 hover:text-white hover:bg-white/6'
+                ? 'border-violet-400/40 bg-violet-500/15 text-violet-300'
+                : 'border-white/12 bg-white/8 text-white/65 hover:text-white hover:bg-white/12'
             }`}
           >
-            <DSIcon name="search" size={20} />
+            <DSIcon name="search" size={18} />
           </button>
         </div>
 
-        {/* Search bar */}
+        {/* Search bar inside hero */}
         {showSearch && (
           <div className="mt-3 relative">
             <DSIcon
               name="search"
               size={16}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500"
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-white/35"
             />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Buscar exercício..."
-              className="w-full rounded-xl border border-white/8 bg-white/3 py-2.5 pl-9 pr-4 text-[14px] text-white placeholder:text-zinc-600 focus:border-brand-primary/30 focus:outline-none focus:ring-1 focus:ring-brand-primary/20"
+              className="w-full rounded-xl border border-white/12 bg-white/8 py-2.5 pl-9 pr-4 text-[14px] text-white placeholder:text-white/35 focus:border-violet-400/30 focus:outline-none focus:ring-1 focus:ring-violet-400/15"
               autoFocus
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white"
               >
                 <DSIcon name="x" size={16} />
               </button>
@@ -178,6 +182,8 @@ export default function ExerciciosPage() {
           </div>
         )}
       </div>
+
+      <div className="px-4">
 
       {/* Tabs */}
       <div className="mb-5 flex gap-1 rounded-xl bg-white/3 p-1">
@@ -243,6 +249,7 @@ export default function ExerciciosPage() {
           totalFavorites={favCount}
         />
       )}
+    </div>
     </div>
   )
 }

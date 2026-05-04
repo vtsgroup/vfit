@@ -330,7 +330,17 @@ app.get('/api/v1/muscle-groups', async (c) => {
     .prepare('SELECT * FROM muscle_groups ORDER BY display_order')
     .all()
 
-  const response = { success: true, data: results.results }
+  type MG = { id: string; parent_id: string | null; [k: string]: unknown }
+  const all = results.results as MG[]
+  // Return flat array so client can filter subgroups by parent_id
+  // Also include sub_muscles nested on each root group for convenience
+  const roots = all.filter((m) => !m.parent_id)
+  const nested = roots.map((r) => ({
+    ...r,
+    sub_muscles: all.filter((s) => s.parent_id === r.id),
+  }))
+  // data = flat array (all records, subgroups included) for backward compat
+  const response = { success: true, data: all, muscle_groups: nested }
   c.executionCtx.waitUntil(
     c.env.KV_CACHE.put(cacheKey, JSON.stringify(response), { expirationTtl: 604800 })
   )

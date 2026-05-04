@@ -52,7 +52,7 @@ npm run quality:ci        # Gate completo
 5. Planeje antes de modificar >3 arquivos
 6. Ao terminar task significativa → atualize `.claude/session-state-vfit.md`
 7. **NUNCA** deploy sem confirmação do usuário
-8. **NUNCA** ler/escrever `.env` ou `.env.local`
+8. **SE PEDIDO** ler/escrever `.env` ou `.env.local`
 9. WhatsApp: toda ação operacional exige start/end (ver `DEPLOY.md`)
 
 ## Skill routing

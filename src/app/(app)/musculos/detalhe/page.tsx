@@ -23,17 +23,25 @@ function MuscleDetailContent() {
   const selected = useMemo(() => {
     const target = normalizeText(muscle)
     if (!target) return null
-
     return muscleGroups.find((m) => (
       normalizeText(m.name_pt) === target
       || normalizeText(m.name) === target
     )) || null
   }, [muscle, muscleGroups])
 
+  // Compute sub-muscles from flat API response using parent_id
+  const subMuscles = useMemo(() => {
+    if (!selected) return []
+    return muscleGroups.filter((m) => m.parent_id === selected.id)
+  }, [muscleGroups, selected])
+
   if (isLoading) {
     return (
-      <div className="mx-auto max-w-lg px-4 pt-6">
-        <div className="h-24 animate-pulse rounded-2xl bg-bg-secondary" />
+      <div className="mx-auto max-w-lg">
+        <div className="h-44 animate-pulse rounded-b-3xl bg-bg-secondary" />
+        <div className="px-4 pt-5">
+          <div className="h-8 animate-pulse rounded-xl bg-bg-secondary" />
+        </div>
       </div>
     )
   }
@@ -51,58 +59,73 @@ function MuscleDetailContent() {
     )
   }
 
-  return (
-    <div className="mx-auto max-w-lg px-4 pb-28 pt-6">
-      <button type="button" onClick={() => router.back()} className="mb-4 inline-flex items-center gap-1 text-sm text-brand-primary">
-        <DSIcon name="arrowLeft" size={14} /> Voltar
-      </button>
+  const muscleColor = selected.color_hex || '#22c55e'
 
-      <div className="rounded-2xl border border-white/10 bg-bg-secondary p-4">
-        <h1 className="text-xl font-black text-text-primary">{selected.name_pt || selected.name}</h1>
-        <p className="mt-2 text-sm text-text-secondary">
+  return (
+    <div className="mx-auto max-w-lg pb-28">
+      {/* ─── Hero ─── */}
+      <div
+        className="relative overflow-hidden rounded-b-3xl px-4 pb-6 pt-5"
+        style={{ background: 'linear-gradient(to bottom, #0b1d36 0%, #0c1f38 20%, #0b1c35 40%, #0a1830 65%, #071628 85%, #050A12 100%)', boxShadow: '0 6px 28px 0 rgba(5,10,18,0.6)' }}
+      >
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{ background: `radial-gradient(circle at 80% 30%, ${muscleColor}22, transparent 60%)` }}
+        />
+        <button type="button" onClick={() => router.back()} className="relative mb-3 inline-flex items-center gap-1 text-xs text-white/55 transition-colors hover:text-white/85">
+          <DSIcon name="arrowLeft" size={12} /> Voltar
+        </button>
+        <div className="relative flex items-end justify-between gap-3">
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-wider" style={{ color: muscleColor }}>Anatomia</p>
+            <h1 className="text-3xl font-black text-white leading-tight">{selected.name_pt || selected.name}</h1>
+          </div>
+          {selected.image_url && (
+            <Image
+              src={selected.image_url}
+              alt={selected.name_pt || selected.name}
+              width={80}
+              height={80}
+              className="h-20 w-20 shrink-0 rounded-2xl object-cover opacity-90"
+            />
+          )}
+        </div>
+        <p className="relative mt-2 text-[13px] leading-relaxed text-white/60">
           {selected.description || 'Este grupo muscular participa de exercícios compostos e isolados. Foque em execução controlada e amplitude completa.'}
         </p>
-
-        {selected.image_url ? (
-          <Image
-            src={selected.image_url}
-            alt={selected.name_pt || selected.name}
-            width={640}
-            height={360}
-            className="mt-3 h-40 w-full rounded-xl object-cover"
-          />
-        ) : (
-          <div className="mt-3 flex h-40 items-center justify-center rounded-xl border border-dashed border-white/15 bg-bg-tertiary text-text-muted">
-            <div className="text-center">
-              <DSIcon name="image" size={28} className="mx-auto" />
-              <p className="mt-2 text-xs">Placeholder imagem do grupo muscular</p>
-            </div>
-          </div>
-        )}
       </div>
 
-      <div className="mt-4 rounded-2xl border border-white/10 bg-bg-secondary p-4">
-        <h2 className="mb-2 text-xs font-bold uppercase tracking-wider text-text-muted">Subgrupos</h2>
-
-        {(selected.sub_muscles?.length ?? 0) === 0 ? (
-          <p className="text-sm text-text-secondary">Sem subgrupos cadastrados ainda.</p>
-        ) : (
-          <div className="space-y-2">
-            {selected.sub_muscles?.map((sub) => (
-              <div key={sub.id} className="flex items-center gap-3 rounded-xl border border-white/8 bg-bg-tertiary p-2.5">
-                {sub.image_url ? (
-                  <Image src={sub.image_url} alt={sub.name_pt || sub.name} width={48} height={48} className="h-12 w-12 rounded-lg object-cover" />
-                ) : (
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-white/8">
-                    <DSIcon name="activity" size={16} className="text-text-muted" />
+      <div className="px-4 pt-5">
+        {/* Subgrupos */}
+        {subMuscles.length > 0 ? (
+          <div className="mb-5">
+            <p className="mb-3 text-[11px] font-bold uppercase tracking-wider text-text-muted">Subgrupos Musculares</p>
+            <div className="grid grid-cols-2 gap-2.5">
+              {subMuscles.map((sub) => (
+                <div
+                  key={sub.id}
+                  className="flex items-center gap-2.5 rounded-2xl border bg-bg-secondary p-3"
+                  style={{ borderColor: `${muscleColor}20` }}
+                >
+                  <div
+                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
+                    style={{ background: `${muscleColor}18` }}
+                  >
+                    {sub.image_url ? (
+                      <Image src={sub.image_url} alt={sub.name_pt || sub.name} width={36} height={36} className="h-9 w-9 rounded-xl object-cover" />
+                    ) : (
+                      <DSIcon name="activity" size={14} style={{ color: muscleColor }} />
+                    )}
                   </div>
-                )}
-                <div>
-                  <p className="text-sm font-semibold text-text-primary">{sub.name_pt || sub.name}</p>
-                  <p className="text-xs text-text-secondary">{sub.description || 'Subgrupo associado ao movimento principal.'}</p>
+                  <p className="text-[12px] font-semibold leading-tight text-text-primary">{sub.name_pt || sub.name}</p>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className="mb-5 rounded-2xl border border-white/6 bg-bg-secondary p-4 text-center">
+            <DSIcon name="activity" size={20} className="mx-auto mb-2 text-text-muted" />
+            <p className="text-sm text-text-secondary">Subgrupos não cadastrados ainda.</p>
           </div>
         )}
       </div>

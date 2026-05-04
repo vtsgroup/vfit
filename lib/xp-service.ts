@@ -492,7 +492,7 @@ export async function getXPBalance(env: Bindings, studentId: string): Promise<XP
     env.KV_CACHE,
     cacheKey('xp:balance', studentId),
     async () => {
-      const { rows } = await pgQueryOne<any>(
+      const row = await pgQueryOne<XPBalance>(
         env,
         `
       SELECT student_id, total_earned, total_spent, current_balance, level, next_level_threshold,
@@ -504,7 +504,7 @@ export async function getXPBalance(env: Bindings, studentId: string): Promise<XP
         [studentId]
       )
 
-      if (!rows) {
+      if (!row) {
         return {
           student_id: studentId,
           total_earned: 0,
@@ -516,7 +516,7 @@ export async function getXPBalance(env: Bindings, studentId: string): Promise<XP
         }
       }
 
-      return rows as XPBalance
+      return row
     },
     CACHE_STRATEGIES.xp_balance
   )
@@ -748,16 +748,24 @@ export async function getOrCreateDailyGoal(
     return existing
   }
 
-  // Create today's goal
+  // Create today's goal (ON CONFLICT handles race conditions)
   const id = generateId()
   await pgQuery(
     env,
     `INSERT INTO user_daily_goals (id, student_id, goal_date, target_xp, workouts_target)
-     VALUES ($1, $2, $3, $4, $5)`,
+     VALUES ($1, $2, $3, $4, $5)
+     ON CONFLICT (student_id, goal_date) DO NOTHING`,
     [id, studentId, goalDate, 50, 1]
   )
 
-  return {
+  // Re-fetch in case another request created the row concurrently
+  const created = await pgQueryOne<DailyGoal>(
+    env,
+    `SELECT * FROM user_daily_goals WHERE student_id = $1 AND goal_date = $2 LIMIT 1`,
+    [studentId, goalDate]
+  )
+
+  return created ?? {
     id,
     student_id: studentId,
     goal_date: goalDate,

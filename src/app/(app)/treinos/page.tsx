@@ -43,6 +43,19 @@ const DIFFICULTY_FILTERS = [
   { value: 'advanced', label: 'Avançado' },
 ]
 
+// Tradução de IDs de grupos musculares para português
+const MUSCLE_PT: Record<string, string> = {
+  chest: 'Peito', back: 'Costas', shoulders: 'Ombros', biceps: 'Bíceps',
+  triceps: 'Tríceps', legs: 'Pernas', quadriceps: 'Quadríceps', hamstrings: 'Isquiotibiais',
+  glutes: 'Glúteos', calves: 'Panturrilhas', abs: 'Abdômen', core: 'Core',
+  forearms: 'Antebraços', traps: 'Trapézio', full_body: 'Corpo Total',
+  lats: 'Dorsais', rhomboids: 'Romboides', lower_back: 'Lombar',
+  hip_flexors: 'Flexores do Quadril', adductors: 'Adutores',
+}
+function musclePt(name: string) {
+  return MUSCLE_PT[name.toLowerCase()] || MUSCLE_PT[name.toLowerCase().replace(/ /g, '_')] || name
+}
+
 // ─── S1.1: Today Workout Card with Urgency UX ─────────────────────────────────
 interface TodayDayShape {
   name: string
@@ -140,7 +153,7 @@ function TodayWorkoutCard({
           {/* Meta info */}
           <div className="mb-2.5 flex flex-wrap items-center gap-x-2 gap-y-1 pl-1 text-[12px] text-text-secondary">
             {todayDay.muscle_groups.length > 0 && (
-              <span>{todayDay.muscle_groups.slice(0, 3).join(' · ')}</span>
+              <span>{todayDay.muscle_groups.slice(0, 3).map(musclePt).join(' · ')}</span>
             )}
             {todayDay.muscle_groups.length > 0 && <span className="text-text-muted">·</span>}
             <span>{todayDay.estimated_duration_min}min</span>
@@ -365,17 +378,18 @@ export default function TreinosPage() {
 
   return (
     <div className="mx-auto max-w-lg animate-in fade-in-0 slide-in-from-bottom-2 duration-300 px-4 pt-0 pb-24">
-      {/* ─── Header ─── */}
+      {/* ─── Hero ─── */}
       <div
-        className="-mx-4 mb-5 rounded-b-3xl border-b border-sky-100 bg-linear-to-b from-white via-sky-50 to-bg-primary px-4 py-5 shadow-[0_10px_30px_-22px_rgba(37,99,235,0.35)]"
+        className="-mx-4 mb-5 overflow-hidden rounded-b-3xl px-4 py-5"
+        style={{ background: 'linear-gradient(to bottom, #0b1d36 0%, #0c1f38 20%, #0b1c35 40%, #0a1830 65%, #071628 85%, #050A12 100%)', boxShadow: '0 6px 28px 0 rgba(5,10,18,0.6)' }}
       >
-        <p className="text-xs font-semibold text-sky-600">
+        <p className="text-xs font-semibold text-sky-400">
           {(() => { const h = new Date().getHours(); return h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite' })()}
         </p>
-        <h1 className="bg-linear-to-r from-slate-950 to-sky-700 bg-clip-text text-4xl font-black text-transparent">
+        <h1 className="bg-linear-to-r from-white to-sky-200 bg-clip-text text-4xl font-black text-transparent">
           Treinos
         </h1>
-        <p className="mt-1 text-xs text-slate-500">Recursos personalizados para você</p>
+        <p className="mt-1 text-xs text-sky-200/60">Recursos personalizados para você</p>
       </div>
 
       {/* S1.1 — Card "Treino de Hoje" com urgência */}
