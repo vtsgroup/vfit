@@ -195,7 +195,7 @@ export default function NutricaoPage() {
       {/* ─── Hero ─── */}
       <div
         className="relative mb-5 overflow-hidden rounded-b-3xl border-b-0 px-4 py-5 backdrop-blur-md"
-        style={{ background: 'linear-gradient(to bottom, #0b1d36 0%, #0c1f38 20%, #0b1c35 40%, #0a1830 65%, #071628 85%, #050A12 100%)', boxShadow: '0 6px 28px 0 rgba(5,10,18,0.6)' }}
+        style={{ background: 'linear-gradient(to bottom, #0b1f0d 0%, #0c2110 20%, #091c0c 40%, #08180a 65%, #071408 85%, #050A12 100%)', boxShadow: '0 6px 28px 0 rgba(5,10,18,0.6)' }}
       >
         {/* Ambient glow */}
         <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_85%_25%,rgba(34,197,94,0.18),transparent_55%)]" />
@@ -212,13 +212,13 @@ export default function NutricaoPage() {
           </div>
 
           {/* Adicionar dentro do hero */}
-          <button
+          <Button
+            size="sm"
             onClick={() => setShowSearch(true)}
-            className="shrink-0 inline-flex items-center gap-1.5 rounded-xl border border-white/14 bg-white/8 px-3 py-2 text-[12px] font-semibold text-white/85 backdrop-blur-md transition-all hover:bg-white/14 hover:border-white/22 active:scale-95"
           >
             <DSIcon name="plus" size={14} />
             Adicionar
-          </button>
+          </Button>
         </div>
       </div>
 

@@ -115,36 +115,35 @@ export default function AvaliacoesPage() {
   }, [showPersonalQr, personalInviteLink])
 
   return (
-    <div className="relative mx-auto max-w-lg px-4 pt-0 pb-24">
-      {/* Ambient gradient mesh */}
+    <div className="relative mx-auto max-w-lg px-4 pb-24">
+      {/* ─── Hero ─── */}
       <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-100 opacity-50"
-        style={{
-          background:
-            'radial-gradient(ellipse 70% 50% at 50% 0%, rgba(34,197,94,0.14) 0%, rgba(34,197,94,0.04) 35%, transparent 70%)',
-        }}
-      />
-
-      {/* Header — clean, no overpowering gradient */}
-      <div className="mb-5 flex items-center gap-3 pt-4">
-        <button
-          aria-label="Voltar"
-          onClick={() => router.back()}
-          className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/6 text-white/75 transition-all hover:border-white/18 hover:bg-white/10 hover:text-white"
-        >
-          <DSIcon name="arrowLeft" size={18} />
-        </button>
-        <div className="flex-1">
-          <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-text-muted">Acompanhamento</p>
-          <h1 className="text-display-heading font-black tracking-tight text-text-primary">Avaliações físicas</h1>
+        className="relative -mx-4 mb-5 overflow-hidden rounded-b-3xl px-4 py-5 backdrop-blur-md"
+        style={{ background: 'linear-gradient(to bottom, #0b1f0d 0%, #0c2110 20%, #091c0c 40%, #08180a 65%, #071408 85%, #050A12 100%)', boxShadow: '0 6px 28px 0 rgba(5,10,18,0.6)' }}
+      >
+        {/* Ambient glow */}
+        <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_85%_25%,rgba(34,197,94,0.18),transparent_55%)]" />
+        <div className="relative z-1 flex items-center gap-3 pt-4">
+          <button
+            aria-label="Voltar"
+            onClick={() => router.back()}
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-white/12 bg-white/6 text-white/75 transition-all hover:border-white/20 hover:bg-white/10 hover:text-white"
+          >
+            <DSIcon name="arrowLeft" size={18} />
+          </button>
+          <div className="min-w-0 flex-1">
+            <p className="text-xs font-semibold text-emerald-400">Acompanhamento</p>
+            <h1 className="bg-linear-to-r from-vfit-primary-100 to-vfit-primary-400 bg-clip-text text-4xl font-black text-transparent">
+              Avaliações
+            </h1>
+          </div>
+          <Link href="/avaliacoes/nova">
+            <Button size="sm">
+              <DSIcon name="plus" size={16} />
+              Nova
+            </Button>
+          </Link>
         </div>
-        <Link href="/avaliacoes/nova">
-          <Button size="sm">
-            <DSIcon name="plus" size={16} />
-            Nova
-          </Button>
-        </Link>
       </div>
 
       <div

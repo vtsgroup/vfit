@@ -398,7 +398,7 @@ export default function TreinosPage() {
       {/* ─── Hero ─── */}
       <div
         className="-mx-4 mb-5 overflow-hidden rounded-b-3xl px-4 py-5"
-        style={{ background: 'linear-gradient(to bottom, #0b1d36 0%, #0c1f38 20%, #0b1c35 40%, #0a1830 65%, #071628 85%, #050A12 100%)', boxShadow: '0 6px 28px 0 rgba(5,10,18,0.6)' }}
+        style={{ background: 'linear-gradient(to bottom, #0b1f0d 0%, #0c2110 20%, #091c0c 40%, #08180a 65%, #071408 85%, #050A12 100%)', boxShadow: '0 6px 28px 0 rgba(5,10,18,0.6)' }}
       >
         <p className="text-xs font-semibold text-emerald-400">
           {(() => { const h = new Date().getHours(); return h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite' })()}
