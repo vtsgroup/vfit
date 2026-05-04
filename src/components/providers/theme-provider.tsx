@@ -75,10 +75,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     }
 
     // Update <meta name="theme-color"> dynamically — Chrome TWA/PWA picks this up
-    // for status bar color in real-time
-    const topColor = effectiveTheme === 'light' ? '#f8fbff' : '#050A12'
-    // Bottom safe area (gesture bar / nav bar) — slightly different shade for depth
-    const bottomColor = effectiveTheme === 'light' ? '#f8fbff' : '#050A12'
+    // for status bar color in real-time. App é dark-only para status bar — sempre #050A12.
+    const topColor = '#050A12'
+    // Bottom safe area (gesture bar / nav bar) — também dark sempre
+    const bottomColor = effectiveTheme === 'light' ? '#f7fbfa' : '#050A12'
 
     // CRITICAL: Set html background-color to fill bottom safe area (iOS gesture bar / Android nav bar)
     root.style.backgroundColor = bottomColor

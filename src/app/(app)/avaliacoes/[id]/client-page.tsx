@@ -103,7 +103,7 @@ export default function AvaliacaoDetalhePage() {
       {/* ─── Premium Hero ─── */}
       <div
         className="relative -mb-2 overflow-hidden rounded-b-3xl px-4 pt-5 pb-7 backdrop-blur-md"
-        style={{ background: 'linear-gradient(to bottom, #0b1f0d 0%, #0c2110 20%, #091c0c 40%, #08180a 65%, #071408 85%, #050A12 100%)', boxShadow: '0 6px 28px 0 rgba(5,10,18,0.6)' }}
+        style={{ background: 'linear-gradient(to bottom, #0b1d36 0%, #0c1f38 20%, #0b1c35 40%, #0a1830 65%, #071628 85%, #050A12 100%)', boxShadow: '0 6px 28px 0 rgba(5,10,18,0.6)' }}
       >
         {/* Ambient mesh */}
         <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_85%_15%,rgba(34,197,94,0.20),transparent_55%),radial-gradient(circle_at_15%_85%,rgba(59,130,246,0.16),transparent_55%)]" />
