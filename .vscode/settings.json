@@ -1,4 +1,11 @@
 {
     "java.configuration.updateBuildConfiguration": "automatic",
-    "git.ignoreLimitWarning": true
+    "git.ignoreLimitWarning": true,
+    "github.copilot.chat.mcpServers": {
+        "copilot-mem": {
+            "type": "stdio",
+            "command": "/Users/macos/.copilot-mem/start-mcp-safe.sh",
+            "args": []
+        }
+    }
 }

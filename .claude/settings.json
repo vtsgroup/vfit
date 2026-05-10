@@ -69,9 +69,11 @@
       "Skill(browse:*)",
       "Read(//Users/macos/Development/apps/vfit-production/**)",
       "Bash(npm list:*)",
-      "mcp__plugin_claude-mem_mcp-search__smart_search",
-      "mcp__plugin_claude-mem_mcp-search__search",
-      "mcp__plugin_claude-mem_mcp-search__get_observations",
+      "mcp__copilot-mem__smart_search",
+      "mcp__copilot-mem__search",
+      "mcp__copilot-mem__timeline",
+      "mcp__copilot-mem__get_memories",
+      "mcp__copilot-mem__save_memory",
       "Bash(curl -s http://localhost:37777/api/health)",
       "Bash(du -sh .claude/skills/ .claude/docs/SKILLS*)",
       "Bash(wrangler --version)",
@@ -146,15 +148,15 @@
         "hooks": [
           {
             "type": "command",
-            "command": "printf '{\"systemMessage\": \"✅ EVOLUIA Session Initialized\\\\n\\\\n📊 Contexto carregado:\\\\n  • Branch: %s\\\\n  • Último commit: %s\\\\n  • Arquivos modificados: %s\\\\n\\\\n🎯 Estratégia: Haiku 100%% (70%% menos tokens)\\\\n⚡ Fast mode: ON | Effort level: HIGH\\\\n\\\\n💾 Memory: MEMORY.md + session-state.md sincronizados\\\\n🔍 Carregando contexto com mem-search...\"}' \"$(git branch --show-current 2>/dev/null)\" \"$(git log --oneline -1 2>/dev/null | head -c 60)\" \"$(git diff --name-only HEAD 2>/dev/null | head -3 | tr '\\\\n' ', ')\"",
+            "command": "printf '{\"systemMessage\": \"✅ EVOLUIA Session Initialized\\\\n\\\\n📊 Contexto carregado:\\\\n  • Branch: %s\\\\n  • Último commit: %s\\\\n  • Arquivos modificados: %s\\\\n\\\\n🎯 Estratégia: Haiku 100%% (70%% menos tokens)\\\\n⚡ Fast mode: ON | Effort level: HIGH\\\\n\\\\n💾 Memory: MEMORY.md + session-state.md sincronizados\\\\n🧠 Copilot-Mem ativo (MCP)\\\\n🔍 Consulta sugerida: smart_search recent:7d\"}' \"$(git branch --show-current 2>/dev/null)\" \"$(git log --oneline -1 2>/dev/null | head -c 60)\" \"$(git diff --name-only HEAD 2>/dev/null | head -3 | tr '\\\\n' ', ')\"",
             "timeout": 5,
             "statusMessage": "Carregando contexto EVOLUIA..."
           },
           {
             "type": "command",
-            "command": "echo '{\"skill\": \"claude-mem:mem-search\", \"args\": \"EVOLUIA blockers decision recent:7d\"}' || true",
+            "command": "echo '{\"systemMessage\": \"Use copilot-mem MCP: smart_search(\\\"EVOLUIA blockers decision recent:7d\\\")\"}' || true",
             "timeout": 10,
-            "statusMessage": "Buscando contexto em claude-mem (recent:7d)..."
+            "statusMessage": "Copilot-Mem pronto (recent:7d)..."
           }
         ]
       }
@@ -199,7 +201,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo '{\"systemMessage\": \"📊 SESSÃO ENCERRADA\\\\n\\\\n🎯 Checklist final:\\\\n  [ ] Atualizar .claude/session-state.md (task + timestamp)\\\\n  [ ] Se importante: /remember para memory persistent\\\\n  [ ] Verificar tokens: https://console.anthropic.com/usage\\\\n\\\\n💡 Dica: próxima sessão carrega contexto auto (SessionStart hook)\\\\n✅ Economia: ~70%% menos tokens com Haiku + mem-search\"}' || true",
+            "command": "echo '{\"systemMessage\": \"📊 SESSÃO ENCERRADA\\\\n\\\\n🎯 Checklist final:\\\\n  [ ] Atualizar .claude/session-state.md (task + timestamp)\\\\n  [ ] Se importante: /remember para memory persistent\\\\n  [ ] Verificar tokens: https://console.anthropic.com/usage\\\\n\\\\n💡 Dica: próxima sessão carrega contexto auto (SessionStart hook)\\\\n✅ Economia: ~70%% menos tokens com Haiku + copilot-mem\"}' || true",
             "timeout": 3
           }
         ]
@@ -210,7 +212,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "PROMPT=\"${CLAUDE_PROMPT_TEXT}\"; if echo \"$PROMPT\" | grep -qiE '(plano|arquitetura|roadmap|design de sistema|decision tree|strategy)'; then echo '{\"systemMessage\": \"🔵 DETECTADO: TASK ARQUITETURAL\\\\n💡 Sugestão: /opus\\\\n(Qualidade de design crítica — recomendado)\"}'; elif echo \"$PROMPT\" | grep -qiE '(debug|trace|race condition|incompatibilidade|investigar|bloqueador)'; then echo '{\"systemMessage\": \"🟡 DETECTADO: DEBUGGING COMPLEXO\\\\n💡 Sugestão: /sonnet\\\\n(Análise integrada mais eficiente)\"}'; elif echo \"$PROMPT\" | grep -qiE '(review-pr|paranóico|security audit|code review)'; then echo '{\"systemMessage\": \"🔴 DETECTADO: REVIEW CRÍTICO\\\\n💡 Sugestão: /opus\\\\n(Review paranóico — máxima qualidade)\"}'; elif echo \"$PROMPT\" | grep -qiE '(worker.*frontend|múltiplos domínios|integração|multi-domain)'; then echo '{\"systemMessage\": \"🟠 DETECTADO: FEATURE MULTI-DOMÍNIO\\\\n💡 Sugestão: Haiku + /mem-search recent:3d\\\\n(Contexto anterior como fallback)\"}'; fi",
+            "command": "PROMPT=\"${CLAUDE_PROMPT_TEXT}\"; if echo \"$PROMPT\" | grep -qiE '(plano|arquitetura|roadmap|design de sistema|decision tree|strategy)'; then echo '{\"systemMessage\": \"🔵 DETECTADO: TASK ARQUITETURAL\\\\n💡 Sugestão: /opus\\\\n(Qualidade de design crítica — recomendado)\"}'; elif echo \"$PROMPT\" | grep -qiE '(debug|trace|race condition|incompatibilidade|investigar|bloqueador)'; then echo '{\"systemMessage\": \"🟡 DETECTADO: DEBUGGING COMPLEXO\\\\n💡 Sugestão: /sonnet\\\\n(Análise integrada mais eficiente)\"}'; elif echo \"$PROMPT\" | grep -qiE '(review-pr|paranóico|security audit|code review)'; then echo '{\"systemMessage\": \"🔴 DETECTADO: REVIEW CRÍTICO\\\\n💡 Sugestão: /opus\\\\n(Review paranóico — máxima qualidade)\"}'; elif echo \"$PROMPT\" | grep -qiE '(worker.*frontend|múltiplos domínios|integração|multi-domain)'; then echo '{\"systemMessage\": \"🟠 DETECTADO: FEATURE MULTI-DOMÍNIO\\\\n💡 Sugestão: Haiku + copilot-mem smart_search recent:3d\\\\n(Contexto anterior como fallback)\"}'; fi",
             "timeout": 2,
             "statusMessage": "Analisando complexidade da task..."
           }

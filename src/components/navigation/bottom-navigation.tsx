@@ -247,7 +247,7 @@ export function BottomNavigation({ notificationCount = 0, fabMenuOpen = false, o
   return (
     <nav
       aria-label="Navegação principal"
-      className="mobile-bottom-nav fixed -bottom-px left-0 right-0 z-45 rounded-t-[28px] bg-bg-dark lg:hidden"
+      className="mobile-bottom-nav fixed -bottom-px left-0 right-0 z-45 rounded-t-[28px] bg-[#050A12] lg:hidden"
     >
       <div
         className="relative z-5 w-full overflow-visible rounded-t-[28px] backdrop-blur-2xl backdrop-saturate-200"
@@ -285,14 +285,14 @@ export function BottomNavigation({ notificationCount = 0, fabMenuOpen = false, o
                       haptic()
                       onFabPress?.()
                     }}
-                    className="fab-ring relative flex h-14 w-14 items-center justify-center rounded-full border-none transition-all duration-300 active:scale-90"
+                    className="fab-ring relative flex h-14 w-14 items-center justify-center rounded-full border border-emerald-900/70 transition-all duration-300 active:translate-y-0.5 active:scale-92"
                     style={{
                       background: fabMenuOpen
-                        ? 'linear-gradient(135deg, #16a34a, #15803d)'
-                        : 'linear-gradient(135deg, #34d399, #22c55e 55%, #16a34a)',
+                        ? 'linear-gradient(180deg, #10b981 0%, #059669 52%, #065f46 100%)'
+                        : 'linear-gradient(180deg, #6ee7b7 0%, #10b981 48%, #047857 100%)',
                       boxShadow: fabMenuOpen
-                        ? '0 10px 36px rgba(34, 197, 94, 0.55), 0 4px 14px rgba(34, 197, 94, 0.35), 0 0 0 1px rgba(255,255,255,0.16) inset'
-                        : '0 10px 32px rgba(34, 197, 94, 0.5), 0 4px 12px rgba(34, 197, 94, 0.3), 0 0 0 1px rgba(255,255,255,0.18) inset',
+                        ? '0 5px 0 #064e3b, 0 16px 36px -12px rgba(6,95,70,0.85), 0 0 0 1px rgba(255,255,255,0.18) inset'
+                        : '0 6px 0 #064e3b, 0 18px 40px -12px rgba(6,95,70,0.9), 0 0 42px -18px rgba(52,211,153,0.85), 0 0 0 1px rgba(255,255,255,0.22) inset',
                       animation: fabMenuOpen ? 'none' : 'fab-pulse 3.2s ease-in-out infinite',
                       cursor: 'pointer',
                       touchAction: 'manipulation',
@@ -307,7 +307,7 @@ export function BottomNavigation({ notificationCount = 0, fabMenuOpen = false, o
                       {tab.icon(false)}
                     </motion.div>
                   </button>
-                  <span className="mt-1 text-[9px] font-semibold leading-none tracking-wide text-brand-primary">
+                  <span className="mt-1 text-[9px] font-black leading-none tracking-wide text-emerald-300">
                     {tab.label}
                   </span>
                 </div>
@@ -321,14 +321,14 @@ export function BottomNavigation({ notificationCount = 0, fabMenuOpen = false, o
                 href={tab.href}
                 prefetch={true}
                 onClick={haptic}
-                className="group relative flex min-w-10 flex-1 flex-col items-center active:scale-[0.88] transition-all duration-200"
+                className="group relative flex min-w-10 flex-1 flex-col items-center transition-all duration-200 active:translate-y-0.5 active:scale-[0.9]"
                 style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
               >
                 <div className="relative flex h-9 w-9 items-center justify-center">
                   {isActive && (
                     <motion.div
                       layoutId="mobile-active-pill"
-                      className="absolute inset-0 rounded-[14px] border border-brand-primary/20 bg-brand-primary/12 shadow-[0_0_20px_rgba(34,197,94,0.22)]"
+                      className="absolute inset-0 rounded-[14px] border border-sky-200/18 bg-linear-to-b from-sky-300/15 to-emerald-400/10 shadow-[0_0_24px_rgba(56,189,248,0.16),inset_0_1px_0_rgba(255,255,255,0.12)]"
                       initial={{ scale: 0.92, opacity: 0.7 }}
                       animate={{ scale: 1.05, opacity: 1 }}
                       transition={{ type: 'spring', stiffness: 500, damping: 28 }}
@@ -337,8 +337,8 @@ export function BottomNavigation({ notificationCount = 0, fabMenuOpen = false, o
                   <div className={cn(
                     'relative z-10 transition-all duration-200',
                     isActive
-                      ? 'text-brand-primary'
-                      : 'text-slate-400 group-hover:text-slate-200'
+                      ? 'text-emerald-300 drop-shadow-[0_0_10px_rgba(52,211,153,0.28)]'
+                      : 'text-slate-400 group-hover:text-sky-100'
                   )}>
                     {tab.icon(isActive)}
                   </div>
@@ -358,7 +358,7 @@ export function BottomNavigation({ notificationCount = 0, fabMenuOpen = false, o
 
                 <span className={cn(
                   'relative z-10 mt-0.5 text-[9px] leading-none tracking-[0.3px] transition-all duration-200',
-                  isActive ? 'font-semibold text-brand-primary' : 'font-medium text-slate-400'
+                  isActive ? 'font-black text-emerald-300' : 'font-semibold text-slate-400'
                 )}>
                   {tab.label}
                 </span>

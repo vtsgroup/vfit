@@ -48,18 +48,14 @@ function StatTile({ icon, label, value, unit, delta, valueClass }: {
 }) {
   return (
     <div
-      className="rounded-xl px-2.5 py-2"
-      style={{
-        background: 'rgba(255,255,255,0.03)',
-        border: '1px solid rgba(255,255,255,0.06)',
-      }}
+      className="rounded-2xl border border-slate-200/80 bg-white/85 px-2.5 py-2 shadow-[0_8px_18px_rgba(15,23,42,0.05)]"
     >
       <div className="mb-1 flex items-center gap-1.5">
-        <DSIcon name={icon} size={11} className="text-text-muted" />
-        <p className="text-[10px] font-semibold uppercase tracking-wider text-text-muted">{label}</p>
+        <DSIcon name={icon} size={11} className="text-emerald-600" />
+        <p className="text-[10px] font-black uppercase tracking-wider text-slate-400">{label}</p>
       </div>
-      <p className={`text-[15px] font-black tabular-nums leading-tight ${valueClass ?? 'text-text-primary'}`}>
-        {value}{unit && <span className="text-[10px] font-medium text-text-muted"> {unit}</span>}
+      <p className={`text-[16px] font-black tabular-nums leading-tight ${valueClass ?? 'text-slate-950'}`}>
+        {value}{unit && <span className="text-[10px] font-bold text-slate-400"> {unit}</span>}
         {delta}
       </p>
     </div>
@@ -146,23 +142,17 @@ export default function AvaliacoesPage() {
         </div>
       </div>
 
-      <div
-        className="mb-5 overflow-hidden rounded-2xl border border-brand-primary/22 p-4"
-        style={{
-          background:
-            'linear-gradient(135deg, rgba(34,197,94,0.10) 0%, rgba(34,197,94,0.03) 60%, transparent 100%)',
-          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04), 0 8px 24px -12px rgba(34,197,94,0.18)',
-        }}
-      >
-        <div className="mb-3 flex items-start gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-brand-primary/30 bg-brand-primary/12">
-            <DSIcon name="userPlus" size={18} className="text-brand-primary" />
+      <div className="relative mb-5 overflow-hidden rounded-[28px] border border-emerald-100/90 bg-linear-to-br from-white via-emerald-50/40 to-slate-50 p-4 shadow-[0_22px_52px_rgba(15,23,42,0.13)]">
+        <div className="pointer-events-none absolute -left-10 -top-12 h-32 w-32 rounded-full bg-emerald-200/45 blur-2xl" />
+        <div className="relative mb-3 flex items-start gap-3">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-emerald-200 bg-white shadow-[0_8px_18px_rgba(5,150,105,0.14)]">
+            <DSIcon name="userPlus" size={19} className="text-emerald-600" />
           </div>
           <div className="flex-1">
-            <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-brand-primary">
+            <p className="text-[10px] font-black uppercase tracking-[0.22em] text-emerald-600/85">
               Avaliação completa com personal
             </p>
-            <p className="mt-1 text-[13px] leading-relaxed text-text-secondary">
+            <p className="mt-1 text-[13px] font-semibold leading-relaxed text-slate-500">
               Convide um personal trainer para revisar e validar sua avaliação física.
             </p>
             {studentProfile?.personal_name && (
@@ -174,7 +164,7 @@ export default function AvaliacoesPage() {
           </div>
         </div>
 
-        <div className="mb-3 flex gap-2">
+        <div className="relative mb-3 flex gap-2">
           <Input
             value={personalReferralCode}
             onChange={(e) => setPersonalReferralCode(e.target.value.toUpperCase())}
@@ -190,13 +180,13 @@ export default function AvaliacoesPage() {
           </Button>
         </div>
 
-        <div className="flex flex-wrap gap-2">
-          <Button variant="outline" size="sm" onClick={() => navigator.clipboard.writeText(personalInviteLink)}>
+        <div className="relative flex flex-wrap gap-2">
+          <Button variant="secondary" size="sm" onClick={() => navigator.clipboard.writeText(personalInviteLink)}>
             <DSIcon name="copy" size={14} />
             Copiar link
           </Button>
           <Button
-            variant="outline"
+            variant="secondary"
             size="sm"
             onClick={() => window.open(`mailto:?subject=${encodeURIComponent('Convite VFIT — Avaliação Completa')}&body=${encodeURIComponent(`Olá! Quero te convidar para me acompanhar no VFIT e completar minha avaliação física.\n\nCadastro: ${personalInviteLink}`)}`, '_blank')}
           >
@@ -204,7 +194,7 @@ export default function AvaliacoesPage() {
             Email
           </Button>
           <Button
-            variant="outline"
+            variant="secondary"
             size="sm"
             onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(`Olá! Quero te convidar para completar minha avaliação física no VFIT.\n\nCadastro: ${personalInviteLink}`)}`, '_blank')}
           >
@@ -212,7 +202,7 @@ export default function AvaliacoesPage() {
             WhatsApp
           </Button>
           <Button
-            variant={showPersonalQr ? 'secondary' : 'outline'}
+            variant={showPersonalQr ? 'primary' : 'secondary'}
             size="sm"
             onClick={() => setShowPersonalQr((v) => !v)}
           >
@@ -227,10 +217,10 @@ export default function AvaliacoesPage() {
               <img
                 src={personalInviteQrUrl}
                 alt="QR Code convite personal"
-                className="h-44 w-44 rounded-xl border border-white/12 bg-white p-2"
+                className="h-44 w-44 rounded-2xl border border-emerald-100 bg-white p-2 shadow-[0_14px_32px_rgba(15,23,42,0.10)]"
               />
             ) : (
-              <div className="flex h-44 w-44 items-center justify-center rounded-xl border border-white/12 bg-white/6">
+              <div className="flex h-44 w-44 items-center justify-center rounded-2xl border border-emerald-100 bg-white/80">
                 <DSIcon name="loader" size={20} className="animate-spin text-text-muted" />
               </div>
             )}
@@ -284,30 +274,22 @@ export default function AvaliacoesPage() {
               <Link
                 key={a.id}
                 href={`/avaliacoes/${a.id}`}
-                className="group relative block overflow-hidden rounded-2xl p-4 transition-all"
-                style={{
-                  background: isFirst
-                    ? 'linear-gradient(135deg, rgba(34,197,94,0.08) 0%, rgba(255,255,255,0.03) 100%)'
-                    : 'linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.02) 100%)',
-                  border: isFirst ? '1px solid rgba(34,197,94,0.28)' : '1px solid rgba(255,255,255,0.08)',
-                  boxShadow: isFirst
-                    ? 'inset 0 1px 0 rgba(255,255,255,0.04), 0 6px 20px -12px rgba(34,197,94,0.25)'
-                    : 'inset 0 1px 0 rgba(255,255,255,0.04)',
-                }}
+                className="group relative block overflow-hidden rounded-[26px] border border-emerald-100/90 bg-linear-to-br from-white via-emerald-50/35 to-slate-50 p-4 shadow-[0_18px_40px_rgba(15,23,42,0.11)] transition-all active:translate-y-px"
               >
+                <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-emerald-200/35 blur-2xl" />
                 <div className="mb-3 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     {isFirst && (
-                      <span className="inline-flex items-center gap-1 rounded-full border border-brand-primary/30 bg-brand-primary/12 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-brand-primary">
+                      <span className="inline-flex items-center gap-1 rounded-full border border-emerald-200 bg-white/85 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-emerald-700 shadow-[0_4px_12px_rgba(5,150,105,0.10)]">
                         <span className="h-1.5 w-1.5 rounded-full bg-brand-primary" />
                         Mais recente
                       </span>
                     )}
-                    <span className="text-[11px] font-medium text-text-muted">
+                    <span className="text-[11px] font-bold text-slate-400">
                       {date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
                     </span>
                   </div>
-                  <DSIcon name="chevronRight" size={16} className="text-text-muted transition-transform group-hover:translate-x-0.5" />
+                  <DSIcon name="chevronRight" size={16} className="text-slate-400 transition-transform group-hover:translate-x-0.5" />
                 </div>
 
                 <div className="grid grid-cols-3 gap-2">
@@ -340,7 +322,7 @@ export default function AvaliacoesPage() {
                 </div>
 
                 {a.bmi_category && (
-                  <p className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-white/8 bg-white/4 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-text-secondary">
+                  <p className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-700">
                     <span className="h-1.5 w-1.5 rounded-full bg-current opacity-60" />
                     {a.bmi_category}
                   </p>

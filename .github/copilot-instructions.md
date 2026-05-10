@@ -218,26 +218,26 @@ Critério mínimo: 4/5 corretos.
 | `/plan-ceo-review` | Reframing de produto/escopo | 55% |
 | `/retro` | Retrospectiva e melhoria contínua | 50% |
 | `/gstack-upgrade` | Upgrade do gstack com segurança | 50% |
-| `/mem-search` | Busca histórica no Claude-Mem (quando instalado) | 60% |
+| `copilot-mem (MCP)` | Busca histórica com memória persistente (quando instalado) | 60% |
 
 ---
 
-## Memory Strategy (Auto Memory + Claude-Mem)
+## Memory Strategy (Auto Memory + Copilot-Mem)
 
 1. Memória nativa (`/memory`)
 - Guardar fatos estáveis: comandos, padrões, gotchas recorrentes.
 - Manter índice curto e tópico.
 
-2. Claude-Mem (opcional)
-- Instalar com `npx claude-mem install` ou via `/plugin marketplace`.
-- Evitar `npm install -g claude-mem` para setup de plugin.
+2. Copilot-Mem (opcional)
+- Instalar com `npm install -g @copilot-mem/mcp-server`.
+- Configurar em `settings.json` com `github.copilot.chat.mcpServers`.
 
-3. Fluxo recomendado `/mem-search`
+3. Fluxo recomendado (MCP)
 - `search` para índice compacto.
 - `timeline` para contexto cronológico.
-- `get_observations` apenas para IDs filtrados.
+- `get_memories` apenas para IDs filtrados.
 
-4. Quando usar `/mem-search`
+4. Quando usar Copilot-Mem
 - Bugs recorrentes.
 - Onboarding em área legada.
 - Investigação de regressão.
@@ -1680,6 +1680,12 @@ npx wrangler d1 execute vfiti-exercises --file=backups/<timestamp>/d1/_schema.sq
 - Profundidade 3D do botão principal agora é exclusivamente verde escuro (`#064e3b`), sem cinza no shadow/base.
 - `Button.gradient` foi alinhado ao mesmo padrão: borda verde escura, profundidade verde escura e glow controlado.
 
+## Atualização — Botão Secondary Navy Blue-Gray (10/05/2026)
+
+- `Button.secondary` usa gradiente navy blue-gray `slate-500 → slate-600 → slate-800` com texto branco.
+- A profundidade 3D é `#0f172a`, mantendo a aparência sóbria sem competir com o verde do CTA principal.
+- Hover adiciona brilho sky controlado e mantém contraste forte em light/dark.
+
 ---
 
 ## Cores & Contraste (Web — Tema Atual)
@@ -1706,7 +1712,7 @@ npx wrangler d1 execute vfiti-exercises --file=backups/<timestamp>/d1/_schema.sq
 
 | Variant | Light (bg → text) | Dark (bg → text) |
 |---------|-------------------|-------------------|
-| **secondary** | `slate-200→300→400` → `slate-800` · contraste alto | `slate-500→600→700` → `slate-100` · contraste alto |
+| **secondary** | `slate-500→600→800` → `white` · navy 3D alto contraste | `slate-500→600→800` → `white` · navy 3D alto contraste |
 | **outline** | `zinc-200` (#e4e4e7) → `zinc-600` · 13.62:1 AAA | `zinc-500` (#71717a) → `zinc-100` · 4.37:1 AA-lg |
 
 > `secondary` agora é canônico em **slate blue-gray** para manter contraste perfeito e evitar saturação excessiva.
@@ -1930,7 +1936,7 @@ Para design system v3 spec:
 | # | Variant | Light bg | Dark bg | Propósito |
 |---|---------|----------|---------|-----------|
 | 1 | `primary` | `#22C55E` (brand) | `#22C55E` | CTA principal — ação primária |
-| 2 | `secondary` | `#d4d4d8` (zinc-300) | `#52525b` (zinc-600) | Ação secundária forte |
+| 2 | `secondary` | `#475569 → #1e293b` (slate navy) | `#475569 → #1e293b` (slate navy) | Ação secundária forte |
 | 3 | `outline` | `#e4e4e7` (zinc-200) | `#71717a` (zinc-500) | Ação terciária / cancelar |
 | 4 | `ghost` | transparent | transparent | Ação contextual mínima |
 | 5 | `danger` | `#EF4444` | `#EF4444` | Ação destrutiva |
@@ -1965,8 +1971,8 @@ Para design system v3 spec:
 |---------|------|--------|:----------:|:-----------:|:----------:|:---------------:|
 | **primary** | light | `#22C55E` | 2.28:1 | **8.73:1** | AAA ✅ | 3.13:1 |
 | | dark | `#22C55E` | 8.71:1 | **8.73:1** | AAA ✅ | 3.13:1 |
-| **secondary** | light | `#d4d4d8` (zinc-300) | 1.48:1 | **12.08:1** | AAA ✅ | 1.34:1 |
-| | dark | `#52525b` (zinc-600) | 2.57:1 | **6.99:1** | AA ✅ | 2.66:1 |
+| **secondary** | light | `#475569→#1e293b` | ≥7.58:1 | **≥7.58:1** | AAA ✅ | forte |
+| | dark | `#475569→#1e293b` | ≥2.62:1 | **≥7.58:1** | AAA ✅ | forte |
 | **outline** | light | `#e4e4e7` (zinc-200) | 1.23:1 | **13.62:1** | AAA ✅ | 1.52:1 |
 | | dark | `#71717a` (zinc-500) | 4.10:1 | **4.37:1** | AA-lg ⚠️ | 1.60:1 |
 | **danger** | light | `#EF4444` | 3.76:1 | **3.76:1** | AA-lg ⚠️ | 2.21:1 |
@@ -2126,7 +2132,7 @@ Dark mode:  fundo escuro → texto claro → status como texto direto
 ### Hierarquia de botões (respeitando contraste):
 
 ```
-primary (verde 3D) > secondary (zinc-300/600 3D) > outline (zinc-200/500 3D) > ghost (transparente)
+primary (verde 3D) > secondary (navy slate 3D) > outline (zinc-200/500 3D) > ghost (transparente)
 ```
 
 ### Fórmula para shadow 3D sólido:

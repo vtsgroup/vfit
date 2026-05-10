@@ -5,13 +5,13 @@
  * Mimetiza o FirstWinCommandCenter + lista de templates abaixo.
  */
 
-const S = 'animate-pulse bg-white/5'
+const S = 'animate-pulse bg-white/8'
 
 export default function TreinosLoading() {
   return (
-    <div className="min-h-screen pb-28">
+    <div className="mx-auto max-w-lg px-4 pt-0 pb-28">
       {/* ── Command center skeleton ─────────────────────────────────── */}
-      <div className="-mx-4 mb-5 overflow-hidden rounded-b-3xl border-b border-white/8 bg-linear-to-br from-slate-950 via-slate-900 to-emerald-950 shadow-xl">
+      <div className="-mx-4 mb-5 min-h-110 overflow-hidden rounded-b-[30px] bg-linear-to-b from-[#0b1d36] via-[#08172d] to-[#050A12] shadow-[0_18px_48px_rgba(5,10,18,0.42)]">
         <div className="px-4 pt-5 pb-4">
           {/* Label + título */}
           <div className="mb-4 flex items-start justify-between gap-3">
@@ -25,7 +25,7 @@ export default function TreinosLoading() {
           </div>
 
           {/* Card treino do dia */}
-          <div className="rounded-3xl border border-white/10 bg-white/6 p-3.5">
+          <div className="rounded-3xl border border-white/10 bg-white/7 p-3.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
             <div className="mb-3 flex items-start justify-between gap-3">
               <div className="min-w-0 flex-1">
                 <div className={`${S} mb-2 h-6 w-32 rounded-full`} />
@@ -47,7 +47,7 @@ export default function TreinosLoading() {
             </div>
 
             {/* CTA button */}
-            <div className={`${S} h-14 w-full rounded-2xl`} />
+            <div className="h-11 w-full animate-pulse rounded-[13px] border border-emerald-900/60 bg-linear-to-b from-emerald-300/60 via-emerald-500/50 to-green-700/50 shadow-[0_5px_0_0_#064e3b]" />
           </div>
 
           {/* Atalhos nutrição/plano */}
@@ -65,7 +65,7 @@ export default function TreinosLoading() {
         {[60, 80, 100].map((h, i) => (
           <div key={i}>
             <div className={`${S} mb-3 h-4 w-40 rounded`} />
-            <div className={`${S} h-${h === 60 ? '32' : h === 80 ? '48' : '64'} rounded-2xl`} />
+            <div className={`${S} ${h === 60 ? 'h-32' : h === 80 ? 'h-48' : 'h-64'} rounded-[28px] border border-emerald-100/10`} />
           </div>
         ))}
 

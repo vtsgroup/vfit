@@ -33,6 +33,12 @@
 - Profundidade 3D do botão principal agora é exclusivamente verde escuro (`#064e3b`), sem cinza no shadow/base.
 - `Button.gradient` foi alinhado ao mesmo padrão: borda verde escura, profundidade verde escura e glow controlado.
 
+## Atualização — Botão Secondary Navy Blue-Gray (10/05/2026)
+
+- `Button.secondary` usa gradiente navy blue-gray `slate-500 → slate-600 → slate-800` com texto branco.
+- A profundidade 3D é `#0f172a`, mantendo a aparência sóbria sem competir com o verde do CTA principal.
+- Hover adiciona brilho sky controlado e mantém contraste forte em light/dark.
+
 ---
 
 ## Cores & Contraste (Web — Tema Atual)
@@ -59,7 +65,7 @@
 
 | Variant | Light (bg → text) | Dark (bg → text) |
 |---------|-------------------|-------------------|
-| **secondary** | `slate-200→300→400` → `slate-800` · contraste alto | `slate-500→600→700` → `slate-100` · contraste alto |
+| **secondary** | `slate-500→600→800` → `white` · navy 3D alto contraste | `slate-500→600→800` → `white` · navy 3D alto contraste |
 | **outline** | `zinc-200` (#e4e4e7) → `zinc-600` · 13.62:1 AAA | `zinc-500` (#71717a) → `zinc-100` · 4.37:1 AA-lg |
 
 > `secondary` agora é canônico em **slate blue-gray** para manter contraste perfeito e evitar saturação excessiva.
@@ -283,7 +289,7 @@ Para design system v3 spec:
 | # | Variant | Light bg | Dark bg | Propósito |
 |---|---------|----------|---------|-----------|
 | 1 | `primary` | `#22C55E` (brand) | `#22C55E` | CTA principal — ação primária |
-| 2 | `secondary` | `#d4d4d8` (zinc-300) | `#52525b` (zinc-600) | Ação secundária forte |
+| 2 | `secondary` | `#475569 → #1e293b` (slate navy) | `#475569 → #1e293b` (slate navy) | Ação secundária forte |
 | 3 | `outline` | `#e4e4e7` (zinc-200) | `#71717a` (zinc-500) | Ação terciária / cancelar |
 | 4 | `ghost` | transparent | transparent | Ação contextual mínima |
 | 5 | `danger` | `#EF4444` | `#EF4444` | Ação destrutiva |
@@ -318,8 +324,8 @@ Para design system v3 spec:
 |---------|------|--------|:----------:|:-----------:|:----------:|:---------------:|
 | **primary** | light | `#22C55E` | 2.28:1 | **8.73:1** | AAA ✅ | 3.13:1 |
 | | dark | `#22C55E` | 8.71:1 | **8.73:1** | AAA ✅ | 3.13:1 |
-| **secondary** | light | `#d4d4d8` (zinc-300) | 1.48:1 | **12.08:1** | AAA ✅ | 1.34:1 |
-| | dark | `#52525b` (zinc-600) | 2.57:1 | **6.99:1** | AA ✅ | 2.66:1 |
+| **secondary** | light | `#475569→#1e293b` | ≥7.58:1 | **≥7.58:1** | AAA ✅ | forte |
+| | dark | `#475569→#1e293b` | ≥2.62:1 | **≥7.58:1** | AAA ✅ | forte |
 | **outline** | light | `#e4e4e7` (zinc-200) | 1.23:1 | **13.62:1** | AAA ✅ | 1.52:1 |
 | | dark | `#71717a` (zinc-500) | 4.10:1 | **4.37:1** | AA-lg ⚠️ | 1.60:1 |
 | **danger** | light | `#EF4444` | 3.76:1 | **3.76:1** | AA-lg ⚠️ | 2.21:1 |
@@ -479,7 +485,7 @@ Dark mode:  fundo escuro → texto claro → status como texto direto
 ### Hierarquia de botões (respeitando contraste):
 
 ```
-primary (verde 3D) > secondary (zinc-300/600 3D) > outline (zinc-200/500 3D) > ghost (transparente)
+primary (verde 3D) > secondary (navy slate 3D) > outline (zinc-200/500 3D) > ghost (transparente)
 ```
 
 ### Fórmula para shadow 3D sólido:

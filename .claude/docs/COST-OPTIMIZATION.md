@@ -207,26 +207,26 @@ Critério mínimo: 4/5 corretos.
 | `/plan-ceo-review` | Reframing de produto/escopo | 55% |
 | `/retro` | Retrospectiva e melhoria contínua | 50% |
 | `/gstack-upgrade` | Upgrade do gstack com segurança | 50% |
-| `/mem-search` | Busca histórica no Claude-Mem (quando instalado) | 60% |
+| `copilot-mem (MCP)` | Busca histórica com memória persistente (quando instalado) | 60% |
 
 ---
 
-## Memory Strategy (Auto Memory + Claude-Mem)
+## Memory Strategy (Auto Memory + Copilot-Mem)
 
 1. Memória nativa (`/memory`)
 - Guardar fatos estáveis: comandos, padrões, gotchas recorrentes.
 - Manter índice curto e tópico.
 
-2. Claude-Mem (opcional)
-- Instalar com `npx claude-mem install` ou via `/plugin marketplace`.
-- Evitar `npm install -g claude-mem` para setup de plugin.
+2. Copilot-Mem (opcional)
+- Instalar com `npm install -g @copilot-mem/mcp-server`.
+- Configurar em `settings.json` com `github.copilot.chat.mcpServers`.
 
-3. Fluxo recomendado `/mem-search`
+3. Fluxo recomendado (MCP)
 - `search` para índice compacto.
 - `timeline` para contexto cronológico.
-- `get_observations` apenas para IDs filtrados.
+- `get_memories` apenas para IDs filtrados.
 
-4. Quando usar `/mem-search`
+4. Quando usar Copilot-Mem
 - Bugs recorrentes.
 - Onboarding em área legada.
 - Investigação de regressão.

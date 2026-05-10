@@ -85,7 +85,7 @@ Effective immediately in the current Claude Code session.
 ## Golden Rules
 
 1. **Start with Haiku** — switch only if needed
-2. **Context before model** — try `/mem-search` before switching
+2. **Context before model** — try Copilot-Mem (`smart_search`) before switching
 3. **Sonnet is the midpoint** — never skip from Haiku to Opus
 4. **Opus is rare** — ~5% of tasks only
 
@@ -112,10 +112,10 @@ Auto-detection keywords:
 - "plano", "arquitetura", "roadmap" → `/opus`
 - "debug", "race condition", "incompatibilidade" → `/sonnet`
 - "review-pr", "paranóico", "security audit" → `/opus`
-- "worker + frontend", "múltiplos domínios" → `/mem-search` first
+- "worker + frontend", "múltiplos domínios" → `smart_search` first
 - (default) → `/haiku`
 
 ---
 
 **Status**: ✅ ATIVO
-**Integrated with**: SessionStart hook, mem-search, scheduled snapshot 6h
+**Integrated with**: SessionStart hook, copilot-mem, scheduled snapshot 6h

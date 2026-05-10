@@ -106,9 +106,9 @@ export function StudentHeader() {
         scrolled && 'ds3-header-scrolled'
       )}
       style={{
-        // Dark top → medium navy bottom, seamlessly connecting to hero (#0b1627)
+        // Premium blue top → dark intersection, seamlessly connecting to hero (#0b1627)
         background:
-          'linear-gradient(to bottom, #050A12 0%, #060d1a 18%, #071120 36%, #08152a 54%, #091830 72%, #0a1b33 88%, #0b1d36 100%)',
+          'linear-gradient(to bottom, #082f49 0%, #06314f 18%, #072943 38%, #071f37 60%, #07182d 80%, #050A12 100%)',
         backgroundColor: '#050A12',
         borderBottom: 0,
         top: 'var(--demo-banner-offset, 0px)',
@@ -149,27 +149,27 @@ export function StudentHeader() {
         </div>
 
         <div className="flex shrink-0 items-center gap-2">
-          {/* XP chip — same glass style as bell, left of notifications */}
+          {/* XP chip — digital asset coin, left of notifications */}
           <Link
             href="/progresso/streaks"
-            className="flex h-9 items-center gap-1.5 rounded-[10px] border border-emerald-500/20 bg-emerald-500/8 px-2.5 text-slate-200 transition-all hover:border-emerald-400/35 hover:bg-emerald-500/14"
+            className="flex h-9 items-center gap-1.5 rounded-[12px] border border-amber-300/35 bg-linear-to-b from-amber-300/18 via-amber-400/10 to-slate-950/20 px-2.5 text-slate-100 shadow-[0_7px_18px_-12px_rgba(251,191,36,0.75),inset_0_1px_0_rgba(253,230,138,0.22)] transition-all duration-200 hover:border-amber-300/55 hover:bg-amber-300/16 active:scale-95"
             title={`${xpData?.balance ?? 0} XP — Nível ${xpData?.level ?? 1}`}
             aria-label={`${xpData?.balance ?? 0} XP, nível ${xpData?.level ?? 1}`}
-            style={{ boxShadow: 'inset 0 1px 0 rgba(52,211,153,0.06)' }}
           >
-            <DSIcon name="flame" size={14} className="text-emerald-400" />
-            <span className="text-[11px] font-bold tabular-nums leading-none text-emerald-300">{xpData?.balance ?? 0}</span>
+            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-linear-to-b from-amber-200 via-yellow-400 to-amber-600 text-amber-950 shadow-[0_2px_8px_rgba(245,158,11,0.4),inset_0_1px_0_rgba(255,255,255,0.42)]">
+              <DSIcon name="coin" size={13} />
+            </span>
+            <span className="text-[11px] font-black tabular-nums leading-none text-amber-100">{xpData?.balance ?? 0}</span>
           </Link>
 
           <div className="relative">
             <Link
               href="/perfil/notificacoes"
-              className="flex h-9 w-9 items-center justify-center rounded-[10px] border border-white/12 bg-white/5 text-slate-200 transition-all hover:bg-white/10 hover:text-white hover:border-emerald-500/30"
+              className="flex h-9 w-9 items-center justify-center rounded-[12px] border border-sky-200/16 bg-linear-to-b from-white/11 via-sky-300/6 to-slate-950/18 text-slate-100 shadow-[0_8px_20px_-14px_rgba(125,211,252,0.65),inset_0_1px_0_rgba(255,255,255,0.12)] transition-all duration-200 hover:border-sky-200/28 hover:bg-white/12 active:scale-95"
               title={unreadCount > 0 ? `${unreadCount} nao lida(s)` : 'Notificacoes'}
               aria-label={unreadCount > 0 ? `${unreadCount} notificacoes nao lidas` : 'Notificacoes'}
-              style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)' }}
             >
-              <DSIcon name="bell" size={16} className="text-white" />
+              <DSIcon name={unreadCount > 0 ? 'bellRing' : 'bell'} size={16} className="text-white drop-shadow-[0_0_8px_rgba(125,211,252,0.22)]" />
             </Link>
 
             {unreadCount > 0 && (
@@ -182,9 +182,9 @@ export function StudentHeader() {
             )}
           </div>
 
-          <div className="shrink-0">
-            <AvatarWithPlanBadge src={user?.avatar_url} name={user?.full_name || 'U'} size="sm" linkToPlans />
-          </div>
+          <Link href="/perfil" className="shrink-0 rounded-full transition-transform duration-200 active:scale-95" aria-label="Abrir perfil">
+            <AvatarWithPlanBadge src={user?.avatar_url} name={user?.full_name || 'U'} size="sm" />
+          </Link>
         </div>
       </div>
     </header>

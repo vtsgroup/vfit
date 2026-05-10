@@ -19,7 +19,7 @@ Result:
 - Replication quality improved with a mandatory expert-audit gate.
 - Generated instructions were effectively updated from source docs and validated.
 - Skills catalog is now complete and aligned with expert workflow routing.
-- Memory strategy now includes `/mem-search` flow for token-efficient historical retrieval.
+- Memory strategy now includes Copilot-Mem MCP flow for token-efficient historical retrieval.
 - Project-isolation guardrails were added to prevent cross-repo confusion.
 
 ## Delta vs Previous Audit
@@ -33,7 +33,7 @@ Improvements added in this cycle:
 
 0.1 Skills + memory layer expansion completed
 - Added expert-level Skills Reference with full operational catalog.
-- Added Memory Strategy section with `/memory` + optional Claude-Mem + `/mem-search` flow.
+- Added Memory Strategy section with `/memory` + optional Copilot-Mem MCP flow.
 - Added recommended workflows (feature, bugfix, UI/UX, performance) for consistent low-cost execution.
 
 0.2 Project isolation hardening completed
@@ -96,8 +96,8 @@ Improvements added in this cycle:
 ### 6) Memory strategy is correctly layered
 - Status: PASS
 - Evidence:
-  - Native memory + optional Claude-Mem layering remains explicit.
-  - Retrieval discipline (search -> timeline -> get_observations) remains preserved.
+  - Native memory + optional Copilot-Mem layering remains explicit.
+  - Retrieval discipline (search -> timeline -> get_memories) remains preserved.
 
 ### 7) Replicability for other repositories is high
 - Status: PASS
@@ -120,7 +120,7 @@ Improvements added in this cycle:
 ### 10) Memory-driven cost optimization is explicit
 - Status: PASS
 - Evidence:
-  - Generated instructions now document `/mem-search` strategy with `search -> timeline -> get_observations`.
+  - Generated instructions now document Copilot-Mem strategy with `search -> timeline -> get_memories`.
   - Clear guidance on when to use memory for recurring bugs and regressions.
 
 ### 11) Cross-project confusion risk is controlled
@@ -158,7 +158,7 @@ Improvements added in this cycle:
 - [x] Versions/date refreshed
 - [x] Generated copilot-instructions updated via sync script
 - [x] Skills table expanded to expert-level coverage
-- [x] `/mem-search` strategy documented in generated instructions
+- [x] Copilot-Mem MCP strategy documented in generated instructions
 - [x] Project-isolation guardrails documented in generated instructions
 
 ## Final Recommendation

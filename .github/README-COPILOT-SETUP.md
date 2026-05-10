@@ -202,7 +202,7 @@ Regra prática:
 
 ---
 
-## 🧠 Memory Strategy (/memory + /mem-search)
+## 🧠 Memory Strategy (/memory + Copilot-Mem MCP)
 
 Para replicar entre projetos com continuidade real entre sessões:
 
@@ -212,40 +212,44 @@ Para replicar entre projetos com continuidade real entre sessões:
 - Guarde no índice apenas o essencial (comandos, padrões, gotchas)
 - Separe detalhes em arquivos temáticos
 
-### Camada 2: Claude-Mem (opcional avançado)
+### Camada 2: Copilot-Mem (opcional avançado)
 
 - Instalar corretamente:
 
 ```bash
 # opção 1
-npx claude-mem install
+npm install -g @copilot-mem/mcp-server
 
-# opção 2 (dentro do Claude Code)
-/plugin marketplace add thedotmack/claude-mem
-/plugin install claude-mem
+# opção 2 (workspace settings.json)
+"github.copilot.chat.mcpServers": {
+   "copilot-mem": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["copilot-mem-server"]
+   }
+}
 ```
 
-- Não usar `npm install -g claude-mem` para setup do plugin completo
-- Validar worker e UI em `http://localhost:37777`
+- Validar API/UI em `http://localhost:37888/ui`
 
-### /mem-search (melhor prática)
+### Fluxo MCP (melhor prática)
 
 Fluxo recomendado de busca histórica para economizar tokens:
 
 1. `search` (índice compacto)
 2. `timeline` (contexto ao redor)
-3. `get_observations` (detalhe apenas para IDs filtrados)
+3. `get_memories` (detalhe apenas para IDs filtrados)
 
-Use `/mem-search` quando o contexto histórico faz diferença: bugs recorrentes, áreas sensíveis, regressões antigas e onboarding em legado.
+Use o Copilot-Mem quando o contexto histórico faz diferença: bugs recorrentes, áreas sensíveis, regressões antigas e onboarding em legado.
 
-### Claude-Mem Operating SOP (Replicable)
+### Copilot-Mem Operating SOP (Replicable)
 
-If your team is already using Claude-Mem, adopt this standard flow:
+If your team is already using Copilot-Mem, adopt this standard flow:
 
 1. Historical question appears ("já corrigimos isso?").
-2. Run `/mem-search` with compact intent first.
+2. Run `smart_search` with compact intent first.
 3. Retrieve IDs from `search`.
-4. Expand only selected IDs with `timeline` and `get_observations`.
+4. Expand only selected IDs with `timeline` and `get_memories`.
 5. Convert findings into actionable patch/testing steps.
 
 Recommended query patterns:

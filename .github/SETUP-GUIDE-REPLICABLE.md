@@ -246,24 +246,24 @@ Example for **Next.js project**:
 
 **Replace with YOUR project's actual workflow**
 
-#### 3.4 Add /mem-search to Skills (if Claude-Mem is used)
+#### 3.4 Add Copilot-Mem MCP flow (if memory is used)
 
-If your team uses Claude-Mem, add `/mem-search` to Skills Reference:
+If your team uses Copilot-Mem, add this to Skills Reference:
 
 ```markdown
-| `/mem-search` | Search historical project memory | –60% |
+| `copilot-mem (MCP)` | Search historical project memory | –60% |
 ```
 
 Document the retrieval flow to avoid token waste:
 
 1. `search` (compact index)
 2. `timeline` (chronology)
-3. `get_observations` (details only for selected IDs)
+3. `get_memories` (details only for selected IDs)
 
 Use this operating rule:
 
 ```markdown
-Never call get_observations on all results.
+Never call get_memories on all results.
 Always filter by IDs from search first.
 ```
 
@@ -429,32 +429,30 @@ Cost optimization is not just model routing; memory avoids paying to rediscover 
 - Store concise project facts and recurring corrections
 - Keep memory index short; move details to topic files
 
-### Layer 2: Claude-Mem + `/mem-search` (optional)
+### Layer 2: Copilot-Mem (optional)
 
 Install using one of the official paths:
 
 ```bash
-npx claude-mem install
-# or
-/plugin marketplace add thedotmack/claude-mem
-/plugin install claude-mem
+npm install -g @copilot-mem/mcp-server
+# and configure github.copilot.chat.mcpServers in settings.json
 ```
 
-Do NOT use `npm install -g claude-mem` for full plugin setup.
+Do NOT leave an old memory plugin enabled in parallel.
 
 Validation checklist:
 
-- [ ] Worker healthy (`http://localhost:37777/health`)
-- [ ] Web viewer opens (`http://localhost:37777`)
-- [ ] Search flow works (`search` -> `timeline` -> `get_observations`)
+- [ ] API healthy (`http://localhost:37888/api/sessions`)
+- [ ] Web viewer opens (`http://localhost:37888/ui`)
+- [ ] Search flow works (`search` -> `timeline` -> `get_memories`)
 
 ### Memory Query Protocol (Expert)
 
-Apply this protocol in every project that has Claude-Mem:
+Apply this protocol in every project that has Copilot-Mem:
 
 1. Search phase: narrow query + filters (type/date/project)
 2. Context phase: timeline around the 2-5 most relevant IDs
-3. Detail phase: get_observations only for shortlisted IDs
+3. Detail phase: get_memories only for shortlisted IDs
 4. Action phase: translate findings into patch + test plan
 
 Success criteria:
@@ -463,7 +461,7 @@ Success criteria:
 - No full-database dump behavior
 - Lower token usage than manual long-context prompts
 
-When to use `/mem-search`:
+When to use Copilot-Mem:
 
 - Recurring bugs
 - Legacy onboarding
@@ -601,7 +599,7 @@ Content Sections:
 ☐ Pre-IA Checklist section
 ☐ Context Efficiency (anti-patterns + economic patterns)
 ☐ Skills Reference table
-☐ /mem-search included (if Claude-Mem is used)
+☐ Copilot-Mem MCP flow included (if memory is used)
 ☐ Project-specific workflows
 ☐ Imports & Patterns for YOUR stack
 ☐ API/Component templates

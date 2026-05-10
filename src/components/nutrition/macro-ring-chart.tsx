@@ -12,7 +12,7 @@
 
 import { useEffect, useState, useRef } from 'react'
 import { cn } from '@/lib/utils'
-import { DSIcon } from '@/components/ui/ds-icon'
+import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 
 // ── Types ──────────────────────────────────────────────
 
@@ -39,7 +39,7 @@ interface MacroItem {
   key: string
   label: string
   short: string
-  icon: string
+  icon: DSIconName
   value: number
   target: number
   kcal: number
@@ -50,6 +50,7 @@ interface MacroItem {
   gradFrom: string
   gradTo: string
   gradId: string
+  iconBg: string
   segLen: number
   segOff: number
 }
@@ -141,7 +142,7 @@ export function MacroRingChart({
       key: 'protein',
       label: 'Proteína',
       short: 'P',
-      icon: 'zap',
+      icon: 'flask',
       value: protein,
       target: proteinTarget,
       kcal: proteinKcal,
@@ -152,6 +153,7 @@ export function MacroRingChart({
       gradFrom: '#34d399',
       gradTo: '#059669',
       gradId: 'gP',
+      iconBg: '#16a34a',
       segLen: seg1Len,
       segOff: seg1Off,
     },
@@ -159,7 +161,7 @@ export function MacroRingChart({
       key: 'carbs',
       label: 'Carboidratos',
       short: 'C',
-      icon: 'wheat',
+      icon: 'apple',
       value: carbs,
       target: carbsTarget,
       kcal: carbsKcal,
@@ -170,6 +172,7 @@ export function MacroRingChart({
       gradFrom: '#fbbf24',
       gradTo: '#d97706',
       gradId: 'gC',
+      iconBg: '#f59e0b',
       segLen: seg2Len,
       segOff: seg2Off,
     },
@@ -188,6 +191,7 @@ export function MacroRingChart({
       gradFrom: '#fb923c',
       gradTo: '#dc2626',
       gradId: 'gF',
+      iconBg: '#f97316',
       segLen: seg3Len,
       segOff: seg3Off,
     },
@@ -414,15 +418,11 @@ export function MacroRingChart({
               aria-label={`${m.label}: ${isHidden ? 'oculto' : 'visível'}. Clique para alternar.`}
             >
               {/* Icon + Pattern Indicator (not just color) */}
-              <div className="relative flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-white shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_3px_8px_rgba(15,23,42,0.08)]">
-                <DSIcon name={m.icon} size={14} style={{ color: m.color }} className="m-auto" />
-                <div
-                  className="absolute inset-0 rounded-xl"
-                  style={{
-                    border: `1px solid ${m.color}`,
-                    opacity: isHidden ? 0.3 : 0.7,
-                  }}
-                />
+              <div
+                className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-white shadow-[0_6px_14px_rgba(15,23,42,0.14),inset_0_1px_0_rgba(255,255,255,0.22)]"
+                style={{ background: m.iconBg }}
+              >
+                <DSIcon name={m.icon} size={15} className="m-auto" />
               </div>
 
               {/* Label */}

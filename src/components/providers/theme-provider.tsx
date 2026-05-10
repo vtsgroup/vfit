@@ -6,8 +6,8 @@
  * Exports: ThemeProvider
  * Features: 'use client'
  *
- * Dashboard: respeita light/dark/system do app-store (settings)
- * Páginas públicas: sem app-store hidratado → default dark
+ * Dashboard/app: respeita light/dark/system do app-store (settings)
+ * Páginas públicas: não força light/dark; usa tokens CSS base existentes
  */
 
 // ============================================
@@ -34,9 +34,34 @@ const STUDENT_LIGHT_ROUTES = [
   '/social',
 ]
 
+const PUBLIC_UNTHEMED_ROUTES = [
+  '/',
+  '/afiliados',
+  '/app-personal-trainer',
+  '/blog',
+  '/carreiras',
+  '/contato',
+  '/cookies',
+  '/excluir-conta',
+  '/guest',
+  '/lgpd',
+  '/nutricionistas',
+  '/p',
+  '/pricing',
+  '/privacidade',
+  '/sobre',
+  '/status',
+  '/termos',
+]
+
 function isStudentLightRoute(pathname: string | null) {
   if (!pathname) return false
   return STUDENT_LIGHT_ROUTES.some((route) => pathname === route || pathname.startsWith(`${route}/`))
+}
+
+function isPublicUnthemedRoute(pathname: string | null) {
+  if (!pathname) return false
+  return PUBLIC_UNTHEMED_ROUTES.some((route) => pathname === route || (route !== '/' && pathname.startsWith(`${route}/`)))
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
@@ -46,6 +71,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const setResolvedTheme = useAppStore((s) => s.setResolvedTheme)
   const isOnboardingRoute = pathname === '/welcome' || pathname.startsWith('/onboarding')
   const isB2CStudentRoute = isStudentLightRoute(pathname)
+  const isPublicRouteWithoutForcedTheme = isPublicUnthemedRoute(pathname)
   const effectiveTheme: 'light' | 'dark' = isOnboardingRoute ? 'dark' : isB2CStudentRoute ? 'light' : resolvedTheme
 
   // Resolve theme deterministically from current preference + OS
@@ -62,6 +88,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   // Sync resolved theme → <html> class + colorScheme + meta theme-color (TWA/PWA)
   useEffect(() => {
     const root = document.documentElement
+
+    if (isPublicRouteWithoutForcedTheme) {
+      root.classList.remove('light', 'dark', 'theme-switching')
+      root.style.removeProperty('color-scheme')
+      root.style.removeProperty('background-color')
+      return
+    }
+
     root.classList.add('theme-switching')
 
     if (effectiveTheme === 'light') {
@@ -104,7 +138,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       window.cancelAnimationFrame(rafId)
       root.classList.remove('theme-switching')
     }
-  }, [effectiveTheme])
+  }, [effectiveTheme, isPublicRouteWithoutForcedTheme])
 
   // Listen for OS color scheme changes when theme === 'system'
   useEffect(() => {
