@@ -7,6 +7,9 @@
 
 ## [Unreleased] — 2026-04-08 — Sprint 11-15 (UX Nutrição/Exercícios)
 
+### 🔧 Hotfix v4.1.9 — Analytics CSP production fix (2026-05-10)
+- **GA4 sem bloqueio de CSP:** [public/_headers](public/_headers) adiciona `https://www.google.com` ao `connect-src`, permitindo o fallback `g/collect` usado por eventos de engajamento e Web Vitals do GA4 sem relaxar os demais domínios da política.
+
 ### 🎨 Hotfix v4.1.8 — Welcome, onboarding e auth ultra premium (2026-05-10)
 - **Welcome redesenhado:** [src/app/(onboarding)/welcome/page.tsx](src/app/(onboarding)/welcome/page.tsx) agora abre o fluxo com hero cinematográfico VFIT, métricas do quiz, cards glass e CTA desktop/mobile sem alterar a lógica de retomada do onboarding.
 - **Welcome mobile corrigido:** CTA principal saiu do overlay fixo e passou para o fluxo do hero em telas pequenas, removendo sobreposição com texto e mantendo leitura limpa no viewport mobile.
