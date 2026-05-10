@@ -1,6 +1,6 @@
 # Auditoria de Referências Sensíveis (Gerado automaticamente)
 
-> Gerado em: 2026-05-10T17:58:28.322Z
+> Gerado em: 2026-05-10T18:01:14.765Z
 
 ## Resumo
 - Total de arquivos analisados: **1514**
