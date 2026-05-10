@@ -467,7 +467,7 @@ export default function TreinosPage() {
   const planPct = plan && plan.total_days > 0 ? Math.round((plan.current_day / plan.total_days) * 100) : 0
 
   return (
-    <div className="mx-auto max-w-lg animate-in fade-in-0 slide-in-from-bottom-2 duration-300 px-4 pt-0 pb-4">
+    <div className="mx-auto max-w-lg px-4 pt-0 pb-4">
       <FirstWinCommandCenter
         userName={user?.full_name}
         todayDay={todayDay}

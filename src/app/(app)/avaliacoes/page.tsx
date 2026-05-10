@@ -9,6 +9,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { cn } from '@/lib/utils'
 import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -27,8 +28,8 @@ function DeltaBadge({ current, previous, unit, invert }: {
   if (diff === 0) return null
   const isPositive = diff > 0
   const color = invert
-    ? (isPositive ? 'text-red-400' : 'text-brand-primary')
-    : (isPositive ? 'text-brand-primary' : 'text-red-400')
+    ? (isPositive ? 'text-red-600' : 'text-emerald-700')
+    : (isPositive ? 'text-emerald-700' : 'text-red-600')
 
   return (
     <span className={`ml-1 text-[10px] font-semibold tabular-nums ${color}`}>
@@ -47,19 +48,13 @@ function StatTile({ icon, label, value, unit, delta, valueClass }: {
   valueClass?: string
 }) {
   return (
-    <div
-      className="rounded-xl px-2.5 py-2"
-      style={{
-        background: 'rgba(255,255,255,0.03)',
-        border: '1px solid rgba(255,255,255,0.06)',
-      }}
-    >
+    <div className="rounded-2xl border border-slate-200 bg-slate-50/80 px-2.5 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.82)]">
       <div className="mb-1 flex items-center gap-1.5">
-        <DSIcon name={icon} size={11} className="text-text-muted" />
-        <p className="text-[10px] font-semibold uppercase tracking-wider text-text-muted">{label}</p>
+        <DSIcon name={icon} size={11} className="text-slate-500" />
+        <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">{label}</p>
       </div>
-      <p className={`text-[15px] font-black tabular-nums leading-tight ${valueClass ?? 'text-text-primary'}`}>
-        {value}{unit && <span className="text-[10px] font-medium text-text-muted"> {unit}</span>}
+      <p className={`text-[15px] font-black tabular-nums leading-tight ${valueClass ?? 'text-slate-900'}`}>
+        {value}{unit && <span className="text-[10px] font-bold text-slate-500"> {unit}</span>}
         {delta}
       </p>
     </div>
@@ -146,27 +141,22 @@ export default function AvaliacoesPage() {
         </div>
       </div>
 
-      <div
-        className="mb-5 overflow-hidden rounded-2xl border border-brand-primary/22 p-4"
-        style={{
-          background:
-            'linear-gradient(135deg, rgba(34,197,94,0.10) 0%, rgba(34,197,94,0.03) 60%, transparent 100%)',
-          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04), 0 8px 24px -12px rgba(34,197,94,0.18)',
-        }}
-      >
-        <div className="mb-3 flex items-start gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-brand-primary/30 bg-brand-primary/12">
-            <DSIcon name="userPlus" size={18} className="text-brand-primary" />
+      <div className="relative mb-5 overflow-hidden rounded-[26px] border border-emerald-100 bg-linear-to-br from-white via-emerald-50/55 to-sky-50/50 p-4 shadow-[0_24px_58px_-34px_rgba(15,23,42,0.34),inset_0_1px_0_rgba(255,255,255,0.94)]">
+        <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-emerald-200/50 blur-3xl" />
+        <div className="pointer-events-none absolute left-0 top-0 h-px w-full bg-linear-to-r from-transparent via-emerald-200 to-transparent" />
+        <div className="relative mb-3 flex items-start gap-3">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-emerald-500 text-white shadow-[0_10px_22px_-12px_rgba(5,150,105,0.82),inset_0_1px_0_rgba(255,255,255,0.28)]">
+            <DSIcon name="userPlus" size={18} />
           </div>
           <div className="flex-1">
-            <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-brand-primary">
+            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-emerald-700">
               Avaliação completa com personal
             </p>
-            <p className="mt-1 text-[13px] leading-relaxed text-text-secondary">
+            <p className="mt-1 text-[13px] leading-relaxed text-slate-600">
               Convide um personal trainer para revisar e validar sua avaliação física.
             </p>
             {studentProfile?.personal_name && (
-              <p className="mt-1.5 inline-flex items-center gap-1 text-[12px] font-semibold text-success">
+              <p className="mt-1.5 inline-flex items-center gap-1 text-[12px] font-bold text-emerald-700">
                 <DSIcon name="checkCircle" size={12} />
                 Vinculado a {studentProfile.personal_name}
               </p>
@@ -174,7 +164,7 @@ export default function AvaliacoesPage() {
           </div>
         </div>
 
-        <div className="mb-3 flex gap-2">
+        <div className="relative mb-3 flex gap-2">
           <Input
             value={personalReferralCode}
             onChange={(e) => setPersonalReferralCode(e.target.value.toUpperCase())}
@@ -190,7 +180,7 @@ export default function AvaliacoesPage() {
           </Button>
         </div>
 
-        <div className="flex flex-wrap gap-2">
+        <div className="relative flex flex-wrap gap-2">
           <Button variant="outline" size="sm" onClick={() => navigator.clipboard.writeText(personalInviteLink)}>
             <DSIcon name="copy" size={14} />
             Copiar link
@@ -222,15 +212,15 @@ export default function AvaliacoesPage() {
         </div>
 
         {showPersonalQr && (
-          <div className="mt-4 flex justify-center">
+          <div className="relative mt-4 flex justify-center">
             {personalInviteQrUrl ? (
               <img
                 src={personalInviteQrUrl}
                 alt="QR Code convite personal"
-                className="h-44 w-44 rounded-xl border border-white/12 bg-white p-2"
+                className="h-44 w-44 rounded-2xl border border-slate-200 bg-white p-2 shadow-[0_16px_36px_-24px_rgba(15,23,42,0.32)]"
               />
             ) : (
-              <div className="flex h-44 w-44 items-center justify-center rounded-xl border border-white/12 bg-white/6">
+              <div className="flex h-44 w-44 items-center justify-center rounded-2xl border border-slate-200 bg-white/80">
                 <DSIcon name="loader" size={20} className="animate-spin text-text-muted" />
               </div>
             )}
@@ -247,24 +237,18 @@ export default function AvaliacoesPage() {
 
       {/* Empty — premium */}
       {!isLoading && (!assessments || assessments.length === 0) && (
-        <div className="flex flex-col items-center gap-4 py-16 text-center">
-          <div
-            className="relative flex h-20 w-20 items-center justify-center rounded-2xl"
-            style={{
-              background: 'radial-gradient(circle at 30% 30%, rgba(34,197,94,0.22) 0%, rgba(22,101,52,0.12) 60%, rgba(5,10,18,0.6) 100%)',
-              border: '1px solid rgba(74,222,128,0.32)',
-              boxShadow: '0 0 30px rgba(34,197,94,0.22), inset 0 1px 0 rgba(255,255,255,0.08)',
-            }}
-          >
-            <DSIcon name="clipboardList" size={32} className="text-emerald-300" />
+        <div className="relative overflow-hidden rounded-[28px] border border-slate-200 bg-white px-5 py-14 text-center shadow-[0_24px_58px_-34px_rgba(15,23,42,0.34),inset_0_1px_0_rgba(255,255,255,0.94)]">
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-linear-to-b from-emerald-50 to-transparent" />
+          <div className="relative mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-2xl bg-emerald-500 text-white shadow-[0_14px_30px_-16px_rgba(5,150,105,0.86),inset_0_1px_0_rgba(255,255,255,0.28)]">
+            <DSIcon name="clipboardList" size={32} />
           </div>
-          <div>
-            <h2 className="text-[18px] font-black tracking-tight text-text-primary">Sua jornada começa aqui</h2>
-            <p className="mx-auto mt-2 max-w-72 text-[13px] leading-relaxed text-text-muted">
+          <div className="relative">
+            <h2 className="text-[18px] font-black tracking-tight text-slate-900">Sua jornada começa aqui</h2>
+            <p className="mx-auto mt-2 max-w-72 text-[13px] leading-relaxed text-slate-500">
               Faça sua primeira avaliação e descubra seu IMC, percentual de gordura e veja sua evolução ao longo do tempo.
             </p>
           </div>
-          <Link href="/avaliacoes/nova">
+          <Link href="/avaliacoes/nova" className="relative mt-4 inline-flex">
             <Button>
               <DSIcon name="plus" size={18} />
               Fazer minha avaliação
@@ -284,30 +268,25 @@ export default function AvaliacoesPage() {
               <Link
                 key={a.id}
                 href={`/avaliacoes/${a.id}`}
-                className="group relative block overflow-hidden rounded-2xl p-4 transition-all"
-                style={{
-                  background: isFirst
-                    ? 'linear-gradient(135deg, rgba(34,197,94,0.08) 0%, rgba(255,255,255,0.03) 100%)'
-                    : 'linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.02) 100%)',
-                  border: isFirst ? '1px solid rgba(34,197,94,0.28)' : '1px solid rgba(255,255,255,0.08)',
-                  boxShadow: isFirst
-                    ? 'inset 0 1px 0 rgba(255,255,255,0.04), 0 6px 20px -12px rgba(34,197,94,0.25)'
-                    : 'inset 0 1px 0 rgba(255,255,255,0.04)',
-                }}
+                className={cn(
+                  'group relative block overflow-hidden rounded-2xl border bg-white p-4 shadow-[0_18px_46px_-34px_rgba(15,23,42,0.34),inset_0_1px_0_rgba(255,255,255,0.94)] transition-all hover:-translate-y-0.5 hover:shadow-[0_24px_58px_-36px_rgba(14,165,233,0.30)] active:translate-y-0',
+                  isFirst ? 'border-emerald-100 bg-linear-to-br from-white via-emerald-50/65 to-sky-50/45' : 'border-slate-200'
+                )}
               >
+                {isFirst && <div className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-emerald-200/45 blur-3xl" />}
                 <div className="mb-3 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     {isFirst && (
-                      <span className="inline-flex items-center gap-1 rounded-full border border-brand-primary/30 bg-brand-primary/12 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-brand-primary">
-                        <span className="h-1.5 w-1.5 rounded-full bg-brand-primary" />
+                      <span className="inline-flex items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-emerald-700">
+                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
                         Mais recente
                       </span>
                     )}
-                    <span className="text-[11px] font-medium text-text-muted">
+                    <span className="text-[11px] font-bold text-slate-500">
                       {date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
                     </span>
                   </div>
-                  <DSIcon name="chevronRight" size={16} className="text-text-muted transition-transform group-hover:translate-x-0.5" />
+                  <DSIcon name="chevronRight" size={16} className="text-slate-400 transition-transform group-hover:translate-x-0.5" />
                 </div>
 
                 <div className="grid grid-cols-3 gap-2">
@@ -340,7 +319,7 @@ export default function AvaliacoesPage() {
                 </div>
 
                 {a.bmi_category && (
-                  <p className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-white/8 bg-white/4 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-text-secondary">
+                  <p className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-600 shadow-[0_8px_20px_-18px_rgba(15,23,42,0.28)]">
                     <span className="h-1.5 w-1.5 rounded-full bg-current opacity-60" />
                     {a.bmi_category}
                   </p>

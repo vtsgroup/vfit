@@ -1050,8 +1050,8 @@ select option {
 }
 
 @keyframes fab-pulse {
-  0%, 100% { box-shadow: 0 8px 32px rgba(61, 252, 164, 0.4), 0 4px 12px rgba(61, 252, 164, 0.25), 0 0 0 0 rgba(61, 252, 164, 0.35); }
-  50% { box-shadow: 0 8px 32px rgba(61, 252, 164, 0.4), 0 4px 12px rgba(61, 252, 164, 0.25), 0 0 0 14px rgba(61, 252, 164, 0); }
+  0%, 100% { box-shadow: 0 14px 40px rgba(34,197,94,0.36), 0 5px 0 #064e3b, 0 0 0 1px rgba(255,255,255,0.24) inset, 0 0 0 0 rgba(125,211,252,0.24); }
+  50% { box-shadow: 0 16px 46px rgba(14,165,233,0.28), 0 5px 0 #064e3b, 0 0 0 1px rgba(255,255,255,0.28) inset, 0 0 0 14px rgba(125,211,252,0); }
 }
 
 @keyframes fab-ring-pulse {
@@ -2596,7 +2596,7 @@ html.light {
   position: absolute;
   inset: -3px;
   border-radius: 50%;
-  border: 2px solid rgba(61, 252, 164, 0.4);
+  border: 2px solid rgba(125, 211, 252, 0.35);
   animation: fab-ring-pulse 2.8s ease-out infinite;
   pointer-events: none;
 }
@@ -2608,11 +2608,11 @@ html.light {
 
 /* Premium nav bar — Apple Dynamic Island inspired */
 .nav-premium {
-  background: linear-gradient(180deg, rgba(8,23,45,0.78) 0%, rgba(6,15,28,0.9) 36%, rgba(5,10,18,0.97) 72%, rgba(5,10,18,0.99) 100%);
+  background: linear-gradient(180deg, rgba(15,58,114,0.9) 0%, rgba(11,45,92,0.86) 22%, rgba(7,24,47,0.94) 58%, rgba(5,10,18,0.99) 100%);
   backdrop-filter: blur(40px) saturate(200%);
   -webkit-backdrop-filter: blur(40px) saturate(200%);
   border-top: 1px solid rgba(255,255,255,0.06);
-  box-shadow: 0 -4px 24px rgba(0,0,0,0.25), 0 0 32px rgba(61,252,164,0.04), inset 0 1px 0 rgba(125,211,252,0.12);
+  box-shadow: 0 -6px 28px rgba(2,6,23,0.34), 0 0 36px rgba(14,165,233,0.08), inset 0 1px 0 rgba(125,211,252,0.18);
 }
 
 /* Bottom nav top-edge gradient — removed */
@@ -2668,11 +2668,11 @@ html.light {
 }
 
 .light .nav-premium {
-  background: linear-gradient(180deg, rgba(5,10,18,0.88) 0%, rgba(5,10,18,0.96) 100%);
+  background: linear-gradient(180deg, rgba(15,58,114,0.9) 0%, rgba(11,45,92,0.86) 22%, rgba(7,24,47,0.94) 58%, rgba(5,10,18,0.99) 100%);
   backdrop-filter: blur(40px) saturate(200%);
   -webkit-backdrop-filter: blur(40px) saturate(200%);
   border-top: 1px solid rgba(255,255,255,0.06);
-  box-shadow: 0 -4px 24px rgba(0,0,0,0.25), 0 0 32px rgba(61,252,164,0.04);
+  box-shadow: 0 -6px 28px rgba(2,6,23,0.34), 0 0 36px rgba(14,165,233,0.08), inset 0 1px 0 rgba(125,211,252,0.18);
 }
 
 .light .md3-pill {
@@ -2697,11 +2697,11 @@ html.light {
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.08);
   }
   :root:not(.dark) .nav-premium {
-    background: linear-gradient(180deg, rgba(5,10,18,0.88) 0%, rgba(5,10,18,0.96) 100%);
+    background: linear-gradient(180deg, rgba(15,58,114,0.9) 0%, rgba(11,45,92,0.86) 22%, rgba(7,24,47,0.94) 58%, rgba(5,10,18,0.99) 100%);
     backdrop-filter: blur(40px) saturate(200%);
     -webkit-backdrop-filter: blur(40px) saturate(200%);
     border-top: 1px solid rgba(255,255,255,0.06);
-    box-shadow: 0 -4px 24px rgba(0,0,0,0.25), 0 0 32px rgba(61,252,164,0.04);
+    box-shadow: 0 -6px 28px rgba(2,6,23,0.34), 0 0 36px rgba(14,165,233,0.08), inset 0 1px 0 rgba(125,211,252,0.18);
   }
   :root:not(.dark) .md3-pill {
     background: rgba(34, 197, 94, 0.12);

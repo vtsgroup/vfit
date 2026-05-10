@@ -140,8 +140,8 @@ export function StudentFabMenu({ open, onClose }: StudentFabMenuProps) {
               haptic()
               onClose()
             }}
-            className="fixed inset-0 z-40 bg-slate-950/28 backdrop-blur-lg lg:hidden"
-            style={{ backdropFilter: 'blur(16px) saturate(140%)', WebkitBackdropFilter: 'blur(16px) saturate(140%)' }}
+            className="fixed inset-0 z-40 bg-slate-950/32 backdrop-blur-xl lg:hidden"
+            style={{ backdropFilter: 'blur(20px) saturate(150%)', WebkitBackdropFilter: 'blur(20px) saturate(150%)' }}
           />
 
           {/* Quick Actions Card — matches dashboard style */}
@@ -157,12 +157,14 @@ export function StudentFabMenu({ open, onClose }: StudentFabMenuProps) {
             }}
           >
             <div
-              className="rounded-[22px] border border-emerald-100 bg-white/96 p-2 shadow-[0_20px_60px_-28px_rgba(34,197,94,0.35),0_10px_24px_-18px_rgba(15,23,42,0.28)]"
+              className="relative overflow-hidden rounded-[26px] border border-sky-100 bg-linear-to-br from-white via-sky-50/60 to-emerald-50/50 p-2 shadow-[0_26px_70px_-30px_rgba(14,165,233,0.36),0_14px_34px_-20px_rgba(15,23,42,0.32)]"
               style={{ backdropFilter: 'blur(28px) saturate(185%)', WebkitBackdropFilter: 'blur(28px) saturate(185%)' }}
             >
+              <div className="pointer-events-none absolute -left-12 -top-12 h-32 w-32 rounded-full bg-sky-200/55 blur-3xl" />
+              <div className="pointer-events-none absolute -right-12 bottom-0 h-36 w-36 rounded-full bg-emerald-200/45 blur-3xl" />
               {/* Header */}
-              <div className="px-4 pb-2.5 pt-3">
-                <span className="text-[11px] font-bold uppercase tracking-[1.5px] text-brand-primary">
+              <div className="relative px-4 pb-2.5 pt-3">
+                <span className="text-[11px] font-black uppercase tracking-[1.7px] text-sky-700">
                   IA Assistente
                 </span>
               </div>
@@ -176,12 +178,12 @@ export function StudentFabMenu({ open, onClose }: StudentFabMenuProps) {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.04, type: 'spring', damping: 25, stiffness: 300 }}
                     onClick={() => handleAction(action)}
-                    className="flex flex-col items-center gap-2 rounded-xl border-none bg-transparent px-2 py-3.5 transition-all duration-300 hover:bg-brand-primary/8 hover:shadow-[0_8px_22px_rgba(16,185,129,0.12)] active:scale-[0.95]"
+                    className="relative flex flex-col items-center gap-2 rounded-2xl border border-transparent bg-transparent px-2 py-3.5 transition-all duration-300 hover:border-sky-100 hover:bg-white/72 hover:shadow-[0_10px_24px_rgba(14,165,233,0.12)] active:translate-y-0.5 active:scale-[0.95]"
                   >
-                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-brand-primary/15 bg-brand-primary/12 text-brand-primary shadow-[0_2px_8px_rgba(16,185,129,0.12)]">
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-sky-100 bg-linear-to-br from-sky-100 via-white to-emerald-100 text-sky-700 shadow-[0_8px_18px_rgba(14,165,233,0.12),inset_0_1px_0_rgba(255,255,255,0.9)]">
                       {action.icon}
                     </div>
-                    <span className="text-center text-[11px] font-semibold leading-tight text-text-primary">
+                    <span className="text-center text-[11px] font-bold leading-tight text-slate-700">
                       {action.label}
                     </span>
                   </motion.button>
@@ -196,12 +198,12 @@ export function StudentFabMenu({ open, onClose }: StudentFabMenuProps) {
                     haptic()
                     onClose()
                   }}
-                  className="flex flex-col items-center gap-2 rounded-xl border-none bg-transparent px-2 py-3.5 transition-all duration-300 hover:bg-red-500/8 active:scale-[0.95]"
+                  className="relative flex flex-col items-center gap-2 rounded-2xl border border-transparent bg-transparent px-2 py-3.5 transition-all duration-300 hover:border-slate-200 hover:bg-white/72 active:translate-y-0.5 active:scale-[0.95]"
                 >
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 text-slate-500">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-slate-200 bg-white text-slate-500 shadow-[0_8px_18px_rgba(15,23,42,0.08)]">
                     <DSIcon name="x" size={20} />
                   </div>
-                  <span className="text-center text-[11px] font-semibold leading-tight text-text-muted">
+                  <span className="text-center text-[11px] font-bold leading-tight text-slate-500">
                     Fechar
                   </span>
                 </motion.button>

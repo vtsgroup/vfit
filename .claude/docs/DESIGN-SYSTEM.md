@@ -32,6 +32,7 @@
 - A borda do CTA principal é uma linha fina de verde escuro (`emerald-900/70`), alinhada ao detalhe 3D.
 - Profundidade 3D do botão principal agora é exclusivamente verde escuro (`#064e3b`), sem cinza no shadow/base.
 - `Button.gradient` foi alinhado ao mesmo padrão: borda verde escura, profundidade verde escura e glow controlado.
+- `Button.secondary` agora usa slate navy blue-gray 3D: gradiente `slate-200 → slate-400` no light mode, `slate-500 → slate-700` no dark mode, borda fina e base 3D `#475569`/`#1e293b`.
 
 ---
 

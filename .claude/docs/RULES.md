@@ -230,7 +230,25 @@ npm install -g wrangler@latest && wrangler --version
 
 ---
 
-## 18. WhatsApp Operacional — INÍCIO/FIM OBRIGATÓRIO
+## 18. GStack & Skills — SEMPRE ATUALIZADOS
+
+**🔴 REGRA ABSOLUTA:** manter gstack e skills atualizados no início de cada sessão e antes de usar qualquer fluxo gstack/skill operacional.
+
+Se qualquer preamble/skill mostrar `UPGRADE_AVAILABLE`, executar o fluxo `/gstack-upgrade` imediatamente antes de continuar.
+
+```bash
+# Checagem rápida quando aplicável
+~/.claude/skills/gstack/bin/gstack-update-check || true
+
+# Se houver atualização disponível
+# usar /gstack-upgrade e seguir o SKILL.md correspondente
+```
+
+**❌ NUNCA** ignorar aviso de atualização de gstack/skills antes de QA, deploy, browser testing, review, investigação ou automações.
+
+---
+
+## 19. WhatsApp Operacional — INÍCIO/FIM OBRIGATÓRIO
 
 - Toda ação operacional deve registrar `start` e `end` no grupo WhatsApp
 - Escopo: deploy, hotfix, migração, rollback, correção crítica, auditoria
@@ -241,7 +259,7 @@ npm install -g wrangler@latest && wrangler --version
 
 ---
 
-## 19. Documentação Pós-Deploy
+## 20. Documentação Pós-Deploy
 
 Após CADA deploy, atualizar **na mesma sessão**:
 1. `.claude/docs/CHANGELOG.md` — entry com data + mudanças
@@ -252,7 +270,7 @@ Após CADA deploy, atualizar **na mesma sessão**:
 
 ---
 
-## 20. Documentação & Tracking — OBRIGATÓRIO
+## 21. Documentação & Tracking — OBRIGATÓRIO
 
 ### Documentação centralizada em `.claude/docs/`
 - **TODA** documentação técnica, operacional e de design DEVE estar em `.claude/docs/`

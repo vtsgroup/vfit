@@ -12,7 +12,7 @@
 
 | Arquivo | Conteúdo |
 |---------|----------|
-| `.claude/docs/RULES.md` | **19 regras críticas — NÃO VIOLAR** |
+| `.claude/docs/RULES.md` | **21 regras críticas — NÃO VIOLAR** |
 | `.claude/docs/STACK.md` | Stack, URLs, credenciais, infra CF, mapa rápido |
 | `.claude/docs/CONVENTIONS.md` | Imports, TypeScript, CSS/Tailwind v4, auth guard |
 | `.claude/docs/DEPLOY.md` | Deploy pipeline, CF operations, WhatsApp, smoke auth |
@@ -54,6 +54,7 @@ npm run quality:ci        # Gate completo
 7. **NUNCA** deploy sem confirmação do usuário
 8. **PODE ACESSAR** ler/escrever `.env` ou `.env.local`
 9. WhatsApp: toda ação operacional exige start/end (ver `DEPLOY.md`)
+10. **GStack & Skills SEMPRE atualizados** — no início de cada sessão e antes de qualquer fluxo gstack/skill operacional, checar atualizações; se aparecer `UPGRADE_AVAILABLE`, rodar `/gstack-upgrade` antes de continuar.
 
 ## Skill routing
 
