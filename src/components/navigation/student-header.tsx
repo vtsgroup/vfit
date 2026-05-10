@@ -157,7 +157,7 @@ export function StudentHeader() {
             aria-label={`${xpData?.balance ?? 0} XP, nível ${xpData?.level ?? 1}`}
             style={{ boxShadow: 'inset 0 1px 0 rgba(52,211,153,0.06)' }}
           >
-            <span aria-hidden="true" style={{ fontSize: '13px', lineHeight: 1 }}>🪙</span>
+            <DSIcon name="flame" size={14} className="text-emerald-400" />
             <span className="text-[11px] font-bold tabular-nums leading-none text-emerald-300">{xpData?.balance ?? 0}</span>
           </Link>
 

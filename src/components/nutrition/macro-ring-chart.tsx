@@ -10,8 +10,9 @@
  */
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { cn } from '@/lib/utils'
+import { DSIcon } from '@/components/ui/ds-icon'
 
 // ── Types ──────────────────────────────────────────────
 
@@ -26,6 +27,12 @@ interface MacroRingChartProps {
   fatTarget: number
   size?: number
   className?: string
+}
+
+interface TooltipState {
+  key: string | null
+  x: number
+  y: number
 }
 
 // ── Helpers ────────────────────────────────────────────
@@ -49,10 +56,24 @@ export function MacroRingChart({
   className,
 }: MacroRingChartProps) {
   const [mounted, setMounted] = useState(false)
+  const [tooltip, setTooltip] = useState<TooltipState>({ key: null, x: 0, y: 0 })
+  const [hiddenMacros, setHiddenMacros] = useState<Set<string>>(new Set())
+  const svgRef = useRef<SVGSVGElement>(null)
+  const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
   useEffect(() => {
     const t = setTimeout(() => setMounted(true), 80)
     return () => clearTimeout(t)
   }, [])
+
+  const toggleMacro = (key: string) => {
+    setHiddenMacros((prev) => {
+      const next = new Set(prev)
+      if (next.has(key)) next.delete(key)
+      else next.add(key)
+      return next
+    })
+  }
 
   const cx = size / 2
   const cy = size / 2
@@ -93,11 +114,13 @@ export function MacroRingChart({
       key: 'protein',
       label: 'Proteína',
       short: 'P',
+      icon: 'zap',
       value: protein,
       target: proteinTarget,
       kcal: proteinKcal,
       pct: clamp((protein / Math.max(proteinTarget, 0.01)) * 100),
       color: '#34d399',
+      pattern: 'url(#patternP)',
       glow: 'rgba(52,211,153,0.35)',
       gradFrom: '#34d399',
       gradTo: '#059669',
@@ -109,11 +132,13 @@ export function MacroRingChart({
       key: 'carbs',
       label: 'Carboidratos',
       short: 'C',
+      icon: 'wheat',
       value: carbs,
       target: carbsTarget,
       kcal: carbsKcal,
       pct: clamp((carbs / Math.max(carbsTarget, 0.01)) * 100),
       color: '#fbbf24',
+      pattern: 'url(#patternC)',
       glow: 'rgba(251,191,36,0.35)',
       gradFrom: '#fbbf24',
       gradTo: '#d97706',
@@ -125,11 +150,13 @@ export function MacroRingChart({
       key: 'fat',
       label: 'Gordura',
       short: 'G',
+      icon: 'droplets',
       value: fat,
       target: fatTarget,
       kcal: fatKcal,
       pct: clamp((fat / Math.max(fatTarget, 0.01)) * 100),
       color: '#fb923c',
+      pattern: 'url(#patternF)',
       glow: 'rgba(251,146,60,0.35)',
       gradFrom: '#fb923c',
       gradTo: '#dc2626',
@@ -215,23 +242,34 @@ export function MacroRingChart({
           />
 
           {/* ── Macro segments (positioned via dashoffset) ── */}
-          {hasData && macros.map((m, i) => (
-            <circle
-              key={m.key}
-              cx={cx} cy={cy} r={innerR}
-              fill="none"
-              stroke={`url(#${m.gradId})`}
-              strokeWidth={18}
-              strokeLinecap="round"
-              strokeDasharray={`${m.segLen} ${innerC - m.segLen}`}
-              strokeDashoffset={-m.segOff}
-              filter="url(#glw)"
-              style={{
-                opacity: mounted ? 1 : 0,
-                transition: `opacity 0.6s ease ${0.2 + i * 0.1}s`,
-              }}
-            />
-          ))}
+          {hasData && macros.map((m, i) => {
+            const isHidden = hiddenMacros.has(m.key)
+            return (
+              <circle
+                key={m.key}
+                cx={cx} cy={cy} r={innerR}
+                fill="none"
+                stroke={`url(#${m.gradId})`}
+                strokeWidth={18}
+                strokeLinecap="round"
+                strokeDasharray={`${m.segLen} ${innerC - m.segLen}`}
+                strokeDashoffset={-m.segOff}
+                filter="url(#glw)"
+                style={{
+                  opacity: mounted && !isHidden ? 1 : isHidden ? 0.15 : 0,
+                  transition: prefersReducedMotion ? 'none' : `opacity 0.6s ease ${0.2 + i * 0.1}s`,
+                  cursor: 'pointer',
+                }}
+                onClick={() => toggleMacro(m.key)}
+                onMouseEnter={() => setTooltip({ key: m.key, x: cx, y: cy - innerR - 20 })}
+                onMouseLeave={() => setTooltip({ key: null, x: 0, y: 0 })}
+                role="button"
+                tabIndex={0}
+                aria-pressed={!isHidden}
+                aria-label={`${m.label}: ${Math.round(m.value)}g de ${Math.round(m.target)}g alvo (${Math.round(m.kcal)} kcal). Clique para alternar visibilidade.`}
+              />
+            )
+          })}
 
           {/* ── Empty state dashes ── */}
           {!hasData && (
@@ -282,50 +320,87 @@ export function MacroRingChart({
         </div>
       </div>
 
-      {/* ── Macro stat bars ── */}
-      <div className="mt-5 w-full space-y-2.5 px-1">
-        {macros.map((m, i) => (
-          <div key={m.key} className="flex items-center gap-3">
-            {/* Color dot with glow */}
-            <div
-              className="h-2 w-2 shrink-0 rounded-full"
-              style={{ backgroundColor: m.color, boxShadow: `0 0 5px ${m.glow}` }}
-            />
-
-            {/* Label */}
-            <span
-              className="w-22 shrink-0 truncate text-[11px] font-medium"
-              style={{ color: 'rgba(255,255,255,0.48)' }}
+      {/* ── Legend (Interactive - Toggle Series) ── */}
+      <div className="mt-5 w-full space-y-1.5 px-1" role="group" aria-label="Filtro de macronutrientes">
+        {macros.map((m) => {
+          const isHidden = hiddenMacros.has(m.key)
+          return (
+            <button
+              key={m.key}
+              onClick={() => toggleMacro(m.key)}
+              className={cn(
+                'flex w-full items-center gap-3 rounded-[8px] px-2.5 py-1.5 transition-all border-t border-x',
+                isHidden ? 'opacity-40 border-emerald-600/30 bg-emerald-950/40' : 'opacity-100 border-emerald-400/40 bg-emerald-900/25 hover:border-emerald-300/50 hover:bg-emerald-900/35'
+              )}
+              style={{
+                boxShadow: isHidden ? '0 2px 4px rgba(5,10,18,0.4)' : '0 3px 6px rgba(5,80,40,0.5), inset 0 1px 0 rgba(52,211,153,0.1)',
+              }}
+              aria-label={`${m.label}: ${isHidden ? 'oculto' : 'visível'}. Clique para alternar.`}
             >
-              {m.label}
-            </span>
+              {/* Icon + Pattern Indicator (not just color) */}
+              <div className="relative h-5 w-5 shrink-0">
+                <DSIcon name={m.icon} size={14} style={{ color: m.color }} className="m-auto" />
+                <div
+                  className="absolute inset-0 rounded"
+                  style={{
+                    border: `1px solid ${m.color}`,
+                    opacity: isHidden ? 0.3 : 0.7,
+                  }}
+                />
+              </div>
 
-            {/* Progress bar */}
-            <div
-              className="relative h-1.25 flex-1 overflow-hidden rounded-full"
-              style={{ background: 'rgba(255,255,255,0.07)' }}
-            >
-              <div
-                className="absolute inset-y-0 left-0 rounded-full"
-                style={{
-                  width: mounted ? `${Math.min(m.pct, 100)}%` : '0%',
-                  background: `linear-gradient(90deg, ${m.gradFrom}, ${m.gradTo})`,
-                  boxShadow: `0 0 8px ${m.glow}`,
-                  transition: `width 0.95s cubic-bezier(.22,1,.36,1) ${0.15 + i * 0.07}s`,
-                }}
-              />
-            </div>
+              {/* Label */}
+              <span className="w-24 shrink-0 text-[11px] font-medium" style={{ color: 'rgba(255,255,255,0.48)' }}>
+                {m.label}
+              </span>
 
-            {/* Value / target */}
-            <span
-              className="w-15.5 shrink-0 text-right text-[11px] tabular-nums"
-            >
-              <span className="font-bold text-white">{Math.round(m.value)}</span>
-              <span style={{ color: 'rgba(255,255,255,0.25)' }}>/{m.target}g</span>
-            </span>
-          </div>
-        ))}
+              {/* Progress bar (fixed width, animated via transform translateX) */}
+              <div className="relative h-1.25 flex-1 overflow-hidden rounded-full" style={{ background: 'rgba(255,255,255,0.07)' }}>
+                <div
+                  className="absolute inset-y-0 left-0 rounded-full"
+                  style={{
+                    width: '100%',
+                    transformOrigin: 'left',
+                    transform: `scaleX(${mounted ? Math.min(m.pct, 100) / 100 : 0})`,
+                    background: `linear-gradient(90deg, ${m.gradFrom}, ${m.gradTo})`,
+                    boxShadow: `0 0 8px ${m.glow}`,
+                    transition: prefersReducedMotion ? 'none' : `transform 0.95s cubic-bezier(.22,1,.36,1)`,
+                  }}
+                />
+              </div>
+
+              {/* Value / target */}
+              <span className="w-16 shrink-0 text-right text-[11px] tabular-nums">
+                <span className="font-bold text-white">{Math.round(m.value)}</span>
+                <span style={{ color: 'rgba(255,255,255,0.25)' }}>/{m.target}g</span>
+              </span>
+            </button>
+          )
+        })}
       </div>
+
+      {/* ── Tooltip (on hover) ── */}
+      {tooltip.key && (
+        <div
+          className="pointer-events-none fixed z-50 flex flex-col gap-1 rounded-lg border border-white/10 bg-black/90 px-2.5 py-1.5 text-[10px] backdrop-blur"
+          style={{
+            left: `${tooltip.x}px`,
+            top: `${tooltip.y}px`,
+            transform: 'translate(-50%, -100%)',
+          }}
+        >
+          {macros.map((m) => {
+            if (m.key !== tooltip.key) return null
+            return (
+              <div key={m.key} className="whitespace-nowrap">
+                <span style={{ color: m.color }}>{m.label}</span>
+                <span style={{ color: 'rgba(255,255,255,0.5)' }}>: {Math.round(m.value)}g</span>
+                <span style={{ color: 'rgba(255,255,255,0.35)' }}> ({Math.round(m.kcal)} kcal)</span>
+              </div>
+            )
+          })}
+        </div>
+      )}
 
       {/* ── Calorie target footer ── */}
       <div
