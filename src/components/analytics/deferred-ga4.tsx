@@ -12,23 +12,31 @@
 
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
+import { usePathname } from 'next/navigation'
 
 declare global {
   interface Window {
     dataLayer: unknown[]
+    gtag?: (...args: unknown[]) => void
+    __ga4Ready?: boolean
   }
 }
 
 const GA_ID = 'G-XGXZ4R6JXH'
 
 export function DeferredGA4() {
+  const pathname = usePathname()
+  const lastTrackedPathRef = useRef<string | null>(null)
+
   useEffect(() => {
     let loaded = false
 
     function loadGA() {
       if (loaded) return
       loaded = true
+
+      if (window.__ga4Ready) return
 
       // Remove listeners immediately
       const events = ['scroll', 'click', 'touchstart', 'mousemove', 'keydown'] as const
@@ -42,11 +50,12 @@ export function DeferredGA4() {
 
       // Initialize dataLayer + gtag
       window.dataLayer = window.dataLayer || []
-      function gtag(...args: unknown[]) {
+      window.gtag = (...args: unknown[]) => {
         window.dataLayer.push(args)
       }
-      gtag('js', new Date())
-      gtag('config', GA_ID)
+      window.gtag('js', new Date())
+      window.gtag('config', GA_ID)
+      window.__ga4Ready = true
     }
 
     // Listen for first interaction
@@ -63,6 +72,21 @@ export function DeferredGA4() {
       events.forEach(e => window.removeEventListener(e, loadGA, { capture: true }))
     }
   }, [])
+
+  useEffect(() => {
+    const pagePath = `${pathname}${window.location.search || ''}`
+
+    if (lastTrackedPathRef.current === pagePath) return
+    lastTrackedPathRef.current = pagePath
+
+    if (typeof window.gtag !== 'function') return
+
+    window.gtag('event', 'page_view', {
+      page_path: pagePath,
+      page_location: window.location.href,
+      page_title: document.title,
+    })
+  }, [pathname])
 
   return null
 }
