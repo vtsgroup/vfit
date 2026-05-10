@@ -115,66 +115,66 @@ function FirstWinCommandCenter({
   const duration = todayDay?.estimated_duration_min ?? 0
 
   return (
-    <section className="vfit-app-hero-gradient -mx-4 mb-5 overflow-hidden rounded-b-[28px] border-b border-white/8 text-white">
-      <div className="relative px-4 pt-5 pb-4">
+    <section className="vfit-app-hero-gradient -mx-4 mb-4 overflow-hidden rounded-b-[28px] border-b border-white/8 text-white">
+      <div className="relative px-4 pt-4 pb-3">
         <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-white/7 via-transparent to-transparent" />
         <div className="pointer-events-none absolute inset-x-4 top-0 h-px bg-linear-to-r from-transparent via-brand-primary/70 to-transparent" />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-linear-to-t from-bg-primary via-bg-primary/58 to-transparent" />
 
-        <div className="relative z-10 mb-4 flex items-start justify-between gap-3">
+        <div className="relative z-10 mb-3 flex items-start justify-between gap-3">
           <div className="min-w-0">
             <p className="text-[10px] font-bold uppercase tracking-[0.32em] text-emerald-300/90">
               Primeira vitória do dia
             </p>
-            <h1 className="mt-1 bg-linear-to-r from-white via-emerald-100 to-vfit-primary-300 bg-clip-text text-[38px] font-black leading-[0.92] text-transparent">
+            <h1 className="mt-1 bg-linear-to-r from-white via-emerald-100 to-vfit-primary-300 bg-clip-text text-[34px] font-black leading-[0.94] text-transparent">
               Bora, {firstName}
             </h1>
-            <p className="mt-2 max-w-62.5 text-[13px] leading-relaxed text-slate-300">
+            <p className="mt-1.5 max-w-62.5 text-[12px] leading-snug text-slate-300">
               Foco no treino de hoje. O resto entra no ritmo depois.
             </p>
           </div>
-          <Link href="/progresso/streaks" className="shrink-0 rounded-[22px] border border-white/12 bg-white/7 px-3.5 py-2.5 text-right shadow-glass-inset-sm backdrop-blur active:scale-95">
+          <Link href="/progresso/streaks" className="shrink-0 rounded-card-lg border border-white/12 bg-white/7 px-3 py-2 text-right shadow-glass-inset-sm backdrop-blur active:scale-95">
             <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">Streak</p>
-            <p className="mt-0.5 text-[22px] font-black leading-none text-amber-300">{streak?.current_streak ?? 0}d</p>
+            <p className="mt-0.5 text-display-heading font-black leading-none text-amber-300">{streak?.current_streak ?? 0}d</p>
           </Link>
         </div>
 
-        <div className="relative z-10 overflow-hidden rounded-[30px] border border-white/12 bg-white/7 p-4 shadow-[0_22px_58px_rgba(0,0,0,0.34),inset_0_1px_0_rgba(255,255,255,0.09)] backdrop-blur-xl">
+        <div className="relative z-10 overflow-hidden rounded-[26px] border border-white/12 bg-white/7 p-3 shadow-[0_18px_46px_rgba(0,0,0,0.34),inset_0_1px_0_rgba(255,255,255,0.09)] backdrop-blur-xl">
           <div className="pointer-events-none absolute inset-x-4 top-0 h-px bg-linear-to-r from-transparent via-white/45 to-transparent" />
           <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-linear-to-l from-brand-primary/10 to-transparent" />
           {todayDay ? (
             <>
-              <div className="relative mb-4 flex items-start justify-between gap-3">
+              <div className="relative mb-3 flex items-start justify-between gap-3">
                 <div className="min-w-0">
-                  <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-brand-primary/24 bg-brand-primary/12 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-brand-primary shadow-glass-inset-sm">
+                  <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-brand-primary/24 bg-brand-primary/12 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.18em] text-brand-primary shadow-glass-inset-sm">
                     <DSIcon name={urgency.streakIcon} size={12} />
                     Dia {plan?.current_day ?? 1} de {plan?.total_days ?? todayDay.day_number}
                   </div>
-                  <h2 className="max-w-62.5 text-[28px] font-black leading-[0.98] text-white">{todayDay.name}</h2>
-                  <p className="mt-2 text-[13px] font-medium text-slate-300">
+                  <h2 className="max-w-62.5 text-[23px] font-black leading-none text-white">{todayDay.name}</h2>
+                  <p className="mt-1.5 text-[12px] font-medium text-slate-300">
                     {todayDay.muscle_groups.slice(0, 3).map(musclePt).join(' · ') || 'Treino personalizado'}
                   </p>
                 </div>
-                <div className="relative flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border border-white/8 bg-slate-950/66 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
+                <div className="relative flex h-16 w-16 shrink-0 items-center justify-center rounded-[18px] border border-white/8 bg-slate-950/66 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
                   <div
-                    className="absolute inset-1.5 rounded-card-lg"
+                    className="absolute inset-1 rounded-[15px]"
                     style={{ background: `conic-gradient(from 210deg, rgba(34,197,94,0.92) ${Math.min(100, Math.max(8, duration))}%, rgba(255,255,255,0.08) 0)` }}
                   />
-                  <div className="relative flex h-15.5 w-15.5 flex-col items-center justify-center rounded-[18px] bg-slate-950">
-                    <p className="text-[24px] font-black leading-none text-white">{todayDay.estimated_duration_min}</p>
-                    <p className="mt-1 text-[9px] font-bold uppercase tracking-[0.18em] text-slate-500">min</p>
+                  <div className="relative flex h-14 w-14 flex-col items-center justify-center rounded-[15px] bg-slate-950">
+                    <p className="text-display-heading font-black leading-none text-white">{todayDay.estimated_duration_min}</p>
+                    <p className="mt-0.5 text-[8px] font-bold uppercase tracking-[0.16em] text-slate-500">min</p>
                   </div>
                 </div>
               </div>
 
-              <div className="relative mb-4 grid grid-cols-3 gap-2">
+              <div className="relative mb-3 grid grid-cols-3 gap-2">
                 <MetricTile label="Plano" value={`${planPct}%`} progress={Math.min(100, planPct)} tone="green" />
                 <MetricTile label="Meta" value={`${dailyProgress}%`} progress={Math.min(100, dailyProgress)} tone="blue" />
                 <MetricTile label="XP" value={String(xpBalance?.balance ?? 0)} progress={Math.min(100, (xpBalance?.balance ?? 0) % 100)} tone="amber" />
               </div>
 
               <Link href="/plano" onClick={() => hapticLight()}>
-                <Button size="lg" className="w-full justify-center shadow-glow-primary">
+                <Button size="md" className="w-full justify-center shadow-glow-primary">
                   <DSIcon name="play" size={18} />
                   {urgency.workedOutToday ? 'Rever treino de hoje' : 'Começar treino de hoje'}
                 </Button>
@@ -199,17 +199,17 @@ function FirstWinCommandCenter({
           )}
         </div>
 
-        <div className="relative z-10 mt-3 grid grid-cols-2 gap-2">
-          <Link href="/nutricao" className="rounded-[22px] border border-white/10 bg-white/7 p-3 shadow-glass-inset-sm backdrop-blur active:scale-[0.98]">
-            <div className="mb-2 flex items-center justify-between">
+        <div className="relative z-10 mt-2 grid grid-cols-2 gap-2">
+          <Link href="/nutricao" className="rounded-[18px] border border-white/10 bg-white/7 p-2.5 shadow-glass-inset-sm backdrop-blur active:scale-[0.98]">
+            <div className="mb-1.5 flex items-center justify-between">
               <DSIcon name="flask" size={15} className="text-emerald-300" />
               <span className="text-[10px] font-bold text-slate-400">{proteinPct}%</span>
             </div>
             <p className="text-[12px] font-bold text-white">Proteína</p>
             <p className="mt-0.5 text-[10px] text-slate-400">{Math.round(totals.protein)}g de {targets.protein}g</p>
           </Link>
-          <Link href="/plano" className="rounded-[22px] border border-white/10 bg-white/7 p-3 shadow-glass-inset-sm backdrop-blur active:scale-[0.98]">
-            <div className="mb-2 flex items-center justify-between">
+          <Link href="/plano" className="rounded-[18px] border border-white/10 bg-white/7 p-2.5 shadow-glass-inset-sm backdrop-blur active:scale-[0.98]">
+            <div className="mb-1.5 flex items-center justify-between">
               <DSIcon name="shoppingBag" size={15} className="text-brand-primary" />
               <span className="text-[10px] font-bold text-slate-400">Próximo</span>
             </div>
@@ -230,10 +230,10 @@ function MetricTile({ label, value, progress, tone }: { label: string; value: st
   }[tone]
 
   return (
-    <div className="rounded-[18px] border border-white/9 bg-slate-950/48 p-2.5 shadow-glass-inset-sm">
+    <div className="rounded-[16px] border border-white/9 bg-slate-950/48 p-2 shadow-glass-inset-sm">
       <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-slate-500">{label}</p>
-      <p className={cn('mt-1 text-[21px] font-black leading-none', toneClasses.text)}>{value}</p>
-      <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/8">
+      <p className={cn('mt-1 text-[18px] font-black leading-none', toneClasses.text)}>{value}</p>
+      <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-white/8">
         <div
           className={cn('h-full rounded-full bg-linear-to-r transition-all duration-700', toneClasses.bar)}
           style={{ width: `${Math.max(4, Math.min(100, progress))}%` }}

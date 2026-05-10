@@ -38,6 +38,11 @@
 - Validação pré-deploy: `npm run foods:sync:dry`, `npm run type-check`, `npm run type-check:workers`, `npm run build`, `git diff --check` e `npx wrangler --version` (`4.90.0`) passaram.
 - Exceção operacional: WhatsApp task-notify start/end continua falhando com Unipile 401 `invalid_credentials`; deploy realizado com `--allow-no-whatsapp`.
 
+### 🎨 Hotfix — 10/05/2026 — v3.6.3 First Win compacto
+- Smoke visual mobile pós-deploy mostrou o hero de `/treinos` alto demais em viewport compacta, encostando na bottom navigation.
+- `FirstWinCommandCenter` foi compactado mantendo a paleta e sem alterar header/navbar: título menor, card principal mais baixo, medidor de duração reduzido, métricas/CTA/mini-cards mais densos.
+- Objetivo: preservar o visual premium sem ocupar a área da navegação inferior.
+
 ### 🚀 Deploy — 10/05/2026 — v3.6.0 produção
 - Cloudflare Pages e Worker `vfit-api` publicados com sucesso via deploy patch; release commit `3c0f2cab` e tag `v3.6.0` enviados para `origin/main`.
 - Pós-deploy API: `https://api.vfit.app.br/health` retornou 200; `/api/v1/progress/top-exercises?limit=4` sem token retornou 401 em vez de 500.

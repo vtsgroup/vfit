@@ -39,6 +39,11 @@
 - **Validação pré-deploy:** `npm run foods:sync:dry`, `npm run type-check`, `npm run type-check:workers`, `npm run build`, `git diff --check` e `npx wrangler --version` (`4.90.0`) passaram.
 - **Exceção operacional mantida:** WhatsApp task-notify start/end segue falhando por Unipile 401 `invalid_credentials`; deploy executado com `--allow-no-whatsapp` até corrigir credenciais do gateway.
 
+### 🎨 Hotfix v3.6.3 — First Win compacto em mobile (2026-05-10)
+- **Ajuste visual pós-smoke:** validação mobile de `/treinos` em produção mostrou o hero `FirstWinCommandCenter` alto demais em viewport compacta, encostando na navegação inferior.
+- **Polish preservado:** [src/app/(app)/treinos/page.tsx](src/app/(app)/treinos/page.tsx) compacta título, card principal, medidor de duração, métricas, CTA e mini-cards sem alterar cores do header/navbar.
+- **Objetivo:** manter o aspecto premium do command deck e evitar sobreposição visual com a bottom navigation em telas menores.
+
 ### 🚀 Deploy v3.6.0 — produção (2026-05-10)
 - **Publicado em produção:** Cloudflare Pages e Worker `vfit-api` publicados via `node scripts/cf-deploy.js patch --allow-no-whatsapp --msg "estabiliza app aluno para producao"`.
 - **Git/tag:** release commit `3c0f2cab` em `main`, tag `v3.6.0` enviada para `origin/main`.

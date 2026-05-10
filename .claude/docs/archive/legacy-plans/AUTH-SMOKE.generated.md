@@ -1,9 +1,9 @@
 # Authenticated Smoke Report (Gerado automaticamente)
 
-> Gerado em: 2026-05-10T02:01:32.497Z
+> Gerado em: 2026-05-10T02:07:54.192Z
 > Base URL: https://api.vfit.app.br
-> test_run_id: run-20260510020132-auth
-> session_id: session-smoke-1778378492
+> test_run_id: run-20260510020754-auth
+> session_id: session-smoke-1778378874
 
 ## Como executar (sem vazar token)
 
@@ -43,14 +43,14 @@ Opção 3 — UI (super_admin)
 ## Execuções
 | Fluxo | Método | Rota | Status | HTTP | Latência (ms) | request_id | Observação |
 |---|---|---|---|---:|---:|---|---|
-| Personal: auth/me | GET | /api/v1/auth/me | passed | 200 | 997.93 | 9f955b4ac8b86463-GIG | - |
-| Personal: students list (seed) | GET | /api/v1/students?page=1&per_page=1 | passed | 200 | 692.47 | 9f955b509c1d6463-GIG | - |
+| Personal: auth/me | GET | /api/v1/auth/me | passed | 200 | 1305.49 | 9f95649c4f3dcae7-GIG | - |
+| Personal: students list (seed) | GET | /api/v1/students?page=1&per_page=1 | passed | 200 | 766.79 | 9f9564a40a8ccae7-GIG | - |
 | Personal: seed student_id | GET | /api/v1/students?page=1&per_page=1 | skipped | - | 0 | - | nenhum aluno disponível para smoke autenticado |
-| Student: auth/me | GET | /api/v1/auth/me | passed | 200 | 652.37 | 9f955b54eea96463-GIG | - |
-| Payments: my list | GET | /api/v1/payments/my?page=1&per_page=5 | passed | 200 | 654.44 | 9f955b5908fa6463-GIG | - |
-| Checkout auth route: pix (expect not-found on fake/isolated payment) | POST | /api/v1/payments/5163ecbb-662f-4aca-9ac8-f1964861c704/pay | passed | 404 | 622.37 | 9f955b5d2b716463-GIG | - |
-| Checkout auth route: boleto (expect not-found on fake/isolated payment) | POST | /api/v1/payments/5163ecbb-662f-4aca-9ac8-f1964861c704/pay | passed | 404 | 820.75 | 9f955b610e4d6463-GIG | - |
-| Checkout auth route: credit_card (expect not-found on fake/isolated payment) | POST | /api/v1/payments/5163ecbb-662f-4aca-9ac8-f1964861c704/pay | passed | 404 | 446.36 | 9f955b662a586463-GIG | - |
+| Student: auth/me | GET | /api/v1/auth/me | passed | 200 | 656.21 | 9f9564a8dcb2cae7-GIG | - |
+| Payments: my list | GET | /api/v1/payments/my?page=1&per_page=5 | passed | 200 | 628.77 | 9f9564acfed0cae7-GIG | - |
+| Checkout auth route: pix (expect not-found on fake/isolated payment) | POST | /api/v1/payments/5051efaf-f4a8-4330-9392-51eac9a879b5/pay | passed | 404 | 711.3 | 9f9564b0e87ecae7-GIG | - |
+| Checkout auth route: boleto (expect not-found on fake/isolated payment) | POST | /api/v1/payments/5051efaf-f4a8-4330-9392-51eac9a879b5/pay | passed | 404 | 486.76 | 9f9564b55ab6cae7-GIG | - |
+| Checkout auth route: credit_card (expect not-found on fake/isolated payment) | POST | /api/v1/payments/5051efaf-f4a8-4330-9392-51eac9a879b5/pay | passed | 404 | 490.78 | 9f9564b86c17cae7-GIG | - |
 | Admin: feedback list | GET | /api/v1/admin/feedback?page=1&per_page=5 | skipped | - | 0 | - | token não informado para este fluxo |
 
 ## Evidências de contexto
