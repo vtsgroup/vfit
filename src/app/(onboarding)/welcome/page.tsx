@@ -21,17 +21,29 @@ import { useOnboardingStore } from '@/stores/onboarding-store'
 import { supportsPasskey, getPasskeyEmail, isBiometricAutoUnlockEnabled, isBiometricInCooldown } from '@/hooks/use-passkey'
 import Link from 'next/link'
 
-const FEATURES: { icon: DSIconName; text: string }[] = [
-  { icon: 'target', text: 'Plano personalizado por IA' },
-  { icon: 'chart', text: 'Progresso em tempo real' },
-  { icon: 'trophy', text: 'Gamificação + Streaks' },
-  { icon: 'zap', text: 'Treinos de 15 a 60 min' },
+const TRUST_BADGES: { icon: DSIconName; text: string }[] = [
+  { icon: 'shieldCheck', text: 'Sem cartão' },
+  { icon: 'clock', text: '2 minutos' },
+  { icon: 'lock', text: 'Dados protegidos' },
 ]
 
-const FLOW_STATS = [
-  { value: '2 min', label: 'para montar seu plano' },
-  { value: '16', label: 'sinais analisados' },
-  { value: 'IA', label: 'adaptação contínua' },
+const PLAN_SIGNALS: { icon: DSIconName; label: string; value: string }[] = [
+  { icon: 'target', label: 'Objetivo', value: 'Emagrecer, força ou hipertrofia' },
+  { icon: 'dumbbell', label: 'Estrutura', value: 'Casa, academia ou peso corporal' },
+  { icon: 'clock', label: 'Tempo', value: '15, 30, 45 ou 60 minutos' },
+  { icon: 'activity', label: 'Nível', value: 'Intensidade sem exagero' },
+]
+
+const RETENTION_LOOP: { icon: DSIconName; title: string; text: string }[] = [
+  { icon: 'zap', title: 'Hoje', text: 'Treino claro, curto e executável.' },
+  { icon: 'flame', title: 'Amanhã', text: 'Streak e lembrete para voltar.' },
+  { icon: 'chart', title: 'Semana', text: 'Progresso visível para manter ritmo.' },
+]
+
+const CONVERSION_POINTS: { icon: DSIconName; title: string; text: string }[] = [
+  { icon: 'sparkles', title: 'Plano no final do fluxo', text: 'Você entende seu treino antes de qualquer compromisso.' },
+  { icon: 'shieldCheck', title: 'Sem fricção inicial', text: 'Sem cartão, sem planilha, sem conversa longa.' },
+  { icon: 'trophy', title: 'Volta guiada', text: 'Você sempre sabe o próximo treino e a próxima vitória.' },
 ] as const
 
 export default function WelcomePage() {
@@ -86,43 +98,53 @@ export default function WelcomePage() {
   return (
     <div className="vfit-flow-bg relative flex min-h-dvh flex-col overflow-hidden text-white">
       <div className="vfit-flow-grid pointer-events-none absolute inset-0" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-48 bg-linear-to-b from-white/8 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-linear-to-b from-white/10 via-emerald-300/6 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-linear-to-t from-bg-base to-transparent" />
 
       {/* ─── Background image with overlay ─── */}
-      <div className="absolute inset-0 opacity-75">
+      <div className="absolute inset-0 opacity-78">
         <Image
           src="/images/hero-1.webp"
           alt=""
           fill
-          className="object-cover object-[58%_center]"
+          className="object-cover object-[62%_center]"
           priority
         />
-        <div className="absolute inset-0 bg-bg-base/82" />
-        <div className="absolute inset-0 bg-linear-to-b from-bg-base/20 via-bg-base/75 to-bg-base" />
-        <div className="absolute inset-0 bg-linear-to-r from-bg-base via-bg-base/70 to-bg-base/20" />
+        <div className="absolute inset-0 bg-bg-base/84" />
+        <div className="absolute inset-0 bg-linear-to-b from-bg-base/15 via-bg-base/70 to-bg-base" />
+        <div className="absolute inset-0 bg-linear-to-r from-bg-base via-bg-base/76 to-bg-base/24" />
       </div>
 
       {/* ─── Content ─── */}
-      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col px-5 pb-10 pt-[calc(env(safe-area-inset-top)+18px)] sm:px-8 sm:pt-[calc(env(safe-area-inset-top)+24px)] lg:grid lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-14 lg:pb-12 lg:pt-8">
+      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col px-5 pb-8 pt-[calc(env(safe-area-inset-top)+18px)] sm:px-8 sm:pt-[calc(env(safe-area-inset-top)+24px)] lg:grid lg:grid-cols-[1.02fr_0.98fr] lg:items-center lg:gap-12 lg:pb-10 lg:pt-8">
         <div
           className="flex flex-col items-start"
           style={{ animation: 'welcome-slide-down 0.7s ease-out both' }}
         >
-          <div className="mb-4 inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/8 px-3 py-1.5 text-[11px] font-bold uppercase text-emerald-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.10)] backdrop-blur-xl sm:mb-5 sm:gap-3 sm:py-2 sm:text-xs">
+          <div className="mb-4 inline-flex items-center gap-2.5 rounded-full border border-emerald-300/18 bg-emerald-300/10 px-3 py-1.5 text-[11px] font-black uppercase text-emerald-100 shadow-glass-inset-sm backdrop-blur-xl sm:mb-5 sm:gap-3 sm:py-2 sm:text-xs">
             <span className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-400 text-bg-base">
               <DSIcon name="sparkles" size={15} />
             </span>
-            Quiz inteligente VFIT
+            Plano grátis pronto no final
           </div>
           <h1
-            className="max-w-xl text-[36px] leading-[1.02] text-white min-[380px]:text-[38px] sm:text-6xl lg:text-7xl"
+            className="max-w-2xl text-[38px] leading-[1.01] text-white min-[380px]:text-[42px] sm:text-6xl lg:text-[76px]"
             style={{ fontFamily: 'Inter, sans-serif', fontWeight: 900, letterSpacing: 0 }}
           >
-            Seu plano começa com uma leitura precisa do seu corpo.
+            Seu treino pronto hoje, feito para o seu corpo.
           </h1>
-          <p className="mt-4 max-w-md text-sm leading-6 text-slate-300 sm:mt-5 sm:text-lg sm:leading-7">
-            Responda o fluxo e receba um treino sob medida, com intensidade, rotina e metas ajustadas para você.
+          <p className="mt-4 max-w-xl text-[15px] font-medium leading-7 text-slate-300 sm:mt-5 sm:text-lg sm:leading-8">
+            Em 2 minutos o VFIT entende seu objetivo, rotina, equipamentos e nível para montar um plano que você consegue começar sem enrolar.
           </p>
+
+          <div className="mt-5 flex flex-wrap gap-2">
+            {TRUST_BADGES.map((badge) => (
+              <span key={badge.text} className="inline-flex min-h-9 items-center gap-2 rounded-full border border-white/10 bg-white/7 px-3 text-[11px] font-black text-slate-200 backdrop-blur-xl">
+                <DSIcon name={badge.icon} size={13} className="text-emerald-200" />
+                {badge.text}
+              </span>
+            ))}
+          </div>
 
           <div className="mt-6 w-full lg:hidden">
             <Button
@@ -132,7 +154,7 @@ export default function WelcomePage() {
               className="h-14 w-full"
             >
               <DSIcon name={hasSavedProgress ? 'play' : 'graduationCap'} size={18} />
-              Continuar
+              {hasSavedProgress ? 'Continuar meu plano' : 'Criar meu plano grátis'}
             </Button>
 
             <div className="mt-2 text-center text-xs text-white/65">
@@ -144,7 +166,7 @@ export default function WelcomePage() {
                   Recomeçar do início
                 </button>
               ) : (
-                <span className="text-xs text-white/45">Plano gratuito em 2 minutos</span>
+                <span className="text-xs text-white/55">Sem cartão · resultado no final do fluxo</span>
               )}
             </div>
 
@@ -172,44 +194,89 @@ export default function WelcomePage() {
             </button>
           </div>
 
-          <div className="mt-8 grid w-full max-w-lg grid-cols-3 gap-2.5">
-            {FLOW_STATS.map((stat) => (
-              <div key={stat.label} className="vfit-flow-panel-soft rounded-2xl px-3 py-3">
-                <p className="text-lg font-black text-white tabular-nums">{stat.value}</p>
-                <p className="mt-1 text-[10px] leading-tight text-slate-400">{stat.label}</p>
+          <div className="mt-8 grid w-full max-w-xl gap-2.5 sm:grid-cols-3">
+            {CONVERSION_POINTS.map((point) => (
+              <div key={point.title} className="vfit-flow-panel-soft rounded-2xl px-3 py-3">
+                <DSIcon name={point.icon} size={17} className="text-emerald-200" />
+                <p className="mt-2 text-[12px] font-black text-white">{point.title}</p>
+                <p className="mt-1 text-[10px] font-medium leading-4 text-slate-400">{point.text}</p>
               </div>
             ))}
           </div>
         </div>
 
         <div
-          className="mt-10 space-y-3 lg:mt-0"
+          className="mt-9 space-y-4 lg:mt-0"
           style={{ animation: 'welcome-slide-up 0.7s ease-out 0.25s both' }}
         >
-          {FEATURES.map((f, i) => (
-            <div
-              key={i}
-              className="vfit-flow-panel-soft group flex items-center gap-4 rounded-3xl px-4 py-4 transition-all duration-300 hover:border-emerald-300/30 hover:bg-emerald-300/8"
-              style={{
-                animation: `welcome-slide-right 0.5s ease-out ${400 + i * 100}ms both`,
-              }}
-            >
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-emerald-300/20 bg-emerald-300/10 text-emerald-300 transition-transform duration-300 group-hover:scale-105">
-                <DSIcon name={f.icon} size={20} />
-              </span>
-              <span className="text-sm font-semibold text-slate-100">{f.text}</span>
-              <DSIcon name="chevronRight" size={16} className="ml-auto text-slate-500" />
+          <div className="vfit-flow-panel overflow-hidden rounded-[32px] p-4 sm:p-5">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="text-[11px] font-black uppercase text-emerald-200">Prévia do seu plano</p>
+                <h2 className="mt-1 text-[22px] font-black leading-tight text-white">A IA transforma respostas em treino.</h2>
+              </div>
+              <div className="flex h-13 w-13 shrink-0 items-center justify-center rounded-2xl border border-emerald-300/18 bg-emerald-300/10 text-emerald-200">
+                <DSIcon name="brainCircuit" size={25} />
+              </div>
             </div>
-          ))}
 
-          <div className="vfit-flow-panel mt-5 rounded-3xl p-4">
+            <div className="mt-5 space-y-2.5">
+              {PLAN_SIGNALS.map((signal, i) => (
+                <div
+                  key={signal.label}
+                  className="group rounded-2xl border border-white/9 bg-white/6 p-3 shadow-glass-inset-sm transition-all duration-300 hover:border-emerald-300/24 hover:bg-emerald-300/8"
+                  style={{ animation: `welcome-slide-right 0.5s ease-out ${360 + i * 90}ms both` }}
+                >
+                  <div className="flex items-start gap-3">
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[15px] border border-white/10 bg-white/7 text-emerald-200 transition-transform duration-300 group-hover:scale-105">
+                      <DSIcon name={signal.icon} size={18} />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center justify-between gap-2">
+                        <p className="text-[12px] font-black text-white">{signal.label}</p>
+                        <DSIcon name="check" size={14} className="text-emerald-200" />
+                      </div>
+                      <p className="mt-0.5 text-[11px] font-medium leading-4 text-slate-400">{signal.value}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-4 rounded-2xl border border-emerald-300/16 bg-emerald-300/9 p-4">
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <p className="text-[12px] font-black text-emerald-100">Plano pronto para começar hoje</p>
+                <span className="rounded-full bg-emerald-300 px-2.5 py-1 text-[10px] font-black text-bg-base">92%</span>
+              </div>
+              <div className="h-2 overflow-hidden rounded-full bg-white/10">
+                <div className="h-full w-[92%] rounded-full bg-linear-to-r from-emerald-300 to-lime-200 shadow-[0_0_18px_rgba(134,239,172,0.42)]" />
+              </div>
+              <p className="mt-3 text-[11px] font-medium leading-5 text-slate-300">Intensidade ajustada para evitar desistência na primeira semana.</p>
+            </div>
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
+            {RETENTION_LOOP.map((item) => (
+              <div key={item.title} className="vfit-flow-panel-soft rounded-2xl p-3">
+                <div className="flex items-center gap-2">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-[12px] bg-white/8 text-emerald-200">
+                    <DSIcon name={item.icon} size={15} />
+                  </span>
+                  <p className="text-[12px] font-black text-white">{item.title}</p>
+                </div>
+                <p className="mt-2 text-[10px] font-medium leading-4 text-slate-400">{item.text}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="vfit-flow-panel-soft rounded-3xl p-4">
             <div className="flex items-center gap-3">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-bg-base">
-                <DSIcon name="aiBot" size={24} />
+                <DSIcon name="messageCircle" size={23} />
               </div>
               <div>
-                <p className="text-sm font-black text-white">Plano pronto no final do fluxo</p>
-                <p className="text-xs text-slate-400">Perguntas preservadas, visual de última geração.</p>
+                <p className="text-sm font-black text-white">“Agora eu sei exatamente o que fazer.”</p>
+                <p className="text-xs text-slate-400">Você sai com direção, tempo e intensidade definidos.</p>
               </div>
             </div>
           </div>
@@ -223,8 +290,8 @@ export default function WelcomePage() {
               <DSIcon name="graduationCap" size={20} />
             </div>
             <div>
-              <p className="text-sm font-black text-white">Comece como aluno</p>
-              <p className="text-xs text-slate-400">Plano gratuito em 2 minutos</p>
+              <p className="text-sm font-black text-white">Comece como aluno, sem cartão</p>
+              <p className="text-xs text-slate-400">Receba um plano executável antes de decidir qualquer upgrade.</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -233,7 +300,7 @@ export default function WelcomePage() {
             </Link>
             <Button onClick={handlePrimaryStudentFlow} size="lg">
               <DSIcon name={hasSavedProgress ? 'play' : 'sparkles'} size={18} />
-              {hasSavedProgress ? 'Continuar fluxo' : 'Começar agora'}
+              {hasSavedProgress ? 'Continuar meu plano' : 'Criar meu plano grátis'}
             </Button>
           </div>
         </div>

@@ -7,6 +7,12 @@
 
 ## [Unreleased] — 2026-04-08 — Sprint 11-15 (UX Nutrição/Exercícios)
 
+### 🚀 Release v4.2.0 — Welcome conversion + retention redesign (2026-05-10)
+- **Welcome reposicionado para conversão:** [src/app/(onboarding)/welcome/page.tsx](src/app/(onboarding)/welcome/page.tsx) troca a narrativa de “quiz inteligente” por uma promessa direta de plano gratuito pronto em 2 minutos, com CTA “Criar meu plano grátis” e objeções resolvidas acima da dobra.
+- **Retenção como parte da primeira impressão:** a página agora mostra a prévia do plano, sinais analisados pela IA e ciclo Hoje/Amanhã/Semana, deixando claro que o usuário recebe direção imediata e motivo para voltar.
+- **Fricção menor no cadastro:** badges “Sem cartão”, “2 minutos” e “Dados protegidos” aparecem antes do CTA; retomada de progresso, links para Personal/Nutricionista e login foram preservados.
+- **Escopo controlado:** alteração limitada ao welcome; lógica de autenticação, biometria, reset/continuação do onboarding e rotas existentes foram mantidas.
+
 ### 🔧 Hotfix v4.1.9 — Analytics CSP production fix (2026-05-10)
 - **GA4 sem bloqueio de CSP:** [public/_headers](public/_headers) adiciona `https://www.google.com` ao `connect-src`, permitindo o fallback `g/collect` usado por eventos de engajamento e Web Vitals do GA4 sem relaxar os demais domínios da política.
 
