@@ -124,9 +124,9 @@ export function Hero() {
 
       {/* Top gradient for navbar blending */}
       <div
-        className="absolute inset-x-0 top-0 h-40 z-20"
+        className="absolute inset-x-0 top-0 h-52 z-20"
         style={{
-          background: 'linear-gradient(to bottom, rgba(5,10,18,0.96) 0%, rgba(15,26,44,0.62) 38%, rgba(15,26,43,0.24) 68%, transparent 100%)',
+          background: 'linear-gradient(to bottom, rgba(5,10,18,0.92) 0%, rgba(15,26,44,0.58) 34%, rgba(15,26,43,0.20) 64%, transparent 100%)',
         }}
       />
 

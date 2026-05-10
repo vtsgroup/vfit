@@ -152,12 +152,13 @@ export function StudentHeader() {
           {/* XP chip — digital asset coin, left of notifications */}
           <Link
             href="/progresso/streaks"
-            className="flex h-9 items-center gap-1.5 rounded-[12px] border border-amber-300/35 bg-linear-to-b from-amber-300/18 via-amber-400/10 to-slate-950/20 px-2.5 text-slate-100 shadow-[0_7px_18px_-12px_rgba(251,191,36,0.75),inset_0_1px_0_rgba(253,230,138,0.22)] transition-all duration-200 hover:border-amber-300/55 hover:bg-amber-300/16 active:scale-95"
+            className="flex h-9 items-center gap-1.5 rounded-[12px] border border-amber-200/30 bg-linear-to-b from-amber-200/16 via-amber-400/9 to-slate-950/22 px-2.5 text-slate-100 shadow-[0_8px_22px_-14px_rgba(251,191,36,0.85),inset_0_1px_0_rgba(253,230,138,0.24)] transition-all duration-200 hover:border-amber-200/50 hover:bg-amber-300/14 active:scale-95"
             title={`${xpData?.balance ?? 0} XP — Nível ${xpData?.level ?? 1}`}
             aria-label={`${xpData?.balance ?? 0} XP, nível ${xpData?.level ?? 1}`}
           >
-            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-linear-to-b from-amber-200 via-yellow-400 to-amber-600 text-amber-950 shadow-[0_2px_8px_rgba(245,158,11,0.4),inset_0_1px_0_rgba(255,255,255,0.42)]">
-              <DSIcon name="coin" size={13} />
+            <span className="relative flex h-5.5 w-5.5 items-center justify-center overflow-hidden rounded-full bg-linear-to-b from-amber-100 via-amber-300 to-amber-600 text-amber-950 shadow-[0_3px_10px_rgba(245,158,11,0.36),inset_0_1px_0_rgba(255,255,255,0.58),inset_0_-1px_0_rgba(120,53,15,0.28)] ring-1 ring-amber-100/55">
+              <span className="absolute inset-x-0 top-0 h-1/2 rounded-full bg-white/28" aria-hidden="true" />
+              <DSIcon name="coin" size={13} className="relative drop-shadow-[0_1px_0_rgba(255,255,255,0.28)]" />
             </span>
             <span className="text-[11px] font-black tabular-nums leading-none text-amber-100">{xpData?.balance ?? 0}</span>
           </Link>
