@@ -1,8 +1,75 @@
+<!-- /autoplan restore point: /Users/macos/.gstack/projects/vtsgroup-vfit/main-autoplan-restore-20260509-221720.md -->
 # Product Roadmap — VFIT Completo
 
 ## Premissa central
 
 VFIT deve ser o sistema operacional diário de fitness para profissionais e alunos. O produto não ganha por ter uma tela de treino, uma tela de nutrição e uma tela de pagamento. Ganha quando essas telas viram um loop de valor que o usuário sente toda semana.
+
+## Autoplan decision — 2026-05-10
+
+Feedback incorporado: "Está ficando legal mas precisa de muitas melhorias ainda, não tem nenhum alimento para adicionar, nada está super funcional ainda."
+
+Decisão aprovada para execução: **Student-first depth**.
+
+O plano original continua válido como visão completa, mas a ordem de entrega muda. Antes de ampliar marketplace, nutricionista, SEO, social ou personal OS, o aluno precisa conseguir completar o loop diário sem sentir que está usando uma demo:
+
+```text
+Abrir app -> entender treino de hoje -> executar treino -> salvar mesmo offline
+          -> ver progresso -> registrar refeicao com alimentos reais
+          -> receber proxima acao clara -> voltar amanha
+```
+
+### Decision audit trail
+
+| Review | Veredito | Implicacao |
+|---|---|---|
+| CEO review | Replanejar por profundidade, nao por amplitude | Pausar novas personas e frentes ate o aluno ter um fluxo funcional de treino + progresso + nutricao. |
+| Design review | UI esta melhorando, mas faltam estados operacionais | Food search vazio, execucao de treino, offline, onboarding e mobile keyboard/nav precisam de states explicitos. |
+| Engineering review | Infra existe, integracao funcional ainda e baixa | Popular `vfit_foods`, consolidar estado de workout e implementar offline sync antes de loja. |
+| DX/operability review | Nao da para escalar sem gates repetiveis | Smoke auth, WhatsApp deploy gate, dados seed e quality gate precisam virar fluxo reprodutivel. |
+
+### Premissas invalidadas
+
+- "Mais telas" nao torna o produto mais pronto. O usuario esta reagindo a loops incompletos, nao a falta de superficie visual.
+- Loja antes de treino/nutricao funcional vira discovery sem uso real.
+- Nutricionista OS antes de food catalog e meal logging real cria um portal sem insumo.
+- SEO/campanhas antes de smoke auth, OneSignal, WhatsApp gate e core loops estaveis aumenta risco de churn e suporte.
+
+### Novo principio de sequencing
+
+1. **Functional loop first:** treino executavel, progresso confiavel, nutricao com alimentos reais.
+2. **Validation before expansion:** smoke auth, browser smoke, fixtures e deploy sem bypass antes de novos lancamentos.
+3. **Marketplace only after use:** compra de plano so conta quando o aluno ativa e inicia o treino comprado.
+4. **New personas after data exists:** nutricionista entra quando refeicoes e historico do aluno ja existem.
+
+### Criterio de "super funcional"
+
+O app aluno so passa para expansao quando um aluno consegue, em mobile:
+
+- abrir `/treinos` e ver uma proxima acao clara;
+- iniciar, pausar, editar sets, concluir e retomar treino;
+- continuar registrando treino com rede instavel e sincronizar sem duplicidade;
+- abrir `/nutricao`, buscar/adicionar alimento real, usar recentes/favoritos e ver macros atualizados;
+- abrir `/progresso` sem 500/empty state morto e entender a evolucao da semana;
+- passar por rotas criticas sem tela branca, erro silencioso, scroll horizontal ou CTA falso.
+
+### Execucao revisada — proximas 5 semanas
+
+| Semana | Foco | Resultado esperado |
+|---|---|---|
+| 1 | Gates + dados de base | Smoke auth renovavel, deploy sem bypass planejado, food catalog versionado/idempotente com pelo menos 150 alimentos PT-BR. |
+| 2 | Treino funcional | Estado canonico de workout, execucao Start -> Rest -> Next -> Finish, resume e offline queue basica. |
+| 3 | Nutricao funcional | Busca de alimentos, adicionar refeicao, recentes, favoritos, entrada manual e estados de erro/retry. |
+| 4 | Progresso + QA | Progress sem 500, resumo semanal util, Playwright student matrix e evidencia visual mobile/desktop. |
+| 5 | Loja com uso real | `/loja`, detalhe, compra idempotente, biblioteca, ativacao do plano e primeiro treino comprado iniciado. |
+
+### Deferred ate o loop do aluno fechar
+
+- Nutricionista OS completo.
+- Lead pipeline/personal OS avancado.
+- SEO programatico e campanhas.
+- Social/feed amplo.
+- Admin dashboard amplo de operacao, exceto itens P0 de gate/observabilidade.
 
 ```text
 Personal cria valor      Aluno executa valor      Plataforma captura valor
@@ -225,13 +292,22 @@ Route loading.tsx -> Page skeleton -> Section skeleton -> Empty state -> Error s
 
 ### Sprint P1 — App aluno completo
 
+- Smoke auth renovavel e release gate sem bypass.
+- Base alimentar versionada, idempotente e pesquisavel.
+- Treino de hoje executavel com estados Start -> In Progress -> Rest -> Finish.
+- Offline/sync para treino ativo.
+- Nutrição com busca real, entrada manual, favoritos, recentes e estados completos.
+- Progresso sem 500 e com zero-data útil.
+- Skeleton/error/empty state em todas rotas do aluno.
+
+### Sprint P1.5 — Loja apenas depois do loop base
+
 - Loja dentro do app.
 - Biblioteca de compras.
 - Plano comprado ativável.
-- Nutrição com estados completos.
-- Progresso sem 500 e com zero-data útil.
-- Offline/sync para treino ativo.
-- Skeleton/error/empty state em todas rotas do aluno.
+- Compra idempotente e sem duplicidade.
+- Estado “pago, liberando plano” para entrega assíncrona.
+- Primeiro treino comprado iniciado como fim do fluxo, nao apenas checkout aprovado.
 
 ### Sprint P2 — Personal OS
 

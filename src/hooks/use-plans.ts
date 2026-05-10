@@ -199,6 +199,7 @@ export function useCompleteWorkout() {
     },
     Error,
     {
+      client_completion_id?: string
       plan_id: string
       plan_day_id: string
       day_number: number

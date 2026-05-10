@@ -1,13 +1,13 @@
 # VFIT Production Completion — Tracking
 
-> Última atualização: 2026-05-10 · Status: Deploy v3.6.0 publicado; smoke visual/API verde; smoke auth bloqueado por tokens expirados · Branch de execução: `main` · Versão live observada: `3.6.0`.
+> Última atualização: 2026-05-10 · Status: P2.21/P2.24/P2.26 concluídos local+Neon; P2.22/P2.23/P2.25 em progresso; seed de alimentos 152 itens sincronizado no Neon; deploy v3.6.0 publicado; próximo deploy pendente · Branch de execução: `main` · Versão live observada: `3.6.0`.
 
 ## Progresso geral
 
 ```text
 Fases: 0/9 concluídas
-Tasks: 23/127 concluídas
-Bloqueadores P0 abertos: 2 + validação runtime publicada pendente
+Tasks: 27/134 concluídas
+Bloqueadores P0 abertos: 2 + deploy/smoke runtime do novo pacote pendente
 Gate produção: NÃO LIBERADO
 ```
 
@@ -25,10 +25,27 @@ Initial design score: 5/10
 Current design score after addendum: 8/10
 Reference: DESIGN-UX-REVIEW.md
 Mockups: blocked until gstack designer gets OpenAI key via $D setup
-Next required review: /plan-eng-review
+Next required review: Student-first execution implementation
 ```
 
 Design decisions from `DESIGN-UX-REVIEW.md` are binding for implementation unless explicitly changed in this tracking file.
+
+## Autoplan status — 2026-05-10
+
+```text
+/autoplan: DONE_WITH_REFRAME
+Mode: Student-first depth
+Plan file: PRODUCT-ROADMAP.md
+Restore point: /Users/macos/.gstack/projects/vtsgroup-vfit/main-autoplan-restore-20260509-221720.md
+Codex: unavailable (binary_missing); review completed with subagents only
+Premise gate: asked; environment instructed autonomous decision-making; recommended option selected
+```
+
+Decision now binding for next work:
+
+- Food catalog, workout execution, offline sync, progress clarity and QA gates block marketplace/persona expansion.
+- Nutritionist OS, broad SEO, social/feed and Personal OS advanced work are deferred until student loop is functional.
+- Loja starts after the base loop works; checkout success is not the success metric, first purchased workout started is.
 
 ## Legenda
 
@@ -159,9 +176,9 @@ Objetivo: aluno conseguir treinar, evoluir, comprar, registrar nutrição e ente
 - [ ] **P2.6** Garantir compra idempotente e sem duplicidade. `P0`
 - [ ] **P2.7** Criar estado “pago, liberando plano” para entrega assíncrona. `P0`
 - [ ] **P2.8** Adicionar review/rating verificado pós-compra. `P2`
-- [ ] **P2.9** Melhorar `/nutricao` com câmera, barcode, favoritos e histórico alimentar. `P2`
+- [x] **P2.9** Melhorar `/nutricao` com câmera, barcode, favoritos e histórico alimentar. `P2` — tela já tinha câmera/barcode; agora ganhou favoritos, recentes/histórico e entrada manual conectados à API.
 - [ ] **P2.10** Adicionar estados de erro/retry em vínculo com nutricionista. `P1`
-- [ ] **P2.11** Fechar fluxo offline/sync para treino ativo. `P1`
+- [~] **P2.11** Fechar fluxo offline/sync para treino ativo. `P1` — conclusão do treino agora tenta persistir no backend, cai para fila offline local e re-sincroniza autenticada no app shell; ainda falta hardening de replay visual e testes E2E.
 - [x] **P2.12** Criar skeleton route-level para `/treinos`. `P1` — `src/app/(app)/treinos/loading.tsx` criado com shimmer do FirstWinCommandCenter.
 - [x] **P2.13** Criar skeleton route-level para `/nutricao`. `P1` — `src/app/(app)/nutricao/loading.tsx` criado com shimmer do macro ring + refeições.
 - [x] **P2.14** Criar skeleton route-level para `/avaliacoes`. `P1` — `src/app/(app)/avaliacoes/loading.tsx` criado com shimmer header + search + cards.
@@ -171,6 +188,13 @@ Objetivo: aluno conseguir treinar, evoluir, comprar, registrar nutrição e ente
 - [ ] **P2.18** Definir propósito de `/social`: ranking, desafios ou comunidade; remover ruído se não houver tese. `P2`
 - [ ] **P2.19** Adicionar analytics de workout_started/completed, meal_logged, store_purchase. `P1`
 - [x] **P2.20** Implementar First Win operacional no topo de `/treinos`. `P1` — primeira dobra agora prioriza treino de hoje, progresso/meta/XP, nutrição e próxima ação de evolução de plano.
+- [x] **P2.21** Popular base alimentar inicial com seed idempotente e versionado (`vfit_foods`) com pelo menos 150 alimentos PT-BR. `P0` — migrations 0032/0033 aplicadas no Neon; `foods:sync` inseriu 152 alimentos PT-BR; total biblioteca Neon observado: 10152.
+- [~] **P2.22** Criar validação/API smoke para `GET /api/v1/vfit/foods` com busca, categoria e macros obrigatórios. `P0` — endpoint agora retorna array para o frontend e aceita `search`/`q`; pendente smoke autenticado contra API publicada após sync.
+- [~] **P2.23** Definir tabela/contrato canônico para estado de execução de treino e remover ambiguidade entre estados antigos/novos. `P0` — execução B2C local usa `vfit-active-workout`; persistência final usa `workout_sessions`/`exercise_logs` com `client_completion_id`; `workout_session_state` legado ainda existe para outro fluxo.
+- [x] **P2.24** Implementar fluxo de execução Start -> In Progress -> Rest -> Next -> Finish com editar/undo de sets. `P0` — tela ativa já permite editar reps/carga, desfazer set, descanso, próximo exercício e finalizar; finalização agora persiste no backend ou fila offline.
+- [~] **P2.25** Implementar offline queue para sets de treino com sync-on-reconnect e proteção contra duplicidade. `P0` — fila de conclusão do treino implementada com replay autenticado e índice único `client_completion_id`; ainda falta fila set-a-set e Playwright offline.
+- [x] **P2.26** Melhorar meal logging com busca real, entrada manual, recentes e favoritos antes de câmera/barcode. `P0` — API e UI agora suportam busca, recentes, favoritos, cadastro manual de alimento e registro imediato de refeição.
+- [ ] **P2.27** Criar Playwright student-first: iniciar treino, concluir treino, registrar refeição e validar progresso/empty state. `P0`
 
 **Gate Phase 2:** aluno novo consegue entrar, receber plano, treinar, ver progresso, registrar nutrição e comprar/usar plano da loja.
 
@@ -186,6 +210,45 @@ Primeira entrega de produto/design:
 Limite conhecido:
 
 - A entrada de loja ainda é teaser/ação de evolução de plano, não a superfície completa de marketplace. P2.1-P2.8 seguem pendentes.
+
+Segunda entrega em progresso — alimentos/nutrição:
+
+- `FirstWinCommandCenter` de `/treinos` foi alinhado ao gradiente dos heroes/headers com a classe global `vfit-app-hero-gradient`.
+- `GET /api/v1/vfit/foods` corrigido para retornar `foods.rows` como array, compatível com `useFoodSearch` e `foods.map` no frontend.
+- Migration `0032_vfit_foods_sync_hardening.sql` criada para adicionar `barcode` e índices seguros usados por busca/barcode.
+- Script `scripts/sync-vfit-foods.mjs` criado para seed/sync idempotente em Neon, sem tocar em D1 porque alimentos vivem em Neon; D1 permanece catálogo cold-data de exercícios.
+- Seed inicial `scripts/vfit-food-library.mjs` validada com 152 alimentos PT-BR, categorias e macros obrigatórios.
+- `/nutricao` ganhou chips rápidos de busca e categorias visuais para os grupos usados pela seed.
+
+Validação desta entrega:
+
+- `npm run foods:sync:dry` ✅: 152 alimentos, nenhuma conexão Neon aberta.
+- `npx eslint 'src/app/(app)/treinos/page.tsx' 'src/app/(app)/nutricao/page.tsx'` ✅
+- `npm run type-check` ✅
+- `npm run type-check:workers` ✅
+- `npm run build` ✅ com export estático de 141 HTML files.
+
+Pendência operacional para concluir P2.21 em produção:
+
+- `migrations/hyperdrive/0032_vfit_foods_sync_hardening.sql` e `0033_vfit_food_favorites_and_workout_idempotency.sql` aplicadas no Neon com sucesso.
+- `scripts/sync-vfit-foods.mjs` executado contra Neon: 152 inseridos, 0 atualizados, total biblioteca 10152.
+- Durante a primeira tentativa de migration, a lib Neon imprimiu a connection string em erro de URL; rotação de `NEON_DATABASE_URL` deve entrar no runbook operacional após deploy.
+- Depois do deploy do Worker, executar smoke autenticado de `/vfit/foods?search=arroz`, `/vfit/foods?search=frango`, `/vfit/foods?search=banana`, `/vfit/foods/recent`, `/vfit/foods/favorites` e fluxo visual de adicionar refeição.
+
+Terceira entrega em progresso — nutrição funcional e treino ativo:
+
+- `GET /vfit/foods/recent`, `GET /vfit/foods/favorites`, `POST /vfit/foods`, `POST/DELETE /vfit/foods/:id/favorite` adicionados com fallback seguro quando a migration de favoritos ainda não existe.
+- `/nutricao` ganhou favoritos, recentes e entrada manual com macros, categoria e porção; alimentos manuais são salvos como `is_custom` e já podem ser registrados na mesma tela.
+- `workout_sessions` ganhou `client_completion_id` único por usuário para deduplicar replay offline.
+- `/treino-ativo` agora monta payload real do treino concluído, salva via `POST /workouts/b2c/complete` e cai para fila offline local se a rede falhar.
+- `AppLayout` passa a tentar replay autenticado da fila `vfit:offline-completions` ao abrir o app e quando o navegador volta online.
+
+Validação desta entrega:
+
+- Migrations 0032/0033 Neon ✅
+- `scripts/sync-vfit-foods.mjs` Neon ✅: 152 inseridos; total biblioteca 10152.
+- `npm run foods:sync:dry` ✅
+- `npm run type-check && npm run type-check:workers` ✅
 
 ---
 

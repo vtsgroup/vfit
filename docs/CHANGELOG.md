@@ -7,6 +7,29 @@
 
 ## [Unreleased] — 12/04/2026 — Paridade admin de saques + redirect domínio legado
 
+### 🧭 Planejamento — 10/05/2026 — Autoplan Student-first depth
+- `plan-production-ready/PRODUCT-ROADMAP.md` recebeu a decisão `/autoplan` de priorizar profundidade do app aluno antes de marketplace amplo, nutricionista OS, SEO, social ou Personal OS avançado.
+- O feedback “não tem nenhum alimento para adicionar” e “nada está super funcional ainda” virou critério de bloqueio: food catalog, treino executável, offline sync, nutrição real, progresso claro e gates de QA passam a vir antes da expansão.
+- `plan-production-ready/TRACKING.md` foi atualizado para `/autoplan: DONE_WITH_REFRAME`, com novas tarefas P2.21-P2.27 e progresso geral ajustado para 23/134.
+- Artefato de teste do replanejamento salvo em `/Users/macos/.gstack/projects/vtsgroup-vfit/main-autoplan-test-plan-20260510-student-first.md`.
+
+### ✨ Student App — 10/05/2026 — First Win hero + base alimentar
+- “Primeira vitória do dia” em `/treinos` foi alinhado ao gradiente visual dos heroes/headers do app, usando a nova classe global `vfit-app-hero-gradient`.
+- `GET /api/v1/vfit/foods` foi corrigido para retornar array de alimentos, destravando a integração esperada pelo `useFoodSearch` no frontend.
+- Criados `scripts/vfit-food-library.mjs` e `scripts/sync-vfit-foods.mjs` com seed de 152 alimentos PT-BR e sync idempotente para Neon; `npm run foods:sync:dry` passou sem abrir conexão com o banco.
+- Criada migration `migrations/hyperdrive/0032_vfit_foods_sync_hardening.sql` para adicionar `barcode` e índices seguros ao catálogo alimentar.
+- `/nutricao` ganhou chips rápidos de busca e categorias visuais para os novos grupos da base alimentar.
+- Validação local: lint das telas alteradas, type-check frontend/workers e build passaram; aplicar migration/sync no Neon ainda exige janela operacional.
+
+### ✨ Student App — 10/05/2026 — nutrição funcional + treino ativo persistente
+- Migrations `0032_vfit_foods_sync_hardening.sql` e `0033_vfit_food_favorites_and_workout_idempotency.sql` aplicadas no Neon.
+- `scripts/sync-vfit-foods.mjs` sincronizou 152 alimentos PT-BR no Neon; total de biblioteca observado: 10152.
+- `/nutricao` agora suporta recentes, favoritos, entrada manual com macros e registro imediato de refeição.
+- API `/vfit` ganhou endpoints de recentes/favoritos/cadastro manual de alimentos, além do retorno de favoritos na busca.
+- `/treino-ativo` passou a salvar conclusão real no backend e cair para fila offline autenticada com deduplicação por `client_completion_id`.
+- Validação: `npm run foods:sync:dry`, `npm run type-check` e `npm run type-check:workers` passaram.
+- Segurança operacional: primeira tentativa de migration expôs a URL de conexão em erro da lib Neon; rotacionar `NEON_DATABASE_URL` após deploy.
+
 ### 🚀 Deploy — 10/05/2026 — v3.6.0 produção
 - Cloudflare Pages e Worker `vfit-api` publicados com sucesso via deploy patch; release commit `3c0f2cab` e tag `v3.6.0` enviados para `origin/main`.
 - Pós-deploy API: `https://api.vfit.app.br/health` retornou 200; `/api/v1/progress/top-exercises?limit=4` sem token retornou 401 em vez de 500.

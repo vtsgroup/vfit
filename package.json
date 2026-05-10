@@ -1,6 +1,6 @@
 {
   "name": "vfit",
-  "version": "3.6.0",
+  "version": "3.6.1",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -47,6 +47,8 @@
     "db:self-check": "node scripts/db-self-check.mjs",
     "db:migrate:d1": "wrangler d1 migrations apply personaliai-exercises",
     "db:seed": "node scripts/seed-database.js",
+    "foods:sync": "node scripts/sync-vfit-foods.mjs",
+    "foods:sync:dry": "node scripts/sync-vfit-foods.mjs --dry-run",
     "foods:import:bulk": "node scripts/import-vfit-foods-bulk.mjs",
     "test": "vitest run",
     "test:e2e": "playwright test",

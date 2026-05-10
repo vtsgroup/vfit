@@ -14,16 +14,21 @@ import { useAuthStore } from '@/stores/auth-store'
 export interface VfitFood {
   id: string
   name: string
+  description?: string | null
   category: string
   calories: number
   protein_g: number
   carbs_g: number
   fat_g: number
   fiber_g: number | null
+  sodium_mg?: number | null
   standard_portion_g: number
   is_library: boolean
+  is_custom?: boolean
+  is_favorite?: boolean
   creator_id: string | null
   created_at: string
+  last_logged_at?: string
 }
 
 export type MealType =
@@ -78,6 +83,19 @@ export interface LogMealInput {
   logged_at?: string
 }
 
+export interface CreateFoodInput {
+  name: string
+  description?: string
+  category: string
+  calories: number
+  protein_g: number
+  carbs_g: number
+  fat_g: number
+  fiber_g?: number
+  sodium_mg?: number
+  standard_portion_g?: number
+}
+
 // ── Hooks ──────────────────────────────────────────────
 
 /**
@@ -99,6 +117,69 @@ export function useFoodSearch(search: string, category?: string) {
     },
     enabled: isReady && search.length >= 2,
     staleTime: 60_000,
+  })
+}
+
+export function useRecentFoods(enabled = true) {
+  const isReady = useAuthStore((s) => s.isAuthenticated && s.isHydrated)
+
+  return useQuery({
+    queryKey: ['vfit-foods-recent'],
+    queryFn: async () => {
+      const res = await api.get<VfitFood[]>('/vfit/foods/recent?limit=12')
+      return res.data
+    },
+    enabled: isReady && enabled,
+    staleTime: 60_000,
+  })
+}
+
+export function useFavoriteFoods(enabled = true) {
+  const isReady = useAuthStore((s) => s.isAuthenticated && s.isHydrated)
+
+  return useQuery({
+    queryKey: ['vfit-foods-favorites'],
+    queryFn: async () => {
+      const res = await api.get<VfitFood[]>('/vfit/foods/favorites?limit=30')
+      return res.data
+    },
+    enabled: isReady && enabled,
+    staleTime: 60_000,
+  })
+}
+
+export function useCreateFood() {
+  const qc = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (input: CreateFoodInput) => {
+      const res = await api.post<VfitFood>('/vfit/foods', input)
+      return res.data
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['vfit-foods'] })
+      qc.invalidateQueries({ queryKey: ['vfit-foods-recent'] })
+    },
+  })
+}
+
+export function useToggleFoodFavorite() {
+  const qc = useQueryClient()
+
+  return useMutation({
+    mutationFn: async ({ foodId, favorite }: { foodId: string; favorite: boolean }) => {
+      if (favorite) {
+        const res = await api.post<{ food_id: string; is_favorite: boolean }>(`/vfit/foods/${foodId}/favorite`, {})
+        return res.data
+      }
+      const res = await api.delete<{ food_id: string; is_favorite: boolean }>(`/vfit/foods/${foodId}/favorite`)
+      return res.data
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['vfit-foods'] })
+      qc.invalidateQueries({ queryKey: ['vfit-foods-recent'] })
+      qc.invalidateQueries({ queryKey: ['vfit-foods-favorites'] })
+    },
   })
 }
 

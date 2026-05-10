@@ -1421,6 +1421,7 @@ workouts.get('/:id/export', requireType('personal'), async (c) => {
 workouts.post('/b2c/complete', authMiddleware, async (c) => {
   const userId = c.get('userId')
   const body = await c.req.json<{
+    client_completion_id?: string
     plan_id: string
     plan_day_id: string
     day_number: number
@@ -1444,6 +1445,60 @@ workouts.post('/b2c/complete', authMiddleware, async (c) => {
     throw new BadRequestError('Dados do treino incompletos')
   }
 
+  const clientCompletionId = body.client_completion_id?.trim() || null
+  let supportsClientCompletionId = false
+
+  if (clientCompletionId) {
+    const columnInfo = await pgQueryOne<{ exists: boolean }>(
+      c.env,
+      `SELECT EXISTS (
+         SELECT 1 FROM information_schema.columns
+         WHERE table_schema = 'public' AND table_name = 'workout_sessions' AND column_name = 'client_completion_id'
+       ) as exists`,
+      []
+    )
+    supportsClientCompletionId = columnInfo?.exists === true
+
+    const existing = await pgQueryOne<{
+      id: string
+      duration_seconds: number | null
+      total_sets: number | null
+      total_reps: number | null
+      total_volume_kg: string | number | null
+      calories_estimated: number | null
+    }>(
+      c.env,
+      supportsClientCompletionId
+        ? `SELECT id, duration_seconds, total_sets, total_reps, total_volume_kg, calories_estimated
+             FROM workout_sessions
+            WHERE user_id = $1 AND client_completion_id = $2
+            LIMIT 1`
+        : `SELECT id, duration_seconds, total_sets, total_reps, total_volume_kg, calories_estimated
+             FROM workout_sessions
+            WHERE user_id = $1 AND notes = $2
+            LIMIT 1`,
+      [userId, supportsClientCompletionId ? clientCompletionId : `client_completion_id:${clientCompletionId}`]
+    )
+
+    if (existing) {
+      const totalVolume = Number(existing.total_volume_kg || 0)
+      return success({
+        workout_id: existing.id,
+        duplicate: true,
+        summary: {
+          duration_seconds: existing.duration_seconds || body.duration_seconds,
+          total_sets: existing.total_sets || 0,
+          total_reps: existing.total_reps || 0,
+          total_volume_kg: Math.round(totalVolume * 100) / 100,
+          estimated_calories: existing.calories_estimated || 0,
+          exercises_completed: body.exercises.filter((e) => !e.skipped).length,
+          exercises_skipped: body.exercises.filter((e) => e.skipped).length,
+        },
+        records: [],
+      })
+    }
+  }
+
   const workoutId = generateId()
   const totalSets = body.exercises.reduce(
     (sum, ex) => sum + ex.sets.filter((s) => s.completed).length, 0
@@ -1456,17 +1511,32 @@ workouts.post('/b2c/complete', authMiddleware, async (c) => {
   )
   const estimatedCalories = Math.round(totalSets * 5 + (body.duration_seconds / 60) * 3)
 
-  await pgQuery(
-    c.env,
-    `INSERT INTO workout_sessions (id, user_id, plan_id, plan_day_id,
-       started_at, duration_seconds, total_sets, total_reps, total_volume_kg, calories_estimated, status)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 'completed')`,
-    [
-      workoutId, userId, body.plan_id, body.plan_day_id,
-      body.started_at, body.duration_seconds, totalSets, totalReps,
-      Math.round(totalVolume * 100) / 100, estimatedCalories,
-    ]
-  )
+  if (supportsClientCompletionId) {
+    await pgQuery(
+      c.env,
+      `INSERT INTO workout_sessions (id, user_id, plan_id, plan_day_id,
+         started_at, duration_seconds, total_sets, total_reps, total_volume_kg, calories_estimated, status, client_completion_id)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 'completed', $11)`,
+      [
+        workoutId, userId, body.plan_id, body.plan_day_id,
+        body.started_at, body.duration_seconds, totalSets, totalReps,
+        Math.round(totalVolume * 100) / 100, estimatedCalories, clientCompletionId,
+      ]
+    )
+  } else {
+    await pgQuery(
+      c.env,
+      `INSERT INTO workout_sessions (id, user_id, plan_id, plan_day_id,
+         started_at, duration_seconds, total_sets, total_reps, total_volume_kg, calories_estimated, status, notes)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 'completed', $11)`,
+      [
+        workoutId, userId, body.plan_id, body.plan_day_id,
+        body.started_at, body.duration_seconds, totalSets, totalReps,
+        Math.round(totalVolume * 100) / 100, estimatedCalories,
+        clientCompletionId ? `client_completion_id:${clientCompletionId}` : null,
+      ]
+    )
+  }
 
   // Save exercise logs + check records
   const records: Array<{ exercise_name: string; weight_kg: number }> = []

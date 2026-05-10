@@ -38,6 +38,7 @@ export interface WorkoutExercise {
 }
 
 export interface ActiveWorkout {
+  client_completion_id: string
   plan_id: string
   plan_day_id: string
   day_number: number
@@ -101,6 +102,11 @@ function parseReps(repsStr: string): number {
   return isNaN(num) ? 10 : num
 }
 
+function generateClientCompletionId(): string {
+  if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) return crypto.randomUUID()
+  return `local-${Date.now()}-${Math.random().toString(36).slice(2)}`
+}
+
 export const useActiveWorkoutStore = create<ActiveWorkoutState>()(
   persist(
     (set, get) => ({
@@ -136,6 +142,7 @@ export const useActiveWorkoutStore = create<ActiveWorkoutState>()(
 
         set({
           workout: {
+            client_completion_id: generateClientCompletionId(),
             plan_id: data.plan_id,
             plan_day_id: data.plan_day_id,
             day_number: data.day_number,

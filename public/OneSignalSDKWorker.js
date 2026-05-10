@@ -397,7 +397,10 @@ async function queueOfflineCompletion(payload) {
     if (existing) {
       try { queue = await existing.json() } catch { queue = [] }
     }
-    queue.push({ ...payload, queued_at: new Date().toISOString() })
+    if (payload && payload.client_completion_id) {
+      queue = queue.filter((item) => item.client_completion_id !== payload.client_completion_id)
+    }
+    queue.push({ ...payload, queued_at: new Date().toISOString(), api_base: payload?.api_base || '' })
     await cache.put(
       OFFLINE_QUEUE_KEY,
       new Response(JSON.stringify(queue), {
@@ -432,7 +435,11 @@ async function replayOfflineCompletions() {
     const failed = []
     for (const item of queue) {
       try {
-        const res = await fetch(`/api/v1/workouts/${item.workout_id}/complete`, {
+        const apiBase = item.api_base || ''
+        const endpoint = item.plan_id
+          ? `${apiBase}/api/v1/workouts/b2c/complete`
+          : `${apiBase}/api/v1/workouts/${item.workout_id}/complete`
+        const res = await fetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',

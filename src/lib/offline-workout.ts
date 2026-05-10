@@ -13,6 +13,27 @@
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || ''
 
+export interface OfflineWorkoutCompletionPayload {
+  client_completion_id: string
+  plan_id: string
+  plan_day_id: string
+  day_number: number
+  started_at: string
+  duration_seconds: number
+  exercises: Array<{
+    exercise_id: string
+    exercise_name: string
+    muscle_group: string | null
+    skipped: boolean
+    sets: Array<{
+      reps: number
+      weight_kg: number
+      is_warmup: boolean
+      completed: boolean
+    }>
+  }>
+}
+
 /**
  * Send a message to the Service Worker and wait for a response
  */
@@ -39,6 +60,34 @@ function swMessage(data: Record<string, unknown>): Promise<Record<string, unknow
   })
 }
 
+function migrateLegacyCompletionQueue() {
+  const key = 'vfit:offline-completions'
+  const legacyKey = 'personaliai:offline-completions'
+  const legacyData = localStorage.getItem(legacyKey)
+  if (legacyData && !localStorage.getItem(key)) {
+    localStorage.setItem(key, legacyData)
+    localStorage.removeItem(legacyKey)
+  }
+  return key
+}
+
+function storeLocalCompletion(payload: Record<string, unknown>): boolean {
+  try {
+    const key = migrateLegacyCompletionQueue()
+    const existing = JSON.parse(localStorage.getItem(key) || '[]') as Array<Record<string, unknown>>
+    const completionId = payload.client_completion_id
+    const next = { ...payload, queued_at: new Date().toISOString() }
+    const deduped = completionId
+      ? existing.filter((item) => item.client_completion_id !== completionId)
+      : existing
+    deduped.push(next)
+    localStorage.setItem(key, JSON.stringify(deduped))
+    return true
+  } catch {
+    return false
+  }
+}
+
 /**
  * Pre-cache a workout for offline execution
  */
@@ -60,15 +109,24 @@ export async function cacheWorkoutForOffline(workoutId: string): Promise<boolean
  * Queue a workout completion for background sync
  */
 export async function queueOfflineCompletion(payload: {
-  workout_id: string
+  client_completion_id?: string
+  workout_id?: string
+  plan_id?: string
+  plan_day_id?: string
+  day_number?: number
+  started_at?: string
+  duration_seconds?: number
   duration_minutes?: number
   feeling?: string
   student_notes?: string
+  exercises?: unknown[]
   exercises_completed?: unknown[]
 }): Promise<boolean> {
+  const localQueued = storeLocalCompletion(payload as Record<string, unknown>)
+
   try {
     // Try SW message first
-    await swMessage({ type: 'QUEUE_OFFLINE_COMPLETION', payload })
+    await swMessage({ type: 'QUEUE_OFFLINE_COMPLETION', payload: { ...payload, api_base: API_BASE } })
 
     // Register background sync if supported
     if ('serviceWorker' in navigator) {
@@ -81,23 +139,7 @@ export async function queueOfflineCompletion(payload: {
 
     return true
   } catch {
-    // Fallback: store in localStorage
-    try {
-      const key = 'vfit:offline-completions'
-      // Migrate legacy key
-      const legacyKey = 'personaliai:offline-completions'
-      const legacyData = localStorage.getItem(legacyKey)
-      if (legacyData && !localStorage.getItem(key)) {
-        localStorage.setItem(key, legacyData)
-        localStorage.removeItem(legacyKey)
-      }
-      const existing = JSON.parse(localStorage.getItem(key) || '[]')
-      existing.push({ ...payload, queued_at: new Date().toISOString() })
-      localStorage.setItem(key, JSON.stringify(existing))
-      return true
-    } catch {
-      return false
-    }
+    return localQueued
   }
 }
 
@@ -112,19 +154,12 @@ export function isOnline(): boolean {
  * Replay any localStorage-queued completions when back online
  */
 export async function replayLocalCompletions(apiPost: (url: string, body: unknown) => Promise<unknown>): Promise<number> {
-  const key = 'vfit:offline-completions'
-  // Migrate legacy key
-  const legacyKey = 'personaliai:offline-completions'
-  const legacyData = localStorage.getItem(legacyKey)
-  if (legacyData && !localStorage.getItem(key)) {
-    localStorage.setItem(key, legacyData)
-    localStorage.removeItem(legacyKey)
-  }
+  const key = migrateLegacyCompletionQueue()
   const raw = localStorage.getItem(key)
   if (!raw) return 0
 
   try {
-    const queue = JSON.parse(raw) as Array<{ workout_id: string; [k: string]: unknown }>
+    const queue = JSON.parse(raw) as Array<{ workout_id?: string; plan_id?: string; [k: string]: unknown }>
     if (queue.length === 0) return 0
 
     const failed: typeof queue = []
@@ -132,7 +167,8 @@ export async function replayLocalCompletions(apiPost: (url: string, body: unknow
 
     for (const item of queue) {
       try {
-        await apiPost(`/workouts/${item.workout_id}/complete`, item)
+        const endpoint = item.plan_id ? '/workouts/b2c/complete' : `/workouts/${item.workout_id}/complete`
+        await apiPost(endpoint, item)
         synced++
       } catch {
         failed.push(item)

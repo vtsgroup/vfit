@@ -24,7 +24,9 @@ import { Button } from '@/components/ui/button'
 import { RestTimer } from '@/components/treino/rest-timer'
 import { useActiveWorkoutStore } from '@/stores/active-workout-store'
 import { useCurrentPlan } from '@/hooks/use-plans'
+import { useCompleteWorkout as useCompleteB2CWorkout } from '@/hooks/use-plans'
 import { requestWakeLock, releaseWakeLock } from '@/lib/wake-lock'
+import { isOnline, queueOfflineCompletion, type OfflineWorkoutCompletionPayload } from '@/lib/offline-workout'
 import { hapticLight, hapticSuccess } from '@/lib/haptics'
 
 function formatTimer(ms: number): string {
@@ -50,14 +52,16 @@ export default function TreinoAtivoPage() {
   const nextExercise = useActiveWorkoutStore((s) => s.nextExercise)
   const skipExercise = useActiveWorkoutStore((s) => s.skipExercise)
   const markAllSets = useActiveWorkoutStore((s) => s.markAllSets)
-  const completeWorkout = useActiveWorkoutStore((s) => s.completeWorkout)
+  const markWorkoutCompleted = useActiveWorkoutStore((s) => s.completeWorkout)
   const cancelWorkout = useActiveWorkoutStore((s) => s.cancelWorkout)
+  const completeWorkoutMutation = useCompleteB2CWorkout()
 
   const [elapsed, setElapsed] = useState(0)
   const [showCancelConfirm, setShowCancelConfirm] = useState(false)
   const [editingCell, setEditingCell] = useState<{ ex: number; set: number; field: 'reps' | 'weight' } | null>(null)
   const [restTimer, setRestTimer] = useState<{ seconds: number } | null>(null)
   const [showNotes, setShowNotes] = useState(false)
+  const [finishState, setFinishState] = useState<'idle' | 'saving' | 'queued' | 'failed'>('idle')
   const inputRef = useRef<HTMLInputElement>(null)
 
   // Wake lock
@@ -128,17 +132,62 @@ export default function TreinoAtivoPage() {
     }
   }, [workout, completeSet, uncompleteSet])
 
-  const handleFinish = useCallback(() => {
-    completeWorkout()
+  const buildCompletionPayload = useCallback((): OfflineWorkoutCompletionPayload | null => {
+    if (!workout) return null
+    const durationSeconds = Math.max(1, Math.floor((Date.now() - new Date(workout.started_at).getTime() - workout.total_pause_ms) / 1000))
+    return {
+      client_completion_id: workout.client_completion_id,
+      plan_id: workout.plan_id,
+      plan_day_id: workout.plan_day_id,
+      day_number: workout.day_number,
+      started_at: workout.started_at,
+      duration_seconds: durationSeconds,
+      exercises: workout.exercises.map((exercise) => ({
+        exercise_id: exercise.exercise_id,
+        exercise_name: exercise.exercise_name,
+        muscle_group: exercise.muscle_group,
+        skipped: exercise.skipped,
+        sets: exercise.sets.map((set) => ({
+          reps: set.reps,
+          weight_kg: set.weight_kg,
+          is_warmup: set.is_warmup,
+          completed: set.completed,
+        })),
+      })),
+    }
+  }, [workout])
+
+  const handleFinish = useCallback(async () => {
+    if (!workout || finishState === 'saving') return
+    const payload = buildCompletionPayload()
+    if (!payload) return
+
+    setFinishState('saving')
+    if (!isOnline()) {
+      await queueOfflineCompletion(payload)
+      setFinishState('queued')
+    } else {
+      try {
+        await completeWorkoutMutation.mutateAsync(payload)
+      } catch {
+        if (!isOnline()) {
+          await queueOfflineCompletion(payload)
+          setFinishState('queued')
+        } else {
+          setFinishState('failed')
+          return
+        }
+      }
+    }
+
+    markWorkoutCompleted()
     releaseWakeLock()
     // Persist day completion for same-day blocking
-    if (workout) {
-      const today = new Date().toISOString().slice(0, 10)
-      const key = `vfit_day_completed_${workout.plan_id}_${workout.day_number}`
-      localStorage.setItem(key, today)
-    }
+    const today = new Date().toISOString().slice(0, 10)
+    const key = `vfit_day_completed_${workout.plan_id}_${workout.day_number}`
+    localStorage.setItem(key, today)
     router.push('/treino-ativo/concluido')
-  }, [completeWorkout, router, workout])
+  }, [buildCompletionPayload, completeWorkoutMutation, finishState, markWorkoutCompleted, router, workout])
 
   const handleCancel = useCallback(() => {
     cancelWorkout()
@@ -196,9 +245,10 @@ export default function TreinoAtivoPage() {
           <button
             type="button"
             onClick={handleFinish}
+            disabled={finishState === 'saving'}
             className="rounded-lg border border-brand-primary/30 bg-brand-primary/18 px-3 py-1.5 text-xs font-bold text-emerald-300"
           >
-            Finalizar
+            {finishState === 'saving' ? 'Salvando' : 'Finalizar'}
           </button>
         </div>
 
@@ -253,6 +303,18 @@ export default function TreinoAtivoPage() {
         </p>
 
         {/* ─── Sets table ─── */}
+        {finishState === 'failed' && (
+          <div className="mb-3 rounded-xl border border-red-500/25 bg-red-500/8 px-3 py-2 text-xs font-semibold text-red-300">
+            Nao foi possivel salvar agora. Verifique a conexao e tente finalizar novamente.
+          </div>
+        )}
+
+        {finishState === 'queued' && (
+          <div className="mb-3 rounded-xl border border-amber-500/25 bg-amber-500/8 px-3 py-2 text-xs font-semibold text-amber-300">
+            Treino guardado offline. Vamos sincronizar quando a conexao voltar.
+          </div>
+        )}
+
         <div className="overflow-hidden rounded-2xl border border-border-primary">
           {/* Table header */}
           <div className="grid grid-cols-[48px_1fr_1fr_48px] bg-bg-tertiary px-3 py-2">
@@ -450,6 +512,7 @@ export default function TreinoAtivoPage() {
               size="lg"
               className="w-full"
               onClick={handleFinish}
+              loading={finishState === 'saving'}
             >
               <DSIcon name="check" className="h-5 w-5" />
               Finalizar Treino 🎉

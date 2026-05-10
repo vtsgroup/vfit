@@ -25,6 +25,8 @@ import { SplashOrchestrator } from '@/components/layout/splash-orchestrator'
 import { useAuthStore } from '@/stores/auth-store'
 import { useB2COnboardingCompleted } from '@/hooks/use-b2c-onboarding'
 import { useEffectiveUserView } from '@/hooks/use-effective-user-view'
+import { api } from '@/lib/api-client'
+import { replayLocalCompletions } from '@/lib/offline-workout'
 
 /**
  * Migrate legacy localStorage keys (evoluia_* → vfit_*) once per device.
@@ -110,8 +112,28 @@ function AppShell({ children }: { children: React.ReactNode }) {
     await queryClient.invalidateQueries()
   }, [queryClient])
 
+  const replayQueuedWorkouts = useCallback(async () => {
+    if (typeof window === 'undefined' || !navigator.onLine) return
+    const synced = await replayLocalCompletions((url, body) => api.post(url, body))
+    if (synced > 0) {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['plans', 'current'] }),
+        queryClient.invalidateQueries({ queryKey: ['workouts'] }),
+        queryClient.invalidateQueries({ queryKey: ['xp-balance'] }),
+        queryClient.invalidateQueries({ queryKey: ['daily-goal'] }),
+      ])
+    }
+  }, [queryClient])
+
   // Migrate legacy keys before any reads
   useEffect(() => { migrateLocalStorageKeys() }, [])
+
+  useEffect(() => {
+    if (!isHydrated || !isAuthenticated) return
+    void replayQueuedWorkouts()
+    window.addEventListener('online', replayQueuedWorkouts)
+    return () => window.removeEventListener('online', replayQueuedWorkouts)
+  }, [isHydrated, isAuthenticated, replayQueuedWorkouts])
 
   useEffect(() => {
     if (!isHydrated) return

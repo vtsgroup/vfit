@@ -390,24 +390,194 @@ vfit.get('/sessions/history', async (c) => {
 // FOODS & MEALS
 // ============================================
 
+const FoodInputSchema = z.object({
+  name: z.string().min(2).max(255),
+  description: z.string().max(1000).optional(),
+  category: z.string().min(2).max(100).default('manual'),
+  calories: z.coerce.number().min(0).max(9999),
+  protein_g: z.coerce.number().min(0).max(999),
+  carbs_g: z.coerce.number().min(0).max(999),
+  fat_g: z.coerce.number().min(0).max(999),
+  fiber_g: z.coerce.number().min(0).max(999).optional().default(0),
+  sodium_mg: z.coerce.number().min(0).max(99999).optional().default(0),
+  standard_portion_g: z.coerce.number().int().min(1).max(5000).default(100),
+})
+
+async function foodFavoritesTableExists(env: AppContext['Bindings']): Promise<boolean> {
+  const row = await pgQueryOne<{ exists: boolean }>(
+    env,
+    `SELECT EXISTS (
+       SELECT 1 FROM information_schema.tables
+       WHERE table_schema = 'public' AND table_name = 'vfit_food_favorites'
+     ) as exists`,
+    []
+  )
+  return row?.exists === true
+}
+
+async function selectFoodWithFavorite(env: AppContext['Bindings'], foodId: string, userId: string) {
+  if (await foodFavoritesTableExists(env)) {
+    return pgQueryOne(
+      env,
+      `SELECT f.*, (fav.food_id IS NOT NULL) as is_favorite
+         FROM vfit_foods f
+         LEFT JOIN vfit_food_favorites fav
+           ON fav.food_id = f.id AND fav.user_id = $2
+        WHERE f.id = $1 AND (f.is_library = true OR f.creator_id = $2)
+        LIMIT 1`,
+      [foodId, userId]
+    )
+  }
+
+  return pgQueryOne(
+    env,
+    `SELECT f.*, false as is_favorite
+       FROM vfit_foods f
+      WHERE f.id = $1 AND (f.is_library = true OR f.creator_id = $2)
+      LIMIT 1`,
+    [foodId, userId]
+  )
+}
+
+/**
+ * GET /foods/recent — Alimentos usados recentemente pelo usuário
+ */
+vfit.get('/foods/recent', async (c) => {
+  const userId = c.get('userId')
+  const env = c.env
+  const limit = Math.min(parseInt(c.req.query('limit') || '12', 10), 30)
+  const hasFavorites = await foodFavoritesTableExists(env)
+
+  const foods = await pgQuery(
+    env,
+    `SELECT * FROM (
+       SELECT DISTINCT ON (f.id) f.*,
+              m.created_at as last_logged_at,
+              ${hasFavorites ? `(fav.food_id IS NOT NULL)` : `false`} as is_favorite
+         FROM vfit_user_meals m
+         JOIN vfit_foods f ON f.id = m.food_id
+         ${hasFavorites ? `LEFT JOIN vfit_food_favorites fav ON fav.food_id = f.id AND fav.user_id = $1` : ``}
+        WHERE m.user_id = $1
+        ORDER BY f.id, m.created_at DESC
+     ) recent
+      ORDER BY last_logged_at DESC
+      LIMIT $2`,
+    [userId, limit]
+  )
+
+  return c.json(success(foods.rows))
+})
+
+/**
+ * GET /foods/favorites — Favoritos do usuário
+ */
+vfit.get('/foods/favorites', async (c) => {
+  const userId = c.get('userId')
+  const env = c.env
+  const limit = Math.min(parseInt(c.req.query('limit') || '30', 10), 50)
+
+  if (!(await foodFavoritesTableExists(env))) {
+    return c.json(success([]))
+  }
+
+  const foods = await pgQuery(
+    env,
+    `SELECT f.*, true as is_favorite, fav.created_at as favorited_at
+       FROM vfit_food_favorites fav
+       JOIN vfit_foods f ON f.id = fav.food_id
+      WHERE fav.user_id = $1 AND (f.is_library = true OR f.creator_id = $1)
+      ORDER BY fav.created_at DESC
+      LIMIT $2`,
+    [userId, limit]
+  )
+
+  return c.json(success(foods.rows))
+})
+
+/**
+ * POST /foods — Entrada manual/customizada de alimento
+ */
+vfit.post('/foods', async (c) => {
+  const userId = c.get('userId')
+  const env = c.env
+  const data = FoodInputSchema.parse(await c.req.json())
+
+  const food = await pgQueryOne(
+    env,
+    `INSERT INTO vfit_foods
+      (name, description, category, calories, protein_g, carbs_g, fat_g, fiber_g, sodium_mg,
+       standard_portion_g, is_library, is_custom, creator_id, tags)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, false, true, $11, ARRAY['manual'])
+     RETURNING *, false as is_favorite`,
+    [
+      data.name.trim(), data.description || null, data.category.trim().toLowerCase(),
+      data.calories, data.protein_g, data.carbs_g, data.fat_g,
+      data.fiber_g, data.sodium_mg, data.standard_portion_g, userId,
+    ]
+  )
+
+  return c.json(created(food), 201)
+})
+
+/**
+ * POST /foods/:id/favorite — Favoritar alimento
+ */
+vfit.post('/foods/:id/favorite', async (c) => {
+  const userId = c.get('userId')
+  const env = c.env
+  const foodId = c.req.param('id')
+
+  if (!(await foodFavoritesTableExists(env))) {
+    throw new BadRequestError('Tabela de favoritos ainda nao foi migrada')
+  }
+
+  const food = await selectFoodWithFavorite(env, foodId, userId)
+  if (!food) throw new NotFoundError('Food not found')
+
+  await pgQuery(
+    env,
+    `INSERT INTO vfit_food_favorites (user_id, food_id)
+     VALUES ($1, $2)
+     ON CONFLICT (user_id, food_id) DO NOTHING`,
+    [userId, foodId]
+  )
+
+  return c.json(success({ food_id: foodId, is_favorite: true }))
+})
+
+/**
+ * DELETE /foods/:id/favorite — Remover favorito
+ */
+vfit.delete('/foods/:id/favorite', async (c) => {
+  const userId = c.get('userId')
+  const env = c.env
+  const foodId = c.req.param('id')
+
+  if (await foodFavoritesTableExists(env)) {
+    await pgQuery(env, `DELETE FROM vfit_food_favorites WHERE user_id = $1 AND food_id = $2`, [userId, foodId])
+  }
+
+  return c.json(success({ food_id: foodId, is_favorite: false }))
+})
+
 /**
  * GET /foods — Buscar alimentos (library + custom do user)
  */
 vfit.get('/foods', async (c) => {
   const userId = c.get('userId')
   const env = c.env
-  const search = c.req.query('search') || ''
+  const search = c.req.query('search') || c.req.query('q') || ''
   const category = c.req.query('category')
   const limit = Math.min(parseInt(c.req.query('limit') || '50', 10), 100)
+  const hasFavorites = await foodFavoritesTableExists(env)
 
   let where = `WHERE (f.is_library = true OR f.creator_id = $1)`
-  const params: unknown[] = [userId]
-  let idx = 2
+  const searchPattern = search ? `%${search}%` : ''
+  const params: unknown[] = [userId, searchPattern]
+  let idx = 3
 
   if (search) {
-    where += ` AND f.name ILIKE $${idx}`
-    params.push(`%${search}%`)
-    idx++
+    where += ` AND f.name ILIKE $2`
   }
   if (category) {
     where += ` AND f.category = $${idx}`
@@ -418,11 +588,18 @@ vfit.get('/foods', async (c) => {
   params.push(limit)
   const foods = await pgQuery(
     env,
-    `SELECT * FROM vfit_foods f ${where} ORDER BY f.name LIMIT $${idx}`,
+    `SELECT f.*, ${hasFavorites ? `(fav.food_id IS NOT NULL)` : `false`} as is_favorite
+     FROM vfit_foods f
+     ${hasFavorites ? `LEFT JOIN vfit_food_favorites fav ON fav.food_id = f.id AND fav.user_id = $1` : ``}
+     ${where}
+     ORDER BY
+       CASE WHEN $2 <> '' AND f.name ILIKE $2 THEN 0 ELSE 1 END,
+       f.name
+     LIMIT $${idx}`,
     params
   )
 
-  return c.json(success(foods))
+  return c.json(success(foods.rows))
 })
 
 /**
@@ -736,9 +913,16 @@ vfit.get('/food-barcode/:code', async (c) => {
   // 1. Buscar no banco local
   const localFood = await pgQueryOne(
     env,
-    `SELECT * FROM vfit_foods WHERE barcode = $1 AND is_library = true LIMIT 1`,
+    `SELECT * FROM vfit_foods
+      WHERE is_library = true
+        AND EXISTS (
+          SELECT 1 FROM information_schema.columns
+          WHERE table_schema = 'public' AND table_name = 'vfit_foods' AND column_name = 'barcode'
+        )
+        AND barcode = $1
+      LIMIT 1`,
     [code]
-  )
+  ).catch(() => null)
 
   if (localFood) {
     return c.json(success({ source: 'local', food: localFood }))

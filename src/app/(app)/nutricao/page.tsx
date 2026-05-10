@@ -8,6 +8,7 @@
 
 import { useState, useMemo, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -19,6 +20,10 @@ import { FoodCamera } from '@/components/nutrition/food-camera'
 import {
   useMealsToday,
   useFoodSearch,
+  useRecentFoods,
+  useFavoriteFoods,
+  useCreateFood,
+  useToggleFoodFavorite,
   useLogMeal,
   useNutritionTargets,
   MEAL_TYPE_LABELS,
@@ -47,7 +52,37 @@ const FOOD_CATEGORY_CONFIG: Record<string, { emoji: string; color: string; bg: s
   'bebidas': { emoji: '🥤', color: 'text-brand-primary', bg: 'bg-brand-primary/12' },
   'industrializado': { emoji: '📦', color: 'text-zinc-400', bg: 'bg-zinc-400/12' },
   'suplementos': { emoji: '💊', color: 'text-violet-400', bg: 'bg-violet-400/12' },
+  'cereais': { emoji: '🌾', color: 'text-amber-400', bg: 'bg-amber-400/12' },
+  'proteinas': { emoji: '🍗', color: 'text-red-400', bg: 'bg-red-400/12' },
+  'laticinios': { emoji: '🥛', color: 'text-zinc-300', bg: 'bg-zinc-300/12' },
+  'tuberculos': { emoji: '🍠', color: 'text-orange-400', bg: 'bg-orange-400/12' },
+  'oleos': { emoji: '🫙', color: 'text-amber-500', bg: 'bg-amber-500/12' },
+  'nozes': { emoji: '🥜', color: 'text-amber-300', bg: 'bg-amber-300/12' },
+  'sementes': { emoji: '🌱', color: 'text-lime-400', bg: 'bg-lime-400/12' },
+  'preparacoes': { emoji: '🍱', color: 'text-sky-400', bg: 'bg-sky-400/12' },
   'default': { emoji: '🍽️', color: 'text-zinc-400', bg: 'bg-zinc-400/12' },
+}
+
+const QUICK_SEARCH_TERMS = ['arroz', 'frango', 'ovo', 'banana', 'feijao', 'whey']
+const MANUAL_FOOD_CATEGORIES = [
+  'preparacoes',
+  'proteinas',
+  'cereais',
+  'frutas',
+  'vegetais',
+  'laticinios',
+  'suplementos',
+  'bebidas',
+]
+
+const EMPTY_MANUAL_FOOD = {
+  name: '',
+  category: 'preparacoes',
+  calories: '',
+  protein_g: '',
+  carbs_g: '',
+  fat_g: '',
+  standard_portion_g: '100',
 }
 
 function getFoodCategoryConfig(category: string) {
@@ -82,6 +117,8 @@ export default function NutricaoPage() {
   const [selectedMealType, setSelectedMealType] = useState<MealType>('lunch')
   const [selectedFood, setSelectedFood] = useState<VfitFood | null>(null)
   const [quantity, setQuantity] = useState(100)
+  const [showManualFood, setShowManualFood] = useState(false)
+  const [manualFood, setManualFood] = useState(EMPTY_MANUAL_FOOD)
   const [showBarcode, setShowBarcode] = useState(false)
   const [showFoodCamera, setShowFoodCamera] = useState(false)
   const [nutritionistReferralCode, setNutritionistReferralCode] = useState('')
@@ -92,12 +129,18 @@ export default function NutricaoPage() {
 
   const { data: dailyData, isLoading } = useMealsToday(selectedDate)
   const { data: foods, isLoading: searchLoading } = useFoodSearch(searchQuery)
+  const { data: recentFoods = [] } = useRecentFoods(showSearch && !selectedFood)
+  const { data: favoriteFoods = [] } = useFavoriteFoods(showSearch && !selectedFood)
   const { data: targets = { calories: 2000, protein: 150, carbs: 250, fat: 65 } } =
     useNutritionTargets()
   const logMeal = useLogMeal()
+  const createFood = useCreateFood()
+  const toggleFavorite = useToggleFoodFavorite()
 
   const totals = dailyData?.totals ?? { calories: 0, protein: 0, carbs: 0, fat: 0 }
   const meals = useMemo(() => dailyData?.meals ?? [], [dailyData?.meals])
+  const favoriteIds = useMemo(() => new Set(favoriteFoods.map((food) => food.id)), [favoriteFoods])
+  const selectedFoodIsFavorite = selectedFood ? Boolean(selectedFood.is_favorite || favoriteIds.has(selectedFood.id)) : false
 
   const grouped = useMemo(() => {
     const map = new Map<MealType, typeof meals>()
@@ -187,6 +230,76 @@ export default function NutricaoPage() {
           setQuantity(100)
         },
       }
+    )
+  }
+
+  function handleCreateManualFood() {
+    const name = manualFood.name.trim()
+    if (!name) return
+
+    createFood.mutate(
+      {
+        name,
+        category: manualFood.category,
+        calories: Number(manualFood.calories) || 0,
+        protein_g: Number(manualFood.protein_g) || 0,
+        carbs_g: Number(manualFood.carbs_g) || 0,
+        fat_g: Number(manualFood.fat_g) || 0,
+        standard_portion_g: Math.max(1, Number(manualFood.standard_portion_g) || 100),
+      },
+      {
+        onSuccess: (food) => {
+          setSelectedFood(food)
+          setQuantity(food.standard_portion_g || 100)
+          setSearchQuery(food.name)
+          setShowManualFood(false)
+          setManualFood(EMPTY_MANUAL_FOOD)
+        },
+      }
+    )
+  }
+
+  function pickFood(food: VfitFood) {
+    setSelectedFood(food)
+    setQuantity(food.standard_portion_g || 100)
+    setShowManualFood(false)
+  }
+
+  function renderFoodRow(food: VfitFood, label?: string) {
+    const cat = getFoodCategoryConfig(food.category)
+    const favorite = Boolean(food.is_favorite || favoriteIds.has(food.id))
+    return (
+      <button
+        key={food.id}
+        onClick={() => pickFood({ ...food, is_favorite: favorite })}
+        className="flex w-full items-center gap-3 rounded-xl bg-bg-secondary p-3 text-left transition-colors hover:bg-bg-tertiary active:scale-[0.99]"
+      >
+        <div
+          className={cn(
+            'flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-base',
+            cat.bg
+          )}
+        >
+          {cat.emoji}
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-sm font-medium text-text-primary">
+            {food.name}
+          </p>
+          <p className={cn('text-xs capitalize', cat.color)}>
+            {label || food.category}
+          </p>
+        </div>
+        <div className="ml-1 text-right text-xs text-text-secondary">
+          <div className="flex items-center justify-end gap-1">
+            {favorite && <DSIcon name="star" size={12} className="text-amber-300" />}
+            <span className="font-bold">{food.calories} kcal</span>
+          </div>
+          <p className="text-text-muted">
+            P:{food.protein_g} C:{food.carbs_g} G:{food.fat_g}
+          </p>
+        </div>
+      </button>
     )
   }
 
@@ -340,9 +453,12 @@ export default function NutricaoPage() {
           {showNutritionQr && (
             <div className="mt-4 flex justify-center">
               {nutritionInviteQrUrl ? (
-                <img
+                <Image
                   src={nutritionInviteQrUrl}
                   alt="QR Code convite nutricionista"
+                  width={176}
+                  height={176}
+                  unoptimized
                   className="h-44 w-44 rounded-xl border border-white/12 bg-white p-2"
                 />
               ) : (
@@ -450,6 +566,7 @@ export default function NutricaoPage() {
                 setShowSearch(false)
                 setSelectedFood(null)
                 setSearchQuery('')
+                setShowManualFood(false)
               }}
               className="p-1"
             >
@@ -460,6 +577,18 @@ export default function NutricaoPage() {
             </h2>
             {!selectedFood && (
               <>
+                <button
+                  onClick={() => setShowManualFood((value) => !value)}
+                  title="Adicionar alimento manual"
+                  className={cn(
+                    'flex h-8 w-8 items-center justify-center rounded-full transition-colors',
+                    showManualFood
+                      ? 'bg-brand-primary text-bg-primary'
+                      : 'bg-bg-secondary text-text-secondary hover:bg-bg-tertiary hover:text-text-primary'
+                  )}
+                >
+                  <DSIcon name="edit" size={16} />
+                </button>
                 <button
                   onClick={() => {
                     setShowSearch(false)
@@ -488,8 +617,34 @@ export default function NutricaoPage() {
             /* ── Log form ── */
             <div className="flex flex-1 flex-col p-4">
               <div className="glass-card mb-6">
-                <p className="font-bold text-text-primary">{selectedFood.name}</p>
-                <p className="mt-1 text-xs capitalize text-text-muted">{selectedFood.category}</p>
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0 flex-1">
+                    <p className="font-bold text-text-primary">{selectedFood.name}</p>
+                    <p className="mt-1 text-xs capitalize text-text-muted">{selectedFood.category}</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const nextFavorite = !selectedFoodIsFavorite
+                      toggleFavorite.mutate(
+                        { foodId: selectedFood.id, favorite: nextFavorite },
+                        {
+                          onSuccess: () => setSelectedFood({ ...selectedFood, is_favorite: nextFavorite }),
+                        }
+                      )
+                    }}
+                    disabled={toggleFavorite.isPending}
+                    className={cn(
+                      'flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border transition-colors',
+                      selectedFoodIsFavorite
+                        ? 'border-amber-400/40 bg-amber-400/12 text-amber-300'
+                        : 'border-white/8 bg-white/6 text-text-muted hover:text-amber-300'
+                    )}
+                    title={selectedFoodIsFavorite ? 'Remover dos favoritos' : 'Favoritar alimento'}
+                  >
+                    <DSIcon name="star" size={16} />
+                  </button>
+                </div>
                 <div className="mt-3 grid grid-cols-4 gap-2 text-center text-xs">
                   <div>
                     <span className="font-bold text-text-primary">{selectedFood.calories}</span>
@@ -626,12 +781,94 @@ export default function NutricaoPage() {
               </div>
 
               <div className="flex-1 overflow-y-auto px-4 py-2">
-                {searchQuery.length < 2 ? (
+                {showManualFood ? (
+                  <div className="space-y-4 py-4">
+                    <div className="rounded-2xl border border-brand-primary/20 bg-brand-primary/6 p-4">
+                      <div className="mb-4 flex items-center gap-2">
+                        <DSIcon name="edit" size={16} className="text-brand-primary" />
+                        <p className="text-sm font-bold text-text-primary">Entrada manual</p>
+                      </div>
+                      <div className="space-y-3">
+                        <Input
+                          value={manualFood.name}
+                          onChange={(e) => setManualFood((food) => ({ ...food, name: e.target.value }))}
+                          placeholder="Nome do alimento"
+                        />
+                        <select
+                          value={manualFood.category}
+                          onChange={(e) => setManualFood((food) => ({ ...food, category: e.target.value }))}
+                          className="w-full rounded-xl border border-white/8 bg-bg-secondary px-3 py-2.5 text-sm text-text-primary outline-none focus:border-brand-primary"
+                        >
+                          {MANUAL_FOOD_CATEGORIES.map((category) => (
+                            <option key={category} value={category}>{category}</option>
+                          ))}
+                        </select>
+                        <div className="grid grid-cols-2 gap-2">
+                          <input
+                            type="number"
+                            value={manualFood.calories}
+                            onChange={(e) => setManualFood((food) => ({ ...food, calories: e.target.value }))}
+                            placeholder="kcal"
+                            className="rounded-xl border border-white/8 bg-bg-secondary px-3 py-2.5 text-sm text-text-primary outline-none focus:border-brand-primary"
+                          />
+                          <input
+                            type="number"
+                            value={manualFood.standard_portion_g}
+                            onChange={(e) => setManualFood((food) => ({ ...food, standard_portion_g: e.target.value }))}
+                            placeholder="Porção g"
+                            className="rounded-xl border border-white/8 bg-bg-secondary px-3 py-2.5 text-sm text-text-primary outline-none focus:border-brand-primary"
+                          />
+                          <input
+                            type="number"
+                            value={manualFood.protein_g}
+                            onChange={(e) => setManualFood((food) => ({ ...food, protein_g: e.target.value }))}
+                            placeholder="Proteína g"
+                            className="rounded-xl border border-white/8 bg-bg-secondary px-3 py-2.5 text-sm text-text-primary outline-none focus:border-brand-primary"
+                          />
+                          <input
+                            type="number"
+                            value={manualFood.carbs_g}
+                            onChange={(e) => setManualFood((food) => ({ ...food, carbs_g: e.target.value }))}
+                            placeholder="Carbo g"
+                            className="rounded-xl border border-white/8 bg-bg-secondary px-3 py-2.5 text-sm text-text-primary outline-none focus:border-brand-primary"
+                          />
+                          <input
+                            type="number"
+                            value={manualFood.fat_g}
+                            onChange={(e) => setManualFood((food) => ({ ...food, fat_g: e.target.value }))}
+                            placeholder="Gordura g"
+                            className="rounded-xl border border-white/8 bg-bg-secondary px-3 py-2.5 text-sm text-text-primary outline-none focus:border-brand-primary"
+                          />
+                        </div>
+                      </div>
+                      <Button
+                        className="mt-4 w-full"
+                        onClick={handleCreateManualFood}
+                        loading={createFood.isPending}
+                        disabled={!manualFood.name.trim()}
+                      >
+                        <DSIcon name="save" size={16} />
+                        Salvar e registrar
+                      </Button>
+                    </div>
+                  </div>
+                ) : searchQuery.length < 2 ? (
                   <div className="flex flex-col items-center justify-center pt-16 text-center">
                     <DSIcon name="search" size={32} className="mb-3 text-text-muted/50" />
                     <p className="text-sm text-text-muted">
                       Digite pelo menos 2 letras para buscar
                     </p>
+                    <div className="mt-5 flex max-w-xs flex-wrap justify-center gap-2">
+                      {QUICK_SEARCH_TERMS.map((term) => (
+                        <button
+                          key={term}
+                          onClick={() => setSearchQuery(term)}
+                          className="rounded-full border border-white/8 bg-bg-secondary px-3 py-1.5 text-xs font-semibold text-text-secondary transition-colors hover:bg-bg-tertiary"
+                        >
+                          {term}
+                        </button>
+                      ))}
+                    </div>
                     <div className="mt-6 flex gap-3">
                       <button
                         onClick={() => {
@@ -654,6 +891,32 @@ export default function NutricaoPage() {
                         Identificar foto
                       </button>
                     </div>
+                    {(favoriteFoods.length > 0 || recentFoods.length > 0) && (
+                      <div className="mt-8 w-full space-y-5 text-left">
+                        {favoriteFoods.length > 0 && (
+                          <section>
+                            <h3 className="mb-2 flex items-center gap-1.5 text-[11px] font-bold uppercase text-amber-300">
+                              <DSIcon name="star" size={13} />
+                              Favoritos
+                            </h3>
+                            <div className="space-y-2">
+                              {favoriteFoods.slice(0, 6).map((food) => renderFoodRow(food, 'favorito'))}
+                            </div>
+                          </section>
+                        )}
+                        {recentFoods.length > 0 && (
+                          <section>
+                            <h3 className="mb-2 flex items-center gap-1.5 text-[11px] font-bold uppercase text-text-muted">
+                              <DSIcon name="clock" size={13} />
+                              Recentes
+                            </h3>
+                            <div className="space-y-2">
+                              {recentFoods.slice(0, 6).map((food) => renderFoodRow(food, 'recente'))}
+                            </div>
+                          </section>
+                        )}
+                      </div>
+                    )}
                   </div>
                 ) : searchLoading ? (
                   <div className="flex items-center justify-center pt-16">
@@ -664,45 +927,14 @@ export default function NutricaoPage() {
                     <p className="text-sm text-text-muted">
                       Nenhum alimento encontrado para &quot;{searchQuery}&quot;
                     </p>
+                    <Button variant="secondary" size="sm" className="mt-4" onClick={() => setShowManualFood(true)}>
+                      <DSIcon name="edit" size={14} />
+                      Cadastrar manualmente
+                    </Button>
                   </div>
                 ) : (
                   <div className="space-y-2">
-                    {foods.map((food) => {
-                      const cat = getFoodCategoryConfig(food.category)
-                      return (
-                        <button
-                          key={food.id}
-                          onClick={() => {
-                            setSelectedFood(food)
-                            setQuantity(food.standard_portion_g || 100)
-                          }}
-                          className="flex w-full items-center gap-3 rounded-xl bg-bg-secondary p-3 text-left transition-colors hover:bg-bg-tertiary active:scale-[0.99]"
-                        >
-                          <div
-                            className={cn(
-                              'flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-base',
-                              cat.bg
-                            )}
-                          >
-                            {cat.emoji}
-                          </div>
-                          <div className="min-w-0 flex-1">
-                            <p className="truncate text-sm font-medium text-text-primary">
-                              {food.name}
-                            </p>
-                            <p className={cn('text-xs capitalize', cat.color)}>
-                              {food.category}
-                            </p>
-                          </div>
-                          <div className="ml-1 text-right text-xs text-text-secondary">
-                            <span className="font-bold">{food.calories} kcal</span>
-                            <p className="text-text-muted">
-                              P:{food.protein_g} C:{food.carbs_g} G:{food.fat_g}
-                            </p>
-                          </div>
-                        </button>
-                      )
-                    })}
+                    {foods.map((food) => renderFoodRow(food))}
                   </div>
                 )}
               </div>
