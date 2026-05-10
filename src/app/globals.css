@@ -2615,20 +2615,9 @@ html.light {
   box-shadow: 0 -4px 24px rgba(0,0,0,0.25), 0 0 32px rgba(61,252,164,0.04), inset 0 1px 0 rgba(125,211,252,0.12);
 }
 
-/* Bottom nav top-edge gradient — soft fade from content into glass nav */
+/* Bottom nav top-edge gradient — removed */
 .mobile-bottom-nav::before {
-  content: '';
-  position: absolute;
-  bottom: 100%;
-  left: 0;
-  right: 0;
-  height: 42px;
-  background:
-    radial-gradient(130% 90% at 50% 100%, rgba(11,29,54,0.42) 0%, rgba(9,22,44,0.26) 42%, transparent 76%),
-    linear-gradient(to top, rgba(5,10,18,0.94) 0%, rgba(5,10,18,0.72) 52%, transparent 100%);
-  opacity: 1;
-  pointer-events: none;
-  z-index: 0;
+  display: none;
 }
 
 /* Bottom nav bottom-edge gradient — blends solid safe-area fill upward into glass nav.

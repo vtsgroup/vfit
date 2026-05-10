@@ -157,9 +157,7 @@ export function StudentHeader() {
             aria-label={`${xpData?.balance ?? 0} XP, nível ${xpData?.level ?? 1}`}
             style={{ boxShadow: 'inset 0 1px 0 rgba(52,211,153,0.06)' }}
           >
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M13 2L4.5 13.5H11L10 22L20.5 10H14L13 2Z" fill="#34d399" />
-            </svg>
+            <span aria-hidden="true" style={{ fontSize: '13px', lineHeight: 1 }}>🪙</span>
             <span className="text-[11px] font-bold tabular-nums leading-none text-emerald-300">{xpData?.balance ?? 0}</span>
           </Link>
 
