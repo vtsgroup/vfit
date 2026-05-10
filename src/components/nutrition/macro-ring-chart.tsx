@@ -10,7 +10,7 @@
  */
 'use client'
 
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import { cn } from '@/lib/utils'
 import { DSIcon } from '@/components/ui/ds-icon'
 
@@ -58,7 +58,6 @@ export function MacroRingChart({
   const [mounted, setMounted] = useState(false)
   const [tooltip, setTooltip] = useState<TooltipState>({ key: null, x: 0, y: 0 })
   const [hiddenMacros, setHiddenMacros] = useState<Set<string>>(new Set())
-  const svgRef = useRef<SVGSVGElement>(null)
   const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   useEffect(() => {
@@ -73,6 +72,10 @@ export function MacroRingChart({
       else next.add(key)
       return next
     })
+  }
+
+  const showTooltip = (key: string, x: number, y: number) => {
+    setTooltip({ key, x, y })
   }
 
   const cx = size / 2
@@ -271,7 +274,8 @@ export function MacroRingChart({
                   cursor: 'pointer',
                 }}
                 onClick={() => toggleMacro(m.key)}
-                onMouseEnter={() => setTooltip({ key: m.key, x: cx, y: cy - innerR - 20 })}
+                onMouseEnter={(e) => showTooltip(m.key, e.clientX, e.clientY - 10)}
+                onMouseMove={(e) => showTooltip(m.key, e.clientX, e.clientY - 10)}
                 onMouseLeave={() => setTooltip({ key: null, x: 0, y: 0 })}
                 role="button"
                 tabIndex={0}
@@ -338,6 +342,11 @@ export function MacroRingChart({
             <button
               key={m.key}
               onClick={() => toggleMacro(m.key)}
+              onMouseEnter={(e) => {
+                const r = e.currentTarget.getBoundingClientRect()
+                showTooltip(m.key, r.left + r.width / 2, r.top - 8)
+              }}
+              onMouseLeave={() => setTooltip({ key: null, x: 0, y: 0 })}
               className={cn(
                 'flex w-full items-center gap-3 rounded-xl border-t border-x border-b-2 px-2.5 py-1.5 transition-all active:translate-y-px',
                 isHidden
@@ -417,10 +426,7 @@ export function MacroRingChart({
       )}
 
       {/* ── Calorie target footer ── */}
-      <div
-        className="mt-4 flex items-center justify-center gap-2 rounded-full border border-emerald-200/80 bg-white/70 py-1"
-        style={{ borderTop: '1px solid rgba(15,23,42,0.08)', paddingTop: '12px' }}
-      >
+      <div className="mt-4 flex items-center justify-center gap-2 rounded-full border border-emerald-200/80 bg-white/70 py-2">
         <span
           className="text-[9px] font-bold uppercase tracking-[0.2em]"
           style={{ color: 'rgba(15,23,42,0.36)' }}
