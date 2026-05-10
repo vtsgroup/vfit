@@ -15,7 +15,6 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { Syne, DM_Sans } from "next/font/google";
-import { DeferredGA4 } from "@/components/analytics/deferred-ga4";
 import { Providers } from "@/components/providers";
 import { DeferredComponents } from "@/components/layout/deferred-components";
 import { LazyWebVitals } from "@/components/analytics/lazy-web-vitals";
@@ -222,8 +221,21 @@ export default function RootLayout({
         <SoftwareApplicationSchema />
         <OrganizationSchema />
         <WebSiteSchema />
+        <Script
+          id="ga4-script"
+          src="https://www.googletagmanager.com/gtag/js?id=G-XGXZ4R6JXH"
+          strategy="afterInteractive"
+        />
+        <Script id="ga4-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            window.gtag = gtag;
+            gtag('js', new Date());
+            gtag('config', 'G-XGXZ4R6JXH');
+          `}
+        </Script>
         <LazyWebVitals />
-        <DeferredGA4 />
         <Providers>
           <DeferredComponents />
           {children}
