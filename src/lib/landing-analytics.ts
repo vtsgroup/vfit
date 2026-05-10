@@ -108,13 +108,6 @@ export function trackLandingEvent(event: LandingEventName, params: EventParams =
   })
 
   try {
-    ;(window as Window & { dataLayer?: unknown[] }).dataLayer =
-      (window as Window & { dataLayer?: unknown[] }).dataLayer || []
-    ;(window as Window & { dataLayer?: unknown[] }).dataLayer?.push({
-      event,
-      ...payload,
-    })
-
     const gtag = (window as Window & {
       gtag?: (command: string, name: string, data?: Record<string, unknown>) => void
     }).gtag
@@ -137,6 +130,34 @@ export function trackLandingEvent(event: LandingEventName, params: EventParams =
           placement: params.placement,
           plan: params.plan,
         }))
+      }
+    } else {
+      ;(window as Window & { dataLayer?: unknown[] }).dataLayer =
+        (window as Window & { dataLayer?: unknown[] }).dataLayer || []
+      ;(window as Window & { dataLayer?: unknown[] }).dataLayer?.push(['event', event, payload])
+
+      if (event === 'lp_cta_primary_click' || event === 'lp_cta_secondary_click') {
+        ;(window as Window & { dataLayer?: unknown[] }).dataLayer?.push([
+          'event',
+          'cta_click',
+          cleanParams({
+            cta_location: params.placement,
+            cta_text: params.cta,
+            page_path: window.location.pathname,
+          }),
+        ])
+      }
+
+      if (event === 'lp_register_start') {
+        ;(window as Window & { dataLayer?: unknown[] }).dataLayer?.push([
+          'event',
+          'signup_start',
+          cleanParams({
+            source_page: window.location.pathname,
+            placement: params.placement,
+            plan: params.plan,
+          }),
+        ])
       }
     }
   } catch {

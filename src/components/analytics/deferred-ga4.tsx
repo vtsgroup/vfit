@@ -42,6 +42,11 @@ export function DeferredGA4() {
       const events = ['scroll', 'click', 'touchstart', 'mousemove', 'keydown'] as const
       events.forEach(e => window.removeEventListener(e, loadGA, { capture: true }))
 
+      // Ensure queue is compatible with gtag.js replay (array commands only)
+      if (Array.isArray(window.dataLayer)) {
+        window.dataLayer = window.dataLayer.filter((entry) => Array.isArray(entry))
+      }
+
       // Inject gtag.js script
       const script = document.createElement('script')
       script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`
