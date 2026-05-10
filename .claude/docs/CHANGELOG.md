@@ -7,6 +7,12 @@
 
 ## [Unreleased] — 2026-04-08 — Sprint 11-15 (UX Nutrição/Exercícios)
 
+### 🎨 Hotfix v4.1.7 — Streaks + IA premium e continuidade real (2026-05-10)
+- **Continuidade corrigida de raiz:** `vfit-app-hero-gradient` agora mantém a cor final do header nos primeiros 11% do hero e desloca os glows para baixo, removendo a quebra visual relatada entre header e heróis.
+- **Streaks ultra premium:** [src/app/(app)/progresso/streaks/page.tsx](src/app/(app)/progresso/streaks/page.tsx) foi refeito como cockpit de consistência com hero contínuo, progresso de marco, métricas claras, ritual semanal, calendário e conquistas em cards premium light.
+- **IA como command center:** [src/app/(app)/ia/page.tsx](src/app/(app)/ia/page.tsx) ganhou hero premium, modo `?action=goals`, seletor de foco, metas inteligentes, atalhos de IA, rotas especializadas e dicas sem emoji visual.
+- **Mais opções IA:** [src/types/ia-consultation.ts](src/types/ia-consultation.ts) libera macros, treino adaptado e recuperação como rotas clicáveis no hub.
+
 ### 🎨 Hotfix v4.1.6 — Continuidade do gradiente no perfil (2026-05-10)
 - **Hero do perfil alinhado ao header:** [src/app/(app)/perfil/page.tsx](src/app/(app)/perfil/page.tsx) agora usa `vfit-app-hero-gradient`, mantendo a sequência visual do header escuro para o topo da página.
 - **Subpáginas do perfil consistentes:** [src/components/profile/settings-shell.tsx](src/components/profile/settings-shell.tsx) aplica o mesmo gradiente nos heróis de assinatura, sobre, editar, novidades, unidades, equipamentos, descanso, lembretes, notificações, gamificação, desafios e offline.

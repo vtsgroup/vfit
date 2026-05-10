@@ -20,11 +20,11 @@ const MONTHS_PT = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set'
 
 /** Intensity levels → Tailwind classes (dark-mode optimized) */
 const INTENSITY_CLASSES = [
-  'bg-white/4',                          // 0 — empty
-  'bg-emerald-900/60',                   // 1 — light
-  'bg-emerald-700/70',                   // 2 — medium
-  'bg-emerald-500/80',                   // 3 — strong
-  'bg-emerald-400',                      // 4+ — max
+  'bg-slate-200/80 dark:bg-white/4',
+  'bg-emerald-100 dark:bg-emerald-900/60',
+  'bg-emerald-300 dark:bg-emerald-700/70',
+  'bg-emerald-500/80 dark:bg-emerald-500/80',
+  'bg-emerald-600 dark:bg-emerald-400',
 ] as const
 
 // ============================================

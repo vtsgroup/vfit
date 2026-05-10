@@ -38,7 +38,7 @@ export const IA_CONSULTATION_OPTIONS: IAConsultationOption[] = [
     icon: 'dumbbell',
     description: 'Ajuste seu treino conforme seus objetivos',
     route: '/ia/treino-adaptado',
-    isAvailable: false,
+    isAvailable: true,
   },
   {
     id: 'macro_guidance',
@@ -46,7 +46,7 @@ export const IA_CONSULTATION_OPTIONS: IAConsultationOption[] = [
     icon: 'barChart',
     description: 'Entenda seus macronutrientes ideais',
     route: '/ia/macros',
-    isAvailable: false,
+    isAvailable: true,
   },
   {
     id: 'recovery_guide',
@@ -54,6 +54,6 @@ export const IA_CONSULTATION_OPTIONS: IAConsultationOption[] = [
     icon: 'moon',
     description: 'Otimize seu descanso e recuperação',
     route: '/ia/recuperacao',
-    isAvailable: false,
+    isAvailable: true,
   },
 ]
