@@ -11,6 +11,7 @@
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import { DSIcon } from '@/components/ui/ds-icon'
+import { Button } from '@/components/ui/button'
 import { KPICard, MiniBarChart, ProgressoPageSkeleton } from '@/components/progresso'
 import { useProgressSummary, useProgressChart, useStreak, useTopExercises, useExerciseProgress, type TopExercise } from '@/hooks/use-progress'
 
@@ -193,9 +194,15 @@ export default function ProgressoPage() {
             <DSIcon name="barChart" size={28} className="text-brand-primary" />
           </div>
           <h2 className="text-base font-bold text-text-primary">Comece a treinar</h2>
-          <p className="mt-2 text-[13px] text-text-muted max-w-xs">
+          <p className="mt-2 mb-5 text-[13px] text-text-muted max-w-xs">
             Seus gráficos de evolução, recordes pessoais e streak aparecerão aqui após seus primeiros treinos.
           </p>
+          <Link href="/treinos">
+            <Button>
+              <DSIcon name="dumbbell" size={16} />
+              Ver meu treino de hoje
+            </Button>
+          </Link>
         </div>
       )}
 

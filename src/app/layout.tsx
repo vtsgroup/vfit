@@ -151,8 +151,6 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
-        {/* Preload logo SVG — evita FOIT e melhora LCP */}
-        <link rel="preload" href="/images/vfit-logo-white.svg" as="image" type="image/svg+xml" />
         {/* dns-prefetch para terceiros (leve, sem conexão TCP) */}
         <link rel="dns-prefetch" href="https://api.vfit.app.br" />
         {/* preconnect removido: GA4 agora é deferred até interação */}

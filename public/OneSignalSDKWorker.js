@@ -11,7 +11,7 @@ try {
   console.warn('[SW] OneSignal SW script failed to load (likely ad blocker):', e.message)
 }
 
-const CACHE_VERSION = 'v8'
+const CACHE_VERSION = 'v9'
 const CACHE_STATIC = `vfit-static-${CACHE_VERSION}`
 const CACHE_DYNAMIC = `vfit-dynamic-${CACHE_VERSION}`
 const CACHE_API = `vfit-api-${CACHE_VERSION}`
@@ -123,11 +123,16 @@ self.addEventListener('fetch', (event) => {
 
 async function cacheFirst(request, cacheName) {
   const cached = await caches.match(request)
-  if (cached) return cached
+  if (cached) {
+    if (isUsableStaticResponse(request, cached)) return cached
+    const cache = await caches.open(cacheName)
+    await cache.delete(request)
+  }
 
   try {
     const response = await fetch(request)
     if (response.ok) {
+      if (!isUsableStaticResponse(request, response)) return response
       const cache = await caches.open(cacheName)
       cache.put(request, response.clone())
     }
@@ -199,6 +204,20 @@ async function navigationHandler(request) {
 function isStaticAsset(pathname) {
   return /\.(js|css|png|jpg|jpeg|gif|svg|webp|woff|woff2|ttf|eot|ico)$/i.test(pathname) ||
     pathname.startsWith('/_next/static/')
+}
+
+function isUsableStaticResponse(request, response) {
+  const pathname = new URL(request.url).pathname
+  const contentType = response.headers.get('Content-Type') || ''
+
+  if (pathname.endsWith('.js') || pathname.startsWith('/_next/static/chunks/')) {
+    return contentType.includes('javascript') || contentType.includes('ecmascript')
+  }
+
+  if (pathname.endsWith('.css')) return contentType.includes('text/css')
+  if (/\.(png|jpg|jpeg|gif|svg|webp|ico)$/i.test(pathname)) return contentType.startsWith('image/')
+
+  return true
 }
 
 async function trimCache(cacheName, maxEntries) {

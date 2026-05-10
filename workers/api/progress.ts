@@ -21,6 +21,20 @@ const progress = new Hono<AppContext>()
 
 progress.use('*', authMiddleware)
 
+export const TOP_EXERCISES_QUERY = `SELECT
+      el.exercise_id,
+      COUNT(DISTINCT ws.id)::text as session_count,
+      MAX(el.weight_kg)::text as max_weight,
+      MAX(ws.started_at)::text as last_performed
+    FROM exercise_logs el
+    JOIN workout_sessions ws ON ws.id = el.session_id
+    WHERE ws.user_id = $1
+      AND ws.status = 'completed'
+      AND ws.started_at >= NOW() - interval '90 days'
+    GROUP BY el.exercise_id
+    ORDER BY COUNT(DISTINCT ws.id) DESC
+    LIMIT $2`
+
 // ============================================
 // GET /summary — KPIs por período
 // ============================================
@@ -486,38 +500,45 @@ progress.get('/exercise/:id', async (c) => {
 progress.get('/top-exercises', async (c) => {
   const userId = c.get('userId')
   const env = c.env
-  const limit = Math.min(parseInt(c.req.query('limit') || '5', 10), 10)
+  const requestedLimit = Number.parseInt(c.req.query('limit') || '5', 10)
+  const limit = Number.isFinite(requestedLimit) && requestedLimit > 0
+    ? Math.min(requestedLimit, 10)
+    : 5
 
   const result = await pgQuery<{
     exercise_id: string
-    exercise_name: string
     session_count: string
     max_weight: string | null
     last_performed: string
   }>(
     env,
-    `SELECT 
-      el.exercise_id,
-      COALESCE(e.name_pt, e.name, el.exercise_id) as exercise_name,
-      COUNT(DISTINCT ws.id)::text as session_count,
-      MAX(el.weight_kg)::text as max_weight,
-      MAX(ws.started_at)::text as last_performed
-    FROM exercise_logs el
-    JOIN workout_sessions ws ON ws.id = el.session_id
-    LEFT JOIN exercises e ON e.id = el.exercise_id
-    WHERE ws.user_id = $1
-      AND ws.status = 'completed'
-      AND ws.started_at >= NOW() - interval '90 days'
-    GROUP BY el.exercise_id, e.name_pt, e.name
-    ORDER BY COUNT(DISTINCT ws.id) DESC
-    LIMIT $2`,
+    TOP_EXERCISES_QUERY,
     [userId, limit]
   )
+
+  const exerciseIds = result.rows.map((row) => row.exercise_id)
+  const exerciseNames = new Map<string, string>()
+
+  if (exerciseIds.length > 0) {
+    try {
+      const placeholders = exerciseIds.map(() => '?').join(', ')
+      const d1Result = await env.DB
+        .prepare(`SELECT id, COALESCE(name_pt, name, id) as exercise_name FROM exercises WHERE id IN (${placeholders})`)
+        .bind(...exerciseIds)
+        .all<{ id: string; exercise_name: string }>()
+
+      for (const exercise of d1Result.results ?? []) {
+        exerciseNames.set(exercise.id, exercise.exercise_name)
+      }
+    } catch (err) {
+      console.warn('[Progress] D1 exercise names lookup failed:', err instanceof Error ? err.message : err)
+    }
+  }
 
   return c.json(success({
     exercises: result.rows.map(r => ({
       exercise_id: r.exercise_id,
-      exercise_name: r.exercise_name,
+      exercise_name: exerciseNames.get(r.exercise_id) || r.exercise_id,
       session_count: parseInt(r.session_count, 10),
       max_weight: r.max_weight ? parseFloat(r.max_weight) : null,
       last_performed: r.last_performed,

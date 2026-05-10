@@ -230,7 +230,7 @@ export default function RegisterStudentPage() {
                   width={160}
                   height={32}
                   className="w-auto transition-transform duration-300 group-hover:scale-105"
-                  style={{ height: '40px', filter: 'drop-shadow(0 0 20px rgba(16,185,129,0.7))' }}
+                  style={{ width: 'auto', height: '40px', filter: 'drop-shadow(0 0 20px rgba(16,185,129,0.7))' }}
                   priority
                 />
               </Link>

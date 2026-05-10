@@ -504,7 +504,7 @@ vfit.get('/meals/today', async (c) => {
 
   return c.json(success({
     date,
-    meals,
+    meals: meals.rows,
     totals: {
       calories: parseFloat(totals?.total_calories || '0'),
       protein: parseFloat(totals?.total_protein || '0'),

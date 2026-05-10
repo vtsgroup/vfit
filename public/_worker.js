@@ -45,6 +45,10 @@ const PERMANENT_REDIRECTS = {
   '/default-icon': '/icons/icon-192.png',
 };
 
+function isAssetRequest(pathname) {
+  return pathname.startsWith('/_next/static/') || /\.[a-z0-9]{2,8}$/i.test(pathname);
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -120,6 +124,19 @@ export default {
       }
     } catch {
       // Asset not found, fall through to SPA fallback
+    }
+
+    // Missing hashed assets must stay 404. Serving index HTML for an old JS/CSS
+    // chunk makes browsers reject it as "text/html" and can break the app shell.
+    if (isAssetRequest(pathname)) {
+      return new Response('Not Found', {
+        status: 404,
+        headers: {
+          'Content-Type': 'text/plain; charset=utf-8',
+          'Cache-Control': 'no-store',
+          'X-Content-Type-Options': 'nosniff',
+        },
+      });
     }
 
     // 5. SPA fallback — serve index.html for client-side routing

@@ -66,6 +66,29 @@ interface ExercisesResult {
   }
 }
 
+function cleanMediaUrl(url: string | null): string | null {
+  if (!url) return null
+
+  try {
+    const pathname = new URL(url, 'https://vfit.app.br').pathname.toLowerCase()
+    if (/\/(image_url|image_male_url|image_female_url)\.png$/.test(pathname)) return null
+  } catch {
+    if (/\/(image_url|image_male_url|image_female_url)\.png$/i.test(url)) return null
+  }
+
+  return url
+}
+
+function cleanMuscleGroupMedia(group: MuscleGroup): MuscleGroup {
+  return {
+    ...group,
+    image_url: cleanMediaUrl(group.image_url),
+    image_male_url: cleanMediaUrl(group.image_male_url),
+    image_female_url: cleanMediaUrl(group.image_female_url),
+    sub_muscles: group.sub_muscles?.map(cleanMuscleGroupMedia),
+  }
+}
+
 // ============================================
 // Hooks
 // ============================================
@@ -106,8 +129,13 @@ export function useMuscleGroups() {
     queryKey: ['muscle-groups'],
     queryFn: async () => {
       const res = await api.get<MuscleGroup[] | { muscle_groups?: MuscleGroup[] }>('/muscle-groups')
-      if (Array.isArray(res.data)) return res.data
-      return Array.isArray(res.data?.muscle_groups) ? res.data.muscle_groups : []
+      const muscleGroups = Array.isArray(res.data)
+        ? res.data
+        : Array.isArray(res.data?.muscle_groups)
+          ? res.data.muscle_groups
+          : []
+
+      return muscleGroups.map(cleanMuscleGroupMedia)
     },
     staleTime: 2 * 60 * 1000, // 2min — permite refletir updates de mídia sem delay longo
     refetchOnMount: 'always',

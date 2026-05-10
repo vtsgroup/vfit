@@ -7,6 +7,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { api } from '@/lib/api-client'
 import { useAuthStore } from '@/stores/auth-store'
+import { useEffectiveUserView } from '@/hooks/use-effective-user-view'
 
 // ============================================
 // Types
@@ -53,8 +54,39 @@ export interface StreakData {
 // Hooks
 // ============================================
 
-export function useProgressSummary(period: string, offset: number) {
+function useProgressQueryEnabled() {
   const isReady = useAuthStore((s) => s.isAuthenticated && s.isHydrated)
+  const { isStudentView } = useEffectiveUserView()
+  return isReady && isStudentView
+}
+
+function emptyProgressSummary(period: string, offset: number): ProgressSummary {
+  return {
+    period,
+    offset,
+    label: period === 'week' ? 'Esta semana' : period === 'month' ? 'Este mês' : 'Este período',
+    date_range: { start: null, end: null },
+    kpis: {
+      workouts: 0,
+      exercises: 0,
+      duration_min: 0,
+      calories: 0,
+      total_reps: 0,
+      total_volume_kg: 0,
+    },
+  }
+}
+
+function emptyProgressChart(period: string, offset: number): ProgressChart {
+  return { period, offset, data: [] }
+}
+
+function emptyStreak(): StreakData {
+  return { current_streak: 0, best_streak: 0, total_workout_days: 0 }
+}
+
+export function useProgressSummary(period: string, offset: number) {
+  const isReady = useProgressQueryEnabled()
 
   return useQuery<ProgressSummary>({
     queryKey: ['progress', 'summary', period, offset],
@@ -62,7 +94,7 @@ export function useProgressSummary(period: string, offset: number) {
       const res = await api.get<ProgressSummary>(
         `/progress/summary?period=${period}&offset=${offset}`
       )
-      return res.data
+      return res.data ?? emptyProgressSummary(period, offset)
     },
     enabled: isReady,
     staleTime: 2 * 60 * 1000, // 2 min
@@ -70,7 +102,7 @@ export function useProgressSummary(period: string, offset: number) {
 }
 
 export function useProgressChart(period: string, offset: number) {
-  const isReady = useAuthStore((s) => s.isAuthenticated && s.isHydrated)
+  const isReady = useProgressQueryEnabled()
 
   return useQuery<ProgressChart>({
     queryKey: ['progress', 'chart', period, offset],
@@ -78,7 +110,7 @@ export function useProgressChart(period: string, offset: number) {
       const res = await api.get<ProgressChart>(
         `/progress/chart?period=${period}&offset=${offset}`
       )
-      return res.data
+      return res.data ?? emptyProgressChart(period, offset)
     },
     enabled: isReady && ['week', 'month'].includes(period),
     staleTime: 2 * 60 * 1000,
@@ -86,13 +118,13 @@ export function useProgressChart(period: string, offset: number) {
 }
 
 export function useStreak() {
-  const isReady = useAuthStore((s) => s.isAuthenticated && s.isHydrated)
+  const isReady = useProgressQueryEnabled()
 
   return useQuery<StreakData>({
     queryKey: ['progress', 'streak'],
     queryFn: async () => {
       const res = await api.get<StreakData>('/progress/streak')
-      return res.data
+      return res.data ?? emptyStreak()
     },
     enabled: isReady,
     staleTime: 5 * 60 * 1000, // 5 min
@@ -144,7 +176,7 @@ export interface HeatmapData {
 }
 
 export function useExerciseProgress(exerciseId: string | null, period: string = '3m') {
-  const isReady = useAuthStore((s) => s.isAuthenticated && s.isHydrated)
+  const isReady = useProgressQueryEnabled()
 
   return useQuery<ExerciseProgress>({
     queryKey: ['progress', 'exercise', exerciseId, period],
@@ -160,7 +192,7 @@ export function useExerciseProgress(exerciseId: string | null, period: string = 
 }
 
 export function useHeatmap() {
-  const isReady = useAuthStore((s) => s.isAuthenticated && s.isHydrated)
+  const isReady = useProgressQueryEnabled()
 
   return useQuery<HeatmapData>({
     queryKey: ['progress', 'heatmap'],
@@ -186,13 +218,13 @@ export interface TopExercise {
 }
 
 export function useTopExercises(limit = 5) {
-  const isReady = useAuthStore((s) => s.isAuthenticated && s.isHydrated)
+  const isReady = useProgressQueryEnabled()
 
   return useQuery<{ exercises: TopExercise[] }>({
     queryKey: ['progress', 'top-exercises', limit],
     queryFn: async () => {
       const res = await api.get<{ exercises: TopExercise[] }>(`/progress/top-exercises?limit=${limit}`)
-      return res.data
+      return res.data ?? { exercises: [] }
     },
     enabled: isReady,
     staleTime: 5 * 60 * 1000,

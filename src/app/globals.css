@@ -1572,6 +1572,7 @@ select option {
 body {
   background: var(--color-bg-primary);
   color: var(--color-text-primary);
+  overflow-x: clip;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -2361,6 +2362,7 @@ label {
 html {
   scroll-behavior: smooth;
   overscroll-behavior-y: none;
+  overflow-x: clip;
   background-color: #050A12;
 }
 html.light {

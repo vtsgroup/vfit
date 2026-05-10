@@ -7,6 +7,32 @@
 
 ## [Unreleased] — 12/04/2026 — Paridade admin de saques + redirect domínio legado
 
+### ✨ Student App — 10/05/2026 — estabilização First Win, skeletons e empty states
+- `/treinos` recebeu a primeira dobra operacional do aluno com treino de hoje, CTA principal, progresso do plano, meta diária, XP/streak, nutrição e próxima ação de evolução de plano.
+- Adicionados skeletons route-level em `/treinos`, `/nutricao`, `/avaliacoes`, `/progresso` e `/exercicios` para reduzir tela branca na navegação mobile do app aluno.
+- Empty state de `/progresso` ganhou CTA direto para `/treinos`; os demais fluxos críticos já mantêm CTA para gerar plano, registrar refeição, fazer avaliação ou favoritar exercícios.
+- Correções Phase 0 mantidas no pacote: CSP/R2, stale chunks, OneSignal SW, hooks do app aluno, progress/top-exercises sem join inválido no Neon, `/students/me` explícito para admin sem simulação e smoke UI local.
+
+### ✅ Validação local desta sessão
+- `npx eslint 'src/app/(app)/progresso/page.tsx' 'src/app/(app)/progresso/loading.tsx' 'src/app/(app)/avaliacoes/loading.tsx' 'src/app/(app)/exercicios/loading.tsx'` → aprovado sem warnings.
+- `npm run type-check` → aprovado.
+- `npm run build` → aprovado, com export estático de 141 HTML files.
+- Browser smoke estático em `/treinos`, `/nutricao`, `/avaliacoes`, `/progresso` e `/exercicios` → status 200, textos esperados encontrados, `scrollX=0`, zero page errors.
+- Observação pré-deploy: API live ainda retorna `/progress/top-exercises` 500 até o Worker corrigido ser publicado.
+
+### 🔧 Arquivos principais
+- [src/app/(app)/treinos/page.tsx](../src/app/(app)/treinos/page.tsx)
+- [src/app/(app)/treinos/loading.tsx](../src/app/(app)/treinos/loading.tsx)
+- [src/app/(app)/nutricao/loading.tsx](../src/app/(app)/nutricao/loading.tsx)
+- [src/app/(app)/avaliacoes/loading.tsx](../src/app/(app)/avaliacoes/loading.tsx)
+- [src/app/(app)/progresso/loading.tsx](../src/app/(app)/progresso/loading.tsx)
+- [src/app/(app)/exercicios/loading.tsx](../src/app/(app)/exercicios/loading.tsx)
+- [src/app/(app)/progresso/page.tsx](../src/app/(app)/progresso/page.tsx)
+- [workers/api/progress.ts](../workers/api/progress.ts)
+- [workers/api/students.ts](../workers/api/students.ts)
+- [workers/api/vfit.ts](../workers/api/vfit.ts)
+- [plan-production-ready/TRACKING.md](../plan-production-ready/TRACKING.md)
+
 ### 🗂️ Infra — 18/04/2026 — migração R2 para buckets vfit-*
 - Buckets legados removidos: `personal-ia-images` e `personal-ia-videos`.
 - Buckets novos ativos em produção: `vfit-images` e `vfit-videos`.

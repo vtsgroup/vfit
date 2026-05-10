@@ -868,8 +868,23 @@ students.get('/me', requireType('student'), async (c) => {
   )
 
   if (rows.length === 0) {
-    // Se em modo de simulação, retornar erro descritivo (não é um bug real)
     const simulationMode = c.get('simulationMode')
+    const actorUserType = c.get('actorUserType')
+    const userRole = c.get('userRole')
+
+    const isAdminActor = actorUserType === 'admin'
+      || actorUserType === 'super_admin'
+      || userRole === 'admin'
+      || userRole === 'super_admin'
+
+    if (isAdminActor) {
+      throw new BadRequestError(
+        simulationMode === 'student'
+          ? 'Simulação: o aluno selecionado não possui perfil na tabela students. Selecione outro aluno ou repare o cadastro.'
+          : 'Simulação: ative a simulação de um aluno real antes de acessar o app do aluno.'
+      )
+    }
+
     if (simulationMode && simulationMode !== 'super_admin') {
       throw new BadRequestError(
         'Simulação: este usuário não possui perfil de aluno na tabela students. Troque o modo de simulação ou selecione um aluno válido.'

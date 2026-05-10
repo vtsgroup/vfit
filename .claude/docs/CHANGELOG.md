@@ -7,6 +7,58 @@
 
 ## [Unreleased] — 2026-04-08 — Sprint 11-15 (UX Nutrição/Exercícios)
 
+### ✨ Student App — First Win em `/treinos` (2026-05-10)
+- **Primeira dobra operacional:** [src/app/(app)/treinos/page.tsx](src/app/(app)/treinos/page.tsx) recebeu o `FirstWinCommandCenter`, priorizando treino de hoje, CTA principal, progresso do plano, meta diária, XP/streak, proteína e próxima ação de evolução de plano.
+- **Hierarquia alinhada ao plano de produção:** a tela deixa de abrir como coleção de cards soltos e passa a funcionar como cockpit do aluno: fazer treino agora, entender progresso e continuar para nutrição/plano.
+- **Sem backend novo:** a implementação reaproveita hooks e payloads existentes (`useCurrentPlan`, XP, streak, meta diária, nutrição e logs), mantendo o escopo concentrado na experiência de `/treinos`.
+- **Seções legadas preservadas:** avaliação física, vínculo com personal, gamificação detalhada, exercícios do dia e biblioteca de treinos continuam disponíveis abaixo da primeira dobra.
+- **Tracking atualizado:** [plan-production-ready/TRACKING.md](plan-production-ready/TRACKING.md) registra P2.20 concluído e mantém P2.1-P2.8 pendentes para a loja completa.
+
+### ✨ Student App — Skeletons e empty states P2.12-P2.17 (2026-05-10)
+- **Skeletons route-level adicionados:** [src/app/(app)/treinos/loading.tsx](src/app/(app)/treinos/loading.tsx), [src/app/(app)/nutricao/loading.tsx](src/app/(app)/nutricao/loading.tsx), [src/app/(app)/avaliacoes/loading.tsx](src/app/(app)/avaliacoes/loading.tsx), [src/app/(app)/progresso/loading.tsx](src/app/(app)/progresso/loading.tsx) e [src/app/(app)/exercicios/loading.tsx](src/app/(app)/exercicios/loading.tsx) reduzem tela branca na navegação mobile do app aluno.
+- **Empty state com próxima ação:** [src/app/(app)/progresso/page.tsx](src/app/(app)/progresso/page.tsx) ganhou CTA "Ver meu treino de hoje" quando ainda não há histórico; os demais fluxos críticos já mantêm CTA para gerar plano, registrar refeição, fazer avaliação ou favoritar exercícios.
+- **Tracking atualizado:** [plan-production-ready/TRACKING.md](plan-production-ready/TRACKING.md) marca P2.12-P2.17 como concluídos, elevando o progresso para 23/127 tasks.
+
+### ✅ Validação da sessão — First Win `/treinos`
+`npx eslint 'src/app/(app)/treinos/page.tsx'` ✅
+`npm run type-check` ✅
+`npm run build` ✅ com `/treinos` exportado em 13.7 kB / 173 kB first load.
+Browser visual via export estático em `http://localhost:3000/treinos.html?firstwin=1` ✅: primeira dobra mostrou “Primeira vitória do dia”, CTA “Começar treino de hoje”, “Detalhes do treino de hoje” e `scrollX=0`.
+`npx eslint 'src/app/(app)/progresso/page.tsx' 'src/app/(app)/progresso/loading.tsx' 'src/app/(app)/avaliacoes/loading.tsx' 'src/app/(app)/exercicios/loading.tsx'` ✅ zero warnings após P2.12-P2.17.
+`npm run type-check` ✅ após P2.12-P2.17.
+`npm run build` ✅ com export estático de 141 HTML files após P2.12-P2.17.
+Browser smoke estático em `/treinos`, `/nutricao`, `/avaliacoes`, `/progresso` e `/exercicios` ✅: status 200, texto esperado encontrado, `scrollX=0` e zero page errors; responses ruins capturadas contra API live (`/progress/top-exercises` 500) permanecem pendentes até deploy do Worker corrigido.
+
+### 🛠️ Phase 0 — Stabilização produção/app aluno (2026-05-09)
+- **CSP/R2 corrigido:** [public/_headers](public/_headers) passou a permitir `images.vfit.app.br` e `videos.vfit.app.br` em `connect-src` e adicionou `media-src`, evitando bloqueio de assets buscados via `fetch`.
+- **Progress sem join inválido no Neon:** [workers/api/progress.ts](workers/api/progress.ts) removeu o `JOIN exercises` de `/progress/top-exercises`, mantendo agregação em Neon e buscando nomes do catálogo no D1 de forma best-effort.
+- **Regressão coberta:** [tests/api/progress.test.ts](tests/api/progress.test.ts) garante que `top-exercises` não volte a consultar `exercises` no Neon.
+- **`/students/me` mais explícito para admin/simulação:** [workers/api/students.ts](workers/api/students.ts) agora retorna erro 400 descritivo quando admin/super_admin acessa app aluno sem simulação de aluno real, em vez de 404 genérico.
+- **Chunks stale não viram HTML:** [public/_worker.js](public/_worker.js) passa a retornar 404/no-store para assets ausentes, e [public/OneSignalSDKWorker.js](public/OneSignalSDKWorker.js) invalida cache para `v9` e descarta HTML cacheado para JS/CSS.
+- **Gráficos financeiros estáveis:** [src/components/financial/financial-charts.tsx](src/components/financial/financial-charts.tsx) só monta Recharts após medir dimensões positivas, evitando warning de `width(-1)`/`height(-1)` no `/dashboard/financeiro`.
+- **Preload global do logo removido:** [src/app/layout.tsx](src/app/layout.tsx) não força mais `vfit-logo-white.svg` em todas as rotas, removendo warning de preload não usado em páginas sem logo no primeiro load.
+- **Stash legado documentado:** [plan-production-ready/TRACKING.md](plan-production-ready/TRACKING.md) registra runbook para revisar o stash antigo de infraestrutura sem aplicar/remover automaticamente.
+- **Smoke UI destravado no localhost:** [src/app/dashboard/admin/smoke/page.tsx](src/app/dashboard/admin/smoke/page.tsx) agora assina `isHydrated` e `user.role` diretamente antes de aplicar `pointer-events-none`, evitando que o gerador de tokens fique bloqueado após hidratação.
+- **Dashboard local sem crash de Framer Motion:** [src/components/providers/dashboard-providers.tsx](src/components/providers/dashboard-providers.tsx) removeu `LazyMotion strict`, que quebrava o dashboard porque a base ainda usa `motion.*` em vários componentes.
+- **Splash invisível não bloqueia mais cliques:** [src/components/ui/splash-screen.tsx](src/components/ui/splash-screen.tsx) separou o timer de remoção da fase `exit` e aplica `pointer-events-none` durante o fade-out, removendo o overlay `z-9999` que interceptava inputs no localhost.
+- **Smoke auth verde com tokens temporários:** [docs/ULTRA-PLANO-MVP-PRODUCAO/AUTH-SMOKE.generated.md](docs/ULTRA-PLANO-MVP-PRODUCAO/AUTH-SMOKE.generated.md) e [AUTH-SMOKE.generated.md](.claude/docs/archive/legacy-plans/AUTH-SMOKE.generated.md) registram 8 passed, 0 failed, 4 skipped por mutações desabilitadas.
+- **QA localhost do app aluno estabilizado:** [src/hooks/use-vfit-nutrition.ts](src/hooks/use-vfit-nutrition.ts) e [src/hooks/use-progress.ts](src/hooks/use-progress.ts) retornam empty states tipados quando a API não entrega payload, removendo erros React Query de `data undefined` em nutrição/progresso.
+- **Queries aluno respeitam visão efetiva:** [src/hooks/use-student-app.ts](src/hooks/use-student-app.ts) e [src/hooks/use-progress.ts](src/hooks/use-progress.ts) usam o hook de simulação existente para só consultar endpoints de aluno/progresso quando a visão efetiva é `student`, evitando 400/500 locais com sessão admin sem aluno ativo.
+- **Mídia muscular placeholder saneada:** [src/hooks/use-exercises.ts](src/hooks/use-exercises.ts) ignora URLs finais placeholder como `image_female_url.png`, evitando 404/ORB de `images.vfit.app.br` nas telas de plano/exercícios.
+- **Público mobile sem warnings de logo/scroll lateral:** [src/components/landing/navbar.tsx](src/components/landing/navbar.tsx), [src/components/landing/footer.tsx](src/components/landing/footer.tsx), [src/components/landing/how-it-works-v2.tsx](src/components/landing/how-it-works-v2.tsx), [src/app/(auth)/register/student/page.tsx](src/app/(auth)/register/student/page.tsx) e [src/app/globals.css](src/app/globals.css) alinham dimensões do SVG, escondem o drawer fechado das métricas e bloqueiam overflow horizontal de página.
+- **Plano atualizado:** [plan-production-ready/TRACKING.md](plan-production-ready/TRACKING.md) e [plan-production-ready/AUDIT.md](plan-production-ready/AUDIT.md) registram root causes, status e pendências externas do OneSignal/smoke.
+
+### ✅ Validação da sessão
+`npm run test -- tests/api/progress.test.ts` ✅
+`npm run type-check -- --project tsconfig.workers.json` ✅
+`npm run type-check && npm run type-check:workers && npm run test -- tests/api/progress.test.ts` ✅
+`npm run type-check` ✅ após correções da UI local de smoke.
+`node scripts/run-auth-smoke.mjs` ✅ com tokens temporários válidos: 8 passed, 0 failed, 4 skipped por mutações desabilitadas.
+`npm run type-check && npm run type-check:workers && npm run test -- tests/api/progress.test.ts` ✅ após correções de QA local em nutrição/progresso/mídia/logo/overflow.
+`npx eslint src/components/landing/navbar.tsx` ✅ após limpeza do estado não usado no logo.
+`npm run build` ✅ build de produção local concluído após correções finais.
+Browser QA local em `http://localhost:3000` ✅: rotas públicas e app aluno focadas sem console errors, sem 4xx/5xx capturados, sem page errors; page-level horizontal scroll bloqueado (`scrollX` permanece 0).
+
 ### 🎯 Conversão — Login focado em cadastro (2026-05-03)
 - **Removido bypass de visitante do login:** [src/app/(auth)/login/page.tsx](src/app/(auth)/login/page.tsx) não exibe mais “Explorar sem conta”, mantendo o funil focado em entrar ou criar conta.
 - **CTA de cadastro reforçado:** bloco final do login agora direciona novos usuários para “Comece grátis agora” com prova de segurança (`SSL · LGPD · SEM CARTÃO NO CADASTRO`).

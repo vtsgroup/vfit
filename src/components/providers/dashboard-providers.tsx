@@ -26,7 +26,7 @@ export function DashboardProviders({ children }: { children: React.ReactNode }) 
   return (
     <AuthProvider>
       <OneSignalProvider>
-        <LazyMotion features={domAnimation} strict>
+        <LazyMotion features={domAnimation}>
           <MotionConfig reducedMotion="user">
             <CacheEventListener />
             <QueryWarmup />

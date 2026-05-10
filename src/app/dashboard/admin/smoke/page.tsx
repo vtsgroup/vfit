@@ -32,7 +32,10 @@ type IssuedUser = {
 }
 
 export default function AdminSmokeTokensPage() {
-  const isSA = useAuthStore((s) => s.isSuperAdmin)
+  const isHydrated = useAuthStore((s) => s.isHydrated)
+  const userRole = useAuthStore((s) => s.user?.role)
+  const isSuperAdmin = userRole === 'super_admin'
+  const isAccessRestricted = isHydrated && !isSuperAdmin
 
   const [personalEmail, setPersonalEmail] = useState('')
   const [studentEmail, setStudentEmail] = useState('')
@@ -97,7 +100,7 @@ export default function AdminSmokeTokensPage() {
           </div>
         </div>
 
-        {!isSA() && (
+        {isAccessRestricted && (
           <div className="rounded-2xl border border-red-500/20 bg-red-500/5 p-4">
             <div className="flex items-start gap-3">
               <DSIcon name="shieldAlert" className="mt-0.5 text-red-400" />
@@ -111,7 +114,7 @@ export default function AdminSmokeTokensPage() {
           </div>
         )}
 
-        <div className={cn('rounded-2xl border border-border-light bg-bg-secondary p-4', !isSA() ? 'opacity-60 pointer-events-none' : '')}>
+        <div className={cn('rounded-2xl border border-border-light bg-bg-secondary p-4', isAccessRestricted ? 'opacity-60 pointer-events-none' : '')}>
           <div className="grid gap-3 sm:grid-cols-2">
             <div>
               <MD3Input

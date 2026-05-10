@@ -134,9 +134,10 @@ export function Footer() {
               <Image
                 src="/images/vfit-logo-white.svg"
                 alt="VFIT"
-                width={120}
+                width={180}
                 height={36}
                 className="h-9 w-auto transition-transform duration-300 group-hover:scale-105"
+                style={{ width: 'auto' }}
               />
             </Link>
 

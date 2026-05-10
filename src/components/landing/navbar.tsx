@@ -61,39 +61,17 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'Contato', href: '/contato', dropdown: null },
 ]
 
-/* ================================================================
-   ANIMATED LOGO — VFIT brand typing animation
-   ================================================================ */
-const VFIT_LETTERS = 'VFIT'.split('')
-
 function AnimatedLogo() {
-  const [typedCount, setTypedCount] = useState(0)
-
-  useEffect(() => {
-    const startDelay = setTimeout(() => {
-      let i = 0
-      const letterInterval = setInterval(() => {
-        i++
-        setTypedCount(i)
-        if (i >= VFIT_LETTERS.length) {
-          clearInterval(letterInterval)
-        }
-      }, 80)
-      return () => clearInterval(letterInterval)
-    }, 300)
-    return () => clearTimeout(startDelay)
-  }, [])
-
   return (
     <Link href="/" className="flex items-center gap-0 group shrink-0" aria-label="VFIT - Início">
       <div className="relative flex items-center gap-2.5">
         <Image
           src="/images/vfit-logo-white.svg"
           alt="VFIT"
-          width={120}
+          width={160}
           height={32}
           className="h-8 w-auto transition-transform duration-300 group-hover:scale-105 sm:h-7"
-          style={{ filter: 'drop-shadow(0 0 8px rgba(59,130,246,0.38))' }}
+          style={{ width: 'auto', filter: 'drop-shadow(0 0 8px rgba(59,130,246,0.38))' }}
           priority
         />
       </div>
@@ -364,7 +342,7 @@ export function Navbar() {
         className={`
           lg:hidden fixed inset-y-0 right-0 z-50 w-full max-w-sm flex flex-col
           transition-transform duration-500
-          ${mobileOpen ? 'translate-x-0' : 'translate-x-full'}
+          ${mobileOpen ? 'visible translate-x-0 opacity-100 pointer-events-auto' : 'invisible translate-x-full opacity-0 pointer-events-none'}
         `}
         style={{
           transitionTimingFunction: 'cubic-bezier(0.32, 0.72, 0, 1)',
@@ -381,10 +359,10 @@ export function Navbar() {
             <Image
               src="/images/vfit-logo-white.svg"
               alt="VFIT"
-              width={100}
-              height={26}
+              width={120}
+              height={24}
               className="h-6 w-auto"
-              style={{ filter: 'drop-shadow(0 0 6px rgba(59,130,246,0.3))' }}
+              style={{ width: 'auto', filter: 'drop-shadow(0 0 6px rgba(59,130,246,0.3))' }}
             />
           </Link>
           <button

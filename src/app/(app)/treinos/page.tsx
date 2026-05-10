@@ -18,18 +18,17 @@ import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { GlassCard } from '@/components/ui/glass-card'
-import { KPICard } from '@/components/progresso'
 import {
   useWorkoutTemplates,
   getDifficultyLabel,
   getDifficultyColor,
 } from '@/hooks/use-workout-templates'
 import { hapticLight } from '@/lib/haptics'
-import { useCurrentPlan, useAutoGeneratePlan } from '@/hooks/use-plans'
+import { useCurrentPlan, useAutoGeneratePlan, type CurrentPlan, type PlanDay } from '@/hooks/use-plans'
 import { useMealsToday, useNutritionTargets } from '@/hooks/use-vfit-nutrition'
 import { useSelfAssessments, getBMIColor, useAutoAssessmentFromOnboarding } from '@/hooks/use-self-assessments'
 import { useWorkoutLogs } from '@/hooks/use-workouts'
-import { useDailyGoal, useStreak, useXPBalance, type StreakResponse } from '@/hooks/use-xp'
+import { useDailyGoal, useStreak, useXPBalance, type DailyGoalResponse, type StreakResponse, type XPBalance } from '@/hooks/use-xp'
 import { useSubscriptionStatus } from '@/hooks/use-vfit-checkout'
 import { useB2COnboardingCompleted } from '@/hooks/use-b2c-onboarding'
 import { useStudentProfile, useLinkPersonalTrainer } from '@/hooks/use-student-app'
@@ -43,23 +42,6 @@ const DIFFICULTY_FILTERS = [
   { value: 'advanced', label: 'Avançado' },
 ]
 
-const MOTIVATIONAL_PHRASES = [
-  'Cada rep conta. Hoje é o dia.',
-  'Consistência bate talento.',
-  'O melhor treino é o que você faz.',
-  'Progresso, não perfeição.',
-  'Força se constrói dia a dia.',
-  'Você é mais forte do que pensa.',
-  'Foco. Treino. Evolução.',
-  'Supere o ontem.',
-  'Disciplina é liberdade.',
-  'Um passo de cada vez.',
-  'Movimento cria momentum.',
-  'Resultados exigem presença.',
-  'Pequenas vitórias somam grandes mudanças.',
-  'Sua melhor versão está em construção.',
-]
-
 // Tradução de IDs de grupos musculares para português
 const MUSCLE_PT: Record<string, string> = {
   chest: 'Peito', back: 'Costas', shoulders: 'Ombros', biceps: 'Bíceps',
@@ -71,14 +53,6 @@ const MUSCLE_PT: Record<string, string> = {
 }
 function musclePt(name: string) {
   return MUSCLE_PT[name.toLowerCase()] || MUSCLE_PT[name.toLowerCase().replace(/ /g, '_')] || name
-}
-
-// ─── S1.1: Today Workout Card with Urgency UX ─────────────────────────────────
-interface TodayDayShape {
-  name: string
-  muscle_groups: string[]
-  estimated_duration_min: number
-  exercises: unknown[]
 }
 
 function getUrgencyState(streak: StreakResponse | null): {
@@ -110,103 +84,153 @@ function getUrgencyState(streak: StreakResponse | null): {
   }
 }
 
-function TodayWorkoutCard({
+function FirstWinCommandCenter({
+  userName,
   todayDay,
-  planCurrentDay,
+  plan,
+  planPct,
+  totals,
+  targets,
   streak,
+  xpBalance,
+  dailyGoal,
+  workoutCount,
 }: {
-  todayDay: TodayDayShape
-  planCurrentDay: number
-  streak: StreakResponse | null
+  userName?: string
+  todayDay: PlanDay | null
+  plan: CurrentPlan | null | undefined
+  planPct: number
+  totals: { calories: number; protein: number; carbs: number; fat: number }
+  targets: { calories: number; protein: number; carbs: number; fat: number }
+  streak: StreakResponse | undefined
+  xpBalance: XPBalance | undefined
+  dailyGoal: DailyGoalResponse | undefined
+  workoutCount: number
 }) {
-  const urgency = getUrgencyState(streak)
-
-  const borderColor = urgency.urgencyLevel === 'done'
-    ? 'border-emerald-500/40'
-    : urgency.urgencyLevel === 'critical'
-      ? 'border-red-500/50'
-      : urgency.urgencyLevel === 'warning'
-        ? 'border-amber-400/50'
-        : 'border-brand-primary/25'
-
-  const accentBar = urgency.urgencyLevel === 'done'
-    ? 'bg-emerald-400'
-    : urgency.urgencyLevel === 'critical'
-      ? 'bg-red-400 animate-pulse'
-      : urgency.urgencyLevel === 'warning'
-        ? 'bg-amber-400'
-        : 'bg-brand-primary/80'
-
-  const urgencyBadgeClass = urgency.urgencyLevel === 'done'
-    ? 'bg-emerald-500/15 text-emerald-400'
-    : urgency.urgencyLevel === 'critical'
-      ? 'bg-red-500/15 text-red-400'
-      : urgency.urgencyLevel === 'warning'
-        ? 'bg-amber-500/15 text-amber-400'
-        : 'bg-brand-primary/15 text-brand-primary'
+  const urgency = getUrgencyState(streak ?? null)
+  const firstName = userName?.split(' ')[0] || 'atleta'
+  const dailyProgress = Math.round((dailyGoal?.progress ?? 0) * 100)
+  const proteinPct = targets.protein > 0 ? Math.min(100, Math.round((totals.protein / targets.protein) * 100)) : 0
+  const caloriesPct = targets.calories > 0 ? Math.min(100, Math.round((totals.calories / targets.calories) * 100)) : 0
 
   return (
-    <div className="mb-4 block" onClick={() => hapticLight()}>
-      <Link href="/plano">
-        <div className={`glass-card relative overflow-hidden rounded-2xl border p-4 transition-all active:scale-[0.98] ${borderColor}`}>
+    <section className="-mx-4 mb-5 overflow-hidden rounded-b-3xl border-b border-white/8 bg-linear-to-br from-slate-950 via-slate-900 to-emerald-950 text-white shadow-xl">
+      <div className="relative px-4 pt-5 pb-4">
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-linear-to-r from-transparent via-brand-primary/60 to-transparent" />
 
+        <div className="relative z-10 mb-4 flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-brand-primary/80">
+              Primeira vitória do dia
+            </p>
+            <h1 className="mt-1 text-3xl font-black leading-none tracking-tight text-white">
+              Bora, {firstName}
+            </h1>
+            <p className="mt-2 max-w-xs text-[12px] leading-relaxed text-slate-300">
+              Uma ação clara agora: treinar, registrar progresso e manter a semana viva.
+            </p>
+          </div>
+          <Link href="/progresso/streaks" className="shrink-0 rounded-2xl border border-white/10 bg-white/6 px-3 py-2 text-right active:scale-95">
+            <p className="text-[10px] font-semibold text-slate-400">Streak</p>
+            <p className="text-lg font-black text-amber-300">{streak?.current_streak ?? 0}d</p>
+          </Link>
+        </div>
 
-          {/* Header row */}
-          <div className="mb-2.5 flex items-center justify-between pl-1">
-            <div className="flex items-center gap-2">
-              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-primary/15">
-                <DSIcon name="dumbbell" size={14} className="text-brand-primary" />
+        <div className="relative z-10 rounded-3xl border border-white/10 bg-white/6 p-3.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
+          {todayDay ? (
+            <>
+              <div className="mb-3 flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-brand-primary/20 bg-brand-primary/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-brand-primary">
+                    <DSIcon name={urgency.streakIcon} size={12} />
+                    Dia {plan?.current_day ?? 1} de {plan?.total_days ?? todayDay.day_number}
+                  </div>
+                  <h2 className="text-xl font-black leading-tight text-white">{todayDay.name}</h2>
+                  <p className="mt-1 text-[12px] text-slate-300">
+                    {todayDay.muscle_groups.slice(0, 3).map(musclePt).join(' · ') || 'Treino personalizado'}
+                  </p>
+                </div>
+                <div className="shrink-0 rounded-2xl bg-slate-900/80 px-3 py-2 text-center">
+                  <p className="text-xl font-black text-white">{todayDay.estimated_duration_min}</p>
+                  <p className="text-[9px] font-bold uppercase tracking-wider text-slate-500">min</p>
+                </div>
               </div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-brand-primary">
-                Treino de Hoje · Dia {planCurrentDay}
-              </span>
-            </div>
-            <DSIcon name="chevronRight" size={14} className="text-text-muted" />
-          </div>
 
-          {/* Workout name */}
-          <p className="mb-1.5 pl-1 text-[16px] font-bold text-text-primary">{todayDay.name}</p>
+              <div className="mb-3 grid grid-cols-3 gap-2">
+                <MetricTile label="Plano" value={`${planPct}%`} progress={Math.min(100, planPct)} tone="green" />
+                <MetricTile label="Meta" value={`${dailyProgress}%`} progress={Math.min(100, dailyProgress)} tone="blue" />
+                <MetricTile label="XP" value={String(xpBalance?.balance ?? 0)} progress={Math.min(100, (xpBalance?.balance ?? 0) % 100)} tone="amber" />
+              </div>
 
-          {/* Meta info */}
-          <div className="mb-2.5 flex flex-wrap items-center gap-x-2 gap-y-1 pl-1 text-[12px] text-text-secondary">
-            {todayDay.muscle_groups.length > 0 && (
-              <span>{todayDay.muscle_groups.slice(0, 3).map(musclePt).join(' · ')}</span>
-            )}
-            {todayDay.muscle_groups.length > 0 && <span className="text-text-muted">·</span>}
-            <span>{todayDay.estimated_duration_min}min</span>
-            <span className="text-text-muted">·</span>
-            <span>{todayDay.exercises.length} exercícios</span>
-          </div>
-
-          {/* Urgency badge */}
-          {urgency.urgencyLevel !== 'normal' && (
-            <div className={`mb-3 ml-1 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold ${urgencyBadgeClass}`}>
-              <DSIcon name={urgency.streakIcon} size={12} />
-              <span>{urgency.urgencyText}</span>
-              {streak && streak.current_streak > 0 && urgency.urgencyLevel !== 'done' && (
-                <span className="ml-0.5 opacity-70">· {streak.current_streak} dias</span>
-              )}
-            </div>
-          )}
-
-          {/* CTA button */}
-          {urgency.workedOutToday ? (
-            <div className="flex items-center gap-2 rounded-xl border border-emerald-500/20 bg-emerald-500/8 px-3 py-2">
-              <DSIcon name="checkCircle2" size={14} className="text-emerald-400" />
-              <span className="text-[12px] font-semibold text-emerald-400">Concluído hoje — treinar de novo?</span>
-            </div>
+              <Link href="/plano" onClick={() => hapticLight()}>
+                <Button size="lg" className="w-full justify-center">
+                  <DSIcon name="play" size={18} />
+                  {urgency.workedOutToday ? 'Rever treino de hoje' : 'Começar treino de hoje'}
+                </Button>
+              </Link>
+            </>
           ) : (
-            <Button size="sm" className="mt-0.5 w-full">
-              <DSIcon name="play" size={14} />
-              {urgency.urgencyLevel === 'critical' ? 'Voltar a treinar agora' : 'Iniciar treino'}
-            </Button>
+            <div className="py-2">
+              <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-primary/12">
+                <DSIcon name="sparkles" size={22} className="text-brand-primary" />
+              </div>
+              <h2 className="text-xl font-black text-white">Seu plano está nascendo</h2>
+              <p className="mt-2 text-[12px] leading-relaxed text-slate-300">
+                Gere um plano com IA a partir do seu objetivo e transforme a tela inicial em treino executável.
+              </p>
+              <Link href="/plano" className="mt-4 block">
+                <Button size="lg" className="w-full justify-center">
+                  <DSIcon name="sparkles" size={18} />
+                  Gerar plano com IA
+                </Button>
+              </Link>
+            </div>
           )}
         </div>
-      </Link>
+
+        <div className="relative z-10 mt-3 grid grid-cols-2 gap-2">
+          <Link href="/nutricao" className="rounded-2xl border border-white/8 bg-white/5 p-3 active:scale-[0.98]">
+            <div className="mb-2 flex items-center justify-between">
+              <DSIcon name="flask" size={15} className="text-emerald-300" />
+              <span className="text-[10px] font-bold text-slate-400">{proteinPct}%</span>
+            </div>
+            <p className="text-[12px] font-bold text-white">Proteína</p>
+            <p className="mt-0.5 text-[10px] text-slate-400">{Math.round(totals.protein)}g de {targets.protein}g</p>
+          </Link>
+          <Link href="/plano" className="rounded-2xl border border-white/8 bg-white/5 p-3 active:scale-[0.98]">
+            <div className="mb-2 flex items-center justify-between">
+              <DSIcon name="shoppingBag" size={15} className="text-brand-primary" />
+              <span className="text-[10px] font-bold text-slate-400">Próximo</span>
+            </div>
+            <p className="text-[12px] font-bold text-white">Evoluir plano</p>
+            <p className="mt-0.5 text-[10px] text-slate-400">{workoutCount > 0 ? `${workoutCount} treinos no histórico` : `${caloriesPct}% da meta calórica`}</p>
+          </Link>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function MetricTile({ label, value, progress, tone }: { label: string; value: string; progress: number; tone: 'green' | 'blue' | 'amber' }) {
+  const toneClasses = {
+    green: { text: 'text-brand-primary', bar: 'from-brand-primary to-emerald-300' },
+    blue: { text: 'text-sky-300', bar: 'from-sky-400 to-cyan-300' },
+    amber: { text: 'text-amber-300', bar: 'from-amber-400 to-orange-300' },
+  }[tone]
+
+  return (
+    <div className="rounded-2xl border border-white/8 bg-slate-900/70 p-2.5">
+      <p className="text-[9px] font-bold uppercase tracking-wider text-slate-500">{label}</p>
+      <p className={cn('mt-1 text-lg font-black leading-none', toneClasses.text)}>{value}</p>
+      <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/8">
+        <div
+          className={cn('h-full rounded-full bg-linear-to-r transition-all duration-700', toneClasses.bar)}
+          style={{ width: `${Math.max(4, Math.min(100, progress))}%` }}
+        />
+      </div>
     </div>
   )
 }
-// ─────────────────────────────────────────────────────────────────────────────
 
 function buildPlaceholderImage(label: string, tone: 'green' | 'blue' | 'orange' | 'violet' = 'green') {
   const safe = (label || 'Exercício').slice(0, 18)
@@ -389,71 +413,21 @@ export default function TreinosPage() {
 
   const totals = mealsData?.totals ?? { calories: 0, protein: 0, carbs: 0, fat: 0 }
   const planPct = plan && plan.total_days > 0 ? Math.round((plan.current_day / plan.total_days) * 100) : 0
-  const calPct = targets.calories > 0 ? Math.round((totals.calories / targets.calories) * 100) : 0
-  const proteinPct = targets.protein > 0 ? Math.round((totals.protein / targets.protein) * 100) : 0
-  const carbsPct = targets.carbs > 0 ? Math.round((totals.carbs / targets.carbs) * 100) : 0
 
   return (
     <div className="mx-auto max-w-lg animate-in fade-in-0 slide-in-from-bottom-2 duration-300 px-4 pt-0 pb-4">
-      {/* ─── Hero ─── */}
-      <div
-        className="-mx-4 mb-5 overflow-hidden rounded-b-3xl px-4 py-5"
-        style={{ background: 'linear-gradient(to bottom, #0b1d36 0%, #0c1f38 20%, #0b1c35 40%, #0a1830 65%, #071628 85%, #050A12 100%)', boxShadow: '0 6px 28px 0 rgba(5,10,18,0.6)' }}
-      >
-        <p className="text-xs font-semibold text-emerald-400">
-          {(() => { const h = new Date().getHours(); return h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite' })()}
-        </p>
-        <h1 className="bg-linear-to-r from-white to-emerald-300/80 bg-clip-text text-4xl font-black text-transparent">
-          Treinos
-        </h1>
-        <p className="mt-1 text-xs text-emerald-400/60">Recursos personalizados para você</p>
-        <p className="mt-2 text-[11px] italic text-white/35">{MOTIVATIONAL_PHRASES[Math.floor(Date.now() / 86400000) % MOTIVATIONAL_PHRASES.length]}</p>
-      </div>
-
-      {/* S1.1 — Card "Treino de Hoje" com urgência */}
-      {todayDay && (
-        <TodayWorkoutCard
-          todayDay={todayDay}
-          planCurrentDay={plan?.current_day ?? 1}
-          streak={streak ?? null}
-        />
-      )}
-
-      {/* KPI cards ultra-modernos */}
-      <div className="mb-5 grid grid-cols-2 gap-3">
-        <KPICard
-          icon="footprints"
-          label="Plano"
-          value={planPct}
-          unit="%"
-          color="green"
-          trend={{ delta: Math.max(1, planPct - 50), isPositive: planPct >= 50 }}
-        />
-        <KPICard
-          icon="flask"
-          label="Proteína"
-          value={Math.round(totals.protein)}
-          unit="g"
-          color="green"
-          trend={{ delta: Math.abs(proteinPct - 100), isPositive: proteinPct >= 100 }}
-        />
-        <KPICard
-          icon="moon"
-          label="Carboidratos"
-          value={Math.round(totals.carbs)}
-          unit="g"
-          color="purple"
-          trend={{ delta: Math.abs(carbsPct - 100), isPositive: carbsPct >= 100 }}
-        />
-        <KPICard
-          icon="flame"
-          label="Calorias"
-          value={Math.round(totals.calories)}
-          unit="kcal"
-          color="amber"
-          trend={{ delta: Math.abs(calPct - 100), isPositive: calPct >= 100 }}
-        />
-      </div>
+      <FirstWinCommandCenter
+        userName={user?.full_name}
+        todayDay={todayDay}
+        plan={plan}
+        planPct={planPct}
+        totals={totals}
+        targets={targets}
+        streak={streak}
+        xpBalance={xpBalance}
+        dailyGoal={dailyGoal}
+        workoutCount={workoutCount}
+      />
 
       {/* T5.9 — Assessment summary card (pós-onboarding) */}
       {latestAssessment ? (
@@ -610,31 +584,6 @@ export default function TreinosPage() {
         )}
         </div>
       </details>
-
-      {/* Quick actions */}
-      <div className="mb-5 grid grid-cols-2 gap-3">
-        <Link
-          href="/plano"
-          className="group glass-card flex flex-col gap-2 rounded-2xl p-4 transition-all hover:border-brand-primary/20"
-        >
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-primary/12">
-            <DSIcon name="sparkles" size={20} className="text-brand-primary" />
-          </div>
-          <p className="text-[13px] font-bold text-text-primary">Criar com IA</p>
-          <p className="text-[11px] text-text-muted">Treino personalizado</p>
-        </Link>
-
-        <Link
-          href="/plano"
-          className="group glass-card flex flex-col gap-2 rounded-2xl p-4 transition-all hover:border-info/20"
-        >
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-primary/15">
-            <DSIcon name="clipboardList" size={20} className="text-brand-primary" />
-          </div>
-          <p className="text-[13px] font-bold text-text-primary">Meu Plano</p>
-          <p className="text-[11px] text-text-muted">Treino atual ativo</p>
-        </Link>
-      </div>
 
       {/* T8.9 — Upgrade prompt após 3 treinos no free */}
       {showUpgradePrompt && (
@@ -803,9 +752,9 @@ export default function TreinosPage() {
       </div>
       </details>
 
-      {/* Treino de hoje (IA) */}
+      {/* Detalhes do treino de hoje (IA) */}
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-[15px] font-bold text-text-primary">Treinos Prontos de Hoje (IA)</h2>
+        <h2 className="text-[15px] font-bold text-text-primary">Detalhes do treino de hoje</h2>
       </div>
 
       {todayDay ? (

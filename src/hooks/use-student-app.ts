@@ -16,6 +16,7 @@ import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tansta
 import { api } from '@/lib/api-client'
 import { APP_QUERY_CACHE } from '@/lib/query-cache-policy'
 import { useAuthStore } from '@/stores/auth-store'
+import { useEffectiveUserView } from '@/hooks/use-effective-user-view'
 import { toast } from '@/stores/app-store'
 
 // ============================================
@@ -155,8 +156,14 @@ export interface StudentExerciseProgressResponse {
 // Student-specific hooks
 // ============================================
 
-export function useStudentProfile() {
+function useStudentQueryEnabled() {
   const isReady = useAuthStore((s) => s.isAuthenticated && s.isHydrated)
+  const { isStudentView } = useEffectiveUserView()
+  return isReady && isStudentView
+}
+
+export function useStudentProfile() {
+  const isReady = useStudentQueryEnabled()
   return useQuery<StudentProfile>({
     queryKey: ['student', 'me'],
     queryFn: async () => {
@@ -169,7 +176,7 @@ export function useStudentProfile() {
 }
 
 export function useStudentWorkouts(params: { page?: number; per_page?: number } = {}) {
-  const isReady = useAuthStore((s) => s.isAuthenticated && s.isHydrated)
+  const isReady = useStudentQueryEnabled()
   const qs = new URLSearchParams()
   if (params.page) qs.set('page', String(params.page))
   if (params.per_page) qs.set('per_page', String(params.per_page))
@@ -187,7 +194,7 @@ export function useStudentWorkouts(params: { page?: number; per_page?: number } 
 }
 
 export function useStudentPayments(params: { page?: number; per_page?: number } = {}) {
-  const isReady = useAuthStore((s) => s.isAuthenticated && s.isHydrated)
+  const isReady = useStudentQueryEnabled()
   const qs = new URLSearchParams()
   if (params.page) qs.set('page', String(params.page))
   if (params.per_page) qs.set('per_page', String(params.per_page))
@@ -205,7 +212,7 @@ export function useStudentPayments(params: { page?: number; per_page?: number } 
 }
 
 export function useStudentAssessments(params: { page?: number; per_page?: number } = {}) {
-  const isReady = useAuthStore((s) => s.isAuthenticated && s.isHydrated)
+  const isReady = useStudentQueryEnabled()
   const qs = new URLSearchParams()
   if (params.page) qs.set('page', String(params.page))
   if (params.per_page) qs.set('per_page', String(params.per_page))
@@ -223,7 +230,7 @@ export function useStudentAssessments(params: { page?: number; per_page?: number
 }
 
 export function useStudentEvolution() {
-  const isReady = useAuthStore((s) => s.isAuthenticated && s.isHydrated)
+  const isReady = useStudentQueryEnabled()
   return useQuery<{ assessments: { assessment_date: string; weight_kg: number | null; body_fat_percentage: number | null; muscle_mass_kg: number | null }[] }>({
     queryKey: ['student', 'evolution'],
     queryFn: async () => {
@@ -236,7 +243,7 @@ export function useStudentEvolution() {
 }
 
 export function useStudentBadges() {
-  const isReady = useAuthStore((s) => s.isAuthenticated && s.isHydrated)
+  const isReady = useStudentQueryEnabled()
   return useQuery<{ badges: BadgeItem[] }>({
     queryKey: ['student', 'badges'],
     queryFn: async () => {
@@ -249,7 +256,7 @@ export function useStudentBadges() {
 }
 
 export function useStudentTrainingHeatmap(year: number = new Date().getFullYear()) {
-  const isReady = useAuthStore((s) => s.isAuthenticated && s.isHydrated)
+  const isReady = useStudentQueryEnabled()
 
   return useQuery<StudentTrainingHeatmapResponse>({
     queryKey: ['student', 'workouts', 'heatmap', year],
@@ -263,7 +270,7 @@ export function useStudentTrainingHeatmap(year: number = new Date().getFullYear(
 }
 
 export function useStudentExerciseProgress(exerciseId: string | null, days = 180) {
-  const isReady = useAuthStore((s) => s.isAuthenticated && s.isHydrated)
+  const isReady = useStudentQueryEnabled()
 
   return useQuery<StudentExerciseProgressResponse>({
     queryKey: ['student', 'workouts', 'progress', exerciseId, days],

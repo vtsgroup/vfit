@@ -12,7 +12,9 @@
 //   MethodPieChart — pizza de métodos de pagamento
 'use client'
 
+import { type ReactNode, useEffect, useRef, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { cn } from '@/lib/utils'
 import {
   ResponsiveContainer,
   ComposedChart,
@@ -49,12 +51,13 @@ export function RevenueComboChart({
 
   return (
     <div className="grid gap-4 lg:grid-cols-2">
-      <Card>
+      <Card className="min-w-0">
         <CardHeader>
           <CardTitle>Receita diária (30 dias)</CardTitle>
         </CardHeader>
-        <CardContent className="h-70">
-          <ResponsiveContainer width="100%" height="100%">
+        <CardContent>
+          <MeasuredChartFrame className="h-70">
+          <ResponsiveContainer width="100%" height="100%" debounce={100}>
             <ComposedChart data={dailyCompact}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.2)" />
               <XAxis dataKey="label" tick={{ fontSize: 11 }} />
@@ -65,15 +68,17 @@ export function RevenueComboChart({
               <Line type="monotone" dataKey="receita_diaria" stroke="#16a34a" strokeWidth={2} dot={false} />
             </ComposedChart>
           </ResponsiveContainer>
+          </MeasuredChartFrame>
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="min-w-0">
         <CardHeader>
           <CardTitle>Receita mensal (12 meses)</CardTitle>
         </CardHeader>
-        <CardContent className="h-70">
-          <ResponsiveContainer width="100%" height="100%">
+        <CardContent>
+          <MeasuredChartFrame className="h-70">
+          <ResponsiveContainer width="100%" height="100%" debounce={100}>
             <ComposedChart data={monthlyCompact}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.2)" />
               <XAxis dataKey="label" tick={{ fontSize: 11 }} />
@@ -84,6 +89,7 @@ export function RevenueComboChart({
               <Line type="monotone" dataKey="receita_mensal" stroke="#1d4ed8" strokeWidth={2} dot={false} />
             </ComposedChart>
           </ResponsiveContainer>
+          </MeasuredChartFrame>
         </CardContent>
       </Card>
     </div>
@@ -107,8 +113,8 @@ export function MethodPieChart({
         <CardTitle>Receita por método de pagamento</CardTitle>
       </CardHeader>
       <CardContent className="grid gap-4 lg:grid-cols-2">
-        <div className="h-65">
-          <ResponsiveContainer width="100%" height="100%">
+        <MeasuredChartFrame className="h-65">
+          <ResponsiveContainer width="100%" height="100%" debounce={100}>
             <PieChart>
               <Pie data={data} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={90} label>
                 {data.map((entry, index) => (
@@ -118,9 +124,9 @@ export function MethodPieChart({
               <Tooltip />
             </PieChart>
           </ResponsiveContainer>
-        </div>
+        </MeasuredChartFrame>
 
-        <div className="space-y-2">
+        <div className="min-w-0 space-y-2">
           {data.map((item, index) => (
             <div key={item.name} className="flex items-center justify-between rounded-lg border border-border-light bg-bg-secondary px-3 py-2">
               <div className="flex items-center gap-2">
@@ -141,4 +147,40 @@ function normalizeMethod(method: string) {
   if (method === 'credit_card') return 'Cartão'
   if (method === 'boleto') return 'Boleto'
   return method
+}
+
+function MeasuredChartFrame({ className, children }: { className: string; children: ReactNode }) {
+  const frameRef = useRef<HTMLDivElement>(null)
+  const [isReady, setIsReady] = useState(false)
+
+  useEffect(() => {
+    const frame = frameRef.current
+    if (!frame) return
+
+    const updateReadyState = () => {
+      const { width, height } = frame.getBoundingClientRect()
+      const nextReadyState = width > 0 && height > 0
+      setIsReady((currentReadyState) => (
+        currentReadyState === nextReadyState ? currentReadyState : nextReadyState
+      ))
+    }
+
+    updateReadyState()
+
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', updateReadyState)
+      return () => window.removeEventListener('resize', updateReadyState)
+    }
+
+    const observer = new ResizeObserver(updateReadyState)
+    observer.observe(frame)
+
+    return () => observer.disconnect()
+  }, [])
+
+  return (
+    <div ref={frameRef} className={cn('w-full min-w-0', className)}>
+      {isReady ? children : <div aria-hidden="true" className="h-full w-full rounded-xl bg-bg-tertiary/60" />}
+    </div>
+  )
 }

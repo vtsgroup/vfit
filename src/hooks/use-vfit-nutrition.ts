@@ -63,6 +63,14 @@ export interface DailyMealsResponse {
   totals: DailyTotals
 }
 
+function emptyDailyMealsResponse(date: string): DailyMealsResponse {
+  return {
+    date,
+    meals: [],
+    totals: { calories: 0, protein: 0, carbs: 0, fat: 0 },
+  }
+}
+
 export interface LogMealInput {
   food_id: string
   meal_type: MealType
@@ -105,7 +113,7 @@ export function useMealsToday(date?: string) {
     queryKey: ['vfit-meals-today', dateStr],
     queryFn: async () => {
       const res = await api.get<DailyMealsResponse>(`/vfit/meals/today?date=${dateStr}`)
-      return res.data
+      return res.data ?? emptyDailyMealsResponse(dateStr)
     },
     enabled: isReady,
   })

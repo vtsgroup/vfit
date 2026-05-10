@@ -144,10 +144,16 @@ export function SplashScreen({ isReady }: { isReady?: boolean }) {
     if (!shouldShow || !ready || !minAnimationComplete || phase === 'exit' || phase === 'done') return
 
     setPhase('exit')
+
+  }, [minAnimationComplete, phase, ready, shouldShow])
+
+  useEffect(() => {
+    if (phase !== 'exit') return
+
     const tDone = setTimeout(() => setPhase('done'), 700)
 
     return () => clearTimeout(tDone)
-  }, [minAnimationComplete, phase, ready, shouldShow])
+  }, [phase])
 
   useEffect(() => {
     if (!shouldShow || phase === 'exit' || phase === 'done') return
@@ -173,6 +179,7 @@ export function SplashScreen({ isReady }: { isReady?: boolean }) {
       className={cn(
         'dark fixed inset-0 z-9999 flex items-center justify-center',
         'transition-all duration-700 ease-out-expo',
+        isExiting ? 'pointer-events-none' : 'pointer-events-auto',
         isExiting ? 'opacity-0 scale-105' : 'opacity-100 scale-100'
       )}
       style={{ colorScheme: 'dark' }}
