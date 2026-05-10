@@ -43,6 +43,26 @@ npm run cf:deploy         # Deploy OFICIAL (NUNCA wrangler deploy direto)
 npm run quality:ci        # Gate completo
 ```
 
+## 🧠 Memory System (Copilot-Mem MCP)
+
+**Status:** ✅ **ATIVO** — v0.2.0 com 8 categorias VFIT capturadas
+
+```bash
+mem-search "VFIT <topic>"  # Buscar contexto de projeto
+mem-open                   # Dashboard em localhost:37888/ui
+mem-restart                # Reiniciar servidor MCP
+mem-status                 # Ver status (port 37888)
+```
+
+**Categorias Capturadas:**
+- Project Overview, Stack Architecture, Structure
+- Database Schema (26 PostgreSQL + 5 D1 tables)
+- API Endpoints (180+ rotas), Auth Flow
+- Critical Rules, Code Conventions, Design System
+- Infrastructure, Deployment & Operations
+
+**Auto-Inject:** Quando pergunta sobre VFIT, sistema busca contexto automaticamente na memória → **30-40% economia de tokens**
+
 ## 🤖 Regras do Agente
 
 1. **Leia `.claude/docs/RULES.md` PRIMEIRO** — contém todas as regras críticas

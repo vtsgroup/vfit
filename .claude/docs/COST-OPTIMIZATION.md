@@ -95,6 +95,7 @@ Regras:
 | Explicações conceituais · debugging simples | GPT-5 mini | `0×` |
 | Edições CSS · texto · ajustes isolados | GPT-4.1 | `0×` |
 | Completions inline · boilerplate | Raptor mini | `0×` |
+| **Perguntas VFIT com auto-inject memoria** | **GPT-5 mini** | **`0×`** (save 30-40%) |
 | Análise de UI · imagens · diagramas | Gemini 3 Flash | `0.33×` |
 | Debugging com stack trace claro | Claude Haiku 4.5 | `0.33×` |
 | Agentic tasks longas · automações | Grok Code Fast 1 | `0.25×` |

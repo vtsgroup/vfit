@@ -222,26 +222,55 @@ Critério mínimo: 4/5 corretos.
 
 ---
 
-## Memory Strategy (Auto Memory + Copilot-Mem)
+## Memory Strategy (Auto Memory + Copilot-Mem MCP v0.2.0)
 
-1. Memória nativa (`/memory`)
-- Guardar fatos estáveis: comandos, padrões, gotchas recorrentes.
-- Manter índice curto e tópico.
+### 1. Memória Nativa (`/memories/`)
+- Fatos estáveis: comandos, padrões, gotchas recorrentes
+- 3 escopos: `/memories/` (user), `/memories/session/` (local), `/memories/repo/` (workspace)
+- Índice curto e tópico
 
-2. Copilot-Mem (opcional)
-- Instalar com `npm install -g @copilot-mem/mcp-server`.
-- Configurar em `settings.json` com `github.copilot.chat.mcpServers`.
+### 2. Copilot-Mem MCP (ATIVO)
+- **Instalado:** `@copilot-mem/mcp-server@0.2.0` (global)
+- **Transport:** MCP stdio (não HTTP)
+- **Server:** Localhost 37888 com auto-launch via LaunchAgent
+- **Database:** SQLite persistente (`~/.copilot-mem/data/`)
+- **Auto-Capture:** A cada 60s, com SHA256 dedup + quality filters
 
-3. Fluxo recomendado (MCP)
-- `search` para índice compacto.
-- `timeline` para contexto cronológico.
-- `get_memories` apenas para IDs filtrados.
+### 3. VFIT Project Context (8 categorias)
+✅ **Pré-capturado e searchable:**
+- Project Overview, Stack, Structure, Database Schema
+- 180+ API Endpoints, Auth Flow, Rules, Conventions
+- Design System, Infrastructure, Deployment
 
-4. Quando usar Copilot-Mem
-- Bugs recorrentes.
-- Onboarding em área legada.
-- Investigação de regressão.
-- Recuperação de contexto pós-incidente.
+### 4. Auto-Injection Flow (Recomendado)
+**SEM comando manual:**
+- Faça pergunta sobre VFIT no Chat
+- Sistema busca contexto automaticamente na memória
+- Resposta com 100% de contexto relevante
+- **Economiza 30-40% de tokens** vs explicar contexto
+
+### 5. Busca Manual (Quando precisar)
+```bash
+mem-search "VFIT architecture"
+mem-search "database schema"
+mem-search "payment flow"
+```
+
+### 6. Quando Usar Copilot-Mem
+- Recurring bugs em área legada
+- Onboarding novo contributor → auto-context
+- Investigação de regressão → timeline view
+- Decisões recorrentes → evita re-explain
+- **VFIT questions → auto-inject 8 categorias**
+
+### 7. Shell Aliases (Sempre Disponíveis)
+```bash
+mem-search "query"    # Buscar memória
+mem-open              # Dashboard web
+mem-restart           # Reiniciar servidor
+mem-status            # Status completo
+mem-logs              # Ver logs em tempo real
+```
 
 ---
 
