@@ -106,20 +106,15 @@ export function StudentHeader() {
         scrolled && 'ds3-header-scrolled'
       )}
       style={{
-        // Premium blue top → dark navy bottom, seamlessly connecting to app heroes
+        // Dark top → medium navy bottom, seamlessly connecting to hero (#0b1627)
         background:
-          'linear-gradient(180deg, #0f3a72 0%, #0b2d5c 24%, #092246 48%, #07182f 74%, #050A12 100%)',
-        backgroundColor: '#0b2d5c',
+          'linear-gradient(to bottom, #050A12 0%, #060d1a 18%, #071120 36%, #08152a 54%, #091830 72%, #0a1b33 88%, #0b1d36 100%)',
+        backgroundColor: '#050A12',
         borderBottom: 0,
         top: 'var(--demo-banner-offset, 0px)',
         paddingTop: 'env(safe-area-inset-top, 0px)',
-        boxShadow: scrolled
-          ? '0 10px 28px rgba(2,6,23,0.28), inset 0 -1px 0 rgba(125,211,252,0.12)'
-          : 'inset 0 -1px 0 rgba(125,211,252,0.10)',
       }}
     >
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-9 bg-linear-to-b from-sky-300/18 to-transparent" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-7 bg-linear-to-t from-[#050A12] via-[#050A12]/62 to-transparent" />
       <div className="relative z-2 flex h-14 items-center justify-between px-4">
         <div className="flex min-w-0 flex-1 items-center gap-3">
           <div className="flex min-w-0 flex-col justify-center">
@@ -157,25 +152,24 @@ export function StudentHeader() {
           {/* XP chip — same glass style as bell, left of notifications */}
           <Link
             href="/progresso/streaks"
-            className="flex h-9 items-center gap-1.5 rounded-[12px] border border-amber-300/35 bg-amber-300/10 px-2.5 text-amber-100 shadow-[0_8px_18px_rgba(245,158,11,0.12),inset_0_1px_0_rgba(255,255,255,0.10)] transition-all hover:border-amber-200/55 hover:bg-amber-300/16 active:translate-y-px active:scale-[0.97]"
+            className="flex h-9 items-center gap-1.5 rounded-[10px] border border-emerald-500/20 bg-emerald-500/8 px-2.5 text-slate-200 transition-all hover:border-emerald-400/35 hover:bg-emerald-500/14"
             title={`${xpData?.balance ?? 0} XP — Nível ${xpData?.level ?? 1}`}
             aria-label={`${xpData?.balance ?? 0} XP, nível ${xpData?.level ?? 1}`}
+            style={{ boxShadow: 'inset 0 1px 0 rgba(52,211,153,0.06)' }}
           >
-            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-linear-to-b from-amber-200 via-amber-400 to-yellow-600 text-yellow-950 shadow-[0_3px_8px_rgba(245,158,11,0.32),inset_0_1px_0_rgba(255,255,255,0.62)]">
-              <DSIcon name="coin" size={12} />
-            </span>
-            <span className="text-[11px] font-black tabular-nums leading-none text-amber-200">{xpData?.balance ?? 0}</span>
+            <DSIcon name="flame" size={14} className="text-emerald-400" />
+            <span className="text-[11px] font-bold tabular-nums leading-none text-emerald-300">{xpData?.balance ?? 0}</span>
           </Link>
 
           <div className="relative">
             <Link
               href="/perfil/notificacoes"
-              className="relative flex h-9 w-9 items-center justify-center overflow-hidden rounded-[12px] border border-sky-200/18 bg-white/8 text-sky-100 shadow-[0_8px_18px_rgba(14,165,233,0.12),inset_0_1px_0_rgba(255,255,255,0.10)] transition-all hover:border-sky-200/35 hover:bg-white/12 hover:text-white active:translate-y-px active:scale-[0.97]"
+              className="flex h-9 w-9 items-center justify-center rounded-[10px] border border-white/12 bg-white/5 text-slate-200 transition-all hover:bg-white/10 hover:text-white hover:border-emerald-500/30"
               title={unreadCount > 0 ? `${unreadCount} nao lida(s)` : 'Notificacoes'}
               aria-label={unreadCount > 0 ? `${unreadCount} notificacoes nao lidas` : 'Notificacoes'}
+              style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)' }}
             >
-              <span className="pointer-events-none absolute inset-x-1 top-0 h-px bg-linear-to-r from-transparent via-sky-200/60 to-transparent" />
-              <DSIcon name={unreadCount > 0 ? 'bellRing' : 'bell'} size={16} className="text-white drop-shadow-[0_0_10px_rgba(125,211,252,0.28)]" />
+              <DSIcon name="bell" size={16} className="text-white" />
             </Link>
 
             {unreadCount > 0 && (
@@ -188,13 +182,9 @@ export function StudentHeader() {
             )}
           </div>
 
-          <Link
-            href="/perfil"
-            className="shrink-0 rounded-[14px] border border-white/10 bg-white/7 p-0.5 shadow-[0_8px_18px_rgba(2,6,23,0.20),inset_0_1px_0_rgba(255,255,255,0.10)] transition-all hover:border-sky-200/24 hover:bg-white/10 active:translate-y-px active:scale-[0.97]"
-            aria-label="Abrir perfil"
-          >
-            <AvatarWithPlanBadge src={user?.avatar_url} name={user?.full_name || 'U'} size="sm" />
-          </Link>
+          <div className="shrink-0">
+            <AvatarWithPlanBadge src={user?.avatar_url} name={user?.full_name || 'U'} size="sm" linkToPlans />
+          </div>
         </div>
       </div>
     </header>

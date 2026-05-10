@@ -7,10 +7,11 @@
 
 ## [Unreleased] — 2026-04-08 — Sprint 11-15 (UX Nutrição/Exercícios)
 
-### 🧭 Agentes — regra obrigatória de atualização gstack/skills (2026-05-10)
-- **Regra crítica adicionada:** [.claude/docs/RULES.md](.claude/docs/RULES.md) agora exige manter gstack e skills atualizados no início de cada sessão e antes de fluxos operacionais.
-- **Claude/Copilot alinhados:** [CLAUDE.md](CLAUDE.md) recebeu a regra direta para sessões Claude/gstack; [.github/copilot-instructions.md](.github/copilot-instructions.md) foi regenerado via `node scripts/sync-ai-docs.mjs`.
-- **Gate operacional:** se qualquer preamble/skill mostrar `UPGRADE_AVAILABLE`, o agente deve rodar `/gstack-upgrade` antes de continuar QA, deploy, browser testing, review, investigação ou automações.
+### 🔄 Rollback v4.0.1 — desfaz polish premium mobile v4.0.0 (2026-05-10)
+- **Motivo:** usuário não aprovou as mudanças visuais publicadas no deploy v4.0.0.
+- **Ação:** rollback do último release commit para restaurar a experiência anterior estável do app aluno.
+- **Escopo:** Pages/frontend; sem alterações planejadas em banco de dados ou Worker.
+- **Exceção operacional:** WhatsApp task-notify segue com Unipile 401; rollback será publicado com `--allow-no-whatsapp`.
 
 ### 🧭 Planejamento — Autoplan Student-first depth (2026-05-10)
 - **Roadmap replanejado:** [plan-production-ready/PRODUCT-ROADMAP.md](plan-production-ready/PRODUCT-ROADMAP.md) recebeu decisão `/autoplan` para priorizar profundidade do app aluno antes de expandir marketplace, nutricionista, SEO, social ou Personal OS avançado.

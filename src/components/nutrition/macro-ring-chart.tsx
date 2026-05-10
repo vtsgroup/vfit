@@ -12,7 +12,7 @@
 
 import { useEffect, useState, useRef } from 'react'
 import { cn } from '@/lib/utils'
-import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
+import { DSIcon } from '@/components/ui/ds-icon'
 
 // ── Types ──────────────────────────────────────────────
 
@@ -39,8 +39,7 @@ interface MacroItem {
   key: string
   label: string
   short: string
-  icon: DSIconName
-  iconBg: string
+  icon: string
   value: number
   target: number
   kcal: number
@@ -142,8 +141,7 @@ export function MacroRingChart({
       key: 'protein',
       label: 'Proteína',
       short: 'P',
-      icon: 'flask',
-      iconBg: 'bg-emerald-500',
+      icon: 'zap',
       value: protein,
       target: proteinTarget,
       kcal: proteinKcal,
@@ -162,7 +160,6 @@ export function MacroRingChart({
       label: 'Carboidratos',
       short: 'C',
       icon: 'wheat',
-      iconBg: 'bg-amber-500',
       value: carbs,
       target: carbsTarget,
       kcal: carbsKcal,
@@ -181,7 +178,6 @@ export function MacroRingChart({
       label: 'Gordura',
       short: 'G',
       icon: 'droplets',
-      iconBg: 'bg-orange-500',
       value: fat,
       target: fatTarget,
       kcal: fatKcal,
@@ -418,8 +414,15 @@ export function MacroRingChart({
               aria-label={`${m.label}: ${isHidden ? 'oculto' : 'visível'}. Clique para alternar.`}
             >
               {/* Icon + Pattern Indicator (not just color) */}
-              <div className={cn('relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-white shadow-[0_9px_18px_-10px_rgba(15,23,42,0.85),inset_0_1px_0_rgba(255,255,255,0.24)]', m.iconBg)}>
-                <DSIcon name={m.icon} size={16} className="m-auto" />
+              <div className="relative flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-white shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_3px_8px_rgba(15,23,42,0.08)]">
+                <DSIcon name={m.icon} size={14} style={{ color: m.color }} className="m-auto" />
+                <div
+                  className="absolute inset-0 rounded-xl"
+                  style={{
+                    border: `1px solid ${m.color}`,
+                    opacity: isHidden ? 0.3 : 0.7,
+                  }}
+                />
               </div>
 
               {/* Label */}

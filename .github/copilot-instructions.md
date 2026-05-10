@@ -544,25 +544,7 @@ npm install -g wrangler@latest && wrangler --version
 
 ---
 
-## 18. GStack & Skills — SEMPRE ATUALIZADOS
-
-**🔴 REGRA ABSOLUTA:** manter gstack e skills atualizados no início de cada sessão e antes de usar qualquer fluxo gstack/skill operacional.
-
-Se qualquer preamble/skill mostrar `UPGRADE_AVAILABLE`, executar o fluxo `/gstack-upgrade` imediatamente antes de continuar.
-
-```bash
-# Checagem rápida quando aplicável
-~/.claude/skills/gstack/bin/gstack-update-check || true
-
-# Se houver atualização disponível
-# usar /gstack-upgrade e seguir o SKILL.md correspondente
-```
-
-**❌ NUNCA** ignorar aviso de atualização de gstack/skills antes de QA, deploy, browser testing, review, investigação ou automações.
-
----
-
-## 19. WhatsApp Operacional — INÍCIO/FIM OBRIGATÓRIO
+## 18. WhatsApp Operacional — INÍCIO/FIM OBRIGATÓRIO
 
 - Toda ação operacional deve registrar `start` e `end` no grupo WhatsApp
 - Escopo: deploy, hotfix, migração, rollback, correção crítica, auditoria
@@ -573,7 +555,7 @@ Se qualquer preamble/skill mostrar `UPGRADE_AVAILABLE`, executar o fluxo `/gstac
 
 ---
 
-## 20. Documentação Pós-Deploy
+## 19. Documentação Pós-Deploy
 
 Após CADA deploy, atualizar **na mesma sessão**:
 1. `.claude/docs/CHANGELOG.md` — entry com data + mudanças
@@ -584,7 +566,7 @@ Após CADA deploy, atualizar **na mesma sessão**:
 
 ---
 
-## 21. Documentação & Tracking — OBRIGATÓRIO
+## 20. Documentação & Tracking — OBRIGATÓRIO
 
 ### Documentação centralizada em `.claude/docs/`
 - **TODA** documentação técnica, operacional e de design DEVE estar em `.claude/docs/`
@@ -1697,7 +1679,6 @@ npx wrangler d1 execute vfiti-exercises --file=backups/<timestamp>/d1/_schema.sq
 - A borda do CTA principal é uma linha fina de verde escuro (`emerald-900/70`), alinhada ao detalhe 3D.
 - Profundidade 3D do botão principal agora é exclusivamente verde escuro (`#064e3b`), sem cinza no shadow/base.
 - `Button.gradient` foi alinhado ao mesmo padrão: borda verde escura, profundidade verde escura e glow controlado.
-- `Button.secondary` agora usa slate navy blue-gray 3D: gradiente `slate-200 → slate-400` no light mode, `slate-500 → slate-700` no dark mode, borda fina e base 3D `#475569`/`#1e293b`.
 
 ---
 

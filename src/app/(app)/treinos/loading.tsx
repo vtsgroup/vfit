@@ -9,13 +9,12 @@ const S = 'animate-pulse bg-white/5'
 
 export default function TreinosLoading() {
   return (
-    <div className="mx-auto min-h-screen max-w-lg px-4 pt-0 pb-28">
+    <div className="min-h-screen pb-28">
       {/* ── Command center skeleton ─────────────────────────────────── */}
-      <div className="vfit-app-hero-gradient -mx-4 mb-4 min-h-103 overflow-hidden rounded-b-[28px] border-b border-white/8 shadow-xl">
-        <div className="relative px-4 pt-4 pb-3">
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-linear-to-t from-[#050A12] via-[#050A12]/70 to-transparent" />
+      <div className="-mx-4 mb-5 overflow-hidden rounded-b-3xl border-b border-white/8 bg-linear-to-br from-slate-950 via-slate-900 to-emerald-950 shadow-xl">
+        <div className="px-4 pt-5 pb-4">
           {/* Label + título */}
-          <div className="relative z-1 mb-4 flex items-start justify-between gap-3">
+          <div className="mb-4 flex items-start justify-between gap-3">
             <div className="min-w-0 flex-1">
               <div className={`${S} mb-2 h-2.5 w-28 rounded`} />
               <div className={`${S} mb-3 h-8 w-44 rounded-lg`} />
@@ -26,7 +25,7 @@ export default function TreinosLoading() {
           </div>
 
           {/* Card treino do dia */}
-          <div className="relative z-1 rounded-[26px] border border-white/12 bg-white/7 p-3 shadow-[0_18px_46px_rgba(0,0,0,0.34),inset_0_1px_0_rgba(255,255,255,0.09)] backdrop-blur-xl">
+          <div className="rounded-3xl border border-white/10 bg-white/6 p-3.5">
             <div className="mb-3 flex items-start justify-between gap-3">
               <div className="min-w-0 flex-1">
                 <div className={`${S} mb-2 h-6 w-32 rounded-full`} />
@@ -52,7 +51,7 @@ export default function TreinosLoading() {
           </div>
 
           {/* Atalhos nutrição/plano */}
-          <div className="relative z-1 mt-3 grid grid-cols-2 gap-2">
+          <div className="mt-3 grid grid-cols-2 gap-2">
             {[0, 1].map(i => (
               <div key={i} className={`${S} h-20 rounded-2xl`} />
             ))}

@@ -247,7 +247,7 @@ export function BottomNavigation({ notificationCount = 0, fabMenuOpen = false, o
   return (
     <nav
       aria-label="Navegação principal"
-      className="mobile-bottom-nav fixed -bottom-px left-0 right-0 z-45 rounded-t-[28px] bg-[#050A12] lg:hidden"
+      className="mobile-bottom-nav fixed -bottom-px left-0 right-0 z-45 rounded-t-[28px] bg-bg-dark lg:hidden"
     >
       <div
         className="relative z-5 w-full overflow-visible rounded-t-[28px] backdrop-blur-2xl backdrop-saturate-200"
@@ -288,12 +288,12 @@ export function BottomNavigation({ notificationCount = 0, fabMenuOpen = false, o
                     className="fab-ring relative flex h-14 w-14 items-center justify-center rounded-full border-none transition-all duration-300 active:scale-90"
                     style={{
                       background: fabMenuOpen
-                        ? 'linear-gradient(135deg, #0f3a72 0%, #0ea5e9 45%, #22c55e 100%)'
-                        : 'linear-gradient(135deg, #7dd3fc 0%, #22c55e 48%, #15803d 100%)',
+                        ? 'linear-gradient(135deg, #16a34a, #15803d)'
+                        : 'linear-gradient(135deg, #34d399, #22c55e 55%, #16a34a)',
                       boxShadow: fabMenuOpen
-                        ? '0 13px 38px rgba(14,165,233,0.36), 0 5px 0 #0f3a72, 0 0 0 1px rgba(255,255,255,0.22) inset'
-                        : '0 14px 40px rgba(34,197,94,0.36), 0 5px 0 #064e3b, 0 0 0 1px rgba(255,255,255,0.24) inset, 0 0 34px -16px rgba(125,211,252,0.9)',
-                      animation: fabMenuOpen ? 'none' : 'fab-pulse 3.4s ease-in-out infinite',
+                        ? '0 10px 36px rgba(34, 197, 94, 0.55), 0 4px 14px rgba(34, 197, 94, 0.35), 0 0 0 1px rgba(255,255,255,0.16) inset'
+                        : '0 10px 32px rgba(34, 197, 94, 0.5), 0 4px 12px rgba(34, 197, 94, 0.3), 0 0 0 1px rgba(255,255,255,0.18) inset',
+                      animation: fabMenuOpen ? 'none' : 'fab-pulse 3.2s ease-in-out infinite',
                       cursor: 'pointer',
                       touchAction: 'manipulation',
                       WebkitTapHighlightColor: 'transparent',
@@ -321,14 +321,14 @@ export function BottomNavigation({ notificationCount = 0, fabMenuOpen = false, o
                 href={tab.href}
                 prefetch={true}
                 onClick={haptic}
-                className="group relative flex min-w-10 flex-1 flex-col items-center transition-all duration-200 active:translate-y-0.5 active:scale-[0.90]"
+                className="group relative flex min-w-10 flex-1 flex-col items-center active:scale-[0.88] transition-all duration-200"
                 style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
               >
                 <div className="relative flex h-9 w-9 items-center justify-center">
                   {isActive && (
                     <motion.div
                       layoutId="mobile-active-pill"
-                      className="absolute inset-0 rounded-[14px] border border-sky-300/24 bg-linear-to-b from-sky-300/20 via-emerald-300/12 to-transparent shadow-[0_0_22px_rgba(125,211,252,0.18),inset_0_1px_0_rgba(255,255,255,0.12)]"
+                      className="absolute inset-0 rounded-[14px] border border-brand-primary/20 bg-brand-primary/12 shadow-[0_0_20px_rgba(34,197,94,0.22)]"
                       initial={{ scale: 0.92, opacity: 0.7 }}
                       animate={{ scale: 1.05, opacity: 1 }}
                       transition={{ type: 'spring', stiffness: 500, damping: 28 }}
@@ -337,7 +337,7 @@ export function BottomNavigation({ notificationCount = 0, fabMenuOpen = false, o
                   <div className={cn(
                     'relative z-10 transition-all duration-200',
                     isActive
-                      ? 'text-sky-100 drop-shadow-[0_0_10px_rgba(125,211,252,0.28)]'
+                      ? 'text-brand-primary'
                       : 'text-slate-400 group-hover:text-slate-200'
                   )}>
                     {tab.icon(isActive)}
@@ -358,7 +358,7 @@ export function BottomNavigation({ notificationCount = 0, fabMenuOpen = false, o
 
                 <span className={cn(
                   'relative z-10 mt-0.5 text-[9px] leading-none tracking-[0.3px] transition-all duration-200',
-                  isActive ? 'font-black text-sky-100' : 'font-medium text-slate-400'
+                  isActive ? 'font-semibold text-brand-primary' : 'font-medium text-slate-400'
                 )}>
                   {tab.label}
                 </span>

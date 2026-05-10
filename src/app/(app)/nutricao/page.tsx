@@ -9,7 +9,7 @@
 import { useState, useMemo, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
+import { DSIcon } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
@@ -27,6 +27,7 @@ import {
   useLogMeal,
   useNutritionTargets,
   MEAL_TYPE_LABELS,
+  MEAL_TYPE_ICONS,
   formatMacro,
   type MealType,
   type VfitFood,
@@ -35,40 +36,31 @@ import { useStudentProfile, useLinkNutritionist } from '@/hooks/use-student-app'
 
 // ── Food category visual config ────────────────────────
 
-const FOOD_CATEGORY_CONFIG: Record<string, { icon: DSIconName; color: string; bg: string }> = {
-  'cereais e derivados': { icon: 'wheat', color: 'text-amber-700', bg: 'bg-amber-500' },
-  'leguminosas': { icon: 'apple', color: 'text-emerald-700', bg: 'bg-emerald-500' },
-  'carnes': { icon: 'dumbbell', color: 'text-red-700', bg: 'bg-red-500' },
-  'aves': { icon: 'dumbbell', color: 'text-orange-700', bg: 'bg-orange-500' },
-  'peixes': { icon: 'droplets', color: 'text-sky-700', bg: 'bg-sky-500' },
-  'laticínios': { icon: 'flask', color: 'text-slate-700', bg: 'bg-slate-500' },
-  'frutas': { icon: 'apple', color: 'text-rose-700', bg: 'bg-rose-500' },
-  'verduras': { icon: 'apple', color: 'text-emerald-700', bg: 'bg-emerald-500' },
-  'legumes': { icon: 'apple', color: 'text-orange-700', bg: 'bg-orange-500' },
-  'ovos': { icon: 'circle', color: 'text-yellow-700', bg: 'bg-yellow-500' },
-  'gorduras': { icon: 'droplets', color: 'text-orange-700', bg: 'bg-orange-500' },
-  'açúcares': { icon: 'sparkles', color: 'text-pink-700', bg: 'bg-pink-500' },
-  'bebidas': { icon: 'droplets', color: 'text-cyan-700', bg: 'bg-cyan-500' },
-  'industrializado': { icon: 'archive', color: 'text-slate-700', bg: 'bg-slate-500' },
-  'suplementos': { icon: 'flask', color: 'text-violet-700', bg: 'bg-violet-500' },
-  'cereais': { icon: 'wheat', color: 'text-amber-700', bg: 'bg-amber-500' },
-  'proteinas': { icon: 'dumbbell', color: 'text-red-700', bg: 'bg-red-500' },
-  'laticinios': { icon: 'flask', color: 'text-slate-700', bg: 'bg-slate-500' },
-  'tuberculos': { icon: 'apple', color: 'text-orange-700', bg: 'bg-orange-500' },
-  'oleos': { icon: 'droplets', color: 'text-orange-700', bg: 'bg-orange-500' },
-  'nozes': { icon: 'circle', color: 'text-amber-700', bg: 'bg-amber-500' },
-  'sementes': { icon: 'wheat', color: 'text-lime-700', bg: 'bg-lime-500' },
-  'preparacoes': { icon: 'shoppingBag', color: 'text-sky-700', bg: 'bg-sky-500' },
-  'default': { icon: 'apple', color: 'text-slate-700', bg: 'bg-slate-500' },
-}
-
-const MEAL_TYPE_VISUALS: Record<MealType, { icon: DSIconName; bg: string; text: string }> = {
-  breakfast: { icon: 'sun', bg: 'bg-amber-500', text: 'text-amber-700' },
-  snack: { icon: 'apple', bg: 'bg-emerald-500', text: 'text-emerald-700' },
-  lunch: { icon: 'clock', bg: 'bg-sky-500', text: 'text-sky-700' },
-  pre_workout: { icon: 'zap', bg: 'bg-violet-500', text: 'text-violet-700' },
-  post_workout: { icon: 'dumbbell', bg: 'bg-emerald-500', text: 'text-emerald-700' },
-  dinner: { icon: 'moon', bg: 'bg-slate-600', text: 'text-slate-700' },
+const FOOD_CATEGORY_CONFIG: Record<string, { emoji: string; color: string; bg: string }> = {
+  'cereais e derivados': { emoji: '🌾', color: 'text-amber-400', bg: 'bg-amber-400/12' },
+  'leguminosas': { emoji: '🫘', color: 'text-green-400', bg: 'bg-green-400/12' },
+  'carnes': { emoji: '🥩', color: 'text-red-400', bg: 'bg-red-400/12' },
+  'aves': { emoji: '🍗', color: 'text-orange-400', bg: 'bg-orange-400/12' },
+  'peixes': { emoji: '🐟', color: 'text-blue-400', bg: 'bg-blue-400/12' },
+  'laticínios': { emoji: '🥛', color: 'text-zinc-300', bg: 'bg-zinc-300/12' },
+  'frutas': { emoji: '🍎', color: 'text-rose-400', bg: 'bg-rose-400/12' },
+  'verduras': { emoji: '🥬', color: 'text-emerald-400', bg: 'bg-emerald-400/12' },
+  'legumes': { emoji: '🥕', color: 'text-orange-400', bg: 'bg-orange-400/12' },
+  'ovos': { emoji: '🥚', color: 'text-yellow-400', bg: 'bg-yellow-400/12' },
+  'gorduras': { emoji: '🫙', color: 'text-amber-500', bg: 'bg-amber-500/12' },
+  'açúcares': { emoji: '🍬', color: 'text-pink-400', bg: 'bg-pink-400/12' },
+  'bebidas': { emoji: '🥤', color: 'text-brand-primary', bg: 'bg-brand-primary/12' },
+  'industrializado': { emoji: '📦', color: 'text-zinc-400', bg: 'bg-zinc-400/12' },
+  'suplementos': { emoji: '💊', color: 'text-violet-400', bg: 'bg-violet-400/12' },
+  'cereais': { emoji: '🌾', color: 'text-amber-400', bg: 'bg-amber-400/12' },
+  'proteinas': { emoji: '🍗', color: 'text-red-400', bg: 'bg-red-400/12' },
+  'laticinios': { emoji: '🥛', color: 'text-zinc-300', bg: 'bg-zinc-300/12' },
+  'tuberculos': { emoji: '🍠', color: 'text-orange-400', bg: 'bg-orange-400/12' },
+  'oleos': { emoji: '🫙', color: 'text-amber-500', bg: 'bg-amber-500/12' },
+  'nozes': { emoji: '🥜', color: 'text-amber-300', bg: 'bg-amber-300/12' },
+  'sementes': { emoji: '🌱', color: 'text-lime-400', bg: 'bg-lime-400/12' },
+  'preparacoes': { emoji: '🍱', color: 'text-sky-400', bg: 'bg-sky-400/12' },
+  'default': { emoji: '🍽️', color: 'text-zinc-400', bg: 'bg-zinc-400/12' },
 }
 
 const QUICK_SEARCH_TERMS = ['arroz', 'frango', 'ovo', 'banana', 'feijao', 'whey']
@@ -280,28 +272,28 @@ export default function NutricaoPage() {
       <button
         key={food.id}
         onClick={() => pickFood({ ...food, is_favorite: favorite })}
-        className="flex w-full items-center gap-3 rounded-2xl border border-slate-200/70 bg-white p-3 text-left shadow-[0_10px_28px_-22px_rgba(15,23,42,0.30),inset_0_1px_0_rgba(255,255,255,0.92)] transition-all hover:-translate-y-0.5 hover:border-sky-200 hover:shadow-[0_16px_36px_-24px_rgba(14,165,233,0.28)] active:translate-y-0 active:scale-[0.99] dark:border-white/10 dark:bg-white/6"
+        className="flex w-full items-center gap-3 rounded-xl bg-bg-secondary p-3 text-left transition-colors hover:bg-bg-tertiary active:scale-[0.99]"
       >
         <div
           className={cn(
-            'flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-white shadow-[0_8px_18px_-10px_rgba(15,23,42,0.65),inset_0_1px_0_rgba(255,255,255,0.24)]',
+            'flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-base',
             cat.bg
           )}
         >
-          <DSIcon name={cat.icon} size={17} />
+          {cat.emoji}
         </div>
         <div className="min-w-0 flex-1">
-          <p className="truncate text-sm font-bold text-text-primary">
+          <p className="truncate text-sm font-medium text-text-primary">
             {food.name}
           </p>
           <p className={cn('text-xs capitalize', cat.color)}>
             {label || food.category}
           </p>
         </div>
-        <div className="ml-1 text-right text-xs text-slate-500 dark:text-text-secondary">
+        <div className="ml-1 text-right text-xs text-text-secondary">
           <div className="flex items-center justify-end gap-1">
-            {favorite && <DSIcon name="star" size={12} className="text-amber-500" />}
-            <span className="font-black text-slate-700 dark:text-text-primary">{food.calories} kcal</span>
+            {favorite && <DSIcon name="star" size={12} className="text-amber-300" />}
+            <span className="font-bold">{food.calories} kcal</span>
           </div>
           <p className="text-text-muted">
             P:{food.protein_g} C:{food.carbs_g} G:{food.fat_g}
@@ -348,11 +340,11 @@ export default function NutricaoPage() {
         <div className="flex items-center justify-between">
           <button
             onClick={() => setSelectedDate((d) => shiftDate(d, -1))}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-[0_8px_20px_-16px_rgba(15,23,42,0.38),inset_0_1px_0_rgba(255,255,255,0.92)] transition-all hover:-translate-y-0.5 hover:border-sky-200 hover:text-sky-700 active:translate-y-0"
+            className="flex h-8 w-8 items-center justify-center rounded-full bg-bg-secondary text-text-secondary transition-colors hover:bg-bg-tertiary"
           >
             <DSIcon name="chevronLeft" size={16} />
           </button>
-          <span className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-black text-slate-800 shadow-[0_8px_20px_-18px_rgba(15,23,42,0.34)]">
+          <span className="text-sm font-semibold text-text-primary">
             {getDateLabel(selectedDate)}
           </span>
           <button
@@ -364,10 +356,10 @@ export default function NutricaoPage() {
             }
             disabled={selectedDate === today}
             className={cn(
-              'flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white shadow-[0_8px_20px_-16px_rgba(15,23,42,0.38),inset_0_1px_0_rgba(255,255,255,0.92)] transition-all',
+              'flex h-8 w-8 items-center justify-center rounded-full bg-bg-secondary transition-colors',
               selectedDate === today
-                ? 'text-slate-300 opacity-50'
-                : 'text-slate-600 hover:-translate-y-0.5 hover:border-sky-200 hover:text-sky-700 active:translate-y-0'
+                ? 'text-text-muted opacity-40'
+                : 'text-text-secondary hover:bg-bg-tertiary'
             )}
           >
             <DSIcon name="chevronRight" size={16} />
@@ -396,23 +388,18 @@ export default function NutricaoPage() {
         </section>
 
         {/* ═══ Convite/Vínculo com Nutricionista ═══ */}
-        <section className="relative overflow-hidden rounded-[26px] border border-emerald-100 bg-linear-to-br from-white via-emerald-50/55 to-sky-50/55 p-4 shadow-[0_24px_58px_-34px_rgba(15,23,42,0.34),inset_0_1px_0_rgba(255,255,255,0.92)]">
-          <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-emerald-200/50 blur-3xl" />
-          <div className="pointer-events-none absolute left-0 top-0 h-px w-full bg-linear-to-r from-transparent via-emerald-200 to-transparent" />
-
-          <div className="relative mb-3 flex items-start justify-between gap-3">
+        <section className="rounded-2xl border border-brand-primary/20 bg-linear-to-br from-brand-primary/8 to-transparent p-4">
+          <div className="mb-3 flex items-start justify-between gap-3">
             <div>
-              <p className="text-[11px] font-black uppercase tracking-[0.18em] text-emerald-700">Nutricionista</p>
-              <p className="mt-1 max-w-72 text-[13px] leading-relaxed text-slate-600">
+              <p className="text-[11px] font-bold uppercase tracking-wider text-brand-primary">Nutricionista</p>
+              <p className="mt-1 text-[13px] text-text-secondary">
                 Convide um nutricionista e vincule por código para acompanhamento alimentar.
               </p>
             </div>
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-emerald-500 text-white shadow-[0_10px_22px_-12px_rgba(5,150,105,0.82),inset_0_1px_0_rgba(255,255,255,0.28)]">
-              <DSIcon name="userPlus" size={18} />
-            </div>
+            <DSIcon name="userPlus" size={18} className="text-brand-primary" />
           </div>
 
-          <div className="relative mb-3 flex gap-2">
+          <div className="mb-3 flex gap-2">
             <Input
               value={nutritionistReferralCode}
               onChange={(e) => setNutritionistReferralCode(e.target.value.toUpperCase())}
@@ -428,9 +415,9 @@ export default function NutricaoPage() {
             </Button>
           </div>
 
-          <div className="relative flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2">
             <Button
-              variant="outline"
+              variant="ghost"
               size="sm"
               onClick={() => navigator.clipboard.writeText(nutritionInviteLink)}
             >
@@ -438,7 +425,7 @@ export default function NutricaoPage() {
               Copiar link
             </Button>
             <Button
-              variant="outline"
+              variant="ghost"
               size="sm"
               onClick={() => window.open(`mailto:?subject=${encodeURIComponent('Convite VFIT — Nutricionista')}&body=${encodeURIComponent(`Olá! Quero te convidar para me acompanhar no VFIT na parte nutricional.\n\nContato/cadastro: ${nutritionInviteLink}`)}`, '_blank')}
             >
@@ -446,7 +433,7 @@ export default function NutricaoPage() {
               Email
             </Button>
             <Button
-              variant="outline"
+              variant="ghost"
               size="sm"
               onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(`Olá! Quero te convidar para meu acompanhamento nutricional no VFIT.\n\nContato/cadastro: ${nutritionInviteLink}`)}`, '_blank')}
             >
@@ -454,7 +441,7 @@ export default function NutricaoPage() {
               WhatsApp
             </Button>
             <Button
-              variant={showNutritionQr ? 'secondary' : 'outline'}
+              variant={showNutritionQr ? 'secondary' : 'ghost'}
               size="sm"
               onClick={() => setShowNutritionQr((v) => !v)}
             >
@@ -464,7 +451,7 @@ export default function NutricaoPage() {
           </div>
 
           {showNutritionQr && (
-            <div className="relative mt-4 flex justify-center">
+            <div className="mt-4 flex justify-center">
               {nutritionInviteQrUrl ? (
                 <Image
                   src={nutritionInviteQrUrl}
@@ -472,10 +459,10 @@ export default function NutricaoPage() {
                   width={176}
                   height={176}
                   unoptimized
-                  className="h-44 w-44 rounded-2xl border border-slate-200 bg-white p-2 shadow-[0_16px_36px_-24px_rgba(15,23,42,0.32)]"
+                  className="h-44 w-44 rounded-xl border border-white/12 bg-white p-2"
                 />
               ) : (
-                <div className="flex h-44 w-44 items-center justify-center rounded-2xl border border-slate-200 bg-white/80">
+                <div className="flex h-44 w-44 items-center justify-center rounded-xl border border-white/12 bg-white/6">
                   <DSIcon name="loader" size={20} className="animate-spin text-text-muted" />
                 </div>
               )}
@@ -491,14 +478,12 @@ export default function NutricaoPage() {
           </div>
 
           {meals.length === 0 && !isLoading ? (
-            <div className="relative overflow-hidden rounded-[26px] border border-slate-200 bg-white px-5 py-10 text-center shadow-[0_24px_58px_-36px_rgba(15,23,42,0.36),inset_0_1px_0_rgba(255,255,255,0.95)]">
-              <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-linear-to-b from-sky-50 to-transparent" />
-              <div className="relative mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500 text-white shadow-[0_12px_24px_-14px_rgba(5,150,105,0.86),inset_0_1px_0_rgba(255,255,255,0.28)]">
-                <DSIcon name="plus" size={24} />
+            <div className="glass-card flex flex-col items-center gap-3 py-10 text-center">
+              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/8">
+                <DSIcon name="plus" size={24} className="text-brand-primary" />
               </div>
-              <p className="relative text-sm font-bold text-slate-800">Nenhuma refeição registrada</p>
-              <p className="relative mx-auto mt-1 max-w-56 text-xs leading-relaxed text-slate-500">Comece com um alimento ou use a IA para montar o dia.</p>
-              <Button className="relative mt-4" variant="secondary" size="sm" onClick={() => setShowSearch(true)}>
+              <p className="text-sm text-text-secondary">Nenhuma refeição registrada</p>
+              <Button variant="ghost" size="sm" onClick={() => setShowSearch(true)}>
                 <DSIcon name="plus" size={16} />
                 Adicionar Refeição
               </Button>
@@ -517,14 +502,11 @@ export default function NutricaoPage() {
               ).map((type) => {
                 const items = grouped.get(type)
                 if (!items?.length) return null
-                const visual = MEAL_TYPE_VISUALS[type]
                 return (
-                  <div key={type} className="rounded-2xl border border-slate-200 bg-white p-3 shadow-[0_18px_46px_-34px_rgba(15,23,42,0.34),inset_0_1px_0_rgba(255,255,255,0.94)]">
+                  <div key={type} className="glass-card">
                     <div className="mb-2 flex items-center gap-2">
-                      <span className={cn('flex h-8 w-8 items-center justify-center rounded-full text-white shadow-[0_9px_18px_-12px_rgba(15,23,42,0.74),inset_0_1px_0_rgba(255,255,255,0.24)]', visual.bg)}>
-                        <DSIcon name={visual.icon} size={16} />
-                      </span>
-                      <span className={cn('text-xs font-black uppercase tracking-[0.12em]', visual.text)}>
+                      <span className="text-base">{MEAL_TYPE_ICONS[type]}</span>
+                      <span className="text-xs font-bold text-text-primary">
                         {MEAL_TYPE_LABELS[type]}
                       </span>
                     </div>
@@ -532,17 +514,17 @@ export default function NutricaoPage() {
                       {items.map((meal) => (
                         <div
                           key={meal.id}
-                          className="flex items-center justify-between rounded-2xl border border-slate-100 bg-slate-50/85 px-3 py-2.5"
+                          className="flex items-center justify-between rounded-xl bg-bg-primary/50 px-3 py-2"
                         >
                           <div className="min-w-0 flex-1">
-                            <p className="truncate text-sm font-bold text-slate-800">
+                            <p className="truncate text-sm font-medium text-text-primary">
                               {meal.food_name}
                             </p>
-                            <p className="text-xs text-slate-500">{meal.quantity_g}g</p>
+                            <p className="text-xs text-text-muted">{meal.quantity_g}g</p>
                           </div>
-                          <div className="flex items-center gap-3 text-xs text-slate-500">
-                            <span className="font-bold text-slate-700">{Math.round(meal.calories_total)} kcal</span>
-                            <span className="font-black text-emerald-700">
+                          <div className="flex items-center gap-3 text-xs text-text-secondary">
+                            <span>{Math.round(meal.calories_total)} kcal</span>
+                            <span className="text-brand-primary">
                               {formatMacro(meal.protein_total)}p
                             </span>
                           </div>
@@ -559,19 +541,18 @@ export default function NutricaoPage() {
         {/* ═══ Link para IA Dieta ═══ */}
         <Link
           href="/ia/dieta"
-          className="relative flex items-center gap-3 overflow-hidden rounded-[26px] border border-sky-100 bg-linear-to-br from-white via-sky-50/70 to-emerald-50/55 p-4 shadow-[0_24px_58px_-34px_rgba(14,165,233,0.30),inset_0_1px_0_rgba(255,255,255,0.94)] transition-all hover:-translate-y-0.5 hover:border-sky-200 active:translate-y-0"
+          className="glass-card flex items-center gap-3 transition-colors hover:bg-bg-tertiary"
         >
-          <div className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-sky-200/50 blur-3xl" />
-          <div className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-linear-to-br from-sky-500 to-emerald-500 text-white shadow-[0_12px_24px_-14px_rgba(14,165,233,0.74),inset_0_1px_0_rgba(255,255,255,0.28)]">
-            <DSIcon name="sparkles" size={20} />
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/8">
+            <DSIcon name="sparkles" size={20} className="text-brand-primary" />
           </div>
-          <div className="relative flex-1">
-            <p className="text-sm font-black text-slate-900">Plano Alimentar com IA</p>
-            <p className="text-xs leading-relaxed text-slate-500">
+          <div className="flex-1">
+            <p className="text-sm font-bold text-text-primary">Plano Alimentar com IA</p>
+            <p className="text-xs text-text-muted">
               Gere um plano personalizado baseado na sua avaliação
             </p>
           </div>
-          <DSIcon name="chevronRight" size={16} className="relative text-slate-400" />
+          <DSIcon name="chevronRight" size={16} className="text-text-muted" />
         </Link>
       </div>
 
@@ -699,24 +680,20 @@ export default function NutricaoPage() {
                     'pre_workout',
                     'post_workout',
                   ] as MealType[]
-                ).map((type) => {
-                  const visual = MEAL_TYPE_VISUALS[type]
-                  return (
-                    <button
-                      key={type}
-                      onClick={() => setSelectedMealType(type)}
-                      className={cn(
-                        'flex items-center justify-center gap-1.5 rounded-xl px-2 py-2 text-xs font-bold transition-colors',
-                        selectedMealType === type
-                          ? 'bg-brand-primary text-bg-primary'
-                          : 'bg-bg-secondary text-text-secondary hover:bg-bg-tertiary'
-                      )}
-                    >
-                      <DSIcon name={visual.icon} size={13} />
-                      {MEAL_TYPE_LABELS[type]}
-                    </button>
-                  )
-                })}
+                ).map((type) => (
+                  <button
+                    key={type}
+                    onClick={() => setSelectedMealType(type)}
+                    className={cn(
+                      'rounded-xl px-2 py-2 text-xs font-semibold transition-colors',
+                      selectedMealType === type
+                        ? 'bg-brand-primary text-bg-primary'
+                        : 'bg-bg-secondary text-text-secondary hover:bg-bg-tertiary'
+                    )}
+                  >
+                    {MEAL_TYPE_ICONS[type]} {MEAL_TYPE_LABELS[type]}
+                  </button>
+                ))}
               </div>
 
               {/* Quantity */}
