@@ -26,6 +26,13 @@
 - Sistema 3D padronizado com linha superior fina + base inferior com contraste forte.
 - Botões de ação no card "Personal Trainer" (Treinos) atualizados para `variant="secondary"`.
 
+## Atualização — Botão Primary Verde 3D Premium (10/05/2026)
+
+- `Button.primary` usa gradiente emerald premium `emerald-300 → emerald-500 → green-700`.
+- A borda do CTA principal é uma linha fina de verde escuro (`emerald-900/70`), alinhada ao detalhe 3D.
+- Profundidade 3D do botão principal agora é exclusivamente verde escuro (`#064e3b`), sem cinza no shadow/base.
+- `Button.gradient` foi alinhado ao mesmo padrão: borda verde escura, profundidade verde escura e glow controlado.
+
 ---
 
 ## Cores & Contraste (Web — Tema Atual)

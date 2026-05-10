@@ -36,21 +36,19 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary: [
-    // Surface: VFIT green gradient with subtle mid-tone
-    'bg-linear-to-b from-emerald-400 via-emerald-500 to-emerald-600',
-    'text-white font-bold',
-    '[text-shadow:0_1px_2px_rgba(0,0,0,0.2)]',
-    // Border: lighter top edge, darker bottom — glass edge
-    'border border-t-emerald-300/50 border-x-emerald-500/30 border-b-emerald-700/50',
-    // 3D depth solido + inner highlight (sem ambient glow verde)
-    'shadow-[0_4px_0_0_#166534,inset_0_1px_0_rgba(255,255,255,0.25)]',
-    // Hover: lift (sem glow blur)
+    // Surface: premium emerald gradient with a dark-green precision edge
+    'bg-linear-to-b from-emerald-300 via-emerald-500 to-green-700',
+    'text-white font-black',
+    '[text-shadow:0_1px_2px_rgba(2,44,34,0.38)]',
+    // Border + depth: all green, no neutral gray in the 3D system
+    'border border-emerald-900/70',
+    'shadow-[0_5px_0_0_#064e3b,0_14px_30px_-13px_rgba(6,95,70,0.72),0_0_0_1px_rgba(6,78,59,0.14),inset_0_1px_0_rgba(255,255,255,0.36),inset_0_-1px_0_rgba(6,78,59,0.28)]',
     'hover:-translate-y-0.5',
-    'hover:shadow-[0_6px_0_0_#166534,inset_0_1px_0_rgba(255,255,255,0.3)]',
+    'hover:shadow-[0_7px_0_0_#064e3b,0_18px_38px_-12px_rgba(6,95,70,0.78),0_0_0_1px_rgba(6,78,59,0.18),0_0_42px_-20px_rgba(52,211,153,0.85),inset_0_1px_0_rgba(255,255,255,0.42),inset_0_-1px_0_rgba(6,78,59,0.32)]',
     'hover:brightness-105',
     // Active: press down + inner shadow
     'active:translate-y-[3px] active:scale-[0.98]',
-    'active:shadow-[0_1px_0_0_#166534,inset_0_2px_6px_rgba(0,0,0,0.15)]',
+    'active:shadow-[0_1px_0_0_#064e3b,0_4px_12px_-8px_rgba(6,95,70,0.6),inset_0_2px_8px_rgba(2,44,34,0.24)]',
     'active:brightness-95',
     'focus-visible:ring-emerald-400/40',
   ].join(' '),
@@ -188,18 +186,18 @@ const variantStyles: Record<ButtonVariant, string> = {
 
   // Gradient: vibrant multi-color gradient — for premium/AI CTAs
   gradient: [
-    'bg-linear-to-r from-emerald-500 via-brand-primary to-brand-accent',
-    'text-white font-bold',
-    '[text-shadow:0_1px_2px_rgba(0,0,0,0.2)]',
-    'border border-t-white/20 border-x-transparent border-b-black/10',
-    'shadow-[0_4px_0_0_#065F46,0_6px_24px_-4px_rgba(20,184,166,0.5),inset_0_1px_0_rgba(255,255,255,0.2)]',
+    'bg-linear-to-r from-emerald-400 via-emerald-500 to-lime-400',
+    'text-white font-black',
+    '[text-shadow:0_1px_2px_rgba(2,44,34,0.35)]',
+    'border border-emerald-900/65',
+    'shadow-[0_5px_0_0_#064e3b,0_14px_32px_-12px_rgba(6,95,70,0.72),0_0_0_1px_rgba(6,78,59,0.14),inset_0_1px_0_rgba(255,255,255,0.34)]',
     'hover:-translate-y-0.5',
-    'hover:shadow-[0_6px_0_0_#065F46,0_10px_32px_-4px_rgba(20,184,166,0.6),0_0_60px_-10px_rgba(20,184,166,0.25),inset_0_1px_0_rgba(255,255,255,0.25)]',
+    'hover:shadow-[0_7px_0_0_#064e3b,0_18px_40px_-12px_rgba(6,95,70,0.78),0_0_46px_-18px_rgba(132,204,22,0.72),inset_0_1px_0_rgba(255,255,255,0.42)]',
     'hover:brightness-105',
     'active:translate-y-[3px] active:scale-[0.98]',
-    'active:shadow-[0_1px_0_0_#065F46,0_2px_8px_-2px_rgba(20,184,166,0.3),inset_0_2px_6px_rgba(0,0,0,0.15)]',
+    'active:shadow-[0_1px_0_0_#064e3b,0_4px_12px_-8px_rgba(6,95,70,0.6),inset_0_2px_8px_rgba(2,44,34,0.24)]',
     'active:brightness-95',
-    'focus-visible:ring-teal-400/40',
+    'focus-visible:ring-emerald-400/40',
   ].join(' '),
 
   // Glass: glassmorphism — for overlays and floating actions
