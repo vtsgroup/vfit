@@ -117,10 +117,13 @@ function FirstWinCommandCenter({
   return (
     <section className="vfit-app-hero-gradient -mx-4 mb-4 overflow-hidden rounded-b-[28px] border-b border-white/8 text-white">
       <div className="relative px-4 pt-4 pb-3">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-linear-to-b from-[#0b1d36]/95 via-[#0b1d36]/56 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-18 bg-linear-to-b from-[#0b1d36] via-[#0b1d36]/70 to-transparent" />
         <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-white/7 via-transparent to-transparent" />
         <div className="pointer-events-none absolute inset-x-6 top-0 h-px bg-linear-to-r from-transparent via-sky-300/14 to-transparent" />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-linear-to-t from-bg-primary via-bg-primary/58 to-transparent" />
+        <div
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-20"
+          style={{ background: 'linear-gradient(to top, #050A12 0%, rgba(5,10,18,0.78) 42%, transparent 100%)' }}
+        />
         <div className="pointer-events-none absolute inset-x-6 bottom-0 h-12 bg-linear-to-t from-emerald-300/10 via-sky-300/6 to-transparent blur-xl" />
         <div className="pointer-events-none absolute inset-x-10 bottom-0 h-px bg-linear-to-r from-transparent via-emerald-300/30 to-transparent" />
 
