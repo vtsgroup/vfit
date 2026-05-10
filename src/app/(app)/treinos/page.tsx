@@ -117,9 +117,12 @@ function FirstWinCommandCenter({
   return (
     <section className="vfit-app-hero-gradient -mx-4 mb-4 overflow-hidden rounded-b-[28px] border-b border-white/8 text-white">
       <div className="relative px-4 pt-4 pb-3">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-14 bg-linear-to-b from-[#0b1d36]/92 via-[#0b1d36]/45 to-transparent" />
         <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-white/7 via-transparent to-transparent" />
-        <div className="pointer-events-none absolute inset-x-4 top-0 h-px bg-linear-to-r from-transparent via-brand-primary/70 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-4 top-0 h-px bg-linear-to-r from-transparent via-sky-300/28 to-transparent" />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-linear-to-t from-bg-primary via-bg-primary/58 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-6 bottom-0 h-12 bg-linear-to-t from-emerald-300/12 via-sky-300/8 to-transparent blur-xl" />
+        <div className="pointer-events-none absolute inset-x-10 bottom-0 h-px bg-linear-to-r from-transparent via-emerald-300/45 to-transparent" />
 
         <div className="relative z-10 mb-3 flex items-start justify-between gap-3">
           <div className="min-w-0">
