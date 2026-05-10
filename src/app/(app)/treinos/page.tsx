@@ -450,60 +450,74 @@ export default function TreinosPage() {
 
       {/* T5.9 — Assessment summary card (pós-onboarding) */}
       {latestAssessment ? (
-        <Link href="/avaliacoes" className="mb-5 block">
-          <GlassCard variant="depth" padding="md" hoverLift className="rounded-2xl border border-violet-400/18 bg-linear-to-br from-violet-500/8 to-transparent">
-            <div className="mb-3 flex items-center justify-between">
+        <Link href="/avaliacoes" className="group mb-5 block">
+          <div className="relative overflow-hidden rounded-[28px] border border-emerald-100/90 bg-linear-to-br from-white via-emerald-50/40 to-slate-50 p-4 shadow-[0_24px_58px_rgba(15,23,42,0.14)] transition-all duration-300 group-active:translate-y-px">
+            <div className="pointer-events-none absolute -left-10 -top-12 h-32 w-32 rounded-full bg-emerald-200/45 blur-2xl" />
+            <div className="pointer-events-none absolute -right-12 bottom-4 h-36 w-36 rounded-full bg-violet-100/70 blur-3xl" />
+            <div className="relative mb-4 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-violet-500/15">
-                  <DSIcon name="clipboardList" size={14} className="text-violet-400" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-violet-200 bg-white text-violet-500 shadow-[0_8px_18px_rgba(124,58,237,0.14)]">
+                  <DSIcon name="clipboardList" size={18} />
                 </div>
-                <span className="text-[11px] font-bold uppercase tracking-wider text-violet-400">
-                  Sua Avaliação
-                </span>
+                <div>
+                  <span className="text-[10px] font-black uppercase tracking-[0.24em] text-violet-500/85">
+                    Sua Avaliação
+                  </span>
+                  <p className="mt-0.5 text-[12px] font-semibold text-slate-500">Composição corporal</p>
+                </div>
               </div>
-              <DSIcon name="chevronRight" size={14} className="text-text-muted" />
+              <div className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white/90 text-slate-400 shadow-[0_6px_16px_rgba(15,23,42,0.08)] transition-colors group-hover:text-emerald-600">
+                <DSIcon name="chevronRight" size={16} />
+              </div>
             </div>
-            <div className="grid grid-cols-3 gap-2 text-center">
-              <div>
-                <p className="text-[16px] font-bold text-text-primary">
+
+            <div className="relative grid grid-cols-3 divide-x divide-slate-200/80 rounded-3xl border border-white/80 bg-white/75 py-3 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.95),0_10px_22px_rgba(15,23,42,0.06)]">
+              <div className="px-2">
+                <p className="text-[22px] font-black leading-none tracking-tight text-slate-950 tabular-nums">
                   {latestAssessment.weight_kg}
-                  <span className="ml-0.5 text-[10px] font-normal text-text-muted">kg</span>
+                  <span className="ml-0.5 text-[10px] font-bold text-slate-400">kg</span>
                 </p>
-                <p className="text-[10px] text-text-muted">Peso</p>
+                <p className="mt-1 text-[10px] font-semibold text-slate-400">Peso</p>
               </div>
-              <div>
-                <p className={`text-[16px] font-bold ${getBMIColor(latestAssessment.bmi)}`}>
+              <div className="px-2">
+                <p className={`text-[22px] font-black leading-none tracking-tight tabular-nums ${getBMIColor(latestAssessment.bmi)}`}>
                   {latestAssessment.bmi}
                 </p>
-                <p className="text-[10px] text-text-muted">IMC</p>
+                <p className="mt-1 text-[10px] font-semibold text-slate-400">IMC</p>
               </div>
-              <div>
-                <p className="text-[16px] font-bold text-text-primary">
+              <div className="px-2">
+                <p className="text-[22px] font-black leading-none tracking-tight text-slate-950 tabular-nums">
                   {latestAssessment.body_fat_percentage != null
                     ? `${latestAssessment.body_fat_percentage}%`
                     : '—'}
                 </p>
-                <p className="text-[10px] text-text-muted">Gordura</p>
+                <p className="mt-1 text-[10px] font-semibold text-slate-400">Gordura</p>
               </div>
             </div>
             {latestAssessment.bmi_category && (
-              <p className="mt-2 text-center text-[11px] text-text-muted">
-                {latestAssessment.bmi_category}
-              </p>
+              <div className="relative mt-3 flex justify-center">
+                <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-[11px] font-bold text-amber-700 shadow-[0_4px_12px_rgba(245,158,11,0.12)]">
+                  {latestAssessment.bmi_category}
+                </span>
+              </div>
             )}
-          </GlassCard>
+          </div>
         </Link>
       ) : (
-        <Link href="/avaliacoes/nova" className="mb-5 block">
-          <div className="glass-card flex items-center gap-3 rounded-2xl p-4">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-500/10">
-              <DSIcon name="clipboardList" size={20} className="text-violet-400" />
+        <Link href="/avaliacoes/nova" className="group mb-5 block">
+          <div className="relative flex min-h-22 items-center gap-3 overflow-hidden rounded-[28px] border border-violet-100 bg-linear-to-br from-white via-violet-50/40 to-emerald-50/35 p-4 shadow-[0_22px_48px_rgba(15,23,42,0.12)] transition-all duration-300 group-active:translate-y-px">
+            <div className="pointer-events-none absolute -left-8 -top-12 h-28 w-28 rounded-full bg-violet-200/45 blur-2xl" />
+            <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-violet-200 bg-white text-violet-500 shadow-[0_8px_18px_rgba(124,58,237,0.14)]">
+              <DSIcon name="clipboardList" size={21} />
             </div>
-            <div className="flex-1">
-              <p className="text-[13px] font-bold text-text-primary">Fazer Avaliação Física</p>
-              <p className="text-[11px] text-text-muted">Acompanhe seu progresso corporal</p>
+            <div className="relative flex-1">
+              <p className="text-[10px] font-black uppercase tracking-[0.22em] text-violet-500/85">Avaliação física</p>
+              <p className="mt-1 text-[15px] font-black text-slate-950">Criar avaliação corporal</p>
+              <p className="mt-0.5 text-[12px] font-semibold text-slate-500">Peso, IMC e gordura em um painel inteligente</p>
             </div>
-            <DSIcon name="chevronRight" size={14} className="text-text-muted" />
+            <div className="relative flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white/90 text-slate-400 shadow-[0_6px_16px_rgba(15,23,42,0.08)] transition-colors group-hover:text-emerald-600">
+              <DSIcon name="chevronRight" size={16} />
+            </div>
           </div>
         </Link>
       )}
