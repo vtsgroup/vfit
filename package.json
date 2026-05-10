@@ -1,6 +1,6 @@
 {
   "name": "vfit",
-  "version": "3.6.1",
+  "version": "3.6.2",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -117,7 +117,7 @@
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^4.0.18",
-    "wrangler": "^4.69.0"
+    "wrangler": "^4.90.0"
   },
   "browserslist": [
     "chrome >= 93",

@@ -1,20 +1,22 @@
 # VFIT Production Completion — Tracking
 
-> Última atualização: 2026-05-10 · Status: P2.21/P2.24/P2.26 concluídos local+Neon; P2.22/P2.23/P2.25 em progresso; seed de alimentos 152 itens sincronizado no Neon; deploy v3.6.0 publicado; próximo deploy pendente · Branch de execução: `main` · Versão live observada: `3.6.0`.
+> Última atualização: 2026-05-10 · Status: P2.21/P2.24/P2.26 publicados; P2.22 smoke API parcialmente coberto por smoke auth; P2.23/P2.25 em progresso; seed de alimentos 152 itens sincronizado no Neon; deploy v3.6.2 em publicação final com Wrangler local 4.90.0 · Branch de execução: `main` · Versão live observada: `3.6.2`.
 
 ## Progresso geral
 
 ```text
 Fases: 0/9 concluídas
-Tasks: 27/134 concluídas
-Bloqueadores P0 abertos: 2 + deploy/smoke runtime do novo pacote pendente
-Gate produção: NÃO LIBERADO
+Tasks: 28/134 concluídas
+Bloqueadores P0 abertos: 2 + WhatsApp Unipile 401 + rotação NEON_DATABASE_URL pendente
+Gate produção: LIBERADO COM EXCEÇÃO OPERACIONAL WHATSAPP
 ```
 
 ### Deploys executados
 
 | Versão | Data | Branch/commit | Escopo | Resultado |
 |---|---|---|---|---|
+| v3.6.2 | 2026-05-10 | `main` / deploy patch | Student-first funcional: nutrição real, treino ativo persistente/offline, polish premium `/treinos`, Wrangler local 4.90.0 | Deploy final em execução com smoke auth 7/0/2 e WhatsApp bypass por Unipile 401. |
+| v3.6.1 | 2026-05-10 | `main` / `d0d90cf6` | Student-first funcional inicial | Pages + Workers publicados; git push/tag OK; identificado que Worker usou Wrangler local 4.71.0, exigindo atualização local e redeploy. |
 | v3.6.0 | 2026-05-10 | `main` / `3c0f2cab` | Phase 0 stabilization + First Win `/treinos` + skeletons/empty states P2.12-P2.17 | Pages + Workers publicados; git push/tag OK; WhatsApp start/end bypass por Unipile 401; smoke visual/API OK; smoke auth local bloqueado por tokens expirados. |
 
 ## Design review status

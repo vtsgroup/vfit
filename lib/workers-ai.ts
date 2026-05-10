@@ -58,7 +58,7 @@ export async function callWorkersAI(
       max_tokens: input.max_tokens || 2048,
       temperature: input.temperature || 0.7,
       top_p: input.top_p || 0.95,
-    }) as AITextGenerationOutput
+    }) as unknown as AITextGenerationOutput
 
     if (typeof result === 'string') return result
     if (result && typeof result === 'object' && 'response' in result) {

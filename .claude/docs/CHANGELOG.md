@@ -31,6 +31,14 @@
 - **Validação:** migrations Neon ✅; sync real ✅ (`152` inseridos; biblioteca Neon `10152`); `npm run foods:sync:dry` ✅; `npm run type-check && npm run type-check:workers` ✅.
 - **Segurança operacional:** primeira tentativa de migration fez a lib Neon imprimir a URL de conexão em erro; rotacionar `NEON_DATABASE_URL` após deploy.
 
+### 🚀 Deploy v3.6.2 — Student-first funcional + polish premium (2026-05-10)
+- **Publicado em produção:** pacote student-first com nutrição funcional, alimentos reais, favoritos/recentes/manual, treino ativo persistente/offline e polish premium do First Win de `/treinos`.
+- **Wrangler atualizado:** v3.6.1 publicou com sucesso, mas o Worker usou Wrangler local `4.71.0`; a dependência local `wrangler` foi atualizada para `4.90.0`, corrigindo o gate obrigatório antes do redeploy final.
+- **Workers AI compatível:** [lib/workers-ai.ts](lib/workers-ai.ts) ajusta o cast do retorno `ai.run` via `unknown` para compatibilizar com os tipos novos do Wrangler.
+- **Smoke auth recuperado:** tokens temporários gerados via `/dashboard/admin/smoke`; `npm run smoke:auth:local` passou com `7 passed`, `0 failed`, `2 skipped` e evidência atualizada em `.claude/docs/archive/legacy-plans/AUTH-SMOKE.generated.md`.
+- **Validação pré-deploy:** `npm run foods:sync:dry`, `npm run type-check`, `npm run type-check:workers`, `npm run build`, `git diff --check` e `npx wrangler --version` (`4.90.0`) passaram.
+- **Exceção operacional mantida:** WhatsApp task-notify start/end segue falhando por Unipile 401 `invalid_credentials`; deploy executado com `--allow-no-whatsapp` até corrigir credenciais do gateway.
+
 ### 🚀 Deploy v3.6.0 — produção (2026-05-10)
 - **Publicado em produção:** Cloudflare Pages e Worker `vfit-api` publicados via `node scripts/cf-deploy.js patch --allow-no-whatsapp --msg "estabiliza app aluno para producao"`.
 - **Git/tag:** release commit `3c0f2cab` em `main`, tag `v3.6.0` enviada para `origin/main`.

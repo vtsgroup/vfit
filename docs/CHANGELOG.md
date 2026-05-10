@@ -30,6 +30,14 @@
 - Validação: `npm run foods:sync:dry`, `npm run type-check` e `npm run type-check:workers` passaram.
 - Segurança operacional: primeira tentativa de migration expôs a URL de conexão em erro da lib Neon; rotacionar `NEON_DATABASE_URL` após deploy.
 
+### 🚀 Deploy — 10/05/2026 — v3.6.2 Student-first funcional
+- Produção republicada com nutrição funcional, catálogo alimentar PT-BR, favoritos/recentes/manual, treino ativo persistente/offline e polish premium no First Win de `/treinos`.
+- v3.6.1 publicou Pages/Worker/git/tag com sucesso, mas o Worker usou Wrangler local `4.71.0`; a dependência local foi atualizada para Wrangler `4.90.0` e o pacote foi repassado no deploy final.
+- `lib/workers-ai.ts` ajustado para os tipos novos do Wrangler usando cast via `unknown` no retorno de `ai.run`.
+- Smoke auth recuperado com tokens temporários do painel admin: `7 passed`, `0 failed`, `2 skipped`; evidência sincronizada para `.claude/docs/archive/legacy-plans/AUTH-SMOKE.generated.md`.
+- Validação pré-deploy: `npm run foods:sync:dry`, `npm run type-check`, `npm run type-check:workers`, `npm run build`, `git diff --check` e `npx wrangler --version` (`4.90.0`) passaram.
+- Exceção operacional: WhatsApp task-notify start/end continua falhando com Unipile 401 `invalid_credentials`; deploy realizado com `--allow-no-whatsapp`.
+
 ### 🚀 Deploy — 10/05/2026 — v3.6.0 produção
 - Cloudflare Pages e Worker `vfit-api` publicados com sucesso via deploy patch; release commit `3c0f2cab` e tag `v3.6.0` enviados para `origin/main`.
 - Pós-deploy API: `https://api.vfit.app.br/health` retornou 200; `/api/v1/progress/top-exercises?limit=4` sem token retornou 401 em vez de 500.
