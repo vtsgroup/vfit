@@ -70,8 +70,8 @@ export function ProfileDetailShell({
   return (
     <div className={cn('mx-auto min-h-dvh max-w-lg bg-linear-to-b from-white via-slate-50 to-white px-4 pt-0 pb-28 text-slate-950', className)}>
       <header
-        className="relative -mx-4 mb-5 overflow-hidden rounded-b-[34px] px-4 pb-6 pt-5 text-white"
-        style={{ background: 'linear-gradient(to bottom, #0b1d36 0%, #0c1f38 28%, #0a1830 64%, #050A12 100%)', boxShadow: '0 22px 46px -28px rgba(5,10,18,0.96)' }}
+        className="vfit-app-hero-gradient relative -mx-4 mb-5 overflow-hidden rounded-b-[34px] px-4 pb-6 pt-5 text-white"
+        style={{ boxShadow: '0 22px 46px -28px rgba(5,10,18,0.96)' }}
       >
         <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-linear-to-b from-white/10 via-sky-300/6 to-transparent" />
 

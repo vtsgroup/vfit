@@ -58,6 +58,7 @@ export default function TermosPage() {
         subtitle={`Versão ${VERSION} · Última atualização: ${LAST_UPDATED}`}
         badge="Legal"
         breadcrumbs={[{ label: 'Legal', href: '/termos' }, { label: 'Termos de Uso', href: '/termos' }]}
+        appHeaderContinuation
       />
 
       <ProfileReturnLink />

@@ -34,11 +34,12 @@ interface PageHeroProps {
   subtitle?: string
   badge?: string
   breadcrumbs: BreadcrumbItem[]
+  appHeaderContinuation?: boolean
 }
 
-export function PageHero({ title, subtitle, badge, breadcrumbs }: PageHeroProps) {
+export function PageHero({ title, subtitle, badge, breadcrumbs, appHeaderContinuation = false }: PageHeroProps) {
   return (
-    <section className="relative overflow-hidden bg-bg-page pb-16 pt-32 sm:pb-20 sm:pt-40">
+    <section className={`${appHeaderContinuation ? 'vfit-app-hero-gradient' : 'bg-bg-page'} relative overflow-hidden pb-16 pt-32 sm:pb-20 sm:pt-40`}>
       {/* ── Background effects ── */}
       <div className="pointer-events-none absolute inset-0">
         {/* Radial mesh */}

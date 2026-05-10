@@ -89,6 +89,7 @@ export default function CookiesPage() {
         subtitle="Saiba quais cookies e tecnologias a VFIT utiliza, com foco em segurança, performance e conformidade LGPD."
         badge="Cookies"
         breadcrumbs={[{ label: 'Legal', href: '/termos' }, { label: 'Cookies', href: '/cookies' }]}
+        appHeaderContinuation
       />
 
       <ProfileReturnLink />

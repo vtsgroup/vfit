@@ -36,6 +36,7 @@ export default function ExcluirContaPage() {
         subtitle="Solicite a exclusão da sua conta conforme a LGPD (Art. 16 e 18)"
         badge="Exclusão de Dados"
         breadcrumbs={[{ label: 'Legal', href: '/termos' }, { label: 'Excluir Conta', href: '/excluir-conta' }]}
+        appHeaderContinuation
       />
 
       <ProfileReturnLink />

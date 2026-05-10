@@ -73,8 +73,8 @@ export default function PerfilPage() {
     <div className="mx-auto max-w-lg bg-linear-to-b from-white via-slate-50 to-white px-4 pt-0 pb-28 text-slate-950">
       {/* Profile header */}
       <div
-        className="relative -mx-4 mb-5 overflow-hidden rounded-b-[34px] border-b-0 px-4 pb-6 pt-5 text-white backdrop-blur-md"
-        style={{ background: 'linear-gradient(to bottom, #0b1d36 0%, #0c1f38 20%, #0b1c35 40%, #0a1830 65%, #071628 85%, #050A12 100%)', boxShadow: '0 22px 46px -26px rgba(5,10,18,0.96)' }}
+        className="vfit-app-hero-gradient relative -mx-4 mb-5 overflow-hidden rounded-b-[34px] border-b-0 px-4 pb-6 pt-5 text-white backdrop-blur-md"
+        style={{ boxShadow: '0 22px 46px -26px rgba(5,10,18,0.96)' }}
       >
         <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-linear-to-b from-white/10 via-sky-300/6 to-transparent" />
         <div className="pointer-events-none absolute -right-20 top-8 h-44 w-44 rounded-full bg-emerald-300/12 blur-3xl" />

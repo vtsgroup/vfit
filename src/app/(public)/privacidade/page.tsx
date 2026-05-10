@@ -87,6 +87,7 @@ export default function PrivacidadePage() {
         subtitle="Conheça as regras de coleta, uso, armazenamento e compartilhamento de dados na VFIT, em conformidade com a LGPD."
         badge="LGPD Compliant"
         breadcrumbs={[{ label: 'Legal', href: '/termos' }, { label: 'Privacidade', href: '/privacidade' }]}
+        appHeaderContinuation
       />
 
       <ProfileReturnLink />

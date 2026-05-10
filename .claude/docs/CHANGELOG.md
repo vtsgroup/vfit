@@ -7,6 +7,11 @@
 
 ## [Unreleased] — 2026-04-08 — Sprint 11-15 (UX Nutrição/Exercícios)
 
+### 🎨 Hotfix v4.1.6 — Continuidade do gradiente no perfil (2026-05-10)
+- **Hero do perfil alinhado ao header:** [src/app/(app)/perfil/page.tsx](src/app/(app)/perfil/page.tsx) agora usa `vfit-app-hero-gradient`, mantendo a sequência visual do header escuro para o topo da página.
+- **Subpáginas do perfil consistentes:** [src/components/profile/settings-shell.tsx](src/components/profile/settings-shell.tsx) aplica o mesmo gradiente nos heróis de assinatura, sobre, editar, novidades, unidades, equipamentos, descanso, lembretes, notificações, gamificação, desafios e offline.
+- **Páginas legais abertas pelo perfil:** termos, privacidade, cookies e exclusão de conta receberam opt-in no `PageHero` para a mesma continuidade visual quando acessadas pelo app.
+
 ### 🎨 Hotfix v4.1.5 — Perfil premium claro + moeda VFIT (2026-05-10)
 - **Perfil e configurações premium:** [src/app/(app)/perfil/page.tsx](src/app/(app)/perfil/page.tsx) recebeu uma experiência light mais moderna, com hero refinado, cards claros, ícones por categoria, CTAs mais fortes e navegação com touch targets maiores.
 - **Subpáginas do perfil redesenhadas:** assinatura, sobre, novidades, editar perfil, unidades, equipamentos, descanso, lembretes, notificações, gamificação, desafios e offline/performance agora usam um shell premium compartilhado, com retorno previsível para `/perfil` e visual light consistente.
@@ -14,7 +19,8 @@
 - **Theme color removido:** a opção de alterar tema saiu da seção App para preservar a identidade visual fixa do app aluno.
 - **Versão mais visível:** a tela agora mostra `APP_VERSION`, build curto e data do build em um card próprio, com acesso às notas de versão.
 - **Moeda XP redesenhada:** [src/components/ui/ds-icon.tsx](src/components/ui/ds-icon.tsx) troca o símbolo antigo por um token VFIT com marca `V`, mais limpo e premium no header.
-- **Validação:** `npm run build` passou; `npm run smoke:auth:local` ficou bloqueado por tokens `SMOKE_*` expirados no preflight (`JWT exp`), então o deploy de produção permanece pendente até renovar os tokens em `/dashboard/admin/smoke`.
+- **Deploy:** publicado em produção como `v4.1.5` via `node scripts/cf-deploy.js patch --allow-no-whatsapp --msg "redesign perfil premium"`; Pages, Worker, commit, tag e push concluídos.
+- **Validação:** `npm run build` passou no deploy; `/perfil`, `/perfil/assinatura`, `/perfil/sobre`, `/termos` e `https://api.vfit.app.br/health` validados em produção. `npm run smoke:auth:local` foi bypassado nesta publicação por confirmação explícita do usuário porque os tokens `SMOKE_*` estavam expirados no preflight (`JWT exp`).
 
 ### 🔄 Rollback v4.0.1 — desfaz polish premium mobile v4.0.0 (2026-05-10)
 - **Motivo:** usuário não aprovou as mudanças visuais publicadas no deploy v4.0.0.
