@@ -170,7 +170,15 @@ export function MacroRingChart({
   const isOver = calories > calorieTarget
 
   return (
-    <div className={cn('w-full', className)}>
+    <div
+      className={cn(
+        'relative w-full overflow-hidden rounded-[26px] border border-slate-200/80 bg-linear-to-br from-white via-emerald-50/35 to-slate-50 p-3 shadow-[0_24px_60px_rgba(15,23,42,0.14)] sm:p-4',
+        className
+      )}
+    >
+      <div className="pointer-events-none absolute -left-9 -top-11 h-36 w-36 rounded-full bg-emerald-200/55 blur-2xl" />
+      <div className="pointer-events-none absolute -right-12 bottom-12 h-44 w-44 rounded-full bg-sky-100/65 blur-3xl" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-12 bg-linear-to-b from-white/85 to-transparent" />
 
       {/* ── SVG Ring ── */}
       <div className="relative mx-auto" style={{ width: size, height: size }}>
@@ -179,10 +187,12 @@ export function MacroRingChart({
         <div
           className="pointer-events-none absolute inset-0 rounded-full"
           style={{
-            background: 'radial-gradient(50% 50% at 50% 50%, rgba(52,211,153,0.07) 0%, transparent 100%)',
-            filter: 'blur(16px)',
+            background: 'radial-gradient(50% 50% at 50% 50%, rgba(16,185,129,0.22) 0%, transparent 100%)',
+            filter: 'blur(14px)',
           }}
         />
+
+        <div className="pointer-events-none absolute inset-[14%] rounded-full border border-white/70 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)]" />
 
         <svg
           width={size}
@@ -217,7 +227,7 @@ export function MacroRingChart({
           <circle
             cx={cx} cy={cy} r={outerR}
             fill="none"
-            stroke="rgba(255,255,255,0.05)"
+            stroke="rgba(15,23,42,0.08)"
             strokeWidth={4}
           />
 
@@ -237,7 +247,7 @@ export function MacroRingChart({
           <circle
             cx={cx} cy={cy} r={innerR}
             fill="none"
-            stroke="rgba(255,255,255,0.04)"
+            stroke="rgba(15,23,42,0.08)"
             strokeWidth={18}
           />
 
@@ -276,7 +286,7 @@ export function MacroRingChart({
             <circle
               cx={cx} cy={cy} r={innerR}
               fill="none"
-              stroke="rgba(255,255,255,0.06)"
+              stroke="rgba(15,23,42,0.14)"
               strokeWidth={18}
               strokeDasharray="3 10"
             />
@@ -287,18 +297,18 @@ export function MacroRingChart({
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-0">
           <span
             className="text-[9px] font-semibold uppercase tracking-[0.18em]"
-            style={{ color: 'rgba(255,255,255,0.35)' }}
+            style={{ color: 'rgba(5,150,105,0.7)' }}
           >
             consumido
           </span>
           <span
-            className="mt-0.5 text-[30px] font-black leading-none tabular-nums tracking-tight text-white"
+            className="mt-0.5 text-[30px] font-black leading-none tabular-nums tracking-tight text-slate-900"
           >
             {Math.round(calories).toLocaleString('pt-BR')}
           </span>
           <span
             className="text-[10px] font-medium tabular-nums"
-            style={{ color: 'rgba(255,255,255,0.28)' }}
+            style={{ color: 'rgba(15,23,42,0.5)' }}
           >
             kcal
           </span>
@@ -306,12 +316,12 @@ export function MacroRingChart({
           {/* Divider */}
           <div
             className="my-2 h-px w-8"
-            style={{ background: 'rgba(255,255,255,0.10)' }}
+            style={{ background: 'rgba(15,23,42,0.12)' }}
           />
 
           <span
             className="text-[11px] font-semibold tabular-nums"
-            style={{ color: isOver ? 'rgba(251,113,133,0.9)' : 'rgba(255,255,255,0.45)' }}
+            style={{ color: isOver ? 'rgba(225,29,72,0.9)' : 'rgba(15,23,42,0.58)' }}
           >
             {isOver
               ? `+${Math.round(calories - calorieTarget).toLocaleString('pt-BR')} excedido`
@@ -329,11 +339,15 @@ export function MacroRingChart({
               key={m.key}
               onClick={() => toggleMacro(m.key)}
               className={cn(
-                'flex w-full items-center gap-3 rounded-[8px] px-2.5 py-1.5 transition-all border-t border-x',
-                isHidden ? 'opacity-40 border-emerald-600/30 bg-emerald-950/40' : 'opacity-100 border-emerald-400/40 bg-emerald-900/25 hover:border-emerald-300/50 hover:bg-emerald-900/35'
+                'flex w-full items-center gap-3 rounded-xl border-t border-x border-b-2 px-2.5 py-1.5 transition-all active:translate-y-px',
+                isHidden
+                  ? 'opacity-45 border-emerald-300/65 bg-white/80 border-b-emerald-300/40'
+                  : 'opacity-100 border-emerald-300/80 bg-white/90 border-b-emerald-500/55 hover:border-emerald-400 hover:bg-emerald-50/80'
               )}
               style={{
-                boxShadow: isHidden ? '0 2px 4px rgba(5,10,18,0.4)' : '0 3px 6px rgba(5,80,40,0.5), inset 0 1px 0 rgba(52,211,153,0.1)',
+                boxShadow: isHidden
+                  ? '0 2px 4px rgba(15,23,42,0.08), inset 0 1px 0 rgba(16,185,129,0.08)'
+                  : '0 5px 12px rgba(5,150,105,0.2), inset 0 1px 0 rgba(16,185,129,0.16)',
               }}
               aria-label={`${m.label}: ${isHidden ? 'oculto' : 'visível'}. Clique para alternar.`}
             >
@@ -350,12 +364,12 @@ export function MacroRingChart({
               </div>
 
               {/* Label */}
-              <span className="w-24 shrink-0 text-[11px] font-medium" style={{ color: 'rgba(255,255,255,0.48)' }}>
+              <span className="w-24 shrink-0 text-[11px] font-semibold" style={{ color: 'rgba(15,23,42,0.68)' }}>
                 {m.label}
               </span>
 
               {/* Progress bar (fixed width, animated via transform translateX) */}
-              <div className="relative h-1.25 flex-1 overflow-hidden rounded-full" style={{ background: 'rgba(255,255,255,0.07)' }}>
+              <div className="relative h-1.25 flex-1 overflow-hidden rounded-full" style={{ background: 'rgba(15,23,42,0.08)' }}>
                 <div
                   className="absolute inset-y-0 left-0 rounded-full"
                   style={{
@@ -371,8 +385,8 @@ export function MacroRingChart({
 
               {/* Value / target */}
               <span className="w-16 shrink-0 text-right text-[11px] tabular-nums">
-                <span className="font-bold text-white">{Math.round(m.value)}</span>
-                <span style={{ color: 'rgba(255,255,255,0.25)' }}>/{m.target}g</span>
+                <span className="font-bold text-slate-900">{Math.round(m.value)}</span>
+                <span style={{ color: 'rgba(15,23,42,0.42)' }}>/{m.target}g</span>
               </span>
             </button>
           )
@@ -382,7 +396,7 @@ export function MacroRingChart({
       {/* ── Tooltip (on hover) ── */}
       {tooltip.key && (
         <div
-          className="pointer-events-none fixed z-50 flex flex-col gap-1 rounded-lg border border-white/10 bg-black/90 px-2.5 py-1.5 text-[10px] backdrop-blur"
+          className="pointer-events-none fixed z-50 flex flex-col gap-1 rounded-lg border border-emerald-200 bg-white/95 px-2.5 py-1.5 text-[10px] shadow-[0_8px_22px_rgba(15,23,42,0.12)] backdrop-blur"
           style={{
             left: `${tooltip.x}px`,
             top: `${tooltip.y}px`,
@@ -394,8 +408,8 @@ export function MacroRingChart({
             return (
               <div key={m.key} className="whitespace-nowrap">
                 <span style={{ color: m.color }}>{m.label}</span>
-                <span style={{ color: 'rgba(255,255,255,0.5)' }}>: {Math.round(m.value)}g</span>
-                <span style={{ color: 'rgba(255,255,255,0.35)' }}> ({Math.round(m.kcal)} kcal)</span>
+                <span style={{ color: 'rgba(15,23,42,0.6)' }}>: {Math.round(m.value)}g</span>
+                <span style={{ color: 'rgba(15,23,42,0.45)' }}> ({Math.round(m.kcal)} kcal)</span>
               </div>
             )
           })}
@@ -404,18 +418,18 @@ export function MacroRingChart({
 
       {/* ── Calorie target footer ── */}
       <div
-        className="mt-4 flex items-center justify-center gap-2"
-        style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '12px' }}
+        className="mt-4 flex items-center justify-center gap-2 rounded-full border border-emerald-200/80 bg-white/70 py-1"
+        style={{ borderTop: '1px solid rgba(15,23,42,0.08)', paddingTop: '12px' }}
       >
         <span
           className="text-[9px] font-bold uppercase tracking-[0.2em]"
-          style={{ color: 'rgba(255,255,255,0.2)' }}
+          style={{ color: 'rgba(15,23,42,0.36)' }}
         >
           Meta diária
         </span>
         <span
           className="text-[11px] font-bold tabular-nums"
-          style={{ color: 'rgba(255,255,255,0.38)' }}
+          style={{ color: 'rgba(15,23,42,0.6)' }}
         >
           {Math.round(calorieTarget).toLocaleString('pt-BR')} kcal
         </span>
