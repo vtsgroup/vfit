@@ -6,139 +6,103 @@
 
 'use client'
 
-import { useRouter } from 'next/navigation'
-import { DSIcon, type DSIconName } from '@/components/ui'
+import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 import { XPBar } from '@/components/gamificacao/xp-bar'
 import { BadgeGrid } from '@/components/gamificacao/badge-grid'
-import {
-  useGamificationProfile,
-  useBadges,
-  getLevelTitle,
-  getLevelEmoji,
-} from '@/hooks/use-gamification'
+import { ProfileCard, ProfileDetailShell, ProfilePill, ProfileTintCard } from '@/components/profile/settings-shell'
+import { useGamificationProfile, useBadges, getLevelTitle } from '@/hooks/use-gamification'
 
 export default function GamificacaoPage() {
-  const router = useRouter()
   const { data: profile, isLoading: loadingProfile } = useGamificationProfile()
   const { data: badges, isLoading: loadingBadges } = useBadges()
 
   const isLoading = loadingProfile || loadingBadges
 
   return (
-    <div className="flex min-h-screen flex-col bg-bg-primary pb-24">
-      {/* Header */}
-      <header className="sticky top-14 z-20 flex items-center gap-3 border-b border-white/8 bg-slate-950/95 px-4 py-3 backdrop-blur-xl">
-        <button
-          aria-label="Voltar"
-          onClick={() => router.back()}
-          className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/6 text-white/70 transition-colors hover:text-white"
-        >
-          <DSIcon name="arrowLeft" className="h-5 w-5" />
-        </button>
-        <h1 className="text-lg font-bold text-white">Conquistas</h1>
-      </header>
-
-      <div className="space-y-6 px-4 pt-2">
-        {/* Loading */}
+    <ProfileDetailShell
+      title="Gamificação"
+      subtitle="Acompanhe XP, níveis, recordes e conquistas da sua rotina."
+      icon="trophy"
+      tone="amber"
+      meta={<ProfilePill tone="amber">{profile ? `Nível ${profile.level}` : 'Evolução ativa'}</ProfilePill>}
+    >
+      <div className="space-y-5">
         {isLoading && (
-          <div className="flex flex-col items-center gap-4 py-12">
-            <DSIcon
-              name="loader"
-              className="h-6 w-6 animate-spin text-brand-primary"
-            />
-            <p className="text-sm text-text-secondary">Carregando...</p>
-          </div>
+          <ProfileCard>
+            <div className="flex flex-col items-center gap-4 py-10">
+              <DSIcon name="loader" className="h-6 w-6 animate-spin text-emerald-600" />
+              <p className="text-sm font-bold text-slate-500">Carregando evolução...</p>
+            </div>
+          </ProfileCard>
         )}
 
-        {/* XP & Nível */}
         {profile && (
           <>
-            {/* Hero card */}
-            <div className="flex flex-col items-center rounded-2xl border border-white/8 bg-white/3 p-6">
-              <span className="text-5xl">{getLevelEmoji(profile.level)}</span>
-              <h2 className="mt-2 text-xl font-bold text-text-primary">
-                Nível {profile.level}
-              </h2>
-              <p className="text-sm text-text-secondary">
-                {getLevelTitle(profile.level)}
+            <ProfileTintCard tone="amber" className="text-center">
+              <div className="mx-auto flex h-18 w-18 items-center justify-center rounded-2xl bg-slate-950 text-amber-300 shadow-[0_18px_44px_-28px_rgba(15,23,42,0.8)]">
+                <DSIcon name="crown" size={31} />
+              </div>
+              <h2 className="mt-4 text-[26px] font-black leading-none text-slate-950">Nível {profile.level}</h2>
+              <p className="mt-1 text-[13px] font-bold text-slate-500">{getLevelTitle(profile.level)}</p>
+              <p className="mt-3 text-[30px] font-black leading-none text-emerald-700">
+                {profile.total_xp.toLocaleString('pt-BR')} <span className="text-[13px] text-slate-500">XP</span>
               </p>
-              <p className="mt-1 text-2xl font-black text-brand-primary">
-                {profile.total_xp.toLocaleString('pt-BR')}{' '}
-                <span className="text-sm font-medium">XP</span>
-              </p>
-            </div>
+            </ProfileTintCard>
 
-            {/* Barra de XP */}
-            <XPBar
-              level={profile.level}
-              xpInLevel={profile.xp_in_level}
-              xpNeeded={profile.xp_needed}
-              progressPercent={profile.progress_percent}
-              totalXp={profile.total_xp}
-            />
+            <ProfileCard>
+              <XPBar
+                level={profile.level}
+                xpInLevel={profile.xp_in_level}
+                xpNeeded={profile.xp_needed}
+                progressPercent={profile.progress_percent}
+                totalXp={profile.total_xp}
+              />
+            </ProfileCard>
 
-            {/* Stats rápidos */}
             <div className="grid grid-cols-2 gap-3">
-              <StatCard
-                icon="dumbbell"
-                label="Treinos"
-                value={profile.total_workouts}
-              />
-              <StatCard
-                icon="trophy"
-                label="Recordes"
-                value={profile.total_records}
-              />
+              <StatCard icon="dumbbell" label="Treinos" value={profile.total_workouts} />
+              <StatCard icon="trophy" label="Recordes" value={profile.total_records} />
             </div>
           </>
         )}
 
-        {/* Badges */}
         {badges && badges.length > 0 && (
-          <div>
-            <h2 className="mb-3 text-base font-bold text-text-primary">
-              🏅 Badges
-            </h2>
+          <ProfileCard>
+            <div className="mb-3 flex items-center justify-between">
+              <h2 className="text-[16px] font-black text-slate-950">Badges</h2>
+              <ProfilePill tone="amber">{badges.length}</ProfilePill>
+            </div>
             <BadgeGrid badges={badges} />
-          </div>
+          </ProfileCard>
         )}
 
-        {/* Empty state */}
         {!isLoading && !profile && (
-          <div className="flex flex-col items-center gap-3 py-16">
-            <span className="text-5xl">🌱</span>
-            <p className="text-sm text-text-secondary">
-              Complete treinos para ganhar XP!
-            </p>
-          </div>
+          <ProfileCard>
+            <div className="flex flex-col items-center gap-3 py-12 text-center">
+              <div className="flex h-14 w-14 items-center justify-center rounded-card-lg bg-emerald-50 text-emerald-600 ring-1 ring-emerald-100">
+                <DSIcon name="sparkles" size={24} />
+              </div>
+              <p className="text-sm font-bold text-slate-600">Complete treinos para ganhar XP.</p>
+            </div>
+          </ProfileCard>
         )}
       </div>
-    </div>
+    </ProfileDetailShell>
   )
 }
 
-// ── Stat card ──────────────────────────────────────────
-function StatCard({
-  icon,
-  label,
-  value,
-}: {
-  icon: string
-  label: string
-  value: number
-}) {
+function StatCard({ icon, label, value }: { icon: DSIconName; label: string; value: number }) {
   return (
-    <div className="flex items-center gap-3 rounded-xl bg-bg-secondary p-3">
-      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/8">
-        <DSIcon
-          name={icon as DSIconName}
-          className="h-5 w-5 text-brand-primary"
-        />
+    <ProfileCard className="p-3">
+      <div className="flex items-center gap-3">
+        <div className="flex h-11 w-11 items-center justify-center rounded-[16px] bg-emerald-50 text-emerald-600 ring-1 ring-emerald-100">
+          <DSIcon name={icon} size={19} />
+        </div>
+        <div>
+          <p className="text-xl font-black leading-none text-slate-950">{value}</p>
+          <p className="mt-1 text-[11px] font-bold text-slate-500">{label}</p>
+        </div>
       </div>
-      <div>
-        <p className="text-lg font-bold text-text-primary">{value}</p>
-        <p className="text-xs text-text-secondary">{label}</p>
-      </div>
-    </div>
+    </ProfileCard>
   )
 }

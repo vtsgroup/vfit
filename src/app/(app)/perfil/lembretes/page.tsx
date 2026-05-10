@@ -10,6 +10,8 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { DSIcon } from '@/components/ui/ds-icon'
+import { Button } from '@/components/ui/button'
+import { ProfileCard, ProfileDetailShell, ProfilePill, ProfileTintCard, ProfileToggle } from '@/components/profile/settings-shell'
 import { cn } from '@/lib/utils'
 import { hapticLight, hapticSuccess } from '@/lib/haptics'
 import {
@@ -45,11 +47,9 @@ export default function LembretesPage() {
   const router = useRouter()
   const [settings, setSettings] = useState<ReminderSettings>(DEFAULT)
 
-  // T8.10: API de preferências de notificação
   const { data: prefsData } = useNotificationPreferences()
   const updatePrefs = useUpdateNotificationPreferences()
 
-  // Sincronizar enabled com a API quando carregar
   useEffect(() => {
     if (prefsData?.preferences) {
       const apiEnabled = prefsData.preferences.push_enabled && prefsData.preferences.workout_enabled
@@ -57,7 +57,6 @@ export default function LembretesPage() {
     }
   }, [prefsData])
 
-  // Carregar dias/horário do localStorage
   useEffect(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY)
@@ -81,7 +80,6 @@ export default function LembretesPage() {
     hapticLight()
     const newEnabled = !settings.enabled
     save({ ...settings, enabled: newEnabled })
-    // Sincronizar com API
     updatePrefs.mutate({
       push_enabled: newEnabled,
       workout_enabled: newEnabled,
@@ -91,7 +89,7 @@ export default function LembretesPage() {
   const toggleDay = (day: string) => {
     hapticLight()
     const days = settings.days.includes(day)
-      ? settings.days.filter((d) => d !== day)
+      ? settings.days.filter((selectedDay) => selectedDay !== day)
       : [...settings.days, day]
     save({ ...settings, days })
   }
@@ -102,125 +100,91 @@ export default function LembretesPage() {
   }
 
   return (
-    <div className="mx-auto max-w-lg px-4 pt-4 pb-24">
-      {/* Header */}
-      <div className="mb-6 flex items-center gap-3">
+    <ProfileDetailShell
+      title="Lembretes de treino"
+      subtitle="Escolha dias e horário para o app chamar você de volta para a rotina."
+      icon="bell"
+      tone="violet"
+      meta={<ProfilePill tone={settings.enabled ? 'emerald' : 'slate'}>{settings.enabled ? 'Ativo' : 'Desativado'}</ProfilePill>}
+    >
+      <div className="space-y-5">
         <button
-          aria-label="Voltar"
-          onClick={() => router.back()}
-          className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5"
-        >
-          <DSIcon name="arrowLeft" size={20} className="text-zinc-400" />
-        </button>
-        <div>
-          <h1 className="text-lg font-bold text-white">Lembretes de Treino</h1>
-          <p className="text-[11px] text-zinc-500">Receba notificações nos seus dias de treino</p>
-        </div>
-      </div>
-
-      {/* Master toggle */}
-      <div className="mb-6 flex items-center justify-between rounded-2xl bg-white/4 p-4">
-        <div className="flex items-center gap-3">
-          <div className={cn(
-            'flex h-10 w-10 items-center justify-center rounded-xl',
-            settings.enabled ? 'bg-white/10' : 'bg-white/5'
-          )}>
-            <DSIcon
-              name="bell"
-              size={20}
-              className={settings.enabled ? 'text-brand-primary' : 'text-zinc-500'}
-            />
-          </div>
-          <div>
-            <p className="text-sm font-bold text-white">Ativar Lembretes</p>
-            <p className="text-[11px] text-zinc-500">
-              {settings.enabled ? 'Notificações ativas' : 'Desativado'}
-            </p>
-          </div>
-        </div>
-        <button
+          type="button"
           onClick={toggleEnabled}
-          className={cn(
-            'h-7 w-12 rounded-full transition-colors',
-            settings.enabled ? 'bg-brand-primary' : 'bg-zinc-700'
-          )}
+          className="flex min-h-22 w-full items-center justify-between gap-4 rounded-[28px] border border-slate-200 bg-white p-4 text-left shadow-[0_18px_45px_-34px_rgba(15,23,42,0.42)] transition-all active:scale-[0.99]"
         >
-          <div className={cn(
-            'h-5 w-5 rounded-full bg-white shadow-md transition-transform mx-1',
-            settings.enabled ? 'translate-x-5' : 'translate-x-0'
-          )} />
-        </button>
-      </div>
-
-      {settings.enabled && (
-        <>
-          {/* Day selector */}
-          <p className="mb-3 px-1 text-[11px] font-bold uppercase tracking-wider text-zinc-600">
-            Dias de treino
-          </p>
-          <div className="mb-6 grid grid-cols-7 gap-2">
-            {DAYS.map((day) => {
-              const active = settings.days.includes(day.key)
-              return (
-                <button
-                  key={day.key}
-                  onClick={() => toggleDay(day.key)}
-                  className={cn(
-                    'flex flex-col items-center gap-1 rounded-xl py-3 transition-all',
-                    active
-                      ? 'bg-brand-primary/15 ring-1 ring-brand-primary/30'
-                      : 'bg-white/4 hover:bg-white/6'
-                  )}
-                >
-                  <span className={cn(
-                    'text-sm font-bold',
-                    active ? 'text-brand-primary' : 'text-zinc-400'
-                  )}>
-                    {day.label}
-                  </span>
-                  <span className="text-[8px] text-zinc-600">{day.full.slice(0, 3)}</span>
-                </button>
-              )
-            })}
-          </div>
-
-          {/* Time picker */}
-          <p className="mb-3 px-1 text-[11px] font-bold uppercase tracking-wider text-zinc-600">
-            Horário
-          </p>
-          <div className="mb-6 flex items-center gap-3 rounded-2xl bg-white/4 p-4">
-            <DSIcon name="clock" size={20} className="text-zinc-400" />
-            <input
-              type="time"
-              value={settings.time}
-              onChange={(e) => save({ ...settings, time: e.target.value })}
-              className="flex-1 bg-transparent text-lg font-bold text-white outline-none"
-            />
-          </div>
-
-          {/* Summary */}
-          <div className="rounded-2xl bg-white/4 p-4">
-            <div className="flex items-start gap-2">
-              <DSIcon name="info" size={14} className="mt-0.5 shrink-0 text-zinc-500" />
-              <p className="text-xs leading-relaxed text-zinc-500">
-                Você receberá uma notificação às{' '}
-                <span className="font-bold text-zinc-300">{settings.time}</span>
-                {' '}nos dias selecionados lembrando de treinar.
-                {settings.days.length === 0 && ' Selecione pelo menos um dia.'}
-              </p>
+          <div className="flex items-center gap-3">
+            <div className={cn('flex h-12 w-12 items-center justify-center rounded-[17px] ring-1', settings.enabled ? 'bg-violet-600 text-white ring-violet-200' : 'bg-slate-100 text-slate-500 ring-slate-200')}>
+              <DSIcon name="bell" size={21} />
+            </div>
+            <div>
+              <p className="text-[15px] font-black text-slate-950">Ativar lembretes</p>
+              <p className="mt-0.5 text-[12px] font-medium text-slate-500">{settings.enabled ? 'Notificações ativas' : 'Nenhum lembrete agendado'}</p>
             </div>
           </div>
-        </>
-      )}
+          <ProfileToggle enabled={settings.enabled} />
+        </button>
 
-      {/* Save */}
-      <button
-        onClick={handleSave}
-        className="mt-8 flex w-full items-center justify-center gap-2 rounded-2xl bg-brand-primary px-6 py-3.5 text-sm font-bold text-black transition-colors hover:bg-brand-primary/90 active:scale-[0.98]"
-      >
-        <DSIcon name="checkCircle" size={16} />
-        Salvar
-      </button>
-    </div>
+        {settings.enabled && (
+          <>
+            <ProfileCard>
+              <p className="mb-3 text-[11px] font-black uppercase text-slate-500">Dias de treino</p>
+              <div className="grid grid-cols-7 gap-2">
+                {DAYS.map((day) => {
+                  const active = settings.days.includes(day.key)
+                  return (
+                    <button
+                      key={day.key}
+                      type="button"
+                      onClick={() => toggleDay(day.key)}
+                      className={cn(
+                        'min-h-15 rounded-[16px] border py-2 text-center transition-all active:scale-[0.98]',
+                        active ? 'border-violet-200 bg-violet-50 text-violet-700' : 'border-slate-200 bg-slate-50 text-slate-500'
+                      )}
+                      aria-label={day.full}
+                    >
+                      <span className="block text-sm font-black">{day.label}</span>
+                      <span className="mt-1 block text-[8px] font-bold text-slate-400">{day.full.slice(0, 3)}</span>
+                    </button>
+                  )
+                })}
+              </div>
+            </ProfileCard>
+
+            <ProfileCard>
+              <label className="mb-3 block text-[11px] font-black uppercase text-slate-500" htmlFor="reminder-time">Horário</label>
+              <div className="flex items-center gap-3 rounded-card-lg border border-slate-200 bg-slate-50 px-4 py-3">
+                <DSIcon name="clock" size={20} className="text-violet-600" />
+                <input
+                  id="reminder-time"
+                  type="time"
+                  value={settings.time}
+                  onChange={(event) => save({ ...settings, time: event.target.value })}
+                  className="min-h-12 flex-1 bg-transparent text-lg font-black text-slate-950 outline-none"
+                />
+              </div>
+            </ProfileCard>
+
+            <ProfileTintCard tone="violet">
+              <div className="flex items-start gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[14px] bg-white text-violet-600 ring-1 ring-violet-100">
+                  <DSIcon name="info" size={18} />
+                </div>
+                <p className="text-[12px] font-medium leading-relaxed text-slate-600">
+                  Você receberá uma notificação às <span className="font-black text-slate-950">{settings.time}</span> nos dias selecionados.{settings.days.length === 0 && ' Selecione pelo menos um dia.'}
+                </p>
+              </div>
+            </ProfileTintCard>
+          </>
+        )}
+
+        <ProfileCard>
+          <Button onClick={handleSave} className="w-full">
+            <DSIcon name="checkCircle" size={16} />
+            Salvar lembretes
+          </Button>
+        </ProfileCard>
+      </div>
+    </ProfileDetailShell>
   )
 }

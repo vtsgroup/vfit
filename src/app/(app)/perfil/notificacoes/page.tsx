@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation'
 import { useMutation } from '@tanstack/react-query'
 import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
+import { ProfileCard, ProfileDetailShell, ProfilePill } from '@/components/profile/settings-shell'
 import { cn } from '@/lib/utils'
 import { api } from '@/lib/api-client'
 import { emitCacheEvent } from '@/lib/cache-events'
@@ -144,68 +145,41 @@ export default function NotificacoesPage() {
   }, [tab])
 
   return (
-    <div className="mx-auto max-w-lg px-4 pt-0 pb-24">
-      <div
-        className="-mx-4 mb-5 rounded-b-3xl border-b-0 px-4 py-5 backdrop-blur-md"
-        style={{
-          background: 'linear-gradient(to bottom, #0b1d36 0%, #0c1f38 20%, #0b1c35 40%, #0a1830 65%, #071628 85%, #050A12 100%)',
-          boxShadow: '0 6px 28px 0 rgba(5,10,18,0.6)',
-        }}
-      >
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <button
-              aria-label="Voltar"
-              onClick={() => router.back()}
-              className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/6 text-white/70 transition-colors hover:text-white"
-            >
-              <DSIcon name="arrowLeft" size={20} />
-            </button>
-            <div>
-              <h1 className="text-lg font-bold text-white">Notificações</h1>
-              <p className="text-[11px] text-white/60">{items.length} item(ns)</p>
+    <ProfileDetailShell
+      title="Notificações"
+      subtitle="Alertas, avisos de treino e mensagens importantes do app."
+      icon="bell"
+      tone="sky"
+      meta={<ProfilePill tone={unread?.unread_count ? 'sky' : 'slate'}>{unread?.unread_count ? `${unread.unread_count} não lidas` : `${items.length} item(ns)`}</ProfilePill>}
+    >
+      <div className="space-y-4">
+        <ProfileCard>
+          <div className="flex items-center justify-between gap-3">
+            <div className="inline-flex rounded-[16px] border border-slate-200 bg-slate-50 p-1">
+              <button
+                type="button"
+                onClick={() => setTab('unread')}
+                className={cn('min-h-9 rounded-[12px] px-3 text-xs font-black transition-colors', tab === 'unread' ? 'bg-white text-sky-700 shadow-sm' : 'text-slate-500')}
+              >
+                Não lidas {unread?.unread_count ? `(${unread.unread_count})` : ''}
+              </button>
+              <button
+                type="button"
+                onClick={() => setTab('all')}
+                className={cn('min-h-9 rounded-[12px] px-3 text-xs font-black transition-colors', tab === 'all' ? 'bg-white text-sky-700 shadow-sm' : 'text-slate-500')}
+              >
+                Todas
+              </button>
             </div>
+
+            {items.length > 0 && (
+              <Button variant="primary" size="sm" onClick={() => markAllRead.mutate()} loading={markAllRead.isPending}>
+                <DSIcon name="checkCheck" size={14} />
+                Ler tudo
+              </Button>
+            )}
           </div>
-
-          {items.length > 0 && (
-            <Button
-              variant="primary"
-              size="sm"
-              onClick={() => markAllRead.mutate()}
-              loading={markAllRead.isPending}
-              className=""
-            >
-              <DSIcon name="checkCheck" size={14} />
-              Ler tudo
-            </Button>
-          )}
-        </div>
-
-        <div className="mt-4 inline-flex rounded-xl border border-white/10 bg-bg-secondary/80 p-1">
-          <button
-            onClick={() => setTab('unread')}
-            className={cn(
-              'rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors',
-              tab === 'unread'
-                ? 'bg-brand-primary/90 text-white shadow'
-                : 'text-white/80 hover:text-white'
-            )}
-          >
-            Não lidas {unread?.unread_count ? `(${unread.unread_count})` : ''}
-          </button>
-          <button
-            onClick={() => setTab('all')}
-            className={cn(
-              'rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors',
-              tab === 'all'
-                ? 'bg-brand-primary/90 text-white shadow'
-                : 'text-white/80 hover:text-white'
-            )}
-          >
-            Todas
-          </button>
-        </div>
-      </div>
+        </ProfileCard>
 
       {isLoading && items.length === 0 ? (
         <div className="py-10 text-center text-slate-500 dark:text-white/60">Carregando notificações...</div>
@@ -242,6 +216,7 @@ export default function NotificacoesPage() {
           )}
         </div>
       )}
-    </div>
+      </div>
+    </ProfileDetailShell>
   )
 }

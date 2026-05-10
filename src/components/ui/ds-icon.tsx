@@ -367,12 +367,12 @@ export function DSIcon({
         aria-hidden={!ariaLabel}
         role={ariaLabel ? 'img' : undefined}
       >
-        <circle cx="12" cy="12" r="9.25" fill="#A16207" />
-        <circle cx="12" cy="12" r="8.35" fill="#FCD34D" />
-        <circle cx="12" cy="12" r="6.8" fill="#FBBF24" stroke="rgba(120,53,15,0.35)" strokeWidth="0.8" />
-        <path d="M12 8v8" stroke="#78350F" strokeWidth="1.5" strokeLinecap="round" />
-        <path d="M9.8 10.25c.42-.72 1.15-1.08 2.2-1.08 1.28 0 2.1.57 2.1 1.45 0 1.9-4.18.92-4.18 2.86 0 .87.8 1.46 2.07 1.46 1.05 0 1.83-.34 2.26-1.03" stroke="#78350F" strokeWidth="1.32" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M8.35 7.05c1-.74 2.21-1.12 3.65-1.12" stroke="rgba(255,255,255,0.58)" strokeWidth="0.85" strokeLinecap="round" />
+        <circle cx="12" cy="12" r="9.2" fill="#92400E" />
+        <circle cx="12" cy="12" r="8.2" fill="#FDE68A" />
+        <circle cx="12" cy="12" r="6.65" fill="#F59E0B" />
+        <path d="M7.9 8.15h2.15l1.95 5.18 1.95-5.18h2.15L12.92 16h-1.84L7.9 8.15Z" fill="#451A03" />
+        <path d="M9.2 8.15h.92L12 13.05l1.88-4.9h.92L12.55 14h-1.1L9.2 8.15Z" fill="#FFFBEB" opacity="0.32" />
+        <path d="M8.35 6.85c.98-.62 2.2-.98 3.65-.98" stroke="#FFFBEB" strokeWidth="0.85" strokeLinecap="round" opacity="0.6" />
       </svg>
     )
   }

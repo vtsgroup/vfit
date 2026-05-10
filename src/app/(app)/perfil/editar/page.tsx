@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
 import { PhotoUpload } from '@/components/profile/photo-upload'
+import { ProfileCard, ProfileDetailShell, ProfilePill } from '@/components/profile/settings-shell'
 import { useAuthStore } from '@/stores/auth-store'
 import { api } from '@/lib/api-client'
 import { hapticSuccess } from '@/lib/haptics'
@@ -45,34 +46,32 @@ export default function EditarPerfilPage() {
   }, [name, phone, setUser, router])
 
   return (
-    <div className="mx-auto max-w-lg px-4 pt-4 pb-24">
-      {/* Header */}
-      <div className="mb-6 flex items-center gap-3">
-        <button aria-label="Voltar" onClick={() => router.back()} className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5">
-          <DSIcon name="arrowLeft" size={20} className="text-zinc-400" />
-        </button>
-        <h1 className="text-lg font-bold text-white">Editar perfil</h1>
-      </div>
+    <ProfileDetailShell
+      title="Editar perfil"
+      subtitle="Atualize sua foto, nome e dados básicos da conta."
+      icon="userCog"
+      tone="emerald"
+      meta={<ProfilePill tone="emerald">Perfil público</ProfilePill>}
+    >
+      <div className="space-y-5">
+        <ProfileCard>
+          <PhotoUpload />
+        </ProfileCard>
 
-      {/* Avatar com Upload — crop/zoom integrado */}
-      <div className="mb-8">
-        <PhotoUpload />
-      </div>
+        <ProfileCard className="space-y-4">
+          <FieldInput label="Nome completo" value={name} onChange={setName} placeholder="Seu nome" />
+          <FieldInput label="Email" value={user?.email || ''} disabled />
+          <FieldInput label="Telefone" value={phone} onChange={setPhone} placeholder="(00) 00000-0000" />
+        </ProfileCard>
 
-      {/* Form */}
-      <div className="space-y-4">
-        <FieldInput label="Nome completo" value={name} onChange={setName} placeholder="Seu nome" />
-        <FieldInput label="Email" value={user?.email || ''} disabled />
-        <FieldInput label="Telefone" value={phone} onChange={setPhone} placeholder="(00) 00000-0000" />
+        <ProfileCard>
+          <Button loading={saving} onClick={handleSave} className="w-full">
+            <DSIcon name="checkCircle" size={16} />
+            Salvar alterações
+          </Button>
+        </ProfileCard>
       </div>
-
-      {/* Save */}
-      <div className="mt-8">
-        <Button loading={saving} onClick={handleSave} className="w-full">
-          Salvar alterações
-        </Button>
-      </div>
-    </div>
+    </ProfileDetailShell>
   )
 }
 
@@ -91,14 +90,14 @@ function FieldInput({
 }) {
   return (
     <div>
-      <label className="mb-1 block text-[12px] font-medium text-zinc-500">{label}</label>
+      <label className="mb-1.5 block text-[12px] font-black text-slate-600">{label}</label>
       <input
         type="text"
         value={value}
-        onChange={(e) => onChange?.(e.target.value)}
+        onChange={(event) => onChange?.(event.target.value)}
         placeholder={placeholder}
         disabled={disabled}
-        className="w-full rounded-xl border border-white/8 bg-white/3 px-4 py-3 text-[14px] text-white placeholder:text-zinc-600 outline-none focus:border-brand-primary/50 disabled:opacity-50"
+        className="min-h-13 w-full rounded-[18px] border border-slate-200 bg-slate-50 px-4 text-[14px] font-semibold text-slate-950 outline-none transition-colors placeholder:text-slate-400 focus:border-emerald-300 focus:bg-white disabled:bg-slate-100 disabled:text-slate-400"
       />
     </div>
   )

@@ -19,6 +19,7 @@ import { buildSeoMetadata } from '@/lib/seo'
 import { PageHero } from '@/components/shared/page-hero'
 import { PageMetadata } from '@/components/shared/page-metadata'
 import { FaqInline } from '@/components/shared/faq-inline'
+import { ProfileReturnLink } from '@/components/profile/settings-shell'
 import { FAQ_COOKIES } from '@/data/faqs'
 
 export const metadata: Metadata = buildSeoMetadata({
@@ -89,6 +90,8 @@ export default function CookiesPage() {
         badge="Cookies"
         breadcrumbs={[{ label: 'Legal', href: '/termos' }, { label: 'Cookies', href: '/cookies' }]}
       />
+
+      <ProfileReturnLink />
 
       <div className="mx-auto max-w-4xl px-6 space-y-12 pb-24">
       <PageMetadata lastUpdated={LAST_UPDATED} version={VERSION} readingTime="6 min" />

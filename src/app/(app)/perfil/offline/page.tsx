@@ -7,9 +7,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { DSIcon, type DSIconName } from '@/components/ui'
-import { cn } from '@/lib/utils'
+import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
+import { Button } from '@/components/ui/button'
+import { ProfileCard, ProfileDetailShell, ProfilePill, ProfileTintCard, ProfileToggle } from '@/components/profile/settings-shell'
 
 interface CacheStats {
   totalEntries: number
@@ -17,18 +17,16 @@ interface CacheStats {
 }
 
 export default function OfflinePage() {
-  const router = useRouter()
   const [offlineMode, setOfflineMode] = useState(false)
   const [reducedMotion, setReducedMotion] = useState(false)
   const [cacheStats, setCacheStats] = useState<CacheStats | null>(null)
   const [isClearing, setIsClearing] = useState(false)
+  const isOnline = typeof navigator !== 'undefined' && navigator.onLine
 
-  // Carregar prefs do localStorage
   useEffect(() => {
     setOfflineMode(localStorage.getItem('vfit_offline_mode') === 'true')
     setReducedMotion(localStorage.getItem('vfit_reduced_motion') === 'true')
 
-    // Estimar tamanho do cache
     if ('caches' in window) {
       caches.keys().then(async (names) => {
         let total = 0
@@ -39,7 +37,7 @@ export default function OfflinePage() {
         }
         setCacheStats({
           totalEntries: total,
-          estimatedSizeMB: (total * 0.05).toFixed(1), // ~50KB média por entry
+          estimatedSizeMB: (total * 0.05).toFixed(1),
         })
       })
     }
@@ -62,7 +60,7 @@ export default function OfflinePage() {
     try {
       if ('caches' in window) {
         const names = await caches.keys()
-        await Promise.all(names.map((n) => caches.delete(n)))
+        await Promise.all(names.map((name) => caches.delete(name)))
       }
       localStorage.removeItem('vfit_equipment')
       setCacheStats({ totalEntries: 0, estimatedSizeMB: '0' })
@@ -72,145 +70,90 @@ export default function OfflinePage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-bg-primary pb-24">
-      {/* Header */}
-      <header className="sticky top-14 z-20 flex items-center gap-3 border-b border-white/8 bg-slate-950/95 px-4 py-3 backdrop-blur-xl">
-        <button
-          aria-label="Voltar"
-          onClick={() => router.back()}
-          className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/6 text-white/70 transition-colors hover:text-white"
-        >
-          <DSIcon name="arrowLeft" className="h-5 w-5" />
-        </button>
-        <h1 className="text-lg font-bold text-white">
-          Performance & Offline
-        </h1>
-      </header>
-
-      <div className="space-y-6 px-4 pt-2">
-        {/* Status */}
-        <div className="rounded-xl bg-bg-secondary p-4">
+    <ProfileDetailShell
+      title="Offline e performance"
+      subtitle="Controle armazenamento local, conexão e movimento para treinar sem atrito."
+      icon="zap"
+      tone="slate"
+      meta={<ProfilePill tone={isOnline ? 'emerald' : 'rose'}>{isOnline ? 'Online' : 'Offline'}</ProfilePill>}
+    >
+      <div className="space-y-5">
+        <ProfileTintCard tone={isOnline ? 'emerald' : 'rose'}>
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/8">
-              <DSIcon name="zap" className="h-5 w-5 text-brand-primary" />
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[17px] bg-slate-950 text-emerald-300">
+              <DSIcon name={isOnline ? 'wifi' : 'wifiOff'} size={22} />
             </div>
             <div>
-              <p className="text-sm font-semibold text-text-primary">
-                Status da conexão
-              </p>
-              <p className="text-xs text-text-secondary">
-                {typeof navigator !== 'undefined' && navigator.onLine
-                  ? '🟢 Online'
-                  : '🔴 Offline'}
-              </p>
+              <p className="text-[15px] font-black text-slate-950">Status da conexão</p>
+              <p className="mt-0.5 text-[12px] font-medium text-slate-600">{isOnline ? 'Conectado e pronto para sincronizar' : 'Sem conexão no momento'}</p>
             </div>
           </div>
-        </div>
+        </ProfileTintCard>
 
-        {/* Toggles */}
         <div className="space-y-3">
-          <ToggleSetting
-            icon="layers"
-            title="Modo Offline"
-            description="Salvar treinos localmente quando sem internet"
-            enabled={offlineMode}
-            onToggle={toggleOffline}
-          />
-          <ToggleSetting
-            icon="activity"
-            title="Reduzir Animações"
-            description="Desativar animações para melhor desempenho"
-            enabled={reducedMotion}
-            onToggle={toggleMotion}
-          />
+          <ToggleSetting icon="layers" title="Modo Offline" description="Salvar treinos localmente quando a internet falhar" enabled={offlineMode} onToggle={toggleOffline} />
+          <ToggleSetting icon="activity" title="Reduzir animações" description="Interface mais estável para aparelhos lentos" enabled={reducedMotion} onToggle={toggleMotion} />
         </div>
 
-        {/* Cache info */}
         {cacheStats && (
-          <div className="rounded-xl bg-bg-secondary p-4">
-            <h3 className="mb-3 text-sm font-semibold text-text-primary">
-              Armazenamento Local
-            </h3>
-            <div className="mb-3 grid grid-cols-2 gap-3">
-              <div className="rounded-lg bg-bg-tertiary p-3 text-center">
-                <p className="text-lg font-bold text-text-primary">
-                  {cacheStats.totalEntries}
-                </p>
-                <p className="text-xs text-text-muted">entradas em cache</p>
+          <ProfileCard>
+            <div className="mb-3 flex items-center justify-between gap-3">
+              <div>
+                <p className="text-[15px] font-black text-slate-950">Armazenamento local</p>
+                <p className="text-[12px] font-medium text-slate-500">Dados salvos para acelerar o app.</p>
               </div>
-              <div className="rounded-lg bg-bg-tertiary p-3 text-center">
-                <p className="text-lg font-bold text-text-primary">
-                  ~{cacheStats.estimatedSizeMB} MB
-                </p>
-                <p className="text-xs text-text-muted">estimado</p>
-              </div>
+              <DSIcon name="database" size={20} className="text-slate-400" />
             </div>
-            <button
-              onClick={clearCache}
-              disabled={isClearing}
-              className="w-full rounded-lg bg-error/10 px-4 py-2.5 text-sm font-medium text-error transition-colors hover:bg-error/20 disabled:opacity-50"
-            >
-              {isClearing ? 'Limpando...' : 'Limpar Cache'}
-            </button>
-          </div>
+            <div className="mb-4 grid grid-cols-2 gap-3">
+              <StatTile label="entradas" value={String(cacheStats.totalEntries)} />
+              <StatTile label="estimado" value={`~${cacheStats.estimatedSizeMB} MB`} />
+            </div>
+            <Button variant="danger" className="w-full" loading={isClearing} onClick={clearCache}>
+              <DSIcon name="trash2" size={16} />
+              Limpar cache
+            </Button>
+          </ProfileCard>
         )}
 
-        {/* PWA info */}
-        <div className="rounded-xl bg-bg-secondary p-4">
-          <h3 className="mb-2 text-sm font-semibold text-text-primary">
-            Sobre o modo offline
-          </h3>
-          <p className="text-xs leading-relaxed text-text-secondary">
-            Com o modo offline ativado, seus treinos serão salvos localmente e
-            sincronizados automaticamente quando a conexão for restaurada. Ideal
-            para academias com Wi-Fi instável.
-          </p>
-        </div>
+        <ProfileTintCard tone="slate">
+          <div className="flex items-start gap-3">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[14px] bg-white text-slate-700 ring-1 ring-slate-200">
+              <DSIcon name="info" size={18} />
+            </div>
+            <p className="text-[12px] font-medium leading-relaxed text-slate-600">
+              Quando o modo offline estiver ativo, treinos recentes ficam disponíveis no aparelho e sincronizam quando a conexão voltar.
+            </p>
+          </div>
+        </ProfileTintCard>
       </div>
-    </div>
+    </ProfileDetailShell>
   )
 }
 
-// ── Toggle setting ─────────────────────────────────────
-function ToggleSetting({
-  icon,
-  title,
-  description,
-  enabled,
-  onToggle,
-}: {
-  icon: string
-  title: string
-  description: string
-  enabled: boolean
-  onToggle: () => void
-}) {
+function ToggleSetting({ icon, title, description, enabled, onToggle }: { icon: DSIconName; title: string; description: string; enabled: boolean; onToggle: () => void }) {
   return (
     <button
+      type="button"
       onClick={onToggle}
-      className="flex w-full items-center gap-3 rounded-xl bg-bg-secondary p-4 text-left"
+      className="flex min-h-20 w-full items-center gap-3 rounded-[28px] border border-slate-200 bg-white p-4 text-left shadow-[0_18px_45px_-34px_rgba(15,23,42,0.42)] transition-all active:scale-[0.99]"
     >
-      <DSIcon
-        name={icon as DSIconName}
-        className="h-5 w-5 text-text-secondary"
-      />
-      <div className="flex-1">
-        <p className="text-sm font-semibold text-text-primary">{title}</p>
-        <p className="text-xs text-text-secondary">{description}</p>
+      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[17px] bg-slate-100 text-slate-600 ring-1 ring-slate-200">
+        <DSIcon name={icon} size={21} />
       </div>
-      <div
-        className={cn(
-          'flex h-6 w-11 items-center rounded-full px-0.5 transition-colors',
-          enabled ? 'bg-brand-primary' : 'bg-bg-tertiary'
-        )}
-      >
-        <div
-          className={cn(
-            'h-5 w-5 rounded-full bg-white shadow-sm transition-transform',
-            enabled ? 'translate-x-5' : 'translate-x-0'
-          )}
-        />
+      <div className="min-w-0 flex-1">
+        <p className="text-[14px] font-black text-slate-950">{title}</p>
+        <p className="mt-0.5 text-[12px] font-medium leading-snug text-slate-500">{description}</p>
       </div>
+      <ProfileToggle enabled={enabled} />
     </button>
+  )
+}
+
+function StatTile({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-card-lg border border-slate-200 bg-slate-50 p-3 text-center">
+      <p className="text-[19px] font-black text-slate-950">{value}</p>
+      <p className="mt-1 text-[10px] font-black uppercase text-slate-400">{label}</p>
+    </div>
   )
 }

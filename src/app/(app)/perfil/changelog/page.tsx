@@ -6,15 +6,15 @@
 
 'use client'
 
-import { useRouter } from 'next/navigation'
-import { DSIcon } from '@/components/ui'
+import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
+import { ProfileCard, ProfileDetailShell, ProfilePill, ProfileTintCard } from '@/components/profile/settings-shell'
 import { APP_VERSION } from '../../../../../lib/version'
 
 interface Release {
   version: string
   date: string
-  highlights: string[]
   tag?: 'new' | 'fix' | 'improvement'
+  highlights: { icon: DSIconName; text: string }[]
 }
 
 const RELEASES: Release[] = [
@@ -23,95 +23,87 @@ const RELEASES: Release[] = [
     date: '2026-03',
     tag: 'new',
     highlights: [
-      '🎮 Sistema de Gamificação — XP, Níveis e Badges',
-      '🔥 Streak tracker com milestones',
-      '⚡ Desafios semanais',
-      '📚 30+ dicas fitness categorizadas',
-      '⚙️ Configurações offline & performance',
-      '🛡️ Error boundaries em todas as telas',
-      '📊 Testes unitários expandidos',
+      { icon: 'trophy', text: 'Sistema de gamificação com XP, níveis e badges' },
+      { icon: 'flame', text: 'Streak tracker com milestones de consistência' },
+      { icon: 'zap', text: 'Desafios semanais com recompensas de XP' },
+      { icon: 'sparkles', text: '30+ dicas fitness categorizadas' },
+      { icon: 'settings', text: 'Configurações offline e performance' },
+      { icon: 'shield', text: 'Error boundaries em todas as telas críticas' },
+      { icon: 'barChart', text: 'Testes unitários expandidos' },
     ],
   },
   {
     version: '6.7.0',
     date: '2026-02',
     highlights: [
-      '🏋️ Explorar templates de treino',
-      '📝 Criar treino manual',
-      '📏 Medidas corporais com gráficos',
-      '🩺 Auto-avaliação com IMC',
-      '🔧 Equipamentos da academia',
-      '💳 Gestão de assinatura',
-      '📊 Progresso detalhado com heatmap',
+      { icon: 'dumbbell', text: 'Explorar templates de treino' },
+      { icon: 'edit3', text: 'Criar treino manual' },
+      { icon: 'ruler', text: 'Medidas corporais com gráficos' },
+      { icon: 'activity', text: 'Auto-avaliação com IMC' },
+      { icon: 'settings', text: 'Equipamentos da academia' },
+      { icon: 'creditCard', text: 'Gestão de assinatura' },
+      { icon: 'barChart', text: 'Progresso detalhado com heatmap' },
     ],
   },
   {
     version: '6.5.0',
     date: '2026-01',
     highlights: [
-      '🏠 Nova Home com dashboard',
-      '🏆 Tab de progresso completa',
-      '📱 PWA com suporte offline',
-      '🎨 Design system VFIT',
-      '🔔 Notificações push',
+      { icon: 'home', text: 'Nova home com dashboard' },
+      { icon: 'trophy', text: 'Aba de progresso completa' },
+      { icon: 'smartphone', text: 'PWA com suporte offline' },
+      { icon: 'palette', text: 'Design system VFIT' },
+      { icon: 'bell', text: 'Notificações push' },
     ],
   },
 ]
 
 export default function ChangelogPage() {
-  const router = useRouter()
-
   return (
-    <div className="flex min-h-screen flex-col bg-bg-primary pb-24">
-      {/* Header */}
-      <header className="sticky top-14 z-20 flex items-center gap-3 border-b border-white/8 bg-slate-950/95 px-4 py-3 backdrop-blur-xl">
-        <button
-          aria-label="Voltar"
-          onClick={() => router.back()}
-          className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/6 text-white/70 transition-colors hover:text-white"
-        >
-          <DSIcon name="arrowLeft" className="h-5 w-5" />
-        </button>
-        <h1 className="text-lg font-bold text-white">Novidades</h1>
-      </header>
-
-      <div className="space-y-6 px-4 pt-2">
-        {/* Versão atual */}
-        <div className="rounded-xl border border-white/8 bg-white/3 p-4 text-center">
-          <p className="text-xs font-medium text-brand-primary">
-            Versão Atual
-          </p>
-          <p className="text-2xl font-black text-text-primary">
-            {APP_VERSION || '7.0.0'}
-          </p>
-        </div>
-
-        {/* Releases */}
-        {RELEASES.map((release) => (
-          <div key={release.version} className="rounded-xl bg-bg-secondary p-4">
-            <div className="mb-3 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-bold text-text-primary">
-                  v{release.version}
-                </span>
-                {release.tag === 'new' && (
-                  <span className="rounded-full bg-brand-primary/15 px-2 py-0.5 text-[10px] font-bold text-brand-primary">
-                    NOVO
-                  </span>
-                )}
-              </div>
-              <span className="text-xs text-text-muted">{release.date}</span>
+    <ProfileDetailShell
+      title="Novidades"
+      subtitle="Melhorias recentes, correções e novos recursos que chegaram no app."
+      icon="sparkles"
+      tone="violet"
+      meta={<ProfilePill tone="emerald">Versão atual {APP_VERSION || '7.0.0'}</ProfilePill>}
+    >
+      <div className="space-y-5">
+        <ProfileTintCard tone="violet">
+          <div className="flex items-center gap-4">
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-card-lg bg-slate-950 text-emerald-300">
+              <DSIcon name="sparkles" size={25} />
             </div>
-            <ul className="space-y-1.5">
-              {release.highlights.map((h, i) => (
-                <li key={i} className="text-xs leading-relaxed text-text-secondary">
-                  {h}
-                </li>
-              ))}
-            </ul>
+            <div className="min-w-0 flex-1">
+              <p className="text-[12px] font-black uppercase text-violet-700">Instalado agora</p>
+              <p className="text-[30px] font-black leading-none text-slate-950">v{APP_VERSION || '7.0.0'}</p>
+              <p className="mt-1 text-[12px] font-medium text-slate-500">O app está atualizado com a versão mais recente publicada.</p>
+            </div>
           </div>
+        </ProfileTintCard>
+
+        {RELEASES.map((release) => (
+          <ProfileCard key={release.version}>
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <div>
+                <p className="text-[12px] font-bold text-slate-500">{release.date}</p>
+                <h2 className="text-[19px] font-black text-slate-950">v{release.version}</h2>
+              </div>
+              {release.tag === 'new' && <ProfilePill tone="emerald">Novo</ProfilePill>}
+            </div>
+
+            <div className="space-y-2.5">
+              {release.highlights.map((highlight) => (
+                <div key={highlight.text} className="flex items-start gap-3 rounded-[18px] bg-slate-50 px-3 py-3">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[13px] bg-white text-emerald-600 ring-1 ring-slate-200">
+                    <DSIcon name={highlight.icon} size={17} />
+                  </div>
+                  <p className="pt-1 text-[13px] font-bold leading-snug text-slate-700">{highlight.text}</p>
+                </div>
+              ))}
+            </div>
+          </ProfileCard>
         ))}
       </div>
-    </div>
+    </ProfileDetailShell>
   )
 }

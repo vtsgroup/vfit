@@ -10,24 +10,16 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { DSIcon } from '@/components/ui/ds-icon'
+import { Button } from '@/components/ui/button'
+import { ProfileCard, ProfileDetailShell, ProfilePill, ProfileTintCard } from '@/components/profile/settings-shell'
 import { cn } from '@/lib/utils'
 import { hapticLight, hapticSuccess } from '@/lib/haptics'
 
 type UnitSystem = 'metric' | 'imperial'
 
 const UNIT_OPTIONS: { key: UnitSystem; label: string; desc: string; examples: string }[] = [
-  {
-    key: 'metric',
-    label: 'Métrico',
-    desc: 'Sistema Internacional',
-    examples: 'kg, cm, km',
-  },
-  {
-    key: 'imperial',
-    label: 'Imperial',
-    desc: 'Sistema Anglo-Saxão',
-    examples: 'lb, in, mi',
-  },
+  { key: 'metric', label: 'Métrico', desc: 'Sistema Internacional', examples: 'kg, cm, km' },
+  { key: 'imperial', label: 'Imperial', desc: 'Sistema Anglo-Saxão', examples: 'lb, in, mi' },
 ]
 
 const STORAGE_KEY = 'vfit_unit_system'
@@ -41,10 +33,10 @@ export default function UnidadesPage() {
     if (saved === 'imperial') setSystem('imperial')
   }, [])
 
-  const handleSelect = (s: UnitSystem) => {
+  const handleSelect = (nextSystem: UnitSystem) => {
     hapticLight()
-    setSystem(s)
-    localStorage.setItem(STORAGE_KEY, s)
+    setSystem(nextSystem)
+    localStorage.setItem(STORAGE_KEY, nextSystem)
   }
 
   const handleSave = () => {
@@ -53,81 +45,59 @@ export default function UnidadesPage() {
   }
 
   return (
-    <div className="mx-auto max-w-lg px-4 pt-4 pb-24">
-      {/* Header */}
-      <div className="mb-6 flex items-center gap-3">
-        <button
-          aria-label="Voltar"
-          onClick={() => router.back()}
-          className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5"
-        >
-          <DSIcon name="arrowLeft" size={20} className="text-zinc-400" />
-        </button>
-        <div>
-          <h1 className="text-lg font-bold text-white">Unidades de Medida</h1>
-          <p className="text-[11px] text-zinc-500">Defina o sistema de medidas</p>
+    <ProfileDetailShell
+      title="Unidades de medida"
+      subtitle="Escolha como peso, altura e distância aparecem durante o treino."
+      icon="ruler"
+      tone="sky"
+      meta={<ProfilePill tone="sky">{system === 'metric' ? 'kg e cm' : 'lb e in'}</ProfilePill>}
+    >
+      <div className="space-y-5">
+        <div className="grid gap-3">
+          {UNIT_OPTIONS.map((option) => {
+            const active = system === option.key
+            return (
+              <button
+                key={option.key}
+                type="button"
+                onClick={() => handleSelect(option.key)}
+                className={cn(
+                  'flex min-h-24 w-full items-center gap-4 rounded-[28px] border p-4 text-left shadow-[0_18px_45px_-34px_rgba(15,23,42,0.42)] transition-all duration-200 active:scale-[0.99]',
+                  active ? 'border-sky-200 bg-linear-to-br from-sky-50 via-white to-emerald-50' : 'border-slate-200 bg-white hover:border-slate-300'
+                )}
+              >
+                <div className={cn('flex h-13 w-13 shrink-0 items-center justify-center rounded-[18px] ring-1', active ? 'bg-sky-600 text-white ring-sky-200' : 'bg-slate-100 text-slate-500 ring-slate-200')}>
+                  <DSIcon name="ruler" size={22} />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[15px] font-black text-slate-950">{option.label}</p>
+                  <p className="mt-0.5 text-[12px] font-medium text-slate-500">{option.desc}</p>
+                  <p className="mt-2 inline-flex rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-black text-slate-600">{option.examples}</p>
+                </div>
+                {active && <DSIcon name="checkCircle" size={21} className="text-sky-600" />}
+              </button>
+            )
+          })}
         </div>
-      </div>
 
-      {/* Options */}
-      <div className="space-y-3">
-        {UNIT_OPTIONS.map((opt) => (
-          <button
-            key={opt.key}
-            onClick={() => handleSelect(opt.key)}
-            className={cn(
-              'flex w-full items-center gap-4 rounded-2xl p-4 text-left transition-all',
-              system === opt.key
-                ? 'bg-brand-primary/12 ring-1 ring-brand-primary/30'
-                : 'bg-white/4 hover:bg-white/6'
-            )}
-          >
-            <div className={cn(
-              'flex h-11 w-11 items-center justify-center rounded-xl',
-              system === opt.key ? 'bg-brand-primary/20' : 'bg-white/5'
-            )}>
-              <DSIcon
-                name="ruler"
-                size={22}
-                className={system === opt.key ? 'text-brand-primary' : 'text-zinc-400'}
-              />
+        <ProfileTintCard tone="sky">
+          <div className="flex items-start gap-3">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[14px] bg-white text-sky-600 ring-1 ring-sky-100">
+              <DSIcon name="info" size={18} />
             </div>
-            <div className="flex-1">
-              <p className={cn(
-                'text-sm font-bold',
-                system === opt.key ? 'text-brand-primary' : 'text-white'
-              )}>
-                {opt.label}
-              </p>
-              <p className="text-[11px] text-zinc-500">{opt.desc}</p>
-              <p className="mt-1 text-[10px] text-zinc-600">{opt.examples}</p>
-            </div>
-            {system === opt.key && (
-              <DSIcon name="checkCircle" size={20} className="text-brand-primary" />
-            )}
-          </button>
-        ))}
-      </div>
+            <p className="text-[12px] font-medium leading-relaxed text-slate-600">
+              Seus dados seguem armazenados em formato métrico. Esta preferência muda apenas a forma de exibição no app.
+            </p>
+          </div>
+        </ProfileTintCard>
 
-      {/* Info card */}
-      <div className="mt-6 rounded-2xl bg-white/4 p-4">
-        <div className="flex items-start gap-2">
-          <DSIcon name="info" size={14} className="mt-0.5 shrink-0 text-zinc-500" />
-          <p className="text-xs leading-relaxed text-zinc-500">
-            A alteração afeta como pesos e medidas são exibidos no app.
-            Seus dados são sempre armazenados em formato métrico.
-          </p>
-        </div>
+        <ProfileCard>
+          <Button onClick={handleSave} className="w-full">
+            <DSIcon name="checkCircle" size={16} />
+            Salvar preferência
+          </Button>
+        </ProfileCard>
       </div>
-
-      {/* Save */}
-      <button
-        onClick={handleSave}
-        className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl bg-brand-primary px-6 py-3.5 text-sm font-bold text-black transition-colors hover:bg-brand-primary/90 active:scale-[0.98]"
-      >
-        <DSIcon name="checkCircle" size={16} />
-        Salvar
-      </button>
-    </div>
+    </ProfileDetailShell>
   )
 }

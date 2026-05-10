@@ -18,6 +18,7 @@ import { buildSeoMetadata } from '@/lib/seo'
 import { PageHero } from '@/components/shared/page-hero'
 import { PageMetadata } from '@/components/shared/page-metadata'
 import { FaqInline } from '@/components/shared/faq-inline'
+import { ProfileReturnLink } from '@/components/profile/settings-shell'
 import { FAQ_EXCLUIR_CONTA } from '@/data/faqs'
 
 export const metadata: Metadata = buildSeoMetadata({
@@ -36,6 +37,8 @@ export default function ExcluirContaPage() {
         badge="Exclusão de Dados"
         breadcrumbs={[{ label: 'Legal', href: '/termos' }, { label: 'Excluir Conta', href: '/excluir-conta' }]}
       />
+
+      <ProfileReturnLink />
 
       <div className="mx-auto max-w-2xl px-6 pb-24">
         <PageMetadata lastUpdated="14 de fevereiro de 2026" readingTime="3 min" />

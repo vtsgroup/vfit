@@ -19,6 +19,7 @@ import { buildSeoMetadata } from '@/lib/seo'
 import { PageHero } from '@/components/shared/page-hero'
 import { PageMetadata } from '@/components/shared/page-metadata'
 import { FaqInline } from '@/components/shared/faq-inline'
+import { ProfileReturnLink } from '@/components/profile/settings-shell'
 import { FAQ_PRIVACIDADE } from '@/data/faqs'
 
 export const metadata: Metadata = buildSeoMetadata({
@@ -87,6 +88,8 @@ export default function PrivacidadePage() {
         badge="LGPD Compliant"
         breadcrumbs={[{ label: 'Legal', href: '/termos' }, { label: 'Privacidade', href: '/privacidade' }]}
       />
+
+      <ProfileReturnLink />
 
       <div className="mx-auto max-w-4xl px-6 space-y-12 pb-24">
       <PageMetadata lastUpdated={LAST_UPDATED} version={VERSION} readingTime="10 min" />
