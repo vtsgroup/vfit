@@ -1866,7 +1866,7 @@ body {
 
 /* ═══ DS v3 HEADER — Frosted glass with backdrop blur ═══ */
 .ds3-header {
-  background: linear-gradient(180deg, rgba(4, 9, 22, 0.98) 0%, rgba(5, 10, 18, 0.96) 32%, rgba(2, 6, 23, 0.99) 100%);
+  background: linear-gradient(180deg, #050A12 0%, #0f1a2c 32%, #0f1a2b 100%);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(28px) saturate(180%);
   -webkit-backdrop-filter: blur(28px) saturate(180%);
@@ -1884,26 +1884,26 @@ body {
   pointer-events: none;
 }
 .ds3-header.ds3-header-scrolled {
-  background: linear-gradient(180deg, rgba(4, 9, 22, 0.99) 0%, rgba(5, 10, 18, 0.97) 30%, rgba(2, 6, 23, 0.995) 100%);
+  background: linear-gradient(180deg, #050A12 0%, #0d1728 30%, #0c1626 100%);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .dark .ds3-header,
 :root:not(.light) .ds3-header {
-  background: linear-gradient(180deg, rgba(4, 9, 22, 0.98) 0%, rgba(5, 10, 18, 0.96) 32%, rgba(2, 6, 23, 0.99) 100%);
+  background: linear-gradient(180deg, #050A12 0%, #0f1a2c 32%, #0f1a2b 100%);
 }
 .dark .ds3-header.ds3-header-scrolled,
 :root:not(.light) .ds3-header.ds3-header-scrolled {
-  background: linear-gradient(180deg, rgba(4, 9, 22, 0.99) 0%, rgba(5, 10, 18, 0.97) 30%, rgba(2, 6, 23, 0.995) 100%);
+  background: linear-gradient(180deg, #050A12 0%, #0d1728 30%, #0c1626 100%);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 /* VFIT Theme — header uses dark blue glass */
 .vfit-theme .ds3-header {
-  background: linear-gradient(180deg, rgba(4, 9, 22, 0.98) 0%, rgba(5, 10, 18, 0.96) 32%, rgba(2, 6, 23, 0.99) 100%);
+  background: linear-gradient(180deg, #050A12 0%, #0f1a2c 32%, #0f1a2b 100%);
 }
 .vfit-theme .ds3-header.ds3-header-scrolled {
-  background: linear-gradient(180deg, rgba(4, 9, 22, 0.99) 0%, rgba(5, 10, 18, 0.97) 30%, rgba(2, 6, 23, 0.995) 100%);
+  background: linear-gradient(180deg, #050A12 0%, #0d1728 30%, #0c1626 100%);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(37, 99, 235, 0.04);
 }
 
@@ -1917,7 +1917,7 @@ body {
   background: transparent;
 }
 .light .ds3-header.ds3-header-scrolled {
-  background: linear-gradient(180deg, rgba(4, 9, 22, 0.96) 0%, rgba(5, 10, 18, 0.94) 30%, rgba(2, 6, 23, 0.98) 100%);
+  background: linear-gradient(180deg, #050A12 0%, #0d1728 30%, #0c1626 100%);
   box-shadow: 0 6px 24px rgba(37, 99, 235, 0.10), 0 1px 0 rgba(59, 130, 246, 0.10) inset;
 }
 
