@@ -577,7 +577,15 @@ vfit.get('/foods', async (c) => {
   let idx = 3
 
   if (search) {
-    where += ` AND f.name ILIKE $2`
+    where += ` AND (
+      f.name ILIKE $2
+      OR COALESCE(f.description, '') ILIKE $2
+      OR EXISTS (
+        SELECT 1
+        FROM unnest(COALESCE(f.tags, ARRAY[]::text[])) AS tag
+        WHERE tag ILIKE $2
+      )
+    )`
   }
   if (category) {
     where += ` AND f.category = $${idx}`
@@ -594,6 +602,7 @@ vfit.get('/foods', async (c) => {
      ${where}
      ORDER BY
        CASE WHEN $2 <> '' AND f.name ILIKE $2 THEN 0 ELSE 1 END,
+       CASE WHEN $2 <> '' AND COALESCE(f.description, '') ILIKE $2 THEN 1 ELSE 2 END,
        f.name
      LIMIT $${idx}`,
     params

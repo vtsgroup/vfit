@@ -927,9 +927,39 @@ export default function NutricaoPage() {
                     <p className="text-sm text-text-muted">
                       Nenhum alimento encontrado para &quot;{searchQuery}&quot;
                     </p>
-                    <Button variant="secondary" size="sm" className="mt-4" onClick={() => setShowManualFood(true)}>
+                    <p className="mt-2 max-w-72 text-xs text-text-muted">
+                      Tente uma palavra mais simples ou use câmera/código de barras para identificar mais rápido.
+                    </p>
+
+                    <div className="mt-4 flex flex-wrap justify-center gap-2">
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => {
+                          setShowSearch(false)
+                          setShowFoodCamera(true)
+                        }}
+                      >
+                        <DSIcon name="camera" size={14} />
+                        Identificar por foto
+                      </Button>
+
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setShowSearch(false)
+                          setShowBarcode(true)
+                        }}
+                      >
+                        <DSIcon name="scan" size={14} />
+                        Código de barras
+                      </Button>
+                    </div>
+
+                    <Button variant="ghost" size="sm" className="mt-3" onClick={() => setShowManualFood(true)}>
                       <DSIcon name="edit" size={14} />
-                      Cadastrar manualmente
+                      Cadastrar manualmente (opcional)
                     </Button>
                   </div>
                 ) : (
