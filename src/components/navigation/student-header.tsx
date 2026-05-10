@@ -153,15 +153,14 @@ export function StudentHeader() {
           {/* XP chip — digital asset coin, left of notifications */}
           <Link
             href="/progresso/streaks"
-            className="flex h-9 items-center gap-1.5 rounded-[13px] border border-amber-200/28 bg-linear-to-b from-amber-100/14 via-amber-300/8 to-slate-950/30 px-2.5 pr-3 text-slate-100 shadow-[0_10px_28px_-16px_rgba(251,191,36,0.95),inset_0_1px_0_rgba(255,251,235,0.24),inset_0_-1px_0_rgba(120,53,15,0.18)] transition-all duration-200 hover:border-amber-100/50 hover:from-amber-100/18 hover:via-amber-300/12 active:scale-95"
+            className="flex h-9 items-center gap-1.5 rounded-[13px] border border-amber-200/22 bg-linear-to-b from-white/10 via-amber-300/7 to-slate-950/26 px-2.5 pr-3 text-slate-100 shadow-[0_8px_20px_-14px_rgba(245,158,11,0.56),inset_0_1px_0_rgba(255,251,235,0.16)] transition-all duration-200 hover:border-amber-100/40 hover:from-white/12 hover:via-amber-300/11 active:scale-95"
             title={`${xpData?.balance ?? 0} XP — Nível ${xpData?.level ?? 1}`}
             aria-label={`${xpData?.balance ?? 0} XP, nível ${xpData?.level ?? 1}`}
           >
-            <span className="relative flex h-6.5 w-6.5 items-center justify-center rounded-full bg-linear-to-b from-amber-50 via-amber-300 to-amber-700 shadow-[0_0_0_1px_rgba(255,251,235,0.45),0_4px_12px_rgba(245,158,11,0.42),inset_0_1px_0_rgba(255,255,255,0.62),inset_0_-1px_0_rgba(69,26,3,0.34)]">
-              <span className="absolute -inset-1 rounded-full bg-amber-300/18 blur-md" aria-hidden="true" />
-              <DSIcon name="coin" size={20} className="relative drop-shadow-[0_2px_3px_rgba(69,26,3,0.38)]" />
+            <span className="relative flex h-6 w-6 items-center justify-center rounded-full bg-linear-to-b from-amber-100 to-amber-500 shadow-[0_0_0_1px_rgba(255,251,235,0.34),0_3px_8px_rgba(180,83,9,0.32)]">
+              <DSIcon name="coin" size={17} className="relative" />
             </span>
-            <span className="text-[12px] font-black tabular-nums leading-none text-amber-50 drop-shadow-[0_1px_4px_rgba(245,158,11,0.24)]">{xpData?.balance ?? 0}</span>
+            <span className="text-[12px] font-black tabular-nums leading-none text-amber-50">{xpData?.balance ?? 0}</span>
           </Link>
 
           <div className="relative">
