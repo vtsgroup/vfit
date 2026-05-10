@@ -367,7 +367,7 @@ export default function NutricaoPage() {
         </div>
 
         {/* ═══ Macros Overview — MacroRingChart ═══ */}
-        <section className="glass-card flex flex-col items-center py-4">
+        <section className="glass-card px-4 py-5">
           {isLoading ? (
             <div className="flex items-center justify-center py-10">
               <div className="h-6 w-6 animate-spin rounded-full border-2 border-brand-primary border-t-transparent" />
