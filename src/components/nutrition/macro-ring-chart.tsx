@@ -10,7 +10,7 @@
  */
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { cn } from '@/lib/utils'
 import { DSIcon } from '@/components/ui/ds-icon'
 
@@ -35,10 +35,37 @@ interface TooltipState {
   y: number
 }
 
+interface MacroItem {
+  key: string
+  label: string
+  short: string
+  icon: string
+  value: number
+  target: number
+  kcal: number
+  pct: number
+  color: string
+  pattern: string
+  glow: string
+  gradFrom: string
+  gradTo: string
+  gradId: string
+  segLen: number
+  segOff: number
+}
+
 // ── Helpers ────────────────────────────────────────────
 
 function clamp(v: number, min = 0, max = 100) {
   return Math.max(min, Math.min(max, v))
+}
+
+function positionTooltip(event: React.PointerEvent | React.MouseEvent, key: string) {
+  const padding = 18
+  const tooltipWidth = 150
+  const x = clamp(event.clientX, padding + tooltipWidth / 2, window.innerWidth - padding - tooltipWidth / 2)
+  const y = clamp(event.clientY - 12, 72, window.innerHeight - padding)
+  return { key, x, y }
 }
 
 // ── Component ──────────────────────────────────────────
@@ -58,6 +85,7 @@ export function MacroRingChart({
   const [mounted, setMounted] = useState(false)
   const [tooltip, setTooltip] = useState<TooltipState>({ key: null, x: 0, y: 0 })
   const [hiddenMacros, setHiddenMacros] = useState<Set<string>>(new Set())
+  const svgRef = useRef<SVGSVGElement>(null)
   const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   useEffect(() => {
@@ -72,10 +100,6 @@ export function MacroRingChart({
       else next.add(key)
       return next
     })
-  }
-
-  const showTooltip = (key: string, x: number, y: number) => {
-    setTooltip({ key, x, y })
   }
 
   const cx = size / 2
@@ -112,7 +136,7 @@ export function MacroRingChart({
   const seg3Off = seg1Len + GAP + seg2Len + GAP
 
   // ── Macro stat config ──
-  const macros = [
+  const macros: MacroItem[] = [
     {
       key: 'protein',
       label: 'Proteína',
@@ -175,13 +199,24 @@ export function MacroRingChart({
   return (
     <div
       className={cn(
-        'relative w-full overflow-hidden rounded-[26px] border border-slate-200/80 bg-linear-to-br from-white via-emerald-50/35 to-slate-50 p-3 shadow-[0_24px_60px_rgba(15,23,42,0.14)] sm:p-4',
+        'relative w-full overflow-hidden rounded-[28px] border border-emerald-100/90 bg-linear-to-br from-white via-emerald-50/45 to-slate-50 p-4 shadow-[0_28px_70px_rgba(15,23,42,0.16)] sm:p-5',
         className
       )}
     >
       <div className="pointer-events-none absolute -left-9 -top-11 h-36 w-36 rounded-full bg-emerald-200/55 blur-2xl" />
       <div className="pointer-events-none absolute -right-12 bottom-12 h-44 w-44 rounded-full bg-sky-100/65 blur-3xl" />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-12 bg-linear-to-b from-white/85 to-transparent" />
+
+      <div className="relative mb-3 flex items-center justify-between gap-3">
+        <div>
+          <p className="text-[10px] font-black uppercase tracking-[0.22em] text-emerald-700/80">Macros</p>
+          <p className="mt-0.5 text-[12px] font-semibold text-slate-500">Resumo nutricional de hoje</p>
+        </div>
+        <div className="flex h-9 items-center gap-1.5 rounded-full border border-emerald-200 bg-white/85 px-3 text-[11px] font-black text-emerald-700 shadow-[0_4px_12px_rgba(5,150,105,0.14)]">
+          <DSIcon name="sparkles" size={13} />
+          VFIT
+        </div>
+      </div>
 
       {/* ── SVG Ring ── */}
       <div className="relative mx-auto" style={{ width: size, height: size }}>
@@ -198,11 +233,13 @@ export function MacroRingChart({
         <div className="pointer-events-none absolute inset-[14%] rounded-full border border-white/70 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)]" />
 
         <svg
+          ref={svgRef}
           width={size}
           height={size}
           viewBox={`0 0 ${size} ${size}`}
           style={{ transform: 'rotate(-90deg)' }}
-          aria-hidden="true"
+          role="img"
+          aria-label={`Resumo de macros: ${Math.round(calories).toLocaleString('pt-BR')} kcal consumidas de ${Math.round(calorieTarget).toLocaleString('pt-BR')} kcal. Proteína ${Math.round(protein)}g, carboidratos ${Math.round(carbs)}g, gordura ${Math.round(fat)}g.`}
         >
           <defs>
             {/* Outer calorie ring gradient */}
@@ -274,9 +311,15 @@ export function MacroRingChart({
                   cursor: 'pointer',
                 }}
                 onClick={() => toggleMacro(m.key)}
-                onMouseEnter={(e) => showTooltip(m.key, e.clientX, e.clientY - 10)}
-                onMouseMove={(e) => showTooltip(m.key, e.clientX, e.clientY - 10)}
+                onMouseEnter={(event) => setTooltip(positionTooltip(event, m.key))}
+                onMouseMove={(event) => setTooltip(positionTooltip(event, m.key))}
                 onMouseLeave={() => setTooltip({ key: null, x: 0, y: 0 })}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault()
+                    toggleMacro(m.key)
+                  }
+                }}
                 role="button"
                 tabIndex={0}
                 aria-pressed={!isHidden}
@@ -335,20 +378,18 @@ export function MacroRingChart({
       </div>
 
       {/* ── Legend (Interactive - Toggle Series) ── */}
-      <div className="mt-5 w-full space-y-1.5 px-1" role="group" aria-label="Filtro de macronutrientes">
+      <div className="relative mt-5 w-full space-y-2" role="group" aria-label="Filtro de macronutrientes">
         {macros.map((m) => {
           const isHidden = hiddenMacros.has(m.key)
           return (
             <button
               key={m.key}
               onClick={() => toggleMacro(m.key)}
-              onMouseEnter={(e) => {
-                const r = e.currentTarget.getBoundingClientRect()
-                showTooltip(m.key, r.left + r.width / 2, r.top - 8)
-              }}
+              onMouseEnter={(event) => setTooltip(positionTooltip(event, m.key))}
+              onMouseMove={(event) => setTooltip(positionTooltip(event, m.key))}
               onMouseLeave={() => setTooltip({ key: null, x: 0, y: 0 })}
               className={cn(
-                'flex w-full items-center gap-3 rounded-xl border-t border-x border-b-2 px-2.5 py-1.5 transition-all active:translate-y-px',
+                'flex min-h-11 w-full cursor-pointer items-center gap-3 rounded-2xl border-t border-x border-b-2 px-3 py-2 transition-all active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white',
                 isHidden
                   ? 'opacity-45 border-emerald-300/65 bg-white/80 border-b-emerald-300/40'
                   : 'opacity-100 border-emerald-300/80 bg-white/90 border-b-emerald-500/55 hover:border-emerald-400 hover:bg-emerald-50/80'
@@ -361,10 +402,10 @@ export function MacroRingChart({
               aria-label={`${m.label}: ${isHidden ? 'oculto' : 'visível'}. Clique para alternar.`}
             >
               {/* Icon + Pattern Indicator (not just color) */}
-              <div className="relative h-5 w-5 shrink-0">
+              <div className="relative flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-white shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_3px_8px_rgba(15,23,42,0.08)]">
                 <DSIcon name={m.icon} size={14} style={{ color: m.color }} className="m-auto" />
                 <div
-                  className="absolute inset-0 rounded"
+                  className="absolute inset-0 rounded-xl"
                   style={{
                     border: `1px solid ${m.color}`,
                     opacity: isHidden ? 0.3 : 0.7,
@@ -373,7 +414,7 @@ export function MacroRingChart({
               </div>
 
               {/* Label */}
-              <span className="w-24 shrink-0 text-[11px] font-semibold" style={{ color: 'rgba(15,23,42,0.68)' }}>
+              <span className="w-24 shrink-0 text-[12px] font-bold" style={{ color: 'rgba(15,23,42,0.72)' }}>
                 {m.label}
               </span>
 
@@ -393,7 +434,7 @@ export function MacroRingChart({
               </div>
 
               {/* Value / target */}
-              <span className="w-16 shrink-0 text-right text-[11px] tabular-nums">
+              <span className="w-16 shrink-0 text-right text-[12px] tabular-nums">
                 <span className="font-bold text-slate-900">{Math.round(m.value)}</span>
                 <span style={{ color: 'rgba(15,23,42,0.42)' }}>/{m.target}g</span>
               </span>
@@ -426,7 +467,9 @@ export function MacroRingChart({
       )}
 
       {/* ── Calorie target footer ── */}
-      <div className="mt-4 flex items-center justify-center gap-2 rounded-full border border-emerald-200/80 bg-white/70 py-2">
+      <div
+        className="mt-4 flex min-h-9 items-center justify-center gap-2 rounded-full border border-emerald-200/80 bg-white/80 px-3 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.95)]"
+      >
         <span
           className="text-[9px] font-bold uppercase tracking-[0.2em]"
           style={{ color: 'rgba(15,23,42,0.36)' }}

@@ -367,9 +367,7 @@ export default function NutricaoPage() {
         </div>
 
         {/* ═══ Macros Overview — MacroRingChart ═══ */}
-        <section className="relative overflow-hidden rounded-3xl border border-slate-200/85 bg-linear-to-br from-white via-slate-50 to-emerald-50/35 px-4 py-5 shadow-[0_24px_50px_rgba(15,23,42,0.13)]">
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-18 bg-linear-to-b from-emerald-200/40 to-transparent" />
-          <div className="pointer-events-none absolute -right-14 top-8 h-32 w-32 rounded-full bg-sky-100/70 blur-3xl" />
+        <section className="relative">
           {isLoading ? (
             <div className="flex items-center justify-center py-10">
               <div className="h-6 w-6 animate-spin rounded-full border-2 border-brand-primary border-t-transparent" />
