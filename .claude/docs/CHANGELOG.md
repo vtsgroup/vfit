@@ -7,6 +7,13 @@
 
 ## [Unreleased] — 2026-04-08 — Sprint 11-15 (UX Nutrição/Exercícios)
 
+### 🚀 Deploy v3.6.0 — produção (2026-05-10)
+- **Publicado em produção:** Cloudflare Pages e Worker `vfit-api` publicados via `node scripts/cf-deploy.js patch --allow-no-whatsapp --msg "estabiliza app aluno para producao"`.
+- **Git/tag:** release commit `3c0f2cab` em `main`, tag `v3.6.0` enviada para `origin/main`.
+- **Validação pós-deploy:** `https://api.vfit.app.br/health` retornou 200; `/api/v1/progress/top-exercises?limit=4` sem token retornou 401 em vez de 500; browser smoke em `/treinos`, `/nutricao`, `/avaliacoes`, `/progresso` e `/exercicios` retornou 200, textos esperados, `scrollX=0`, zero page errors e zero 5xx.
+- **Exceção operacional:** WhatsApp task-notify start/end falhou com Unipile 401 `invalid_credentials`; deploy continuou com `--allow-no-whatsapp` para liberar correção já validada. Corrigir credenciais do gateway antes do próximo deploy regular.
+- **Pendência de gate:** `npm run smoke:auth:local` falhou pós-deploy porque os tokens `SMOKE_*` estão expirados e `.env.local` possui linhas não parseáveis; gerar tokens novos via `/dashboard/admin/smoke` e rerodar.
+
 ### ✨ Student App — First Win em `/treinos` (2026-05-10)
 - **Primeira dobra operacional:** [src/app/(app)/treinos/page.tsx](src/app/(app)/treinos/page.tsx) recebeu o `FirstWinCommandCenter`, priorizando treino de hoje, CTA principal, progresso do plano, meta diária, XP/streak, proteína e próxima ação de evolução de plano.
 - **Hierarquia alinhada ao plano de produção:** a tela deixa de abrir como coleção de cards soltos e passa a funcionar como cockpit do aluno: fazer treino agora, entender progresso e continuar para nutrição/plano.

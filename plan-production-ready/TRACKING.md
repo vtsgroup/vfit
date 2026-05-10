@@ -1,6 +1,6 @@
 # VFIT Production Completion — Tracking
 
-> Última atualização: 2026-05-10 · Status: Phase 2 loading.tsx + empty states concluídos · Branch de execução: `phase0-production-stabilization` · Versão live observada: `3.5.9` no app.
+> Última atualização: 2026-05-10 · Status: Deploy v3.6.0 publicado; smoke visual/API verde; smoke auth bloqueado por tokens expirados · Branch de execução: `main` · Versão live observada: `3.6.0`.
 
 ## Progresso geral
 
@@ -10,6 +10,12 @@ Tasks: 23/127 concluídas
 Bloqueadores P0 abertos: 2 + validação runtime publicada pendente
 Gate produção: NÃO LIBERADO
 ```
+
+### Deploys executados
+
+| Versão | Data | Branch/commit | Escopo | Resultado |
+|---|---|---|---|---|
+| v3.6.0 | 2026-05-10 | `main` / `3c0f2cab` | Phase 0 stabilization + First Win `/treinos` + skeletons/empty states P2.12-P2.17 | Pages + Workers publicados; git push/tag OK; WhatsApp start/end bypass por Unipile 401; smoke visual/API OK; smoke auth local bloqueado por tokens expirados. |
 
 ## Design review status
 
@@ -96,13 +102,18 @@ Validação já executada:
 - `npx eslint 'src/app/(app)/progresso/page.tsx' 'src/app/(app)/progresso/loading.tsx' 'src/app/(app)/avaliacoes/loading.tsx' 'src/app/(app)/exercicios/loading.tsx'` ✅ zero warnings após P2.12-P2.17.
 - `npm run type-check` ✅ após P2.12-P2.17 (loading.tsx batch + CTA em /progresso).
 - `npm run build` ✅ após P2.12-P2.17; export estático gerou 141 HTML files.
-- Browser smoke estático em `/treinos`, `/nutricao`, `/avaliacoes`, `/progresso` e `/exercicios` ✅: status 200, textos esperados encontrados, `scrollX=0`, zero page errors. Observação: API live ainda retornou `/progress/top-exercises` 500, esperado antes do deploy do Worker corrigido.
+- Browser smoke estático em `/treinos`, `/nutricao`, `/avaliacoes`, `/progresso` e `/exercicios` ✅: status 200, textos esperados encontrados, `scrollX=0`, zero page errors. Observação pré-deploy: API live ainda retornou `/progress/top-exercises` 500, esperado antes do deploy do Worker corrigido.
+- Deploy v3.6.0 ✅: `PATH="/opt/homebrew/opt/node@22/bin:$PATH" node scripts/cf-deploy.js patch --allow-no-whatsapp --msg "estabiliza app aluno para producao"` publicou Pages + Workers e fez push/tag para `origin/main`.
+- Pós-deploy API ✅: `https://api.vfit.app.br/health` retornou 200; `GET /api/v1/progress/top-exercises?limit=4` sem token retornou 401 em vez de 500.
+- Pós-deploy browser smoke ✅: `https://vfit.app.br/{treinos,nutricao,avaliacoes,progresso,exercicios}` retornou 200, textos esperados, `scrollX=0`, zero page errors e zero 5xx capturados.
+- Pós-deploy auth smoke ❌: `npm run smoke:auth:local` falhou porque tokens `SMOKE_*` estão expirados e `.env.local` possui linhas não parseáveis; evidência regenerada em `docs/ULTRA-PLANO-MVP-PRODUCAO/AUTH-SMOKE.generated.md`.
 Ainda pendente para liberar gate:
 
 - Configurar `vfit.app.br` como allowed origin no OneSignal dashboard.
 - Validar R2 CORS/headers em ambiente publicado.
 - Manter tokens temporários renováveis via UI de smoke; o wrapper `npm run smoke:auth:local` ainda carrega `.env.local` e pode sobrescrever tokens frescos por valores antigos.
-- Rodar browser smoke público/aluno após deploy ou preview.
+- Corrigir credenciais Unipile/WhatsApp gateway: deploy v3.6.0 exigiu `--allow-no-whatsapp` porque task-notify start/end retornou 401 `invalid_credentials`.
+- Regenerar tokens em `https://vfit.app.br/dashboard/admin/smoke` com super_admin e rerodar `npm run smoke:auth:local`.
 
 Runbook do stash antigo:
 

@@ -7,6 +7,13 @@
 
 ## [Unreleased] — 12/04/2026 — Paridade admin de saques + redirect domínio legado
 
+### 🚀 Deploy — 10/05/2026 — v3.6.0 produção
+- Cloudflare Pages e Worker `vfit-api` publicados com sucesso via deploy patch; release commit `3c0f2cab` e tag `v3.6.0` enviados para `origin/main`.
+- Pós-deploy API: `https://api.vfit.app.br/health` retornou 200; `/api/v1/progress/top-exercises?limit=4` sem token retornou 401 em vez de 500.
+- Pós-deploy browser smoke: `/treinos`, `/nutricao`, `/avaliacoes`, `/progresso` e `/exercicios` retornaram 200, textos esperados, `scrollX=0`, zero page errors e zero 5xx capturados.
+- Exceção operacional: WhatsApp task-notify start/end falhou com Unipile 401 `invalid_credentials`; deploy continuou com `--allow-no-whatsapp` para liberar correção validada. Credenciais do gateway precisam ser corrigidas antes do próximo deploy regular.
+- Pendência de gate: `npm run smoke:auth:local` falhou porque os tokens `SMOKE_*` estão expirados e `.env.local` possui linhas não parseáveis; gerar tokens novos via `/dashboard/admin/smoke` e rerodar.
+
 ### ✨ Student App — 10/05/2026 — estabilização First Win, skeletons e empty states
 - `/treinos` recebeu a primeira dobra operacional do aluno com treino de hoje, CTA principal, progresso do plano, meta diária, XP/streak, nutrição e próxima ação de evolução de plano.
 - Adicionados skeletons route-level em `/treinos`, `/nutricao`, `/avaliacoes`, `/progresso` e `/exercicios` para reduzir tela branca na navegação mobile do app aluno.
