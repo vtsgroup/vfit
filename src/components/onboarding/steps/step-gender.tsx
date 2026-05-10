@@ -36,15 +36,16 @@ export function StepGender() {
           <button
             key={opt.value}
             onClick={() => updateData({ gender: opt.value })}
-            className={`group relative flex flex-col items-center gap-3 rounded-2xl border p-6 transition-all duration-300 ${
+            className={`group relative min-h-36 overflow-hidden rounded-2xl border p-4 text-left transition-all duration-300 active:scale-[0.99] ${
               isSelected
-                ? 'border-brand-primary bg-brand-primary/10 shadow-lg shadow-brand-primary/10 scale-[1.02]'
-                : 'border-white/8 bg-white/4 hover:border-white/15 hover:bg-white/6'
+                ? 'border-emerald-300/55 bg-emerald-300/12 shadow-[0_22px_46px_-32px_rgba(34,197,94,0.68),inset_0_1px_0_rgba(255,255,255,0.14)]'
+                : 'border-white/9 bg-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] hover:border-white/16 hover:bg-white/8'
             }`}
           >
-            {/* Icon */}
+            <div className={`pointer-events-none absolute inset-0 bg-linear-to-br ${opt.color} opacity-70`} />
+            <div className="pointer-events-none absolute inset-x-3 top-0 h-px bg-linear-to-r from-transparent via-white/30 to-transparent" />
             <div
-              className={`flex h-14 w-14 items-center justify-center rounded-xl bg-linear-to-br ${opt.color} transition-all duration-300 ${
+              className={`relative z-10 mb-4 flex h-13 w-13 items-center justify-center rounded-[18px] border border-white/10 bg-white/8 transition-all duration-300 ${
                 isSelected ? 'scale-110' : 'group-hover:scale-105'
               }`}
             >
@@ -54,19 +55,20 @@ export function StepGender() {
               />
             </div>
 
-            {/* Label */}
             <span
-              className={`text-sm font-semibold transition-colors ${
+              className={`relative z-10 block text-sm font-black transition-colors ${
                 isSelected ? 'text-white' : 'text-white/70'
               }`}
             >
               {opt.label}
             </span>
+            <span className="relative z-10 mt-1 block text-[10px] font-semibold uppercase text-white/34">
+              Personalização segura
+            </span>
 
-            {/* Check indicator */}
             {isSelected && (
-              <div className="absolute top-3 right-3 flex h-5 w-5 items-center justify-center rounded-full bg-brand-primary">
-                <DSIcon name="check" className="h-3 w-3 text-white" />
+              <div className="absolute top-3 right-3 flex h-6 w-6 items-center justify-center rounded-full bg-emerald-300 text-bg-base shadow-[0_0_18px_rgba(134,239,172,0.45)]">
+                <DSIcon name="check" className="h-3 w-3" />
               </div>
             )}
           </button>

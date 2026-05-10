@@ -28,16 +28,16 @@ import { GuestGuard } from '@/components/auth'
 const headingFont = {
   fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
   fontWeight: 900,
-  letterSpacing: '-0.03em',
+  letterSpacing: '0',
 }
 const monoLabel = {
   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
   fontWeight: 700,
-  letterSpacing: '0.15em',
+  letterSpacing: '0',
 }
 
 /* ─── Input classes ─── */
-const inputClass = 'w-full h-12 rounded-xl border border-zinc-200/80 bg-white px-4 text-[14px] text-zinc-900 placeholder:text-zinc-400 shadow-[0_1px_3px_rgba(0,0,0,0.06),inset_0_1px_2px_rgba(0,0,0,0.04)] transition-all duration-200 focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20'
+const inputClass = 'vfit-flow-field h-12 w-full rounded-2xl px-4 text-[14px] transition-all duration-200 focus:outline-none'
 
 export default function ResetPasswordPage() {
   return (
@@ -98,7 +98,7 @@ function ResetPasswordInner() {
           <h1 className="text-[1.75rem] text-white leading-none" style={headingFont}>
             {usingTokenFlow ? 'Redefinir senha' : 'Recuperar conta'}
           </h1>
-          <p className="mt-1.5 text-[13px] text-zinc-600">
+          <p className="mt-1.5 text-[13px] text-slate-400">
             {usingTokenFlow
               ? 'Escolha uma nova senha para sua conta'
               : 'Informe email + código de 6 dígitos enviado por email'}
@@ -139,7 +139,7 @@ function ResetPasswordInner() {
                   onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
                   autoComplete="one-time-code"
                   required
-                  className={`${inputClass} tracking-[0.3em] text-center font-mono text-lg`}
+                  className={`${inputClass} text-center font-mono text-lg`}
                 />
               </div>
             </>
@@ -164,7 +164,7 @@ function ResetPasswordInner() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-1.5 top-1/2 -translate-y-1/2 p-2 text-zinc-400 hover:text-zinc-600 transition-colors rounded-lg hover:bg-zinc-100"
+                className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-lg p-2 text-slate-400 transition-colors hover:bg-white/6 hover:text-emerald-300"
                 tabIndex={-1}
               >
                 {showPassword ? <DSIcon name="eyeOff" size={16} /> : <DSIcon name="eye" size={16} />}
@@ -197,7 +197,7 @@ function ResetPasswordInner() {
             size="lg"
             disabled={!formValid}
             loading={resetPassword.isPending}
-            className="w-full uppercase tracking-wider font-black"
+            className="w-full uppercase font-black"
           >
             REDEFINIR SENHA
             <DSIcon name="arrowRight" size={16} />
@@ -224,7 +224,7 @@ function ResetPasswordInner() {
               </div>
               <Link
                 href="/login"
-                className="w-full group relative flex items-center justify-center gap-2.5 rounded-2xl bg-linear-to-b from-brand-primary to-[#1ea84e] py-4 text-[14px] font-black text-bg-dark uppercase tracking-wider transition-all duration-200 shadow-[0_5px_0_0_#065F46,0_8px_20px_rgba(0,0,0,0.35)] hover:-translate-y-0.5 hover:shadow-[0_7px_0_0_#065F46,0_10px_28px_rgba(16,185,129,0.2)] active:translate-y-1 active:shadow-[0_2px_0_0_#065F46,0_3px_8px_rgba(0,0,0,0.3)]"
+                className="auth-submit-cta group relative flex w-full items-center justify-center gap-2.5 rounded-2xl py-4 text-[14px] font-black uppercase transition-all duration-200 hover:-translate-y-0.5 active:translate-y-1"
                 style={headingFont}
               >
                 <div className="absolute inset-0 rounded-2xl overflow-hidden">

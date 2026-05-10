@@ -75,15 +75,16 @@ export function StepGoal() {
           <button
             key={opt.value}
             onClick={() => updateData({ goal: opt.value })}
-            className={`group relative flex flex-col items-center gap-2 rounded-2xl border p-5 transition-all duration-300 ${
+            className={`group relative min-h-38 overflow-hidden rounded-2xl border p-4 text-left transition-all duration-300 active:scale-[0.99] ${
               isSelected
-                ? 'border-brand-primary bg-brand-primary/10 shadow-lg shadow-brand-primary/10 scale-[1.02]'
-                : 'border-white/8 bg-white/4 hover:border-white/15 hover:bg-white/6'
+                ? 'border-emerald-300/55 bg-emerald-300/12 shadow-[0_22px_46px_-34px_rgba(34,197,94,0.62)]'
+                : 'border-white/9 bg-white/5 hover:border-white/16 hover:bg-white/8'
             }`}
           >
-            {/* Icon */}
+            <div className={`pointer-events-none absolute inset-0 bg-linear-to-br ${opt.color} opacity-75`} />
+            <div className="pointer-events-none absolute inset-x-3 top-0 h-px bg-linear-to-r from-transparent via-white/30 to-transparent" />
             <div
-              className={`flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br ${opt.color} transition-all duration-300 ${
+              className={`relative z-10 mb-4 flex h-13 w-13 items-center justify-center rounded-[18px] border border-white/10 bg-white/8 transition-all duration-300 ${
                 isSelected ? 'scale-110' : 'group-hover:scale-105'
               }`}
             >
@@ -93,22 +94,19 @@ export function StepGoal() {
               />
             </div>
 
-            {/* Label */}
             <span
-              className={`text-sm font-bold transition-colors ${
+              className={`relative z-10 block text-sm font-black transition-colors ${
                 isSelected ? 'text-white' : 'text-white/80'
               }`}
             >
               {opt.label}
             </span>
 
-            {/* Subtitle */}
-            <span className="text-[11px] text-white/35 leading-tight">{opt.subtitle}</span>
+            <span className="relative z-10 mt-1 block text-[11px] font-medium leading-tight text-white/42">{opt.subtitle}</span>
 
-            {/* Check */}
             {isSelected && (
-              <div className="absolute top-2.5 right-2.5 flex h-5 w-5 items-center justify-center rounded-full bg-brand-primary">
-                <DSIcon name="check" className="h-3 w-3 text-white" />
+              <div className="absolute top-2.5 right-2.5 flex h-6 w-6 items-center justify-center rounded-full bg-emerald-300 text-bg-base shadow-[0_0_18px_rgba(134,239,172,0.45)]">
+                <DSIcon name="check" className="h-3 w-3" />
               </div>
             )}
           </button>

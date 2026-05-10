@@ -32,17 +32,16 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://api.vfit.app.br'
 const headingFont = {
   fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
   fontWeight: 900,
-  letterSpacing: '-0.03em',
+  letterSpacing: '0',
 }
 const monoLabel = {
   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
   fontWeight: 700,
-  letterSpacing: '0.15em',
+  letterSpacing: '0',
 }
 
 /* ─── Input classes ─── */
-const inputClass = 'w-full h-12 rounded-xl border border-zinc-200/80 bg-white px-4 text-[14px] text-zinc-900 placeholder:text-zinc-400 shadow-[0_1px_3px_rgba(0,0,0,0.06),inset_0_1px_2px_rgba(0,0,0,0.04)] transition-all duration-200 focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20'
-const selectClass = 'w-full h-12 rounded-xl border border-zinc-200/80 bg-white px-4 text-[14px] text-zinc-900 shadow-[0_1px_3px_rgba(0,0,0,0.06),inset_0_1px_2px_rgba(0,0,0,0.04)] transition-all duration-200 focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 appearance-none'
+const inputClass = 'vfit-flow-field h-12 w-full rounded-2xl px-4 text-[14px] transition-all duration-200 focus:outline-none'
 
 const UF_OPTIONS = [
   'AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG',
@@ -302,7 +301,7 @@ export default function RegisterPersonalPage() {
           <h1 className="text-[1.75rem] text-white leading-none" style={headingFont}>
             {step === 1 ? 'Seus dados' : 'Dados profissionais'}
           </h1>
-          <p className="mt-1.5 text-[13px] text-zinc-600">
+          <p className="mt-1.5 text-[13px] text-slate-400">
             {step === 1 ? 'Informações pessoais e acesso' : 'CREF e informações complementares'}
           </p>
 
@@ -322,7 +321,7 @@ export default function RegisterPersonalPage() {
                 <div className="w-full border-t border-white/6" />
               </div>
               <div className="relative flex justify-center">
-                <span className="px-4 py-1.5 text-[9px] uppercase text-zinc-500 rounded-full border border-zinc-700/50 bg-[#0F1729] backdrop-blur-sm shadow-lg" style={monoLabel}>
+                <span className="rounded-full border border-white/10 bg-bg-surface-1/85 px-4 py-1.5 text-[9px] uppercase text-slate-500 shadow-lg backdrop-blur-sm" style={monoLabel}>
                   OU PREENCHA
                 </span>
               </div>
@@ -362,7 +361,7 @@ export default function RegisterPersonalPage() {
                   value={form.cpf}
                   onChange={(e) => updateField('cpf', maskCpf(e.target.value))}
                   required
-                  className={`${inputClass} tracking-wider ${cpfValidated ? 'border-brand-primary/50! ring-1! ring-brand-primary/30!' : cpfError ? 'border-red-500/50! ring-1! ring-red-500/30!' : ''}`}
+                  className={`${inputClass} ${cpfValidated ? 'border-brand-primary/50! ring-1! ring-brand-primary/30!' : cpfError ? 'border-red-500/50! ring-1! ring-red-500/30!' : ''}`}
                 />
                 {cpfChecking && (
                   <div className="mt-2 flex items-center gap-2">
@@ -373,7 +372,9 @@ export default function RegisterPersonalPage() {
                 {cpfValidated && !cpfChecking && (
                   <div className="mt-2 flex items-center gap-2">
                     <DSIcon name="checkCircle2" size={14} className="text-brand-primary" />
-                    <span className="text-[11px] text-brand-primary">CPF validado</span>
+                    <span className="text-[11px] text-brand-primary">
+                      CPF validado{cpfLookupName ? ` para ${cpfLookupName}` : ''}
+                    </span>
                   </div>
                 )}
                 {cpfError && (
@@ -394,7 +395,7 @@ export default function RegisterPersonalPage() {
                   onChange={(e) => updateField('birthDate', maskDate(e.target.value))}
                   autoComplete="bday"
                   required
-                  className={`${inputClass} tracking-wider ${cpfValidated ? 'border-brand-primary/50! ring-1! ring-brand-primary/30!' : ''}`}
+                  className={`${inputClass} ${cpfValidated ? 'border-brand-primary/50! ring-1! ring-brand-primary/30!' : ''}`}
                 />
               </div>
 
@@ -447,7 +448,7 @@ export default function RegisterPersonalPage() {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-1.5 top-1/2 -translate-y-1/2 p-2 text-zinc-400 hover:text-zinc-600 transition-colors rounded-lg hover:bg-zinc-100"
+                    className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-lg p-2 text-slate-400 transition-colors hover:bg-white/6 hover:text-emerald-300"
                     tabIndex={-1}
                   >
                     {showPassword ? <DSIcon name="eyeOff" size={16} /> : <DSIcon name="eye" size={16} />}
@@ -479,7 +480,7 @@ export default function RegisterPersonalPage() {
                 type="submit"
                 size="lg"
                 disabled={!step1Valid}
-                className="w-full uppercase tracking-wider font-black"
+                className="w-full uppercase font-black"
               >
                 CONTINUAR
                 <DSIcon name="arrowRight" size={16} />
@@ -500,7 +501,7 @@ export default function RegisterPersonalPage() {
                   value={form.cref}
                   onChange={(e) => updateField('cref', maskCref(e.target.value))}
                   required
-                  className={`${inputClass} tracking-wider uppercase`}
+                  className={`${inputClass} uppercase`}
                 />
                 <p className="mt-1 text-[10px] text-zinc-600">Apenas o número do CREF · O estado é selecionado abaixo</p>
               </div>
@@ -539,7 +540,7 @@ export default function RegisterPersonalPage() {
                     value={form.referral_code}
                     onChange={(e) => !referralLocked && updateField('referral_code', e.target.value)}
                     readOnly={referralLocked}
-                    className={`${inputClass} ${referralLocked ? 'opacity-70 cursor-not-allowed bg-zinc-100' : ''}`}
+                    className={`${inputClass} ${referralLocked ? 'cursor-not-allowed opacity-70' : ''}`}
                   />
                   {referralLocked && <DSIcon name="lock" size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-brand-primary" />}
                 </div>
@@ -596,7 +597,7 @@ export default function RegisterPersonalPage() {
                 size="lg"
                 disabled={!step2Valid}
                 loading={register.isPending}
-                className="w-full uppercase tracking-wider font-black"
+                className="w-full uppercase font-black"
               >
                 CRIAR CONTA
                 <DSIcon name="arrowRight" size={16} />

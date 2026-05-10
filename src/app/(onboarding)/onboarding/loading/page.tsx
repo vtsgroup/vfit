@@ -135,14 +135,15 @@ export default function OnboardingLoadingPage() {
 
   if (error) {
     return (
-      <div className="flex min-h-dvh flex-col items-center justify-center bg-bg-primary px-6 text-center">
-        <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-white/8">
+      <div className="vfit-flow-bg relative flex min-h-dvh flex-col items-center justify-center overflow-hidden px-6 text-center text-white">
+        <div className="vfit-flow-grid pointer-events-none absolute inset-0" />
+        <div className="relative mb-6 flex h-20 w-20 items-center justify-center rounded-3xl border border-yellow-300/20 bg-yellow-300/10">
           <DSIcon name="alertTriangle" className="h-10 w-10 text-yellow-400" />
         </div>
-        <h2 className="mb-2 text-xl font-bold text-text-primary">
+        <h2 className="relative mb-2 text-xl font-bold text-white">
           {error}
         </h2>
-        <p className="mb-8 text-sm text-text-secondary">
+        <p className="relative mb-8 text-sm text-slate-400">
           Tente novamente em alguns segundos.
         </p>
         <Button
@@ -160,39 +161,44 @@ export default function OnboardingLoadingPage() {
   }
 
   return (
-    <div className="flex min-h-dvh flex-col items-center justify-center bg-bg-primary px-6">
+    <div className="vfit-flow-bg relative flex min-h-dvh flex-col items-center justify-center overflow-hidden px-6 text-white">
+      <div className="vfit-flow-grid pointer-events-none absolute inset-0" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-56 bg-linear-to-b from-white/8 to-transparent" />
       {/* ─── Pulsing orb with glow effect ─── */}
       <div className="relative mb-10">
-        <div className="absolute inset-0 h-32 w-32 animate-pulse rounded-full bg-brand-primary/20 blur-3xl" />
-        <div className="relative flex h-32 w-32 items-center justify-center rounded-full border border-white/10 bg-white/5">
+        <div className="absolute inset-0 h-36 w-36 animate-pulse rounded-[2rem] bg-emerald-300/20 blur-3xl" />
+        <div className="vfit-flow-panel relative flex h-36 w-36 items-center justify-center rounded-[2rem]">
           <DSIcon name={phase.icon} className="h-14 w-14 text-brand-primary transition-all duration-500" key={phase.icon} />
         </div>
       </div>
 
       {/* ─── Phase label ─── */}
       <h2
-        className="mb-8 text-center text-lg font-semibold text-text-primary transition-all duration-500"
+        className="mb-3 text-center text-2xl font-black text-white transition-all duration-500"
         key={phase.label}
       >
         {phase.label}
       </h2>
+      <p className="mb-8 max-w-xs text-center text-sm leading-6 text-slate-400">
+        Cruzando seus dados com intensidade, tempo disponível e objetivo principal.
+      </p>
 
       {/* ─── Progress bar with step counter ─── */}
       <div className="w-full max-w-xs space-y-3">
-        <div className="relative h-1.5 overflow-hidden rounded-full bg-bg-tertiary">
+        <div className="relative h-2 overflow-hidden rounded-full bg-white/10">
           <div
-            className="h-full rounded-full bg-brand-primary transition-all duration-300 ease-out"
+            className="h-full rounded-full bg-linear-to-r from-emerald-300 via-brand-primary to-lime-300 shadow-[0_0_18px_rgba(34,197,94,0.42)] transition-all duration-300 ease-out"
             style={{ width: `${progress}%` }}
           />
         </div>
-        <div className="flex items-center justify-between text-xs text-text-muted">
+        <div className="flex items-center justify-between text-xs text-slate-400">
           <span>Passo {currentPhase + 1}/{PHASES.length}</span>
           <span>{Math.round(progress)}%</span>
         </div>
       </div>
 
       {/* ─── Time estimate ─── */}
-      <p className="mt-12 flex max-w-xs items-center justify-center gap-1.5 text-center text-xs text-text-secondary">
+      <p className="vfit-flow-panel-soft mt-12 flex max-w-xs items-center justify-center gap-2 rounded-2xl px-4 py-3 text-center text-xs text-slate-300">
         <DSIcon name="clock" className="h-3.5 w-3.5" />
         Tempo estimado: 30-45 segundos
       </p>

@@ -31,12 +31,12 @@ import { ApiClientError } from '@/lib/api-client'
 const headingFont = {
   fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
   fontWeight: 900,
-  letterSpacing: '-0.03em',
+  letterSpacing: '0',
 }
 const monoLabel = {
   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
   fontWeight: 700,
-  letterSpacing: '0.15em',
+  letterSpacing: '0',
 }
 
 /* ─── CPF mask ─── */
@@ -215,7 +215,7 @@ export default function LoginPage() {
           </div>
           <div className="relative flex justify-center">
             <span
-              className="px-4 py-1.5 text-[9px] uppercase text-zinc-500 rounded-full border border-zinc-700/50 bg-[#0F1729] backdrop-blur-sm shadow-lg"
+              className="rounded-full border border-white/10 bg-bg-surface-1/85 px-4 py-1.5 text-[9px] uppercase text-slate-500 shadow-lg backdrop-blur-sm"
               style={monoLabel}
             >
               OU COM CPF / EMAIL
@@ -241,7 +241,7 @@ export default function LoginPage() {
               onChange={handleIdentifierChange}
               autoComplete="username"
               required
-              className="w-full h-11 rounded-xl border border-emerald-400/20 bg-slate-950/70 px-4 text-[14px] text-white placeholder:text-slate-500 shadow-[0_1px_3px_rgba(0,0,0,0.28),inset_0_1px_2px_rgba(255,255,255,0.03)] transition-all duration-200 focus:outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/25"
+              className="vfit-flow-field h-12 w-full rounded-2xl px-4 text-[14px] transition-all duration-200 focus:outline-none"
             />
           </div>
 
@@ -258,7 +258,7 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete="current-password"
                 required
-                className="w-full h-11 rounded-xl border border-emerald-400/20 bg-slate-950/70 px-4 pr-12 text-[14px] text-white placeholder:text-slate-500 shadow-[0_1px_3px_rgba(0,0,0,0.28),inset_0_1px_2px_rgba(255,255,255,0.03)] transition-all duration-200 focus:outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/25"
+                className="vfit-flow-field h-12 w-full rounded-2xl px-4 pr-12 text-[14px] transition-all duration-200 focus:outline-none"
               />
               <button
                 type="button"
@@ -341,7 +341,7 @@ export default function LoginPage() {
             size="lg"
             disabled={!isFormFilled}
             loading={login.isPending}
-            className="auth-submit-cta w-full uppercase tracking-wider font-black"
+            className="auth-submit-cta w-full uppercase font-black"
           >
             ENTRAR
             <DSIcon name="arrowRight" size={16} />
@@ -372,7 +372,7 @@ export default function LoginPage() {
         </div>
 
         {/* Version */}
-        <p className="mt-3 text-center text-[9px] text-zinc-800 select-none" style={monoLabel}>
+        <p className="mt-3 text-center text-[9px] text-slate-600 select-none" style={monoLabel}>
           v{APP_VERSION}
         </p>
       </div>

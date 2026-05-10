@@ -7,6 +7,16 @@
 
 ## [Unreleased] — 2026-04-08 — Sprint 11-15 (UX Nutrição/Exercícios)
 
+### 🎨 Hotfix v4.1.8 — Welcome, onboarding e auth ultra premium (2026-05-10)
+- **Welcome redesenhado:** [src/app/(onboarding)/welcome/page.tsx](src/app/(onboarding)/welcome/page.tsx) agora abre o fluxo com hero cinematográfico VFIT, métricas do quiz, cards glass e CTA desktop/mobile sem alterar a lógica de retomada do onboarding.
+- **Welcome mobile corrigido:** CTA principal saiu do overlay fixo e passou para o fluxo do hero em telas pequenas, removendo sobreposição com texto e mantendo leitura limpa no viewport mobile.
+- **Quiz preservado e muito mais premium:** [src/components/onboarding/onboarding-layout.tsx](src/components/onboarding/onboarding-layout.tsx) agora usa shell de leitura IA, header protegido, progresso percentual, cards glass em camadas e footer premium; respostas, inputs numéricos e prova social receberam estados selecionados mais fortes sem mudar perguntas, opções ou validações.
+- **Paywall modernizado:** [src/components/paywall/paywall-plans.tsx](src/components/paywall/paywall-plans.tsx), descontos e modal de saída receberam pricing cards premium, overlays blur e CTAs alinhados à identidade verde VFIT.
+- **Assinatura/PIX premium:** [src/app/(app)/perfil/assinatura/page.tsx](src/app/(app)/perfil/assinatura/page.tsx) recebeu camada de confiança com TLS, cadeado, Asaas, webhook automático, QR Code em vault, preview de Pix Copia e Cola, copy PIX com estado visual e espera dinâmica de confirmação sem alterar o contrato backend.
+- **Botões mais premium:** [src/components/ui/button.tsx](src/components/ui/button.tsx) refina o `primary` verde 3D com topo lime/emerald e transforma o `secondary` em navy graphite com brilho sky, contraste mais forte e profundidade melhor para CTAs de pagamento e ações secundárias.
+- **Auth alinhado ao produto:** login, registro, cadastro de aluno/personal, recuperação, reset e verificação saíram da identidade azul antiga e usam campos dark, tokens verdes, botões 3D e tipografia sem letter spacing negativo.
+- **Base visual compartilhada:** [src/app/globals.css](src/app/globals.css) adiciona `vfit-flow-bg`, `vfit-flow-panel`, `vfit-flow-panel-soft` e `vfit-flow-field` para manter consistência nas próximas telas de aquisição.
+
 ### 🎨 Hotfix v4.1.7 — Streaks + IA premium e continuidade real (2026-05-10)
 - **Continuidade corrigida de raiz:** `vfit-app-hero-gradient` agora mantém a cor final do header nos primeiros 11% do hero e desloca os glows para baixo, removendo a quebra visual relatada entre header e heróis.
 - **Streaks ultra premium:** [src/app/(app)/progresso/streaks/page.tsx](src/app/(app)/progresso/streaks/page.tsx) foi refeito como cockpit de consistência com hero contínuo, progresso de marco, métricas claras, ritual semanal, calendário e conquistas em cards premium light.

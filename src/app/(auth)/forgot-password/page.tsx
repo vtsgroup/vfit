@@ -26,16 +26,16 @@ import { GuestGuard, Turnstile, type TurnstileRef } from '@/components/auth'
 const headingFont = {
   fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
   fontWeight: 900,
-  letterSpacing: '-0.03em',
+  letterSpacing: '0',
 }
 const monoLabel = {
   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
   fontWeight: 700,
-  letterSpacing: '0.15em',
+  letterSpacing: '0',
 }
 
 /* ─── Input classes ─── */
-const inputClass = 'w-full h-12 rounded-xl border border-zinc-200/80 bg-white px-4 text-[14px] text-zinc-900 placeholder:text-zinc-400 shadow-[0_1px_3px_rgba(0,0,0,0.06),inset_0_1px_2px_rgba(0,0,0,0.04)] transition-all duration-200 focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20'
+const inputClass = 'vfit-flow-field h-12 w-full rounded-2xl px-4 text-[14px] transition-all duration-200 focus:outline-none'
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('')
@@ -92,7 +92,7 @@ export default function ForgotPasswordPage() {
           <h1 className="text-[1.75rem] text-white leading-none" style={headingFont}>
             Recuperar senha
           </h1>
-          <p className="mt-1.5 text-[13px] text-zinc-600">
+          <p className="mt-1.5 text-[13px] text-slate-400">
             Informe seu email para receber um link e um código de recuperação
           </p>
         </div>
@@ -163,7 +163,7 @@ export default function ForgotPasswordPage() {
               size="lg"
               disabled={!email || !turnstileToken}
               loading={forgotPassword.isPending}
-              className="w-full uppercase tracking-wider font-black"
+              className="w-full uppercase font-black"
             >
               <DSIcon name="send" size={16} />
               ENVIAR RECUPERAÇÃO

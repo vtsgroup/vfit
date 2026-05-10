@@ -69,9 +69,9 @@ function ImageSlideshow() {
         </div>
       ))}
       {/* Dark overlay to keep text readable */}
-      <div className="absolute inset-0 bg-[#020810]/75" />
+      <div className="absolute inset-0 bg-bg-base/75" />
       {/* Public/auth green cinematic tint */}
-      <div className="absolute inset-0 bg-linear-to-br from-[#020810]/50 via-emerald-500/8 to-[#020810]/60" />
+      <div className="absolute inset-0 bg-linear-to-br from-bg-base/50 via-emerald-500/8 to-bg-base/60" />
     </div>
   )
 }
@@ -107,7 +107,7 @@ function AnimatedAuthLogo({ size = 'large' }: { size?: 'large' | 'small' }) {
             fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
             fontWeight: 800,
             fontSize,
-            letterSpacing: '-0.02em',
+            letterSpacing: '0',
             lineHeight: lineH,
             color: 'white',
           }}
@@ -175,7 +175,7 @@ function CinematicBackground() {
   return (
     <div className="absolute inset-0 overflow-hidden opacity-60">
       {/* Base deep dark gradient */}
-      <div className="absolute inset-0 bg-linear-to-br from-[#020810]/70 via-[#071022]/50 to-[#030B15]/70" />
+      <div className="absolute inset-0 bg-linear-to-br from-bg-base/70 via-bg-surface-1/50 to-bg-base/70" />
 
       {/* Aurora layer 1 — slow drift, green */}
       <div
@@ -248,7 +248,7 @@ function CinematicBackground() {
       />
 
       {/* Vignette edges */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(2,8,16,0.6)_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(5,10,18,0.6)_100%)]" />
     </div>
   )
 }
@@ -266,8 +266,8 @@ function TestimonialCarousel() {
   return (
     <div className="relative -mx-10 xl:-mx-14">
       {/* Edge fade masks — match dark bg */}
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-14 bg-linear-to-r from-[#020810]/90 to-transparent" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-14 bg-linear-to-l from-[#020810]/90 to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-14 bg-linear-to-r from-bg-base/90 to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-14 bg-linear-to-l from-bg-base/90 to-transparent" />
 
       <div className="overflow-hidden">
         <div
@@ -407,7 +407,7 @@ export function AuthLayoutClient({ children }: { children: ReactNode }) {
             style={{ animation: 'authFloat 8s ease-in-out infinite' }}
           />
           <div
-            className="absolute bottom-[20%] right-[-5%] h-80 w-80 rounded-full bg-cyan-400/10 blur-[120px]"
+            className="absolute bottom-[20%] right-[-5%] h-80 w-80 rounded-full bg-lime-300/10 blur-[120px]"
             style={{ animation: 'authFloat 10s ease-in-out infinite', animationDelay: '3s' }}
           />
 
@@ -426,7 +426,7 @@ export function AuthLayoutClient({ children }: { children: ReactNode }) {
               </p>
               <h2
                 className="text-[2.4rem] xl:text-[2.8rem] text-white leading-[1.08] mb-4"
-                style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', fontWeight: 900, letterSpacing: '-0.03em' }}
+                style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', fontWeight: 900, letterSpacing: 0 }}
               >
                 Treinos, alunos e{' '}
                 <span className="text-transparent bg-clip-text bg-linear-to-r from-emerald-300 via-green-300 to-emerald-500">
@@ -461,7 +461,7 @@ export function AuthLayoutClient({ children }: { children: ReactNode }) {
                   <div key={i}>
                     <div
                       className="text-2xl text-white"
-                      style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', fontWeight: 900, letterSpacing: '-0.03em' }}
+                      style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', fontWeight: 900, letterSpacing: 0 }}
                     >
                       {stat.value}
                     </div>

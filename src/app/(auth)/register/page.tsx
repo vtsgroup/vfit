@@ -26,12 +26,12 @@ import { saveReferralCode, getReferralCode } from '@/lib/referral-cookie'
 const headingFont = {
   fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
   fontWeight: 900,
-  letterSpacing: '-0.03em',
+  letterSpacing: '0',
 }
 const monoLabel = {
   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
   fontWeight: 700,
-  letterSpacing: '0.15em',
+  letterSpacing: '0',
 }
 
 /* ─── Feature pill ─── */
@@ -83,7 +83,7 @@ export default function RegisterPage() {
           <h1 className="text-[2rem] text-white leading-none" style={headingFont}>
             Começar grátis
           </h1>
-          <p className="mt-1.5 text-[13px] text-zinc-600">
+          <p className="mt-1.5 text-[13px] text-slate-400">
             Escolha seu perfil para personalizar a experiência
           </p>
         </div>
@@ -93,7 +93,7 @@ export default function RegisterPage() {
           {/* Personal Trainer Card — 3D with green accent */}
           <Link
             href={`/register/personal${refQuery}`}
-            className="group relative block rounded-2xl bg-linear-to-b from-[#0F1A2E] to-[#0B1322] border border-white/6 p-6 transition-all duration-300 shadow-[0_4px_0_0_#065F46,0_6px_20px_rgba(0,0,0,0.3)] hover:-translate-y-1 hover:shadow-[0_6px_0_0_#065F46,0_10px_30px_rgba(16,185,129,0.15)] active:translate-y-0.5 active:shadow-[0_2px_0_0_#065F46,0_3px_8px_rgba(0,0,0,0.3)]"
+            className="vfit-flow-panel group relative block rounded-[1.75rem] p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_28px_70px_rgba(34,197,94,0.16)] active:translate-y-0.5"
           >
             {/* Shine effect */}
             <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
@@ -103,8 +103,8 @@ export default function RegisterPage() {
             <div className="relative z-10">
               {/* Icon + Title + Arrow */}
               <div className="flex items-center gap-4 mb-4">
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-linear-to-br from-brand-primary to-[#16A34A] shadow-[0_4px_12px_rgba(16,185,129,0.3)]">
-                  <DSIcon name="dumbbell" size={28} className="text-white" />
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-linear-to-br from-emerald-300 via-brand-primary to-green-700 shadow-[0_12px_26px_rgba(34,197,94,0.28)]">
+                  <DSIcon name="dumbbell" size={28} className="text-bg-base" />
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
@@ -113,11 +113,11 @@ export default function RegisterPage() {
                       PRO
                     </span>
                   </div>
-                  <p className="text-[12px] text-zinc-500 mt-0.5">
+                  <p className="text-[12px] text-slate-400 mt-0.5">
                     Gerencie alunos, crie treinos com IA e automatize cobranças
                   </p>
                 </div>
-                <DSIcon name="arrowRight" className="text-zinc-600 transition-all group-hover:translate-x-1.5 group-hover:text-brand-primary" />
+                <DSIcon name="arrowRight" className="text-slate-500 transition-all group-hover:translate-x-1.5 group-hover:text-brand-primary" />
               </div>
 
               {/* Feature pills */}
@@ -135,7 +135,7 @@ export default function RegisterPage() {
           {/* Student Card — 3D with brand accent */}
           <Link
             href={`/register/student${refQuery}`}
-            className="group relative block rounded-2xl bg-linear-to-b from-[#0F1A2E] to-[#0B1322] border border-white/6 p-6 transition-all duration-300 shadow-[0_4px_0_0_#1e3a5f,0_6px_20px_rgba(0,0,0,0.3)] hover:-translate-y-1 hover:shadow-[0_6px_0_0_#1e3a5f,0_10px_30px_rgba(56,189,248,0.1)] active:translate-y-0.5 active:shadow-[0_2px_0_0_#1e3a5f,0_3px_8px_rgba(0,0,0,0.3)]"
+            className="vfit-flow-panel-soft group relative block rounded-[1.75rem] p-6 transition-all duration-300 hover:-translate-y-1 hover:bg-white/8 active:translate-y-0.5"
           >
             {/* Shine effect */}
             <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
@@ -146,7 +146,7 @@ export default function RegisterPage() {
               {/* Icon + Title + Arrow */}
               <div className="flex items-center gap-4 mb-4">
                 <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-linear-to-br from-brand-primary to-emerald-600 shadow-[0_4px_12px_rgba(34,197,94,0.3)]">
-                  <DSIcon name="graduationCap" size={28} className="text-white" />
+                  <DSIcon name="graduationCap" size={28} className="text-bg-base" />
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
@@ -155,11 +155,11 @@ export default function RegisterPage() {
                       FREE
                     </span>
                   </div>
-                  <p className="text-[12px] text-zinc-500 mt-0.5">
+                  <p className="text-[12px] text-slate-400 mt-0.5">
                     Acesse treinos, compre no marketplace e acompanhe sua evolução
                   </p>
                 </div>
-                <DSIcon name="arrowRight" className="text-zinc-600 transition-all group-hover:translate-x-1.5 group-hover:text-brand-primary" />
+                <DSIcon name="arrowRight" className="text-slate-500 transition-all group-hover:translate-x-1.5 group-hover:text-brand-primary" />
               </div>
 
               {/* Feature pills — only included ones */}
@@ -182,13 +182,13 @@ export default function RegisterPage() {
 
         {/* Footer */}
         <div className="mt-7 flex items-center justify-between">
-          <p className="text-[13px] text-zinc-500">
+          <p className="text-[13px] text-slate-400">
             Já tem conta?{' '}
             <Link href="/login" className="font-bold text-brand-primary hover:text-brand-primary/80 transition-colors">
               Entrar
             </Link>
           </p>
-          <span className="flex items-center gap-1.5 text-[9px] text-zinc-700" style={monoLabel}>
+          <span className="flex items-center gap-1.5 text-[9px] text-slate-600" style={monoLabel}>
             <DSIcon name="shield" size={12} /> SSL · LGPD
           </span>
         </div>

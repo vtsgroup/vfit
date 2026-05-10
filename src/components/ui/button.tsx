@@ -36,15 +36,15 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary: [
-    // Surface: premium emerald gradient with a dark-green precision edge
-    'bg-linear-to-b from-emerald-300 via-emerald-500 to-green-700',
+    // Surface: premium emerald gradient with a brighter top edge and deeper base
+    'bg-linear-to-b from-lime-200 via-emerald-400 to-emerald-800',
     'text-white font-black',
     '[text-shadow:0_1px_2px_rgba(2,44,34,0.38)]',
     // Border + depth: all green, no neutral gray in the 3D system
-    'border border-emerald-900/70',
-    'shadow-[0_5px_0_0_#064e3b,0_14px_30px_-13px_rgba(6,95,70,0.72),0_0_0_1px_rgba(6,78,59,0.14),inset_0_1px_0_rgba(255,255,255,0.36),inset_0_-1px_0_rgba(6,78,59,0.28)]',
+    'border border-emerald-900/80',
+    'shadow-[0_5px_0_0_#064e3b,0_16px_34px_-13px_rgba(6,95,70,0.82),0_0_0_1px_rgba(6,78,59,0.22),0_0_34px_-16px_rgba(190,242,100,0.82),inset_0_1px_0_rgba(255,255,255,0.52),inset_0_-1px_0_rgba(6,78,59,0.32)]',
     'hover:-translate-y-0.5',
-    'hover:shadow-[0_7px_0_0_#064e3b,0_18px_38px_-12px_rgba(6,95,70,0.78),0_0_0_1px_rgba(6,78,59,0.18),0_0_42px_-20px_rgba(52,211,153,0.85),inset_0_1px_0_rgba(255,255,255,0.42),inset_0_-1px_0_rgba(6,78,59,0.32)]',
+    'hover:shadow-[0_7px_0_0_#064e3b,0_20px_42px_-12px_rgba(6,95,70,0.88),0_0_0_1px_rgba(6,78,59,0.22),0_0_56px_-16px_rgba(190,242,100,0.96),inset_0_1px_0_rgba(255,255,255,0.56),inset_0_-1px_0_rgba(6,78,59,0.34)]',
     'hover:brightness-105',
     // Active: press down + inner shadow
     'active:translate-y-[3px] active:scale-[0.98]',
@@ -54,17 +54,17 @@ const variantStyles: Record<ButtonVariant, string> = {
   ].join(' '),
 
   secondary: [
-    // Navy blue-gray 3D — sober contrast partner for emerald primary CTAs
-    'bg-linear-to-b from-slate-500 via-slate-600 to-slate-800',
-    'text-white font-bold',
+    // Premium navy graphite — stronger contrast partner for emerald primary CTAs
+    'bg-linear-to-b from-slate-300 via-slate-600 to-slate-950',
+    'text-white font-black',
     '[text-shadow:0_1px_2px_rgba(2,6,23,0.42)]',
-    'border border-slate-950/65',
-    'shadow-[0_4px_0_0_#0f172a,0_12px_28px_-14px_rgba(15,23,42,0.78),0_0_0_1px_rgba(51,65,85,0.16),inset_0_1px_0_rgba(255,255,255,0.22)]',
+    'border border-slate-950/80',
+    'shadow-[0_5px_0_0_#020617,0_14px_32px_-14px_rgba(15,23,42,0.9),0_0_0_1px_rgba(186,230,253,0.14),0_0_34px_-20px_rgba(125,211,252,0.58),inset_0_1px_0_rgba(255,255,255,0.34)]',
     'hover:-translate-y-0.5',
-    'hover:shadow-[0_6px_0_0_#0f172a,0_16px_34px_-14px_rgba(15,23,42,0.84),0_0_36px_-20px_rgba(125,211,252,0.45),inset_0_1px_0_rgba(255,255,255,0.28)]',
+    'hover:shadow-[0_7px_0_0_#020617,0_18px_40px_-14px_rgba(15,23,42,0.94),0_0_44px_-18px_rgba(125,211,252,0.66),inset_0_1px_0_rgba(255,255,255,0.40)]',
     'hover:brightness-105',
     'active:translate-y-[3px] active:scale-[0.98]',
-    'active:shadow-[0_1px_0_0_#0f172a,0_4px_10px_-8px_rgba(15,23,42,0.68),inset_0_2px_6px_rgba(2,6,23,0.24)]',
+    'active:shadow-[0_1px_0_0_#020617,0_4px_10px_-8px_rgba(15,23,42,0.72),inset_0_2px_6px_rgba(2,6,23,0.28)]',
     'active:brightness-95',
     'focus-visible:ring-sky-300/45',
   ].join(' '),

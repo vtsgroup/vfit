@@ -43,7 +43,7 @@ export function StepAge() {
             value={input}
             onChange={(e) => handleChange(e.target.value)}
             placeholder="25"
-            className="h-28 w-40 rounded-2xl border border-white/10 bg-white/4 text-center text-5xl font-bold text-white placeholder:text-white/15 focus:border-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary/20 transition-all"
+            className="h-30 w-42 rounded-[28px] border border-emerald-300/18 bg-white/8 text-center text-5xl font-black text-white shadow-[0_26px_54px_-38px_rgba(34,197,94,0.58),inset_0_1px_0_rgba(255,255,255,0.12)] outline-none transition-all placeholder:text-white/15 focus:border-emerald-300/55 focus:ring-4 focus:ring-emerald-300/14"
             autoFocus
           />
           <span className="absolute right-4 bottom-3 text-sm text-white/30">anos</span>
@@ -59,7 +59,7 @@ export function StepAge() {
 
       {/* Age group feedback */}
       {age && (
-        <div className="flex items-center gap-2.5 rounded-xl border border-white/8 bg-white/4 px-5 py-3">
+        <div className="flex items-center gap-2.5 rounded-card-lg border border-white/10 bg-white/7 px-5 py-3 shadow-glass-inset-sm">
           <DSIcon
             name={age < 18 ? 'star' : age < 30 ? 'dumbbell' : age < 45 ? 'target' : age < 60 ? 'zap' : 'trophy'}
             className="h-5 w-5 shrink-0 text-brand-primary"

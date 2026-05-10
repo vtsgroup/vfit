@@ -33,17 +33,17 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://api.vfit.app.br'
 const headingFont = {
   fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
   fontWeight: 900,
-  letterSpacing: '-0.03em',
+  letterSpacing: '0',
 }
 const monoLabel = {
   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
   fontWeight: 700,
-  letterSpacing: '0.15em',
+  letterSpacing: '0',
 }
 
 /* ─── Input classes ─── */
-const inputBase = 'w-full h-13 rounded-2xl border backdrop-blur-sm px-4 text-[15px] transition-all duration-300 focus:outline-none'
-const inputNormal = `${inputBase} bg-white/95 text-zinc-900 placeholder:text-zinc-400 border-white/20 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-400/25 focus:bg-white shadow-sm`
+const inputBase = 'vfit-flow-field h-13 w-full rounded-2xl px-4 text-[15px] transition-all duration-300 focus:outline-none'
+const inputNormal = inputBase
 
 function seededUnit(seed: number): number {
   const x = Math.sin(seed * 12.9898) * 43758.5453
@@ -197,7 +197,7 @@ export default function RegisterStudentPage() {
           {/* Banner area with logo */}
           <div className="relative overflow-hidden h-48 sm:h-52 lg:h-52 xl:h-56">
             {/* Background layers */}
-            <div className="absolute inset-0 bg-linear-to-br from-[#020810] via-[#071a12] to-[#051020]" />
+            <div className="absolute inset-0 bg-linear-to-br from-bg-base via-bg-surface-1 to-bg-base" />
             <div className="absolute inset-0 opacity-40" style={{ background: 'radial-gradient(ellipse 80% 70% at 30% 80%, rgba(16,185,129,0.25) 0%, transparent 60%)' }} />
             <div className="absolute inset-0 opacity-20" style={{ background: 'radial-gradient(ellipse 60% 60% at 80% 20%, rgba(56,189,248,0.15) 0%, transparent 55%)' }} />
 
@@ -247,12 +247,13 @@ export default function RegisterStudentPage() {
                 {/* Photo — overlapping cover, vivid green */}
                 <div className="relative shrink-0">
                   <div className="absolute -inset-2.5 rounded-2xl bg-linear-to-br from-emerald-400/45 via-emerald-400/30 to-emerald-400/45 blur-xl opacity-90 animate-pulse" />
-                  <div className="relative h-26 w-26 rounded-2xl bg-linear-to-br from-emerald-400 via-emerald-400 to-emerald-500 p-0.75 shadow-[0_0_50px_rgba(16,185,129,0.5)] ring-[3px] ring-[#0b1120]">
-                    <div className="h-full w-full rounded-lg overflow-hidden bg-[#0a1628]">
+                  <div className="relative h-26 w-26 rounded-2xl bg-linear-to-br from-emerald-400 via-emerald-400 to-emerald-500 p-0.75 shadow-[0_0_50px_rgba(16,185,129,0.5)] ring-[3px] ring-bg-surface-1">
+                    <div className="h-full w-full overflow-hidden rounded-lg bg-bg-surface-1">
                       {(() => {
                         const photoUrl = normalizePhotoUrl(personalInfo.personal_photo)
                         if (photoUrl && !photoFailed) {
                           return (
+                            // eslint-disable-next-line @next/next/no-img-element
                             <img
                               src={photoUrl}
                               alt=""
@@ -272,7 +273,7 @@ export default function RegisterStudentPage() {
                     </div>
                   </div>
                   {personalInfo.personal_cref_verified && (
-                    <div className="absolute -bottom-1 -right-1 rounded-full bg-emerald-500 p-1.5 shadow-lg shadow-emerald-500/50 ring-2 ring-[#0b1120]">
+                    <div className="absolute -bottom-1 -right-1 rounded-full bg-emerald-500 p-1.5 shadow-lg shadow-emerald-500/50 ring-2 ring-bg-surface-1">
                       <DSIcon name="shieldCheck" size={14} className="text-white" />
                     </div>
                   )}
@@ -297,7 +298,7 @@ export default function RegisterStudentPage() {
             ) : inviteToken ? (
               /* Loading skeleton */
               <div className="flex items-end gap-4 animate-pulse">
-                <div className="h-26 w-26 rounded-2xl bg-white/20 ring-[3px] ring-[#0b1120]" />
+                <div className="h-26 w-26 rounded-2xl bg-white/20 ring-[3px] ring-bg-surface-1" />
                 <div className="space-y-1.5 pb-0.5 flex-1">
                   <div className="h-2.5 w-20 rounded bg-white/20" />
                   <div className="h-4 w-32 rounded bg-white/20" />
@@ -519,7 +520,7 @@ export default function RegisterStudentPage() {
                 size="lg"
                 disabled={!formValid}
                 loading={register.isPending}
-                className="w-full uppercase tracking-wider font-black"
+                className="w-full uppercase font-black"
               >
                 <DSIcon name="sparkles" size={16} />
                 {requireCpf ? 'CRIAR CONTA E ASSINAR' : 'CRIAR CONTA E ENTRAR'}

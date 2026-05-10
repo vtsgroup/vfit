@@ -58,7 +58,7 @@ export function StepHeight() {
           value={input}
           onChange={(e) => handleChange(e.target.value)}
           placeholder="170"
-          className="h-28 w-44 rounded-2xl border border-white/10 bg-white/4 text-center text-5xl font-bold text-white placeholder:text-white/15 focus:border-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary/20 transition-all"
+          className="h-30 w-46 rounded-[28px] border border-emerald-300/18 bg-white/8 text-center text-5xl font-black text-white shadow-[0_26px_54px_-38px_rgba(34,197,94,0.58),inset_0_1px_0_rgba(255,255,255,0.12)] outline-none transition-all placeholder:text-white/15 focus:border-emerald-300/55 focus:ring-4 focus:ring-emerald-300/14"
           autoFocus
         />
         <span className="absolute right-4 bottom-3 text-sm text-white/30">cm</span>
@@ -84,12 +84,12 @@ export function StepHeight() {
       {/* Conversion + feedback */}
       {height && (
         <div className="flex gap-3">
-          <div className="rounded-xl border border-white/8 bg-white/4 px-4 py-2.5 text-center">
+          <div className="rounded-[18px] border border-white/10 bg-white/7 px-4 py-2.5 text-center shadow-glass-inset-sm">
             <p className="text-lg font-bold text-white">{height} cm</p>
             <p className="text-xs text-white/40">Centímetros</p>
           </div>
           {ftIn && (
-            <div className="rounded-xl border border-white/8 bg-white/4 px-4 py-2.5 text-center">
+            <div className="rounded-[18px] border border-white/10 bg-white/7 px-4 py-2.5 text-center shadow-glass-inset-sm">
               <p className="text-lg font-bold text-white/70">
                 {ftIn.ft}&apos;{ftIn.inches}&quot;
               </p>

@@ -921,17 +921,17 @@ select option {
    The auth layout can render under html.light after student route hydration,
    so reset the design tokens locally instead of relying on inherited variables. */
 .auth-dark-scope {
-  --color-brand-primary: #38bdf8;
-  --color-brand-primary-hover: #0ea5e9;
-  --color-brand-accent: #22d3ee;
-  --color-brand-mint: #7dd3fc;
-  --color-brand-deep: #075985;
-  --color-brand-glow: rgba(56, 189, 248, 0.30);
-  --color-brand-glow-weak: rgba(56, 189, 248, 0.12);
-  --color-brand-ring: rgba(56, 189, 248, 0.24);
-  --gradient-cta: linear-gradient(135deg, #38bdf8 0%, #2563eb 100%);
-  --gradient-cta-hover: linear-gradient(135deg, #0ea5e9 0%, #1d4ed8 100%);
-  --gradient-text: linear-gradient(135deg, #7dd3fc 0%, #38bdf8 45%, #2563eb 100%);
+  --color-brand-primary: #22c55e;
+  --color-brand-primary-hover: #16a34a;
+  --color-brand-accent: #84cc16;
+  --color-brand-mint: #86efac;
+  --color-brand-deep: #166534;
+  --color-brand-glow: rgba(34, 197, 94, 0.30);
+  --color-brand-glow-weak: rgba(34, 197, 94, 0.12);
+  --color-brand-ring: rgba(34, 197, 94, 0.24);
+  --gradient-cta: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  --gradient-cta-hover: linear-gradient(135deg, #16a34a 0%, #166534 100%);
+  --gradient-text: linear-gradient(135deg, #86efac 0%, #22c55e 45%, #84cc16 100%);
   --color-bg-primary: #050A12;
   --color-bg-secondary: #0B1221;
   --color-bg-tertiary: #111B2E;
@@ -957,20 +957,66 @@ select option {
 }
 
 .auth-dark-scope .auth-submit-cta {
-  background-image: linear-gradient(to bottom, #7dd3fc 0%, #0ea5e9 50%, #1d4ed8 100%) !important;
-  border-top-color: rgba(186, 230, 253, 0.60) !important;
-  border-right-color: rgba(14, 165, 233, 0.35) !important;
-  border-bottom-color: rgba(30, 64, 175, 0.60) !important;
-  border-left-color: rgba(14, 165, 233, 0.35) !important;
-  box-shadow: 0 4px 0 0 #075985, 0 6px 22px -4px rgba(56, 189, 248, 0.48), 0 0 42px -14px rgba(59, 130, 246, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;
+  background-image: linear-gradient(to bottom, #86efac 0%, #22c55e 50%, #15803d 100%) !important;
+  border-top-color: rgba(187, 247, 208, 0.60) !important;
+  border-right-color: rgba(34, 197, 94, 0.35) !important;
+  border-bottom-color: rgba(6, 78, 59, 0.70) !important;
+  border-left-color: rgba(34, 197, 94, 0.35) !important;
+  box-shadow: 0 4px 0 0 #064e3b, 0 6px 22px -4px rgba(34, 197, 94, 0.48), 0 0 42px -14px rgba(132, 204, 22, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;
 }
 
 .auth-dark-scope .auth-submit-cta:hover {
-  box-shadow: 0 6px 0 0 #075985, 0 10px 32px -4px rgba(56, 189, 248, 0.56), 0 0 58px -12px rgba(59, 130, 246, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.34) !important;
+  box-shadow: 0 6px 0 0 #064e3b, 0 10px 32px -4px rgba(34, 197, 94, 0.56), 0 0 58px -12px rgba(132, 204, 22, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.34) !important;
 }
 
 .auth-dark-scope .auth-submit-cta:active {
-  box-shadow: 0 1px 0 0 #075985, 0 2px 8px -2px rgba(56, 189, 248, 0.32), inset 0 2px 6px rgba(0, 0, 0, 0.16) !important;
+  box-shadow: 0 1px 0 0 #064e3b, 0 2px 8px -2px rgba(34, 197, 94, 0.32), inset 0 2px 6px rgba(0, 0, 0, 0.16) !important;
+}
+
+.vfit-flow-bg {
+  background:
+    radial-gradient(circle at 82% 28%, rgba(34, 197, 94, 0.18), transparent 32%),
+    radial-gradient(circle at 18% 74%, rgba(132, 204, 22, 0.10), transparent 34%),
+    linear-gradient(to bottom, #0b1d36 0%, #08182d 24%, #061124 58%, #050a12 100%);
+  color-scheme: dark;
+}
+
+.vfit-flow-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.75), transparent 78%);
+}
+
+.vfit-flow-panel {
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: linear-gradient(145deg, rgba(15, 23, 42, 0.82), rgba(5, 10, 18, 0.72));
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(26px) saturate(150%);
+}
+
+.vfit-flow-panel-soft {
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.035));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(18px) saturate(140%);
+}
+
+.vfit-flow-field {
+  border: 1px solid rgba(134, 239, 172, 0.18);
+  background: rgba(5, 10, 18, 0.62);
+  color: #f0f4f8;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.vfit-flow-field::placeholder {
+  color: rgba(168, 184, 204, 0.46);
+}
+
+.vfit-flow-field:focus {
+  border-color: rgba(134, 239, 172, 0.62);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 /* Autofill overrides — prevent Chrome dark autofill backgrounds in light mode */
