@@ -179,7 +179,10 @@ function FirstWinCommandCenter({
               </div>
 
               <Link href="/plano" onClick={() => hapticLight()}>
-                <Button size="md" className="w-full justify-center shadow-glow-primary">
+                <Button
+                  size="md"
+                  className="h-11 w-full justify-center gap-2 rounded-[13px] border-t-emerald-300/45 border-x-emerald-500/28 border-b-zinc-700/82 px-5 text-[15px] font-semibold tracking-tight shadow-[0_4px_0_0_#52525b,0_12px_24px_-14px_rgba(15,23,42,0.75),inset_0_1px_0_rgba(255,255,255,0.22)] hover:-translate-y-px hover:shadow-[0_5px_0_0_#52525b,0_14px_28px_-14px_rgba(15,23,42,0.78),inset_0_1px_0_rgba(255,255,255,0.28)] active:translate-y-0.5 active:shadow-[0_1px_0_0_#52525b,0_4px_10px_-8px_rgba(15,23,42,0.62),inset_0_2px_5px_rgba(0,0,0,0.18)]"
+                >
                   <DSIcon name="play" size={18} />
                   {urgency.workedOutToday ? 'Rever treino de hoje' : 'Começar treino de hoje'}
                 </Button>
