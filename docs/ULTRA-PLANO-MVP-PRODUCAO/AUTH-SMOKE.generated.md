@@ -1,9 +1,9 @@
 # Authenticated Smoke Report (Gerado automaticamente)
 
-> Gerado em: 2026-05-10T02:13:16.752Z
+> Gerado em: 2026-05-10T17:03:09.471Z
 > Base URL: https://api.vfit.app.br
-> test_run_id: run-20260510021316-auth
-> session_id: session-smoke-1778379196
+> test_run_id: run-20260510170309-auth
+> session_id: session-smoke-1778432589
 
 ## Como executar (sem vazar token)
 
@@ -23,11 +23,11 @@ Opção 3 — UI (super_admin)
 - Abra `https://vfit.app.br/dashboard/admin/smoke` e gere tokens temporários para colar no terminal usando `read -s`.
 
 ## Configuração de tokens
-- Personal token: informado
-- Student token: informado
+- Personal token: ausente
+- Student token: ausente
 - Admin token: ausente
-- Personal préflight: válido
-- Student préflight: válido
+- Personal préflight: expirado
+- Student préflight: expirado
 - Admin préflight: expirado
 
 ## Configuração operacional
@@ -36,21 +36,15 @@ Opção 3 — UI (super_admin)
 - retries(GET): 1
 
 ## Resumo
-- Passou: **7**
+- Passou: **0**
 - Falhou: **0**
-- Skipped: **2**
+- Skipped: **3**
 
 ## Execuções
 | Fluxo | Método | Rota | Status | HTTP | Latência (ms) | request_id | Observação |
 |---|---|---|---|---:|---:|---|---|
-| Personal: auth/me | GET | /api/v1/auth/me | passed | 200 | 950.87 | 9f956c7c9db75023-GIG | - |
-| Personal: students list (seed) | GET | /api/v1/students?page=1&per_page=1 | passed | 200 | 647.46 | 9f956c81ccbc5023-GIG | - |
-| Personal: seed student_id | GET | /api/v1/students?page=1&per_page=1 | skipped | - | 0 | - | nenhum aluno disponível para smoke autenticado |
-| Student: auth/me | GET | /api/v1/auth/me | passed | 200 | 652.21 | 9f956c85da475023-GIG | - |
-| Payments: my list | GET | /api/v1/payments/my?page=1&per_page=5 | passed | 200 | 618.43 | 9f956c89f8745023-GIG | - |
-| Checkout auth route: pix (expect not-found on fake/isolated payment) | POST | /api/v1/payments/57da50c3-4ec1-4f33-a9cb-e86a18da2d20/pay | passed | 404 | 627.12 | 9f956c8dddac5023-GIG | - |
-| Checkout auth route: boleto (expect not-found on fake/isolated payment) | POST | /api/v1/payments/57da50c3-4ec1-4f33-a9cb-e86a18da2d20/pay | passed | 404 | 473.61 | 9f956c91cae35023-GIG | - |
-| Checkout auth route: credit_card (expect not-found on fake/isolated payment) | POST | /api/v1/payments/57da50c3-4ec1-4f33-a9cb-e86a18da2d20/pay | passed | 404 | 478.82 | 9f956c94bf185023-GIG | - |
+| Personal: auth/me | GET | /api/v1/auth/me | skipped | - | 0 | - | token não informado para este fluxo |
+| Student: auth/me | GET | /api/v1/auth/me | skipped | - | 0 | - | token não informado para este fluxo |
 | Admin: feedback list | GET | /api/v1/admin/feedback?page=1&per_page=5 | skipped | - | 0 | - | token não informado para este fluxo |
 
 ## Evidências de contexto
