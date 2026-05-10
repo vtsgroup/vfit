@@ -382,7 +382,7 @@ export default function NutricaoPage() {
               carbsTarget={targets.carbs}
               fat={totals.fat}
               fatTarget={targets.fat}
-              size={220}
+              size={196}
             />
           )}
         </section>

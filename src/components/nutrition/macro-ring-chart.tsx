@@ -207,7 +207,7 @@ export function MacroRingChart({
       <div className="pointer-events-none absolute -right-12 bottom-12 h-44 w-44 rounded-full bg-sky-100/65 blur-3xl" />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-12 bg-linear-to-b from-white/85 to-transparent" />
 
-      <div className="relative mb-3 flex items-center justify-between gap-3">
+      <div className="relative mb-2 flex items-center justify-between gap-3">
         <div>
           <p className="text-[10px] font-black uppercase tracking-[0.22em] text-emerald-700/80">Macros</p>
           <p className="mt-0.5 text-[12px] font-semibold text-slate-500">Resumo nutricional de hoje</p>
@@ -267,7 +267,7 @@ export function MacroRingChart({
           <circle
             cx={cx} cy={cy} r={outerR}
             fill="none"
-            stroke="rgba(15,23,42,0.08)"
+            stroke="rgba(15,23,42,0.06)"
             strokeWidth={4}
           />
 
@@ -287,7 +287,7 @@ export function MacroRingChart({
           <circle
             cx={cx} cy={cy} r={innerR}
             fill="none"
-            stroke="rgba(15,23,42,0.08)"
+            stroke="rgba(15,23,42,0.06)"
             strokeWidth={18}
           />
 
@@ -330,13 +330,25 @@ export function MacroRingChart({
 
           {/* ── Empty state dashes ── */}
           {!hasData && (
-            <circle
-              cx={cx} cy={cy} r={innerR}
-              fill="none"
-              stroke="rgba(15,23,42,0.14)"
-              strokeWidth={18}
-              strokeDasharray="3 10"
-            />
+            <>
+              <circle
+                cx={cx} cy={cy} r={innerR}
+                fill="none"
+                stroke="url(#gCal)"
+                strokeWidth={18}
+                strokeLinecap="round"
+                strokeDasharray="10 12"
+                opacity={0.22}
+              />
+              <circle
+                cx={cx} cy={cy} r={innerR - 14}
+                fill="none"
+                stroke="#fbbf24"
+                strokeWidth={2}
+                strokeDasharray="3 9"
+                opacity={0.28}
+              />
+            </>
           )}
         </svg>
 
@@ -349,7 +361,7 @@ export function MacroRingChart({
             consumido
           </span>
           <span
-            className="mt-0.5 text-[30px] font-black leading-none tabular-nums tracking-tight text-slate-900"
+            className="mt-0.5 text-[28px] font-black leading-none tabular-nums tracking-tight text-slate-900"
           >
             {Math.round(calories).toLocaleString('pt-BR')}
           </span>
@@ -378,7 +390,7 @@ export function MacroRingChart({
       </div>
 
       {/* ── Legend (Interactive - Toggle Series) ── */}
-      <div className="relative mt-5 w-full space-y-2" role="group" aria-label="Filtro de macronutrientes">
+      <div className="relative mt-4 w-full space-y-2" role="group" aria-label="Filtro de macronutrientes">
         {macros.map((m) => {
           const isHidden = hiddenMacros.has(m.key)
           return (
