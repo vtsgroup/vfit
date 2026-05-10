@@ -60,6 +60,11 @@ export function DeferredGA4() {
       }
       window.gtag('js', new Date())
       window.gtag('config', GA_ID)
+      window.gtag('event', 'page_view', {
+        page_path: `${window.location.pathname}${window.location.search || ''}`,
+        page_location: window.location.href,
+        page_title: document.title,
+      })
       window.__ga4Ready = true
     }
 
