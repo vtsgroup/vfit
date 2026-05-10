@@ -11,6 +11,21 @@
 				"--allow-no-whatsapp"
 			],
 			"isBackground": false
+		},
+		{
+			"label": "deploy-vfit-fast-no-build-no-whatsapp",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"scripts/cf-deploy.js",
+				"patch",
+				"--skip-build",
+				"--skip-bump",
+				"--skip-workers",
+				"--skip-git",
+				"--allow-no-whatsapp"
+			],
+			"isBackground": false
 		}
 	]
 }

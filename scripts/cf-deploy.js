@@ -38,6 +38,7 @@ if (!["patch", "minor", "major"].includes(bumpType)) {
 const skipWorkers = args.includes("--skip-workers");
 const skipPages = args.includes("--skip-pages");
 const skipGit = args.includes("--skip-git");
+const skipBuild = args.includes("--skip-build") || args.includes("--no-build");
 const dryRun = args.includes("--dry-run");
 const noBump = args.includes("--no-bump") || args.includes("--skip-bump");
 const includeWhatsApp = args.includes("--include-whatsapp") || args.includes("--whatsapp");
@@ -175,7 +176,7 @@ const startTime = Date.now();
 console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 console.log("🚀 VFIT — Deploy Pipeline v2");
 console.log(
-  `📋 Bump: ${noBump ? 'skip' : bumpType} | Workers: ${!skipWorkers} | Pages: ${!skipPages} | Git: ${!skipGit}`
+  `📋 Bump: ${noBump ? 'skip' : bumpType} | Build: ${skipBuild ? 'skip' : 'true'} | Workers: ${!skipWorkers} | Pages: ${!skipPages} | Git: ${!skipGit}`
 );
 if (deployMsg) console.log(`📝 Msg: ${deployMsg}`);
 if (dryRun) console.log("🧪 DRY RUN — nenhuma mudança será feita");
@@ -248,7 +249,15 @@ try {
   run("node scripts/update-version.js", "Atualizar version files");
 
   // 3. Build
-  run("npm run build", "Build Next.js");
+  if (skipBuild) {
+    const outDir = resolve(process.cwd(), "out");
+    if (!existsSync(outDir)) {
+      throw new Error("--skip-build exige diretório out/ já gerado. Rode npm run build uma vez antes.");
+    }
+    console.log("\n⏭️  Build Next.js: SKIP (--skip-build) — publicando out/ existente");
+  } else {
+    run("npm run build", "Build Next.js");
+  }
 
   // 4. Deploy Pages (cd /tmp evita que wrangler detecte wrangler.toml do Workers)
   if (!skipPages) {
@@ -332,6 +341,7 @@ try {
       "Motivo: manter visibilidade operacional de início e término no grupo.",
       "Vantagem prática: decisão rápida com status consolidado e duração automática.",
       version ? `Versão: v${version}` : "Versão: não gerada",
+      skipBuild ? "Build: SKIP" : "Build: OK",
       skipPages ? "Pages: SKIP" : "Pages: OK",
       skipWorkers ? "Workers: SKIP" : "Workers: OK",
       includeWhatsApp ? "WhatsApp worker: ON" : "WhatsApp worker: OFF",

@@ -141,14 +141,14 @@ export function Navbar() {
           fixed left-0 right-0 z-50 transition-all duration-500
           ${scrolled
             ? 'border-b border-white/8 shadow-[0_4px_30px_rgba(0,0,0,0.36)] backdrop-blur-2xl'
-            : 'border-b border-white/0 shadow-none backdrop-blur-xl'
+            : 'border-b border-transparent shadow-none'
           }
         `}
         style={{
           top: 'var(--demo-banner-offset, 0px)',
           background: scrolled
             ? 'linear-gradient(180deg, rgba(5,10,18,0.94) 0%, rgba(15,26,44,0.78) 100%)'
-            : 'linear-gradient(180deg, rgba(5,10,18,0.82) 0%, rgba(15,26,44,0.18) 72%, rgba(15,26,43,0) 100%)',
+            : 'transparent',
         }}
       >
         <nav className="mx-auto max-w-7xl flex items-center justify-between px-5 py-3 lg:px-6">

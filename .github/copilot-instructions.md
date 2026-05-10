@@ -106,6 +106,7 @@ Regras:
 | Explicações conceituais · debugging simples | GPT-5 mini | `0×` |
 | Edições CSS · texto · ajustes isolados | GPT-4.1 | `0×` |
 | Completions inline · boilerplate | Raptor mini | `0×` |
+| **Perguntas VFIT com auto-inject memoria** | **GPT-5 mini** | **`0×`** (save 30-40%) |
 | Análise de UI · imagens · diagramas | Gemini 3 Flash | `0.33×` |
 | Debugging com stack trace claro | Claude Haiku 4.5 | `0.33×` |
 | Agentic tasks longas · automações | Grok Code Fast 1 | `0.25×` |
@@ -222,55 +223,26 @@ Critério mínimo: 4/5 corretos.
 
 ---
 
-## Memory Strategy (Auto Memory + Copilot-Mem MCP v0.2.0)
+## Memory Strategy (Auto Memory + Copilot-Mem)
 
-### 1. Memória Nativa (`/memories/`)
-- Fatos estáveis: comandos, padrões, gotchas recorrentes
-- 3 escopos: `/memories/` (user), `/memories/session/` (local), `/memories/repo/` (workspace)
-- Índice curto e tópico
+1. Memória nativa (`/memory`)
+- Guardar fatos estáveis: comandos, padrões, gotchas recorrentes.
+- Manter índice curto e tópico.
 
-### 2. Copilot-Mem MCP (ATIVO)
-- **Instalado:** `@copilot-mem/mcp-server@0.2.0` (global)
-- **Transport:** MCP stdio (não HTTP)
-- **Server:** Localhost 37888 com auto-launch via LaunchAgent
-- **Database:** SQLite persistente (`~/.copilot-mem/data/`)
-- **Auto-Capture:** A cada 60s, com SHA256 dedup + quality filters
+2. Copilot-Mem (opcional)
+- Instalar com `npm install -g @copilot-mem/mcp-server`.
+- Configurar em `settings.json` com `github.copilot.chat.mcpServers`.
 
-### 3. VFIT Project Context (8 categorias)
-✅ **Pré-capturado e searchable:**
-- Project Overview, Stack, Structure, Database Schema
-- 180+ API Endpoints, Auth Flow, Rules, Conventions
-- Design System, Infrastructure, Deployment
+3. Fluxo recomendado (MCP)
+- `search` para índice compacto.
+- `timeline` para contexto cronológico.
+- `get_memories` apenas para IDs filtrados.
 
-### 4. Auto-Injection Flow (Recomendado)
-**SEM comando manual:**
-- Faça pergunta sobre VFIT no Chat
-- Sistema busca contexto automaticamente na memória
-- Resposta com 100% de contexto relevante
-- **Economiza 30-40% de tokens** vs explicar contexto
-
-### 5. Busca Manual (Quando precisar)
-```bash
-mem-search "VFIT architecture"
-mem-search "database schema"
-mem-search "payment flow"
-```
-
-### 6. Quando Usar Copilot-Mem
-- Recurring bugs em área legada
-- Onboarding novo contributor → auto-context
-- Investigação de regressão → timeline view
-- Decisões recorrentes → evita re-explain
-- **VFIT questions → auto-inject 8 categorias**
-
-### 7. Shell Aliases (Sempre Disponíveis)
-```bash
-mem-search "query"    # Buscar memória
-mem-open              # Dashboard web
-mem-restart           # Reiniciar servidor
-mem-status            # Status completo
-mem-logs              # Ver logs em tempo real
-```
+4. Quando usar Copilot-Mem
+- Bugs recorrentes.
+- Onboarding em área legada.
+- Investigação de regressão.
+- Recuperação de contexto pós-incidente.
 
 ---
 
@@ -1182,6 +1154,7 @@ node scripts/cf-deploy.js patch --msg "fix X"  # com mensagem personalizada
 npm run cf:deploy:minor                        # minor version
 npm run cf:deploy:major                        # major version
 npm run cf:deploy:dry                          # simula sem executar
+npm run cf:deploy:fast:no-whatsapp             # publica out/ existente sem build/bump/git
 # Parcial:
 node scripts/cf-deploy.js patch --skip-workers --msg "frontend only"
 node scripts/cf-deploy.js patch --skip-pages --msg "API only"
@@ -1339,6 +1312,8 @@ Após CADA deploy, atualizar **na mesma sessão**:
 | `npm run cf:deploy:minor` | Deploy com bump minor (1.0.0 → 1.1.0) |
 | `npm run cf:deploy:major` | Deploy com bump major (1.0.0 → 2.0.0) |
 | `npm run cf:deploy:dry` | Dry-run — simula deploy sem executar |
+| `npm run cf:deploy:fast` | Deploy rápido do `out/` existente, sem build, bump, Workers ou git |
+| `npm run cf:deploy:fast:no-whatsapp` | Igual ao fast, com bypass WhatsApp para exceções locais |
 | `npm run cf:pages` | Deploy somente Pages (sem versão) |
 | `npm run wrangler:deploy` | Deploy somente Workers |
 | `npm run db:migrate:d1` | Aplicar migrations D1 |
@@ -1494,6 +1469,9 @@ npm run cf:deploy:major
 
 # Dry-run (simula tudo sem executar)
 npm run cf:deploy:dry
+
+# Fast deploy: publica o out/ já gerado sem rodar next build
+npm run cf:deploy:fast:no-whatsapp
 ```
 
 ### Opções avançadas (via node direto)
@@ -1504,6 +1482,9 @@ node scripts/cf-deploy.js patch --skip-workers
 
 # Deploy somente Workers (sem Pages)
 node scripts/cf-deploy.js minor --skip-pages
+
+# Deploy Pages rápido usando out/ existente, sem build/bump/git
+node scripts/cf-deploy.js patch --skip-build --skip-bump --skip-workers --skip-git --allow-no-whatsapp
 
 # Dry-run major
 node scripts/cf-deploy.js major --dry-run

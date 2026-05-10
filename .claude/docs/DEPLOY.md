@@ -12,6 +12,7 @@ node scripts/cf-deploy.js patch --msg "fix X"  # com mensagem personalizada
 npm run cf:deploy:minor                        # minor version
 npm run cf:deploy:major                        # major version
 npm run cf:deploy:dry                          # simula sem executar
+npm run cf:deploy:fast:no-whatsapp             # publica out/ existente sem build/bump/git
 # Parcial:
 node scripts/cf-deploy.js patch --skip-workers --msg "frontend only"
 node scripts/cf-deploy.js patch --skip-pages --msg "API only"
@@ -169,6 +170,8 @@ Após CADA deploy, atualizar **na mesma sessão**:
 | `npm run cf:deploy:minor` | Deploy com bump minor (1.0.0 → 1.1.0) |
 | `npm run cf:deploy:major` | Deploy com bump major (1.0.0 → 2.0.0) |
 | `npm run cf:deploy:dry` | Dry-run — simula deploy sem executar |
+| `npm run cf:deploy:fast` | Deploy rápido do `out/` existente, sem build, bump, Workers ou git |
+| `npm run cf:deploy:fast:no-whatsapp` | Igual ao fast, com bypass WhatsApp para exceções locais |
 | `npm run cf:pages` | Deploy somente Pages (sem versão) |
 | `npm run wrangler:deploy` | Deploy somente Workers |
 | `npm run db:migrate:d1` | Aplicar migrations D1 |
@@ -324,6 +327,9 @@ npm run cf:deploy:major
 
 # Dry-run (simula tudo sem executar)
 npm run cf:deploy:dry
+
+# Fast deploy: publica o out/ já gerado sem rodar next build
+npm run cf:deploy:fast:no-whatsapp
 ```
 
 ### Opções avançadas (via node direto)
@@ -334,6 +340,9 @@ node scripts/cf-deploy.js patch --skip-workers
 
 # Deploy somente Workers (sem Pages)
 node scripts/cf-deploy.js minor --skip-pages
+
+# Deploy Pages rápido usando out/ existente, sem build/bump/git
+node scripts/cf-deploy.js patch --skip-build --skip-bump --skip-workers --skip-git --allow-no-whatsapp
 
 # Dry-run major
 node scripts/cf-deploy.js major --dry-run

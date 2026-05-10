@@ -148,10 +148,9 @@ function FirstWinCommandCenter({
   const duration = todayDay?.estimated_duration_min ?? 0
 
   return (
-    <section className="vfit-app-hero-gradient -mx-4 mb-4 overflow-hidden rounded-b-[28px] border-b border-white/8 text-white">
+    <section className="vfit-app-hero-gradient -mx-4 -mt-px mb-4 overflow-hidden rounded-b-[28px] border-b border-white/8 text-white">
       <div className="relative px-4 pt-4 pb-3">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-18 bg-linear-to-b from-[#0b1d36] via-[#0b1d36]/82 to-transparent" />
-        <div className="pointer-events-none absolute inset-x-6 top-0 h-px bg-linear-to-r from-transparent via-[#0b1d36]/95 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-linear-to-b from-[#0b1d36] via-[#0b1d36]/72 to-transparent" />
         <div
           className="pointer-events-none absolute inset-x-0 bottom-0 h-20"
           style={{ background: 'linear-gradient(to top, #050A12 0%, rgba(5,10,18,0.78) 42%, transparent 100%)' }}

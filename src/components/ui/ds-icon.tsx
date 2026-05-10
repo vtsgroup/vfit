@@ -354,6 +354,47 @@ export function DSIcon({
     )
   }
 
+  if (name === 'coin') {
+    return (
+      <svg
+        width={resolvedSize}
+        height={resolvedSize}
+        viewBox="0 0 24 24"
+        fill="none"
+        className={cn('shrink-0', className)}
+        style={style}
+        aria-label={ariaLabel}
+        aria-hidden={!ariaLabel}
+        role={ariaLabel ? 'img' : undefined}
+      >
+        <defs>
+          <radialGradient id="vfit-coin-face" cx="36%" cy="25%" r="74%">
+            <stop offset="0%" stopColor="#FFF7AD" />
+            <stop offset="42%" stopColor="#FACC15" />
+            <stop offset="72%" stopColor="#F59E0B" />
+            <stop offset="100%" stopColor="#A16207" />
+          </radialGradient>
+          <linearGradient id="vfit-coin-rim" x1="6" y1="3" x2="18" y2="21" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stopColor="#FFFBEB" />
+            <stop offset="40%" stopColor="#FBBF24" />
+            <stop offset="100%" stopColor="#78350F" />
+          </linearGradient>
+          <linearGradient id="vfit-coin-mark" x1="9" y1="7" x2="15" y2="17" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stopColor="#451A03" />
+            <stop offset="100%" stopColor="#92400E" />
+          </linearGradient>
+        </defs>
+        <circle cx="12" cy="12" r="9.4" fill="url(#vfit-coin-rim)" />
+        <circle cx="12" cy="12" r="7.65" fill="url(#vfit-coin-face)" stroke="rgba(120,53,15,0.42)" strokeWidth="0.75" />
+        <path d="M7.7 8.15c1.1-1.55 2.62-2.32 4.3-2.32 3.38 0 6.15 2.78 6.15 6.17 0 1.44-.5 2.76-1.34 3.8" stroke="#FFFBEB" strokeWidth="1" strokeLinecap="round" opacity="0.72" />
+        <circle cx="12" cy="12" r="4.62" fill="rgba(255,251,235,0.16)" stroke="rgba(120,53,15,0.34)" strokeWidth="0.7" />
+        <path d="M12 7.85v8.3" stroke="url(#vfit-coin-mark)" strokeWidth="1.45" strokeLinecap="round" />
+        <path d="M9.7 10.1c.42-.72 1.2-1.08 2.3-1.08 1.31 0 2.12.58 2.12 1.48 0 2.03-4.22.94-4.22 2.98 0 .88.8 1.5 2.1 1.5 1.12 0 1.91-.37 2.36-1.1" stroke="url(#vfit-coin-mark)" strokeWidth="1.35" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M8.15 5.95c1.13-.77 2.42-1.16 3.85-1.16 3.98 0 7.21 3.23 7.21 7.21" stroke="rgba(255,255,255,0.48)" strokeWidth="0.8" strokeLinecap="round" />
+      </svg>
+    )
+  }
+
   const pathData = ICON_PATHS[name] ?? ''
   const strokeWidth = STROKE_WIDTH_OVERRIDES[name] ?? 2
 

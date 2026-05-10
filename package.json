@@ -1,6 +1,6 @@
 {
   "name": "vfit",
-  "version": "4.1.1",
+  "version": "4.1.3",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -21,6 +21,8 @@
     "cf:deploy:minor": "node scripts/cf-deploy.js minor",
     "cf:deploy:major": "node scripts/cf-deploy.js major",
     "cf:deploy:dry": "node scripts/cf-deploy.js patch --dry-run",
+    "cf:deploy:fast": "node scripts/cf-deploy.js patch --skip-build --skip-bump --skip-workers --skip-git",
+    "cf:deploy:fast:no-whatsapp": "node scripts/cf-deploy.js patch --skip-build --skip-bump --skip-workers --skip-git --allow-no-whatsapp",
     "cf:deploy:msg": "node scripts/cf-deploy.js patch --msg",
     "cf:pages": "node scripts/deploy-pages.js",
     "security:inventory": "node scripts/generate-secrets-inventory.mjs",

@@ -144,7 +144,7 @@ export function StudentFabMenu({ open, onClose }: StudentFabMenuProps) {
             style={{ backdropFilter: 'blur(16px) saturate(140%)', WebkitBackdropFilter: 'blur(16px) saturate(140%)' }}
           />
 
-          {/* Quick Actions Card — matches dashboard style */}
+          {/* Quick Actions Card — suspended AI assistant panel */}
           <motion.div
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -157,18 +157,32 @@ export function StudentFabMenu({ open, onClose }: StudentFabMenuProps) {
             }}
           >
             <div
-              className="rounded-[22px] border border-emerald-100 bg-white/96 p-2 shadow-[0_20px_60px_-28px_rgba(34,197,94,0.35),0_10px_24px_-18px_rgba(15,23,42,0.28)]"
+              className="relative overflow-hidden rounded-[30px] border border-white/12 bg-[#06101f]/92 p-2.5 shadow-[0_34px_90px_-34px_rgba(16,185,129,0.55),0_22px_46px_-28px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.12)]"
               style={{ backdropFilter: 'blur(28px) saturate(185%)', WebkitBackdropFilter: 'blur(28px) saturate(185%)' }}
             >
+              <div className="pointer-events-none absolute -left-16 -top-20 h-44 w-44 rounded-full bg-emerald-300/18 blur-3xl" />
+              <div className="pointer-events-none absolute -right-12 top-8 h-36 w-36 rounded-full bg-sky-300/14 blur-3xl" />
+              <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-linear-to-r from-transparent via-emerald-200/65 to-transparent" />
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-linear-to-t from-emerald-500/8 to-transparent" />
+
               {/* Header */}
-              <div className="px-4 pb-2.5 pt-3">
-                <span className="text-[11px] font-bold uppercase tracking-[1.5px] text-brand-primary">
-                  IA Assistente
-                </span>
+              <div className="relative flex items-center gap-3 px-3.5 pb-3 pt-3">
+                <div className="relative flex h-13 w-13 shrink-0 items-center justify-center rounded-[20px] border border-emerald-200/22 bg-linear-to-b from-emerald-300/24 via-emerald-400/14 to-slate-950/60 text-emerald-100 shadow-[0_0_32px_rgba(16,185,129,0.38),inset_0_1px_0_rgba(255,255,255,0.20)]">
+                  <span className="absolute inset-1 rounded-[16px] border border-white/8" aria-hidden="true" />
+                  <DSIcon name="sparkles" size={22} className="drop-shadow-[0_0_12px_rgba(110,231,183,0.58)]" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="mb-1 flex items-center gap-2">
+                    <span className="text-[10px] font-black uppercase tracking-[0.22em] text-emerald-200/82">IA Assistente</span>
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-300 shadow-[0_0_12px_rgba(110,231,183,0.8)]" />
+                  </div>
+                  <p className="truncate text-[14px] font-black tracking-tight text-white">Escolha uma ação inteligente</p>
+                  <p className="mt-0.5 text-[11px] font-medium text-slate-400">Treino, metas e evolução em um toque.</p>
+                </div>
               </div>
 
               {/* Actions grid — 2×3 but 5 items (last row has 1 centered or not) */}
-              <div className="grid grid-cols-3 gap-1.5 px-1.5 pb-2">
+              <div className="relative grid grid-cols-3 gap-2 px-1.5 pb-2">
                 {FAB_ACTIONS.map((action, i) => (
                   <motion.button
                     key={action.id}
@@ -176,12 +190,12 @@ export function StudentFabMenu({ open, onClose }: StudentFabMenuProps) {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.04, type: 'spring', damping: 25, stiffness: 300 }}
                     onClick={() => handleAction(action)}
-                    className="flex flex-col items-center gap-2 rounded-xl border-none bg-transparent px-2 py-3.5 transition-all duration-300 hover:bg-brand-primary/8 hover:shadow-[0_8px_22px_rgba(16,185,129,0.12)] active:scale-[0.95]"
+                    className="group flex min-h-24 flex-col items-center justify-center gap-2 rounded-[19px] border border-white/8 bg-white/6 px-2 py-3 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] transition-all duration-250 hover:border-emerald-200/24 hover:bg-emerald-300/9 hover:shadow-[0_12px_30px_-18px_rgba(16,185,129,0.55),inset_0_1px_0_rgba(255,255,255,0.14)] active:scale-[0.96]"
                   >
-                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-brand-primary/15 bg-brand-primary/12 text-brand-primary shadow-[0_2px_8px_rgba(16,185,129,0.12)]">
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[16px] border border-emerald-200/18 bg-linear-to-b from-emerald-300/18 via-emerald-400/9 to-slate-950/45 text-emerald-200 shadow-[0_8px_20px_-16px_rgba(16,185,129,0.72),inset_0_1px_0_rgba(255,255,255,0.13)] transition-all duration-250 group-hover:text-emerald-100 group-hover:shadow-[0_0_24px_rgba(16,185,129,0.24),inset_0_1px_0_rgba(255,255,255,0.18)]">
                       {action.icon}
                     </div>
-                    <span className="text-center text-[11px] font-semibold leading-tight text-text-primary">
+                    <span className="text-center text-[11px] font-bold leading-tight text-slate-100">
                       {action.label}
                     </span>
                   </motion.button>
@@ -196,12 +210,12 @@ export function StudentFabMenu({ open, onClose }: StudentFabMenuProps) {
                     haptic()
                     onClose()
                   }}
-                  className="flex flex-col items-center gap-2 rounded-xl border-none bg-transparent px-2 py-3.5 transition-all duration-300 hover:bg-red-500/8 active:scale-[0.95]"
+                  className="group flex min-h-24 flex-col items-center justify-center gap-2 rounded-[19px] border border-white/8 bg-white/5 px-2 py-3 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.07)] transition-all duration-250 hover:border-rose-200/20 hover:bg-rose-300/8 active:scale-[0.96]"
                 >
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 text-slate-500">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[16px] border border-white/10 bg-slate-950/58 text-slate-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.10)] transition-colors group-hover:text-rose-100">
                     <DSIcon name="x" size={20} />
                   </div>
-                  <span className="text-center text-[11px] font-semibold leading-tight text-text-muted">
+                  <span className="text-center text-[11px] font-bold leading-tight text-slate-400 group-hover:text-rose-100">
                     Fechar
                   </span>
                 </motion.button>
