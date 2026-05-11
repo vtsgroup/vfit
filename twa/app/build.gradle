@@ -58,7 +58,7 @@ android {
         release {
             storeFile file("../keystore/vfit-release.jks")
             storePassword System.getenv("KEYSTORE_PASS") ?: ""
-            keyAlias "personalia"
+            keyAlias "vfit"
             keyPassword System.getenv("KEYSTORE_PASS") ?: ""
         }
     }
