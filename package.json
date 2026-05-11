@@ -52,6 +52,7 @@
     "foods:sync": "node scripts/sync-vfit-foods.mjs",
     "foods:sync:dry": "node scripts/sync-vfit-foods.mjs --dry-run",
     "foods:import:bulk": "node scripts/import-vfit-foods-bulk.mjs",
+    "icons:generate": "node scripts/generate-icons-from-round.mjs",
     "test": "vitest run",
     "test:e2e": "playwright test",
     "test:e2e:a11y": "npx playwright test tests/e2e/accessibility.spec.ts",
