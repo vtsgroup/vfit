@@ -19,7 +19,7 @@ import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 const headingFont = {
   fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
   fontWeight: 900,
-  letterSpacing: '-0.03em',
+  letterSpacing: '0',
 }
 const monoLabel = {
   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
@@ -56,12 +56,12 @@ function useCountUp(end: number, duration = 2000, start = false) {
 
 /* ─── Stats data ─── */
 const NUMBERS: { icon: DSIconName; value: number; suffix: string; prefix?: string; label: string; desc: string }[] = [
-  { icon: 'users', value: 2500, suffix: '+', label: 'Personal Trainers', desc: 'profissionais ativos na plataforma' },
-  { icon: 'graduationCap', value: 15000, suffix: '+', label: 'Alunos Gerenciados', desc: 'treinando com acompanhamento digital' },
-  { icon: 'brainCircuit', value: 45000, suffix: '+', label: 'Treinos Gerados', desc: 'criados com inteligência artificial' },
-  { icon: 'heart', value: 98, suffix: '%', label: 'Satisfação', desc: 'dos personais recomendam a plataforma' },
-  { icon: 'creditCard', value: 850000, suffix: '', prefix: 'R$', label: 'Cobranças Processadas', desc: 'em pagamentos automáticos / mês' },
-  { icon: 'arrowDown', value: 60, suffix: '%', label: 'Menos Evasão', desc: 'com gamificação e acompanhamento' },
+  { icon: 'users', value: 15000, suffix: '+', label: 'Alunos Ativos', desc: 'treinando com acompanhamento digital' },
+  { icon: 'brainCircuit', value: 45000, suffix: '+', label: 'Treinos Personalizados', desc: 'gerados com inteligência artificial' },
+  { icon: 'heart', value: 98, suffix: '%', label: 'Satisfação', desc: 'de aprovação na experiência VFIT' },
+  { icon: 'dumbbell', value: 500, suffix: '+', label: 'Exercícios', desc: 'com variações para academia e casa' },
+  { icon: 'clock', value: 24, suffix: '/7', label: 'Acesso Mobile', desc: 'treino sempre disponível no celular' },
+  { icon: 'flame', value: 60, suffix: '%', label: 'Mais Constância', desc: 'com XP, streaks e lembretes' },
 ]
 
 function formatNumber(n: number): string {
@@ -137,7 +137,7 @@ export function NumbersSection() {
         <IntersectionReveal animation="fade-in">
           <div className="mb-5 text-center">
             <span className="inline-block text-xs text-brand-primary/70 uppercase" style={monoLabel}>
-              /NÚMEROS
+              /PROVA SOCIAL
             </span>
           </div>
         </IntersectionReveal>
@@ -145,19 +145,19 @@ export function NumbersSection() {
         {/* Heading */}
         <IntersectionReveal animation="blur-in" delay={50}>
           <h2
-            className="mb-4 text-center uppercase text-white"
-            style={{ ...headingFont, fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: '0.95' }}
+            className="mb-4 text-center text-3xl uppercase leading-[0.96] text-white sm:text-5xl"
+            style={headingFont}
           >
-            RESULTADOS QUE{' '}
+            GENTE REAL{' '}
             <span className="bg-linear-to-r from-brand-primary via-brand-mint to-brand-accent bg-clip-text text-transparent">
-              FALAM
+              TREINANDO
             </span>
           </h2>
         </IntersectionReveal>
 
         <IntersectionReveal animation="fade-in" delay={100}>
           <p className="mx-auto mb-14 max-w-lg text-center text-sm leading-relaxed text-white/40 sm:text-base">
-            Números reais de uma plataforma que cresce todos os dias.
+            O VFIT combina treino personalizado, acompanhamento profissional e motivação diária em uma experiência simples de usar.
           </p>
         </IntersectionReveal>
 

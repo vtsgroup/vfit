@@ -7,6 +7,12 @@
 
 ## [Unreleased] — 12/04/2026 — Paridade admin de saques + redirect domínio legado
 
+### 🎨 Unreleased — Landing aluno-first conversion polish (2026-05-11)
+- Home principal reposicionada para conversão de alunos com hero mais direto, social proof reforçado, remoção de blocos redundantes e CTAs mais claros em [src/app/page.tsx](../src/app/page.tsx).
+- Seções da landing alinhadas ao fluxo aluno-first em [src/components/landing/hero.tsx](../src/components/landing/hero.tsx), [src/components/landing/features.tsx](../src/components/landing/features.tsx), [src/components/landing/how-it-works-v2.tsx](../src/components/landing/how-it-works-v2.tsx), [src/components/landing/numbers-section.tsx](../src/components/landing/numbers-section.tsx), [src/components/landing/gamification-section.tsx](../src/components/landing/gamification-section.tsx), [src/components/landing/cta-section.tsx](../src/components/landing/cta-section.tsx), [src/components/landing/footer.tsx](../src/components/landing/footer.tsx), [src/components/landing/about-section.tsx](../src/components/landing/about-section.tsx), [src/components/landing/blog-section.tsx](../src/components/landing/blog-section.tsx), [src/components/landing/faq-section.tsx](../src/components/landing/faq-section.tsx), [src/components/landing/navbar.tsx](../src/components/landing/navbar.tsx) e [src/components/landing/pricing-koyeb.tsx](../src/components/landing/pricing-koyeb.tsx).
+- Fix de asset mobile no banner inteligente em [src/components/ui/smart-app-banner.tsx](../src/components/ui/smart-app-banner.tsx).
+- Validação local executada: `npm run type-check` e browser QA mobile (390px) sem overflow horizontal e sem 404 de assets da landing.
+
 ### 🎨 Unreleased — Welcome + onboarding premium funnel refinement (2026-05-11)
 - Fluxo de aquisição recebeu redesign completo com foco de conversão e retenção em [src/app/(onboarding)/welcome/page.tsx](../src/app/(onboarding)/welcome/page.tsx), mantendo continuidade visual azul/verde e CTA principal mais claro no mobile.
 - Shell do onboarding foi simplificado em [src/components/onboarding/onboarding-layout.tsx](../src/components/onboarding/onboarding-layout.tsx), removendo excesso de containers aninhados e preservando progresso no topo + botão fixo no rodapé.

@@ -40,11 +40,11 @@ const NAV_ITEMS: NavItem[] = [
     label: 'Plataforma',
     href: '/#features',
     dropdown: [
-      { label: 'Treinos com IA', desc: 'Gere treinos personalizados automaticamente', href: '/#features', icon: 'flame' },
-      { label: 'Gestão de Alunos', desc: 'Controle completo da sua base de clientes', href: '/#features', icon: 'users' },
-      { label: 'Cobranças Automáticas', desc: 'PIX, boleto e cartão integrados', href: '/#features', icon: 'creditCard' },
-      { label: 'Avaliações Físicas', desc: 'Anamnese e medidas com gráficos', href: '/#features', icon: 'clipboardList' },
-      { label: 'Gamificação & XP', desc: 'Rankings, badges e motivação', href: '/#gamification', icon: 'trophy' },
+      { label: 'Treinos com IA', desc: 'Plano personalizado para objetivo, nível e rotina', href: '/#features', icon: 'dumbbell' },
+      { label: 'Personal online', desc: 'Acompanhamento profissional quando você precisar', href: '/#features', icon: 'users' },
+      { label: 'Progresso por dados', desc: 'Evolução corporal, cargas e frequência no app', href: '/#features', icon: 'trendingUp' },
+      { label: 'Gamificação & XP', desc: 'Streaks, rankings e badges para manter constância', href: '/#gamification', icon: 'trophy' },
+      { label: 'Para profissionais', desc: 'Gestão, cobranças e IA para personal trainers', href: '/app-personal-trainer', icon: 'briefcase' },
     ],
   },
   {
@@ -52,8 +52,8 @@ const NAV_ITEMS: NavItem[] = [
     href: '/#how-it-works',
     dropdown: [
       { label: 'Como Funciona', desc: 'Passo a passo da plataforma', href: '/#how-it-works', icon: 'arrowRight' },
-      { label: 'Depoimentos', desc: 'O que dizem nossos personais', href: '/#testimonials', icon: 'star' },
-      { label: 'Blog', desc: 'Artigos sobre gestão fitness', href: '/blog', icon: 'bookOpen', tag: 'Novo' },
+      { label: 'Depoimentos', desc: 'Histórias de alunos e profissionais', href: '/#testimonials', icon: 'star' },
+      { label: 'Blog', desc: 'Guias de treino, IA e constância', href: '/blog', icon: 'bookOpen', tag: 'Novo' },
     ],
   },
   { label: 'Preços', href: '/pricing', dropdown: null },
@@ -71,7 +71,7 @@ function AnimatedLogo() {
           width={160}
           height={32}
           className="h-8 w-auto transition-transform duration-300 group-hover:scale-105 sm:h-7"
-          style={{ width: 'auto', filter: 'drop-shadow(0 0 8px rgba(59,130,246,0.38))' }}
+          style={{ width: 'auto', filter: 'drop-shadow(0 0 8px rgba(34,197,94,0.34))' }}
           priority
         />
       </div>
@@ -147,14 +147,14 @@ export function Navbar() {
         style={{
           top: 'var(--demo-banner-offset, 0px)',
           background: scrolled
-            ? 'linear-gradient(180deg, rgba(5,10,18,0.94) 0%, rgba(15,26,44,0.78) 100%)'
-            : 'transparent',
+            ? 'linear-gradient(180deg, rgba(5,10,18,0.96) 0%, rgba(11,18,33,0.90) 100%)'
+            : 'linear-gradient(180deg, rgba(5,10,18,0.58) 0%, rgba(5,10,18,0.10) 100%)',
         }}
       >
         <nav className="mx-auto max-w-7xl flex items-center justify-between px-5 py-3 lg:px-6">
 
           {/* ===== Left: Animated Logo ===== */}
-          <div className={`transition-all duration-500 ${scrolled ? 'drop-shadow-[0_0_8px_rgba(59,130,246,0.28)]' : ''}`}>
+          <div className={`transition-all duration-500 ${scrolled ? 'drop-shadow-[0_0_8px_rgba(34,197,94,0.24)]' : ''}`}>
             <AnimatedLogo />
           </div>
 
@@ -272,7 +272,7 @@ export function Navbar() {
                 trackLandingEvent('lp_register_start', { placement: 'navbar' })
               }}
             >
-              <Button variant="primary" size="sm" className="px-5 text-[13px] uppercase tracking-wide">
+              <Button variant="gradient" size="sm" className="px-5 text-[13px] uppercase tracking-wide">
                 Começar Grátis
               </Button>
             </Link>
@@ -289,11 +289,11 @@ export function Navbar() {
                   cta: 'entrar_mobile_header',
                 })
               }
-              className="group relative inline-flex h-8 items-center gap-1.5 rounded-xl border border-white/15 bg-white/8 px-3.5 text-[11px] font-bold uppercase tracking-wider text-white/90 backdrop-blur-sm transition-all duration-200 active:scale-95 hover:border-emerald-400/40 hover:bg-emerald-500/10 hover:text-white hover:shadow-[0_0_16px_rgba(34,197,94,0.18)]"
-              style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08)' }}
             >
-              <DSIcon name="logIn" size={13} className="text-emerald-300/80 transition-colors duration-200 group-hover:text-emerald-200" />
-              Entrar
+              <Button variant="glass" size="sm" className="h-9 px-3 text-[11px] uppercase tracking-wider">
+                <DSIcon name="logIn" size={13} />
+                Entrar
+              </Button>
             </Link>
             <Link
               href="/welcome"
@@ -306,7 +306,7 @@ export function Navbar() {
               }}
               className="hidden xs:inline-flex"
             >
-              <Button variant="primary" size="sm" className="h-8 px-3 text-[11px] uppercase tracking-wider">
+              <Button variant="gradient" size="sm" className="h-9 px-3 text-[11px] uppercase tracking-wider">
                 Grátis
               </Button>
             </Link>
@@ -367,7 +367,7 @@ export function Navbar() {
               width={120}
               height={24}
               className="h-6 w-auto"
-              style={{ width: 'auto', filter: 'drop-shadow(0 0 6px rgba(59,130,246,0.3))' }}
+              style={{ width: 'auto', filter: 'drop-shadow(0 0 6px rgba(34,197,94,0.28))' }}
             />
           </Link>
           <button
@@ -498,7 +498,7 @@ export function Navbar() {
                 closeMobile()
               }}
             >
-              <Button variant="primary" size="lg" className="w-full text-[13px] uppercase tracking-widest">
+              <Button variant="gradient" size="lg" className="w-full text-[13px] uppercase tracking-widest">
                 <DSIcon name="sparkles" size={16} />
                 Começar Grátis
               </Button>

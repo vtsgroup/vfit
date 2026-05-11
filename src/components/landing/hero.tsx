@@ -18,7 +18,7 @@ import { Button } from '@/components/ui/button'
 const headingFont = {
   fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
   fontWeight: 900,
-  letterSpacing: '-0.03em',
+  letterSpacing: '0',
 }
 const monoLabel = {
   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
@@ -28,17 +28,17 @@ const monoLabel = {
 
 /* ─── Hero slides ─── */
 const HERO_SLIDES = [
-  { image: '/images/hero-1.webp', prefix: 'TREINOS QUE', highlight: 'TRANSFORMAM' },
-  { image: '/images/hero-2.webp', prefix: 'SEU OBJETIVO', highlight: 'NO FOCO' },
-  { image: '/images/hero-3.webp', prefix: 'RESULTADO COM', highlight: 'MÉTODO' },
-  { image: '/images/hero-4.webp', prefix: 'TREINO E DIETA', highlight: 'ALINHADOS' },
+  { image: '/images/hero-1.webp', label: 'Treino personalizado no celular' },
+  { image: '/images/hero-2.webp', label: 'Evolução acompanhada por dados' },
+  { image: '/images/hero-3.webp', label: 'Personal trainer online' },
+  { image: '/images/hero-4.webp', label: 'Treino e dieta alinhados' },
 ]
 
 const HERO_STATS = [
-  { value: PUBLIC_SOCIAL_PROOF.active_personals_label, label: 'PERSONALS', icon: 'users' as const },
   { value: PUBLIC_SOCIAL_PROOF.active_students_label, label: 'ALUNOS', icon: 'userCheck' as const },
   { value: PUBLIC_SOCIAL_PROOF.satisfaction_label, label: 'SATISFAÇÃO', icon: 'star' as const },
-  { value: '24/7', label: 'DISPONÍVEL', icon: 'clock' as const },
+  { value: PUBLIC_SOCIAL_PROOF.active_personals_label, label: 'PROFISSIONAIS', icon: 'users' as const },
+  { value: '24/7', label: 'NO CELULAR', icon: 'smartphone' as const },
 ]
 
 export function Hero() {
@@ -115,7 +115,7 @@ export function Hero() {
 
       {/* Bottom gradient fade — strong, smooth transition to page bg */}
       <div
-        className="absolute inset-x-0 bottom-0 z-20"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-5"
         style={{
           height: '40%',
           background: 'linear-gradient(to top, var(--color-bg-primary) 0%, var(--color-bg-primary) 8%, rgba(5,10,18,0.85) 35%, rgba(5,10,18,0.4) 65%, transparent 100%)',
@@ -124,7 +124,7 @@ export function Hero() {
 
       {/* Top gradient for navbar blending */}
       <div
-        className="absolute inset-x-0 top-0 h-52 z-20"
+        className="pointer-events-none absolute inset-x-0 top-0 h-52 z-5"
         style={{
           background: 'linear-gradient(to bottom, rgba(5,10,18,0.92) 0%, rgba(15,26,44,0.58) 34%, rgba(15,26,43,0.20) 64%, transparent 100%)',
         }}
@@ -162,36 +162,23 @@ export function Hero() {
               >
                 <span className="h-1.5 w-1.5 rounded-full bg-brand-primary animate-pulse" />
                 {headlineVariant === 'A'
-                  ? 'App de treino com IA para alunos'
-                  : 'Treino inteligente com apoio profissional'}
+                  ? 'App de treino com personal trainer online'
+                  : 'Treino inteligente para evoluir de verdade'}
               </span>
             </div>
           </IntersectionReveal>
 
-          {/* Rotating headline */}
-          <div className="relative mb-4" style={{ minHeight: 'clamp(100px, 16vw, 180px)' }}>
-            {HERO_SLIDES.map((slide, i) => (
-              <div
-                key={slide.highlight}
-                className="absolute inset-0 flex flex-col items-center justify-center transition-all duration-700"
-                style={{
-                  opacity: currentSlide === i ? 1 : 0,
-                  transform: currentSlide === i ? 'translateY(0) scale(1)' : 'translateY(20px) scale(0.97)',
-                }}
-              >
-                <h1
-                  className="uppercase text-white"
-                  style={{ ...headingFont, fontSize: 'clamp(2.5rem, 7vw, 5rem)', lineHeight: '0.9' }}
-                >
-                  {slide.prefix}
-                  <br />
-                  <span className="bg-linear-to-r from-brand-primary via-brand-mint to-brand-accent bg-clip-text text-transparent">
-                    {slide.highlight}
-                  </span>
-                </h1>
-              </div>
-            ))}
-          </div>
+          {/* Headline */}
+          <h1
+            className="mx-auto mb-6 max-w-5xl text-balance text-4xl uppercase leading-[0.96] text-white sm:text-6xl lg:text-7xl"
+            style={headingFont}
+          >
+            Treine com personal trainer e{' '}
+            <span className="bg-linear-to-r from-brand-primary via-brand-mint to-brand-accent bg-clip-text text-transparent">
+              IA
+            </span>
+            {' '}no celular
+          </h1>
 
           {/* Slide indicators */}
           <IntersectionReveal animation="fade-in" delay={100}>
@@ -213,8 +200,8 @@ export function Hero() {
           <IntersectionReveal animation="fade-in" delay={150}>
             <p className="mx-auto max-w-xl text-base leading-relaxed text-white/50 sm:text-lg">
               {headlineVariant === 'A'
-                ? 'Receba treinos personalizados com inteligência artificial, acompanhe sua evolução e mantenha constância com gamificação no celular.'
-                : 'Treine com método, acompanhe progresso real e conte com personal e nutricionista no mesmo ecossistema quando precisar.'}
+                ? 'Receba um plano de treino personalizado, acompanhe sua evolução por dados e mantenha constância com gamificação no app.'
+                : 'Comece grátis, veja seu próximo treino com clareza e evolua com apoio de IA, personal e nutricionista quando precisar.'}
             </p>
           </IntersectionReveal>
 
@@ -237,9 +224,9 @@ export function Hero() {
                   })
                 }}
               >
-                <Button variant="primary" size="lg" className="px-10 text-sm uppercase" style={monoLabel}>
+                <Button variant="gradient" size="lg" className="w-full px-7 text-xs uppercase sm:w-auto sm:px-10 sm:text-sm" style={monoLabel}>
                   <DSIcon name="sparkles" size={16} />
-                  {ctaVariant === 'A' ? 'COMEÇAR GRÁTIS' : 'TESTAR AGORA'}
+                  {ctaVariant === 'A' ? 'COMEÇAR GRÁTIS' : 'CRIAR MEU TREINO'}
                 </Button>
               </Link>
 
@@ -247,11 +234,9 @@ export function Hero() {
                 href="#how-it-works"
                 onClick={() => trackLandingEvent('lp_cta_secondary_click', { placement: 'hero', cta: 'ver_demo' })}
               >
-                <Button variant="outline" size="lg" className="px-8 text-xs uppercase" style={monoLabel}>
-                  <svg className="h-3 w-3" viewBox="0 0 12 12" fill="currentColor">
-                    <path d="M2 1.5l7.5 4.5-7.5 4.5V1.5z" />
-                  </svg>
-                  VER DEMONSTRAÇÃO
+                <Button variant="outline" size="lg" className="w-full px-7 text-xs uppercase sm:w-auto sm:px-8" style={monoLabel}>
+                  <DSIcon name="playCircle" size={15} />
+                  VER COMO FUNCIONA
                 </Button>
               </a>
             </div>
@@ -270,7 +255,7 @@ export function Hero() {
               </span>
               <span className="inline-flex items-center gap-2 text-[10px] uppercase">
                 <DSIcon name="check" size={14} className="text-brand-primary/50" />
-                CANCELE QUANDO QUISER
+                TREINO NO CELULAR
               </span>
             </div>
           </IntersectionReveal>

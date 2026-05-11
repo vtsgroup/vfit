@@ -7,6 +7,12 @@
 
 ## [Unreleased] — 2026-04-08 — Sprint 11-15 (UX Nutrição/Exercícios)
 
+### 🎨 Unreleased — Landing aluno-first conversion polish (2026-05-11)
+- **Home com conversão aluno-first:** [src/app/page.tsx](src/app/page.tsx), [src/components/landing/hero.tsx](src/components/landing/hero.tsx), [src/components/landing/features.tsx](src/components/landing/features.tsx), [src/components/landing/numbers-section.tsx](src/components/landing/numbers-section.tsx), [src/components/landing/how-it-works-v2.tsx](src/components/landing/how-it-works-v2.tsx), [src/components/landing/gamification-section.tsx](src/components/landing/gamification-section.tsx), [src/components/landing/cta-section.tsx](src/components/landing/cta-section.tsx) e [src/components/landing/footer.tsx](src/components/landing/footer.tsx) reposicionam a landing principal para alunos, removem blocos genéricos/duplicados de escolha de perfil e deixam profissionais como caminho secundário.
+- **CTAs e header no Design System:** [src/components/landing/navbar.tsx](src/components/landing/navbar.tsx) usa botões do DS no header mobile/desktop, corrige o glow azul legado para verde VFIT e mantém ícones via `DSIcon`.
+- **Assets e QA mobile:** [src/components/ui/smart-app-banner.tsx](src/components/ui/smart-app-banner.tsx) corrige o ícone do banner PWA; Playwright local em 390px validou H1/CTAs acima da dobra, `bodyScrollWidth === viewportWidth` e zero 404 em assets públicos.
+- **Validação local:** `npm run type-check` passou após as mudanças.
+
 ### 🎨 Unreleased — Welcome + onboarding premium funnel refinement (2026-05-11)
 - **Onboarding com menos camadas:** [src/components/onboarding/onboarding-layout.tsx](src/components/onboarding/onboarding-layout.tsx) remove o padrão de card dentro de card, mantém progresso no topo e CTA fixo no rodapé com uma composição mais próxima de app nativo.
 - **Fundo mais contínuo e moderno:** [src/app/globals.css](src/app/globals.css) reforça o gradiente azul do fluxo VFIT com acentos verdes, grid sutil e modo compacto para viewports baixos.

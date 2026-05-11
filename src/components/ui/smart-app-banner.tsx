@@ -126,7 +126,7 @@ export function SmartAppBanner() {
         {/* App icon */}
         <div className="shrink-0 h-11 w-11 rounded-xl overflow-hidden shadow-sm border border-zinc-200 dark:border-white/10">
           <Image
-            src="/icons/apple-touch-icon.png"
+            src="/apple-touch-icon.png"
             alt="VFIT"
             width={44}
             height={44}

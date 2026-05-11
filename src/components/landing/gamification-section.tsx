@@ -18,7 +18,7 @@ import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 const headingFont = {
   fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
   fontWeight: 900,
-  letterSpacing: '-0.03em',
+  letterSpacing: '0',
 }
 const monoLabel = {
   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
@@ -184,26 +184,26 @@ export function GamificationSection() {
         {/* Heading */}
         <IntersectionReveal animation="blur-in" delay={50}>
           <h2
-            className="mb-4 text-center uppercase text-white"
-            style={{ ...headingFont, fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: '0.95' }}
+            className="mb-4 text-center text-3xl uppercase leading-[0.96] text-white sm:text-5xl"
+            style={headingFont}
           >
-            RANKING DE{' '}
+            CONSTÂNCIA QUE{' '}
             <span className="bg-linear-to-r from-brand-primary via-brand-mint to-brand-accent bg-clip-text text-transparent">
-              CAMPEÕES
+              VIRA RESULTADO
             </span>
           </h2>
         </IntersectionReveal>
 
         <IntersectionReveal animation="fade-in" delay={100}>
           <p className="mx-auto mb-14 max-w-lg text-center text-sm leading-relaxed text-white/40 sm:text-base">
-            Motivação através de competição saudável. XP, badges e rankings mantêm alunos e personals engajados.
+            XP, badges e rankings deixam o treino menos solitário e dão ao aluno um motivo a mais para voltar amanhã.
           </p>
         </IntersectionReveal>
 
         {/* Two-column leaderboards */}
         <div className="grid gap-8 lg:grid-cols-2">
-          <LeaderboardCard icon="briefcase" title="TOP PERSONALS" ranking={personalRanking} maxXp={15000} delay={150} />
-          <LeaderboardCard icon="dumbbell" title="TOP ALUNOS" ranking={studentRanking} maxXp={10000} delay={250} />
+          <LeaderboardCard icon="dumbbell" title="TOP ALUNOS" ranking={studentRanking} maxXp={10000} delay={150} />
+          <LeaderboardCard icon="briefcase" title="TOP PROFISSIONAIS" ranking={personalRanking} maxXp={15000} delay={250} />
         </div>
 
         {/* Badges showcase */}

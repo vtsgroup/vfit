@@ -21,7 +21,7 @@ import { DSIcon } from '@/components/ui/ds-icon'
 const headingFont = {
   fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
   fontWeight: 900,
-  letterSpacing: '-0.03em',
+  letterSpacing: '0',
 }
 const monoLabel = {
   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
@@ -48,7 +48,7 @@ export function CtaSection() {
       </div>
 
       {/* Overlay escuro cinematográfico */}
-      <div className="absolute inset-0 bg-[#030810]/85" />
+      <div className="absolute inset-0 bg-bg-primary/85" />
 
       {/* Camada tonal da marca */}
       <div className="absolute inset-0 bg-brand-primary/40 mix-blend-multiply" />
@@ -96,26 +96,22 @@ export function CtaSection() {
         {/* Heading — slightly smaller, balanced */}
         <IntersectionReveal animation="blur-in" delay={50}>
           <h2
-            className="mx-auto max-w-4xl uppercase text-white"
-            style={{
-              ...headingFont,
-              fontSize: 'clamp(2rem, 5.5vw, 4rem)',
-              lineHeight: '0.95',
-            }}
+            className="mx-auto max-w-4xl text-3xl uppercase leading-[0.96] text-white sm:text-5xl"
+            style={headingFont}
           >
-            TRANSFORME SEU{' '}
+            COMECE SEU{' '}
             <span className="bg-linear-to-r from-brand-primary via-brand-mint to-brand-accent bg-clip-text text-transparent">
-              NEGÓCIO
+              TREINO
             </span>
             <br />
-            DE PERSONAL TRAINER
+            COM PERSONAL E IA
           </h2>
         </IntersectionReveal>
 
         {/* Subtitle */}
         <IntersectionReveal animation="fade-in" delay={100}>
           <p className="mx-auto mt-5 max-w-lg text-sm leading-relaxed text-white/60 sm:text-base">
-            Junte-se a milhares de profissionais. Teste grátis, sem cartão.
+            Crie sua conta grátis, receba um plano claro e acompanhe sua evolução sem depender de planilha solta.
           </p>
         </IntersectionReveal>
 
@@ -131,7 +127,7 @@ export function CtaSection() {
               }}
             >
               <Button
-                variant="primary"
+                variant="gradient"
                 size="lg"
                 className="px-12 text-sm uppercase"
                 style={monoLabel}

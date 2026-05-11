@@ -30,7 +30,7 @@ const monoStyle = { fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Co
 const headingFont = {
   fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
   fontWeight: 900,
-  letterSpacing: '-0.03em',
+  letterSpacing: '0',
 }
 const forcedGlassStyle = {
   backdropFilter: 'blur(22px) saturate(1.45)',
@@ -547,22 +547,22 @@ export function PricingKoyeb() {
               <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/14" />
               <div className="pointer-events-none absolute -inset-px rounded-2xl bg-linear-to-br from-brand-primary/30 via-transparent to-white/16 opacity-60" />
               {/* Koyeb-style circuit decoration */}
-              <svg className="pointer-events-none absolute right-0 top-0 h-full w-1/2 opacity-[0.12]" viewBox="0 0 200 150" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M120 0v40h80" stroke="#10B981" strokeWidth="1" />
-                <path d="M160 0v70h40" stroke="#10B981" strokeWidth="0.5" />
-                <path d="M140 30h60" stroke="#10B981" strokeWidth="0.5" />
-                <path d="M100 60h100" stroke="#10B981" strokeWidth="0.5" />
-                <path d="M180 0v150" stroke="#10B981" strokeWidth="0.5" />
-                <path d="M130 80l30-30" stroke="#10B981" strokeWidth="0.5" />
-                <path d="M150 100h50" stroke="#10B981" strokeWidth="0.5" />
-                <circle cx="120" cy="40" r="2" fill="#10B981" />
-                <circle cx="160" cy="70" r="2" fill="#10B981" />
-                <circle cx="140" cy="30" r="1.5" fill="#10B981" />
-                <circle cx="180" cy="100" r="1.5" fill="#10B981" />
+              <svg className="pointer-events-none absolute right-0 top-0 h-full w-1/2 text-brand-primary opacity-[0.12]" viewBox="0 0 200 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M120 0v40h80" stroke="currentColor" strokeWidth="1" />
+                <path d="M160 0v70h40" stroke="currentColor" strokeWidth="0.5" />
+                <path d="M140 30h60" stroke="currentColor" strokeWidth="0.5" />
+                <path d="M100 60h100" stroke="currentColor" strokeWidth="0.5" />
+                <path d="M180 0v150" stroke="currentColor" strokeWidth="0.5" />
+                <path d="M130 80l30-30" stroke="currentColor" strokeWidth="0.5" />
+                <path d="M150 100h50" stroke="currentColor" strokeWidth="0.5" />
+                <circle cx="120" cy="40" r="2" fill="currentColor" />
+                <circle cx="160" cy="70" r="2" fill="currentColor" />
+                <circle cx="140" cy="30" r="1.5" fill="currentColor" />
+                <circle cx="180" cy="100" r="1.5" fill="currentColor" />
                 {/* Dot matrix pattern */}
                 {Array.from({length: 8}).map((_, row) =>
                   Array.from({length: 6}).map((_, col) => (
-                    <circle key={`${row}-${col}`} cx={110 + col * 14} cy={20 + row * 16} r="0.8" fill="#10B981" opacity={(row + col) % 2 === 0 ? 0.55 : 0.2} />
+                    <circle key={`${row}-${col}`} cx={110 + col * 14} cy={20 + row * 16} r="0.8" fill="currentColor" opacity={(row + col) % 2 === 0 ? 0.55 : 0.2} />
                   ))
                 )}
               </svg>
@@ -608,16 +608,16 @@ export function PricingKoyeb() {
               <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/14" />
               <div className="pointer-events-none absolute -inset-px rounded-2xl bg-linear-to-br from-white/20 via-transparent to-brand-primary/20 opacity-60" />
               {/* Koyeb-style circuit decoration */}
-              <svg className="pointer-events-none absolute right-0 top-0 h-full w-1/2 opacity-[0.08]" viewBox="0 0 200 150" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M100 0v50h100" stroke="#10B981" strokeWidth="1" />
-                <path d="M130 30h70" stroke="#10B981" strokeWidth="0.5" />
-                <path d="M150 0v80" stroke="#10B981" strokeWidth="0.5" />
-                <path d="M170 50v100" stroke="#10B981" strokeWidth="0.5" />
-                <path d="M110 70l40 40" stroke="#10B981" strokeWidth="0.5" />
-                <path d="M120 120h80" stroke="#10B981" strokeWidth="0.5" />
-                <circle cx="100" cy="50" r="2" fill="#10B981" />
-                <circle cx="150" cy="80" r="1.5" fill="#10B981" />
-                <circle cx="170" cy="50" r="1.5" fill="#10B981" />
+              <svg className="pointer-events-none absolute right-0 top-0 h-full w-1/2 text-brand-primary opacity-[0.08]" viewBox="0 0 200 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M100 0v50h100" stroke="currentColor" strokeWidth="1" />
+                <path d="M130 30h70" stroke="currentColor" strokeWidth="0.5" />
+                <path d="M150 0v80" stroke="currentColor" strokeWidth="0.5" />
+                <path d="M170 50v100" stroke="currentColor" strokeWidth="0.5" />
+                <path d="M110 70l40 40" stroke="currentColor" strokeWidth="0.5" />
+                <path d="M120 120h80" stroke="currentColor" strokeWidth="0.5" />
+                <circle cx="100" cy="50" r="2" fill="currentColor" />
+                <circle cx="150" cy="80" r="1.5" fill="currentColor" />
+                <circle cx="170" cy="50" r="1.5" fill="currentColor" />
               </svg>
 
               <div className="relative">

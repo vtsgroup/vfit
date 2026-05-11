@@ -21,7 +21,7 @@ import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 const headingFont = {
   fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
   fontWeight: 900,
-  letterSpacing: '-0.03em',
+  letterSpacing: '0',
 }
 const monoLabel = {
   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
@@ -108,72 +108,72 @@ const PERSONAL_FEATURES: Feature[] = [
 const ALUNO_FEATURES: Feature[] = [
   {
     icon: 'dumbbell',
-    title: 'Treinos Personalizados',
-    description: 'Receba treinos criados por IA para seus objetivos, nível de condicionamento e preferências.',
-    badge: 'PERSONALIZADO',
+    title: 'Treino sob medida',
+    description: 'Receba um plano claro para seu objetivo, nível, rotina e equipamentos disponíveis.',
+    badge: 'IA + PERSONAL',
     badgeAccent: true,
-    highlights: ['IA adaptativa', 'Progressão automática', '500+ exercícios'],
+    highlights: ['Progressão guiada', '500+ exercícios', 'Ajustes por objetivo'],
   },
   {
     icon: 'trendingUp',
-    title: 'Evolução Corporal',
-    description: 'Acompanhe composição corporal, fotos comparativas e gráficos detalhados de progresso.',
+    title: 'Evolução visível',
+    description: 'Acompanhe frequência, cargas, medidas e fotos para enxergar o progresso sem achismo.',
     badge: 'GRÁFICOS',
     badgeAccent: false,
-    highlights: ['Gráficos interativos', 'Fotos comparativas', 'Relatório mensal'],
-  },
-  {
-    icon: 'wallet',
-    title: 'Pagamento Fácil',
-    description: 'Pague via PIX, boleto ou cartão de forma automática, sem esforço e com recibo instantâneo.',
-    badge: 'PIX AUTOMÁTICO',
-    badgeAccent: true,
-    highlights: ['PIX instantâneo', 'Boleto e cartão', 'Recibo automático'],
-  },
-  {
-    icon: 'medal',
-    title: 'Ranking & Conquistas',
-    description: 'Ganhe XP a cada treino, suba de nível, desbloqueie badges e dispute rankings semanais.',
-    badge: 'GAMIFICADO',
-    badgeAccent: false,
-    highlights: ['Rankings semanais', 'Badges exclusivos', 'Sistema de níveis'],
-  },
-  {
-    icon: 'messageCircle',
-    title: 'Chat com Personal',
-    description: 'Comunique-se direto com seu personal pelo chat integrado e receba feedback em tempo real.',
-    badge: 'TEMPO REAL',
-    badgeAccent: true,
-    highlights: ['Mensagens instantâneas', 'Push notifications', 'Histórico completo'],
+    highlights: ['Fotos comparativas', 'Histórico completo', 'Relatórios claros'],
   },
   {
     icon: 'playCircle',
-    title: 'Execução Guiada',
-    description: 'Vídeos de cada exercício com séries, repetições, tempo de descanso e registro de carga.',
-    badge: 'VÍDEOS HD',
+    title: 'Execução sem dúvida',
+    description: 'Veja vídeos, séries, repetições, descanso e registro de carga no mesmo lugar.',
+    badge: 'GUIADO',
+    badgeAccent: true,
+    highlights: ['Vídeos HD', 'Timer integrado', 'Carga registrada'],
+  },
+  {
+    icon: 'medal',
+    title: 'Constância com XP',
+    description: 'Ganhe pontos a cada treino, mantenha streaks e transforme frequência em recompensa.',
+    badge: 'GAMIFICADO',
     badgeAccent: false,
-    highlights: ['Vídeos HD', 'Timer integrado', 'Registro de carga'],
+    highlights: ['Rankings semanais', 'Badges', 'Sistema de níveis'],
+  },
+  {
+    icon: 'messageCircle',
+    title: 'Apoio profissional',
+    description: 'Converse com personal e nutricionista quando precisar alinhar treino, dieta e rotina.',
+    badge: 'ACOMPANHADO',
+    badgeAccent: true,
+    highlights: ['Chat integrado', 'Feedback real', 'Histórico salvo'],
+  },
+  {
+    icon: 'smartphone',
+    title: 'App no celular',
+    description: 'Instale como app, receba notificações e acesse seu treino mesmo com conexão instável.',
+    badge: 'PWA',
+    badgeAccent: false,
+    highlights: ['Instala sem loja', 'Push notifications', 'Modo offline'],
   },
 ]
 
 const TABS = [
-  { id: 'personal', label: 'PARA PERSONALS', features: PERSONAL_FEATURES },
   { id: 'alunos', label: 'PARA ALUNOS', features: ALUNO_FEATURES },
+  { id: 'personal', label: 'PARA PROFISSIONAIS', features: PERSONAL_FEATURES },
 ] as const
 
 /* ═══════════════════════════════════════════
    HOW IT WORKS — Steps per perspective
    ═══════════════════════════════════════════ */
 const PERSONAL_STEPS: Step[] = [
-  { icon: 'userPlus', number: '01', title: 'Crie sua conta', description: 'Cadastro em 30 segundos. Plano Essencial gratuito para sempre, sem cartão de crédito.' },
+  { icon: 'userPlus', number: '01', title: 'Crie sua conta', description: 'Cadastro em 30 segundos. Plano Grátis para começar sem cartão de crédito.' },
   { icon: 'users', number: '02', title: 'Cadastre seus alunos', description: 'Adicione alunos manualmente ou envie convites por link direto pelo app.' },
   { icon: 'brainCircuit', number: '03', title: 'Gere treinos com IA', description: 'Defina os objetivos e deixe a inteligência artificial criar treinos perfeitos.' },
 ]
 
 const ALUNO_STEPS: Step[] = [
-  { icon: 'mail', number: '01', title: 'Receba o convite', description: 'Seu personal envia um link exclusivo. Basta clicar e criar sua conta.' },
-  { icon: 'download', number: '02', title: 'Instale o app', description: 'Adicione à tela inicial do celular. Funciona como app nativo, sem loja.' },
-  { icon: 'dumbbell', number: '03', title: 'Comece a treinar', description: 'Acesse treinos, acompanhe evolução e conquiste badges a cada sessão.' },
+  { icon: 'userPlus', number: '01', title: 'Crie seu perfil', description: 'Informe objetivo, nível, rotina e limitações. O cadastro começa grátis e sem cartão.' },
+  { icon: 'brainCircuit', number: '02', title: 'Receba seu treino', description: 'A IA monta o plano e o personal pode acompanhar sua evolução quando você quiser.' },
+  { icon: 'dumbbell', number: '03', title: 'Treine e evolua', description: 'Siga o app, registre cargas, ganhe XP e veja seu progresso com dados reais.' },
 ]
 
 /* ═══════════════════════════════════════════
@@ -232,7 +232,7 @@ function FeatureCard({ feat, index }: { feat: Feature; index: number }) {
    MAIN — Features + How It Works (merged)
    ═══════════════════════════════════════════ */
 export function Features() {
-  const [activeTab, setActiveTab] = useState<string>('personal')
+  const [activeTab, setActiveTab] = useState<string>('alunos')
   const current = TABS.find((t) => t.id === activeTab)!
   const steps = activeTab === 'personal' ? PERSONAL_STEPS : ALUNO_STEPS
 
@@ -260,17 +260,17 @@ export function Features() {
                 style={monoLabel}
               >
                 <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-brand-primary" />
-                A Plataforma
+                App de treino
               </span>
               <h2
                 className="mt-6 text-3xl uppercase tracking-tight text-gray-950 sm:text-4xl lg:text-5xl"
                 style={headingFont}
               >
-                Tudo que você precisa,{' '}
-                <span className="text-brand-primary">nada</span> que não precisa
+                Entenda seu treino,{' '}
+                <span className="text-brand-primary">execute</span> melhor
               </h2>
               <p className="mt-5 text-base text-gray-500 sm:text-lg">
-                Operacional, cobrança e IA no mesmo lugar. Sem malabarismos, sem planilhas soltas.
+                Um app mobile-first para transformar orientação profissional em treino simples de seguir.
               </p>
             </div>
           </IntersectionReveal>
@@ -314,13 +314,13 @@ export function Features() {
               </span>
               <span className="hidden h-3 w-px bg-gray-300 sm:block" />
               <span className="flex items-center gap-2">
-                <DSIcon name="flame" size={16} className="text-brand-primary" />
-                99.9% UPTIME
+                <DSIcon name="smartphone" size={16} className="text-brand-primary" />
+                APP NO CELULAR
               </span>
               <span className="hidden h-3 w-px bg-gray-300 sm:block" />
               <span className="flex items-center gap-2">
-                <DSIcon name="lock" size={16} className="text-brand-primary" />
-                CRIPTOGRAFIA E2E
+                <DSIcon name="creditCard" size={16} className="text-brand-primary" />
+                SEM CARTÃO NO CADASTRO
               </span>
             </div>
           </IntersectionReveal>

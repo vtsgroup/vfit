@@ -15,7 +15,9 @@ import { FAQSchema, LocalBusinessSchema } from '@/components/seo/json-ld'
 import type { Metadata } from 'next'
 import { buildSeoMetadata } from '@/lib/seo'
 import { Button } from '@/components/ui/button'
+import { DSIcon } from '@/components/ui/ds-icon'
 import { TrackedCtaLink } from '@/components/analytics/tracked-cta-link'
+import { PUBLIC_SOCIAL_PROOF } from '@config/constants'
 
 export const metadata: Metadata = buildSeoMetadata({
   title: 'VFIT — App de Treinos com IA | Treinos Personalizados Grátis',
@@ -66,82 +68,52 @@ export default function Home() {
       <Navbar />
       <main id="main-content">
         <Hero />
-        <section className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
-          <div className="surface-card rounded-2xl p-6 sm:p-8">
-            <p className="mb-2 text-xs font-bold tracking-wider text-brand-primary uppercase">Escolha seu caminho</p>
-            <h2 className="text-xl font-black text-text-primary sm:text-2xl">VFIT para alunos, profissionais e parceiros</h2>
-            <p className="mt-2 text-sm text-text-secondary">
-              Se você é profissional de fitness ou quer monetizar indicações, acesse a página específica do seu perfil.
-            </p>
-            <div className="mt-6 flex flex-wrap gap-3 sm:gap-4">
-              <TrackedCtaLink href="/app-personal-trainer" cta="Sou Personal Trainer" placement="segment_switcher_home" pageSegment="home" event="lp_cta_secondary_click"><Button size="sm" variant="secondary">Sou Personal Trainer</Button></TrackedCtaLink>
-              <TrackedCtaLink href="/nutricionistas" cta="Sou Nutricionista" placement="segment_switcher_home" pageSegment="home" event="lp_cta_secondary_click"><Button size="sm" variant="outline">Sou Nutricionista</Button></TrackedCtaLink>
-              <TrackedCtaLink href="/afiliados" cta="Quero ser Afiliado" placement="segment_switcher_home" pageSegment="home" event="lp_cta_secondary_click"><Button size="sm" variant="ghost">Quero ser Afiliado</Button></TrackedCtaLink>
+        <section className="relative overflow-hidden border-y border-white/6 bg-bg-primary" aria-label="Comece como aluno">
+          <div className="pointer-events-none absolute inset-0 opacity-[0.03]" style={{
+            backgroundImage: 'linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)',
+            backgroundSize: '56px 56px',
+          }} />
+          <div className="relative mx-auto grid max-w-7xl gap-7 px-4 py-8 sm:px-6 sm:py-12 lg:grid-cols-[1fr_auto] lg:items-center">
+            <div>
+              <p className="mb-3 text-xs font-bold tracking-wider text-brand-primary uppercase">Aluno primeiro</p>
+              <h2 className="max-w-3xl text-2xl font-black text-text-primary sm:text-3xl">
+                Treino de personal trainer online, criado com IA e pronto para começar hoje.
+              </h2>
+              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-text-secondary sm:text-base">
+                Sem planilha perdida, sem cartão no cadastro e sem dúvida sobre o próximo exercício. O VFIT guia seu treino, mostra evolução e conecta você a profissionais quando fizer sentido.
+              </p>
+              <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                <TrackedCtaLink href="/welcome" cta="Começar grátis como aluno" placement="student_trust_strip" pageSegment="home" event="lp_register_start">
+                  <Button size="lg" variant="gradient" className="w-full px-7 text-xs uppercase tracking-wider sm:w-auto">
+                    <DSIcon name="sparkles" size={16} />
+                    Começar grátis
+                  </Button>
+                </TrackedCtaLink>
+                <TrackedCtaLink href="/#testimonials" cta="Ver depoimentos" placement="student_trust_strip" pageSegment="home" event="lp_cta_secondary_click">
+                  <Button size="lg" variant="outline" className="w-full px-7 text-xs uppercase tracking-wider sm:w-auto">
+                    <DSIcon name="star" size={15} />
+                    Ver histórias reais
+                  </Button>
+                </TrackedCtaLink>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-3 gap-3 lg:w-150">
+              {[
+                { icon: 'users' as const, value: PUBLIC_SOCIAL_PROOF.active_students_label, label: 'alunos ativos' },
+                { icon: 'star' as const, value: PUBLIC_SOCIAL_PROOF.satisfaction_label, label: 'satisfação' },
+                { icon: 'dumbbell' as const, value: '500+', label: 'exercícios' },
+              ].map((item) => (
+                <article key={item.label} className="rounded-xl border border-white/8 bg-white/4 p-3 text-center sm:p-4">
+                  <DSIcon name={item.icon} size={16} className="mx-auto mb-2 text-brand-primary" />
+                  <p className="text-lg font-black text-text-primary sm:text-2xl">{item.value}</p>
+                  <p className="mt-1 text-[10px] font-bold uppercase tracking-wider text-text-muted">{item.label}</p>
+                </article>
+              ))}
             </div>
           </div>
         </section>
         <Features />
-        <div className="h-px bg-linear-to-r from-transparent via-brand-primary/20 to-transparent" />
-        <section className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6">
-          <div className="surface-card rounded-2xl p-6 sm:p-8">
-            <p className="text-xs font-bold tracking-wider text-brand-primary uppercase">Acesso para aluno</p>
-            <h2 className="mt-2 text-xl font-black text-text-primary sm:text-2xl">Treine com IA de forma gratuita e evolua com acompanhamento real</h2>
-            <p className="mt-2 text-sm text-text-secondary">
-              A home do VFIT é para quem quer resultado no treino. O aluno começa sem cartão e acompanha evolução pelo celular.
-              Profissionais têm páginas dedicadas com planos e operação completa.
-            </p>
-
-            <div className="mt-6 grid gap-4 md:grid-cols-3">
-              <article className="rounded-xl border border-white/8 bg-white/4 p-4">
-                <h3 className="text-sm font-bold text-text-primary uppercase tracking-wider">Aluno</h3>
-                <p className="mt-2 text-sm text-text-secondary">Começa grátis, recebe treino personalizado e acompanha progresso no app.</p>
-              </article>
-              <article className="rounded-xl border border-white/8 bg-white/4 p-4">
-                <h3 className="text-sm font-bold text-text-primary uppercase tracking-wider">Personal Trainer</h3>
-                <p className="mt-2 text-sm text-text-secondary">Gestão de alunos, IA, cobrança e plano profissional em página dedicada.</p>
-              </article>
-              <article className="rounded-xl border border-white/8 bg-white/4 p-4">
-                <h3 className="text-sm font-bold text-text-primary uppercase tracking-wider">Nutricionista</h3>
-                <p className="mt-2 text-sm text-text-secondary">Acompanhamento nutricional integrado ao contexto de treino do aluno.</p>
-              </article>
-            </div>
-
-            <div className="mt-6 flex flex-wrap gap-3 sm:gap-4">
-              <TrackedCtaLink href="/welcome" cta="Sou aluno" placement="home_access_section" pageSegment="home" event="lp_register_start"><Button size="lg" variant="gradient">Sou aluno</Button></TrackedCtaLink>
-              <TrackedCtaLink href="/app-personal-trainer" cta="Sou personal trainer" placement="home_access_section" pageSegment="home" event="lp_cta_secondary_click"><Button size="md" variant="outline">Personal trainer</Button></TrackedCtaLink>
-              <TrackedCtaLink href="/nutricionistas" cta="Sou nutricionista" placement="home_access_section" pageSegment="home" event="lp_cta_secondary_click"><Button size="md" variant="soft">Nutricionista</Button></TrackedCtaLink>
-            </div>
-
-            <div className="mt-6 grid gap-3 md:grid-cols-3">
-              <article className="rounded-xl border border-white/8 bg-white/4 p-4">
-                <h3 className="text-sm font-bold text-text-primary uppercase tracking-wider">Aluno</h3>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  <TrackedCtaLink href="/login" cta="Entrar aluno" placement="home_quick_access" pageSegment="home" event="lp_cta_secondary_click"><Button size="sm" variant="secondary">Entrar</Button></TrackedCtaLink>
-                  <TrackedCtaLink href="/register/student" cta="Cadastrar aluno" placement="home_quick_access" pageSegment="home" event="lp_register_start"><Button size="sm" variant="outline">Cadastrar</Button></TrackedCtaLink>
-                  <TrackedCtaLink href="/termos" cta="Termos aluno" placement="home_quick_access" pageSegment="home" event="lp_cta_secondary_click"><Button size="sm" variant="ghost">Termos</Button></TrackedCtaLink>
-                </div>
-              </article>
-
-              <article className="rounded-xl border border-white/8 bg-white/4 p-4">
-                <h3 className="text-sm font-bold text-text-primary uppercase tracking-wider">Personal Trainer</h3>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  <TrackedCtaLink href="/login" cta="Entrar personal" placement="home_quick_access" pageSegment="home" event="lp_cta_secondary_click"><Button size="sm" variant="secondary">Entrar</Button></TrackedCtaLink>
-                  <TrackedCtaLink href="/register/personal" cta="Cadastrar personal" placement="home_quick_access" pageSegment="home" event="lp_register_start"><Button size="sm" variant="outline">Cadastrar</Button></TrackedCtaLink>
-                  <TrackedCtaLink href="/termos" cta="Termos personal" placement="home_quick_access" pageSegment="home" event="lp_cta_secondary_click"><Button size="sm" variant="ghost">Termos</Button></TrackedCtaLink>
-                </div>
-              </article>
-
-              <article className="rounded-xl border border-white/8 bg-white/4 p-4">
-                <h3 className="text-sm font-bold text-text-primary uppercase tracking-wider">Nutricionista</h3>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  <TrackedCtaLink href="/login" cta="Entrar nutri" placement="home_quick_access" pageSegment="home" event="lp_cta_secondary_click"><Button size="sm" variant="secondary">Entrar</Button></TrackedCtaLink>
-                  <TrackedCtaLink href="/register/personal?type=nutri" cta="Cadastrar nutri" placement="home_quick_access" pageSegment="home" event="lp_register_start"><Button size="sm" variant="outline">Cadastrar</Button></TrackedCtaLink>
-                  <TrackedCtaLink href="/termos" cta="Termos nutri" placement="home_quick_access" pageSegment="home" event="lp_cta_secondary_click"><Button size="sm" variant="ghost">Termos</Button></TrackedCtaLink>
-                </div>
-              </article>
-            </div>
-          </div>
-        </section>
         <div className="h-px bg-linear-to-r from-transparent via-white/8 to-transparent" />
         <Testimonials />
         <div className="h-px bg-linear-to-r from-transparent via-brand-primary/15 to-transparent" />

@@ -19,7 +19,7 @@ import { IntersectionReveal } from '@/components/ui/intersection-reveal'
 const headingFont = {
   fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
   fontWeight: 900,
-  letterSpacing: '-0.03em',
+  letterSpacing: '0',
 }
 const monoLabel = {
   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
@@ -48,7 +48,7 @@ const FAQ_ITEMS: FaqItem[] = [
   {
     icon: 'brain',
     q: 'Como funciona a geração de treinos por IA?',
-    a: 'Nosso sistema de IA analisa o perfil do aluno (nível, objetivos, restrições, histórico) e gera um treino completo e personalizado com exercícios, séries, repetições e descanso. Você pode ajustar tudo antes de enviar ao aluno.',
+    a: 'Nosso sistema analisa nível, objetivo, restrições, histórico e equipamentos disponíveis para sugerir um treino completo com exercícios, séries, repetições e descanso. Quando há profissional acompanhando, ele pode ajustar o plano.',
   },
   {
     icon: 'creditCard',
@@ -87,8 +87,8 @@ const FAQ_ITEMS: FaqItem[] = [
   },
   {
     icon: 'lock',
-    q: 'Meus dados e de meus alunos estão seguros?',
-    a: 'Totalmente. Usamos criptografia de ponta a ponta, servidores Cloudflare com infraestrutura global, e banco de dados Neon PostgreSQL com backups automáticos. Sua conta é protegida por autenticação JWT segura.',
+    q: 'Meus dados estão seguros?',
+    a: 'Sim. Usamos infraestrutura Cloudflare, banco de dados PostgreSQL com backups e autenticação segura. Os dados de alunos e profissionais seguem boas práticas de privacidade e LGPD.',
   },
   {
     icon: 'users',

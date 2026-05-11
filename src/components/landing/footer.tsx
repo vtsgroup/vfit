@@ -20,7 +20,7 @@ import { Button } from '@/components/ui/button'
 const headingFont = {
   fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
   fontWeight: 900,
-  letterSpacing: '-0.03em',
+  letterSpacing: '0',
 }
 const monoLabel = {
   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
@@ -79,7 +79,7 @@ const SOCIALS = [
 
 /* ─── Trust badges ─── */
 const TRUST_ITEMS = [
-  { icon: 'shield' as DSIconName, label: 'CREF Verificado' },
+  { icon: 'shield' as DSIconName, label: 'Dados Protegidos' },
   { icon: 'lock' as DSIconName, label: 'SSL Criptografado' },
   { icon: 'flame' as DSIconName, label: 'LGPD Conforme' },
 ]
@@ -107,16 +107,16 @@ export function Footer() {
               className="text-lg font-black tracking-tight text-bg-primary sm:text-xl"
               style={{ fontFamily: headingFont.fontFamily }}
             >
-              Pronto para revolucionar seu negócio?
+              Pronto para treinar com um plano claro?
             </h3>
             <p className="mt-1 text-sm text-bg-primary/80">
-              Comece grátis. Sem cartão de crédito. Cancele quando quiser.
+              Comece grátis, sem cartão, direto pelo celular.
             </p>
           </div>
-          <Link href="/register/personal">
+          <Link href="/welcome">
             <Button variant="secondary" size="lg" className="px-7 text-sm uppercase" style={monoLabel}>
               <DSIcon name="dumbbell" size={16} />
-              Criar Conta Grátis
+              Criar Treino Grátis
             </Button>
           </Link>
         </div>
@@ -143,7 +143,7 @@ export function Footer() {
 
             {/* Description */}
             <p className="mt-5 max-w-xs text-sm leading-relaxed text-white/70">
-              A plataforma mais completa para personal trainers. Crie treinos com IA, gerencie alunos e automatize cobranças.
+              App de treinos com personal trainer online, inteligência artificial, evolução por dados e gamificação para manter constância.
             </p>
 
             {/* Contact info */}
@@ -238,7 +238,7 @@ export function Footer() {
       {/* ══════════════════════════════════════════════
           BOTTOM BAR
           ══════════════════════════════════════════════ */}
-      <div className="border-t border-white/5 bg-[#030810]">
+      <div className="border-t border-white/5 bg-bg-primary">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 py-4 sm:flex-row sm:gap-4 sm:px-6 sm:py-5">
           {/* Copyright */}
           <p className="text-[10px] text-white/50" style={monoLabel}>

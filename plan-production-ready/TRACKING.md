@@ -1,12 +1,12 @@
 # VFIT Production Completion — Tracking
 
-> Última atualização: 2026-05-10 · Status: P2.21/P2.22/P2.24/P2.26 publicados; P2.23/P2.25 em progresso; seed de alimentos 152 itens sincronizado no Neon; hotfix visual v3.6.3 compacta First Win mobile após smoke pós-deploy · Branch de execução: `main` · Versão live observada: `3.6.3`.
+> Última atualização: 2026-05-11 · Status: landing pública aluno-first revisada localmente; P2.21/P2.22/P2.24/P2.26 publicados; P2.23/P2.25 em progresso; seed de alimentos 152 itens sincronizado no Neon; hotfix visual v3.6.3 compacta First Win mobile após smoke pós-deploy · Branch de execução: `main` · Versão live observada: `3.6.3`.
 
 ## Progresso geral
 
 ```text
 Fases: 0/9 concluídas
-Tasks: 28/134 concluídas
+Tasks: 29/134 concluídas
 Bloqueadores P0 abertos: 2 + WhatsApp Unipile 401 + rotação NEON_DATABASE_URL pendente
 Gate produção: LIBERADO COM EXCEÇÃO OPERACIONAL WHATSAPP
 ```
@@ -80,7 +80,7 @@ Objetivo: remover erros reais vistos no live site antes de ampliar tráfego ou l
 - [x] **P0.11** Remover ou corrigir preloads não usados de CSS/logo. `P1` — preload global de `vfit-logo-white.svg` removido do root layout; warning restante de Cloudflare challenge é externo.
 - [x] **P0.12** Revalidar smoke auth com tokens atuais. `P0` — script direto executado com tokens temporários válidos: 8 passed, 0 failed, 4 skipped por mutações desabilitadas.
 - [x] **P0.13** Atualizar evidência em `.claude/docs/archive/legacy-plans/AUTH-SMOKE.generated.md`. `P0`
-- [ ] **P0.14** Rodar browser smoke público em contexto sem sessão. `P1`
+- [x] **P0.14** Rodar browser smoke público em contexto sem sessão. `P1` — smoke local mobile 390px da landing pública validou CTA visível, sem overflow horizontal e sem 404 de assets.
 - [x] **P0.15** Criar issue/runbook para stash antigo `infra: VFIT v1.0.0`, sem aplicar nem remover automaticamente. `P2`
 - [x] **P0.16** Destravar UI local de smoke tokens para clique em localhost. `P0` — `pointer-events-none` agora depende de role hidratado, `LazyMotion strict` não derruba mais o dashboard e `SplashScreen` invisível não intercepta cliques.
 - [x] **P0.17** Corrigir erros React Query `data undefined` no app aluno local. `P0` — nutrição e progresso agora retornam empty states tipados quando a API vem sem payload.
@@ -118,6 +118,7 @@ Validação já executada:
 - `npm run type-check` ✅ após First Win em `/treinos`.
 - `npm run build` ✅ após First Win em `/treinos`; rota `/treinos` exportada com 13 kB / 176 kB first load.
 - Browser QA local em `http://localhost:3000` ✅: rotas públicas e app aluno focadas sem console errors, sem 4xx/5xx capturados, sem page errors; page-level horizontal scroll bloqueado (`scrollX` permanece 0).
+- Browser QA local da landing em viewport mobile 390px ✅: H1 “Treine com personal trainer e IA no celular”, CTAs visíveis antes da dobra, header mobile ativo, `bodyScrollWidth === viewportWidth` e zero 404 capturado.
 - Browser QA visual de `/treinos` pós-First Win ✅ via export estático em `http://localhost:3000/treinos.html?firstwin=1`: primeira dobra exibiu “Primeira vitória do dia”, CTA “Começar treino de hoje”, seção “Detalhes do treino de hoje” e `scrollX=0`.
 - `npx eslint 'src/app/(app)/progresso/page.tsx' 'src/app/(app)/progresso/loading.tsx' 'src/app/(app)/avaliacoes/loading.tsx' 'src/app/(app)/exercicios/loading.tsx'` ✅ zero warnings após P2.12-P2.17.
 - `npm run type-check` ✅ após P2.12-P2.17 (loading.tsx batch + CTA em /progresso).

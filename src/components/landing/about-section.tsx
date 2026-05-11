@@ -19,7 +19,7 @@ import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 const headingFont = {
   fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
   fontWeight: 900,
-  letterSpacing: '-0.03em',
+  letterSpacing: '0',
 }
 const monoLabel = {
   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
@@ -43,8 +43,8 @@ const techStack: { name: string; icon: DSIconName }[] = [
 const values: { icon: DSIconName; title: string; desc: string }[] = [
   { icon: 'lightbulb', title: 'INOVAÇÃO', desc: 'Tecnologia de ponta aplicada ao mercado fitness' },
   { icon: 'target', title: 'FOCO', desc: 'Cada solução é construída para resolver problemas reais' },
-  { icon: 'flame', title: 'MOTIVAÇÃO', desc: 'Gamificação que engaja e retém profissionais' },
-  { icon: 'trendingUp', title: 'CRESCIMENTO', desc: 'Ferramentas projetadas para escalar seu negócio' },
+  { icon: 'flame', title: 'MOTIVAÇÃO', desc: 'Gamificação que ajuda alunos a manter constância' },
+  { icon: 'trendingUp', title: 'EVOLUÇÃO', desc: 'Dados claros para mostrar progresso real' },
 ]
 
 /* ─── Equipe — dados reais, fotos reais ─── */
@@ -92,7 +92,7 @@ export function AboutSection() {
         <IntersectionReveal animation="fade-in" delay={100}>
           <p className="mx-auto mb-10 max-w-2xl text-center text-sm leading-relaxed text-gray-500 sm:mb-16 sm:text-base">
             A VFIT nasceu da união entre tecnologia, inteligência artificial
-            e paixão pelo fitness. Criada e liderada por Victor Duarte, a plataforma é projetada para ser a melhor ferramenta para personal trainers do Brasil.
+            e paixão pelo fitness. Criada e liderada por Victor Duarte, a plataforma aproxima alunos, personal trainers e nutricionistas em uma experiência simples de acompanhar pelo celular.
           </p>
         </IntersectionReveal>
 
@@ -126,7 +126,7 @@ export function AboutSection() {
               </p>
 
               <p className="mb-6 text-sm leading-relaxed text-gray-600">
-                A VFIT é nosso produto flagship — uma plataforma completa que integra gestão operacional, pagamentos instantâneos via Pix, inteligência artificial e gamificação para revolucionar o mercado de personal trainers no Brasil.
+                A VFIT é nosso produto flagship — uma plataforma que une treinos personalizados, inteligência artificial, pagamentos digitais e gamificação para tornar acompanhamento fitness mais claro para alunos e mais eficiente para profissionais.
               </p>
 
               <p className="mb-8 text-sm leading-relaxed text-gray-600">

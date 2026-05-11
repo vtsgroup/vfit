@@ -21,7 +21,7 @@ import { Button } from '@/components/ui/button'
 const headingFont = {
   fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
   fontWeight: 900,
-  letterSpacing: '-0.03em',
+  letterSpacing: '0',
 }
 const monoLabel = {
   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
@@ -43,37 +43,37 @@ interface BlogPost {
 
 const blogPosts: BlogPost[] = [
   {
+    slug: '/blog/app-treino-ia-gratis-iniciantes',
+    image: '/blog/hero-treino-iniciante.webp',
+    tag: 'INICIANTES',
+    tagColor: 'bg-brand-primary text-bg-dark',
+    tagIcon: 'dumbbell',
+    date: 'FEV 20, 2026',
+    title: 'App de treino com IA grátis: como começar sem se perder na academia',
+    excerpt:
+      'Veja como sair da planilha genérica, montar uma rotina simples e acompanhar evolução direto pelo celular.',
+  },
+  {
     slug: '/blog/ia-personal-trainer',
     image: '/blog/hero-ia-personal-trainer.webp',
-    tag: 'TECNOLOGIA',
-    tagColor: 'bg-brand-primary text-bg-dark',
-    tagIcon: 'cpu',
-    date: 'FEV 20, 2026',
-    title: 'Como a Inteligência Artificial Está Revolucionando o Personal Training',
-    excerpt:
-      'Descubra como a IA está transformando a forma de prescrever treinos, acompanhar alunos e escalar seu negócio fitness.',
-  },
-  {
-    slug: '/blog/cobranca-automatica-personal',
-    image: '/blog/hero-cobranca-automatica.webp',
-    tag: 'GESTÃO',
+    tag: 'IA',
     tagColor: 'bg-bg-page text-white',
-    tagIcon: 'barChart',
+    tagIcon: 'brainCircuit',
     date: 'FEV 15, 2026',
-    title: 'Cobrança Automática para Personal Trainers: Elimine a Inadimplência',
+    title: 'Personal trainer com IA: o que muda no seu treino de verdade',
     excerpt:
-      'PIX, boleto e cartão no automático. Aprenda como automatizar cobranças e nunca mais perder receita por esquecimento.',
+      'Entenda como a IA ajuda no plano, onde o profissional entra e por que acompanhamento ainda faz diferença.',
   },
   {
-    slug: '/blog/retencao-alunos-personal',
-    image: '/blog/hero-retencao-alunos.webp',
-    tag: 'RETENÇÃO',
+    slug: '/blog/nutricionista-personal-trainer-trabalho-conjunto',
+    image: '/blog/hero-nutricao-personal.webp',
+    tag: 'NUTRIÇÃO',
     tagColor: 'bg-brand-primary text-bg-dark',
-    tagIcon: 'users',
+    tagIcon: 'heartHandshake',
     date: 'FEV 10, 2026',
-    title: 'Retenção de Alunos: 7 Estratégias Comprovadas Para Fidelizar Clientes',
+    title: 'Treino e dieta juntos: como alinhar personal e nutricionista',
     excerpt:
-      'Gamificação, acompanhamento e experiência personalizada. Conheça as estratégias que reduzem evasão em até 60%.',
+      'Quando treino, alimentação e dados conversam, fica mais fácil manter constância e ver resultado.',
   },
 ]
 
@@ -180,7 +180,7 @@ export function BlogSection() {
           >
             CONTEÚDO PARA{' '}
             <span className="bg-linear-to-r from-brand-primary via-brand-mint to-brand-accent bg-clip-text text-transparent">
-              CRESCER
+              EVOLUIR
             </span>
           </h2>
         </IntersectionReveal>

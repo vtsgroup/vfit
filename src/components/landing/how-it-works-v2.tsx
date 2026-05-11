@@ -22,7 +22,7 @@ import { DSIcon } from '@/components/ui/ds-icon'
 const headingFont = {
   fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
   fontWeight: 900,
-  letterSpacing: '-0.03em',
+  letterSpacing: '0',
 }
 const monoLabel = {
   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
@@ -143,7 +143,7 @@ const ALUNOS: Testimonial[] = [
   {
     name: 'Thiago Rocha',
     role: 'Aluno · 6 meses',
-    photo: '/images/testimonials/thiago.webp',
+    photo: '/images/testimonials/diego.webp',
     text: 'Pago tudo por Pix automático e recebo notificação quando o treino novo fica pronto. Muito prático.',
     rating: 5,
     highlight: 'Muito prático',
@@ -151,7 +151,7 @@ const ALUNOS: Testimonial[] = [
   {
     name: 'Camila Ferreira',
     role: 'Aluna · 3 meses',
-    photo: '/images/testimonials/camila.webp',
+    photo: '/images/testimonials/camila-b.webp',
     text: 'A avaliação física com gráficos de evolução é incrível. Vejo minha transformação com dados reais.',
     rating: 5,
     highlight: 'transformação com dados reais',
@@ -159,7 +159,7 @@ const ALUNOS: Testimonial[] = [
   {
     name: 'Bruno Nascimento',
     role: 'Aluno · 11 meses',
-    photo: '/images/testimonials/bruno.webp',
+    photo: '/images/testimonials/carlos.webp',
     text: 'Os vídeos demonstrativos de cada exercício são perfeitos. Nunca faço nada errado na academia.',
     rating: 5,
     highlight: 'vídeos demonstrativos',
@@ -167,7 +167,7 @@ const ALUNOS: Testimonial[] = [
   {
     name: 'Isabela Martins',
     role: 'Aluna · 5 meses',
-    photo: '/images/testimonials/isabela.webp',
+    photo: '/images/testimonials/fernanda.webp',
     text: 'Meu personal consegue acompanhar minha evolução em tempo real. Me sinto muito mais acompanhada.',
     rating: 5,
     highlight: 'tempo real',
@@ -175,7 +175,7 @@ const ALUNOS: Testimonial[] = [
   {
     name: 'Gabriel Santos',
     role: 'Aluno · 9 meses',
-    photo: '/images/testimonials/gabriel.webp',
+    photo: '/images/testimonials/rafael.webp',
     text: 'O ranking entre alunos me motiva muito. Estou sempre tentando subir de posição. Já perdi 12kg!',
     rating: 5,
     highlight: 'perdi 12kg',
@@ -183,7 +183,7 @@ const ALUNOS: Testimonial[] = [
   {
     name: 'Luana Oliveira',
     role: 'Aluna · 7 meses',
-    photo: '/images/testimonials/luana.webp',
+    photo: '/images/testimonials/juliana.webp',
     text: 'Os lembretes automáticos de treino são perfeitos. Não esqueço nenhum dia e minha frequência melhorou muito.',
     rating: 5,
     highlight: 'frequência melhorou muito',
@@ -191,7 +191,7 @@ const ALUNOS: Testimonial[] = [
   {
     name: 'Felipe Cardoso',
     role: 'Aluno · 4 meses',
-    photo: '/images/testimonials/felipe.webp',
+    photo: '/images/testimonials/pedro.webp',
     text: 'A interface é linda e fácil de usar. Meu treino anterior era uma planilha no Excel que eu mal entendia.',
     rating: 5,
     highlight: 'linda e fácil',
@@ -199,7 +199,7 @@ const ALUNOS: Testimonial[] = [
   {
     name: 'Amanda Reis',
     role: 'Aluna · 1 ano e 2 meses',
-    photo: '/images/testimonials/amanda.webp',
+    photo: '/images/testimonials/patricia.webp',
     text: 'Acompanho minha evolução corporal com gráficos incríveis. Cada avaliação me motiva a continuar firme.',
     rating: 5,
     highlight: 'evolução corporal',
@@ -207,8 +207,8 @@ const ALUNOS: Testimonial[] = [
 ]
 
 const TABS = [
-  { id: 'personals', label: 'PERSONAL TRAINERS', data: PERSONALS },
   { id: 'alunos', label: 'ALUNOS', data: ALUNOS },
+  { id: 'personals', label: 'PROFISSIONAIS', data: PERSONALS },
 ] as const
 
 /* ─── Stars — modern pill badge ─── */
@@ -236,7 +236,7 @@ function Avatar({ name, photo }: { name: string; photo: string }) {
     .slice(0, 2)
 
   return (
-    <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full bg-linear-to-br from-brand-primary to-[#16A34A] ring-2 ring-brand-primary/25 shadow-md sm:h-14 sm:w-14 sm:ring-[3px]">
+    <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full bg-linear-to-br from-brand-primary to-brand-accent ring-2 ring-brand-primary/25 shadow-md sm:h-14 sm:w-14 sm:ring-[3px]">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={photo}
@@ -305,7 +305,7 @@ function TestimonialCard({ t }: { t: Testimonial }) {
 
 /* ─── Main Component ─── */
 export function HowItWorksV2() {
-  const [activeTab, setActiveTab] = useState<string>(TABS[0].id)
+  const [activeTab, setActiveTab] = useState<string>('alunos')
 
   useEffect(() => {
     trackLandingEvent('lp_how_it_works_view', { section: 'reviews' })
@@ -363,14 +363,14 @@ export function HowItWorksV2() {
             }}
           >
             QUEM USA,{' '}
-            <span className="bg-linear-to-r from-brand-primary via-[#34D399] to-brand-accent bg-clip-text text-transparent">RECOMENDA</span>
+              <span className="bg-linear-to-r from-brand-primary via-brand-mint to-brand-accent bg-clip-text text-transparent">RECOMENDA</span>
           </h2>
         </IntersectionReveal>
 
         {/* Subtitle */}
         <IntersectionReveal animation="fade-in" delay={100}>
           <p className="mx-auto max-w-lg text-center text-base text-gray-500 mb-10 sm:mb-14">
-            Mais de 2.500 personal trainers e 850 mil alunos já transformaram sua rotina.
+            Alunos que saíram da planilha, treinaram com mais clareza e continuaram aparecendo na academia.
           </p>
         </IntersectionReveal>
 
@@ -435,9 +435,9 @@ export function HowItWorksV2() {
                 })
               }}
             >
-              <Button variant="outline" size="lg" className="text-xs uppercase tracking-widest">
+              <Button variant="gradient" size="lg" className="text-xs uppercase tracking-widest">
                 <DSIcon name="sparkles" size={14} />
-                COMEÇAR GRÁTIS
+                COMEÇAR COMO ALUNO
               </Button>
             </Link>
           </div>
