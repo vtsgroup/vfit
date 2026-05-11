@@ -7,6 +7,15 @@
 
 ## [Unreleased] — 12/04/2026 — Paridade admin de saques + redirect domínio legado
 
+### 🎨 Unreleased — Welcome + onboarding premium funnel refinement (2026-05-11)
+- Fluxo de aquisição recebeu redesign completo com foco de conversão e retenção em [src/app/(onboarding)/welcome/page.tsx](../src/app/(onboarding)/welcome/page.tsx), mantendo continuidade visual azul/verde e CTA principal mais claro no mobile.
+- Shell do onboarding foi simplificado em [src/components/onboarding/onboarding-layout.tsx](../src/components/onboarding/onboarding-layout.tsx), removendo excesso de containers aninhados e preservando progresso no topo + botão fixo no rodapé.
+- Controles de escolha premium reutilizáveis foram introduzidos em [src/components/onboarding/onboarding-choice.tsx](../src/components/onboarding/onboarding-choice.tsx), depois aplicados nas etapas de gênero, experiência, frequência, local, duração e horário.
+- Etapa de gênero deixou de usar ícones genéricos e adotou marcação tipográfica mais profissional em [src/components/onboarding/steps/step-gender.tsx](../src/components/onboarding/steps/step-gender.tsx).
+- Botão primário do design system foi restaurado para verde sólido com borda escura de 1px e profundidade 3D verde escura em [src/components/ui/button.tsx](../src/components/ui/button.tsx).
+- Base visual compartilhada do fluxo foi ajustada em [src/app/globals.css](../src/app/globals.css), incluindo modo compacto para viewport baixo e prevenção de sobreposição com o footer fixo.
+- Validação local concluída com sucesso: `git diff --check`, `npm run type-check` e `npm run build`.
+
 ### 🧭 Planejamento — 10/05/2026 — Autoplan Student-first depth
 - `plan-production-ready/PRODUCT-ROADMAP.md` recebeu a decisão `/autoplan` de priorizar profundidade do app aluno antes de marketplace amplo, nutricionista OS, SEO, social ou Personal OS avançado.
 - O feedback “não tem nenhum alimento para adicionar” e “nada está super funcional ainda” virou critério de bloqueio: food catalog, treino executável, offline sync, nutrição real, progresso claro e gates de QA passam a vir antes da expansão.

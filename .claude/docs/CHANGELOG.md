@@ -7,6 +7,15 @@
 
 ## [Unreleased] — 2026-04-08 — Sprint 11-15 (UX Nutrição/Exercícios)
 
+### 🎨 Unreleased — Welcome + onboarding premium funnel refinement (2026-05-11)
+- **Onboarding com menos camadas:** [src/components/onboarding/onboarding-layout.tsx](src/components/onboarding/onboarding-layout.tsx) remove o padrão de card dentro de card, mantém progresso no topo e CTA fixo no rodapé com uma composição mais próxima de app nativo.
+- **Fundo mais contínuo e moderno:** [src/app/globals.css](src/app/globals.css) reforça o gradiente azul do fluxo VFIT com acentos verdes, grid sutil e modo compacto para viewports baixos.
+- **Escolhas premium reutilizáveis:** [src/components/onboarding/onboarding-choice.tsx](src/components/onboarding/onboarding-choice.tsx) adiciona controles de opção em card, linha e chip com estados selecionados consistentes, tons por intenção e touch targets seguros.
+- **Gênero sem ícones genéricos:** [src/components/onboarding/steps/step-gender.tsx](src/components/onboarding/steps/step-gender.tsx) troca ícones genéricos por marcas tipográficas compactas e copy mais precisa, evitando o agrupamento arredondado dentro de outro container.
+- **Botão primário restaurado:** [src/components/ui/button.tsx](src/components/ui/button.tsx) volta para verde VFIT sólido com borda escura de 1px e profundidade 3D verde escura, sem gradiente exagerado.
+- **Welcome alinhado ao novo funil:** [src/app/(onboarding)/welcome/page.tsx](src/app/(onboarding)/welcome/page.tsx) recebe continuidade visual azul/verde, CTA mobile mais limpo e menor ruído na primeira dobra.
+- **Validação local:** `git diff --check`, `npm run type-check` e `npm run build` passaram; browser QA no export estático confirmou `/welcome.html` e `/onboarding.html` sem overflow horizontal e com opções/CTA sem sobreposição em viewport baixo.
+
 ### 🚀 Release v4.2.0 — Welcome conversion + retention redesign (2026-05-10)
 - **Welcome reposicionado para conversão:** [src/app/(onboarding)/welcome/page.tsx](src/app/(onboarding)/welcome/page.tsx) troca a narrativa de “quiz inteligente” por uma promessa direta de plano gratuito pronto em 2 minutos, com CTA “Criar meu plano grátis” e objeções resolvidas acima da dobra.
 - **Retenção como parte da primeira impressão:** a página agora mostra a prévia do plano, sinais analisados pela IA e ciclo Hoje/Amanhã/Semana, deixando claro que o usuário recebe direção imediata e motivo para voltar.

@@ -98,7 +98,8 @@ export default function WelcomePage() {
   return (
     <div className="vfit-flow-bg relative flex min-h-dvh flex-col overflow-hidden text-white">
       <div className="vfit-flow-grid pointer-events-none absolute inset-0" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-linear-to-b from-white/10 via-emerald-300/6 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-80 bg-linear-to-b from-vfit-primary-500/24 via-sky-300/8 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-sky-200/45 to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-linear-to-t from-bg-base to-transparent" />
 
       {/* ─── Background image with overlay ─── */}
@@ -151,7 +152,7 @@ export default function WelcomePage() {
               onClick={handlePrimaryStudentFlow}
               variant="primary"
               size="lg"
-              className="h-14 w-full"
+              className="w-full"
             >
               <DSIcon name={hasSavedProgress ? 'play' : 'graduationCap'} size={18} />
               {hasSavedProgress ? 'Continuar meu plano' : 'Criar meu plano grátis'}
@@ -194,7 +195,7 @@ export default function WelcomePage() {
             </button>
           </div>
 
-          <div className="mt-8 grid w-full max-w-xl gap-2.5 sm:grid-cols-3">
+          <div className="mt-8 hidden w-full max-w-xl gap-2.5 sm:grid sm:grid-cols-3">
             {CONVERSION_POINTS.map((point) => (
               <div key={point.title} className="vfit-flow-panel-soft rounded-2xl px-3 py-3">
                 <DSIcon name={point.icon} size={17} className="text-emerald-200" />

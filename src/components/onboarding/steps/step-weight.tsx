@@ -99,7 +99,7 @@ export function StepWeight() {
           value={input}
           onChange={(e) => handleChange(e.target.value)}
           placeholder="70"
-          className="h-30 w-46 rounded-[28px] border border-emerald-300/18 bg-white/8 text-center text-5xl font-black text-white shadow-[0_26px_54px_-38px_rgba(34,197,94,0.58),inset_0_1px_0_rgba(255,255,255,0.12)] outline-none transition-all placeholder:text-white/15 focus:border-emerald-300/55 focus:ring-4 focus:ring-emerald-300/14"
+          className="vfit-flow-field h-30 w-46 rounded-[28px] text-center text-5xl font-black text-white outline-none transition-all placeholder:text-white/15"
           autoFocus
         />
         <span className="absolute right-4 bottom-3 text-sm text-white/30">kg</span>
@@ -114,7 +114,7 @@ export function StepWeight() {
 
       {/* BMI Card */}
       {bmi && bmiInfo && (
-        <div className="w-full max-w-xs space-y-3 rounded-2xl border border-white/10 bg-white/7 p-5 shadow-glass-inset-sm">
+        <div className="w-full max-w-xs space-y-3 rounded-2xl border border-white/10 bg-white/6 p-5 shadow-glass-inset-sm">
           {/* BMI value */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">

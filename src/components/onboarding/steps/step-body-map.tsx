@@ -9,7 +9,8 @@
 'use client'
 
 import { useCallback } from 'react'
-import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
+import type { DSIconName } from '@/components/ui/ds-icon'
+import { OnboardingChoiceChip, OnboardingInsight } from '../onboarding-choice'
 import { useOnboardingStore } from '@/stores/onboarding-store'
 
 type MuscleGroup = {
@@ -58,44 +59,26 @@ export function StepBodyMap() {
 
   return (
     <div className="space-y-6">
-      {/* Instructions */}
-      <p className="text-xs text-white/40">
-        Selecione as áreas que você quer focar · mínimo 1
-      </p>
+      <OnboardingInsight icon="target">Selecione as áreas que você quer priorizar. Um foco claro deixa o primeiro plano mais fácil de seguir.</OnboardingInsight>
 
-      {/* Chip grid */}
       <div className="flex flex-wrap gap-2.5">
         {MUSCLE_GROUPS.map((group) => {
           const isSelected = selected.includes(group.id)
           return (
-            <button
+            <OnboardingChoiceChip
               key={group.id}
               onClick={() => toggle(group.id)}
-              className={`flex items-center gap-2 rounded-full border px-4 py-2.5 transition-all duration-300 ${
-                isSelected
-                  ? 'border-brand-primary bg-brand-primary/15 shadow-sm shadow-brand-primary/10 scale-[1.03]'
-                  : 'border-white/10 bg-white/4 hover:border-white/20 hover:bg-white/6'
-              }`}
+              selected={isSelected}
+              icon={group.icon}
             >
-              <DSIcon name={group.icon} className={`h-4 w-4 transition-colors ${isSelected ? 'text-brand-primary' : 'text-white/50'}`} />
-              <span
-                className={`text-sm font-medium transition-colors ${
-                  isSelected ? 'text-white' : 'text-white/70'
-                }`}
-              >
-                {group.label}
-              </span>
-              {isSelected && (
-                <DSIcon name="check" className="h-3.5 w-3.5 text-brand-primary" />
-              )}
-            </button>
+              {group.label}
+            </OnboardingChoiceChip>
           )
         })}
       </div>
 
-      {/* Selected count */}
       {selected.length > 0 && (
-        <p className="text-center text-xs text-white/40">
+        <p className="text-center text-xs font-medium text-slate-400">
           {selected.includes('full_body')
             ? 'Corpo todo selecionado — treino equilibrado'
             : `${selected.length} ${selected.length === 1 ? 'área selecionada' : 'áreas selecionadas'}`}

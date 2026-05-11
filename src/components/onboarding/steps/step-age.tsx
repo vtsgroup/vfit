@@ -8,7 +8,7 @@
 'use client'
 
 import { useCallback, useState } from 'react'
-import { DSIcon } from '@/components/ui/ds-icon'
+import { OnboardingInsight } from '../onboarding-choice'
 import { useOnboardingStore } from '@/stores/onboarding-store'
 
 export function StepAge() {
@@ -33,7 +33,6 @@ export function StepAge() {
 
   return (
     <div className="flex flex-col items-center space-y-8">
-      {/* Big input */}
       <div className="flex flex-col items-center gap-4">
         <div className="relative">
           <input
@@ -43,7 +42,7 @@ export function StepAge() {
             value={input}
             onChange={(e) => handleChange(e.target.value)}
             placeholder="25"
-            className="h-30 w-42 rounded-[28px] border border-emerald-300/18 bg-white/8 text-center text-5xl font-black text-white shadow-[0_26px_54px_-38px_rgba(34,197,94,0.58),inset_0_1px_0_rgba(255,255,255,0.12)] outline-none transition-all placeholder:text-white/15 focus:border-emerald-300/55 focus:ring-4 focus:ring-emerald-300/14"
+            className="vfit-flow-field h-30 w-42 rounded-[28px] text-center text-5xl font-black text-white outline-none transition-all placeholder:text-white/15"
             autoFocus
           />
           <span className="absolute right-4 bottom-3 text-sm text-white/30">anos</span>
@@ -59,12 +58,7 @@ export function StepAge() {
 
       {/* Age group feedback */}
       {age && (
-        <div className="flex items-center gap-2.5 rounded-card-lg border border-white/10 bg-white/7 px-5 py-3 shadow-glass-inset-sm">
-          <DSIcon
-            name={age < 18 ? 'star' : age < 30 ? 'dumbbell' : age < 45 ? 'target' : age < 60 ? 'zap' : 'trophy'}
-            className="h-5 w-5 shrink-0 text-brand-primary"
-          />
-          <p className="text-sm text-white/70">
+        <OnboardingInsight icon={age < 18 ? 'star' : age < 30 ? 'dumbbell' : age < 45 ? 'target' : age < 60 ? 'zap' : 'trophy'}>
             {age < 18
               ? 'Adaptamos o treino para jovens atletas'
               : age < 30
@@ -74,8 +68,7 @@ export function StepAge() {
                   : age < 60
                     ? 'Treino adaptado para longevidade'
                     : 'Exercícios seguros e eficientes'}
-          </p>
-        </div>
+          </OnboardingInsight>
       )}
     </div>
   )

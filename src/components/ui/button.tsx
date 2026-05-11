@@ -36,16 +36,16 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary: [
-    // Surface: premium emerald gradient with a brighter top edge and deeper base
-    'bg-linear-to-b from-lime-200 via-emerald-400 to-emerald-800',
+    // Surface: solid VFIT green with precise dark-green 3D depth
+    'bg-brand-primary',
     'text-white font-black',
     '[text-shadow:0_1px_2px_rgba(2,44,34,0.38)]',
     // Border + depth: all green, no neutral gray in the 3D system
-    'border border-emerald-900/80',
-    'shadow-[0_5px_0_0_#064e3b,0_16px_34px_-13px_rgba(6,95,70,0.82),0_0_0_1px_rgba(6,78,59,0.22),0_0_34px_-16px_rgba(190,242,100,0.82),inset_0_1px_0_rgba(255,255,255,0.52),inset_0_-1px_0_rgba(6,78,59,0.32)]',
+    'border border-emerald-900/85',
+    'shadow-[0_5px_0_0_#064e3b,0_15px_32px_-14px_rgba(6,95,70,0.76),0_0_0_1px_rgba(6,78,59,0.24),0_0_34px_-18px_rgba(34,197,94,0.74),inset_0_1px_0_rgba(255,255,255,0.22),inset_0_-1px_0_rgba(6,78,59,0.30)]',
     'hover:-translate-y-0.5',
-    'hover:shadow-[0_7px_0_0_#064e3b,0_20px_42px_-12px_rgba(6,95,70,0.88),0_0_0_1px_rgba(6,78,59,0.22),0_0_56px_-16px_rgba(190,242,100,0.96),inset_0_1px_0_rgba(255,255,255,0.56),inset_0_-1px_0_rgba(6,78,59,0.34)]',
-    'hover:brightness-105',
+    'hover:bg-brand-primary-hover',
+    'hover:shadow-[0_7px_0_0_#064e3b,0_20px_42px_-13px_rgba(6,95,70,0.84),0_0_0_1px_rgba(6,78,59,0.24),0_0_46px_-18px_rgba(34,197,94,0.82),inset_0_1px_0_rgba(255,255,255,0.26),inset_0_-1px_0_rgba(6,78,59,0.32)]',
     // Active: press down + inner shadow
     'active:translate-y-[3px] active:scale-[0.98]',
     'active:shadow-[0_1px_0_0_#064e3b,0_4px_12px_-8px_rgba(6,95,70,0.6),inset_0_2px_8px_rgba(2,44,34,0.24)]',
@@ -268,7 +268,10 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       >
         {/* Glass shine — top highlight arc */}
         {!isFlat && (
-          <span className="pointer-events-none absolute inset-x-0 top-0 h-[55%] rounded-t-[inherit] bg-linear-to-b from-white/20 via-white/8 to-transparent" />
+          <span className={cn(
+            'pointer-events-none absolute inset-x-0 top-0 h-[55%] rounded-t-[inherit] bg-linear-to-b to-transparent',
+            variant === 'primary' ? 'from-white/12 via-white/4' : 'from-white/20 via-white/8'
+          )} />
         )}
         {/* Glass shine — bottom edge reflection */}
         {!isFlat && (
