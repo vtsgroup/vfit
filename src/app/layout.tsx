@@ -119,17 +119,13 @@ export const metadata: Metadata = {
     capable: true,
     statusBarStyle: "black-translucent",
     title: "VFIT",
-    startupImage: `/icons/startup-1024.png?v=${APP_VERSION}`,
   },
   icons: {
     shortcut: [
       { url: `/favicons/favicon.ico`, type: "image/x-icon" },
-      { url: `/favicon.ico`, type: "image/x-icon" },
     ],
     icon: [
       { url: `/favicons/favicon.ico`, type: "image/x-icon" },
-      { url: `/favicons/favicon-16.png?v=${APP_VERSION}`, sizes: "16x16", type: "image/png" },
-      { url: `/favicons/favicon-32.png?v=${APP_VERSION}`, sizes: "32x32", type: "image/png" },
       { url: `/favicons/favicon-48.png?v=${APP_VERSION}`, sizes: "48x48", type: "image/png" },
       { url: `/favicons/favicon-96.png?v=${APP_VERSION}`, sizes: "96x96", type: "image/png" },
       { url: `/icons/icon-192.png?v=${APP_VERSION}`, sizes: "192x192", type: "image/png" },
@@ -137,7 +133,6 @@ export const metadata: Metadata = {
     ],
     apple: [
       { url: `/favicons/apple-touch-icon.png?v=${APP_VERSION}` },
-      { url: `/apple-touch-icon.png` },
     ],
   },
 };
@@ -155,15 +150,7 @@ export default function RootLayout({
         {/* preconnect removido: GA4 agora é deferred até interação */}
         <link rel="dns-prefetch" href="https://cdn.onesignal.com" />
         <link rel="dns-prefetch" href="https://challenges.cloudflare.com" />
-        {/* iOS Splash Screens — top 4 mais populares (reduzido de 12 para perf) */}
-        {/* iPhone 12-15 (390×844 @3x) */}
-        <link rel="apple-touch-startup-image" href="/icons/startup-1024.png" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3)" />
-        {/* iPhone 14/15 Pro (393×852 @3x) */}
-        <link rel="apple-touch-startup-image" href="/icons/startup-1024.png" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3)" />
-        {/* iPhone 14/15 Pro Max (430×932 @3x) */}
-        <link rel="apple-touch-startup-image" href="/icons/startup-1024.png" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3)" />
-        {/* iPhone SE / X (375×812 @3x) */}
-        <link rel="apple-touch-startup-image" href="/icons/startup-1024.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" />
+        {/* iOS Splash Screens removed — not critical for PWA, reduces Time to Interactive */}
         {/* Manual theme-color meta — NOT managed by Next.js viewport export.
             Anti-flicker script updates it immediately, ThemeProvider manages dynamically.
             This avoids React re-renders resetting the value. */}
