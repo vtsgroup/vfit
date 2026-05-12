@@ -1,6 +1,6 @@
 # VFIT Production Completion — Tracking
 
-> Última atualização: 2026-05-12 · Status: nutrição manual/autocomplete corrigida localmente; smoke auth renovado e aprovado; P2.21/P2.22/P2.24/P2.26 publicados, com hotfix de UX pronto para deploy patch v4.3.6; P2.23/P2.25 em progresso; seed de alimentos 152 itens sincronizado no Neon · Branch de execução: `main` · Versão live observada: `3.6.3`.
+> Última atualização: 2026-05-12 · Status: nutrição manual/autocomplete corrigida localmente; smoke auth renovado e aprovado; P2.21/P2.22/P2.24/P2.26 publicados, com hotfix de UX + envelope API VFIT pronto para deploy patch v4.3.7; P2.23/P2.25 em progresso; seed de alimentos 152 itens sincronizado no Neon · Branch de execução: `main` · Versão live observada: `4.3.6`.
 
 ## Progresso geral
 

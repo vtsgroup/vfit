@@ -11,8 +11,9 @@
 - Autocomplete de alimentos mais confiável em [workers/api/vfit.ts](../workers/api/vfit.ts): `GET /vfit/foods` agora busca com e sem acentos, por nome/tags/descrição, priorizando alimentos customizados e seed PT-BR (`seed:v1`).
 - Busca mobile com debounce em [src/hooks/use-vfit-nutrition.ts](../src/hooks/use-vfit-nutrition.ts) e [src/app/(app)/nutricao/page.tsx](../src/app/(app)/nutricao/page.tsx), mantendo sugestões anteriores enquanto o usuário digita.
 - Cadastro manual agora realmente “salva e registra”: valida calorias, proteínas, carboidratos, gorduras e porção; cria o alimento e registra a refeição no dia selecionado para atualizar macros e recentes.
+- Hotfix de envelope da API VFIT em [workers/api/vfit.ts](../workers/api/vfit.ts): os helpers `success`, `created`, `paginated` e `noContent` agora são retornados diretamente, evitando respostas `{}` nos endpoints de alimentos, refeições e favoritos.
 - Validação local: `npm run type-check`, `npm run type-check:workers`, ESLint focado, `npm run foods:sync:dry`, `git diff --check`, `npm run build` e consulta Neon somente leitura para `pao/pão/feijao/frango/banana` passaram.
-- Deploy liberado pelo smoke auth: após renovação dos tokens, `npm run smoke:auth:local` passou com 8 checks aprovados, 0 falhas e 4 skips por mutações desabilitadas; próximo passo operacional é o deploy patch v4.3.6.
+- Deploy liberado pelo smoke auth: após renovação dos tokens, `npm run smoke:auth:local` passou com 8 checks aprovados, 0 falhas e 4 skips por mutações desabilitadas; próximo passo operacional é o deploy patch v4.3.7 com hotfix do envelope VFIT.
 
 ### 🎨 Unreleased — Landing aluno-first conversion polish (2026-05-11)
 - Home principal reposicionada para conversão de alunos com hero mais direto, social proof reforçado, remoção de blocos redundantes e CTAs mais claros em [src/app/page.tsx](../src/app/page.tsx).

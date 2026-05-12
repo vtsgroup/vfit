@@ -95,7 +95,7 @@ vfit.get('/workouts', async (c) => {
     [...params, limit, offset]
   )
 
-  return c.json(paginated(workouts.rows, { page, per_page: limit, total }))
+  return paginated(workouts.rows, { page, per_page: limit, total })
 })
 
 /**
@@ -114,7 +114,7 @@ vfit.get('/workouts/:id', async (c) => {
   )
 
   if (!workout) throw new NotFoundError('Workout not found')
-  return c.json(success(workout))
+  return success(workout)
 })
 
 /**
@@ -159,7 +159,7 @@ vfit.post('/workouts', async (c) => {
     ]
   )
 
-  return c.json(created(workout), 201)
+  return created(workout)
 })
 
 /**
@@ -226,7 +226,7 @@ vfit.put('/workouts/:id', async (c) => {
     params
   )
 
-  return c.json(success(workout))
+  return success(workout)
 })
 
 /**
@@ -246,7 +246,7 @@ vfit.delete('/workouts/:id', async (c) => {
   if (existing.creator_id !== userId) throw new ForbiddenError('Not your workout')
 
   await pgQuery(env, `DELETE FROM vfit_workouts WHERE id = $1`, [id])
-  return c.json(noContent())
+  return noContent()
 })
 
 // ============================================
@@ -280,7 +280,7 @@ vfit.post('/sessions', async (c) => {
     [userId, data.workout_id]
   )
 
-  return c.json(created(session), 201)
+  return created(session)
 })
 
 /**
@@ -311,7 +311,7 @@ vfit.put('/sessions/:id/complete', async (c) => {
   )
 
   if (!session) throw new NotFoundError('Session not found')
-  return c.json(success(session))
+  return success(session)
 })
 
 /**
@@ -350,7 +350,7 @@ vfit.post('/sessions/:id/sets', async (c) => {
      data.weight_kg || null, data.rpe || null, data.notes || null]
   )
 
-  return c.json(created(set), 201)
+  return created(set)
 })
 
 /**
@@ -383,7 +383,7 @@ vfit.get('/sessions/history', async (c) => {
     [userId, limit, offset]
   )
 
-  return c.json(paginated(sessions.rows, { page, per_page: limit, total }))
+  return paginated(sessions.rows, { page, per_page: limit, total })
 })
 
 // ============================================
@@ -470,7 +470,7 @@ vfit.get('/foods/recent', async (c) => {
     [userId, limit]
   )
 
-  return c.json(success(foods.rows))
+  return success(foods.rows)
 })
 
 /**
@@ -482,7 +482,7 @@ vfit.get('/foods/favorites', async (c) => {
   const limit = Math.min(parseInt(c.req.query('limit') || '30', 10), 50)
 
   if (!(await foodFavoritesTableExists(env))) {
-    return c.json(success([]))
+    return success([])
   }
 
   const foods = await pgQuery(
@@ -496,7 +496,7 @@ vfit.get('/foods/favorites', async (c) => {
     [userId, limit]
   )
 
-  return c.json(success(foods.rows))
+  return success(foods.rows)
 })
 
 /**
@@ -521,7 +521,7 @@ vfit.post('/foods', async (c) => {
     ]
   )
 
-  return c.json(created(food), 201)
+  return created(food)
 })
 
 /**
@@ -547,7 +547,7 @@ vfit.post('/foods/:id/favorite', async (c) => {
     [userId, foodId]
   )
 
-  return c.json(success({ food_id: foodId, is_favorite: true }))
+  return success({ food_id: foodId, is_favorite: true })
 })
 
 /**
@@ -562,7 +562,7 @@ vfit.delete('/foods/:id/favorite', async (c) => {
     await pgQuery(env, `DELETE FROM vfit_food_favorites WHERE user_id = $1 AND food_id = $2`, [userId, foodId])
   }
 
-  return c.json(success({ food_id: foodId, is_favorite: false }))
+  return success({ food_id: foodId, is_favorite: false })
 })
 
 /**
@@ -623,7 +623,7 @@ vfit.get('/foods', async (c) => {
     params
   )
 
-  return c.json(success(foods.rows))
+  return success(foods.rows)
 })
 
 /**
@@ -669,7 +669,7 @@ vfit.post('/meals', async (c) => {
      data.logged_at || null, calories, protein, carbs, fat]
   )
 
-  return c.json(created(meal), 201)
+  return created(meal)
 })
 
 /**
@@ -703,7 +703,7 @@ vfit.get('/meals/today', async (c) => {
     [userId, date]
   )
 
-  return c.json(success({
+  return success({
     date,
     meals: meals.rows,
     totals: {
@@ -712,7 +712,7 @@ vfit.get('/meals/today', async (c) => {
       carbs: parseFloat(totals?.total_carbs || '0'),
       fat: parseFloat(totals?.total_fat || '0'),
     },
-  }))
+  })
 })
 
 // ============================================
@@ -744,7 +744,7 @@ vfit.post('/evaluations', async (c) => {
      JSON.stringify(data.photos), data.evaluation_date || null]
   )
 
-  return c.json(created(evaluation), 201)
+  return created(evaluation)
 })
 
 /**
@@ -773,7 +773,7 @@ vfit.get('/evaluations', async (c) => {
     params
   )
 
-  return c.json(success(evaluations))
+  return success(evaluations.rows)
 })
 
 // ============================================
@@ -823,11 +823,11 @@ vfit.get('/profile', async (c) => {
     [userId]
   )
 
-  return c.json(success({
+  return success({
     ...profile,
-    recent_workouts_data: recentSessions,
-    recent_meals_data: recentMeals,
-  }))
+    recent_workouts_data: recentSessions.rows,
+    recent_meals_data: recentMeals.rows,
+  })
 })
 
 // ============================================
@@ -894,11 +894,11 @@ Máximo 3 sugestões. Use nomes de alimentos comuns no Brasil (ex: arroz branco,
     // Parse da resposta JSON
     const jsonMatch = result.match(/\{[\s\S]*\}/)
     if (!jsonMatch) {
-      return c.json(success({
+      return success({
         suggestions: [],
         search_query: '',
         raw: result,
-      }))
+      })
     }
 
     const parsed = JSON.parse(jsonMatch[0]) as {
@@ -906,7 +906,7 @@ Máximo 3 sugestões. Use nomes de alimentos comuns no Brasil (ex: arroz branco,
       search_query: string
     }
 
-    return c.json(success(parsed))
+    return success(parsed)
   } catch (err) {
     throw new BadRequestError(
       `Erro ao identificar alimento: ${err instanceof Error ? err.message : 'unknown'}`
@@ -949,7 +949,7 @@ vfit.get('/food-barcode/:code', async (c) => {
   ).catch(() => null)
 
   if (localFood) {
-    return c.json(success({ source: 'local', food: localFood }))
+    return success({ source: 'local', food: localFood })
   }
 
   // 2. Fallback: Open Food Facts API (gratuita, sem auth)
@@ -971,7 +971,7 @@ vfit.get('/food-barcode/:code', async (c) => {
       if (offData.status === 1 && offData.product) {
         const p = offData.product
         const n = p.nutriments
-        return c.json(success({
+        return success({
           source: 'openfoodfacts',
           food: {
             name: p.product_name || 'Alimento desconhecido',
@@ -983,7 +983,7 @@ vfit.get('/food-barcode/:code', async (c) => {
             standard_portion_g: 100,
             category: 'industrializado',
           },
-        }))
+        })
       }
     }
   } catch {

@@ -1,9 +1,9 @@
 # Authenticated Smoke Report (Gerado automaticamente)
 
-> Gerado em: 2026-05-12T04:19:05.638Z
+> Gerado em: 2026-05-12T04:23:43.880Z
 > Base URL: https://api.vfit.app.br
-> test_run_id: run-20260512041905-auth
-> session_id: session-smoke-1778559545
+> test_run_id: run-20260512042343-auth
+> session_id: session-smoke-1778559823
 
 ## Como executar (sem vazar token)
 
@@ -43,17 +43,17 @@ Opção 3 — UI (super_admin)
 ## Execuções
 | Fluxo | Método | Rota | Status | HTTP | Latência (ms) | request_id | Observação |
 |---|---|---|---|---:|---:|---|---|
-| Personal: auth/me | GET | /api/v1/auth/me | passed | 200 | 4706.58 | 9fa69fa2792a6487-GIG | - |
-| Personal: students list (seed) | GET | /api/v1/students?page=1&per_page=1 | passed | 200 | 680.05 | 9fa69fa7f9ea6487-GIG | - |
+| Personal: auth/me | GET | /api/v1/auth/me | passed | 200 | 1510.7 | 9fa6a65639e7cabe-GIG | - |
+| Personal: students list (seed) | GET | /api/v1/students?page=1&per_page=1 | passed | 200 | 658.47 | 9fa6a65f2c86cabe-GIG | - |
 | Chat: create/get conversation | POST | /api/v1/chat/conversations | skipped | - | 0 | - | mutations desabilitadas (exporte SMOKE_ALLOW_MUTATIONS=1 para habilitar) |
 | Feedback (user): create | POST | /api/v1/feedback | skipped | - | 0 | - | mutations desabilitadas (exporte SMOKE_ALLOW_MUTATIONS=1 para habilitar) |
 | Payments: create local pending (no Asaas) | POST | /api/v1/payments | skipped | - | 0 | - | mutations desabilitadas (exporte SMOKE_ALLOW_MUTATIONS=1 para habilitar) |
-| Student: auth/me | GET | /api/v1/auth/me | passed | 200 | 665.52 | 9fa69fac3a5a6487-GIG | - |
-| Payments: my list | GET | /api/v1/payments/my?page=1&per_page=5 | passed | 200 | 683.43 | 9fa69fb06ad96487-GIG | - |
-| Checkout auth route: pix (expect not-found on fake/isolated payment) | POST | /api/v1/payments/268da969-4a5a-4001-8da7-3f05aadc34e7/pay | passed | 404 | 648.38 | 9fa69fb4ab686487-GIG | - |
-| Checkout auth route: boleto (expect not-found on fake/isolated payment) | POST | /api/v1/payments/268da969-4a5a-4001-8da7-3f05aadc34e7/pay | passed | 404 | 480.32 | 9fa69fb8bbca6487-GIG | - |
-| Checkout auth route: credit_card (expect not-found on fake/isolated payment) | POST | /api/v1/payments/268da969-4a5a-4001-8da7-3f05aadc34e7/pay | passed | 404 | 489.53 | 9fa69fbbcc0d6487-GIG | - |
-| Admin: feedback list | GET | /api/v1/admin/feedback?page=1&per_page=5 | passed | 200 | 959.62 | 9fa69fbedc636487-GIG | - |
+| Student: auth/me | GET | /api/v1/auth/me | passed | 200 | 648.75 | 9fa6a6634df9cabe-GIG | - |
+| Payments: my list | GET | /api/v1/payments/my?page=1&per_page=5 | passed | 200 | 629.13 | 9fa6a6675eedcabe-GIG | - |
+| Checkout auth route: pix (expect not-found on fake/isolated payment) | POST | /api/v1/payments/3e49663e-8b61-449b-a2b8-544ff2ad0c42/pay | passed | 404 | 656.93 | 9fa6a66b4fdbcabe-GIG | - |
+| Checkout auth route: boleto (expect not-found on fake/isolated payment) | POST | /api/v1/payments/3e49663e-8b61-449b-a2b8-544ff2ad0c42/pay | passed | 404 | 474.23 | 9fa6a66f68f5cabe-GIG | - |
+| Checkout auth route: credit_card (expect not-found on fake/isolated payment) | POST | /api/v1/payments/3e49663e-8b61-449b-a2b8-544ff2ad0c42/pay | passed | 404 | 481.87 | 9fa6a67259b4cabe-GIG | - |
+| Admin: feedback list | GET | /api/v1/admin/feedback?page=1&per_page=5 | passed | 200 | 716.87 | 9fa6a6755af5cabe-GIG | - |
 | Admin: feedback detail (from user smoke) | GET | /api/v1/admin/feedback/{feedback_id} | skipped | - | 0 | - | mutations desabilitadas; feedback_id não é gerado (SMOKE_ALLOW_MUTATIONS=1 para habilitar) |
 
 ## Evidências de contexto
