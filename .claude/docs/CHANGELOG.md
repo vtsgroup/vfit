@@ -7,6 +7,11 @@
 
 ## [Unreleased] — 2026-04-08 — Sprint 11-15 (UX Nutrição/Exercícios)
 
+### 🔧 Hotfix v4.4.3 — Labels premium do plano (2026-05-12)
+- **Labels humanos no plano:** [src/app/(app)/plano/page.tsx](src/app/(app)/plano/page.tsx) traduz `gym_large`, `gym_small`, `bodyweight`, `tone`, `gain_muscle` e `lose_weight` para labels polidos no hero e nos chips.
+- **Motivo:** validação live do v4.4.2 mostrou slugs internos no app aluno, quebrando o acabamento premium do command center.
+- **Validação local:** `npm run type-check` e `git diff --check` passaram antes da publicação patch.
+
 ### 🎨 Release v4.4.2 — Treino ativo Figma style + IA Assistente premium (2026-05-12)
 - **IA Assistente mais premium:** [src/components/navigation/student-fab-menu.tsx](src/components/navigation/student-fab-menu.tsx) troca o grid pesado por um command sheet em glass cinético, com header compacto, métricas rápidas, ações em 2 colunas, detalhes por intenção e fechamento no topo.
 - **Plano como command center:** [src/app/(app)/plano/page.tsx](src/app/(app)/plano/page.tsx) ganha hero escuro com grid fino, progresso visual, intensidade/sets/local/meta, roteiro semanal com pill de avanço e cards de músculos/exercícios com mais profundidade, hierarquia e affordance.

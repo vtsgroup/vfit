@@ -171,14 +171,20 @@ const MUSCLE_STYLES: Record<string, {
 
 const LOCATION_LABELS: Record<string, string> = {
   gym: 'Academia',
+  gym_large: 'Academia completa',
+  gym_small: 'Academia compacta',
   home: 'Em Casa',
+  bodyweight: 'Peso corporal',
   outdoor: 'Ar Livre',
   calisthenics: 'Calistenia',
 }
 
 const GOAL_LABELS: Record<string, string> = {
   muscle_gain: 'Hipertrofia',
+  gain_muscle: 'Hipertrofia',
   weight_loss: 'Emagrecimento',
+  lose_weight: 'Emagrecimento',
+  tone: 'Definição',
   strength: 'Força',
   endurance: 'Resistência',
   flexibility: 'Flexibilidade',

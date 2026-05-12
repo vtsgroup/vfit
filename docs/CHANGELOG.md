@@ -7,6 +7,11 @@
 
 ## [Unreleased] — 12/04/2026 — Paridade admin de saques + redirect domínio legado
 
+### 🔧 Hotfix v4.4.3 — Labels premium do plano (2026-05-12)
+- [src/app/(app)/plano/page.tsx](../src/app/(app)/plano/page.tsx) agora traduz os slugs do onboarding (`gym_large`, `gym_small`, `bodyweight`, `tone`, `gain_muscle`, `lose_weight`) para labels humanos no hero e nos chips do plano.
+- Motivo: validação live do v4.4.2 mostrou valores internos aparecendo no app aluno, o que quebrava o acabamento premium.
+- Validação local: `npm run type-check` e `git diff --check` passaram antes da publicação patch.
+
 ### 🎨 Release v4.4.2 — Treino ativo Figma style + IA Assistente premium (2026-05-12)
 - [src/components/navigation/student-fab-menu.tsx](../src/components/navigation/student-fab-menu.tsx) foi redesenhado como command sheet IA em glass cinético, com header compacto, métricas rápidas, ações em 2 colunas e estados táteis mais refinados.
 - [src/app/(app)/plano/page.tsx](../src/app/(app)/plano/page.tsx) ganhou hero mais premium com grid fino, progresso visual, intensidade/sets/local/meta, roteiro semanal com melhor hierarquia e cards de exercício/músculo mais ricos.
