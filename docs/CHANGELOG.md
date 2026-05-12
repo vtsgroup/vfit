@@ -7,7 +7,15 @@
 
 ## [Unreleased] — 12/04/2026 — Paridade admin de saques + redirect domínio legado
 
-### 🏋️ Release v4.4.1 — Treino ativo premium + finalização B2C confiável (2026-05-12)
+### 🎨 Release v4.4.2 — Treino ativo Figma style + IA Assistente premium (2026-05-12)
+- [src/components/navigation/student-fab-menu.tsx](../src/components/navigation/student-fab-menu.tsx) foi redesenhado como command sheet IA em glass cinético, com header compacto, métricas rápidas, ações em 2 colunas e estados táteis mais refinados.
+- [src/app/(app)/plano/page.tsx](../src/app/(app)/plano/page.tsx) ganhou hero mais premium com grid fino, progresso visual, intensidade/sets/local/meta, roteiro semanal com melhor hierarquia e cards de exercício/músculo mais ricos.
+- [src/app/(app)/treino-ativo/page.tsx](../src/app/(app)/treino-ativo/page.tsx) recebeu cockpit de execução mais moderno: timer com microcopy, palco de vídeo/fallback com overlay do exercício atual, painel branco com handle e rows de sets com toque mais físico.
+- [src/app/(app)/treino-ativo/concluido/page.tsx](../src/app/(app)/treino-ativo/concluido/page.tsx) foi refinada como recibo de performance, com nota, percentual concluído, métricas em tiles dark e painel de continuidade mais premium.
+- Validação local: `npm run type-check`, `git diff --check`, grep de regras Tailwind/DSIcon e `npm run build` passaram; build exportou 143 páginas.
+- Smoke auth pré-deploy recuperado com token temporário via painel admin: `node scripts/run-auth-smoke.mjs` passou com 9 checks aprovados, 0 falhas e 4 skips por mutações desabilitadas.
+
+### 🏋️ Unreleased — Treino ativo premium + finalização B2C confiável (2026-05-12)
 - Finalização B2C corrigida na origem em [workers/api/workouts.ts](../workers/api/workouts.ts): `/workouts/b2c/complete` não cai mais no validador legado `/:id/complete`, removendo o erro `exercises_completed: expected array` no app aluno.
 - Planos IA com `exercise_id` nulo agora finalizam com fallback por nome do exercício, salvando `name`, `muscle_group` e `completed_at` no histórico.
 - [src/app/(app)/treino-ativo/page.tsx](../src/app/(app)/treino-ativo/page.tsx) ganhou hero escuro com timer maior, botão 3D de finalizar, status de conexão, vídeo de demonstração abaixo do tempo e fallback visual quando o exercício ainda não tem mídia.
@@ -15,9 +23,8 @@
 - [src/app/(app)/plano/page.tsx](../src/app/(app)/plano/page.tsx) passa o dia selecionado para `/treino-ativo?day=...`, garantindo que o treino iniciado seja o mesmo escolhido no plano.
 - Console do treino ficou mais limpo: Wake Lock virou best-effort silencioso e o domínio legado do OneSignal deixa de aparecer como erro vermelho enquanto depende de correção externa no dashboard.
 - Validação local: `npm run type-check`, `npm run type-check:workers`, `npm run build`, `npx wrangler deploy --env="" --dry-run` e `git diff --check` passaram.
-- Deploy e validação produção: publicado como `v4.4.1`; API health respondeu healthy; POST autenticado em `/api/v1/workouts/b2c/complete` aceitou `exercise_id: null`, retornou `workout_id`, salvou 1 set e confirmou idempotência por `client_completion_id`; UI live `/plano → /treino-ativo?day=1` exibiu timer, botão 3D, mídia/fallback e status online; `npm run smoke:auth:local` passou 8/0/4.
 
-### 🥗 Release v4.4.0 — Nutrição autocomplete + registro manual real (2026-05-12)
+### 🥗 Unreleased — Nutrição autocomplete + registro manual real (2026-05-12)
 - Autocomplete de alimentos mais confiável em [workers/api/vfit.ts](../workers/api/vfit.ts): `GET /vfit/foods` agora busca com e sem acentos, por nome/tags/descrição, priorizando alimentos customizados e seed PT-BR (`seed:v1`).
 - Seed PT-BR na base ativa do Worker: se o banco ativo de produção ainda não tiver alimentos `seed:v1`, `GET /vfit/foods` popula de forma idempotente os 152 alimentos comuns de [scripts/vfit-food-library.mjs](../scripts/vfit-food-library.mjs) antes de retornar sugestões.
 - Busca mobile com debounce em [src/hooks/use-vfit-nutrition.ts](../src/hooks/use-vfit-nutrition.ts) e [src/app/(app)/nutricao/page.tsx](../src/app/(app)/nutricao/page.tsx), mantendo sugestões anteriores enquanto o usuário digita.
@@ -25,7 +32,7 @@
 - Hotfix de envelope da API VFIT em [workers/api/vfit.ts](../workers/api/vfit.ts): os helpers `success`, `created`, `paginated` e `noContent` agora são retornados diretamente, evitando respostas `{}` nos endpoints de alimentos, refeições e favoritos.
 - Macros como números no frontend: [workers/api/vfit.ts](../workers/api/vfit.ts) normaliza `numeric` do PostgreSQL para `number` antes de responder alimentos/refeições, evitando crash de `.toFixed()` na tela de nutrição.
 - Validação local: `npm run type-check`, `npm run type-check:workers`, ESLint focado, `npm run foods:sync:dry`, `git diff --check`, `npm run build` e consulta Neon somente leitura para `pao/pão/feijao/frango/banana` passaram.
-- Deploy liberado pelo smoke auth: publicado como `v4.4.0`; após renovação dos tokens, `npm run smoke:auth:local` passou com 8 checks aprovados, 0 falhas e 4 skips por mutações desabilitadas.
+- Deploy liberado pelo smoke auth: após renovação dos tokens, `npm run smoke:auth:local` passou com 8 checks aprovados, 0 falhas e 4 skips por mutações desabilitadas; próximo passo operacional é o deploy patch v4.4.0 com seed automática e normalização numérica.
 
 ### 🎨 Unreleased — Landing aluno-first conversion polish (2026-05-11)
 - Home principal reposicionada para conversão de alunos com hero mais direto, social proof reforçado, remoção de blocos redundantes e CTAs mais claros em [src/app/page.tsx](../src/app/page.tsx).

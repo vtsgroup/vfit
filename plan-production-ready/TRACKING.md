@@ -1,20 +1,21 @@
 # VFIT Production Completion — Tracking
 
-> Última atualização: 2026-05-12 · Status: v4.4.1 publicado com treino ativo premium e finalização B2C confiável; nutrição/autocomplete segue funcionando desde v4.4.0; P2.21/P2.22/P2.24/P2.26 publicados; P2.23/P2.25 seguem em progresso com rota B2C corrigida, `exercise_id` nulo aceito e fallback offline de conclusão implementado · Branch de execução: `main` · Versão live observada: `4.4.1`.
+> Última atualização: 2026-05-12 · Status: v4.4.2 em preparação para publicar polish Figma style em `/plano`, `/treino-ativo`, `/treino-ativo/concluido` e IA Assistente; v4.4.1 segue live com finalização B2C confiável; nutrição/autocomplete segue funcionando desde v4.4.0; P2.21/P2.22/P2.24/P2.26 publicados; P2.23/P2.25 seguem em progresso com rota B2C corrigida, `exercise_id` nulo aceito e fallback offline de conclusão implementado · Branch de execução: `main` · Versão live observada: `4.4.1`.
 
 ## Progresso geral
 
 ```text
 Fases: 0/9 concluídas
-Tasks: 29/134 concluídas
+Tasks: 30/134 concluídas
 Bloqueadores P0 abertos: 2 + WhatsApp Unipile 401 + rotação NEON_DATABASE_URL pendente
-Gate produção: v4.4.1 PUBLICADO; health/API/UI/smoke auth pós-deploy aprovados (8 passed, 0 failed)
+Gate produção: v4.4.2 PRONTO PARA DEPLOY; type-check/build/diff/grep aprovados; smoke auth pré-deploy revalidado 9 passed, 0 failed, 4 skipped; WhatsApp segue com bypass por Unipile 401.
 ```
 
 ### Deploys executados
 
 | Versão | Data | Branch/commit | Escopo | Resultado |
 |---|---|---|---|---|
+| v4.4.2 | 2026-05-12 | `main` / patch release | Polish Figma style em `/plano`, `/treino-ativo`, `/treino-ativo/concluido` e IA Assistente suspenso | Pronto para publicação patch: `npm run type-check`, `git diff --check`, grep Tailwind/DSIcon e `npm run build` aprovados; smoke auth pré-deploy 9/0/4 com token temporário via painel admin; publicar com `--allow-no-whatsapp` enquanto Unipile segue 401. |
 | v4.4.1 | 2026-05-12 | `main` / `bc94739e` | Treino ativo premium, finalização B2C confiável, fallback `exercise_id` nulo, status de conexão e vídeo/fallback abaixo do timer | Pages + Workers publicados; rota `/workouts/b2c/complete` validada sem shadowing por `/:id/complete`; POST smoke aceitou `exercise_id: null`, retornou `workout_id` e confirmou idempotência; UI live `/plano → /treino-ativo?day=1` validada; smoke auth 8/0/4; WhatsApp bypass por Unipile 401. |
 | v4.4.0 | 2026-05-12 | `main` / `15ce80af` | Nutrição autocomplete, seed ativa e normalização numérica | Pages + Workers publicados; autocomplete e registro de refeição validados em produção; smoke auth 8/0/4; WhatsApp bypass por Unipile 401. |
 | v3.6.3 | 2026-05-10 | `main` / hotfix patch | First Win compacto em mobile | Em publicação: reduz altura do hero `/treinos` para não encostar na bottom navigation em viewport compacta. |

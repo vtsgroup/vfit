@@ -90,15 +90,50 @@ interface FabAction {
   label: string
   action: string
   icon: React.ReactNode
+  detail: string
+  tone: string
 }
 
 const FAB_ACTIONS: FabAction[] = [
-  { id: 'goals', label: 'Metas', action: 'goals', icon: <MetasIcon /> },
-  { id: 'progress', label: 'Progresso', action: 'progress', icon: <ProgressoIcon /> },
-  { id: 'exercise', label: 'Exercício', action: 'exercise', icon: <ExercicioIcon /> },
-  { id: 'nutrition', label: 'Nutrição', action: 'nutrition', icon: <NutricaoIcon /> },
-  { id: 'qa', label: 'Perguntas', action: 'qa', icon: <PerguntaIcon /> },
+  { id: 'goals', label: 'Metas', action: 'goals', detail: 'ajuste fino', tone: 'emerald', icon: <MetasIcon /> },
+  { id: 'progress', label: 'Progresso', action: 'progress', detail: 'leitura real', tone: 'sky', icon: <ProgressoIcon /> },
+  { id: 'exercise', label: 'Exercício', action: 'exercise', detail: 'execução', tone: 'lime', icon: <ExercicioIcon /> },
+  { id: 'nutrition', label: 'Nutrição', action: 'nutrition', detail: 'macros', tone: 'amber', icon: <NutricaoIcon /> },
+  { id: 'qa', label: 'Perguntas', action: 'qa', detail: 'consultoria', tone: 'violet', icon: <PerguntaIcon /> },
 ]
+
+const ACTION_TONES: Record<string, { card: string; icon: string; rail: string; text: string }> = {
+  emerald: {
+    card: 'hover:border-emerald-200/28 hover:bg-emerald-300/10',
+    icon: 'border-emerald-200/22 bg-emerald-300/12 text-emerald-200 group-hover:text-emerald-100',
+    rail: 'from-emerald-300 to-lime-300',
+    text: 'text-emerald-200/76',
+  },
+  sky: {
+    card: 'hover:border-sky-200/25 hover:bg-sky-300/9',
+    icon: 'border-sky-200/20 bg-sky-300/11 text-sky-200 group-hover:text-sky-100',
+    rail: 'from-sky-300 to-emerald-300',
+    text: 'text-sky-200/76',
+  },
+  lime: {
+    card: 'hover:border-lime-200/25 hover:bg-lime-300/9',
+    icon: 'border-lime-200/20 bg-lime-300/11 text-lime-200 group-hover:text-lime-100',
+    rail: 'from-lime-300 to-emerald-300',
+    text: 'text-lime-200/76',
+  },
+  amber: {
+    card: 'hover:border-amber-200/25 hover:bg-amber-300/9',
+    icon: 'border-amber-200/20 bg-amber-300/11 text-amber-200 group-hover:text-amber-100',
+    rail: 'from-amber-300 to-emerald-300',
+    text: 'text-amber-200/76',
+  },
+  violet: {
+    card: 'hover:border-violet-200/25 hover:bg-violet-300/9',
+    icon: 'border-violet-200/20 bg-violet-300/11 text-violet-200 group-hover:text-violet-100',
+    rail: 'from-violet-300 to-emerald-300',
+    text: 'text-violet-200/76',
+  },
+}
 
 // ============================================
 // Component
@@ -146,79 +181,96 @@ export function StudentFabMenu({ open, onClose }: StudentFabMenuProps) {
 
           {/* Quick Actions Card — suspended AI assistant panel */}
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            initial={{ opacity: 0, y: 24, scale: 0.94 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 10, scale: 0.95 }}
-            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+            exit={{ opacity: 0, y: 14, scale: 0.96 }}
+            transition={{ type: 'spring', damping: 28, stiffness: 330 }}
             className="fixed left-1/2 z-44 -translate-x-1/2 lg:hidden"
             style={{
               bottom: `calc(7rem + env(safe-area-inset-bottom, 0px))`,
-              width: 'min(340px, 90vw)',
+              width: 'min(368px, calc(100vw - 28px))',
             }}
           >
             <div
-              className="relative overflow-hidden rounded-[30px] border border-white/12 bg-[#06101f]/92 p-2.5 shadow-[0_34px_90px_-34px_rgba(16,185,129,0.55),0_22px_46px_-28px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.12)]"
-              style={{ backdropFilter: 'blur(28px) saturate(185%)', WebkitBackdropFilter: 'blur(28px) saturate(185%)' }}
+              className="relative overflow-hidden rounded-[32px] border border-white/13 bg-slate-950/94 p-3 shadow-[0_34px_90px_-32px_rgba(16,185,129,0.58),0_24px_54px_-30px_rgba(2,6,23,0.95),inset_0_1px_0_rgba(255,255,255,0.14)]"
+              style={{ backdropFilter: 'blur(30px) saturate(190%)', WebkitBackdropFilter: 'blur(30px) saturate(190%)' }}
             >
-              <div className="pointer-events-none absolute -left-16 -top-20 h-44 w-44 rounded-full bg-emerald-300/18 blur-3xl" />
-              <div className="pointer-events-none absolute -right-12 top-8 h-36 w-36 rounded-full bg-sky-300/14 blur-3xl" />
-              <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-linear-to-r from-transparent via-emerald-200/65 to-transparent" />
-              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-linear-to-t from-emerald-500/8 to-transparent" />
+              <div className="pointer-events-none absolute -left-20 -top-24 h-48 w-48 rounded-full bg-emerald-300/18 blur-3xl" />
+              <div className="pointer-events-none absolute -right-20 top-8 h-44 w-44 rounded-full bg-sky-300/13 blur-3xl" />
+              <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-linear-to-r from-transparent via-emerald-100/78 to-transparent" />
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-linear-to-t from-emerald-500/10 to-transparent" />
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0 opacity-45"
+                style={{
+                  backgroundImage:
+                    'linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px)',
+                  backgroundSize: '22px 22px',
+                  maskImage: 'linear-gradient(to bottom, black, transparent 72%)',
+                  WebkitMaskImage: 'linear-gradient(to bottom, black, transparent 72%)',
+                }}
+              />
 
               {/* Header */}
-              <div className="relative flex items-center gap-3 px-3.5 pb-3 pt-3">
-                <div className="relative flex h-13 w-13 shrink-0 items-center justify-center rounded-[20px] border border-emerald-200/22 bg-linear-to-b from-emerald-300/24 via-emerald-400/14 to-slate-950/60 text-emerald-100 shadow-[0_0_32px_rgba(16,185,129,0.38),inset_0_1px_0_rgba(255,255,255,0.20)]">
-                  <span className="absolute inset-1 rounded-[16px] border border-white/8" aria-hidden="true" />
-                  <DSIcon name="sparkles" size={22} className="drop-shadow-[0_0_12px_rgba(110,231,183,0.58)]" />
+              <div className="relative flex items-center gap-3 px-2 pb-3 pt-2">
+                <div className="relative flex h-14 w-14 shrink-0 items-center justify-center rounded-[21px] border border-emerald-100/24 bg-linear-to-b from-emerald-200/25 via-emerald-400/13 to-slate-950/64 text-emerald-100 shadow-[0_0_34px_rgba(16,185,129,0.36),inset_0_1px_0_rgba(255,255,255,0.24)]">
+                  <span className="absolute inset-1 rounded-[17px] border border-white/8" aria-hidden="true" />
+                  <span className="absolute -right-0.5 -top-0.5 h-3 w-3 rounded-full border border-slate-950 bg-emerald-300 shadow-[0_0_16px_rgba(110,231,183,0.9)]" />
+                  <DSIcon name="sparkles" size={23} className="drop-shadow-[0_0_14px_rgba(110,231,183,0.62)]" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className="mb-1 flex items-center gap-2">
-                    <span className="text-[10px] font-black uppercase tracking-[0.22em] text-emerald-200/82">IA Assistente</span>
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-300 shadow-[0_0_12px_rgba(110,231,183,0.8)]" />
-                  </div>
-                  <p className="truncate text-[14px] font-black tracking-tight text-white">Escolha uma ação inteligente</p>
-                  <p className="mt-0.5 text-[11px] font-medium text-slate-400">Treino, metas e evolução em um toque.</p>
+                  <p className="text-[10px] font-black uppercase tracking-[0.22em] text-emerald-200/82">IA Assistente</p>
+                  <p className="mt-1 text-[18px] font-black leading-tight text-white">Comando inteligente</p>
+                  <p className="mt-0.5 text-[12px] font-semibold text-slate-400">Ajuste o próximo movimento do seu dia.</p>
                 </div>
+                <button
+                  type="button"
+                  aria-label="Fechar menu IA"
+                  onClick={() => {
+                    haptic()
+                    onClose()
+                  }}
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[15px] border border-white/10 bg-white/6 text-slate-300 shadow-glass-inset-sm transition-all duration-200 hover:bg-white/10 hover:text-white active:scale-95"
+                >
+                  <DSIcon name="x" size={18} />
+                </button>
               </div>
 
-              {/* Actions grid — 2×3 but 5 items (last row has 1 centered or not) */}
-              <div className="relative grid grid-cols-3 gap-2 px-1.5 pb-2">
+              <div className="relative mb-2 grid grid-cols-3 gap-1.5 rounded-card-lg border border-white/8 bg-white/5 p-1.5 shadow-glass-inset-sm">
+                {[
+                  ['Hoje', 'IA pronta'],
+                  ['Foco', 'treino'],
+                  ['Ritmo', 'online'],
+                ].map(([label, value]) => (
+                  <div key={label} className="rounded-[15px] bg-slate-950/42 px-2 py-2 text-center">
+                    <p className="text-[9px] font-black uppercase tracking-[0.12em] text-slate-500">{label}</p>
+                    <p className="mt-0.5 truncate text-[11px] font-black text-slate-100">{value}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Actions grid */}
+              <div className="relative grid grid-cols-2 gap-2 pb-1">
                 {FAB_ACTIONS.map((action, i) => (
                   <motion.button
                     key={action.id}
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.04, type: 'spring', damping: 25, stiffness: 300 }}
+                    transition={{ delay: i * 0.035, type: 'spring', damping: 26, stiffness: 320 }}
                     onClick={() => handleAction(action)}
-                    className="group flex min-h-24 flex-col items-center justify-center gap-2 rounded-[19px] border border-white/8 bg-white/6 px-2 py-3 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] transition-all duration-250 hover:border-emerald-200/24 hover:bg-emerald-300/9 hover:shadow-[0_12px_30px_-18px_rgba(16,185,129,0.55),inset_0_1px_0_rgba(255,255,255,0.14)] active:scale-[0.96]"
+                    className={`group relative flex min-h-21 items-center gap-3 overflow-hidden rounded-card-lg border border-white/9 bg-white/6 px-3 py-3 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.09)] transition-all duration-300 hover:shadow-[0_16px_34px_-22px_rgba(16,185,129,0.52),inset_0_1px_0_rgba(255,255,255,0.15)] active:scale-[0.97] ${ACTION_TONES[action.tone].card} ${action.id === 'qa' ? 'col-span-2' : ''}`}
                   >
-                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[16px] border border-emerald-200/18 bg-linear-to-b from-emerald-300/18 via-emerald-400/9 to-slate-950/45 text-emerald-200 shadow-[0_8px_20px_-16px_rgba(16,185,129,0.72),inset_0_1px_0_rgba(255,255,255,0.13)] transition-all duration-250 group-hover:text-emerald-100 group-hover:shadow-[0_0_24px_rgba(16,185,129,0.24),inset_0_1px_0_rgba(255,255,255,0.18)]">
+                    <span className={`absolute inset-x-3 top-0 h-px bg-linear-to-r ${ACTION_TONES[action.tone].rail} opacity-0 transition-opacity duration-300 group-hover:opacity-80`} aria-hidden="true" />
+                    <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-[17px] shadow-[0_8px_20px_-16px_rgba(16,185,129,0.72),inset_0_1px_0_rgba(255,255,255,0.14)] transition-all duration-300 group-hover:shadow-[0_0_24px_rgba(16,185,129,0.24),inset_0_1px_0_rgba(255,255,255,0.2)] ${ACTION_TONES[action.tone].icon}`}>
                       {action.icon}
                     </div>
-                    <span className="text-center text-[11px] font-bold leading-tight text-slate-100">
-                      {action.label}
-                    </span>
+                    <div className="min-w-0 flex-1">
+                      <span className="block truncate text-[14px] font-black leading-tight text-slate-50">{action.label}</span>
+                      <span className={`mt-0.5 block truncate text-[10px] font-black uppercase tracking-[0.12em] ${ACTION_TONES[action.tone].text}`}>{action.detail}</span>
+                    </div>
+                    <DSIcon name="chevronRight" size={15} className="shrink-0 text-white/24 transition-all duration-300 group-hover:translate-x-0.5 group-hover:text-white/50" />
                   </motion.button>
                 ))}
-
-                {/* Close button — completes the grid */}
-                <motion.button
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: FAB_ACTIONS.length * 0.04, type: 'spring', damping: 25, stiffness: 300 }}
-                  onClick={() => {
-                    haptic()
-                    onClose()
-                  }}
-                  className="group flex min-h-24 flex-col items-center justify-center gap-2 rounded-[19px] border border-white/8 bg-white/5 px-2 py-3 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.07)] transition-all duration-250 hover:border-rose-200/20 hover:bg-rose-300/8 active:scale-[0.96]"
-                >
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[16px] border border-white/10 bg-slate-950/58 text-slate-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.10)] transition-colors group-hover:text-rose-100">
-                    <DSIcon name="x" size={20} />
-                  </div>
-                  <span className="text-center text-[11px] font-bold leading-tight text-slate-400 group-hover:text-rose-100">
-                    Fechar
-                  </span>
-                </motion.button>
               </div>
             </div>
           </motion.div>

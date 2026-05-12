@@ -7,6 +7,14 @@
 
 ## [Unreleased] — 2026-04-08 — Sprint 11-15 (UX Nutrição/Exercícios)
 
+### 🎨 Release v4.4.2 — Treino ativo Figma style + IA Assistente premium (2026-05-12)
+- **IA Assistente mais premium:** [src/components/navigation/student-fab-menu.tsx](src/components/navigation/student-fab-menu.tsx) troca o grid pesado por um command sheet em glass cinético, com header compacto, métricas rápidas, ações em 2 colunas, detalhes por intenção e fechamento no topo.
+- **Plano como command center:** [src/app/(app)/plano/page.tsx](src/app/(app)/plano/page.tsx) ganha hero escuro com grid fino, progresso visual, intensidade/sets/local/meta, roteiro semanal com pill de avanço e cards de músculos/exercícios com mais profundidade, hierarquia e affordance.
+- **Treino ativo mais cinematográfico:** [src/app/(app)/treino-ativo/page.tsx](src/app/(app)/treino-ativo/page.tsx) recebe palco de vídeo/fallback abaixo do tempo com overlay do exercício atual, métricas dark, handle do painel branco e rows de sets mais táteis, mantendo a lógica de edição, descanso, fila offline e finalização.
+- **Conclusão como recibo de performance:** [src/app/(app)/treino-ativo/concluido/page.tsx](src/app/(app)/treino-ativo/concluido/page.tsx) adiciona nota, percentual concluído, métricas dark em tiles e painel branco de continuidade com acabamento mais premium.
+- **Validação local:** `npm run type-check`, `git diff --check`, grep de regras Tailwind/DSIcon e `npm run build` passaram; build exportou 143 páginas.
+- **Smoke auth:** pré-deploy revalidado com token temporário via painel admin e mint em memória: `node scripts/run-auth-smoke.mjs` passou 9/0/4, sem mutações.
+
 ### 🏋️ Release v4.4.1 — Treino ativo premium + finalização B2C confiável (2026-05-12)
 - **Finalização B2C corrigida na origem:** [workers/api/workouts.ts](workers/api/workouts.ts) agora trata `/workouts/b2c/complete` antes do validador legado `/:id/complete`, evitando erro `exercises_completed: expected array` ao finalizar treino pelo app aluno.
 - **Planos IA sem `exercise_id` não quebram mais:** a conclusão aceita `exercise_id` nulo e usa fallback seguro por nome do exercício em `exercise_logs`, salvando também `name`, `muscle_group` e `completed_at` para histórico, streaks e desafios.

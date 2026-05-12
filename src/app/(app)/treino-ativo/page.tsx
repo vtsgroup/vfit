@@ -270,48 +270,67 @@ export default function TreinoAtivoPage() {
   const currentExercisePercent = Math.round((completedSets / Math.max(totalSets, 1)) * 100)
 
   return (
-    <div className="mx-auto min-h-dvh max-w-lg bg-bg-primary pb-36">
+    <div className="relative mx-auto min-h-dvh max-w-lg overflow-hidden bg-slate-950 pb-36">
       {/* ─── Header ─── */}
-      <div className="sticky top-0 z-30 border-b border-white/8 bg-slate-950/95 px-4 py-3 text-white shadow-[0_16px_44px_-28px_rgba(2,6,23,0.95)] backdrop-blur-xl">
+      <div className="sticky top-0 z-30 border-b border-white/8 bg-slate-950/96 px-4 py-3 text-white shadow-[0_18px_54px_-34px_rgba(2,6,23,0.95)] backdrop-blur-xl">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-emerald-200/55 to-transparent"
+        />
         <div className="flex items-center justify-between gap-3">
           <button
             type="button"
             aria-label="Cancelar treino"
             onClick={() => setShowCancelConfirm(true)}
-            className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/6 text-white/72 transition-all duration-200 hover:bg-white/10 hover:text-white active:scale-95"
+            className="flex h-12 w-12 items-center justify-center rounded-[18px] border border-white/10 bg-white/6 text-white/72 shadow-glass-inset-sm transition-all duration-200 hover:bg-white/10 hover:text-white active:scale-95"
           >
             <DSIcon name="x" size={22} />
           </button>
           <div className="min-w-0 text-center">
-            <p className="truncate text-[11px] font-bold uppercase text-white/55">
+            <p className="truncate text-[10px] font-black uppercase tracking-[0.16em] text-emerald-200/60">
               Dia {workout.day_number} — {workout.day_name}
             </p>
-            <p className="text-3xl font-black tabular-nums leading-none text-white">
+            <p className="mt-0.5 text-[42px] font-black tabular-nums leading-none text-white">
               {formatTimer(elapsed)}
             </p>
+            <p className="mt-1 text-[9px] font-black uppercase tracking-[0.14em] text-white/30">Tempo total</p>
           </div>
           <Button
             size="sm"
             onClick={handleFinish}
             loading={finishState === 'saving'}
-            className="h-10 px-4"
+            className="h-12 px-5 shadow-[0_6px_0_0_#064e3b,0_20px_34px_-24px_rgba(16,185,129,0.95)]"
           >
             Finalizar
           </Button>
         </div>
 
-        <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white/10">
+        <div className="mt-3 h-1.5 overflow-hidden rounded-full border border-white/6 bg-white/8">
           <div
-            className="h-full rounded-full bg-brand-primary transition-all duration-500"
+            className="h-full rounded-full bg-linear-to-r from-emerald-300 via-brand-primary to-lime-300 transition-all duration-500"
             style={{ width: `${workoutProgressPercent}%` }}
           />
         </div>
       </div>
 
       {/* ─── Exercise hero / video ─── */}
-      <div className="bg-slate-950 px-4 pb-5 pt-3 text-white">
-        <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/6 shadow-[0_18px_60px_-30px_rgba(16,185,129,0.45)]">
-          <div className="relative aspect-video bg-slate-900">
+      <div className="relative bg-slate-950 px-4 pb-7 pt-3 text-white">
+        <div className="pointer-events-none absolute -left-24 top-0 h-52 w-52 rounded-full bg-emerald-400/16 blur-3xl" aria-hidden="true" />
+        <div className="pointer-events-none absolute -right-24 top-10 h-48 w-48 rounded-full bg-sky-400/12 blur-3xl" aria-hidden="true" />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-32 opacity-60"
+          style={{
+            backgroundImage:
+              'linear-gradient(rgba(16,185,129,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(16,185,129,0.08) 1px, transparent 1px)',
+            backgroundSize: '22px 22px',
+            maskImage: 'linear-gradient(to top, black, transparent)',
+            WebkitMaskImage: 'linear-gradient(to top, black, transparent)',
+          }}
+        />
+        <div className="relative overflow-hidden rounded-[32px] border border-white/12 bg-white/7 shadow-[0_24px_80px_-34px_rgba(16,185,129,0.62),inset_0_1px_0_rgba(255,255,255,0.12)]">
+          <div className="pointer-events-none absolute inset-x-8 top-0 z-10 h-px bg-linear-to-r from-transparent via-emerald-100/70 to-transparent" aria-hidden="true" />
+          <div className="relative aspect-16/10 bg-slate-900">
             {demoVideoUrl ? (
               <video
                 className="h-full w-full object-cover"
@@ -323,32 +342,40 @@ export default function TreinoAtivoPage() {
                 src={demoVideoUrl}
               />
             ) : (
-              <div className="flex h-full flex-col items-center justify-center gap-3 bg-linear-to-b from-slate-800 to-slate-950 text-center">
-                <span className="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/8 text-emerald-300">
+              <div className="relative flex h-full flex-col items-center justify-center gap-4 bg-linear-to-b from-slate-800 via-slate-900 to-slate-950 text-center">
+                <div className="pointer-events-none absolute inset-0 opacity-55" aria-hidden="true" style={{ backgroundImage: 'radial-gradient(circle at center, rgba(16,185,129,0.2), transparent 42%)' }} />
+                <span className="relative flex h-17 w-17 items-center justify-center rounded-2xl border border-emerald-300/24 bg-emerald-300/11 text-emerald-300 shadow-[0_0_34px_rgba(16,185,129,0.24),inset_0_1px_0_rgba(255,255,255,0.12)]">
                   <DSIcon name="video" size={26} />
                 </span>
-                <div>
+                <div className="relative">
                   <p className="text-sm font-black text-white">Demonstração em breve</p>
-                  <p className="mt-1 text-xs text-white/55">Siga as séries abaixo com controle total.</p>
+                  <p className="mt-1 text-xs font-medium text-white/55">Execução guiada pelas séries abaixo.</p>
                 </div>
               </div>
             )}
-            <div className="absolute left-3 top-3 rounded-full border border-white/10 bg-black/45 px-3 py-1 text-xs font-bold text-white backdrop-blur-md">
+            <div className="absolute left-3 top-3 rounded-full border border-white/10 bg-black/50 px-3 py-1 text-xs font-black text-white backdrop-blur-md">
               {completedSets}/{totalSets} sets
             </div>
+            <div className="absolute right-3 top-3 rounded-full border border-emerald-300/20 bg-emerald-300/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.14em] text-emerald-100 backdrop-blur-md">
+              Ex. {workout.current_exercise_index + 1}/{totalExercises}
+            </div>
+            <div className="absolute inset-x-3 bottom-3 rounded-card-lg border border-white/10 bg-slate-950/62 px-3 py-2 backdrop-blur-md">
+              <p className="text-[9px] font-black uppercase tracking-[0.16em] text-emerald-200/66">Agora</p>
+              <p className="mt-0.5 truncate text-sm font-black text-white">{currentEx.exercise_name}</p>
+            </div>
           </div>
-          <div className="grid grid-cols-3 divide-x divide-white/8 border-t border-white/8 bg-slate-950/72">
+          <div className="grid grid-cols-3 divide-x divide-white/8 border-t border-white/8 bg-slate-950/78">
             <div className="px-3 py-3">
-              <p className="text-[10px] font-bold uppercase text-white/45">Progresso</p>
-              <p className="mt-0.5 text-lg font-black tabular-nums text-white">{currentExercisePercent}%</p>
+              <p className="text-[10px] font-black uppercase tracking-[0.12em] text-white/42">Progresso</p>
+              <p className="mt-1 text-xl font-black tabular-nums text-white">{currentExercisePercent}%</p>
             </div>
             <div className="px-3 py-3">
-              <p className="text-[10px] font-bold uppercase text-white/45">Descanso</p>
-              <p className="mt-0.5 text-lg font-black tabular-nums text-white">{currentEx.rest_seconds}s</p>
+              <p className="text-[10px] font-black uppercase tracking-[0.12em] text-white/42">Descanso</p>
+              <p className="mt-1 text-xl font-black tabular-nums text-white">{currentEx.rest_seconds}s</p>
             </div>
             <div className="px-3 py-3">
-              <p className="text-[10px] font-bold uppercase text-white/45">Conexão</p>
-              <p className={cn('mt-0.5 flex items-center gap-1.5 text-sm font-black', online ? 'text-emerald-300' : 'text-amber-300')}>
+              <p className="text-[10px] font-black uppercase tracking-[0.12em] text-white/42">Conexão</p>
+              <p className={cn('mt-1 flex items-center gap-1.5 text-sm font-black', online ? 'text-emerald-300' : 'text-amber-300')}>
                 <DSIcon name={online ? 'wifi' : 'wifiOff'} size={15} />
                 {online ? 'Online' : 'Offline'}
               </p>
@@ -358,7 +385,9 @@ export default function TreinoAtivoPage() {
       </div>
 
       {/* ─── Exercise navigator ─── */}
-      <div className="flex gap-2 overflow-x-auto px-4 py-4">
+      <div className="relative rounded-t-[34px] bg-white pt-4 shadow-[0_-26px_60px_-48px_rgba(16,185,129,0.9)]">
+      <div className="mx-auto mb-3 h-1.5 w-12 rounded-full bg-slate-200" />
+      <div className="flex gap-2 overflow-x-auto px-4 pb-4 pt-1">
         {workout.exercises.map((ex, i) => {
           const isActive = i === workout.current_exercise_index
           const isDone = ex.skipped || ex.sets.every((s) => s.completed)
@@ -369,12 +398,12 @@ export default function TreinoAtivoPage() {
               onClick={() => { goToExercise(i); hapticLight() }}
               className={`flex h-12 min-w-12 shrink-0 items-center justify-center rounded-2xl px-4 text-sm font-black transition-all duration-200 ${
                 isActive
-                  ? 'bg-brand-primary text-white shadow-[0_4px_0_0_#166534,0_12px_24px_-18px_rgba(22,101,52,0.9)]'
+                  ? 'bg-brand-primary text-white shadow-[0_5px_0_0_#166534,0_18px_30px_-22px_rgba(22,101,52,0.9)]'
                   : isDone
-                    ? 'bg-brand-primary/10 text-brand-primary'
+                    ? 'bg-brand-primary/10 text-brand-primary ring-1 ring-brand-primary/20'
                     : ex.skipped
                       ? 'bg-bg-secondary text-text-muted line-through'
-                      : 'bg-bg-secondary text-text-secondary'
+                      : 'bg-slate-50 text-slate-500 ring-1 ring-slate-100'
               }`}
             >
               {i + 1}
@@ -385,18 +414,31 @@ export default function TreinoAtivoPage() {
 
       {/* ─── Current exercise ─── */}
       <div className="px-4">
-        <div className="mb-1 flex items-center gap-2">
-          <h2 className="text-lg font-bold text-text-primary">{currentEx.exercise_name}</h2>
+        <div className="relative mb-4 overflow-hidden rounded-[26px] border border-slate-200 bg-white p-4 shadow-[0_20px_54px_-42px_rgba(15,23,42,0.9)]">
+          <div className="pointer-events-none absolute inset-x-8 h-px bg-linear-to-r from-transparent via-slate-300/70 to-transparent" aria-hidden="true" />
+          <div className="mb-3 flex items-start justify-between gap-3">
+            <div className="min-w-0">
+              <p className="text-[10px] font-black uppercase tracking-[0.16em] text-slate-400">Exercício atual</p>
+              <h2 className="mt-1 text-[27px] font-black leading-tight text-slate-950">{currentEx.exercise_name}</h2>
+            </div>
+            <div className="flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-2xl bg-slate-950 text-white shadow-[0_5px_0_0_#0f172a]">
+              <span className="text-[10px] font-black uppercase text-white/45">Set</span>
+              <span className="text-lg font-black leading-none">{completedSets}/{totalSets}</span>
+            </div>
+          </div>
+          <div className="h-1.5 overflow-hidden rounded-full bg-slate-100">
+            <div className="h-full rounded-full bg-linear-to-r from-emerald-400 to-lime-300 transition-all duration-500" style={{ width: `${currentExercisePercent}%` }} />
+          </div>
+          <p className="mt-3 text-xs font-medium text-slate-500">
+            {currentEx.muscle_group || 'Grupo muscular'} · descanso {currentEx.rest_seconds}s
+            {currentEx.notes && ` · ${currentEx.notes}`}
+          </p>
           {currentEx.is_superset && (
             <span className="rounded-full bg-purple-500/10 px-2 py-0.5 text-[10px] font-semibold text-purple-400">
               SUPER SET
             </span>
           )}
         </div>
-        <p className="mb-4 text-xs text-text-muted">
-          {currentEx.muscle_group || ''} · {completedSets}/{totalSets} sets
-          {currentEx.notes && ` · ${currentEx.notes}`}
-        </p>
 
         {/* ─── Sets table ─── */}
         {finishState === 'failed' && (
@@ -413,13 +455,13 @@ export default function TreinoAtivoPage() {
           </div>
         )}
 
-        <div className="overflow-hidden rounded-2xl border border-border-primary">
+          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50/80 p-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]">
           {/* Table header */}
-          <div className="grid grid-cols-[48px_1fr_1fr_48px] bg-bg-tertiary px-3 py-2">
-            <span className="text-[10px] font-semibold uppercase text-text-muted">Set</span>
-            <span className="text-center text-[10px] font-semibold uppercase text-text-muted">Reps</span>
-            <span className="text-center text-[10px] font-semibold uppercase text-text-muted">Peso (kg)</span>
-            <span className="text-right text-[10px] font-semibold uppercase text-text-muted">✓</span>
+          <div className="grid grid-cols-[48px_1fr_1fr_48px] px-2 pb-2 pt-1">
+            <span className="text-[10px] font-black uppercase tracking-[0.12em] text-slate-400">Set</span>
+            <span className="text-center text-[10px] font-black uppercase tracking-[0.12em] text-slate-400">Reps</span>
+            <span className="text-center text-[10px] font-black uppercase tracking-[0.12em] text-slate-400">Peso</span>
+            <span className="text-right text-[10px] font-black uppercase tracking-[0.12em] text-slate-400">Ok</span>
           </div>
 
           {/* Sets */}
@@ -431,12 +473,12 @@ export default function TreinoAtivoPage() {
             return (
               <div
                 key={s.id}
-                className={`grid grid-cols-[48px_1fr_1fr_48px] items-center border-t border-border-primary px-3 py-2.5 transition-colors ${
-                  s.completed ? 'bg-white/3' : 'bg-bg-secondary'
+                className={`mb-2 grid grid-cols-[48px_1fr_1fr_48px] items-center rounded-[18px] border px-3 py-2.5 shadow-[0_12px_24px_-22px_rgba(15,23,42,0.65)] transition-all ${
+                  s.completed ? 'border-emerald-500/22 bg-emerald-500/8' : 'border-slate-200 bg-white'
                 }`}
               >
                 {/* Set number / warmup */}
-                <span className={`text-sm font-bold ${s.is_warmup ? 'text-amber-500' : 'text-text-primary'}`}>
+                <span className={`text-sm font-black ${s.is_warmup ? 'text-amber-500' : 'text-slate-950'}`}>
                   {s.is_warmup ? 'A' : s.id}
                 </span>
 
@@ -447,7 +489,7 @@ export default function TreinoAtivoPage() {
                       ref={inputRef}
                       type="number"
                       inputMode="numeric"
-                      className="w-14 rounded-lg bg-bg-tertiary px-2 py-1 text-center text-sm font-bold text-text-primary outline-none ring-2 ring-brand-primary"
+                      className="w-14 rounded-xl bg-slate-100 px-2 py-1 text-center text-sm font-black text-slate-950 outline-none ring-2 ring-brand-primary"
                       defaultValue={s.reps}
                       onBlur={(e) => {
                         const val = parseInt(e.target.value)
@@ -462,7 +504,7 @@ export default function TreinoAtivoPage() {
                     <button
                       type="button"
                       onClick={() => setEditingCell({ ex: exIdx, set: setIdx, field: 'reps' })}
-                      className="rounded-lg px-3 py-1 text-sm font-bold text-text-primary hover:bg-bg-tertiary transition-colors"
+                      className="rounded-xl px-3 py-1 text-sm font-black text-slate-950 transition-colors hover:bg-slate-100"
                     >
                       {s.reps}
                     </button>
@@ -477,7 +519,7 @@ export default function TreinoAtivoPage() {
                       type="number"
                       inputMode="decimal"
                       step="0.5"
-                      className="w-16 rounded-lg bg-bg-tertiary px-2 py-1 text-center text-sm font-bold text-text-primary outline-none ring-2 ring-brand-primary"
+                      className="w-16 rounded-xl bg-slate-100 px-2 py-1 text-center text-sm font-black text-slate-950 outline-none ring-2 ring-brand-primary"
                       defaultValue={s.weight_kg}
                       onBlur={(e) => {
                         const val = parseFloat(e.target.value)
@@ -492,7 +534,7 @@ export default function TreinoAtivoPage() {
                     <button
                       type="button"
                       onClick={() => setEditingCell({ ex: exIdx, set: setIdx, field: 'weight' })}
-                      className="rounded-lg px-3 py-1 text-sm font-bold text-text-primary hover:bg-bg-tertiary transition-colors"
+                      className="rounded-xl px-3 py-1 text-sm font-black text-slate-950 transition-colors hover:bg-slate-100"
                     >
                       {s.weight_kg}
                     </button>
@@ -504,10 +546,10 @@ export default function TreinoAtivoPage() {
                   <button
                     type="button"
                     onClick={() => handleCompleteSet(exIdx, setIdx)}
-                    className={`flex h-7 w-7 items-center justify-center rounded-lg transition-all ${
+                    className={`flex h-8 w-8 items-center justify-center rounded-xl transition-all ${
                       s.completed
-                        ? 'bg-brand-primary text-white scale-110'
-                        : 'border border-border-primary bg-bg-tertiary text-text-muted hover:border-brand-primary'
+                        ? 'scale-110 bg-brand-primary text-white shadow-[0_4px_0_0_#166534]'
+                        : 'border border-slate-200 bg-slate-50 text-slate-400 hover:border-brand-primary'
                     }`}
                   >
                     {s.completed && <DSIcon name="check" size={14} />}
@@ -523,7 +565,7 @@ export default function TreinoAtivoPage() {
           <Button
             variant="secondary"
             onClick={() => { addSet(workout.current_exercise_index); hapticLight() }}
-            className="flex-1"
+            className="flex-1 shadow-[0_5px_0_0_#0f172a]"
           >
             <DSIcon name="plus" size={14} />
             Adicionar Set
@@ -532,7 +574,7 @@ export default function TreinoAtivoPage() {
             <Button
               variant="secondary"
               onClick={() => { markAllSets(workout.current_exercise_index); hapticSuccess() }}
-              className="flex-1"
+              className="flex-1 shadow-[0_5px_0_0_#0f172a]"
             >
               <DSIcon name="checkCheck" size={14} />
               Marcar Todos
@@ -591,6 +633,7 @@ export default function TreinoAtivoPage() {
             </button>
           </div>
         )}
+      </div>
       </div>
 
       {/* ─── Floating CTA — Next exercise / Finish ─── */}

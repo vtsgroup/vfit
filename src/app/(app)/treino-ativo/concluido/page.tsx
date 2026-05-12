@@ -177,23 +177,46 @@ export default function TreinoConcluido() {
   }
 
   const newTotalXP = (xpData?.balance ?? 0) + summary.xp_earned
+  const completionRate = Math.round((summary.exercises_completed / Math.max(workout.exercises.length, 1)) * 100)
+  const performanceGrade = completionRate >= 100 ? 'S' : completionRate >= 80 ? 'A' : completionRate >= 60 ? 'B' : 'C'
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-bg-primary">
+    <div className="relative min-h-screen overflow-hidden bg-slate-950">
+      <div className="pointer-events-none absolute -left-32 top-10 h-64 w-64 rounded-full bg-emerald-400/18 blur-3xl" aria-hidden="true" />
+      <div className="pointer-events-none absolute -right-32 top-28 h-56 w-56 rounded-full bg-sky-400/12 blur-3xl" aria-hidden="true" />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-150 opacity-60"
+        className="pointer-events-none absolute inset-x-0 top-0 h-150 opacity-80"
         style={{
-          background:
-            'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(34,197,94,0.18) 0%, rgba(34,197,94,0.06) 35%, transparent 70%), radial-gradient(ellipse 60% 40% at 80% 20%, rgba(245,158,11,0.10) 0%, transparent 60%)',
+          backgroundImage:
+            'linear-gradient(rgba(110,231,183,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(110,231,183,0.08) 1px, transparent 1px), linear-gradient(135deg, rgba(34,197,94,0.18), transparent 42%)',
+          backgroundSize: '24px 24px, 24px 24px, 100% 100%',
         }}
       />
 
       <Confetti show={showConfetti} />
 
-      <div className="relative mx-auto max-w-lg px-4 pb-32 pt-10 animate-in fade-in-0 slide-in-from-bottom-2 duration-500">
-        <div className="mb-8 flex flex-col items-center text-center">
-          <div className="relative mb-5 flex h-28 w-28 items-center justify-center">
+      <div className="relative mx-auto max-w-lg px-4 pb-32 pt-6 text-white animate-in fade-in-0 slide-in-from-bottom-2 duration-500">
+        <div className="relative mb-5 overflow-hidden rounded-[34px] border border-white/12 bg-white/7 p-5 shadow-[0_30px_96px_-42px_rgba(16,185,129,0.78),inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-xl">
+          <div className="pointer-events-none absolute inset-x-12 top-0 h-px bg-linear-to-r from-transparent via-emerald-100/70 to-transparent" aria-hidden="true" />
+          <div className="mb-5 flex items-start justify-between gap-4">
+            <div>
+              <div className="inline-flex items-center gap-2 rounded-full border border-emerald-300/20 bg-emerald-300/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-emerald-100 shadow-glass-inset-sm">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-300 shadow-[0_0_14px_rgba(110,231,183,0.85)]" />
+                Concluído
+              </div>
+              <h1 className="mt-4 text-[38px] font-black leading-none text-white">
+                {motivation.title}
+              </h1>
+              <p className="mt-3 text-sm font-semibold text-white/58">
+                {workout.day_name} · Dia {workout.day_number}
+              </p>
+              <div className="mt-4 flex flex-wrap gap-1.5">
+                <span className="rounded-full bg-slate-950/44 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-slate-200">Nota {performanceGrade}</span>
+                <span className="rounded-full bg-emerald-300/12 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-emerald-100">{completionRate}% completo</span>
+              </div>
+            </div>
+            <div className="relative flex h-24 w-24 shrink-0 items-center justify-center">
             <div
               data-anim
               className="absolute inset-0 rounded-full blur-2xl"
@@ -215,7 +238,7 @@ export default function TreinoConcluido() {
             <div
               className="relative flex h-22 w-22 items-center justify-center rounded-full"
               style={{
-                background: 'radial-gradient(circle at 30% 30%, rgba(34,197,94,0.32) 0%, rgba(22,101,52,0.22) 60%, rgba(5,10,18,0.85) 100%)',
+                background: 'radial-gradient(circle at 30% 30%, rgba(134,239,172,0.40) 0%, rgba(22,101,52,0.24) 58%, rgba(5,10,18,0.92) 100%)',
                 border: '1px solid rgba(74,222,128,0.4)',
                 boxShadow: '0 0 40px rgba(34,197,94,0.35), inset 0 1px 0 rgba(255,255,255,0.12)',
               }}
@@ -223,14 +246,26 @@ export default function TreinoConcluido() {
               <DSIcon name="trophy" size={44} className="text-emerald-300" />
             </div>
           </div>
+          </div>
 
-          <h1 className="text-[26px] font-black tracking-tight leading-tight text-text-primary">
-            {motivation.title}
-          </h1>
-          <p className="mt-1.5 text-[13px] font-medium text-text-secondary">
-            {workout.day_name} · Dia {workout.day_number}
-          </p>
+          <div className="grid grid-cols-3 gap-2 border-t border-white/8 pt-4">
+            <div className="rounded-[18px] border border-white/8 bg-slate-950/34 px-2.5 py-2 shadow-glass-inset-sm">
+              <p className="text-[10px] font-black uppercase tracking-[0.14em] text-white/36">Tempo</p>
+              <p className="mt-1 text-lg font-black tabular-nums text-white">{formatDuration(summary.duration_seconds)}</p>
+            </div>
+            <div className="rounded-[18px] border border-white/8 bg-slate-950/34 px-2.5 py-2 shadow-glass-inset-sm">
+              <p className="text-[10px] font-black uppercase tracking-[0.14em] text-white/36">Sets</p>
+              <p className="mt-1 text-lg font-black tabular-nums text-white">{summary.total_sets}</p>
+            </div>
+            <div className="rounded-[18px] border border-white/8 bg-slate-950/34 px-2.5 py-2 shadow-glass-inset-sm">
+              <p className="text-[10px] font-black uppercase tracking-[0.14em] text-white/36">Volume</p>
+              <p className="mt-1 text-lg font-black tabular-nums text-white">{summary.total_volume_kg > 0 ? `${summary.total_volume_kg.toLocaleString('pt-BR')}kg` : `${summary.total_reps}r`}</p>
+            </div>
+          </div>
         </div>
+
+        <div className="-mx-4 rounded-t-[36px] bg-white px-4 pb-6 pt-5 text-slate-950 shadow-[0_-28px_80px_-48px_rgba(16,185,129,0.75)]">
+        <div className="mx-auto mb-4 h-1.5 w-12 rounded-full bg-slate-200" />
 
         <div
           className={`mb-4 grid grid-cols-2 gap-3 transition-all duration-500 ${statsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
@@ -254,18 +289,16 @@ export default function TreinoConcluido() {
             />
             <div className="relative flex flex-col items-center">
               <div className="mb-1.5 flex h-9 w-9 items-center justify-center rounded-xl border border-emerald-400/30 bg-emerald-500/10">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
-                  <path d="M13 2L4.5 13.5H11L10 22L20.5 10H14L13 2Z" fill="#4ADE80" />
-                </svg>
+                <DSIcon name="zap" size={16} className="text-emerald-400" />
               </div>
               <span
                 data-anim
-                className="text-[28px] font-black tabular-nums leading-none text-emerald-300"
+                className="text-[28px] font-black tabular-nums leading-none text-emerald-500"
                 style={{ animation: 'counterUp 0.7s ease-out 0.3s backwards' }}
               >
                 +{summary.xp_earned}
               </span>
-              <span className="mt-1.5 text-[10px] font-bold uppercase tracking-wider text-emerald-200/70">
+              <span className="mt-1.5 text-[10px] font-bold uppercase tracking-wider text-emerald-700">
                 XP Ganhos
               </span>
               {xpData && (
@@ -290,12 +323,12 @@ export default function TreinoConcluido() {
               </div>
               <span
                 data-anim
-                className="text-[28px] font-black tabular-nums leading-none text-amber-300"
+                className="text-[28px] font-black tabular-nums leading-none text-amber-500"
                 style={{ animation: 'counterUp 0.7s ease-out 0.4s backwards' }}
               >
                 {currentStreak}
               </span>
-              <span className="mt-1.5 text-[10px] font-bold uppercase tracking-wider text-amber-200/70">
+              <span className="mt-1.5 text-[10px] font-bold uppercase tracking-wider text-amber-700">
                 Dias seguidos
               </span>
               {streakData?.next_milestone && (
@@ -342,7 +375,7 @@ export default function TreinoConcluido() {
         )}
 
         <div
-          className={`mt-6 overflow-hidden rounded-2xl border border-brand-primary/22 bg-brand-primary/6 p-4 transition-all duration-500 delay-200 ${statsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+          className={`mt-6 overflow-hidden rounded-2xl border border-brand-primary/22 bg-brand-primary/6 p-4 shadow-[0_18px_46px_-38px_rgba(16,185,129,0.75)] transition-all duration-500 delay-200 ${statsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
         >
           <div className="flex items-start gap-3">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-brand-primary/30 bg-brand-primary/12">
@@ -381,6 +414,7 @@ export default function TreinoConcluido() {
             <DSIcon name="arrowRight" size={14} />
           </button>
         </div>
+        </div>
       </div>
     </div>
   )
@@ -391,18 +425,16 @@ const StatCard = memo(function StatCard({
 }: { icon: DSIconName; iconColor: string; label: string; value: string }) {
   return (
     <div
-      className="relative flex flex-col items-center gap-1.5 overflow-hidden rounded-2xl p-4 text-center"
+      className="relative flex flex-col items-center gap-1.5 overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 text-center shadow-[0_18px_44px_-36px_rgba(15,23,42,0.9)]"
       style={{
-        background: 'linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%)',
-        border: '1px solid rgba(255,255,255,0.08)',
-        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)',
+        background: 'linear-gradient(135deg, rgba(255,255,255,1) 0%, rgba(248,250,252,1) 100%)',
       }}
     >
-      <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/8 bg-white/4">
+      <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-slate-50">
         <DSIcon name={icon} size={16} className={iconColor} />
       </div>
-      <span className="text-[18px] font-black tabular-nums leading-tight text-text-primary">{value}</span>
-      <span className="text-[10px] font-semibold uppercase tracking-wider text-text-muted">{label}</span>
+      <span className="text-[18px] font-black tabular-nums leading-tight text-slate-950">{value}</span>
+      <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">{label}</span>
     </div>
   )
 })
