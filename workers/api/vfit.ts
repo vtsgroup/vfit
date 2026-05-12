@@ -462,7 +462,7 @@ async function ensureVfitFoodLibrarySeeded(env: AppContext['Bindings']): Promise
        standard_portion_g, is_library, is_custom, creator_id, tags
      )
      SELECT
-       seed.id,
+      seed.id::uuid,
        seed.name,
        seed.category,
        seed.calories,
