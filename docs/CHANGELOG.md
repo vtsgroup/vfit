@@ -7,6 +7,13 @@
 
 ## [Unreleased] — 12/04/2026 — Paridade admin de saques + redirect domínio legado
 
+### 🥗 Unreleased — Nutrição autocomplete + registro manual real (2026-05-12)
+- Autocomplete de alimentos mais confiável em [workers/api/vfit.ts](../workers/api/vfit.ts): `GET /vfit/foods` agora busca com e sem acentos, por nome/tags/descrição, priorizando alimentos customizados e seed PT-BR (`seed:v1`).
+- Busca mobile com debounce em [src/hooks/use-vfit-nutrition.ts](../src/hooks/use-vfit-nutrition.ts) e [src/app/(app)/nutricao/page.tsx](../src/app/(app)/nutricao/page.tsx), mantendo sugestões anteriores enquanto o usuário digita.
+- Cadastro manual agora realmente “salva e registra”: valida calorias, proteínas, carboidratos, gorduras e porção; cria o alimento e registra a refeição no dia selecionado para atualizar macros e recentes.
+- Validação local: `npm run type-check`, `npm run type-check:workers`, ESLint focado, `npm run foods:sync:dry`, `git diff --check`, `npm run build` e consulta Neon somente leitura para `pao/pão/feijao/frango/banana` passaram.
+- Deploy liberado pelo smoke auth: após renovação dos tokens, `npm run smoke:auth:local` passou com 8 checks aprovados, 0 falhas e 4 skips por mutações desabilitadas; próximo passo operacional é o deploy patch v4.3.6.
+
 ### 🎨 Unreleased — Landing aluno-first conversion polish (2026-05-11)
 - Home principal reposicionada para conversão de alunos com hero mais direto, social proof reforçado, remoção de blocos redundantes e CTAs mais claros em [src/app/page.tsx](../src/app/page.tsx).
 - Seções da landing alinhadas ao fluxo aluno-first em [src/components/landing/hero.tsx](../src/components/landing/hero.tsx), [src/components/landing/features.tsx](../src/components/landing/features.tsx), [src/components/landing/how-it-works-v2.tsx](../src/components/landing/how-it-works-v2.tsx), [src/components/landing/numbers-section.tsx](../src/components/landing/numbers-section.tsx), [src/components/landing/gamification-section.tsx](../src/components/landing/gamification-section.tsx), [src/components/landing/cta-section.tsx](../src/components/landing/cta-section.tsx), [src/components/landing/footer.tsx](../src/components/landing/footer.tsx), [src/components/landing/about-section.tsx](../src/components/landing/about-section.tsx), [src/components/landing/blog-section.tsx](../src/components/landing/blog-section.tsx), [src/components/landing/faq-section.tsx](../src/components/landing/faq-section.tsx), [src/components/landing/navbar.tsx](../src/components/landing/navbar.tsx) e [src/components/landing/pricing-koyeb.tsx](../src/components/landing/pricing-koyeb.tsx).

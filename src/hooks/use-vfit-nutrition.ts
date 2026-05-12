@@ -5,7 +5,7 @@
  * Conecta aos endpoints: GET /vfit/foods, POST /vfit/meals, GET /vfit/meals/today
  */
 
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { keepPreviousData, useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '@/lib/api-client'
 import { useAuthStore } from '@/stores/auth-store'
 
@@ -101,21 +101,24 @@ export interface CreateFoodInput {
 /**
  * Buscar alimentos (com search e categoria)
  */
-export function useFoodSearch(search: string, category?: string) {
+export function useFoodSearch(search: string, category?: string, limit = 30) {
   const isReady = useAuthStore((s) => s.isAuthenticated && s.isHydrated)
+  const normalizedSearch = search.trim()
 
   const params = new URLSearchParams()
-  if (search) params.set('search', search)
+  if (normalizedSearch) params.set('search', normalizedSearch)
   if (category) params.set('category', category)
+  params.set('limit', String(limit))
   const qs = params.toString()
 
   return useQuery({
-    queryKey: ['vfit-foods', search, category],
+    queryKey: ['vfit-foods', normalizedSearch, category, limit],
     queryFn: async () => {
       const res = await api.get<VfitFood[]>(`/vfit/foods${qs ? `?${qs}` : ''}`)
       return res.data
     },
-    enabled: isReady && search.length >= 2,
+    enabled: isReady && normalizedSearch.length >= 2,
+    placeholderData: keepPreviousData,
     staleTime: 60_000,
   })
 }
@@ -213,6 +216,7 @@ export function useLogMeal() {
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['vfit-meals-today'] })
+      qc.invalidateQueries({ queryKey: ['vfit-foods-recent'] })
     },
   })
 }

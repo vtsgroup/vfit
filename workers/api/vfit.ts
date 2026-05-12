@@ -403,6 +403,11 @@ const FoodInputSchema = z.object({
   standard_portion_g: z.coerce.number().int().min(1).max(5000).default(100),
 })
 
+const SEARCH_ACCENT_FROM = 'áàâãäéèêëíìîïóòôõöúùûüçñ'
+const SEARCH_ACCENT_TO = 'aaaaaeeeeiiiiooooouuuucn'
+const normalizedSql = (expression: string) =>
+  `translate(lower(${expression}), '${SEARCH_ACCENT_FROM}', '${SEARCH_ACCENT_TO}')`
+
 async function foodFavoritesTableExists(env: AppContext['Bindings']): Promise<boolean> {
   const row = await pgQueryOne<{ exists: boolean }>(
     env,
@@ -566,24 +571,27 @@ vfit.delete('/foods/:id/favorite', async (c) => {
 vfit.get('/foods', async (c) => {
   const userId = c.get('userId')
   const env = c.env
-  const search = c.req.query('search') || c.req.query('q') || ''
+  const search = (c.req.query('search') || c.req.query('q') || '').trim()
   const category = c.req.query('category')
   const limit = Math.min(parseInt(c.req.query('limit') || '50', 10), 100)
   const hasFavorites = await foodFavoritesTableExists(env)
 
   let where = `WHERE (f.is_library = true OR f.creator_id = $1)`
   const searchPattern = search ? `%${search}%` : ''
-  const params: unknown[] = [userId, searchPattern]
-  let idx = 3
+  const prefixPattern = search ? `${search}%` : ''
+  const params: unknown[] = [userId, searchPattern, prefixPattern, search]
+  let idx = 5
 
   if (search) {
     where += ` AND (
       f.name ILIKE $2
+      OR ${normalizedSql('f.name')} LIKE ${normalizedSql('$2::text')}
       OR COALESCE(f.description, '') ILIKE $2
+      OR ${normalizedSql("COALESCE(f.description, '')")} LIKE ${normalizedSql('$2::text')}
       OR EXISTS (
         SELECT 1
         FROM unnest(COALESCE(f.tags, ARRAY[]::text[])) AS tag
-        WHERE tag ILIKE $2
+        WHERE tag ILIKE $2 OR ${normalizedSql('tag')} LIKE ${normalizedSql('$2::text')}
       )
     )`
   }
@@ -601,8 +609,15 @@ vfit.get('/foods', async (c) => {
      ${hasFavorites ? `LEFT JOIN vfit_food_favorites fav ON fav.food_id = f.id AND fav.user_id = $1` : ``}
      ${where}
      ORDER BY
-       CASE WHEN $2 <> '' AND f.name ILIKE $2 THEN 0 ELSE 1 END,
-       CASE WHEN $2 <> '' AND COALESCE(f.description, '') ILIKE $2 THEN 1 ELSE 2 END,
+       CASE
+         WHEN $4 <> '' AND ${normalizedSql('f.name')} = ${normalizedSql('$4::text')} THEN 0
+         WHEN $4 <> '' AND ${normalizedSql('f.name')} LIKE ${normalizedSql('$3::text')} THEN 1
+         WHEN $4 <> '' AND ${normalizedSql('f.name')} LIKE ${normalizedSql('$2::text')} THEN 2
+         WHEN $4 <> '' AND ${normalizedSql("COALESCE(f.description, '')")} LIKE ${normalizedSql('$2::text')} THEN 3
+         ELSE 4
+       END,
+       f.is_custom DESC,
+        CASE WHEN COALESCE(f.tags, '{}'::text[]) @> ARRAY['seed:v1']::text[] THEN 0 ELSE 1 END,
        f.name
      LIMIT $${idx}`,
     params

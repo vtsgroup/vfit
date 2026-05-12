@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import { api } from '@/lib/api-client'
+import { toast } from '@/stores/app-store'
 import { MacroRingChart } from '@/components/nutrition/macro-ring-chart'
 import { BarcodeScanner } from '@/components/nutrition/barcode-scanner'
 import { FoodCamera } from '@/components/nutrition/food-camera'
@@ -30,6 +31,7 @@ import {
   MEAL_TYPE_ICONS,
   formatMacro,
   type MealType,
+  type CreateFoodInput,
   type VfitFood,
 } from '@/hooks/use-vfit-nutrition'
 import { useStudentProfile, useLinkNutritionist } from '@/hooks/use-student-app'
@@ -85,6 +87,47 @@ const EMPTY_MANUAL_FOOD = {
   standard_portion_g: '100',
 }
 
+type ManualFoodDraft = typeof EMPTY_MANUAL_FOOD
+type ManualFoodBuildResult =
+  | { ok: true; input: CreateFoodInput & { standard_portion_g: number } }
+  | { ok: false; error: string }
+
+function parseManualFoodNumber(value: string): number | null {
+  if (value.trim() === '') return null
+  const parsed = Number(value)
+  return Number.isFinite(parsed) && parsed >= 0 ? parsed : null
+}
+
+function buildManualFoodInput(draft: ManualFoodDraft): ManualFoodBuildResult {
+  const name = draft.name.trim()
+  if (name.length < 2) return { ok: false, error: 'Informe o nome do alimento com pelo menos 2 letras.' }
+
+  const calories = parseManualFoodNumber(draft.calories)
+  const protein = parseManualFoodNumber(draft.protein_g)
+  const carbs = parseManualFoodNumber(draft.carbs_g)
+  const fat = parseManualFoodNumber(draft.fat_g)
+  const portion = parseManualFoodNumber(draft.standard_portion_g)
+
+  if (calories === null) return { ok: false, error: 'Informe as calorias da porção.' }
+  if (protein === null) return { ok: false, error: 'Informe a proteína da porção, mesmo que seja 0g.' }
+  if (carbs === null) return { ok: false, error: 'Informe os carboidratos da porção, mesmo que seja 0g.' }
+  if (fat === null) return { ok: false, error: 'Informe as gorduras da porção, mesmo que seja 0g.' }
+  if (portion === null || portion < 1) return { ok: false, error: 'Informe uma porção válida em gramas.' }
+
+  return {
+    ok: true,
+    input: {
+      name,
+      category: draft.category,
+      calories,
+      protein_g: protein,
+      carbs_g: carbs,
+      fat_g: fat,
+      standard_portion_g: Math.round(portion),
+    },
+  }
+}
+
 function getFoodCategoryConfig(category: string) {
   const key = (category || '').toLowerCase()
   return FOOD_CATEGORY_CONFIG[key] ?? FOOD_CATEGORY_CONFIG['default']
@@ -119,6 +162,8 @@ export default function NutricaoPage() {
   const [quantity, setQuantity] = useState(100)
   const [showManualFood, setShowManualFood] = useState(false)
   const [manualFood, setManualFood] = useState(EMPTY_MANUAL_FOOD)
+  const [manualFoodError, setManualFoodError] = useState('')
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('')
   const [showBarcode, setShowBarcode] = useState(false)
   const [showFoodCamera, setShowFoodCamera] = useState(false)
   const [nutritionistReferralCode, setNutritionistReferralCode] = useState('')
@@ -128,7 +173,9 @@ export default function NutricaoPage() {
   const linkNutritionist = useLinkNutritionist()
 
   const { data: dailyData, isLoading } = useMealsToday(selectedDate)
-  const { data: foods, isLoading: searchLoading } = useFoodSearch(searchQuery)
+  const trimmedSearchQuery = searchQuery.trim()
+  const isTypingSearch = trimmedSearchQuery.length >= 2 && debouncedSearchQuery !== trimmedSearchQuery
+  const { data: foods, isLoading: foodsLoading, isFetching: foodsFetching } = useFoodSearch(debouncedSearchQuery)
   const { data: recentFoods = [] } = useRecentFoods(showSearch && !selectedFood)
   const { data: favoriteFoods = [] } = useFavoriteFoods(showSearch && !selectedFood)
   const { data: targets = { calories: 2000, protein: 150, carbs: 250, fat: 65 } } =
@@ -141,6 +188,8 @@ export default function NutricaoPage() {
   const meals = useMemo(() => dailyData?.meals ?? [], [dailyData?.meals])
   const favoriteIds = useMemo(() => new Set(favoriteFoods.map((food) => food.id)), [favoriteFoods])
   const selectedFoodIsFavorite = selectedFood ? Boolean(selectedFood.is_favorite || favoriteIds.has(selectedFood.id)) : false
+  const searchLoading = trimmedSearchQuery.length >= 2 && (foodsLoading || isTypingSearch)
+  const searchRefreshing = trimmedSearchQuery.length >= 2 && foodsFetching && !foodsLoading && !isTypingSearch
 
   const grouped = useMemo(() => {
     const map = new Map<MealType, typeof meals>()
@@ -162,6 +211,11 @@ export default function NutricaoPage() {
     if (studentProfile?.id) params.set('student_id', studentProfile.id)
     return `${base}/contato?${params.toString()}`
   }, [studentProfile?.id])
+
+  useEffect(() => {
+    const id = window.setTimeout(() => setDebouncedSearchQuery(trimmedSearchQuery), 180)
+    return () => window.clearTimeout(id)
+  }, [trimmedSearchQuery])
 
   useEffect(() => {
     let cancelled = false
@@ -224,39 +278,65 @@ export default function NutricaoPage() {
       },
       {
         onSuccess: () => {
+          toast.success('Refeição registrada', `${selectedFood.name} entrou nos macros do dia.`)
           setSelectedFood(null)
           setSearchQuery('')
           setShowSearch(false)
           setQuantity(100)
         },
+        onError: (error) => {
+          toast.error('Não foi possível registrar', error instanceof Error ? error.message : 'Tente novamente em alguns segundos.')
+        },
       }
     )
   }
 
-  function handleCreateManualFood() {
-    const name = manualFood.name.trim()
-    if (!name) return
+  function updateManualFoodField(field: keyof ManualFoodDraft, value: string) {
+    setManualFood((food) => ({ ...food, [field]: value }))
+    if (manualFoodError) setManualFoodError('')
+  }
 
-    createFood.mutate(
-      {
-        name,
-        category: manualFood.category,
-        calories: Number(manualFood.calories) || 0,
-        protein_g: Number(manualFood.protein_g) || 0,
-        carbs_g: Number(manualFood.carbs_g) || 0,
-        fat_g: Number(manualFood.fat_g) || 0,
-        standard_portion_g: Math.max(1, Number(manualFood.standard_portion_g) || 100),
-      },
-      {
-        onSuccess: (food) => {
-          setSelectedFood(food)
-          setQuantity(food.standard_portion_g || 100)
-          setSearchQuery(food.name)
-          setShowManualFood(false)
-          setManualFood(EMPTY_MANUAL_FOOD)
-        },
+  async function handleCreateManualFood() {
+    const result = buildManualFoodInput(manualFood)
+    if (!result.ok) {
+      setManualFoodError(result.error)
+      return
+    }
+
+    let createdFood: VfitFood | null = null
+
+    try {
+      createdFood = await createFood.mutateAsync(result.input)
+      await logMeal.mutateAsync({
+        food_id: createdFood.id,
+        meal_type: selectedMealType,
+        quantity_g: result.input.standard_portion_g,
+        logged_at: selectedDate,
+      })
+
+      toast.success('Alimento registrado', `${createdFood.name} entrou nos macros do dia.`)
+      setSelectedFood(null)
+      setQuantity(100)
+      setSearchQuery('')
+      setShowSearch(false)
+      setShowManualFood(false)
+      setManualFood(EMPTY_MANUAL_FOOD)
+      setManualFoodError('')
+    } catch (error) {
+      if (createdFood) {
+        setSelectedFood(createdFood)
+        setQuantity(createdFood.standard_portion_g || result.input.standard_portion_g)
+        setShowManualFood(false)
+        setManualFood(EMPTY_MANUAL_FOOD)
+        setManualFoodError('')
+        toast.error('Alimento salvo, mas não registrado', 'Revise a porção e toque em Registrar para somar no dia.')
+        return
       }
-    )
+
+      const message = error instanceof Error ? error.message : 'Tente novamente em alguns segundos.'
+      setManualFoodError(message)
+      toast.error('Não foi possível salvar o alimento', message)
+    }
   }
 
   function pickFood(food: VfitFood) {
@@ -796,12 +876,12 @@ export default function NutricaoPage() {
                       <div className="space-y-3">
                         <Input
                           value={manualFood.name}
-                          onChange={(e) => setManualFood((food) => ({ ...food, name: e.target.value }))}
+                          onChange={(e) => updateManualFoodField('name', e.target.value)}
                           placeholder="Nome do alimento"
                         />
                         <select
                           value={manualFood.category}
-                          onChange={(e) => setManualFood((food) => ({ ...food, category: e.target.value }))}
+                          onChange={(e) => updateManualFoodField('category', e.target.value)}
                           className="w-full rounded-xl border border-white/8 bg-bg-secondary px-3 py-2.5 text-sm text-text-primary outline-none focus:border-brand-primary"
                         >
                           {MANUAL_FOOD_CATEGORIES.map((category) => (
@@ -811,53 +891,77 @@ export default function NutricaoPage() {
                         <div className="grid grid-cols-2 gap-2">
                           <input
                             type="number"
+                            min={0}
+                            step="0.1"
+                            inputMode="decimal"
                             value={manualFood.calories}
-                            onChange={(e) => setManualFood((food) => ({ ...food, calories: e.target.value }))}
+                            onChange={(e) => updateManualFoodField('calories', e.target.value)}
                             placeholder="kcal"
                             className="rounded-xl border border-white/8 bg-bg-secondary px-3 py-2.5 text-sm text-text-primary outline-none focus:border-brand-primary"
                           />
                           <input
                             type="number"
+                            min={1}
+                            step={1}
+                            inputMode="numeric"
                             value={manualFood.standard_portion_g}
-                            onChange={(e) => setManualFood((food) => ({ ...food, standard_portion_g: e.target.value }))}
+                            onChange={(e) => updateManualFoodField('standard_portion_g', e.target.value)}
                             placeholder="Porção g"
                             className="rounded-xl border border-white/8 bg-bg-secondary px-3 py-2.5 text-sm text-text-primary outline-none focus:border-brand-primary"
                           />
                           <input
                             type="number"
+                            min={0}
+                            step="0.1"
+                            inputMode="decimal"
                             value={manualFood.protein_g}
-                            onChange={(e) => setManualFood((food) => ({ ...food, protein_g: e.target.value }))}
+                            onChange={(e) => updateManualFoodField('protein_g', e.target.value)}
                             placeholder="Proteína g"
                             className="rounded-xl border border-white/8 bg-bg-secondary px-3 py-2.5 text-sm text-text-primary outline-none focus:border-brand-primary"
                           />
                           <input
                             type="number"
+                            min={0}
+                            step="0.1"
+                            inputMode="decimal"
                             value={manualFood.carbs_g}
-                            onChange={(e) => setManualFood((food) => ({ ...food, carbs_g: e.target.value }))}
+                            onChange={(e) => updateManualFoodField('carbs_g', e.target.value)}
                             placeholder="Carbo g"
                             className="rounded-xl border border-white/8 bg-bg-secondary px-3 py-2.5 text-sm text-text-primary outline-none focus:border-brand-primary"
                           />
                           <input
                             type="number"
+                            min={0}
+                            step="0.1"
+                            inputMode="decimal"
                             value={manualFood.fat_g}
-                            onChange={(e) => setManualFood((food) => ({ ...food, fat_g: e.target.value }))}
+                            onChange={(e) => updateManualFoodField('fat_g', e.target.value)}
                             placeholder="Gordura g"
                             className="rounded-xl border border-white/8 bg-bg-secondary px-3 py-2.5 text-sm text-text-primary outline-none focus:border-brand-primary"
                           />
                         </div>
+                        <p className="text-[11px] leading-relaxed text-text-muted">
+                          Valores por porção. Calorias, proteínas, carboidratos e gorduras são obrigatórios.
+                        </p>
+                        {manualFoodError && (
+                          <div className="flex items-start gap-2 rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700">
+                            <DSIcon name="alertCircle" size={14} className="mt-0.5 shrink-0" />
+                            <span>{manualFoodError}</span>
+                          </div>
+                        )}
                       </div>
                       <Button
                         className="mt-4 w-full"
                         onClick={handleCreateManualFood}
-                        loading={createFood.isPending}
-                        disabled={!manualFood.name.trim()}
+                        loading={createFood.isPending || logMeal.isPending}
+                        disabled={!manualFood.name.trim() || createFood.isPending || logMeal.isPending}
                       >
                         <DSIcon name="save" size={16} />
-                        Salvar e registrar
+                        Salvar e registrar no dia
                       </Button>
                     </div>
                   </div>
-                ) : searchQuery.length < 2 ? (
+                ) : trimmedSearchQuery.length < 2 ? (
                   <div className="flex flex-col items-center justify-center pt-16 text-center">
                     <DSIcon name="search" size={32} className="mb-3 text-text-muted/50" />
                     <p className="text-sm text-text-muted">
@@ -969,6 +1073,14 @@ export default function NutricaoPage() {
                   </div>
                 ) : (
                   <div className="space-y-2">
+                    <div className="flex items-center justify-between px-1 pb-1 pt-2">
+                      <p className="text-[11px] font-bold uppercase text-text-muted">
+                        Sugestões para &quot;{trimmedSearchQuery}&quot;
+                      </p>
+                      {searchRefreshing && (
+                        <DSIcon name="loader" size={13} className="animate-spin text-text-muted" />
+                      )}
+                    </div>
                     {foods.map((food) => renderFoodRow(food))}
                   </div>
                 )}

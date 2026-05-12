@@ -7,6 +7,13 @@
 
 ## [Unreleased] — 2026-04-08 — Sprint 11-15 (UX Nutrição/Exercícios)
 
+### 🥗 Unreleased — Nutrição autocomplete + registro manual real (2026-05-12)
+- **Autocomplete de alimentos mais confiável:** [workers/api/vfit.ts](workers/api/vfit.ts) agora normaliza busca com e sem acentos em `GET /vfit/foods`, prioriza alimentos customizados e a seed PT-BR (`seed:v1`) antes da base importada genérica.
+- **Busca mobile com debounce:** [src/hooks/use-vfit-nutrition.ts](src/hooks/use-vfit-nutrition.ts) e [src/app/(app)/nutricao/page.tsx](src/app/(app)/nutricao/page.tsx) mantêm sugestões anteriores durante digitação, limitam resultados e exibem estado de atualização sem piscar a lista.
+- **Cadastro manual cumpre “salvar e registrar”:** [src/app/(app)/nutricao/page.tsx](src/app/(app)/nutricao/page.tsx) passa a validar calorias, proteínas, carboidratos, gorduras e porção; ao salvar, cria o alimento e registra a refeição no dia selecionado, atualizando macros do dia e recentes.
+- **Validação local:** `npm run type-check`, `npm run type-check:workers`, `npx eslint 'src/app/(app)/nutricao/page.tsx' 'src/hooks/use-vfit-nutrition.ts'`, `npm run foods:sync:dry`, `git diff --check`, `npm run build` e consulta Neon somente leitura para `pao/pão/feijao/frango/banana` passaram.
+- **Deploy liberado pelo smoke auth:** após renovação dos tokens, `npm run smoke:auth:local` passou com 8 checks aprovados, 0 falhas e 4 skips por mutações desabilitadas. Próximo passo operacional: deploy patch v4.3.6.
+
 ### 🎨 Unreleased — Landing aluno-first conversion polish (2026-05-11)
 - **Home com conversão aluno-first:** [src/app/page.tsx](src/app/page.tsx), [src/components/landing/hero.tsx](src/components/landing/hero.tsx), [src/components/landing/features.tsx](src/components/landing/features.tsx), [src/components/landing/numbers-section.tsx](src/components/landing/numbers-section.tsx), [src/components/landing/how-it-works-v2.tsx](src/components/landing/how-it-works-v2.tsx), [src/components/landing/gamification-section.tsx](src/components/landing/gamification-section.tsx), [src/components/landing/cta-section.tsx](src/components/landing/cta-section.tsx) e [src/components/landing/footer.tsx](src/components/landing/footer.tsx) reposicionam a landing principal para alunos, removem blocos genéricos/duplicados de escolha de perfil e deixam profissionais como caminho secundário.
 - **CTAs e header no Design System:** [src/components/landing/navbar.tsx](src/components/landing/navbar.tsx) usa botões do DS no header mobile/desktop, corrige o glow azul legado para verde VFIT e mantém ícones via `DSIcon`.

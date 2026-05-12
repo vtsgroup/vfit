@@ -793,6 +793,23 @@ const id = generateId() // nanoid
 
 ---
 
+## B2C VFIT Nutrição (`/api/v1/vfit`)
+
+| Método | Path | Auth | Descrição |
+|---|---|---|---|
+| `GET` | `/foods?search=&category=&limit=` | ✅ | Autocomplete de alimentos da biblioteca + custom do usuário. Busca normalizada com e sem acentos, tags e descrição; prioriza custom e seed PT-BR. |
+| `GET` | `/foods/recent?limit=` | ✅ | Alimentos registrados recentemente pelo usuário. |
+| `GET` | `/foods/favorites?limit=` | ✅ | Alimentos favoritos do usuário. |
+| `POST` | `/foods` | ✅ | Cadastro manual/customizado. Requer `name`, `category`, `calories`, `protein_g`, `carbs_g`, `fat_g` e `standard_portion_g`. |
+| `POST` | `/foods/:id/favorite` | ✅ | Favorita alimento disponível para o usuário. |
+| `DELETE` | `/foods/:id/favorite` | ✅ | Remove alimento dos favoritos. |
+| `POST` | `/meals` | ✅ | Registra refeição e calcula `calories_total`, `protein_total`, `carbs_total`, `fat_total` proporcionalmente à quantidade em gramas. |
+| `GET` | `/meals/today?date=` | ✅ | Lista refeições e totais do dia para o usuário autenticado. |
+
+Contrato de macros: todo alimento precisa ter calorias, proteínas, carboidratos e gorduras. O frontend valida campos manuais antes de chamar `POST /foods`; o backend valida via Zod e `POST /meals` recalcula totais a partir de `standard_portion_g`.
+
+---
+
 ## Tabelas Principais (Neon PostgreSQL)
 
 | Tabela | Descrição | Relações |

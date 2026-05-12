@@ -1,6 +1,6 @@
 # VFIT Production Completion — Tracking
 
-> Última atualização: 2026-05-11 · Status: landing pública aluno-first revisada localmente; P2.21/P2.22/P2.24/P2.26 publicados; P2.23/P2.25 em progresso; seed de alimentos 152 itens sincronizado no Neon; hotfix visual v3.6.3 compacta First Win mobile após smoke pós-deploy · Branch de execução: `main` · Versão live observada: `3.6.3`.
+> Última atualização: 2026-05-12 · Status: nutrição manual/autocomplete corrigida localmente; smoke auth renovado e aprovado; P2.21/P2.22/P2.24/P2.26 publicados, com hotfix de UX pronto para deploy patch v4.3.6; P2.23/P2.25 em progresso; seed de alimentos 152 itens sincronizado no Neon · Branch de execução: `main` · Versão live observada: `3.6.3`.
 
 ## Progresso geral
 
@@ -8,7 +8,7 @@
 Fases: 0/9 concluídas
 Tasks: 29/134 concluídas
 Bloqueadores P0 abertos: 2 + WhatsApp Unipile 401 + rotação NEON_DATABASE_URL pendente
-Gate produção: LIBERADO COM EXCEÇÃO OPERACIONAL WHATSAPP
+Gate produção: LIBERADO PARA DEPLOY PATCH após smoke auth renovado (8 passed, 0 failed)
 ```
 
 ### Deploys executados
@@ -197,7 +197,7 @@ Objetivo: aluno conseguir treinar, evoluir, comprar, registrar nutrição e ente
 - [~] **P2.23** Definir tabela/contrato canônico para estado de execução de treino e remover ambiguidade entre estados antigos/novos. `P0` — execução B2C local usa `vfit-active-workout`; persistência final usa `workout_sessions`/`exercise_logs` com `client_completion_id`; `workout_session_state` legado ainda existe para outro fluxo.
 - [x] **P2.24** Implementar fluxo de execução Start -> In Progress -> Rest -> Next -> Finish com editar/undo de sets. `P0` — tela ativa já permite editar reps/carga, desfazer set, descanso, próximo exercício e finalizar; finalização agora persiste no backend ou fila offline.
 - [~] **P2.25** Implementar offline queue para sets de treino com sync-on-reconnect e proteção contra duplicidade. `P0` — fila de conclusão do treino implementada com replay autenticado e índice único `client_completion_id`; ainda falta fila set-a-set e Playwright offline.
-- [x] **P2.26** Melhorar meal logging com busca real, entrada manual, recentes e favoritos antes de câmera/barcode. `P0` — API e UI agora suportam busca, recentes, favoritos, cadastro manual de alimento e registro imediato de refeição.
+- [x] **P2.26** Melhorar meal logging com busca real, entrada manual, recentes e favoritos antes de câmera/barcode. `P0` — API e UI suportam busca, recentes, favoritos, cadastro manual e registro imediato de refeição; hotfix local de 2026-05-12 adiciona autocomplete com debounce, busca acento-insensível e “Salvar e registrar no dia” com atualização dos macros.
 - [ ] **P2.27** Criar Playwright student-first: iniciar treino, concluir treino, registrar refeição e validar progresso/empty state. `P0`
 
 **Gate Phase 2:** aluno novo consegue entrar, receber plano, treinar, ver progresso, registrar nutrição e comprar/usar plano da loja.
@@ -253,6 +253,14 @@ Validação desta entrega:
 - `scripts/sync-vfit-foods.mjs` Neon ✅: 152 inseridos; total biblioteca 10152.
 - `npm run foods:sync:dry` ✅
 - `npm run type-check && npm run type-check:workers` ✅
+
+Hotfix local — 2026-05-12:
+
+- Root cause: a ação “Salvar e registrar” do cadastro manual apenas criava o alimento e abria a tela de registro; o usuário precisava tocar em “Registrar” depois, então os macros do dia não mudavam imediatamente.
+- Fix: `/nutricao` agora valida macros obrigatórios, cria o alimento manual e registra a refeição no dia selecionado no mesmo clique; `useLogMeal` também invalida recentes.
+- Busca: `GET /vfit/foods` normaliza acentos, prioriza custom/seed PT-BR e a UI usa debounce para autocomplete sem flicker.
+- Validação: `npm run type-check`, `npm run type-check:workers`, ESLint focado, `npm run foods:sync:dry`, `git diff --check`, `npm run build` e consulta Neon somente leitura para buscas comuns passaram.
+- Deploy: `npm run smoke:auth:local` aprovado após renovação de tokens (8 passed, 0 failed, 4 skipped por mutações desabilitadas); deploy patch v4.3.6 liberado.
 
 ---
 
