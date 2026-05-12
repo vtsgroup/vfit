@@ -11,6 +11,9 @@
 - [src/app/(app)/plano/page.tsx](../src/app/(app)/plano/page.tsx) agora traduz os slugs do onboarding (`gym_large`, `gym_small`, `bodyweight`, `tone`, `gain_muscle`, `lose_weight`) para labels humanos no hero e nos chips do plano.
 - Motivo: validação live do v4.4.2 mostrou valores internos aparecendo no app aluno, o que quebrava o acabamento premium.
 - Validação local: `npm run type-check` e `git diff --check` passaram antes da publicação patch.
+- Deploy v4.4.3 publicado em produção com commit/tag `6b5674f8`; API health pós-deploy healthy; smoke auth pós-deploy passou com 9 passed, 0 failed, 4 skipped.
+- QA visual live validou `/plano?deploy=v4.4.3` com `Academia completa` e `Definição`, IA Assistente suspenso redesenhado, `/treino-ativo` renderizando cockpit online e `/treino-ativo/concluido` renderizando recibo de performance.
+- Exceção operacional: WhatsApp start/end seguiu com bypass documentado porque Unipile respondeu 401 `invalid_credentials`.
 
 ### 🎨 Release v4.4.2 — Treino ativo Figma style + IA Assistente premium (2026-05-12)
 - [src/components/navigation/student-fab-menu.tsx](../src/components/navigation/student-fab-menu.tsx) foi redesenhado como command sheet IA em glass cinético, com header compacto, métricas rápidas, ações em 2 colunas e estados táteis mais refinados.

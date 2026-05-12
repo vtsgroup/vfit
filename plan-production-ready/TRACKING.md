@@ -1,6 +1,6 @@
 # VFIT Production Completion — Tracking
 
-> Última atualização: 2026-05-12 · Status: v4.4.3 em preparação para corrigir labels internos do plano após validação live do v4.4.2; v4.4.2 publicado com polish Figma style em `/plano`, `/treino-ativo`, `/treino-ativo/concluido` e IA Assistente; v4.4.1 segue como base de finalização B2C confiável; nutrição/autocomplete segue funcionando desde v4.4.0 · Branch de execução: `main` · Versão live observada: `4.4.2`.
+> Última atualização: 2026-05-12 · Status: v4.4.3 publicado com hotfix de labels humanos no plano e QA visual live em `/plano`, IA Assistente, `/treino-ativo` e `/treino-ativo/concluido`; v4.4.2 segue como release base do polish Figma style; v4.4.1 segue como base de finalização B2C confiável; nutrição/autocomplete segue funcionando desde v4.4.0 · Branch de execução: `main` · Versão live observada: `4.4.3`.
 
 ## Progresso geral
 
@@ -8,14 +8,14 @@
 Fases: 0/9 concluídas
 Tasks: 31/134 concluídas
 Bloqueadores P0 abertos: 2 + WhatsApp Unipile 401 + rotação NEON_DATABASE_URL pendente
-Gate produção: v4.4.3 PRONTO PARA DEPLOY; type-check/diff aprovados; v4.4.2 health/API/smoke auth pós-deploy aprovados (9 passed, 0 failed, 4 skipped); WhatsApp segue com bypass por Unipile 401.
+Gate produção: v4.4.3 PUBLICADO; build/deploy Pages+Workers concluídos; API health pós-deploy healthy; smoke auth pós-deploy aprovado (9 passed, 0 failed, 4 skipped); QA visual live aprovado para plano/IA/treino/conclusão; WhatsApp segue com bypass por Unipile 401.
 ```
 
 ### Deploys executados
 
 | Versão | Data | Branch/commit | Escopo | Resultado |
 |---|---|---|---|---|
-| v4.4.3 | 2026-05-12 | `main` / patch release | Hotfix de labels humanos no hero/chips de `/plano` para slugs do onboarding | Pronto para publicação patch: `npm run type-check` e `git diff --check` aprovados; publicar com `--allow-no-whatsapp` enquanto Unipile segue 401. |
+| v4.4.3 | 2026-05-12 | `main` / `6b5674f8` | Hotfix de labels humanos no hero/chips de `/plano` para slugs do onboarding | Pages + Workers publicados; commit/tag/push concluídos; API health healthy; smoke auth pós-deploy 9/0/4; QA visual live confirmou labels humanos, IA command sheet, cockpit online e conclusão premium; WhatsApp bypass por Unipile 401. |
 | v4.4.2 | 2026-05-12 | `main` / `cb926346` | Polish Figma style em `/plano`, `/treino-ativo`, `/treino-ativo/concluido` e IA Assistente suspenso | Pages + Workers publicados; commit/tag/push concluídos; `https://api.vfit.app.br/health` healthy; smoke auth pós-deploy 9/0/4 com token temporário via painel admin; WhatsApp bypass por Unipile 401. |
 | v4.4.1 | 2026-05-12 | `main` / `bc94739e` | Treino ativo premium, finalização B2C confiável, fallback `exercise_id` nulo, status de conexão e vídeo/fallback abaixo do timer | Pages + Workers publicados; rota `/workouts/b2c/complete` validada sem shadowing por `/:id/complete`; POST smoke aceitou `exercise_id: null`, retornou `workout_id` e confirmou idempotência; UI live `/plano → /treino-ativo?day=1` validada; smoke auth 8/0/4; WhatsApp bypass por Unipile 401. |
 | v4.4.0 | 2026-05-12 | `main` / `15ce80af` | Nutrição autocomplete, seed ativa e normalização numérica | Pages + Workers publicados; autocomplete e registro de refeição validados em produção; smoke auth 8/0/4; WhatsApp bypass por Unipile 401. |

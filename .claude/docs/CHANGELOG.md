@@ -11,6 +11,9 @@
 - **Labels humanos no plano:** [src/app/(app)/plano/page.tsx](src/app/(app)/plano/page.tsx) traduz `gym_large`, `gym_small`, `bodyweight`, `tone`, `gain_muscle` e `lose_weight` para labels polidos no hero e nos chips.
 - **Motivo:** validação live do v4.4.2 mostrou slugs internos no app aluno, quebrando o acabamento premium do command center.
 - **Validação local:** `npm run type-check` e `git diff --check` passaram antes da publicação patch.
+- **Deploy:** v4.4.3 publicado com commit/tag `6b5674f8`; Pages + Workers concluídos; `https://api.vfit.app.br/health` healthy; smoke auth pós-deploy 9 passed, 0 failed, 4 skipped.
+- **QA visual live:** `/plano?deploy=v4.4.3` mostra `Academia completa` e `Definição`; IA Assistente suspenso abre como command sheet premium; `/treino-ativo` renderiza cockpit online; `/treino-ativo/concluido` renderiza recibo de performance.
+- **Exceção operacional:** WhatsApp start/end continuou em bypass por Unipile 401 `invalid_credentials`.
 
 ### 🎨 Release v4.4.2 — Treino ativo Figma style + IA Assistente premium (2026-05-12)
 - **IA Assistente mais premium:** [src/components/navigation/student-fab-menu.tsx](src/components/navigation/student-fab-menu.tsx) troca o grid pesado por um command sheet em glass cinético, com header compacto, métricas rápidas, ações em 2 colunas, detalhes por intenção e fechamento no topo.
