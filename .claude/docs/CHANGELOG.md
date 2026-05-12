@@ -13,7 +13,8 @@
 - **Treino ativo mais cinematográfico:** [src/app/(app)/treino-ativo/page.tsx](src/app/(app)/treino-ativo/page.tsx) recebe palco de vídeo/fallback abaixo do tempo com overlay do exercício atual, métricas dark, handle do painel branco e rows de sets mais táteis, mantendo a lógica de edição, descanso, fila offline e finalização.
 - **Conclusão como recibo de performance:** [src/app/(app)/treino-ativo/concluido/page.tsx](src/app/(app)/treino-ativo/concluido/page.tsx) adiciona nota, percentual concluído, métricas dark em tiles e painel branco de continuidade com acabamento mais premium.
 - **Validação local:** `npm run type-check`, `git diff --check`, grep de regras Tailwind/DSIcon e `npm run build` passaram; build exportou 143 páginas.
-- **Smoke auth:** pré-deploy revalidado com token temporário via painel admin e mint em memória: `node scripts/run-auth-smoke.mjs` passou 9/0/4, sem mutações.
+- **Deploy e validação produção:** publicado como `v4.4.2` via `node scripts/cf-deploy.js patch --allow-no-whatsapp`; Cloudflare Pages/Worker, commit `cb926346` e tag `v4.4.2` publicados; `https://api.vfit.app.br/health` respondeu healthy; smoke auth pós-deploy passou 9/0/4, sem mutações.
+- **Exceção operacional:** WhatsApp start/end segue falhando com Unipile 401 `invalid_credentials`, então o deploy foi feito com bypass já documentado.
 
 ### 🏋️ Release v4.4.1 — Treino ativo premium + finalização B2C confiável (2026-05-12)
 - **Finalização B2C corrigida na origem:** [workers/api/workouts.ts](workers/api/workouts.ts) agora trata `/workouts/b2c/complete` antes do validador legado `/:id/complete`, evitando erro `exercises_completed: expected array` ao finalizar treino pelo app aluno.

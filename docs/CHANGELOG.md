@@ -13,7 +13,8 @@
 - [src/app/(app)/treino-ativo/page.tsx](../src/app/(app)/treino-ativo/page.tsx) recebeu cockpit de execução mais moderno: timer com microcopy, palco de vídeo/fallback com overlay do exercício atual, painel branco com handle e rows de sets com toque mais físico.
 - [src/app/(app)/treino-ativo/concluido/page.tsx](../src/app/(app)/treino-ativo/concluido/page.tsx) foi refinada como recibo de performance, com nota, percentual concluído, métricas em tiles dark e painel de continuidade mais premium.
 - Validação local: `npm run type-check`, `git diff --check`, grep de regras Tailwind/DSIcon e `npm run build` passaram; build exportou 143 páginas.
-- Smoke auth pré-deploy recuperado com token temporário via painel admin: `node scripts/run-auth-smoke.mjs` passou com 9 checks aprovados, 0 falhas e 4 skips por mutações desabilitadas.
+- Deploy e validação produção: publicado como `v4.4.2` via `node scripts/cf-deploy.js patch --allow-no-whatsapp`; Cloudflare Pages/Worker, commit `cb926346` e tag `v4.4.2` publicados; `https://api.vfit.app.br/health` respondeu healthy; smoke auth pós-deploy passou 9/0/4.
+- Exceção operacional: WhatsApp start/end segue falhando com Unipile 401 `invalid_credentials`, então o deploy foi feito com bypass já documentado.
 
 ### 🏋️ Unreleased — Treino ativo premium + finalização B2C confiável (2026-05-12)
 - Finalização B2C corrigida na origem em [workers/api/workouts.ts](../workers/api/workouts.ts): `/workouts/b2c/complete` não cai mais no validador legado `/:id/complete`, removendo o erro `exercises_completed: expected array` no app aluno.
