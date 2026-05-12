@@ -849,7 +849,7 @@ export default function PlanoPage() {
             <Button
               size="lg"
               className="pointer-events-auto w-full"
-              onClick={() => router.push('/treino-ativo')}
+              onClick={() => router.push(`/treino-ativo?day=${activeDay}`)}
             >
               <DSIcon name="play" className="h-5 w-5" />
               {`INICIAR TREINO — Dia ${activeDay}`}

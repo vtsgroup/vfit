@@ -16,7 +16,7 @@ import { toast } from '@/stores/app-store'
 export interface PlanExercise {
   id: string
   plan_day_id: string
-  exercise_id: string
+  exercise_id: string | null
   sort_order: number
   sets: number
   reps: string
@@ -206,7 +206,7 @@ export function useCompleteWorkout() {
       started_at: string
       duration_seconds: number
       exercises: Array<{
-        exercise_id: string
+        exercise_id: string | null
         exercise_name: string
         muscle_group: string | null
         skipped: boolean
@@ -249,7 +249,7 @@ export function useUpdatePlanExercises() {
       dayId: string
       exercises: Array<{
         id?: string
-        exercise_id: string
+        exercise_id: string | null
         sets: number
         reps: string
         weight_kg?: number | null

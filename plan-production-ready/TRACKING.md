@@ -1,6 +1,6 @@
 # VFIT Production Completion — Tracking
 
-> Última atualização: 2026-05-12 · Status: nutrição manual/autocomplete corrigida localmente; smoke auth renovado e aprovado; P2.21/P2.22/P2.24/P2.26 publicados, com hotfix de UX + envelope API VFIT + seed automática da base ativa + normalização numérica pronto para deploy patch v4.4.0; P2.23/P2.25 em progresso; seed de alimentos 152 itens sincronizado no Neon e preparada para auto-seed no Worker · Branch de execução: `main` · Versão live observada: `4.3.9`.
+> Última atualização: 2026-05-12 · Status: v4.4.0 publicado com nutrição/autocomplete funcionando; hotfix local de treino ativo premium + finalização B2C confiável pronto para próximo patch; P2.21/P2.22/P2.24/P2.26 publicados; P2.23/P2.25 seguem em progresso com correção da rota B2C e fallback para `exercise_id` nulo já implementados · Branch de execução: `main` · Versão live observada: `4.4.0`.
 
 ## Progresso geral
 
@@ -8,13 +8,14 @@
 Fases: 0/9 concluídas
 Tasks: 29/134 concluídas
 Bloqueadores P0 abertos: 2 + WhatsApp Unipile 401 + rotação NEON_DATABASE_URL pendente
-Gate produção: LIBERADO PARA DEPLOY PATCH após smoke auth renovado (8 passed, 0 failed)
+Gate produção: PRONTO PARA DEPLOY PATCH após type-check/build/wrangler dry-run; smoke auth v4.4.0 aprovado (8 passed, 0 failed)
 ```
 
 ### Deploys executados
 
 | Versão | Data | Branch/commit | Escopo | Resultado |
 |---|---|---|---|---|
+| v4.4.0 | 2026-05-12 | `main` / `15ce80af` | Nutrição autocomplete, seed ativa e normalização numérica | Pages + Workers publicados; autocomplete e registro de refeição validados em produção; smoke auth 8/0/4; WhatsApp bypass por Unipile 401. |
 | v3.6.3 | 2026-05-10 | `main` / hotfix patch | First Win compacto em mobile | Em publicação: reduz altura do hero `/treinos` para não encostar na bottom navigation em viewport compacta. |
 | v3.6.2 | 2026-05-10 | `main` / deploy patch | Student-first funcional: nutrição real, treino ativo persistente/offline, polish premium `/treinos`, Wrangler local 4.90.0 | Deploy final em execução com smoke auth 7/0/2 e WhatsApp bypass por Unipile 401. |
 | v3.6.1 | 2026-05-10 | `main` / `d0d90cf6` | Student-first funcional inicial | Pages + Workers publicados; git push/tag OK; identificado que Worker usou Wrangler local 4.71.0, exigindo atualização local e redeploy. |
@@ -194,9 +195,9 @@ Objetivo: aluno conseguir treinar, evoluir, comprar, registrar nutrição e ente
 - [x] **P2.20** Implementar First Win operacional no topo de `/treinos`. `P1` — primeira dobra agora prioriza treino de hoje, progresso/meta/XP, nutrição e próxima ação de evolução de plano.
 - [x] **P2.21** Popular base alimentar inicial com seed idempotente e versionado (`vfit_foods`) com pelo menos 150 alimentos PT-BR. `P0` — migrations 0032/0033 aplicadas no Neon; `foods:sync` inseriu 152 alimentos PT-BR; total biblioteca Neon observado: 10152.
 - [x] **P2.22** Criar validação/API smoke para `GET /api/v1/vfit/foods` com busca, categoria e macros obrigatórios. `P0` — smoke autenticado pós-deploy validou `/vfit/foods?search=arroz|frango|banana`, `/vfit/foods/recent` e `/vfit/foods/favorites` com HTTP 200.
-- [~] **P2.23** Definir tabela/contrato canônico para estado de execução de treino e remover ambiguidade entre estados antigos/novos. `P0` — execução B2C local usa `vfit-active-workout`; persistência final usa `workout_sessions`/`exercise_logs` com `client_completion_id`; `workout_session_state` legado ainda existe para outro fluxo.
+- [~] **P2.23** Definir tabela/contrato canônico para estado de execução de treino e remover ambiguidade entre estados antigos/novos. `P0` — execução B2C local usa `vfit-active-workout`; persistência final usa `workout_sessions`/`exercise_logs` com `client_completion_id`; hotfix local corrige `/workouts/b2c/complete` e `exercise_id` nulo; `workout_session_state` legado ainda existe para outro fluxo.
 - [x] **P2.24** Implementar fluxo de execução Start -> In Progress -> Rest -> Next -> Finish com editar/undo de sets. `P0` — tela ativa já permite editar reps/carga, desfazer set, descanso, próximo exercício e finalizar; finalização agora persiste no backend ou fila offline.
-- [~] **P2.25** Implementar offline queue para sets de treino com sync-on-reconnect e proteção contra duplicidade. `P0` — fila de conclusão do treino implementada com replay autenticado e índice único `client_completion_id`; ainda falta fila set-a-set e Playwright offline.
+- [~] **P2.25** Implementar offline queue para sets de treino com sync-on-reconnect e proteção contra duplicidade. `P0` — fila de conclusão do treino implementada com replay autenticado, índice único `client_completion_id` e fallback local quando a finalização online falha; ainda falta fila set-a-set e Playwright offline.
 - [x] **P2.26** Melhorar meal logging com busca real, entrada manual, recentes e favoritos antes de câmera/barcode. `P0` — API e UI suportam busca, recentes, favoritos, cadastro manual e registro imediato de refeição; hotfix local de 2026-05-12 adiciona autocomplete com debounce, busca acento-insensível e “Salvar e registrar no dia” com atualização dos macros.
 - [ ] **P2.27** Criar Playwright student-first: iniciar treino, concluir treino, registrar refeição e validar progresso/empty state. `P0`
 

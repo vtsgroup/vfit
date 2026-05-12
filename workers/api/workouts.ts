@@ -21,7 +21,7 @@
 // DB: workouts, workout_exercises, workout_assignments, exercises (D1)
 // ============================================
 
-import { Hono } from 'hono'
+import { Hono, type Context } from 'hono'
 import type { AppContext, Bindings } from '@workers/types'
 import { authMiddleware, requireType } from '@workers/middleware/auth'
 import {
@@ -984,6 +984,11 @@ workouts.put('/:id/exercises/reorder', requireType('personal'), async (c) => {
 workouts.post('/:id/complete', requireType('student'), async (c) => {
   const studentId = c.get('userId')
   const workoutId = c.req.param('id')
+
+  if (workoutId === 'b2c') {
+    return completeB2CWorkout(c)
+  }
+
   const body = await c.req.json()
   const parsed = completeWorkoutSchema.parse(body)
 
@@ -1418,7 +1423,9 @@ workouts.get('/:id/export', requireType('personal'), async (c) => {
 // ============================================
 
 // POST /b2c/complete — Salvar treino B2C completo
-workouts.post('/b2c/complete', authMiddleware, async (c) => {
+workouts.post('/b2c/complete', completeB2CWorkout)
+
+async function completeB2CWorkout(c: Context<AppContext>) {
   const userId = c.get('userId')
   const body = await c.req.json<{
     client_completion_id?: string
@@ -1428,7 +1435,7 @@ workouts.post('/b2c/complete', authMiddleware, async (c) => {
     started_at: string
     duration_seconds: number
     exercises: Array<{
-      exercise_id: string
+      exercise_id: string | null
       exercise_name: string
       muscle_group: string | null
       skipped: boolean
@@ -1515,8 +1522,8 @@ workouts.post('/b2c/complete', authMiddleware, async (c) => {
     await pgQuery(
       c.env,
       `INSERT INTO workout_sessions (id, user_id, plan_id, plan_day_id,
-         started_at, duration_seconds, total_sets, total_reps, total_volume_kg, calories_estimated, status, client_completion_id)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 'completed', $11)`,
+         started_at, completed_at, duration_seconds, total_sets, total_reps, total_volume_kg, calories_estimated, status, client_completion_id)
+       VALUES ($1, $2, $3, $4, $5, NOW(), $6, $7, $8, $9, $10, 'completed', $11)`,
       [
         workoutId, userId, body.plan_id, body.plan_day_id,
         body.started_at, body.duration_seconds, totalSets, totalReps,
@@ -1527,8 +1534,8 @@ workouts.post('/b2c/complete', authMiddleware, async (c) => {
     await pgQuery(
       c.env,
       `INSERT INTO workout_sessions (id, user_id, plan_id, plan_day_id,
-         started_at, duration_seconds, total_sets, total_reps, total_volume_kg, calories_estimated, status, notes)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 'completed', $11)`,
+         started_at, completed_at, duration_seconds, total_sets, total_reps, total_volume_kg, calories_estimated, status, notes)
+       VALUES ($1, $2, $3, $4, $5, NOW(), $6, $7, $8, $9, $10, 'completed', $11)`,
       [
         workoutId, userId, body.plan_id, body.plan_day_id,
         body.started_at, body.duration_seconds, totalSets, totalReps,
@@ -1544,6 +1551,7 @@ workouts.post('/b2c/complete', authMiddleware, async (c) => {
 
   for (const ex of body.exercises) {
     if (ex.skipped) continue
+    const exerciseLogId = (ex.exercise_id?.trim() || ex.exercise_name?.trim() || 'exercise').slice(0, 180)
     for (const set of ex.sets) {
       if (!set.completed) continue
       setCounter++
@@ -1552,9 +1560,9 @@ workouts.post('/b2c/complete', authMiddleware, async (c) => {
       await pgQuery(
         c.env,
         `INSERT INTO exercise_logs (id, session_id, exercise_id,
-           set_number, set_type, reps, weight_kg, is_completed, is_personal_record)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, true, false)`,
-        [logId, workoutId, ex.exercise_id,
+           name, muscle_group, set_number, set_type, reps, weight_kg, is_completed, is_personal_record)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, true, false)`,
+        [logId, workoutId, exerciseLogId, ex.exercise_name || null, ex.muscle_group || null,
          setCounter, setType, set.reps, set.weight_kg]
       )
       if (!set.is_warmup && set.weight_kg > 0) {
@@ -1563,7 +1571,7 @@ workouts.post('/b2c/complete', authMiddleware, async (c) => {
           `SELECT MAX(weight_kg) AS max_weight FROM exercise_logs
            WHERE session_id IN (SELECT id FROM workout_sessions WHERE user_id = $1)
              AND exercise_id = $2 AND set_type != 'warmup' AND id != $3`,
-          [userId, ex.exercise_id, logId]
+          [userId, exerciseLogId, logId]
         )
         if (!existing || set.weight_kg > (existing.max_weight || 0)) {
           records.push({ exercise_name: ex.exercise_name, weight_kg: set.weight_kg })
@@ -1598,7 +1606,7 @@ workouts.post('/b2c/complete', authMiddleware, async (c) => {
     },
     records,
   })
-})
+}
 
 // GET /b2c/records — Personal records do aluno B2C
 workouts.get('/b2c/records', authMiddleware, async (c) => {

@@ -17,17 +17,19 @@
 
 'use client'
 
-import { useEffect, useState, useCallback, useRef } from 'react'
-import { useRouter } from 'next/navigation'
+import { useEffect, useState, useCallback, useRef, useMemo } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
 import { RestTimer } from '@/components/treino/rest-timer'
 import { useActiveWorkoutStore } from '@/stores/active-workout-store'
 import { useCurrentPlan } from '@/hooks/use-plans'
 import { useCompleteWorkout as useCompleteB2CWorkout } from '@/hooks/use-plans'
+import { useExercises } from '@/hooks/use-exercises'
 import { requestWakeLock, releaseWakeLock } from '@/lib/wake-lock'
 import { isOnline, queueOfflineCompletion, type OfflineWorkoutCompletionPayload } from '@/lib/offline-workout'
 import { hapticLight, hapticSuccess } from '@/lib/haptics'
+import { cn } from '@/lib/utils'
 
 function formatTimer(ms: number): string {
   const totalSeconds = Math.floor(ms / 1000)
@@ -38,8 +40,17 @@ function formatTimer(ms: number): string {
   return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
 }
 
+function normalizeWorkoutText(value?: string | null) {
+  return (value || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .trim()
+}
+
 export default function TreinoAtivoPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const { data: plan } = useCurrentPlan()
   const workout = useActiveWorkoutStore((s) => s.workout)
   const startWorkout = useActiveWorkoutStore((s) => s.startWorkout)
@@ -55,6 +66,7 @@ export default function TreinoAtivoPage() {
   const markWorkoutCompleted = useActiveWorkoutStore((s) => s.completeWorkout)
   const cancelWorkout = useActiveWorkoutStore((s) => s.cancelWorkout)
   const completeWorkoutMutation = useCompleteB2CWorkout()
+  const { data: exerciseCatalog } = useExercises({ per_page: 300 })
 
   const [elapsed, setElapsed] = useState(0)
   const [showCancelConfirm, setShowCancelConfirm] = useState(false)
@@ -62,12 +74,35 @@ export default function TreinoAtivoPage() {
   const [restTimer, setRestTimer] = useState<{ seconds: number } | null>(null)
   const [showNotes, setShowNotes] = useState(false)
   const [finishState, setFinishState] = useState<'idle' | 'saving' | 'queued' | 'failed'>('idle')
+  const [online, setOnline] = useState(() => isOnline())
   const inputRef = useRef<HTMLInputElement>(null)
+
+  const exerciseMediaLookup = useMemo(() => {
+    const map = new Map<string, NonNullable<typeof exerciseCatalog>['exercises'][number]>()
+    for (const exercise of exerciseCatalog?.exercises ?? []) {
+      map.set(exercise.id, exercise)
+      map.set(normalizeWorkoutText(exercise.name), exercise)
+      map.set(normalizeWorkoutText(exercise.name_pt), exercise)
+    }
+    return map
+  }, [exerciseCatalog])
 
   // Wake lock
   useEffect(() => {
     requestWakeLock()
     return () => { releaseWakeLock() }
+  }, [])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const updateOnline = () => setOnline(isOnline())
+    updateOnline()
+    window.addEventListener('online', updateOnline)
+    window.addEventListener('offline', updateOnline)
+    return () => {
+      window.removeEventListener('online', updateOnline)
+      window.removeEventListener('offline', updateOnline)
+    }
   }, [])
 
   // Timer
@@ -83,7 +118,10 @@ export default function TreinoAtivoPage() {
   // Initialize from plan if no workout
   useEffect(() => {
     if (!workout && plan) {
-      const currentDay = plan.days.find((d) => d.day_number === plan.current_day) || plan.days[0]
+      const requestedDay = Number(searchParams.get('day'))
+      const currentDay = (Number.isInteger(requestedDay) && requestedDay > 0
+        ? plan.days.find((d) => d.day_number === requestedDay)
+        : null) || plan.days.find((d) => d.day_number === plan.current_day) || plan.days[0]
       if (currentDay) {
         startWorkout({
           plan_id: plan.id,
@@ -106,7 +144,7 @@ export default function TreinoAtivoPage() {
         })
       }
     }
-  }, [workout, plan, startWorkout])
+  }, [workout, plan, searchParams, startWorkout])
 
   // Focus input
   useEffect(() => {
@@ -164,19 +202,22 @@ export default function TreinoAtivoPage() {
 
     setFinishState('saving')
     if (!isOnline()) {
-      await queueOfflineCompletion(payload)
+      const queued = await queueOfflineCompletion(payload)
+      if (!queued) {
+        setFinishState('failed')
+        return
+      }
       setFinishState('queued')
     } else {
       try {
         await completeWorkoutMutation.mutateAsync(payload)
       } catch {
-        if (!isOnline()) {
-          await queueOfflineCompletion(payload)
-          setFinishState('queued')
-        } else {
+        const queued = await queueOfflineCompletion(payload)
+        if (!queued) {
           setFinishState('failed')
           return
         }
+        setFinishState('queued')
       }
     }
 
@@ -215,54 +256,109 @@ export default function TreinoAtivoPage() {
   const completedSets = currentEx.sets.filter((s) => s.completed).length
   const totalSets = currentEx.sets.length
   const allCompleted = currentEx.sets.every((s) => s.completed)
+  const currentCatalogExercise = exerciseMediaLookup.get(currentEx.exercise_id || '')
+    || exerciseMediaLookup.get(normalizeWorkoutText(currentEx.exercise_name))
+  const demoVideoUrl = currentCatalogExercise?.video_url_vertical || currentCatalogExercise?.video_url_horizontal || null
+  const demoPosterUrl = currentCatalogExercise?.thumbnail_url || undefined
 
   // Workout progress
   const totalExercises = workout.exercises.length
   const completedExercises = workout.exercises.filter(
     (ex) => ex.skipped || ex.sets.every((s) => s.completed)
   ).length
+  const workoutProgressPercent = Math.max(4, Math.round((completedExercises / totalExercises) * 100))
+  const currentExercisePercent = Math.round((completedSets / Math.max(totalSets, 1)) * 100)
 
   return (
-    <div className="mx-auto min-h-screen max-w-lg bg-bg-primary pb-32">
+    <div className="mx-auto min-h-dvh max-w-lg bg-bg-primary pb-36">
       {/* ─── Header ─── */}
-      <div className="sticky top-0 z-20 border-b border-white/8 bg-slate-950/95 px-4 py-3 backdrop-blur-xl">
-        <div className="flex items-center justify-between">
+      <div className="sticky top-0 z-30 border-b border-white/8 bg-slate-950/95 px-4 py-3 text-white shadow-[0_16px_44px_-28px_rgba(2,6,23,0.95)] backdrop-blur-xl">
+        <div className="flex items-center justify-between gap-3">
           <button
             type="button"
+            aria-label="Cancelar treino"
             onClick={() => setShowCancelConfirm(true)}
-            className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/6 text-white/70 transition-colors hover:text-white"
+            className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/6 text-white/72 transition-all duration-200 hover:bg-white/10 hover:text-white active:scale-95"
           >
-            <DSIcon name="x" size={20} />
+            <DSIcon name="x" size={22} />
           </button>
-          <div className="text-center">
-            <p className="text-[10px] font-medium uppercase text-white/55">
+          <div className="min-w-0 text-center">
+            <p className="truncate text-[11px] font-bold uppercase text-white/55">
               Dia {workout.day_number} — {workout.day_name}
             </p>
-            <p className="text-xl font-black tabular-nums text-white">
+            <p className="text-3xl font-black tabular-nums leading-none text-white">
               {formatTimer(elapsed)}
             </p>
           </div>
-          <button
-            type="button"
+          <Button
+            size="sm"
             onClick={handleFinish}
-            disabled={finishState === 'saving'}
-            className="rounded-lg border border-brand-primary/30 bg-brand-primary/18 px-3 py-1.5 text-xs font-bold text-emerald-300"
+            loading={finishState === 'saving'}
+            className="h-10 px-4"
           >
-            {finishState === 'saving' ? 'Salvando' : 'Finalizar'}
-          </button>
+            Finalizar
+          </Button>
         </div>
 
-        {/* Progress bar */}
-        <div className="mt-2 h-1 overflow-hidden rounded-full bg-white/10">
+        <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white/10">
           <div
             className="h-full rounded-full bg-brand-primary transition-all duration-500"
-            style={{ width: `${(completedExercises / totalExercises) * 100}%` }}
+            style={{ width: `${workoutProgressPercent}%` }}
           />
         </div>
       </div>
 
+      {/* ─── Exercise hero / video ─── */}
+      <div className="bg-slate-950 px-4 pb-5 pt-3 text-white">
+        <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/6 shadow-[0_18px_60px_-30px_rgba(16,185,129,0.45)]">
+          <div className="relative aspect-video bg-slate-900">
+            {demoVideoUrl ? (
+              <video
+                className="h-full w-full object-cover"
+                controls
+                muted
+                playsInline
+                preload="metadata"
+                poster={demoPosterUrl}
+                src={demoVideoUrl}
+              />
+            ) : (
+              <div className="flex h-full flex-col items-center justify-center gap-3 bg-linear-to-b from-slate-800 to-slate-950 text-center">
+                <span className="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/8 text-emerald-300">
+                  <DSIcon name="video" size={26} />
+                </span>
+                <div>
+                  <p className="text-sm font-black text-white">Demonstração em breve</p>
+                  <p className="mt-1 text-xs text-white/55">Siga as séries abaixo com controle total.</p>
+                </div>
+              </div>
+            )}
+            <div className="absolute left-3 top-3 rounded-full border border-white/10 bg-black/45 px-3 py-1 text-xs font-bold text-white backdrop-blur-md">
+              {completedSets}/{totalSets} sets
+            </div>
+          </div>
+          <div className="grid grid-cols-3 divide-x divide-white/8 border-t border-white/8 bg-slate-950/72">
+            <div className="px-3 py-3">
+              <p className="text-[10px] font-bold uppercase text-white/45">Progresso</p>
+              <p className="mt-0.5 text-lg font-black tabular-nums text-white">{currentExercisePercent}%</p>
+            </div>
+            <div className="px-3 py-3">
+              <p className="text-[10px] font-bold uppercase text-white/45">Descanso</p>
+              <p className="mt-0.5 text-lg font-black tabular-nums text-white">{currentEx.rest_seconds}s</p>
+            </div>
+            <div className="px-3 py-3">
+              <p className="text-[10px] font-bold uppercase text-white/45">Conexão</p>
+              <p className={cn('mt-0.5 flex items-center gap-1.5 text-sm font-black', online ? 'text-emerald-300' : 'text-amber-300')}>
+                <DSIcon name={online ? 'wifi' : 'wifiOff'} size={15} />
+                {online ? 'Online' : 'Offline'}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* ─── Exercise navigator ─── */}
-      <div className="flex gap-1.5 overflow-x-auto px-4 py-3">
+      <div className="flex gap-2 overflow-x-auto px-4 py-4">
         {workout.exercises.map((ex, i) => {
           const isActive = i === workout.current_exercise_index
           const isDone = ex.skipped || ex.sets.every((s) => s.completed)
@@ -271,9 +367,9 @@ export default function TreinoAtivoPage() {
               key={ex.id}
               type="button"
               onClick={() => { goToExercise(i); hapticLight() }}
-              className={`flex h-8 shrink-0 items-center justify-center rounded-lg px-3 text-xs font-bold transition-all ${
+              className={`flex h-12 min-w-12 shrink-0 items-center justify-center rounded-2xl px-4 text-sm font-black transition-all duration-200 ${
                 isActive
-                  ? 'bg-brand-primary text-white'
+                  ? 'bg-brand-primary text-white shadow-[0_4px_0_0_#166534,0_12px_24px_-18px_rgba(22,101,52,0.9)]'
                   : isDone
                     ? 'bg-brand-primary/10 text-brand-primary'
                     : ex.skipped
@@ -304,14 +400,16 @@ export default function TreinoAtivoPage() {
 
         {/* ─── Sets table ─── */}
         {finishState === 'failed' && (
-          <div className="mb-3 rounded-xl border border-red-500/25 bg-red-500/8 px-3 py-2 text-xs font-semibold text-red-300">
-            Nao foi possivel salvar agora. Verifique a conexao e tente finalizar novamente.
+          <div className="mb-3 flex items-start gap-2 rounded-2xl border border-red-500/25 bg-red-500/8 px-3 py-3 text-sm font-semibold text-red-500">
+            <DSIcon name="alertTriangle" size={18} className="mt-0.5 shrink-0" />
+            <span>Nao foi possivel salvar agora. O treino continua nesta tela para voce tentar novamente.</span>
           </div>
         )}
 
         {finishState === 'queued' && (
-          <div className="mb-3 rounded-xl border border-amber-500/25 bg-amber-500/8 px-3 py-2 text-xs font-semibold text-amber-300">
-            Treino guardado offline. Vamos sincronizar quando a conexao voltar.
+          <div className="mb-3 flex items-start gap-2 rounded-2xl border border-amber-500/25 bg-amber-500/8 px-3 py-3 text-sm font-semibold text-amber-600 dark:text-amber-300">
+            <DSIcon name="wifiOff" size={18} className="mt-0.5 shrink-0" />
+            <span>Treino guardado neste aparelho. Vamos sincronizar quando a conexao estabilizar.</span>
           </div>
         )}
 
@@ -422,34 +520,34 @@ export default function TreinoAtivoPage() {
 
         {/* ─── Actions ─── */}
         <div className="mt-3 flex gap-2">
-          <button
-            type="button"
+          <Button
+            variant="secondary"
             onClick={() => { addSet(workout.current_exercise_index); hapticLight() }}
-            className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-bg-secondary py-2.5 text-xs font-medium text-text-secondary hover:text-brand-primary transition-colors"
+            className="flex-1"
           >
             <DSIcon name="plus" size={14} />
             Adicionar Set
-          </button>
+          </Button>
           {!allCompleted && (
-            <button
-              type="button"
+            <Button
+              variant="secondary"
               onClick={() => { markAllSets(workout.current_exercise_index); hapticSuccess() }}
-              className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-bg-secondary py-2.5 text-xs font-medium text-text-secondary hover:text-brand-primary transition-colors"
+              className="flex-1"
             >
               <DSIcon name="checkCheck" size={14} />
               Marcar Todos
-            </button>
+            </Button>
           )}
         </div>
 
         {/* ─── Skip ─── */}
-        <button
-          type="button"
+        <Button
+          variant="ghost"
           onClick={() => { skipExercise(workout.current_exercise_index); hapticLight() }}
-          className="mt-2 w-full rounded-xl py-2 text-center text-xs font-medium text-text-muted hover:text-amber-500 transition-colors"
+          className="mt-2 w-full text-text-muted hover:text-amber-500"
         >
           Pular exercício
-        </button>
+        </Button>
 
         {/* ─── Notes ─── */}
         {currentEx.notes && (
@@ -515,7 +613,7 @@ export default function TreinoAtivoPage() {
               loading={finishState === 'saving'}
             >
               <DSIcon name="check" className="h-5 w-5" />
-              Finalizar Treino 🎉
+              Finalizar Treino
             </Button>
           ) : null}
         </div>
@@ -536,7 +634,7 @@ export default function TreinoAtivoPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
           <div className="w-full max-w-sm rounded-3xl bg-bg-primary p-6 text-center shadow-2xl">
             <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-red-500/10">
-              <span className="text-3xl">🏋️</span>
+              <DSIcon name="dumbbell" size={30} className="text-red-500" />
             </div>
             <h3 className="text-lg font-bold text-text-primary">Cancelar treino?</h3>
             <p className="mt-2 text-sm text-text-secondary">

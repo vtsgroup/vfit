@@ -9,6 +9,7 @@ let wakeLock: WakeLockSentinel | null = null
 
 export async function requestWakeLock(): Promise<boolean> {
   try {
+    if (typeof navigator === 'undefined') return false
     if ('wakeLock' in navigator) {
       wakeLock = await navigator.wakeLock.request('screen')
       wakeLock.addEventListener('release', () => {
@@ -16,8 +17,8 @@ export async function requestWakeLock(): Promise<boolean> {
       })
       return true
     }
-  } catch (err) {
-    console.warn('[WakeLock] Failed to acquire:', err)
+  } catch {
+    // Best-effort only: browsers may block Wake Lock outside a direct user gesture.
   }
   return false
 }
@@ -28,8 +29,8 @@ export async function releaseWakeLock(): Promise<void> {
       await wakeLock.release()
       wakeLock = null
     }
-  } catch (err) {
-    console.warn('[WakeLock] Failed to release:', err)
+  } catch {
+    // Best-effort only.
   }
 }
 

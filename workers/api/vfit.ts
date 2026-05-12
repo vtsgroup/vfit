@@ -35,7 +35,7 @@ import { success, created, paginated, noContent } from '@lib/response'
 import { BadRequestError, NotFoundError, ForbiddenError } from '@lib/errors'
 import { callWorkersAIWithFallback } from '@lib/workers-ai'
 import { z } from 'zod'
-// @ts-expect-error seed source is an ESM data module shared with the sync script
+// @ts-ignore seed source is an ESM data module shared with the sync script
 import { VFIT_FOOD_LIBRARY } from '../../scripts/vfit-food-library.mjs'
 
 const vfit = new Hono<AppContext>()

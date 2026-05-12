@@ -126,7 +126,10 @@ export function OneSignalProvider({ children }: { children: React.ReactNode }) {
           setSdkReady(true)
         } catch (err) {
           _sdkInstance = null
-          console.error('[OneSignal] Init error (login/tags disabled):', err)
+          const message = err instanceof Error ? err.message : String(err)
+          if (!message.includes('Can only be used on')) {
+            console.warn('[OneSignal] Init skipped (login/tags disabled):', err)
+          }
         }
       })
     }, 4000)

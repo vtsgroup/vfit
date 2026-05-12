@@ -7,6 +7,15 @@
 
 ## [Unreleased] — 2026-04-08 — Sprint 11-15 (UX Nutrição/Exercícios)
 
+### 🏋️ Unreleased — Treino ativo premium + finalização B2C confiável (2026-05-12)
+- **Finalização B2C corrigida na origem:** [workers/api/workouts.ts](workers/api/workouts.ts) agora trata `/workouts/b2c/complete` antes do validador legado `/:id/complete`, evitando erro `exercises_completed: expected array` ao finalizar treino pelo app aluno.
+- **Planos IA sem `exercise_id` não quebram mais:** a conclusão aceita `exercise_id` nulo e usa fallback seguro por nome do exercício em `exercise_logs`, salvando também `name`, `muscle_group` e `completed_at` para histórico, streaks e desafios.
+- **UX de treino ativo mais robusta:** [src/app/(app)/treino-ativo/page.tsx](src/app/(app)/treino-ativo/page.tsx) ganhou hero escuro com timer maior, botão 3D de finalizar, status de conexão, vídeo de demonstração do catálogo abaixo do tempo e fallback visual quando ainda não há mídia.
+- **Fila de segurança no finalizar:** se a API falhar durante a conclusão, o payload é salvo na fila offline local antes de sair do treino, reduzindo perda de progresso em conexão instável.
+- **Dia selecionado preservado:** [src/app/(app)/plano/page.tsx](src/app/(app)/plano/page.tsx) passa o dia ativo para `/treino-ativo?day=...`, e a tela ativa inicia o dia escolhido em vez de sempre usar `current_day`.
+- **Console mais limpo durante treino:** [src/lib/wake-lock.ts](src/lib/wake-lock.ts) mantém Wake Lock best-effort sem warnings ruidosos quando o navegador bloqueia a API; [src/components/providers/onesignal-provider.tsx](src/components/providers/onesignal-provider.tsx) deixa o erro de domínio legado do OneSignal silencioso até a configuração externa ser corrigida.
+- **Validação local:** `npm run type-check`, `npm run type-check:workers`, `npm run build`, `npx wrangler deploy --env="" --dry-run` e `git diff --check` passaram.
+
 ### 🥗 Unreleased — Nutrição autocomplete + registro manual real (2026-05-12)
 - **Autocomplete de alimentos mais confiável:** [workers/api/vfit.ts](workers/api/vfit.ts) agora normaliza busca com e sem acentos em `GET /vfit/foods`, prioriza alimentos customizados e a seed PT-BR (`seed:v1`) antes da base importada genérica.
 - **Seed PT-BR na base ativa do Worker:** quando o banco ativo de produção ainda não tem alimentos `seed:v1`, `GET /vfit/foods` popula de forma idempotente os 152 alimentos comuns de [scripts/vfit-food-library.mjs](scripts/vfit-food-library.mjs) antes de retornar sugestões.

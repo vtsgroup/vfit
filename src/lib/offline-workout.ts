@@ -21,7 +21,7 @@ export interface OfflineWorkoutCompletionPayload {
   started_at: string
   duration_seconds: number
   exercises: Array<{
-    exercise_id: string
+    exercise_id: string | null
     exercise_name: string
     muscle_group: string | null
     skipped: boolean

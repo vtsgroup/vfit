@@ -49,7 +49,7 @@ export default function EditarPlanoClientPage() {
   const exercises = useMemo(() => currentDay?.exercises || [], [currentDay?.exercises])
 
   const existingExerciseIds = useMemo(
-    () => exercises.map((e) => e.exercise_id),
+    () => exercises.map((e) => e.exercise_id).filter((id): id is string => Boolean(id)),
     [exercises]
   )
 

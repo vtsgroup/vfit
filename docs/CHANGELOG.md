@@ -7,6 +7,15 @@
 
 ## [Unreleased] — 12/04/2026 — Paridade admin de saques + redirect domínio legado
 
+### 🏋️ Unreleased — Treino ativo premium + finalização B2C confiável (2026-05-12)
+- Finalização B2C corrigida na origem em [workers/api/workouts.ts](../workers/api/workouts.ts): `/workouts/b2c/complete` não cai mais no validador legado `/:id/complete`, removendo o erro `exercises_completed: expected array` no app aluno.
+- Planos IA com `exercise_id` nulo agora finalizam com fallback por nome do exercício, salvando `name`, `muscle_group` e `completed_at` no histórico.
+- [src/app/(app)/treino-ativo/page.tsx](../src/app/(app)/treino-ativo/page.tsx) ganhou hero escuro com timer maior, botão 3D de finalizar, status de conexão, vídeo de demonstração abaixo do tempo e fallback visual quando o exercício ainda não tem mídia.
+- Se a API falhar ao finalizar, o treino é guardado na fila offline local para reduzir perda de progresso em conexão instável.
+- [src/app/(app)/plano/page.tsx](../src/app/(app)/plano/page.tsx) passa o dia selecionado para `/treino-ativo?day=...`, garantindo que o treino iniciado seja o mesmo escolhido no plano.
+- Console do treino ficou mais limpo: Wake Lock virou best-effort silencioso e o domínio legado do OneSignal deixa de aparecer como erro vermelho enquanto depende de correção externa no dashboard.
+- Validação local: `npm run type-check`, `npm run type-check:workers`, `npm run build`, `npx wrangler deploy --env="" --dry-run` e `git diff --check` passaram.
+
 ### 🥗 Unreleased — Nutrição autocomplete + registro manual real (2026-05-12)
 - Autocomplete de alimentos mais confiável em [workers/api/vfit.ts](../workers/api/vfit.ts): `GET /vfit/foods` agora busca com e sem acentos, por nome/tags/descrição, priorizando alimentos customizados e seed PT-BR (`seed:v1`).
 - Seed PT-BR na base ativa do Worker: se o banco ativo de produção ainda não tiver alimentos `seed:v1`, `GET /vfit/foods` popula de forma idempotente os 152 alimentos comuns de [scripts/vfit-food-library.mjs](../scripts/vfit-food-library.mjs) antes de retornar sugestões.

@@ -23,7 +23,7 @@ export interface WorkoutSet {
 
 export interface WorkoutExercise {
   id: string
-  exercise_id: string
+  exercise_id: string | null
   exercise_name: string
   muscle_group: string | null
   planned_sets: number
@@ -62,7 +62,7 @@ interface ActiveWorkoutState {
     day_name: string
     exercises: Array<{
       id: string
-      exercise_id: string
+      exercise_id: string | null
       exercise_name: string
       muscle_group: string | null
       sets: number

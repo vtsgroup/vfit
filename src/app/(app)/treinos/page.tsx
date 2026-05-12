@@ -966,7 +966,7 @@ export default function TreinosPage() {
               >
                 <div className="relative shrink-0">
                   <Image
-                    src={exerciseById.get(ex.exercise_id)?.thumbnail_url || buildPlaceholderImage(ex.exercise_name || ex.muscle_group || 'Exercício', toneByMuscle(ex.muscle_group))}
+                    src={(ex.exercise_id ? exerciseById.get(ex.exercise_id)?.thumbnail_url : null) || buildPlaceholderImage(ex.exercise_name || ex.muscle_group || 'Exercício', toneByMuscle(ex.muscle_group))}
                     alt={ex.exercise_name || 'Exercício'}
                     width={64}
                     height={48}
@@ -993,7 +993,7 @@ export default function TreinosPage() {
                   <p className="text-[10px] font-bold text-emerald-700">
                     Carga estimada IA: {ex.weight_kg != null ? `${ex.weight_kg} kg` : 'ajustar com professor'}
                   </p>
-                  {!!exerciseById.get(ex.exercise_id)?.video_url_vertical && (
+                  {!!(ex.exercise_id ? exerciseById.get(ex.exercise_id)?.video_url_vertical : null) && (
                     <p className="text-[10px] font-semibold text-slate-400">Vídeo disponível</p>
                   )}
                 </div>
