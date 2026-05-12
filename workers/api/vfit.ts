@@ -35,6 +35,8 @@ import { success, created, paginated, noContent } from '@lib/response'
 import { BadRequestError, NotFoundError, ForbiddenError } from '@lib/errors'
 import { callWorkersAIWithFallback } from '@lib/workers-ai'
 import { z } from 'zod'
+// @ts-expect-error seed source is an ESM data module shared with the sync script
+import { VFIT_FOOD_LIBRARY } from '../../scripts/vfit-food-library.mjs'
 
 const vfit = new Hono<AppContext>()
 
@@ -405,8 +407,88 @@ const FoodInputSchema = z.object({
 
 const SEARCH_ACCENT_FROM = 'áàâãäéèêëíìîïóòôõöúùûüçñ'
 const SEARCH_ACCENT_TO = 'aaaaaeeeeiiiiooooouuuucn'
+const VFIT_FOOD_SEED_TAG = 'seed:v1'
 const normalizedSql = (expression: string) =>
   `translate(lower(${expression}), '${SEARCH_ACCENT_FROM}', '${SEARCH_ACCENT_TO}')`
+
+type VfitSeedFood = {
+  name: string
+  category: string
+  calories: number
+  protein: number
+  carbs: number
+  fat: number
+  fiber: number
+  sodium: number
+  portion: number
+}
+
+async function ensureVfitFoodLibrarySeeded(env: AppContext['Bindings']): Promise<number> {
+  const seedCount = await pgQueryOne<{ count: number }>(
+    env,
+    `SELECT COUNT(*)::int as count
+       FROM vfit_foods
+      WHERE is_library = true
+        AND COALESCE(tags, '{}'::text[]) @> ARRAY[$1]::text[]`,
+    [VFIT_FOOD_SEED_TAG]
+  )
+
+  if ((seedCount?.count ?? 0) >= VFIT_FOOD_LIBRARY.length) return 0
+
+  const payload = (VFIT_FOOD_LIBRARY as VfitSeedFood[]).map((item) => ({
+    id: generateId(),
+    ...item,
+  }))
+
+  const inserted = await pgQuery<{ id: string }>(
+    env,
+    `WITH seed AS (
+       SELECT *
+       FROM jsonb_to_recordset($1::jsonb) AS item(
+         id text,
+         name text,
+         category text,
+         calories numeric,
+         protein numeric,
+         carbs numeric,
+         fat numeric,
+         fiber numeric,
+         sodium numeric,
+         portion integer
+       )
+     )
+     INSERT INTO vfit_foods (
+       id, name, category, calories, protein_g, carbs_g, fat_g, fiber_g, sodium_mg,
+       standard_portion_g, is_library, is_custom, creator_id, tags
+     )
+     SELECT
+       seed.id,
+       seed.name,
+       seed.category,
+       seed.calories,
+       seed.protein,
+       seed.carbs,
+       seed.fat,
+       seed.fiber,
+       seed.sodium,
+       seed.portion,
+       true,
+       false,
+       null,
+       ARRAY[seed.category, $2]::text[]
+     FROM seed
+     WHERE NOT EXISTS (
+       SELECT 1
+       FROM vfit_foods existing
+       WHERE existing.is_library = true
+         AND ${normalizedSql('existing.name')} = ${normalizedSql('seed.name')}
+     )
+     RETURNING id`,
+    [JSON.stringify(payload), VFIT_FOOD_SEED_TAG]
+  )
+
+  return inserted.rowCount
+}
 
 async function foodFavoritesTableExists(env: AppContext['Bindings']): Promise<boolean> {
   const row = await pgQueryOne<{ exists: boolean }>(
@@ -574,6 +656,7 @@ vfit.get('/foods', async (c) => {
   const search = (c.req.query('search') || c.req.query('q') || '').trim()
   const category = c.req.query('category')
   const limit = Math.min(parseInt(c.req.query('limit') || '50', 10), 100)
+  await ensureVfitFoodLibrarySeeded(env)
   const hasFavorites = await foodFavoritesTableExists(env)
 
   let where = `WHERE (f.is_library = true OR f.creator_id = $1)`

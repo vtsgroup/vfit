@@ -1,6 +1,6 @@
 # VFIT Production Completion — Tracking
 
-> Última atualização: 2026-05-12 · Status: nutrição manual/autocomplete corrigida localmente; smoke auth renovado e aprovado; P2.21/P2.22/P2.24/P2.26 publicados, com hotfix de UX + envelope API VFIT pronto para deploy patch v4.3.7; P2.23/P2.25 em progresso; seed de alimentos 152 itens sincronizado no Neon · Branch de execução: `main` · Versão live observada: `4.3.6`.
+> Última atualização: 2026-05-12 · Status: nutrição manual/autocomplete corrigida localmente; smoke auth renovado e aprovado; P2.21/P2.22/P2.24/P2.26 publicados, com hotfix de UX + envelope API VFIT + seed automática da base ativa pronto para deploy patch v4.3.8; P2.23/P2.25 em progresso; seed de alimentos 152 itens sincronizado no Neon e preparada para auto-seed no Worker · Branch de execução: `main` · Versão live observada: `4.3.7`.
 
 ## Progresso geral
 
@@ -258,7 +258,7 @@ Hotfix local — 2026-05-12:
 
 - Root cause: a ação “Salvar e registrar” do cadastro manual apenas criava o alimento e abria a tela de registro; o usuário precisava tocar em “Registrar” depois, então os macros do dia não mudavam imediatamente.
 - Fix: `/nutricao` agora valida macros obrigatórios, cria o alimento manual e registra a refeição no dia selecionado no mesmo clique; `useLogMeal` também invalida recentes.
-- Busca: `GET /vfit/foods` normaliza acentos, prioriza custom/seed PT-BR e a UI usa debounce para autocomplete sem flicker.
+- Busca: `GET /vfit/foods` normaliza acentos, prioriza custom/seed PT-BR, auto-popula a seed de 152 alimentos se a base ativa ainda estiver vazia e a UI usa debounce para autocomplete sem flicker.
 - Validação: `npm run type-check`, `npm run type-check:workers`, ESLint focado, `npm run foods:sync:dry`, `git diff --check`, `npm run build` e consulta Neon somente leitura para buscas comuns passaram.
 - Deploy: `npm run smoke:auth:local` aprovado após renovação de tokens (8 passed, 0 failed, 4 skipped por mutações desabilitadas); deploy patch v4.3.6 liberado.
 
