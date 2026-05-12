@@ -490,6 +490,35 @@ async function ensureVfitFoodLibrarySeeded(env: AppContext['Bindings']): Promise
   return inserted.rowCount
 }
 
+function numericField(value: unknown): number {
+  const parsed = typeof value === 'number' ? value : Number(value ?? 0)
+  return Number.isFinite(parsed) ? parsed : 0
+}
+
+function normalizeVfitFood<T extends Record<string, unknown>>(food: T): T {
+  return {
+    ...food,
+    calories: numericField(food.calories),
+    protein_g: numericField(food.protein_g),
+    carbs_g: numericField(food.carbs_g),
+    fat_g: numericField(food.fat_g),
+    fiber_g: food.fiber_g == null ? null : numericField(food.fiber_g),
+    sodium_mg: food.sodium_mg == null ? null : numericField(food.sodium_mg),
+    standard_portion_g: numericField(food.standard_portion_g),
+  }
+}
+
+function normalizeVfitMeal<T extends Record<string, unknown>>(meal: T): T {
+  return {
+    ...meal,
+    quantity_g: numericField(meal.quantity_g),
+    calories_total: numericField(meal.calories_total),
+    protein_total: numericField(meal.protein_total),
+    carbs_total: numericField(meal.carbs_total),
+    fat_total: numericField(meal.fat_total),
+  }
+}
+
 async function foodFavoritesTableExists(env: AppContext['Bindings']): Promise<boolean> {
   const row = await pgQueryOne<{ exists: boolean }>(
     env,
@@ -552,7 +581,7 @@ vfit.get('/foods/recent', async (c) => {
     [userId, limit]
   )
 
-  return success(foods.rows)
+  return success(foods.rows.map(normalizeVfitFood))
 })
 
 /**
@@ -578,7 +607,7 @@ vfit.get('/foods/favorites', async (c) => {
     [userId, limit]
   )
 
-  return success(foods.rows)
+  return success(foods.rows.map(normalizeVfitFood))
 })
 
 /**
@@ -603,7 +632,7 @@ vfit.post('/foods', async (c) => {
     ]
   )
 
-  return created(food)
+  return created(food ? normalizeVfitFood(food) : food)
 })
 
 /**
@@ -706,7 +735,7 @@ vfit.get('/foods', async (c) => {
     params
   )
 
-  return success(foods.rows)
+  return success(foods.rows.map(normalizeVfitFood))
 })
 
 /**
@@ -752,7 +781,7 @@ vfit.post('/meals', async (c) => {
      data.logged_at || null, calories, protein, carbs, fat]
   )
 
-  return created(meal)
+  return created(meal ? normalizeVfitMeal(meal) : meal)
 })
 
 /**
@@ -788,7 +817,7 @@ vfit.get('/meals/today', async (c) => {
 
   return success({
     date,
-    meals: meals.rows,
+    meals: meals.rows.map(normalizeVfitMeal),
     totals: {
       calories: parseFloat(totals?.total_calories || '0'),
       protein: parseFloat(totals?.total_protein || '0'),
@@ -1032,7 +1061,7 @@ vfit.get('/food-barcode/:code', async (c) => {
   ).catch(() => null)
 
   if (localFood) {
-    return success({ source: 'local', food: localFood })
+    return success({ source: 'local', food: normalizeVfitFood(localFood) })
   }
 
   // 2. Fallback: Open Food Facts API (gratuita, sem auth)
