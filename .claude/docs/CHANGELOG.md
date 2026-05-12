@@ -7,7 +7,7 @@
 
 ## [Unreleased] — 2026-04-08 — Sprint 11-15 (UX Nutrição/Exercícios)
 
-### 🏋️ Unreleased — Treino ativo premium + finalização B2C confiável (2026-05-12)
+### 🏋️ Release v4.4.1 — Treino ativo premium + finalização B2C confiável (2026-05-12)
 - **Finalização B2C corrigida na origem:** [workers/api/workouts.ts](workers/api/workouts.ts) agora trata `/workouts/b2c/complete` antes do validador legado `/:id/complete`, evitando erro `exercises_completed: expected array` ao finalizar treino pelo app aluno.
 - **Planos IA sem `exercise_id` não quebram mais:** a conclusão aceita `exercise_id` nulo e usa fallback seguro por nome do exercício em `exercise_logs`, salvando também `name`, `muscle_group` e `completed_at` para histórico, streaks e desafios.
 - **UX de treino ativo mais robusta:** [src/app/(app)/treino-ativo/page.tsx](src/app/(app)/treino-ativo/page.tsx) ganhou hero escuro com timer maior, botão 3D de finalizar, status de conexão, vídeo de demonstração do catálogo abaixo do tempo e fallback visual quando ainda não há mídia.
@@ -15,8 +15,9 @@
 - **Dia selecionado preservado:** [src/app/(app)/plano/page.tsx](src/app/(app)/plano/page.tsx) passa o dia ativo para `/treino-ativo?day=...`, e a tela ativa inicia o dia escolhido em vez de sempre usar `current_day`.
 - **Console mais limpo durante treino:** [src/lib/wake-lock.ts](src/lib/wake-lock.ts) mantém Wake Lock best-effort sem warnings ruidosos quando o navegador bloqueia a API; [src/components/providers/onesignal-provider.tsx](src/components/providers/onesignal-provider.tsx) deixa o erro de domínio legado do OneSignal silencioso até a configuração externa ser corrigida.
 - **Validação local:** `npm run type-check`, `npm run type-check:workers`, `npm run build`, `npx wrangler deploy --env="" --dry-run` e `git diff --check` passaram.
+- **Deploy e validação produção:** publicado como `v4.4.1` via `node scripts/cf-deploy.js patch --allow-no-whatsapp`; `https://api.vfit.app.br/health` respondeu healthy; POST autenticado em `/api/v1/workouts/b2c/complete` aceitou `exercise_id: null`, retornou `workout_id`, salvou 1 set e confirmou idempotência por `client_completion_id`; UI live `/plano → /treino-ativo?day=1` exibiu timer, botão 3D, mídia/fallback e status online; `npm run smoke:auth:local` passou 8/0/4.
 
-### 🥗 Unreleased — Nutrição autocomplete + registro manual real (2026-05-12)
+### 🥗 Release v4.4.0 — Nutrição autocomplete + registro manual real (2026-05-12)
 - **Autocomplete de alimentos mais confiável:** [workers/api/vfit.ts](workers/api/vfit.ts) agora normaliza busca com e sem acentos em `GET /vfit/foods`, prioriza alimentos customizados e a seed PT-BR (`seed:v1`) antes da base importada genérica.
 - **Seed PT-BR na base ativa do Worker:** quando o banco ativo de produção ainda não tem alimentos `seed:v1`, `GET /vfit/foods` popula de forma idempotente os 152 alimentos comuns de [scripts/vfit-food-library.mjs](scripts/vfit-food-library.mjs) antes de retornar sugestões.
 - **Busca mobile com debounce:** [src/hooks/use-vfit-nutrition.ts](src/hooks/use-vfit-nutrition.ts) e [src/app/(app)/nutricao/page.tsx](src/app/(app)/nutricao/page.tsx) mantêm sugestões anteriores durante digitação, limitam resultados e exibem estado de atualização sem piscar a lista.
@@ -24,7 +25,7 @@
 - **Hotfix de envelope da API VFIT:** [workers/api/vfit.ts](workers/api/vfit.ts) agora retorna os `Response` helpers (`success`, `created`, `paginated`, `noContent`) diretamente, evitando serialização incorreta como `{}` em alimentos, refeições, favoritos e demais endpoints do router VFIT.
 - **Macros como números no frontend:** [workers/api/vfit.ts](workers/api/vfit.ts) normaliza `numeric` do PostgreSQL para `number` antes de responder alimentos/refeições, evitando crash de `.toFixed()` na tela de nutrição.
 - **Validação local:** `npm run type-check`, `npm run type-check:workers`, `npx eslint 'src/app/(app)/nutricao/page.tsx' 'src/hooks/use-vfit-nutrition.ts'`, `npm run foods:sync:dry`, `git diff --check`, `npm run build` e consulta Neon somente leitura para `pao/pão/feijao/frango/banana` passaram.
-- **Deploy liberado pelo smoke auth:** após renovação dos tokens, `npm run smoke:auth:local` passou com 8 checks aprovados, 0 falhas e 4 skips por mutações desabilitadas. Próximo passo operacional: deploy patch v4.4.0 com seed automática e normalização numérica.
+- **Deploy liberado pelo smoke auth:** publicado como `v4.4.0`; após renovação dos tokens, `npm run smoke:auth:local` passou com 8 checks aprovados, 0 falhas e 4 skips por mutações desabilitadas.
 
 ### 🎨 Unreleased — Landing aluno-first conversion polish (2026-05-11)
 - **Home com conversão aluno-first:** [src/app/page.tsx](src/app/page.tsx), [src/components/landing/hero.tsx](src/components/landing/hero.tsx), [src/components/landing/features.tsx](src/components/landing/features.tsx), [src/components/landing/numbers-section.tsx](src/components/landing/numbers-section.tsx), [src/components/landing/how-it-works-v2.tsx](src/components/landing/how-it-works-v2.tsx), [src/components/landing/gamification-section.tsx](src/components/landing/gamification-section.tsx), [src/components/landing/cta-section.tsx](src/components/landing/cta-section.tsx) e [src/components/landing/footer.tsx](src/components/landing/footer.tsx) reposicionam a landing principal para alunos, removem blocos genéricos/duplicados de escolha de perfil e deixam profissionais como caminho secundário.
