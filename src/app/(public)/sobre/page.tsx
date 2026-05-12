@@ -80,7 +80,7 @@ export default function SobrePage() {
           '@type': 'Organization',
           name: 'VFIT',
           url: 'https://vfit.app.br',
-          logo: 'https://vfit.app.br/favicons/icon-512x512.png',
+          logo: 'https://vfit.app.br/favicons/icon-512x512.png?v=4.3.4',
           description: 'Plataforma SaaS para personal trainers com IA, gestão de alunos e cobranças automáticas.',
           foundingDate: '2025',
           contactPoint: {

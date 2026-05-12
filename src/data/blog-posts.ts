@@ -39,7 +39,7 @@ export interface BlogAuthor {
 
 export const BLOG_AUTHOR: BlogAuthor = {
   name: 'Equipe VFIT',
-  avatar: '/favicons/icon-192x192.png',
+  avatar: '/favicons/icon-192x192.png?v=4.3.4',
   role: 'Time de Conteúdo',
 }
 

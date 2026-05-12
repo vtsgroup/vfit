@@ -29,9 +29,9 @@ const APP_SHELL = [
   '/login',
   '/offline',
   '/manifest.json',
-  '/icons/icon-192.png',
-  '/icons/icon-512.png',
-  '/icons/apple-touch-icon.png',
+  '/icons/icon-192.png?v=4.3.4',
+  '/icons/icon-512.png?v=4.3.4',
+  '/icons/apple-touch-icon.png?v=4.3.4',
 ]
 
 // Max cache sizes

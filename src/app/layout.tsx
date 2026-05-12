@@ -122,10 +122,10 @@ export const metadata: Metadata = {
   },
   icons: {
     shortcut: [
-      { url: `/favicons/favicon.ico`, type: "image/x-icon" },
+      { url: `/favicons/favicon.ico?v=4.3.4`, type: "image/x-icon" },
     ],
     icon: [
-      { url: `/favicons/favicon.ico`, type: "image/x-icon" },
+      { url: `/favicons/favicon.ico?v=4.3.4`, type: "image/x-icon" },
       { url: `/favicons/favicon-48.png?v=${APP_VERSION}`, sizes: "48x48", type: "image/png" },
       { url: `/favicons/favicon-96.png?v=${APP_VERSION}`, sizes: "96x96", type: "image/png" },
       { url: `/icons/icon-192.png?v=${APP_VERSION}`, sizes: "192x192", type: "image/png" },
