@@ -29,6 +29,7 @@ export default function AvaliacaoDetalhePage() {
   const { data: studentProfile } = useStudentProfile()
   const linkPersonalTrainer = useLinkPersonalTrainer()
   const [personalReferralCode, setPersonalReferralCode] = useState('')
+  const [inviteOpen, setInviteOpen] = useState(false)
 
   const personalInviteLink = (() => {
     const base = typeof window !== 'undefined' ? window.location.origin : 'https://vfit.app.br'
@@ -150,67 +151,11 @@ export default function AvaliacaoDetalhePage() {
       </div>
 
       <div className="mt-5 space-y-5 px-4">
-      {/* Personal trainer invite */}
-      <div className="rounded-2xl border border-brand-primary/20 bg-brand-primary/8 p-4">
-        <div className="mb-1 flex items-center gap-2">
-          <DSIcon name="userPlus" size={14} className="text-brand-primary" />
-          <p className="text-[11px] font-bold uppercase tracking-wider text-brand-primary">
-            Melhorar com personal
-          </p>
-        </div>
-        <p className="text-[12px] text-zinc-400">
-          Convide e vincule um personal trainer para completar sua avaliação.
-        </p>
-        {studentProfile?.personal_name && (
-          <p className="mt-1 text-[12px] font-semibold text-brand-primary">
-            Personal vinculado: {studentProfile.personal_name}
-          </p>
-        )}
-
-        <div className="mt-3 flex gap-2">
-          <Input
-            value={personalReferralCode}
-            onChange={(e) => setPersonalReferralCode(e.target.value.toUpperCase())}
-            placeholder="Código do personal"
-            disabled={linkPersonalTrainer.isPending || !!studentProfile?.personal_id}
-          />
-          <Button
-            onClick={() => linkPersonalTrainer.mutate(personalReferralCode)}
-            loading={linkPersonalTrainer.isPending}
-            disabled={!personalReferralCode.trim() || !!studentProfile?.personal_id}
-          >
-            Vincular
-          </Button>
-        </div>
-
-        <div className="mt-2 flex flex-wrap gap-2">
-          <Button variant="outline" size="sm" onClick={() => navigator.clipboard.writeText(personalInviteLink)}>
-            <DSIcon name="copy" size={14} />
-            Link
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(`Olá! Quero te convidar para completar minha avaliação física no VFIT.\n\nCadastro: ${personalInviteLink}`)}`, '_blank')}
-          >
-            <DSIcon name="share2" size={14} />
-            WhatsApp
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => window.open(`mailto:?subject=${encodeURIComponent('Convite VFIT — Avaliação Completa')}&body=${encodeURIComponent(`Olá! Quero te convidar para me acompanhar no VFIT e completar minha avaliação física.\n\nCadastro: ${personalInviteLink}`)}`, '_blank')}
-          >
-            <DSIcon name="mail" size={14} />
-            Email
-          </Button>
-        </div>
-      </div>
-
       {/* BMI category */}
-      <div className="rounded-2xl border border-white/8 bg-white/3 p-4 text-center">
-        <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-zinc-500">Classificação IMC</p>
-        <p className={`text-[18px] font-black ${getBMIColor(assessment.bmi)}`}>
+      <div className="relative overflow-hidden rounded-2xl border border-white/8 bg-white/3 p-5 text-center">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-white/15 to-transparent" />
+        <p className="mb-1.5 text-[11px] font-bold uppercase tracking-[0.16em] text-text-muted">Classificação IMC</p>
+        <p className={`text-[22px] font-black tracking-tight ${getBMIColor(assessment.bmi)}`}>
           {assessment.bmi_category}
         </p>
         <BMIBar bmi={assessment.bmi} />
@@ -261,19 +206,23 @@ export default function AvaliacaoDetalhePage() {
 
       {/* Activity + goal */}
       <div className="grid grid-cols-2 gap-3">
-        <div className="rounded-xl border border-white/6 bg-white/3 p-3">
-          <div className="mb-1 flex items-center gap-1.5">
-            <DSIcon name="zap" size={11} className="text-amber-400" />
-            <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500">Atividade</p>
+        <div className="relative overflow-hidden rounded-2xl border border-white/8 bg-white/3 p-3.5">
+          <div className="mb-2 flex items-center gap-2">
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-500/12 ring-1 ring-amber-400/25">
+              <DSIcon name="zap" size={12} className="text-amber-300" />
+            </div>
+            <p className="text-[10px] font-bold uppercase tracking-wider text-text-muted">Atividade</p>
           </div>
-          <p className="text-[13px] font-semibold text-zinc-200">{getActivityLabel(assessment.activity_level)}</p>
+          <p className="text-[13px] font-bold text-white">{getActivityLabel(assessment.activity_level)}</p>
         </div>
-        <div className="rounded-xl border border-white/6 bg-white/3 p-3">
-          <div className="mb-1 flex items-center gap-1.5">
-            <DSIcon name="target" size={11} className="text-brand-primary" />
-            <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500">Objetivo</p>
+        <div className="relative overflow-hidden rounded-2xl border border-white/8 bg-white/3 p-3.5">
+          <div className="mb-2 flex items-center gap-2">
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-500/12 ring-1 ring-emerald-400/25">
+              <DSIcon name="target" size={12} className="text-emerald-300" />
+            </div>
+            <p className="text-[10px] font-bold uppercase tracking-wider text-text-muted">Objetivo</p>
           </div>
-          <p className="text-[13px] font-semibold text-zinc-200">{getGoalLabel(assessment.goal)}</p>
+          <p className="text-[13px] font-bold text-white">{getGoalLabel(assessment.goal)}</p>
         </div>
       </div>
 
@@ -300,6 +249,78 @@ export default function AvaliacaoDetalhePage() {
         <div className="rounded-xl border border-white/6 bg-white/3 p-4">
           <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-zinc-500">Notas</p>
           <p className="text-[13px] text-zinc-300">{assessment.notes}</p>
+        </div>
+      )}
+
+      {/* Personal invite — elegant, collapsible, demoted below data */}
+      {studentProfile?.personal_name ? (
+        <div className="flex items-center gap-3 rounded-2xl border border-emerald-400/18 bg-emerald-500/8 px-4 py-3.5">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-500/15 ring-1 ring-emerald-400/30">
+            <DSIcon name="checkCircle" size={18} className="text-emerald-300" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-400/90">Personal vinculado</p>
+            <p className="truncate text-[14px] font-bold text-white">{studentProfile.personal_name}</p>
+          </div>
+        </div>
+      ) : (
+        <div className="overflow-hidden rounded-2xl border border-white/8 bg-white/3">
+          <button
+            type="button"
+            onClick={() => setInviteOpen((v) => !v)}
+            className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-white/4"
+          >
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-primary/12 ring-1 ring-brand-primary/25">
+              <DSIcon name="userPlus" size={18} className="text-emerald-300" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-[13px] font-bold text-white">Melhorar com personal</p>
+              <p className="mt-0.5 text-[11px] text-text-muted">Convide um treinador para completar sua avaliação</p>
+            </div>
+            <DSIcon name="chevronDown" size={18} className={`shrink-0 text-text-muted transition-transform ${inviteOpen ? 'rotate-180' : ''}`} />
+          </button>
+
+          {inviteOpen && (
+            <div className="border-t border-white/6 px-4 pb-4 pt-3.5">
+              <div className="mb-3 flex gap-2">
+                <Input
+                  value={personalReferralCode}
+                  onChange={(e) => setPersonalReferralCode(e.target.value.toUpperCase())}
+                  placeholder="Código do personal"
+                  disabled={linkPersonalTrainer.isPending || !!studentProfile?.personal_id}
+                />
+                <Button
+                  onClick={() => linkPersonalTrainer.mutate(personalReferralCode)}
+                  loading={linkPersonalTrainer.isPending}
+                  disabled={!personalReferralCode.trim() || !!studentProfile?.personal_id}
+                >
+                  Vincular
+                </Button>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <Button variant="outline" size="sm" onClick={() => navigator.clipboard.writeText(personalInviteLink)}>
+                  <DSIcon name="copy" size={14} />
+                  Link
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(`Olá! Quero te convidar para completar minha avaliação física no VFIT.\n\nCadastro: ${personalInviteLink}`)}`, '_blank')}
+                >
+                  <DSIcon name="share2" size={14} />
+                  WhatsApp
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => window.open(`mailto:?subject=${encodeURIComponent('Convite VFIT — Avaliação Completa')}&body=${encodeURIComponent(`Olá! Quero te convidar para me acompanhar no VFIT e completar minha avaliação física.\n\nCadastro: ${personalInviteLink}`)}`, '_blank')}
+                >
+                  <DSIcon name="mail" size={14} />
+                  Email
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
@@ -392,7 +413,7 @@ function BMIBar({ bmi }: { bmi: number }) {
         className="absolute top-0 h-2 w-1 rounded-full bg-white shadow-sm"
         style={{ left: `${pct}%` }}
       />
-      <div className="mt-1 flex justify-between text-[9px] text-zinc-700">
+      <div className="mt-1.5 flex justify-between text-[9px] font-medium text-text-muted">
         <span>15</span>
         <span>18.5</span>
         <span>25</span>

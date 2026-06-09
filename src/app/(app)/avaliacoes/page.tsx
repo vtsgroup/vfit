@@ -38,29 +38,66 @@ function DeltaBadge({ current, previous, unit, invert }: {
   )
 }
 
-/** Premium stat tile — used inside assessment cards */
-function StatTile({ icon, label, value, unit, delta, valueClass }: {
+const TILE_TONES = {
+  emerald: { iconBg: 'bg-emerald-500/12', iconRing: 'ring-emerald-400/25', icon: 'text-emerald-300', glow: 'shadow-[0_12px_34px_-16px_rgba(16,185,129,0.7)]' },
+  blue: { iconBg: 'bg-sky-500/12', iconRing: 'ring-sky-400/25', icon: 'text-sky-300', glow: 'shadow-[0_12px_34px_-16px_rgba(56,189,248,0.65)]' },
+  amber: { iconBg: 'bg-amber-500/12', iconRing: 'ring-amber-400/25', icon: 'text-amber-300', glow: 'shadow-[0_12px_34px_-16px_rgba(245,158,11,0.65)]' },
+} as const
+
+/** Premium dark-glass metric tile */
+function MetricTile({ icon, label, value, unit, tone, delta, valueClass }: {
   icon: DSIconName
   label: string
   value: string
-  unit: string
+  unit?: string
+  tone: keyof typeof TILE_TONES
   delta?: React.ReactNode
   valueClass?: string
 }) {
+  const t = TILE_TONES[tone]
   return (
-    <div
-      className="rounded-2xl border border-slate-200/80 bg-white/85 px-2.5 py-2 shadow-[0_8px_18px_rgba(15,23,42,0.05)]"
-    >
-      <div className="mb-1 flex items-center gap-1.5">
-        <DSIcon name={icon} size={11} className="text-emerald-600" />
-        <p className="text-[10px] font-black uppercase tracking-wider text-slate-400">{label}</p>
+    <div className={`relative overflow-hidden rounded-2xl border border-white/8 bg-white/4 px-2.5 py-3 backdrop-blur-sm ${t.glow}`}>
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-white/15 to-transparent" />
+      <div className="mb-2 flex items-center gap-1.5">
+        <div className={`flex h-6 w-6 items-center justify-center rounded-lg ${t.iconBg} ring-1 ${t.iconRing}`}>
+          <DSIcon name={icon} size={11} className={t.icon} />
+        </div>
+        <p className="text-[9px] font-bold uppercase tracking-wider text-text-muted">{label}</p>
       </div>
-      <p className={`text-[16px] font-black tabular-nums leading-tight ${valueClass ?? 'text-slate-950'}`}>
-        {value}{unit && <span className="text-[10px] font-bold text-slate-400"> {unit}</span>}
-        {delta}
+      <p className={`text-xl font-black tabular-nums leading-none ${valueClass ?? 'text-white'}`}>
+        {value}{unit && <span className="ml-0.5 text-[10px] font-bold text-text-muted">{unit}</span>}
       </p>
+      {delta && <div className="mt-1.5 leading-none">{delta}</div>}
     </div>
   )
+}
+
+/** Subtle pill chip for classification labels */
+function InfoChip({ children, tone = 'emerald' }: {
+  children: React.ReactNode
+  tone?: 'emerald' | 'amber' | 'violet' | 'red' | 'blue'
+}) {
+  const tones = {
+    emerald: 'border-emerald-400/20 bg-emerald-500/10 text-emerald-300',
+    amber: 'border-amber-400/20 bg-amber-500/10 text-amber-300',
+    violet: 'border-violet-400/20 bg-violet-500/10 text-violet-300',
+    red: 'border-red-400/20 bg-red-500/10 text-red-300',
+    blue: 'border-sky-400/20 bg-sky-500/10 text-sky-300',
+  }[tone]
+  return (
+    <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider ${tones}`}>
+      <span className="h-1.5 w-1.5 rounded-full bg-current opacity-70" />
+      {children}
+    </span>
+  )
+}
+
+/** Map BMI value to a chip tone */
+function bmiTone(bmi: number): 'blue' | 'emerald' | 'amber' | 'red' {
+  if (bmi < 18.5) return 'blue'
+  if (bmi < 25) return 'emerald'
+  if (bmi < 30) return 'amber'
+  return 'red'
 }
 
 export default function AvaliacoesPage() {
@@ -73,6 +110,7 @@ export default function AvaliacoesPage() {
   const [personalReferralCode, setPersonalReferralCode] = useState('')
   const [showPersonalQr, setShowPersonalQr] = useState(false)
   const [personalInviteQrUrl, setPersonalInviteQrUrl] = useState('')
+  const [inviteOpen, setInviteOpen] = useState(false)
 
   const personalInviteLink = useMemo(() => {
     const base = typeof window !== 'undefined' ? window.location.origin : 'https://vfit.app.br'
@@ -113,15 +151,18 @@ export default function AvaliacoesPage() {
     }
   }, [showPersonalQr, personalInviteLink])
 
+  const hasSelf = !!assessments && assessments.length > 0
+  const isLinked = !!studentProfile?.personal_name
+
   return (
-    <div className="relative mx-auto max-w-lg px-4 pb-24">
+    <div className="relative mx-auto max-w-lg px-4 pb-28">
       {/* ─── Hero ─── */}
       <div
-        className="relative -mx-4 mb-5 overflow-hidden rounded-b-3xl px-4 py-5 backdrop-blur-md"
+        className="relative -mx-4 mb-6 overflow-hidden rounded-b-[32px] px-4 pb-6 pt-5 backdrop-blur-md"
         style={{ background: 'linear-gradient(to bottom, #0b1d36 0%, #0c1f38 20%, #0b1c35 40%, #0a1830 65%, #071628 85%, #050A12 100%)', boxShadow: '0 6px 28px 0 rgba(5,10,18,0.6)' }}
       >
         {/* Ambient glow */}
-        <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_85%_25%,rgba(34,197,94,0.18),transparent_55%)]" />
+        <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_85%_18%,rgba(34,197,94,0.20),transparent_55%),radial-gradient(circle_at_8%_92%,rgba(56,189,248,0.12),transparent_55%)]" />
         <div className="relative z-1 flex items-center gap-3 pt-4">
           <button
             aria-label="Voltar"
@@ -131,8 +172,8 @@ export default function AvaliacoesPage() {
             <DSIcon name="arrowLeft" size={18} />
           </button>
           <div className="min-w-0 flex-1">
-            <p className="text-xs font-semibold text-emerald-400">Acompanhamento</p>
-            <h1 className="bg-linear-to-r from-vfit-primary-100 to-vfit-primary-400 bg-clip-text text-4xl font-black text-transparent">
+            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-emerald-400">Acompanhamento</p>
+            <h1 className="bg-linear-to-br from-white via-white to-emerald-200/90 bg-clip-text text-[34px] font-black leading-none text-transparent">
               Avaliações
             </h1>
           </div>
@@ -143,89 +184,26 @@ export default function AvaliacoesPage() {
             </Button>
           </Link>
         </div>
-      </div>
 
-      <div className="relative mb-5 overflow-hidden rounded-[28px] border border-emerald-100/90 bg-linear-to-br from-white via-emerald-50/40 to-slate-50 p-4 shadow-[0_22px_52px_rgba(15,23,42,0.13)]">
-        <div className="pointer-events-none absolute -left-10 -top-12 h-32 w-32 rounded-full bg-emerald-200/45 blur-2xl" />
-        <div className="relative mb-3 flex items-start gap-3">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-emerald-200 bg-white shadow-[0_8px_18px_rgba(5,150,105,0.14)]">
-            <DSIcon name="userPlus" size={19} className="text-emerald-600" />
-          </div>
-          <div className="flex-1">
-            <p className="text-[10px] font-black uppercase tracking-[0.22em] text-emerald-600/85">
-              Avaliação completa com personal
-            </p>
-            <p className="mt-1 text-[13px] font-semibold leading-relaxed text-slate-500">
-              Convide um personal trainer para revisar e validar sua avaliação física.
-            </p>
-            {studentProfile?.personal_name && (
-              <p className="mt-1.5 inline-flex items-center gap-1 text-[12px] font-semibold text-success">
-                <DSIcon name="checkCircle" size={12} />
-                Vinculado a {studentProfile.personal_name}
+        {/* Hero summary strip */}
+        {hasSelf && (
+          <div className="relative z-1 mt-5 flex items-center gap-4 rounded-2xl border border-white/8 bg-white/4 px-4 py-3 backdrop-blur-sm">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-primary/12 ring-1 ring-brand-primary/25">
+              <DSIcon name="trendingUp" size={18} className="text-emerald-300" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-[11px] font-medium text-text-muted">
+                {assessments!.length === 1 ? '1 avaliação registrada' : `${assessments!.length} avaliações registradas`}
               </p>
-            )}
-          </div>
-        </div>
-
-        <div className="relative mb-3 flex gap-2">
-          <Input
-            value={personalReferralCode}
-            onChange={(e) => setPersonalReferralCode(e.target.value.toUpperCase())}
-            placeholder="Código do personal"
-            disabled={linkPersonalTrainer.isPending || !!studentProfile?.personal_id}
-          />
-          <Button
-            onClick={() => linkPersonalTrainer.mutate(personalReferralCode)}
-            loading={linkPersonalTrainer.isPending}
-            disabled={!personalReferralCode.trim() || !!studentProfile?.personal_id}
-          >
-            Vincular
-          </Button>
-        </div>
-
-        <div className="relative flex flex-wrap gap-2">
-          <Button variant="secondary" size="sm" onClick={() => navigator.clipboard.writeText(personalInviteLink)}>
-            <DSIcon name="copy" size={14} />
-            Copiar link
-          </Button>
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={() => window.open(`mailto:?subject=${encodeURIComponent('Convite VFIT — Avaliação Completa')}&body=${encodeURIComponent(`Olá! Quero te convidar para me acompanhar no VFIT e completar minha avaliação física.\n\nCadastro: ${personalInviteLink}`)}`, '_blank')}
-          >
-            <DSIcon name="mail" size={14} />
-            Email
-          </Button>
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(`Olá! Quero te convidar para completar minha avaliação física no VFIT.\n\nCadastro: ${personalInviteLink}`)}`, '_blank')}
-          >
-            <DSIcon name="share2" size={14} />
-            WhatsApp
-          </Button>
-          <Button
-            variant={showPersonalQr ? 'primary' : 'secondary'}
-            size="sm"
-            onClick={() => setShowPersonalQr((v) => !v)}
-          >
-            <DSIcon name="qrcode" size={14} />
-            QR Code
-          </Button>
-        </div>
-
-        {showPersonalQr && (
-          <div className="mt-4 flex justify-center">
-            {personalInviteQrUrl ? (
-              <img
-                src={personalInviteQrUrl}
-                alt="QR Code convite personal"
-                className="h-44 w-44 rounded-2xl border border-emerald-100 bg-white p-2 shadow-[0_14px_32px_rgba(15,23,42,0.10)]"
-              />
-            ) : (
-              <div className="flex h-44 w-44 items-center justify-center rounded-2xl border border-emerald-100 bg-white/80">
-                <DSIcon name="loader" size={20} className="animate-spin text-text-muted" />
-              </div>
+              <p className="truncate text-[13px] font-bold text-white">
+                Última em {new Date(assessments![0].created_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long' })}
+              </p>
+            </div>
+            {isLinked && (
+              <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-emerald-400/25 bg-emerald-500/10 px-2.5 py-1 text-[10px] font-bold text-emerald-300">
+                <DSIcon name="checkCircle" size={12} />
+                Personal
+              </span>
             )}
           </div>
         )}
@@ -266,74 +244,75 @@ export default function AvaliacoesPage() {
         </div>
       )}
 
-      {/* List — refined */}
-      {assessments && assessments.length > 0 && (
-        <div className="space-y-3">
-          {assessments.map((a, i) => {
+      {/* Self-assessments — the data hero */}
+      {hasSelf && (
+        <section className="space-y-3">
+          <div className="flex items-center gap-2 px-0.5">
+            <DSIcon name="user" size={13} className="text-emerald-400" />
+            <h2 className="text-[11px] font-bold uppercase tracking-[0.16em] text-text-muted">Minhas avaliações</h2>
+          </div>
+          {assessments!.map((a, i) => {
             const date = new Date(a.created_at)
             const isFirst = i === 0
-            const prev = assessments[i + 1] ?? null
+            const prev = assessments![i + 1] ?? null
             return (
               <Link
                 key={a.id}
                 href={`/avaliacoes/${a.id}`}
-                className="group relative block overflow-hidden rounded-[26px] border border-emerald-100/90 bg-linear-to-br from-white via-emerald-50/35 to-slate-50 p-4 shadow-[0_18px_40px_rgba(15,23,42,0.11)] transition-all active:translate-y-px"
+                className={`group relative block overflow-hidden rounded-3xl border p-4 transition-all active:translate-y-px ${isFirst ? 'border-emerald-400/18 bg-white/5' : 'border-white/8 bg-white/3 hover:border-white/12'}`}
+                style={isFirst ? { boxShadow: '0 18px 48px -24px rgba(16,185,129,0.55)' } : undefined}
               >
-                <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-emerald-200/35 blur-2xl" />
-                <div className="mb-3 flex items-center justify-between">
+                {isFirst && <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-emerald-500/12 blur-3xl" />}
+                <div className="relative mb-3 flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    {isFirst && (
-                      <span className="inline-flex items-center gap-1 rounded-full border border-emerald-200 bg-white/85 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-emerald-700 shadow-[0_4px_12px_rgba(5,150,105,0.10)]">
-                        <span className="h-1.5 w-1.5 rounded-full bg-brand-primary" />
-                        Mais recente
-                      </span>
-                    )}
-                    <span className="text-[11px] font-bold text-slate-400">
+                    {isFirst && <InfoChip tone="emerald">Mais recente</InfoChip>}
+                    <span className="text-[11px] font-semibold text-text-muted">
                       {date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
                     </span>
                   </div>
-                  <DSIcon name="chevronRight" size={16} className="text-slate-400 transition-transform group-hover:translate-x-0.5" />
+                  <DSIcon name="chevronRight" size={16} className="text-text-muted transition-transform group-hover:translate-x-0.5" />
                 </div>
 
-                <div className="grid grid-cols-3 gap-2">
-                  <StatTile
+                <div className="relative grid grid-cols-3 gap-2">
+                  <MetricTile
                     icon="scale"
                     label="Peso"
+                    tone="emerald"
                     value={a.weight_kg.toString()}
                     unit="kg"
-                    delta={prev ? <DeltaBadge current={a.weight_kg} previous={prev.weight_kg} unit="kg" /> : null}
+                    delta={prev ? <DeltaBadge current={a.weight_kg} previous={prev.weight_kg} unit="kg" /> : undefined}
                   />
-                  <StatTile
+                  <MetricTile
                     icon="activity"
                     label="IMC"
+                    tone="blue"
                     value={a.bmi.toString()}
-                    unit=""
                     valueClass={getBMIColor(a.bmi)}
-                    delta={prev ? <DeltaBadge current={a.bmi} previous={prev.bmi} unit="" /> : null}
+                    delta={prev ? <DeltaBadge current={a.bmi} previous={prev.bmi} unit="" /> : undefined}
                   />
-                  <StatTile
+                  <MetricTile
                     icon="percent"
                     label="Gordura"
+                    tone="amber"
                     value={a.body_fat_percentage ? a.body_fat_percentage.toString() : '—'}
                     unit={a.body_fat_percentage ? '%' : ''}
                     delta={
                       prev && a.body_fat_percentage && prev.body_fat_percentage ? (
                         <DeltaBadge current={a.body_fat_percentage} previous={prev.body_fat_percentage} unit="%" invert />
-                      ) : null
+                      ) : undefined
                     }
                   />
                 </div>
 
                 {a.bmi_category && (
-                  <p className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-700">
-                    <span className="h-1.5 w-1.5 rounded-full bg-current opacity-60" />
-                    {a.bmi_category}
-                  </p>
+                  <div className="relative mt-3">
+                    <InfoChip tone={bmiTone(a.bmi)}>{a.bmi_category}</InfoChip>
+                  </div>
                 )}
               </Link>
             )
           })}
-        </div>
+        </section>
       )}
 
       {/* ── Avaliações do Personal ────────────────────── */}
@@ -344,64 +323,150 @@ export default function AvaliacoesPage() {
       )}
 
       {proAssessments.length > 0 && (
-        <div className="mt-6">
-          <div className="mb-3 flex items-center gap-2">
-            <DSIcon name="clipboard" size={15} className="text-violet-500" />
-            <h2 className="text-[11px] font-black uppercase tracking-wider text-text-muted">
-              Avaliações do Personal
-            </h2>
+        <section className="mt-7 space-y-3">
+          <div className="flex items-center gap-2 px-0.5">
+            <DSIcon name="clipboard" size={13} className="text-violet-400" />
+            <h2 className="text-[11px] font-bold uppercase tracking-[0.16em] text-text-muted">Avaliações do personal</h2>
           </div>
-          <div className="space-y-3">
-            {proAssessments.map((a, i) => {
-              const date = new Date(a.assessment_date)
-              const isFirst = i === 0
-              return (
-                <Link
-                  key={a.id}
-                  href={`/dashboard/assessments/view?id=${a.id}`}
-                  className="group relative block overflow-hidden rounded-[26px] border border-violet-100/90 bg-linear-to-br from-white via-violet-50/35 to-slate-50 p-4 shadow-[0_18px_40px_rgba(15,23,42,0.11)] transition-all active:translate-y-px"
-                >
-                  <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-violet-200/35 blur-2xl" />
-                  <div className="mb-3 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      {isFirst && (
-                        <span className="inline-flex items-center gap-1 rounded-full border border-violet-200 bg-white/85 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-violet-700 shadow-[0_4px_12px_rgba(109,40,217,0.10)]">
-                          <span className="h-1.5 w-1.5 rounded-full bg-violet-500" />
-                          Mais recente
-                        </span>
-                      )}
-                      <span className="text-[11px] font-bold text-slate-400">
-                        {date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      {(a as { personal_name?: string }).personal_name && (
-                        <span className="text-[10px] font-semibold text-violet-500">
-                          por {(a as { personal_name?: string }).personal_name}
-                        </span>
-                      )}
-                      <DSIcon name="chevronRight" size={16} className="text-slate-400 transition-transform group-hover:translate-x-0.5" />
-                    </div>
+          {proAssessments.map((a, i) => {
+            const date = new Date(a.assessment_date)
+            const isFirst = i === 0
+            const personalName = (a as { personal_name?: string }).personal_name
+            return (
+              <Link
+                key={a.id}
+                href={`/dashboard/assessments/view?id=${a.id}`}
+                className={`group relative block overflow-hidden rounded-3xl border p-4 transition-all active:translate-y-px ${isFirst ? 'border-violet-400/18 bg-white/5' : 'border-white/8 bg-white/3 hover:border-white/12'}`}
+                style={isFirst ? { boxShadow: '0 18px 48px -24px rgba(139,92,246,0.5)' } : undefined}
+              >
+                {isFirst && <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-violet-500/12 blur-3xl" />}
+                <div className="relative mb-3 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    {isFirst && <InfoChip tone="violet">Mais recente</InfoChip>}
+                    <span className="text-[11px] font-semibold text-text-muted">
+                      {date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
+                    </span>
                   </div>
+                  <DSIcon name="chevronRight" size={16} className="text-text-muted transition-transform group-hover:translate-x-0.5" />
+                </div>
 
-                  <div className="grid grid-cols-3 gap-2">
-                    <StatTile icon="scale" label="Peso" value={String(a.weight_kg ?? '—')} unit={a.weight_kg ? 'kg' : ''} />
-                    <StatTile icon="activity" label="IMC" value={String(a.bmi ?? '—')} unit="" valueClass={a.bmi ? getBMIColor(Number(a.bmi)) : ''} />
-                    <StatTile icon="percent" label="Gordura" value={a.body_fat_percentage ? String(a.body_fat_percentage) : '—'} unit={a.body_fat_percentage ? '%' : ''} />
-                  </div>
+                <div className="relative grid grid-cols-3 gap-2">
+                  <MetricTile icon="scale" label="Peso" tone="emerald" value={String(a.weight_kg ?? '—')} unit={a.weight_kg ? 'kg' : ''} />
+                  <MetricTile icon="activity" label="IMC" tone="blue" value={String(a.bmi ?? '—')} valueClass={a.bmi ? getBMIColor(Number(a.bmi)) : undefined} />
+                  <MetricTile icon="percent" label="Gordura" tone="amber" value={a.body_fat_percentage ? String(a.body_fat_percentage) : '—'} unit={a.body_fat_percentage ? '%' : ''} />
+                </div>
 
-                  {a.fat_classification && (
-                    <p className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-violet-200 bg-violet-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-violet-700">
-                      <span className="h-1.5 w-1.5 rounded-full bg-current opacity-60" />
-                      {a.fat_classification}
-                    </p>
+                <div className="relative mt-3 flex flex-wrap items-center gap-2">
+                  {a.fat_classification && <InfoChip tone="violet">{a.fat_classification}</InfoChip>}
+                  {personalName && (
+                    <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-violet-300/90">
+                      <DSIcon name="user" size={11} />
+                      {personalName}
+                    </span>
                   )}
-                </Link>
-              )
-            })}
-          </div>
-        </div>
+                </div>
+              </Link>
+            )
+          })}
+        </section>
       )}
+
+      {/* ── Personal invite — elegant, collapsible, below data ── */}
+      <div className="mt-7">
+        {isLinked ? (
+          <div className="flex items-center gap-3 rounded-2xl border border-emerald-400/18 bg-emerald-500/8 px-4 py-3.5">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-500/15 ring-1 ring-emerald-400/30">
+              <DSIcon name="checkCircle" size={18} className="text-emerald-300" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-400/90">Personal vinculado</p>
+              <p className="truncate text-[14px] font-bold text-white">{studentProfile!.personal_name}</p>
+            </div>
+          </div>
+        ) : (
+          <div className="overflow-hidden rounded-2xl border border-white/8 bg-white/3">
+            <button
+              type="button"
+              onClick={() => setInviteOpen((v) => !v)}
+              className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-white/4"
+            >
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-primary/12 ring-1 ring-brand-primary/25">
+                <DSIcon name="userPlus" size={18} className="text-emerald-300" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-[13px] font-bold text-white">Avaliação completa com personal</p>
+                <p className="mt-0.5 text-[11px] text-text-muted">Convide um treinador para validar sua avaliação</p>
+              </div>
+              <DSIcon name="chevronDown" size={18} className={`shrink-0 text-text-muted transition-transform ${inviteOpen ? 'rotate-180' : ''}`} />
+            </button>
+
+            {inviteOpen && (
+              <div className="border-t border-white/6 px-4 pb-4 pt-3.5">
+                <div className="mb-3 flex gap-2">
+                  <Input
+                    value={personalReferralCode}
+                    onChange={(e) => setPersonalReferralCode(e.target.value.toUpperCase())}
+                    placeholder="Código do personal"
+                    disabled={linkPersonalTrainer.isPending || !!studentProfile?.personal_id}
+                  />
+                  <Button
+                    onClick={() => linkPersonalTrainer.mutate(personalReferralCode)}
+                    loading={linkPersonalTrainer.isPending}
+                    disabled={!personalReferralCode.trim() || !!studentProfile?.personal_id}
+                  >
+                    Vincular
+                  </Button>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <Button variant="outline" size="sm" onClick={() => navigator.clipboard.writeText(personalInviteLink)}>
+                    <DSIcon name="copy" size={14} />
+                    Copiar link
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => window.open(`mailto:?subject=${encodeURIComponent('Convite VFIT — Avaliação Completa')}&body=${encodeURIComponent(`Olá! Quero te convidar para me acompanhar no VFIT e completar minha avaliação física.\n\nCadastro: ${personalInviteLink}`)}`, '_blank')}
+                  >
+                    <DSIcon name="mail" size={14} />
+                    Email
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(`Olá! Quero te convidar para completar minha avaliação física no VFIT.\n\nCadastro: ${personalInviteLink}`)}`, '_blank')}
+                  >
+                    <DSIcon name="share2" size={14} />
+                    WhatsApp
+                  </Button>
+                  <Button
+                    variant={showPersonalQr ? 'primary' : 'outline'}
+                    size="sm"
+                    onClick={() => setShowPersonalQr((v) => !v)}
+                  >
+                    <DSIcon name="qrcode" size={14} />
+                    QR Code
+                  </Button>
+                </div>
+                {showPersonalQr && (
+                  <div className="mt-4 flex justify-center">
+                    {personalInviteQrUrl ? (
+                      <img
+                        src={personalInviteQrUrl}
+                        alt="QR Code convite personal"
+                        className="h-44 w-44 rounded-2xl border border-white/10 bg-white p-2"
+                      />
+                    ) : (
+                      <div className="flex h-44 w-44 items-center justify-center rounded-2xl border border-white/10 bg-white/5">
+                        <DSIcon name="loader" size={20} className="animate-spin text-text-muted" />
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   )
 }
