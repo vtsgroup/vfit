@@ -15,12 +15,6 @@ import { useEffect, useRef, useState } from 'react'
 import { IntersectionReveal } from '@/components/ui/intersection-reveal'
 import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 
-/* ─── Typography ─── */
-const headingFont = {
-  fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-  fontWeight: 900,
-  letterSpacing: '0',
-}
 const monoLabel = {
   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
   fontWeight: 700,
@@ -99,14 +93,11 @@ function StatCard({ stat }: { stat: typeof NUMBERS[0] }) {
         {stat.prefix && (
           <span className="text-lg font-bold text-brand-primary/60" style={monoLabel}>{stat.prefix}</span>
         )}
-        <span
-          className="text-2xl font-black text-white sm:text-4xl"
-          style={headingFont}
-        >
+        <span className="font-syne text-2xl font-black text-white sm:text-4xl">
           {formatNumber(count)}
         </span>
         {stat.suffix && (
-          <span className="text-xl font-black text-brand-primary" style={headingFont}>{stat.suffix}</span>
+          <span className="font-syne text-xl font-black text-brand-primary">{stat.suffix}</span>
         )}
       </div>
 
@@ -144,10 +135,7 @@ export function NumbersSection() {
 
         {/* Heading */}
         <IntersectionReveal animation="blur-in" delay={50}>
-          <h2
-            className="mb-4 text-center text-3xl uppercase leading-[0.96] text-white sm:text-5xl"
-            style={headingFont}
-          >
+          <h2 className="font-syne mb-4 text-center text-3xl uppercase leading-[0.96] text-white sm:text-5xl">
             GENTE REAL{' '}
             <span className="bg-linear-to-r from-brand-primary via-brand-mint to-brand-accent bg-clip-text text-transparent">
               TREINANDO

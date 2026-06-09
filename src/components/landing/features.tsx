@@ -15,14 +15,6 @@ import { useState } from 'react'
 import { IntersectionReveal } from '@/components/ui/intersection-reveal'
 import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 
-/* ═══════════════════════════════════════════
-   DESIGN TOKENS
-   ═══════════════════════════════════════════ */
-const headingFont = {
-  fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-  fontWeight: 900,
-  letterSpacing: '0',
-}
 const monoLabel = {
   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
   fontWeight: 700,
@@ -182,14 +174,14 @@ const ALUNO_STEPS: Step[] = [
 function FeatureCard({ feat, index }: { feat: Feature; index: number }) {
   return (
     <IntersectionReveal animation="scale-in" delay={index * 80}>
-      <div className="group relative h-full overflow-hidden rounded-2xl border border-gray-200/80 bg-white p-5 transition-all duration-300 hover:-translate-y-1 hover:border-brand-primary/40 hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)] sm:p-7">
+      <div className="group relative h-full overflow-hidden rounded-2xl border border-slate-200/80 bg-white/95 p-5 shadow-[0_18px_50px_rgba(15,23,42,0.06)] transition-all duration-300 hover:-translate-y-1 hover:border-brand-primary/30 hover:shadow-[0_22px_60px_rgba(15,23,42,0.10)] sm:p-7">
         {/* Top accent line */}
         <div className="absolute inset-x-0 top-0 h-0.5 bg-linear-to-r from-transparent via-brand-primary/50 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
         <div className="relative flex flex-col gap-4">
           {/* Icon + Badge */}
-          <div className="flex items-center justify-between">
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gray-100 text-gray-700 transition-all duration-300 group-hover:bg-brand-primary/10 group-hover:text-brand-primary group-hover:scale-110 group-hover:-rotate-6">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-brand-primary transition-all duration-300 group-hover:border-brand-primary/20 group-hover:bg-brand-primary/8 group-hover:scale-105">
               <DSIcon name={feat.icon} size={20} />
             </div>
             <span
@@ -203,19 +195,19 @@ function FeatureCard({ feat, index }: { feat: Feature; index: number }) {
           </div>
 
           {/* Title */}
-          <h3 className="text-lg uppercase tracking-tight text-gray-900" style={headingFont}>
+          <h3 className="font-syne text-lg uppercase tracking-tight text-gray-950">
             {feat.title}
           </h3>
 
           {/* Description */}
-          <p className="text-sm leading-relaxed text-gray-500">{feat.description}</p>
+          <p className="font-dm-sans text-sm leading-relaxed text-slate-600">{feat.description}</p>
 
           {/* Highlights */}
           <div className="flex flex-wrap gap-2 pt-1">
             {feat.highlights.map((h) => (
               <span
                 key={h}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-gray-50 px-2.5 py-1 text-[11px] font-semibold text-gray-600 transition-all duration-200 group-hover:border-brand-primary/25 group-hover:bg-brand-primary/5 group-hover:text-gray-800"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] font-semibold text-slate-600 transition-all duration-200 group-hover:border-brand-primary/25 group-hover:bg-brand-primary/5 group-hover:text-slate-800"
               >
                 <span className="h-1.5 w-1.5 rounded-full bg-brand-primary" />
                 {h}
@@ -262,14 +254,11 @@ export function Features() {
                 <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-brand-primary" />
                 App de treino
               </span>
-              <h2
-                className="mt-6 text-3xl uppercase tracking-tight text-gray-950 sm:text-4xl lg:text-5xl"
-                style={headingFont}
-              >
+              <h2 className="font-syne mt-6 text-3xl uppercase tracking-tight text-gray-950 sm:text-4xl lg:text-5xl">
                 Entenda seu treino,{' '}
                 <span className="text-brand-primary">execute</span> melhor
               </h2>
-              <p className="mt-5 text-base text-gray-500 sm:text-lg">
+              <p className="font-dm-sans mt-5 text-base text-gray-500 sm:text-lg">
                 Um app mobile-first para transformar orientação profissional em treino simples de seguir.
               </p>
             </div>
@@ -357,10 +346,7 @@ export function Features() {
               >
                 COMO FUNCIONA
               </span>
-              <h2
-                className="mt-3 text-3xl font-black uppercase tracking-tight text-gray-950 sm:text-4xl lg:text-5xl"
-                style={headingFont}
-              >
+              <h2 className="font-syne mt-3 text-3xl font-black uppercase tracking-tight text-gray-950 sm:text-4xl lg:text-5xl">
                 Comece em{' '}
                 <span className="bg-linear-to-r from-brand-primary via-brand-mint to-brand-accent bg-clip-text text-transparent">
                   3 passos
@@ -375,10 +361,7 @@ export function Features() {
               <IntersectionReveal key={`${activeTab}-step-${i}`} animation="slide-up" delay={i * 120}>
                 <div className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition-all duration-300 hover:border-brand-primary/25 hover:shadow-md sm:p-8">
                   {/* Watermark number */}
-                  <span
-                    className="pointer-events-none absolute -right-2 -top-3 select-none text-7xl font-black text-brand-primary/15 sm:text-8xl"
-                    style={headingFont}
-                  >
+                  <span className="font-syne pointer-events-none absolute -right-2 -top-3 select-none text-7xl font-black text-brand-primary/15 sm:text-8xl">
                     {step.number}
                   </span>
 
@@ -386,10 +369,10 @@ export function Features() {
                     <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary transition-all duration-300 group-hover:bg-brand-primary/20">
                       <DSIcon name={step.icon} />
                     </div>
-                    <h3 className="mb-2 text-lg font-black tracking-tight text-gray-900" style={headingFont}>
+                    <h3 className="font-syne mb-2 text-lg font-black tracking-tight text-gray-900">
                       {step.title}
                     </h3>
-                    <p className="text-sm leading-relaxed text-gray-500">{step.description}</p>
+                    <p className="font-dm-sans text-sm leading-relaxed text-gray-500">{step.description}</p>
                   </div>
                 </div>
               </IntersectionReveal>

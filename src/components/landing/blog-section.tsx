@@ -17,12 +17,6 @@ import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 import { IntersectionReveal } from '@/components/ui/intersection-reveal'
 import { Button } from '@/components/ui/button'
 
-/* ─── Typography — consistent with all sections ─── */
-const headingFont = {
-  fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-  fontWeight: 900,
-  letterSpacing: '0',
-}
 const monoLabel = {
   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
   fontWeight: 700,
@@ -123,8 +117,7 @@ function BlogCard({ post }: { post: BlogPost }) {
 
         {/* Title */}
         <h3
-          className="mb-3 text-lg leading-snug font-bold text-gray-950 transition-colors duration-200 group-hover:text-brand-primary"
-          style={{ fontFamily: headingFont.fontFamily }}
+          className="font-syne mb-3 text-lg leading-snug font-bold text-gray-950 transition-colors duration-200 group-hover:text-brand-primary"
         >
           {post.title}
         </h3>
@@ -171,9 +164,8 @@ export function BlogSection() {
         {/* Heading */}
         <IntersectionReveal animation="blur-in" delay={50}>
           <h2
-            className="mb-10 text-center uppercase text-gray-950 sm:mb-16"
+            className="font-syne mb-10 text-center uppercase text-gray-950 sm:mb-16"
             style={{
-              ...headingFont,
               fontSize: 'clamp(2rem, 5vw, 3.5rem)',
               lineHeight: '0.95',
             }}

@@ -14,12 +14,6 @@ import { PUBLIC_SOCIAL_PROOF } from '@config/constants'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
 
-/* ─── Typography ─── */
-const headingFont = {
-  fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-  fontWeight: 900,
-  letterSpacing: '0',
-}
 const monoLabel = {
   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
   fontWeight: 700,
@@ -169,10 +163,7 @@ export function Hero() {
           </IntersectionReveal>
 
           {/* Headline */}
-          <h1
-            className="mx-auto mb-6 max-w-5xl text-balance text-4xl uppercase leading-[0.96] text-white sm:text-6xl lg:text-7xl"
-            style={headingFont}
-          >
+          <h1 className="font-syne mx-auto mb-6 max-w-5xl text-balance text-4xl uppercase leading-[0.96] text-white sm:text-6xl lg:text-7xl">
             Treine com personal trainer e{' '}
             <span className="bg-linear-to-r from-brand-primary via-brand-mint to-brand-accent bg-clip-text text-transparent">
               IA
@@ -282,7 +273,7 @@ export function Hero() {
                   }`}
                 >
                   <DSIcon name={stat.icon} size={16} className="text-brand-primary/40 mb-1.5 sm:mb-2" />
-                  <span className="text-xl font-black text-white sm:text-3xl" style={headingFont}>
+                  <span className="font-syne text-xl font-black text-white sm:text-3xl">
                     {stat.value}
                   </span>
                   <span className="mt-1 text-[9px] sm:text-[10px] text-white/30 uppercase" style={monoLabel}>

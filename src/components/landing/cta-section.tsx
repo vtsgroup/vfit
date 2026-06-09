@@ -17,12 +17,6 @@ import { trackLandingEvent } from '@/lib/landing-analytics'
 import { Button } from '@/components/ui/button'
 import { DSIcon } from '@/components/ui/ds-icon'
 
-/* ─── Typography — consistent with pricing/testimonials ─── */
-const headingFont = {
-  fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-  fontWeight: 900,
-  letterSpacing: '0',
-}
 const monoLabel = {
   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
   fontWeight: 700,
@@ -96,8 +90,7 @@ export function CtaSection() {
         {/* Heading — slightly smaller, balanced */}
         <IntersectionReveal animation="blur-in" delay={50}>
           <h2
-            className="mx-auto max-w-4xl text-3xl uppercase leading-[0.96] text-white sm:text-5xl"
-            style={headingFont}
+            className="font-syne mx-auto max-w-4xl text-3xl uppercase leading-[0.96] text-white sm:text-5xl"
           >
             COMECE SEU{' '}
             <span className="bg-linear-to-r from-brand-primary via-brand-mint to-brand-accent bg-clip-text text-transparent">

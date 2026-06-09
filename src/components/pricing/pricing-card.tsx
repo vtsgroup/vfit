@@ -30,7 +30,7 @@ export function PricingCard({ plan, isAnnual }: PricingCardProps) {
     <div
       className={`relative flex h-full flex-col overflow-visible rounded-2xl border p-6 sm:p-8 transition-all ${
         isPopular
-          ? 'border-brand-primary/40 bg-brand-primary/5 shadow-[0_0_40px_rgba(99,102,241,0.08)]'
+          ? 'border-brand-primary/40 bg-brand-primary/5 shadow-[0_0_40px_rgba(34,197,94,0.10)]'
           : 'border-white/8 bg-white/2 hover:border-white/15'
       }`}
     >
@@ -56,7 +56,7 @@ export function PricingCard({ plan, isAnnual }: PricingCardProps) {
 
       {/* Name */}
       <h3
-        className="mt-2 text-xl font-bold text-white"
+        className="font-syne mt-2 text-xl font-bold text-white"
         data-testid={`plan-name-${plan.slug}`}
       >
         {plan.name}

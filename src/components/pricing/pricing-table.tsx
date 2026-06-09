@@ -47,7 +47,7 @@ export function PricingTable({ rows }: PricingTableProps) {
             {plans.map((p) => (
               <th
                 key={p}
-                className={`py-4 px-3 text-center text-xs uppercase tracking-wider ${
+                className={`font-syne py-4 px-3 text-center text-xs uppercase tracking-wider ${
                   p === 'pro' ? 'text-brand-primary' : 'text-zinc-400'
                 }`}
                 style={monoStyle}

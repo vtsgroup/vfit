@@ -16,12 +16,6 @@ import Image from 'next/image'
 import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
 
-/* ─── Typography — consistent with all sections ─── */
-const headingFont = {
-  fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-  fontWeight: 900,
-  letterSpacing: '0',
-}
 const monoLabel = {
   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
   fontWeight: 700,
@@ -104,8 +98,7 @@ export function Footer() {
           <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-5 px-5 py-8 sm:flex-row sm:gap-6 sm:px-6 sm:py-12">
           <div>
             <h3
-              className="text-lg font-black tracking-tight text-bg-primary sm:text-xl"
-              style={{ fontFamily: headingFont.fontFamily }}
+              className="font-syne text-lg font-black tracking-tight text-bg-primary sm:text-xl"
             >
               Pronto para treinar com um plano claro?
             </h3>
