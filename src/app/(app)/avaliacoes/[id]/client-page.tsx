@@ -100,7 +100,7 @@ export default function AvaliacaoDetalhePage() {
   ]
 
   return (
-    <div className="mx-auto max-w-lg pb-24">
+    <div className="mx-auto min-h-dvh max-w-lg bg-linear-to-b from-slate-100 via-slate-50 to-slate-100 pb-24">
       {/* ─── Premium Hero ─── */}
       <div
         className="relative -mb-2 overflow-hidden rounded-b-3xl px-4 pt-5 pb-7 backdrop-blur-md"
@@ -152,9 +152,9 @@ export default function AvaliacaoDetalhePage() {
 
       <div className="mt-5 space-y-5 px-4">
       {/* BMI category */}
-      <div className="relative overflow-hidden rounded-2xl border border-white/8 bg-white/3 p-5 text-center">
+      <div className="relative overflow-hidden rounded-2xl border border-slate-700/65 bg-slate-950/80 p-5 text-center">
         <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-white/15 to-transparent" />
-        <p className="mb-1.5 text-[11px] font-bold uppercase tracking-[0.16em] text-text-muted">Classificação IMC</p>
+        <p className="mb-1.5 text-[11px] font-bold uppercase tracking-[0.16em] text-zinc-300">Classificação IMC</p>
         <p className={`text-[22px] font-black tracking-tight ${getBMIColor(assessment.bmi)}`}>
           {assessment.bmi_category}
         </p>
@@ -168,8 +168,8 @@ export default function AvaliacaoDetalhePage() {
             <DSIcon name="trendingUp" size={12} className="text-brand-primary" />
             Evolução
           </h3>
-          <div className="rounded-2xl border border-white/8 bg-white/3 p-4">
-            <p className="mb-3 text-[11px] text-zinc-600">
+          <div className="rounded-2xl border border-slate-700/65 bg-slate-900/70 p-4">
+            <p className="mb-3 text-[11px] text-zinc-300">
               vs. {new Date(prev.created_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })}
             </p>
             <div className="grid grid-cols-3 gap-3">
@@ -195,8 +195,8 @@ export default function AvaliacaoDetalhePage() {
                 />
               ) : (
                 <div className="text-center">
-                  <p className="text-[11px] text-zinc-600">Gordura</p>
-                  <p className="text-[13px] text-zinc-600">—</p>
+                  <p className="text-[11px] text-zinc-300">Gordura</p>
+                  <p className="text-[13px] text-zinc-300">—</p>
                 </div>
               )}
             </div>
@@ -206,21 +206,21 @@ export default function AvaliacaoDetalhePage() {
 
       {/* Activity + goal */}
       <div className="grid grid-cols-2 gap-3">
-        <div className="relative overflow-hidden rounded-2xl border border-white/8 bg-white/3 p-3.5">
+        <div className="relative overflow-hidden rounded-2xl border border-slate-700/65 bg-slate-900/70 p-3.5">
           <div className="mb-2 flex items-center gap-2">
             <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-500/12 ring-1 ring-amber-400/25">
               <DSIcon name="zap" size={12} className="text-amber-300" />
             </div>
-            <p className="text-[10px] font-bold uppercase tracking-wider text-text-muted">Atividade</p>
+            <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-300">Atividade</p>
           </div>
           <p className="text-[13px] font-bold text-white">{getActivityLabel(assessment.activity_level)}</p>
         </div>
-        <div className="relative overflow-hidden rounded-2xl border border-white/8 bg-white/3 p-3.5">
+        <div className="relative overflow-hidden rounded-2xl border border-slate-700/65 bg-slate-900/70 p-3.5">
           <div className="mb-2 flex items-center gap-2">
             <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-500/12 ring-1 ring-emerald-400/25">
               <DSIcon name="target" size={12} className="text-emerald-300" />
             </div>
-            <p className="text-[10px] font-bold uppercase tracking-wider text-text-muted">Objetivo</p>
+            <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-300">Objetivo</p>
           </div>
           <p className="text-[13px] font-bold text-white">{getGoalLabel(assessment.goal)}</p>
         </div>
@@ -232,10 +232,10 @@ export default function AvaliacaoDetalhePage() {
           <DSIcon name="ruler" size={12} className="text-brand-primary" />
           Medidas
         </h3>
-        <div className="rounded-2xl border border-white/8 bg-white/3 divide-y divide-white/5">
+        <div className="rounded-2xl border border-slate-700/65 bg-slate-900/70 divide-y divide-slate-700/55">
           {measurements.map((m) => (
             <div key={m.label} className="flex items-center justify-between px-4 py-2.5">
-              <span className="text-[13px] text-zinc-400">{m.label}</span>
+              <span className="text-[13px] text-zinc-300">{m.label}</span>
               <span className="text-[14px] font-semibold text-white tabular-nums">
                 {m.value !== null ? `${m.value} ${m.unit}` : '—'}
               </span>
@@ -246,8 +246,8 @@ export default function AvaliacaoDetalhePage() {
 
       {/* Notes */}
       {assessment.notes && (
-        <div className="rounded-xl border border-white/6 bg-white/3 p-4">
-          <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-zinc-500">Notas</p>
+        <div className="rounded-xl border border-slate-700/65 bg-slate-900/70 p-4">
+          <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-zinc-300">Notas</p>
           <p className="text-[13px] text-zinc-300">{assessment.notes}</p>
         </div>
       )}
@@ -264,11 +264,11 @@ export default function AvaliacaoDetalhePage() {
           </div>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-2xl border border-white/8 bg-white/3">
+        <div className="overflow-hidden rounded-2xl border border-slate-700/65 bg-slate-900/70">
           <button
             type="button"
             onClick={() => setInviteOpen((v) => !v)}
-            className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-white/4"
+            className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-slate-800/80"
           >
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-primary/12 ring-1 ring-brand-primary/25">
               <DSIcon name="userPlus" size={18} className="text-emerald-300" />
@@ -362,7 +362,7 @@ function HeroStat({
   }[tone]
 
   return (
-    <div className={`relative flex flex-col items-center rounded-2xl border border-white/8 bg-white/4 px-2 py-3 backdrop-blur-sm ${toneStyles.glow}`}>
+    <div className={`relative flex flex-col items-center rounded-2xl border border-slate-700/70 bg-slate-950/82 px-2 py-3 backdrop-blur-sm ${toneStyles.glow}`}>
       <div className={`mb-1.5 flex h-8 w-8 items-center justify-center rounded-lg ${toneStyles.bg} ring-1 ${toneStyles.ring}`}>
         <DSIcon name={icon} size={14} className={toneStyles.icon} />
       </div>
@@ -370,7 +370,7 @@ function HeroStat({
         {value}
         {unit && <span className="ml-0.5 text-[10px] font-semibold text-zinc-400"> {unit}</span>}
       </p>
-      <p className="mt-1 text-[10px] font-medium uppercase tracking-wider text-zinc-500">{label}</p>
+      <p className="mt-1 text-[10px] font-medium uppercase tracking-wider text-zinc-300">{label}</p>
     </div>
   )
 }
@@ -413,7 +413,7 @@ function BMIBar({ bmi }: { bmi: number }) {
         className="absolute top-0 h-2 w-1 rounded-full bg-white shadow-sm"
         style={{ left: `${pct}%` }}
       />
-      <div className="mt-1.5 flex justify-between text-[9px] font-medium text-text-muted">
+      <div className="mt-1.5 flex justify-between text-[9px] font-medium text-zinc-300">
         <span>15</span>
         <span>18.5</span>
         <span>25</span>
@@ -445,7 +445,7 @@ function EvolutionStat({ label, current, previous, unit, invert }: {
 
   return (
     <div className="text-center">
-      <p className="text-[11px] text-zinc-600">{label}</p>
+      <p className="text-[11px] text-zinc-300">{label}</p>
       <p className={`text-[15px] font-bold ${color}`}>
         {diff === 0 ? '=' : `${arrow}${Math.abs(diff)}${unit}`}
       </p>
