@@ -164,8 +164,11 @@ export default function AvaliacoesPage() {
 
   const displayAssessments = useMemo<SelfAssessment[]>(() => {
     const base = (assessments ?? []).filter((a) => a.id !== 'fa501579-0fbd-47f7-b034-54d406016f8e')
+    const isVictorSuperAdmin = user?.role === 'super_admin'
+      || user?.id === 'f1bc775d-7b7b-4702-adeb-dc9255082d03'
+      || user?.email === 'victor.duarte@vfit.app.br'
 
-    if (user?.role !== 'super_admin') return base
+    if (!isVictorSuperAdmin) return base
 
     const hasCompleteAssessment = base.some((a) => a.id === '16efd166-f01f-42de-8e63-a3d8119443d8')
     if (hasCompleteAssessment) return base
@@ -193,7 +196,7 @@ export default function AvaliacoesPage() {
     }
 
     return [...base, fallback].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-  }, [assessments, user?.role])
+  }, [assessments, user?.email, user?.id, user?.role])
 
   const hasSelf = displayAssessments.length > 0
   const isLinked = !!studentProfile?.personal_name

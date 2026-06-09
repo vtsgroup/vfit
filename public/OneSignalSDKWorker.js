@@ -11,7 +11,7 @@ try {
   console.warn('[SW] OneSignal SW script failed to load (likely ad blocker):', e.message)
 }
 
-const CACHE_VERSION = 'v9'
+const CACHE_VERSION = 'v10'
 const CACHE_STATIC = `vfit-static-${CACHE_VERSION}`
 const CACHE_DYNAMIC = `vfit-dynamic-${CACHE_VERSION}`
 const CACHE_API = `vfit-api-${CACHE_VERSION}`
@@ -96,6 +96,12 @@ self.addEventListener('fetch', (event) => {
 
   // Skip cross-origin requests
   if (url.hostname !== self.location.hostname) return
+
+  // Assessment screens must always reflect live auth/data fixes.
+  if (url.pathname.startsWith('/avaliacoes')) {
+    event.respondWith(fetch(new Request(request, { cache: 'no-store' })).catch(() => caches.match(request)))
+    return
+  }
 
   // API calls → Network-first with cache fallback
   if (url.pathname.startsWith('/api/')) {
