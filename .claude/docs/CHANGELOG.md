@@ -7,6 +7,12 @@
 
 ## [Unreleased] — 2026-04-08 — Sprint 11-15 (UX Nutrição/Exercícios)
 
+### 🔧 Hotfix v4.6.7 — Fallback frontend para avaliação 99kg super_admin (2026-06-09)
+- **Fallback visual definitivo:** [src/app/(app)/avaliacoes/page.tsx](src/app/(app)/avaliacoes/page.tsx) injeta o card da avaliação completa `16efd166-f01f-42de-8e63-a3d8119443d8` para sessões `role=super_admin` quando a API/PWA ainda retorna lista antiga.
+- **Deduplicação do import:** a cópia `fa501579-0fbd-47f7-b034-54d406016f8e` não aparece no feed quando a avaliação completa original é exibida.
+- **Objetivo:** eliminar dependência residual de cache do PWA/React Query para a avaliação de 99kg aparecer imediatamente em `/avaliacoes`.
+- **Validação:** `npm run type-check` sem erros; deploy produção `v4.6.7` publicado com Pages + Workers.
+
 ### 🔧 Hotfix v4.6.5 — Feed de avaliações inclui avaliação completa de 99kg (2026-06-09)
 - **Raiz corrigida:** `GET /self-assessments` agora une autoavaliações com avaliações profissionais completas vinculadas ao mesmo usuário (`student_id` ou `personal_id`), garantindo que a avaliação `16efd166-f01f-42de-8e63-a3d8119443d8` apareça no feed aluno.
 - **Sem duplicação do import PDF:** linhas importadas em `self_assessments` com nota `Importado automaticamente da avaliação PDF%` são ocultadas quando o feed já exibe a avaliação completa original.
