@@ -7,6 +7,13 @@
 
 ## [Unreleased] — 2026-04-08 — Sprint 11-15 (UX Nutrição/Exercícios)
 
+### 🔧 Hotfix v4.5.7 — Avaliações: email, visibilidade super_admin, contraste e dados (2026-06-09)
+- **Email atualizado:** `victor.duarte@iapersonal.app.br` → `victor.duarte@vfit.app.br` direto no banco (UPDATE users WHERE id = f1bc775d).
+- **super_admin vê assessments profissionais próprias:** `GET /assessments/my` agora usa `WHERE (student_id = $1 OR personal_id = $1)` para usuários com role `super_admin`/`admin`, permitindo que Victor veja a avaliação que ele mesmo criou como personal.
+- **fmt() helper:** nova função no frontend que faz coerção segura de valores PostgreSQL NUMERIC (retornados como string pelo Neon driver) — evita `'94.0'.toString()` → `'94.0'` mas também `null`/`undefined` → `'—'`.
+- **Contraste visual corrigido:** MetricTile: `bg-white/4 border-white/8` → `bg-white/8 border-white/12`; ícones: `bg-*/12 ring-*/25` → `bg-*/18 ring-*/35`; label: `text-[9px] text-text-muted` → `text-[10px] text-zinc-400`; cards de lista: `bg-white/3/5` → `bg-white/6/10`; datas: `text-text-muted` → `text-zinc-300`; section headers: `text-text-muted` → `text-zinc-300`.
+- **Validação:** `get_errors` limpo em ambos os arquivos; `npm run type-check` exit 0; deploy em 122.6s.
+
 ### 🎨 Release v4.5.6 — Avaliações ultra-premium dark glass (2026-05-12)
 - **Redesign completo da lista de avaliações:** [src/app/(app)/avaliacoes/page.tsx](src/app/(app)/avaliacoes/page.tsx) substitui os cards claros que destoavam do tema midnight por superfícies dark glass coesas (`bg-white/3`, `bg-white/4`, `border-white/8`), com hero arredondado, glow ambiente radial e título em gradiente verde VFIT (`from-white via-white to-emerald-200/90`).
 - **Métricas com profundidade premium:** novos componentes `MetricTile` (chip de ícone tonal emerald/blue/amber, valor `text-xl font-black tabular-nums`, linha de brilho superior e glow por tom) e `InfoChip` (pills tonais) elevam a leitura de Peso/IMC/Gordura e a classificação de IMC com `bmiTone` (azul/emerald/amber/vermelho).

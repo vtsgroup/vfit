@@ -1,10 +1,18 @@
-# Session State — VFIT (Apr 2, 2026)
+# Session State — VFIT
 
 **Date Created**: 2026-04-01  
-**Last Updated**: 2026-04-02 (Copilot session — migration complete)  
-**Current Phase**: Post-Migration · Ready for Visual Improvements  
-**Project**: VFIT v1.0.0 (migrated from personal-ia / EVOLUIA)  
-**Status**: ✅ Migration Complete · Production Stable  
+**Last Updated**: 2026-06-09 (Copilot session — Avaliações redesign + fixes)  
+**Current Phase**: Sprint UI Premium — Avaliações concluído  
+**Project**: VFIT v4.5.7  
+**Status**: ✅ Production Stable  
+
+## Última sessão (2026-06-09)
+- Redesign ultra-premium dark glass das telas `/avaliacoes` e `/avaliacoes/[id]` (v4.5.6)
+- Email super_admin atualizado: `victor.duarte@iapersonal.app.br` → `victor.duarte@vfit.app.br`
+- Fix backend: `GET /assessments/my` agora retorna avaliações onde o super_admin é personal
+- Fix frontend: helper `fmt()` para coerção segura de NUMERIC do Neon
+- Fix visual: contraste dos cards/tiles/labels (bg-white/3→8, border/8→12, text-text-muted→zinc-300/400)
+- Deploy v4.5.7 em produção (122.6s, tag ee4f8657→v4.5.7)
 
 ---
 
