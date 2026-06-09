@@ -212,6 +212,57 @@ payments.post('/webhooks/asaas', async (c) => {
         return c.json({ received: true })
       }
 
+      // Check consultation commerce payment
+      if (extRef?.startsWith('consult_order_')) {
+        const orderId = extRef.replace('consult_order_', '')
+        const now = new Date().toISOString()
+
+        if (['CONFIRMED', 'RECEIVED'].includes(event)) {
+          const { rows: orderRows } = await pgQuery<{
+            id: string
+            student_id: string
+            creator_id: string
+          }>(
+            c.env,
+            `UPDATE consultation_orders
+             SET status = 'paid', paid_at = $1, asaas_payment_id = $2, updated_at = $1
+             WHERE id = $3
+             RETURNING id, student_id, creator_id`,
+            [now, paymentData.id, orderId]
+          )
+
+          if (orderRows.length > 0) {
+            const order = orderRows[0]
+            await pgQuery(
+              c.env,
+              `INSERT INTO consultation_sessions (id, order_id, student_id, creator_id, status, metadata)
+               VALUES ($1, $2, $3, $4, 'scheduled', $5::jsonb)
+               ON CONFLICT (order_id) DO NOTHING`,
+              [generateId(), order.id, order.student_id, order.creator_id, JSON.stringify({ created_by: 'asaas_webhook' })]
+            )
+            console.log(`[Webhook Consult] Order ${order.id} confirmed and session scheduled`)
+          }
+        } else if (['REFUNDED', 'DELETED'].includes(event)) {
+          await pgQuery(
+            c.env,
+            `UPDATE consultation_orders
+             SET status = 'refunded', canceled_at = $1, updated_at = $1
+             WHERE id = $2`,
+            [now, orderId]
+          )
+          await pgQuery(
+            c.env,
+            `UPDATE consultation_sessions
+             SET status = 'cancelled', updated_at = $1
+             WHERE order_id = $2`,
+            [now, orderId]
+          )
+          console.log(`[Webhook Consult] Order ${orderId} refunded/deleted`)
+        }
+
+        return c.json({ received: true })
+      }
+
       // Check if B2B platform checkout payment (personal buying plan)
       if (extRef?.startsWith('platform_checkout_')) {
         // Format: platform_checkout_{userId}_{planSlug}_{billingCycle}

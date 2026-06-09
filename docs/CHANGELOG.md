@@ -18,6 +18,18 @@
 - Deploy patch publicado com sucesso: Pages + Workers + git/tag em `v4.4.7` (commit `1d41b060`).
 - Exceção operacional: notificações WhatsApp start/end seguiram indisponíveis (`Host desativado por segurança`), deploy executado com `--allow-no-whatsapp`.
 
+### 🚀 Release v4.4.8 — Limpeza de checkout legado creator (2026-06-09)
+- Páginas legadas de checkout de plano de creator substituídas por fluxo de deprecação e redirecionamento em [src/app/dashboard/plans/checkout/page.tsx](../src/app/dashboard/plans/checkout/page.tsx) e [src/app/dashboard/plans/checkout/success/page.tsx](../src/app/dashboard/plans/checkout/success/page.tsx).
+- Pricing e FAQ públicos alinhados ao modelo sem assinatura obrigatória de creator em [src/data/pricing-plans.ts](../src/data/pricing-plans.ts), [src/app/(public)/pricing/page.tsx](../src/app/(public)/pricing/page.tsx) e [src/data/faqs.ts](../src/data/faqs.ts).
+- Deploy patch publicado com sucesso: Pages + Workers + git/tag em `v4.4.8` (commit `014d18a2`).
+
+### 🧩 Unreleased — Consultation commerce backend (2026-06-09)
+- Novo domínio de consultoria paga implementado em [workers/api/consultations.ts](../workers/api/consultations.ts) com endpoints de offers, orders, confirmação e início de sessão.
+- Novo schema de banco para commerce de consultoria em [migrations/hyperdrive/0034_consultation_commerce.sql](../migrations/hyperdrive/0034_consultation_commerce.sql).
+- Roteamento da API registrado em [workers/index.ts](../workers/index.ts) com namespace `/api/v1/consultations`.
+- Webhook Asaas estendido para confirmar/refundir orders de consultoria e criar/cancelar sessão em [workers/api/payments.ts](../workers/api/payments.ts).
+- Validação local: `npm run type-check` passou após ajuste de tipagem Zod.
+
 ### 🔧 Hotfix v4.4.3 — Labels premium do plano (2026-05-12)
 - [src/app/(app)/plano/page.tsx](../src/app/(app)/plano/page.tsx) agora traduz os slugs do onboarding (`gym_large`, `gym_small`, `bodyweight`, `tone`, `gain_muscle`, `lose_weight`) para labels humanos no hero e nos chips do plano.
 - Motivo: validação live do v4.4.2 mostrou valores internos aparecendo no app aluno, o que quebrava o acabamento premium.

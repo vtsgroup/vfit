@@ -1,7 +1,7 @@
 # TRACKING — Alunos Pagam, Profissionais Sem Plano
 
 Última atualização: 2026-06-09
-Progresso: 6/24 (25%)
+Progresso: 12/24 (50%)
 
 ## Fase 0 — Direção e contratos
 - [ ] T0.1 ADR monetização student-first aprovada
@@ -15,12 +15,12 @@ Progresso: 6/24 (25%)
 - [ ] T1.4 Testes de regressão de permissões
 
 ## Fase 2 — Consultation commerce
-- [ ] T2.1 Modelo de oferta de consultoria criado
-- [ ] T2.2 Modelo de order criado
-- [ ] T2.3 Checkout de order implementado
-- [ ] T2.4 Confirmação de pagamento idempotente
-- [ ] T2.5 Sessão premium bloqueada sem paid
-- [ ] T2.6 Sessão premium liberada com paid
+- [x] T2.1 Modelo de oferta de consultoria criado
+- [x] T2.2 Modelo de order criado
+- [x] T2.3 Checkout de order implementado
+- [x] T2.4 Confirmação de pagamento idempotente
+- [x] T2.5 Sessão premium bloqueada sem paid
+- [x] T2.6 Sessão premium liberada com paid
 
 ## Fase 3 — Ledger e settlement
 - [ ] T3.1 Ledger append-only em produção
@@ -46,4 +46,5 @@ Progresso: 6/24 (25%)
 | Versão | Data | Sprint | Commit | Notas |
 |---|---|---|---|---|
 | v4.4.7 | 2026-06-09 | R4 (parcial) | 1d41b060 | Deprecação de platform billing + UI inicial de monetização |
-| - | 2026-06-09 | R4 (limpeza) | - | Checkout legado de creator removido e pricing/FAQ alinhados |
+| v4.4.8 | 2026-06-09 | R4 (limpeza) | 014d18a2 | Checkout legado de creator removido e pricing/FAQ alinhados |
+| - | 2026-06-09 | R2 (backend) | - | Consultation commerce (offers/orders/sessions) + webhook de confirmação |

@@ -77,6 +77,7 @@ import { platformRoutes } from './api/platform'
 import { onboardingRoutes } from './api/onboarding'
 import { subscriptionRoutes } from './api/subscription'
 import { plansRoutes } from './api/plans'
+import { consultationsRoutes } from './api/consultations'
 import { progressRoutes } from './api/progress'
 import { measurementsRoutes } from './api/measurements'
 import { selfAssessmentsRoutes } from './api/self-assessments'
@@ -541,6 +542,7 @@ app.route('/api/v1/platform', platformRoutes)
 app.route('/api/v1/onboarding', onboardingRoutes)
 app.route('/api/v1/subscription', subscriptionRoutes)
 app.route('/api/v1/plans', plansRoutes)
+app.route('/api/v1/consultations', consultationsRoutes)
 app.route('/api/v1/progress', progressRoutes)
 app.route('/api/v1/measurements', measurementsRoutes)
 app.route('/api/v1/self-assessments', selfAssessmentsRoutes)
