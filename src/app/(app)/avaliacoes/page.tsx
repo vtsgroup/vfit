@@ -13,6 +13,7 @@ import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useSelfAssessments, getBMIColor } from '@/hooks/use-self-assessments'
+import { useMyAssessments } from '@/hooks/use-assessments'
 import { useLinkPersonalTrainer, useStudentProfile } from '@/hooks/use-student-app'
 
 /** Format delta with sign and color */
@@ -65,6 +66,8 @@ function StatTile({ icon, label, value, unit, delta, valueClass }: {
 export default function AvaliacoesPage() {
   const router = useRouter()
   const { data: assessments, isLoading } = useSelfAssessments()
+  const { data: proAssessmentsData, isLoading: proLoading } = useMyAssessments({ per_page: 20 })
+  const proAssessments = proAssessmentsData?.assessments ?? []
   const { data: studentProfile } = useStudentProfile()
   const linkPersonalTrainer = useLinkPersonalTrainer()
   const [personalReferralCode, setPersonalReferralCode] = useState('')
@@ -330,6 +333,73 @@ export default function AvaliacoesPage() {
               </Link>
             )
           })}
+        </div>
+      )}
+
+      {/* ── Avaliações do Personal ────────────────────── */}
+      {proLoading && !proAssessments.length && (
+        <div className="mt-6 flex items-center justify-center py-6">
+          <DSIcon name="loader" size={20} className="animate-spin text-text-muted" />
+        </div>
+      )}
+
+      {proAssessments.length > 0 && (
+        <div className="mt-6">
+          <div className="mb-3 flex items-center gap-2">
+            <DSIcon name="clipboard" size={15} className="text-violet-500" />
+            <h2 className="text-[11px] font-black uppercase tracking-wider text-text-muted">
+              Avaliações do Personal
+            </h2>
+          </div>
+          <div className="space-y-3">
+            {proAssessments.map((a, i) => {
+              const date = new Date(a.assessment_date)
+              const isFirst = i === 0
+              return (
+                <Link
+                  key={a.id}
+                  href={`/dashboard/assessments/view?id=${a.id}`}
+                  className="group relative block overflow-hidden rounded-[26px] border border-violet-100/90 bg-linear-to-br from-white via-violet-50/35 to-slate-50 p-4 shadow-[0_18px_40px_rgba(15,23,42,0.11)] transition-all active:translate-y-px"
+                >
+                  <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-violet-200/35 blur-2xl" />
+                  <div className="mb-3 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      {isFirst && (
+                        <span className="inline-flex items-center gap-1 rounded-full border border-violet-200 bg-white/85 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-violet-700 shadow-[0_4px_12px_rgba(109,40,217,0.10)]">
+                          <span className="h-1.5 w-1.5 rounded-full bg-violet-500" />
+                          Mais recente
+                        </span>
+                      )}
+                      <span className="text-[11px] font-bold text-slate-400">
+                        {date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {(a as { personal_name?: string }).personal_name && (
+                        <span className="text-[10px] font-semibold text-violet-500">
+                          por {(a as { personal_name?: string }).personal_name}
+                        </span>
+                      )}
+                      <DSIcon name="chevronRight" size={16} className="text-slate-400 transition-transform group-hover:translate-x-0.5" />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-2">
+                    <StatTile icon="scale" label="Peso" value={String(a.weight_kg ?? '—')} unit={a.weight_kg ? 'kg' : ''} />
+                    <StatTile icon="activity" label="IMC" value={String(a.bmi ?? '—')} unit="" valueClass={a.bmi ? getBMIColor(Number(a.bmi)) : ''} />
+                    <StatTile icon="percent" label="Gordura" value={a.body_fat_percentage ? String(a.body_fat_percentage) : '—'} unit={a.body_fat_percentage ? '%' : ''} />
+                  </div>
+
+                  {a.fat_classification && (
+                    <p className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-violet-200 bg-violet-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-violet-700">
+                      <span className="h-1.5 w-1.5 rounded-full bg-current opacity-60" />
+                      {a.fat_classification}
+                    </p>
+                  )}
+                </Link>
+              )
+            })}
+          </div>
         </div>
       )}
     </div>
