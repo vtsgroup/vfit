@@ -56,15 +56,15 @@ function MetricTile({ icon, label, value, unit, tone, delta, valueClass }: {
 }) {
   const t = TILE_TONES[tone]
   return (
-    <div className={`relative overflow-hidden rounded-2xl border border-slate-600/40 bg-slate-900 px-2.5 py-3 ${t.glow}`}>
+    <div className={`relative overflow-hidden rounded-2xl border border-slate-200 bg-white px-2.5 py-3 shadow-[0_10px_28px_-24px_rgba(15,23,42,0.45)] ${t.glow}`}>
       <div className="mb-2 flex items-center gap-1.5">
         <div className={`flex h-6 w-6 items-center justify-center rounded-lg ${t.iconBg} ring-1 ${t.iconRing}`}>
           <DSIcon name={icon} size={11} className={t.icon} />
         </div>
-        <p className="text-[10px] font-bold uppercase tracking-wider text-white">{label}</p>
+        <p className="text-[10px] font-bold uppercase tracking-wider text-slate-600">{label}</p>
       </div>
-      <p className={`text-xl font-black tabular-nums leading-none ${valueClass ?? 'text-white'}`}>
-        {value}{unit && <span className="ml-0.5 text-[10px] font-bold text-zinc-100">{unit}</span>}
+      <p className={`text-xl font-black tabular-nums leading-none ${valueClass ?? 'text-slate-950'}`}>
+        {value}{unit && <span className="ml-0.5 text-[10px] font-bold text-slate-500">{unit}</span>}
       </p>
       {delta && <div className="mt-1.5 leading-none">{delta}</div>}
     </div>
@@ -268,18 +268,18 @@ export default function AvaliacoesPage() {
               <Link
                 key={a.id}
                 href={`/avaliacoes/${a.id}`}
-                className={`group relative block overflow-hidden rounded-3xl border p-4 transition-all active:translate-y-px ${isFirst ? 'border-emerald-400/50 bg-slate-900' : 'border-slate-600/40 bg-slate-900 hover:border-slate-500/50 hover:bg-slate-800'}`}
+                className={`group relative block overflow-hidden rounded-3xl border p-4 transition-all active:translate-y-px ${isFirst ? 'border-emerald-300 bg-white' : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50'}`}
                 style={isFirst ? { boxShadow: '0 18px 48px -24px rgba(16,185,129,0.55)' } : undefined}
               >
                 {isFirst && <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-emerald-500/12 blur-3xl" />}
                 <div className="relative mb-3 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     {isFirst && <InfoChip tone="emerald">Mais recente</InfoChip>}
-                    <span className="text-[12px] font-semibold text-zinc-200">
+                    <span className="text-[12px] font-semibold text-slate-600">
                       {date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
                     </span>
                   </div>
-                  <DSIcon name="chevronRight" size={16} className="text-zinc-300 transition-transform group-hover:translate-x-0.5" />
+                  <DSIcon name="chevronRight" size={16} className="text-slate-400 transition-transform group-hover:translate-x-0.5" />
                 </div>
 
                 <div className="relative grid grid-cols-3 gap-2">
@@ -335,7 +335,7 @@ export default function AvaliacoesPage() {
         <section className="mt-7 space-y-3">
           <div className="flex items-center gap-2 px-0.5">
             <DSIcon name="clipboard" size={13} className="text-violet-400" />
-            <h2 className="text-[12px] font-bold uppercase tracking-[0.16em] text-zinc-300">Avaliações do personal</h2>
+            <h2 className="text-[12px] font-bold uppercase tracking-[0.16em] text-zinc-300">Avaliações completas</h2>
           </div>
           {proAssessments.map((a, i) => {
             const date = new Date(a.assessment_date)
@@ -344,8 +344,8 @@ export default function AvaliacoesPage() {
             return (
               <Link
                 key={a.id}
-                href={`/dashboard/assessments/view?id=${a.id}`}
-                className={`group relative block overflow-hidden rounded-3xl border p-4 transition-all active:translate-y-px ${isFirst ? 'border-violet-400/50 bg-slate-900' : 'border-slate-600/40 bg-slate-900 hover:border-slate-500/50 hover:bg-slate-800'}`}
+                href={`/avaliacoes/${a.id}`}
+                className={`group relative block overflow-hidden rounded-3xl border p-4 transition-all active:translate-y-px ${isFirst ? 'border-violet-300 bg-white' : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50'}`}
                 style={isFirst ? { boxShadow: '0 18px 48px -24px rgba(139,92,246,0.5)' } : undefined}
               >
                 {isFirst && <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-violet-500/12 blur-3xl" />}
@@ -356,7 +356,7 @@ export default function AvaliacoesPage() {
                       {date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
                     </span>
                   </div>
-                  <DSIcon name="chevronRight" size={16} className="text-zinc-100 transition-transform group-hover:translate-x-0.5" />
+                  <DSIcon name="chevronRight" size={16} className="text-slate-400 transition-transform group-hover:translate-x-0.5" />
                 </div>
 
                 <div className="relative grid grid-cols-3 gap-2">
