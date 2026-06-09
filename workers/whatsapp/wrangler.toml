@@ -20,11 +20,15 @@ workers_dev = true
 # =============================================================================
 # CUSTOM DOMAIN
 # =============================================================================
-# Endpoint padrão: https://whatsapp.vfit.app.br
+# Endpoint operacional padrão: https://vfit-whatsapp.vd-b0b.workers.dev
+#
+# IMPORTANTE: manter sem custom domain por padrão enquanto o host
+# whatsapp.vfit.app.br estiver sob revisão de phishing/malware.
 # =============================================================================
-routes = [
-  { pattern = "whatsapp.vfit.app.br", zone_name = "vfit.app.br", custom_domain = true }
-]
+# Para reativar no futuro, descomente e redeploy:
+# routes = [
+#   { pattern = "whatsapp.vfit.app.br", zone_name = "vfit.app.br", custom_domain = true }
+# ]
 
 # =============================================================================
 # SECRETS STORE (shared) — opcional (open beta)

@@ -16,7 +16,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
-const DEFAULT_GATEWAY_URL = 'https://whatsapp.vfit.app.br'
+const DEFAULT_GATEWAY_URL = 'https://vfit-whatsapp.vd-b0b.workers.dev'
 
 function parseArgs(argv) {
   const args = { _: [] }
@@ -130,7 +130,7 @@ function usageAndExit(msg) {
   console.error('  node scripts/whatsapp-task.mjs preview start|end ...   # uses /format (no send)')
   console.error('\nEnv (.env.local, ignored by git):')
   console.error('  WHATSAPP_NOTIFY_TOKEN=<ADMIN_AUTH_TOKEN>')
-  console.error('  WHATSAPP_GATEWAY_URL=https://whatsapp.vfit.app.br')
+  console.error('  WHATSAPP_GATEWAY_URL=https://vfit-whatsapp.vd-b0b.workers.dev')
   process.exit(1)
 }
 

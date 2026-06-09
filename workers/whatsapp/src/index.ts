@@ -48,6 +48,7 @@ type Json = Record<string, unknown>;
 
 const WORKER_NAME = 'vfit-whatsapp';
 const WORKER_VERSION = '1.0.0';
+const BLOCKED_HOSTNAME = 'whatsapp.vfit.app.br';
 
 function normalizeSecret(val: unknown): string | null {
   if (typeof val !== 'string') return null;
@@ -112,6 +113,8 @@ function json(data: Json, init: ResponseInit = {}): Response {
   const headers = new Headers(init.headers);
   headers.set('Content-Type', 'application/json; charset=utf-8');
   headers.set('Cache-Control', 'no-store');
+  headers.set('X-Robots-Tag', 'noindex, nofollow, noarchive');
+  headers.set('X-Content-Type-Options', 'nosniff');
   return new Response(JSON.stringify(data, null, 2), { ...init, headers });
 }
 
@@ -120,6 +123,8 @@ function withCorsHeaders(headers: Headers): Headers {
   headers.set('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
   headers.set('Access-Control-Allow-Headers', 'Authorization,Content-Type');
   headers.set('Access-Control-Max-Age', '86400');
+  headers.set('X-Robots-Tag', 'noindex, nofollow, noarchive');
+  headers.set('X-Content-Type-Options', 'nosniff');
   return headers;
 }
 
@@ -422,6 +427,14 @@ const whatsappWorker = {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
     const path = url.pathname;
+
+    if (url.hostname === BLOCKED_HOSTNAME) {
+      const headers = withCorsHeaders(new Headers());
+      return json({
+        success: false,
+        error: 'Host desativado por segurança',
+      }, { status: 410, headers });
+    }
 
     // CORS preflight
     if (request.method === 'OPTIONS') {

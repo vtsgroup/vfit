@@ -1355,7 +1355,7 @@ async function sendStudentWelcomeWhatsApp(
   env: Bindings,
   input: { phone: string; fullName: string; personalName: string; invitationUrl: string }
 ): Promise<boolean> {
-  const gatewayUrl = (env.WHATSAPP_GATEWAY_URL || 'https://whatsapp.vfit.app.br').replace(/\/+$/, '')
+  const gatewayUrl = (env.WHATSAPP_GATEWAY_URL || 'https://vfit-whatsapp.vd-b0b.workers.dev').replace(/\/+$/, '')
   const token = env.WHATSAPP_NOTIFY_TOKEN || env.WHATSAPP_ADMIN_AUTH_TOKEN
   if (!token) return false
 
