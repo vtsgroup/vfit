@@ -7,6 +7,15 @@
 
 ## [Unreleased] — 12/04/2026 — Paridade admin de saques + redirect domínio legado
 
+### 🚀 Release v4.4.7 — Creator billing deprecado (2026-06-09)
+- Cutover inicial do modelo student-first em [workers/api/platform.ts](../workers/api/platform.ts): endpoints de assinatura/cobrança B2B de creator marcados como legados, com resposta de deprecação e bloqueio de novas cobranças de plano para profissionais.
+- Frontend de assinatura de creator ajustado em [src/hooks/use-platform-subscription.ts](../src/hooks/use-platform-subscription.ts): hooks de checkout/upgrade/downgrade/cancel agora tratam o fluxo como deprecado para evitar novas transações B2B.
+- UI de conta profissional atualizada em [src/app/dashboard/settings/page.tsx](../src/app/dashboard/settings/page.tsx) para remover CTA de upgrade e direcionar para monetização.
+- Fluxo de seleção de planos em [src/app/dashboard/plans/page.tsx](../src/app/dashboard/plans/page.tsx) redirecionado para área de monetização, evitando entrada no checkout legado de creator.
+- Validação executada: `npm run type-check` e checagem de erros por arquivo alterado sem regressões.
+- Deploy patch publicado com sucesso: Pages + Workers + git/tag em `v4.4.7` (commit `1d41b060`).
+- Exceção operacional: notificações WhatsApp start/end seguiram indisponíveis (`Host desativado por segurança`), deploy executado com `--allow-no-whatsapp`.
+
 ### 🔧 Hotfix v4.4.3 — Labels premium do plano (2026-05-12)
 - [src/app/(app)/plano/page.tsx](../src/app/(app)/plano/page.tsx) agora traduz os slugs do onboarding (`gym_large`, `gym_small`, `bodyweight`, `tone`, `gain_muscle`, `lose_weight`) para labels humanos no hero e nos chips do plano.
 - Motivo: validação live do v4.4.2 mostrou valores internos aparecendo no app aluno, o que quebrava o acabamento premium.

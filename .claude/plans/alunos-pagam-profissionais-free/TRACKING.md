@@ -45,4 +45,4 @@ Progresso: 3/24 (13%)
 
 | Versão | Data | Sprint | Commit | Notas |
 |---|---|---|---|---|
-| - | 2026-06-09 | R4 (parcial) | - | Deprecação de platform billing + UI inicial de monetização |
+| v4.4.7 | 2026-06-09 | R4 (parcial) | 1d41b060 | Deprecação de platform billing + UI inicial de monetização |
