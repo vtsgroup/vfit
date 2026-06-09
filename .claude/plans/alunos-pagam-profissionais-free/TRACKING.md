@@ -1,12 +1,12 @@
 # TRACKING — Alunos Pagam, Profissionais Sem Plano
 
 Última atualização: 2026-06-09
-Progresso: 21/24 (88%)
+Progresso: 24/24 (100%)
 
 ## Fase 0 — Direção e contratos
-- [ ] T0.1 ADR monetização student-first aprovada
-- [ ] T0.2 Contratos consultation commerce aprovados
-- [ ] T0.3 Matriz de flags e rollback aprovada
+- [x] T0.1 ADR monetização student-first aprovada
+- [x] T0.2 Contratos consultation commerce aprovados
+- [x] T0.3 Matriz de flags e rollback aprovada
 
 ## Fase 1 — Entitlement sem plano profissional
 - [x] T1.1 Remover gating por subscription_plan para personal
@@ -49,5 +49,4 @@ Progresso: 21/24 (88%)
 | v4.4.8 | 2026-06-09 | R4 (limpeza) | 014d18a2 | Checkout legado de creator removido e pricing/FAQ alinhados |
 | v4.4.9 | 2026-06-09 | R2 (backend) | e6c4d7ec | Consultation commerce (offers/orders/sessions) + webhook de confirmação |
 | v4.5.0 | 2026-06-09 | R3 (ledger) | b5f42aa3 | Ledger append-only + reconciliação + bloqueio de saque por inconsistência |
-| - | 2026-06-09 | R5 (ops) | - | Smoke de consultoria + runbook de incidentes + playbook de suporte |
-| - | 2026-06-09 | R6 (hardening) | - | Testes de permissões + alertas P1/P2 no cron + ajuste requireType(admin) |
+| v4.5.1 | 2026-06-09 | R5 (ops+hardening) | 01a5b6e0 | Smoke de consultoria + runbook/playbook + testes de permissões + alertas P1/P2 + ajuste requireType(admin) |

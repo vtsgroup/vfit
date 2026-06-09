@@ -537,7 +537,7 @@ assessments.post('/', async (c) => {
     bodyComp?.visceralFatLevel ?? null,
     bodyComp?.metabolicAge ?? null,
     aiInterpretation,
-    JSON.stringify(bodyComp || {}),
+    JSON.stringify(bodyComp ? { ...bodyComp, _gender: gender, _activityLevel: parsed.activity_level || 'moderate' } : {}),
     now,
   ])
 

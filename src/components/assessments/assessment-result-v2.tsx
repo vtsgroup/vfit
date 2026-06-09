@@ -142,6 +142,17 @@ export default function AssessmentResultV2({ assessment }: AssessmentResultV2Pro
     }
   }, [a])
 
+  // Infer gender from stored ideal fat range (male min=10, female min=18)
+  const inferredGender = useMemo<'male' | 'female'>(() => {
+    if (!a.body_composition) return 'male'
+    const bc = a.body_composition as Record<string, unknown>
+    const fatClassData = bc.fatClassification as { idealRange?: { min: number } } | undefined
+    if (fatClassData?.idealRange?.min === 18) return 'female'
+    // Also check _gender if stored
+    if ((bc as Record<string, unknown>)._gender === 'female') return 'female'
+    return 'male'
+  }, [a])
+
   // Composition breakdown for ring chart
   const composition = useMemo(() => {
     if (!a.body_fat_percentage) return null
@@ -207,6 +218,18 @@ export default function AssessmentResultV2({ assessment }: AssessmentResultV2Pro
           />
         )}
       </div>
+
+      {/* FFMI + Body Fat Classification Tables */}
+      {(ffmi?.value != null || a.body_fat_percentage != null) && (
+        <div className="grid gap-4 sm:grid-cols-2">
+          {ffmi?.value != null && (
+            <FFMIRangeTable value={ffmi.value} label={ffmi.label} gender={inferredGender} />
+          )}
+          {a.body_fat_percentage != null && (
+            <FatRangeTable value={a.body_fat_percentage} gender={inferredGender} />
+          )}
+        </div>
+      )}
 
       {/* Body Composition Breakdown */}
       {composition && (
@@ -321,6 +344,11 @@ export default function AssessmentResultV2({ assessment }: AssessmentResultV2Pro
             </div>
           </CardContent>
         </Card>
+      )}
+
+      {/* TDEE Multi-Level Table */}
+      {a.basal_metabolic_rate != null && (
+        <TDEETable bmr={a.basal_metabolic_rate} currentTDEE={a.total_daily_expenditure} />
       )}
 
       {/* Somatotype */}
@@ -609,6 +637,249 @@ function MetricBox({
       </p>
       <p className="mt-0.5 text-xs text-text-muted">{sublabel}</p>
     </div>
+  )
+}
+
+// ============================================
+// TDEE Multi-Level Table
+// ============================================
+
+const ACTIVITY_LEVELS_INFO = [
+  { key: 'sedentary', label: 'Sedentário', sublabel: 'Sem exercícios', factor: 1.2 },
+  { key: 'light', label: 'Levemente ativo', sublabel: '1–3x/semana', factor: 1.375 },
+  { key: 'moderate', label: 'Moderado', sublabel: '3–5x/semana', factor: 1.55 },
+  { key: 'active', label: 'Muito ativo', sublabel: '6–7x/semana', factor: 1.725 },
+  { key: 'very_active', label: 'Extremamente ativo', sublabel: 'Duplo treino', factor: 1.9 },
+]
+
+function inferActivityLevel(bmr: number, tdee: number): string {
+  const factor = tdee / bmr
+  if (factor < 1.28) return 'sedentary'
+  if (factor < 1.46) return 'light'
+  if (factor < 1.63) return 'moderate'
+  if (factor < 1.81) return 'active'
+  return 'very_active'
+}
+
+function TDEETable({ bmr, currentTDEE }: { bmr: number; currentTDEE: number | null }) {
+  const currentLevel = currentTDEE ? inferActivityLevel(bmr, currentTDEE) : 'moderate'
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <DSIcon name="flame" size={20} className="text-brand-primary" />
+          Gasto Energético por Atividade
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="overflow-hidden rounded-xl border border-border-light">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-border-light bg-bg-tertiary/60">
+                <th className="px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-text-muted">Nível</th>
+                <th className="hidden px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-text-muted sm:table-cell">Frequência</th>
+                <th className="px-4 py-2.5 text-right text-xs font-semibold uppercase tracking-wider text-text-muted">TDEE</th>
+              </tr>
+            </thead>
+            <tbody>
+              {ACTIVITY_LEVELS_INFO.map((l, idx) => {
+                const tdee = Math.round(bmr * l.factor)
+                const isCurrent = l.key === currentLevel
+                return (
+                  <tr
+                    key={l.key}
+                    className={[
+                      idx < ACTIVITY_LEVELS_INFO.length - 1 ? 'border-b border-border-light/40' : '',
+                      isCurrent ? 'bg-brand-primary/8' : '',
+                    ].join(' ')}
+                  >
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-2">
+                        {isCurrent && <span className="h-2 w-2 rounded-full bg-brand-primary animate-pulse" />}
+                        <span className={`font-medium ${isCurrent ? 'text-brand-primary' : 'text-text-primary'}`}>
+                          {l.label}
+                        </span>
+                        {isCurrent && (
+                          <span className="rounded-full bg-brand-primary/15 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-brand-primary">
+                            atual
+                          </span>
+                        )}
+                      </div>
+                    </td>
+                    <td className="hidden px-4 py-3 text-xs text-text-muted sm:table-cell">{l.sublabel}</td>
+                    <td className={`px-4 py-3 text-right font-bold ${isCurrent ? 'text-brand-primary' : 'text-text-primary'}`}>
+                      {tdee.toLocaleString('pt-BR')} <span className="text-xs font-normal text-text-muted">kcal</span>
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-2 text-xs text-text-muted">TMB base: {Math.round(bmr)} kcal/dia (Mifflin-St Jeor)</p>
+      </CardContent>
+    </Card>
+  )
+}
+
+// ============================================
+// FFMI Classification Table
+// ============================================
+
+const FFMI_RANGES_MALE = [
+  { label: 'Abaixo da média', min: 0, max: 18, color: 'text-text-muted', bg: '' },
+  { label: 'Média', min: 18, max: 20, color: 'text-info', bg: '' },
+  { label: 'Acima da média', min: 20, max: 22, color: 'text-success', bg: '' },
+  { label: 'Excelente', min: 22, max: 23.5, color: 'text-brand-primary', bg: '' },
+  { label: 'Superior', min: 23.5, max: 25.5, color: 'text-brand-primary', bg: '' },
+  { label: 'Acima do limite', min: 25.5, max: 99, color: 'text-error', bg: '' },
+]
+
+const FFMI_RANGES_FEMALE = [
+  { label: 'Abaixo da média', min: 0, max: 15, color: 'text-text-muted', bg: '' },
+  { label: 'Média', min: 15, max: 17, color: 'text-info', bg: '' },
+  { label: 'Acima da média', min: 17, max: 19, color: 'text-success', bg: '' },
+  { label: 'Excelente', min: 19, max: 21, color: 'text-brand-primary', bg: '' },
+  { label: 'Superior', min: 21, max: 22.5, color: 'text-brand-primary', bg: '' },
+  { label: 'Acima do limite', min: 22.5, max: 99, color: 'text-error', bg: '' },
+]
+
+function FFMIRangeTable({ value, label, gender }: { value: number; label: string | null; gender: 'male' | 'female' }) {
+  const ranges = gender === 'female' ? FFMI_RANGES_FEMALE : FFMI_RANGES_MALE
+  const activeIdx = ranges.findIndex((r) => value >= r.min && value < r.max)
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2 text-base">
+          <DSIcon name="dumbbell" size={18} className="text-brand-primary" />
+          Classificação FFMI
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="p-0">
+        <div className="overflow-hidden rounded-b-xl">
+          {ranges.map((r, idx) => {
+            const isActive = idx === activeIdx
+            const rangeLabel = r.max === 99 ? `> ${r.min}` : r.min === 0 ? `< ${r.max}` : `${r.min} – ${r.max}`
+            return (
+              <div
+                key={r.label}
+                className={[
+                  'flex items-center justify-between px-4 py-2.5',
+                  idx < ranges.length - 1 ? 'border-b border-border-light/40' : '',
+                  isActive ? 'bg-brand-primary/10' : '',
+                ].join(' ')}
+              >
+                <div className="flex items-center gap-2">
+                  {isActive ? (
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-brand-primary">
+                      <DSIcon name="chevronRight" size={10} className="text-white" />
+                    </span>
+                  ) : (
+                    <span className="h-5 w-5" />
+                  )}
+                  <span className={`text-sm font-medium ${isActive ? 'text-brand-primary' : 'text-text-secondary'}`}>
+                    {r.label}
+                  </span>
+                </div>
+                <div className="text-right">
+                  <span className={`text-xs font-semibold ${isActive ? 'text-brand-primary' : 'text-text-muted'}`}>
+                    {rangeLabel}
+                  </span>
+                  {isActive && (
+                    <div className="text-[10px] font-bold text-brand-primary">
+                      {value.toFixed(1)}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+
+// ============================================
+// Body Fat % Classification Table
+// ============================================
+
+const FAT_RANGES_MALE = [
+  { label: 'Gordura Essencial', min: 0, max: 6 },
+  { label: 'Atleta', min: 6, max: 14 },
+  { label: 'Fitness', min: 14, max: 18 },
+  { label: 'Aceitável', min: 18, max: 25 },
+  { label: 'Obesidade', min: 25, max: 100 },
+]
+
+const FAT_RANGES_FEMALE = [
+  { label: 'Gordura Essencial', min: 0, max: 14 },
+  { label: 'Atleta', min: 14, max: 21 },
+  { label: 'Fitness', min: 21, max: 25 },
+  { label: 'Aceitável', min: 25, max: 32 },
+  { label: 'Obesidade', min: 32, max: 100 },
+]
+
+const FAT_RANGE_COLORS: Record<string, string> = {
+  'Gordura Essencial': 'text-info',
+  'Atleta': 'text-success',
+  'Fitness': 'text-success',
+  'Aceitável': 'text-warning',
+  'Obesidade': 'text-error',
+}
+
+function FatRangeTable({ value, gender }: { value: number; gender: 'male' | 'female' }) {
+  const ranges = gender === 'female' ? FAT_RANGES_FEMALE : FAT_RANGES_MALE
+  const activeIdx = ranges.findIndex((r) => value >= r.min && value < r.max)
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2 text-base">
+          <DSIcon name="droplets" size={18} className="text-brand-primary" />
+          Classificação % Gordura <span className="text-xs font-normal text-text-muted">(ACE)</span>
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="p-0">
+        <div className="overflow-hidden rounded-b-xl">
+          {ranges.map((r, idx) => {
+            const isActive = idx === activeIdx
+            const rangeLabel = r.max === 100 ? `> ${r.min}%` : r.min === 0 ? `< ${r.max}%` : `${r.min}–${r.max}%`
+            const colorClass = FAT_RANGE_COLORS[r.label] || 'text-text-muted'
+            return (
+              <div
+                key={r.label}
+                className={[
+                  'flex items-center justify-between px-4 py-2.5',
+                  idx < ranges.length - 1 ? 'border-b border-border-light/40' : '',
+                  isActive ? 'bg-brand-primary/10' : '',
+                ].join(' ')}
+              >
+                <div className="flex items-center gap-2">
+                  {isActive ? (
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-brand-primary">
+                      <DSIcon name="chevronRight" size={10} className="text-white" />
+                    </span>
+                  ) : (
+                    <span className={`h-2 w-2 rounded-full ${isActive ? 'bg-brand-primary' : 'bg-transparent'}`} />
+                  )}
+                  <span className={`text-sm font-medium ${isActive ? colorClass : 'text-text-secondary'}`}>
+                    {r.label}
+                  </span>
+                </div>
+                <div className="text-right">
+                  <span className={`text-xs font-semibold ${isActive ? colorClass : 'text-text-muted'}`}>
+                    {rangeLabel}
+                  </span>
+                  {isActive && (
+                    <div className={`text-[10px] font-bold ${colorClass}`}>{value.toFixed(1)}%</div>
+                  )}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </CardContent>
+    </Card>
   )
 }
 

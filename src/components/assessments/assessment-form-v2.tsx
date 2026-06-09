@@ -64,6 +64,7 @@ const STEP_LABELS: { label: string; icon: DSIconName }[] = [
   { label: 'Protocolo', icon: 'activity' },
   { label: 'Dobras', icon: 'layers' },
   { label: 'Medidas', icon: 'ruler' },
+  { label: 'Anamnese', icon: 'clipboard' },
   { label: 'Fotos', icon: 'camera' },
   { label: 'Revisão', icon: 'check' },
 ]
@@ -94,7 +95,8 @@ const ACTIVITY_LEVELS: { value: ActivityLevel; label: string; factor: string }[]
 
 // Medidas pareadas
 const PAIRED_GROUPS = [
-  { label: 'Braço', rightKey: 'right_arm', leftKey: 'left_arm' },
+  { label: 'Braço Relaxado', rightKey: 'right_arm', leftKey: 'left_arm' },
+  { label: 'Braço Contraído', rightKey: 'right_arm_contracted', leftKey: 'left_arm_contracted' },
   { label: 'Antebraço', rightKey: 'right_forearm', leftKey: 'left_forearm' },
   { label: 'Coxa', rightKey: 'right_thigh', leftKey: 'left_thigh' },
   { label: 'Panturrilha', rightKey: 'right_calf', leftKey: 'left_calf' },
@@ -104,9 +106,13 @@ const PAIRED_GROUPS = [
 const SINGLE_MEASURES: { key: keyof Measurements; label: string }[] = [
   { key: 'chest', label: 'Peitoral' },
   { key: 'waist', label: 'Cintura' },
+  { key: 'abdomen', label: 'Abdômen' },
   { key: 'hips', label: 'Quadril' },
   { key: 'shoulders', label: 'Ombros' },
   { key: 'neck', label: 'Pescoço' },
+  { key: 'thorax_inspired' as keyof Measurements, label: 'Tórax Inspirado' },
+  { key: 'thorax_expired' as keyof Measurements, label: 'Tórax Expirado' },
+  { key: 'scapular_waist' as keyof Measurements, label: 'Cintura Escapular' },
 ]
 
 // ============================================
@@ -139,6 +145,9 @@ export default function AssessmentFormV2({ students, onCancel }: AssessmentFormV
   const [measurements, setMeasurements] = useState<Record<string, string>>({})
   const [wristDiameter, setWristDiameter] = useState('')
   const [femurDiameter, setFemurDiameter] = useState('')
+
+  // Step 4.5 — Anamnese
+  const [anamnesisData, setAnamnesisData] = useState<Record<string, string>>({})
 
   // Step 5 — Fotos
   const [photos, setPhotos] = useState<Partial<Record<PhotoPosition, PhotoData>>>({
@@ -173,8 +182,9 @@ export default function AssessmentFormV2({ students, onCancel }: AssessmentFormV
         )
       }
       case 3: return true // measurements optional
-      case 4: return true // photos optional
-      case 5: return true // review always valid
+      case 4: return true // anamnesis optional
+      case 5: return true // photos optional
+      case 6: return true // review always valid
       default: return false
     }
   }, [step, studentId, assessmentDate, age, protocol, isBioimpedance, currentProtocol, skinfolds])
@@ -213,6 +223,14 @@ export default function AssessmentFormV2({ students, onCancel }: AssessmentFormV
     for (const [key, val] of Object.entries(measurements)) {
       const n = parseFloat(val)
       if (!isNaN(n) && n > 0) cleanMeasurements[key] = n
+    }
+
+    // Merge anamnesis + goal passthrough data into measurements JSONB
+    for (const [key, val] of Object.entries(anamnesisData)) {
+      if (val.trim() !== '') {
+        const n = parseFloat(val)
+        ;(cleanMeasurements as Record<string, unknown>)[key] = isNaN(n) ? val.trim() : n
+      }
     }
 
     // Build skinfolds
@@ -326,6 +344,10 @@ export default function AssessmentFormV2({ students, onCancel }: AssessmentFormV
       )}
 
       {step === 4 && (
+        <StepAnamnesis data={anamnesisData} setData={setAnamnesisData} />
+      )}
+
+      {step === 5 && (
         <StepPhotos
           photos={photos}
           editPhotosMode={editPhotosMode}
@@ -336,7 +358,7 @@ export default function AssessmentFormV2({ students, onCancel }: AssessmentFormV
         />
       )}
 
-      {step === 5 && (
+      {step === 6 && (
         <StepReview
           students={students}
           studentId={studentId}
@@ -367,7 +389,7 @@ export default function AssessmentFormV2({ students, onCancel }: AssessmentFormV
           {step === 0 ? 'Cancelar' : 'Voltar'}
         </Button>
 
-        {step < 5 ? (
+        {step < 6 ? (
           <Button onClick={() => setStep((s) => s + 1)} disabled={!stepValid}>
             Próximo
             <DSIcon name="arrowRight" size={16} className="ml-1.5" />
@@ -925,6 +947,149 @@ function StepMeasurements({
 }
 
 // ============================================
+// Step 4.5 — Anamnese & Metas
+// ============================================
+
+function StepAnamnesis({ data, setData }: { data: Record<string, string>; setData: (d: Record<string, string>) => void }) {
+  function set(key: string, value: string) {
+    setData({ ...data, [key]: value })
+  }
+
+  function ScoreInput({ label, fieldKey }: { label: string; fieldKey: string }) {
+    const val = parseInt(data[fieldKey] || '0') || 0
+    return (
+      <div>
+        <div className="mb-1 flex items-center justify-between">
+          <label className="text-sm text-text-secondary">{label}</label>
+          <span className="text-sm font-semibold text-text-primary">{val}/10</span>
+        </div>
+        <div className="flex gap-1">
+          {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => (
+            <button
+              key={n}
+              type="button"
+              onClick={() => set(fieldKey, String(n))}
+              className={`h-7 flex-1 rounded text-xs font-medium transition-colors ${
+                n <= val
+                  ? 'bg-brand-primary text-white'
+                  : 'bg-bg-tertiary text-text-muted hover:bg-bg-secondary'
+              }`}
+            >
+              {n}
+            </button>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Perfil Psicológico */}
+      <div>
+        <h3 className="mb-1 text-sm font-semibold uppercase tracking-wider text-text-muted">Perfil Psicológico (0–10)</h3>
+        <p className="mb-3 text-xs text-text-muted">Avalie o aluno de 1 a 10 em cada dimensão.</p>
+        <div className="space-y-4">
+          <ScoreInput label="Autoimagem" fieldKey="anamnesis_self_image" />
+          <ScoreInput label="Autoestima" fieldKey="anamnesis_self_esteem" />
+          <ScoreInput label="Energia diária" fieldKey="anamnesis_daily_energy" />
+          <ScoreInput label="Nível de estresse" fieldKey="anamnesis_stress" />
+          <ScoreInput label="Qualidade do sono" fieldKey="anamnesis_sleep_quality" />
+        </div>
+      </div>
+
+      {/* Hábitos */}
+      <div>
+        <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-text-muted">Hábitos Diários</h3>
+        <div className="grid gap-3 sm:grid-cols-3">
+          <div>
+            <label className="mb-1 block text-sm text-text-secondary">Refeições/dia</label>
+            <input
+              type="number"
+              value={data['anamnesis_meals_per_day'] || ''}
+              onChange={(e) => set('anamnesis_meals_per_day', e.target.value)}
+              placeholder="ex: 4"
+              className="w-full rounded-lg border border-border-light bg-bg-tertiary px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-brand-primary/30"
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-sm text-text-secondary">Água/dia (litros)</label>
+            <input
+              type="number"
+              step="0.5"
+              value={data['anamnesis_water_liters'] || ''}
+              onChange={(e) => set('anamnesis_water_liters', e.target.value)}
+              placeholder="ex: 2.5"
+              className="w-full rounded-lg border border-border-light bg-bg-tertiary px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-brand-primary/30"
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-sm text-text-secondary">Treinos/semana (meta)</label>
+            <input
+              type="number"
+              value={data['anamnesis_activity_goal_per_week'] || ''}
+              onChange={(e) => set('anamnesis_activity_goal_per_week', e.target.value)}
+              placeholder="ex: 4"
+              className="w-full rounded-lg border border-border-light bg-bg-tertiary px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-brand-primary/30"
+            />
+          </div>
+        </div>
+        <div className="mt-3">
+          <label className="mb-1 block text-sm text-text-secondary">Medicamentos em uso</label>
+          <input
+            type="text"
+            value={data['anamnesis_medications'] || ''}
+            onChange={(e) => set('anamnesis_medications', e.target.value)}
+            placeholder="ex: Roacutan, anticoncepcional..."
+            className="w-full rounded-lg border border-border-light bg-bg-tertiary px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-brand-primary/30"
+          />
+        </div>
+      </div>
+
+      {/* Metas */}
+      <div>
+        <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-text-muted">Metas do Aluno</h3>
+        <div className="space-y-3">
+          <p className="text-xs text-text-muted">Meta de saúde (prioritária):</p>
+          <div className="grid gap-3 sm:grid-cols-3">
+            <div>
+              <label className="mb-1 block text-sm text-text-secondary">% Gordura alvo</label>
+              <input type="number" step="0.1" value={data['goal_health_bf_pct'] || ''} onChange={(e) => set('goal_health_bf_pct', e.target.value)} placeholder="ex: 14" className="w-full rounded-lg border border-border-light bg-bg-tertiary px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-brand-primary/30" />
+            </div>
+            <div>
+              <label className="mb-1 block text-sm text-text-secondary">Peso alvo (kg)</label>
+              <input type="number" step="0.1" value={data['goal_health_weight_kg'] || ''} onChange={(e) => set('goal_health_weight_kg', e.target.value)} placeholder="ex: 95" className="w-full rounded-lg border border-border-light bg-bg-tertiary px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-brand-primary/30" />
+            </div>
+            <div>
+              <label className="mb-1 block text-sm text-text-secondary">Cintura alvo (cm)</label>
+              <input type="number" step="0.5" value={data['goal_health_waist_cm'] || ''} onChange={(e) => set('goal_health_waist_cm', e.target.value)} placeholder="ex: 95" className="w-full rounded-lg border border-border-light bg-bg-tertiary px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-brand-primary/30" />
+            </div>
+          </div>
+          <p className="mt-3 text-xs text-text-muted">Meta estética (ideal futuro):</p>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div>
+              <label className="mb-1 block text-sm text-text-secondary">% Gordura mín. estético</label>
+              <input type="number" step="0.1" value={data['goal_aesthetic_bf_min'] || ''} onChange={(e) => set('goal_aesthetic_bf_min', e.target.value)} placeholder="ex: 10" className="w-full rounded-lg border border-border-light bg-bg-tertiary px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-brand-primary/30" />
+            </div>
+            <div>
+              <label className="mb-1 block text-sm text-text-secondary">% Gordura máx. estético</label>
+              <input type="number" step="0.1" value={data['goal_aesthetic_bf_max'] || ''} onChange={(e) => set('goal_aesthetic_bf_max', e.target.value)} placeholder="ex: 12" className="w-full rounded-lg border border-border-light bg-bg-tertiary px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-brand-primary/30" />
+            </div>
+            <div>
+              <label className="mb-1 block text-sm text-text-secondary">Peso mín. estético (kg)</label>
+              <input type="number" step="0.1" value={data['goal_aesthetic_weight_min'] || ''} onChange={(e) => set('goal_aesthetic_weight_min', e.target.value)} placeholder="ex: 89" className="w-full rounded-lg border border-border-light bg-bg-tertiary px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-brand-primary/30" />
+            </div>
+            <div>
+              <label className="mb-1 block text-sm text-text-secondary">Peso máx. estético (kg)</label>
+              <input type="number" step="0.1" value={data['goal_aesthetic_weight_max'] || ''} onChange={(e) => set('goal_aesthetic_weight_max', e.target.value)} placeholder="ex: 93" className="w-full rounded-lg border border-border-light bg-bg-tertiary px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-brand-primary/30" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // Step 5 — Fotos
 // ============================================
 

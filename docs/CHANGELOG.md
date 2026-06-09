@@ -59,6 +59,17 @@
 - Log do cron atualizado em [workers/index.ts](../workers/index.ts) para incluir severidade calculada da reconciliação.
 - Validação local: `npm run test -- tests/api/consultations-permissions.test.ts tests/api/auth-middleware.test.ts` e `npm run type-check` passaram.
 
+### 🚀 Release v4.5.1 — Consultation ops + hardening (2026-06-09)
+- Pacote operacional de consultoria publicado em produção, incluindo smoke script em [scripts/run-consultation-smoke.mjs](../scripts/run-consultation-smoke.mjs), runbook em [.claude/docs/CONSULTATION-INCIDENT-RUNBOOK.md](../.claude/docs/CONSULTATION-INCIDENT-RUNBOOK.md), playbook em [.claude/docs/CONSULTATION-CREATOR-SUPPORT-PLAYBOOK.md](../.claude/docs/CONSULTATION-CREATOR-SUPPORT-PLAYBOOK.md) e matriz de alertas em [.claude/docs/CONSULTATION-ALERTS.md](../.claude/docs/CONSULTATION-ALERTS.md).
+- Regressão de permissões adicionada em [tests/api/consultations-permissions.test.ts](../tests/api/consultations-permissions.test.ts) e ajuste de autorização admin em [workers/middleware/auth.ts](../workers/middleware/auth.ts) para `requireType('admin', ...)`.
+- Cron de reconciliação evoluído em [workers/cron/consultation-reconciliation.ts](../workers/cron/consultation-reconciliation.ts) com emissão de alertas P1/P2 em `app_logs` e severidade no log de [workers/index.ts](../workers/index.ts).
+- Fase 0 do plano formalizada com ADR, contratos e matriz de rollback em:
+  - [.claude/plans/alunos-pagam-profissionais-free/07-ADR-MONETIZACAO-STUDENT-FIRST.md](../.claude/plans/alunos-pagam-profissionais-free/07-ADR-MONETIZACAO-STUDENT-FIRST.md)
+  - [.claude/plans/alunos-pagam-profissionais-free/08-CONTRATOS-CONSULTATION-COMMERCE.md](../.claude/plans/alunos-pagam-profissionais-free/08-CONTRATOS-CONSULTATION-COMMERCE.md)
+  - [.claude/plans/alunos-pagam-profissionais-free/09-FLAGS-ROLLBACK-MATRIX.md](../.claude/plans/alunos-pagam-profissionais-free/09-FLAGS-ROLLBACK-MATRIX.md)
+- Deploy patch publicado com sucesso: Pages + Workers + git/tag em `v4.5.1` (commit `01a5b6e0`).
+- Exceção operacional: notificações WhatsApp start/end indisponíveis (`Host desativado por segurança`), deploy executado com `--allow-no-whatsapp`.
+
 ### 🔧 Hotfix v4.4.3 — Labels premium do plano (2026-05-12)
 - [src/app/(app)/plano/page.tsx](../src/app/(app)/plano/page.tsx) agora traduz os slugs do onboarding (`gym_large`, `gym_small`, `bodyweight`, `tone`, `gain_muscle`, `lose_weight`) para labels humanos no hero e nos chips do plano.
 - Motivo: validação live do v4.4.2 mostrou valores internos aparecendo no app aluno, o que quebrava o acabamento premium.

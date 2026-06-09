@@ -47,14 +47,22 @@ const measurementLabels: Record<string, string> = {
   chest: 'Peitoral',
   waist: 'Cintura',
   hips: 'Quadril',
-  right_arm: 'Braço D',
-  left_arm: 'Braço E',
+  right_arm: 'Braço D (relax.)',
+  left_arm: 'Braço E (relax.)',
+  right_arm_contracted: 'Braço D (contra.)',
+  left_arm_contracted: 'Braço E (contra.)',
   right_thigh: 'Coxa D',
   left_thigh: 'Coxa E',
   right_calf: 'Panturrilha D',
   left_calf: 'Panturrilha E',
+  right_forearm: 'Antebraço D',
+  left_forearm: 'Antebraço E',
   shoulders: 'Ombros',
   neck: 'Pescoço',
+  abdomen: 'Abdômen',
+  thorax_inspired: 'Tórax Inspirado',
+  thorax_expired: 'Tórax Expirado',
+  scapular_waist: 'Cintura Escapular',
 }
 
 const photoTypeLabels: Record<string, string> = {
@@ -630,6 +638,133 @@ export default function AssessmentDetailClient({ id }: { id: string }) {
             </CardContent>
           </Card>
         </div>
+
+        {/* Anamnese & Metas (from measurements passthrough fields) */}
+        {assessment.measurements && (() => {
+          const m = assessment.measurements as Record<string, unknown>
+          const hasAnamnesis = Object.keys(m).some((k) => k.startsWith('anamnesis_') || k.startsWith('goal_'))
+          if (!hasAnamnesis) return null
+
+          const scoreItems: Array<{ label: string; key: string; max?: number }> = [
+            { label: 'Autoimagem', key: 'anamnesis_self_image', max: 10 },
+            { label: 'Autoestima', key: 'anamnesis_self_esteem', max: 10 },
+            { label: 'Energia diária', key: 'anamnesis_daily_energy', max: 10 },
+            { label: 'Estresse', key: 'anamnesis_stress', max: 10 },
+            { label: 'Qualidade do sono', key: 'anamnesis_sleep_quality', max: 10 },
+          ]
+
+          const goalHealthItems: Array<{ label: string; key: string; unit: string }> = [
+            { label: '% Gordura', key: 'goal_health_bf_pct', unit: '%' },
+            { label: 'Peso alvo', key: 'goal_health_weight_kg', unit: 'kg' },
+            { label: 'Cintura', key: 'goal_health_waist_cm', unit: 'cm' },
+          ]
+
+          const goalAestheticItems: Array<{ label: string; key: string; unit: string }> = [
+            { label: '% Gordura mín.', key: 'goal_aesthetic_bf_min', unit: '%' },
+            { label: '% Gordura máx.', key: 'goal_aesthetic_bf_max', unit: '%' },
+            { label: 'Peso mín.', key: 'goal_aesthetic_weight_min', unit: 'kg' },
+            { label: 'Peso máx.', key: 'goal_aesthetic_weight_max', unit: 'kg' },
+          ]
+
+          const visibleScores = scoreItems.filter((si) => m[si.key] != null)
+          const visibleHealthGoals = goalHealthItems.filter((gi) => m[gi.key] != null)
+          const visibleAestheticGoals = goalAestheticItems.filter((gi) => m[gi.key] != null)
+          const medications = m['anamnesis_medications'] as string | undefined
+          const mealsPerDay = m['anamnesis_meals_per_day'] as number | undefined
+          const waterLiters = m['anamnesis_water_liters'] as number | undefined
+          const activityGoal = m['anamnesis_activity_goal_per_week'] as number | undefined
+
+          return (
+            <div className="grid gap-4 sm:grid-cols-2">
+              {/* Perfil Psicológico */}
+              {visibleScores.length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-base">
+                      <DSIcon name="brain" size={18} className="text-brand-primary" />
+                      Perfil Psicológico
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    {visibleScores.map((si) => {
+                      const val = Number(m[si.key])
+                      const max = si.max ?? 10
+                      const pct = Math.min(100, (val / max) * 100)
+                      const color = pct >= 70 ? 'bg-success' : pct >= 40 ? 'bg-warning' : 'bg-error'
+                      return (
+                        <div key={si.key}>
+                          <div className="mb-1 flex justify-between text-sm">
+                            <span className="text-text-secondary">{si.label}</span>
+                            <span className="font-semibold text-text-primary">{val}/{max}</span>
+                          </div>
+                          <div className="h-2 overflow-hidden rounded-full bg-bg-tertiary">
+                            <div className={`h-full rounded-full ${color} transition-all duration-700`} style={{ width: `${pct}%` }} />
+                          </div>
+                        </div>
+                      )
+                    })}
+                    {(medications || mealsPerDay != null || waterLiters != null || activityGoal != null) && (
+                      <div className="border-t border-border-light pt-3 space-y-1.5 text-sm">
+                        {mealsPerDay != null && (
+                          <div className="flex justify-between"><span className="text-text-muted">Refeições/dia</span><span className="font-medium text-text-primary">{mealsPerDay}×</span></div>
+                        )}
+                        {waterLiters != null && (
+                          <div className="flex justify-between"><span className="text-text-muted">Água/dia</span><span className="font-medium text-text-primary">{waterLiters} L</span></div>
+                        )}
+                        {activityGoal != null && (
+                          <div className="flex justify-between"><span className="text-text-muted">Treinos/semana (meta)</span><span className="font-medium text-text-primary">{activityGoal}×</span></div>
+                        )}
+                        {medications && (
+                          <div className="mt-1.5 rounded-lg bg-warning/10 px-3 py-2 text-xs text-warning">{medications}</div>
+                        )}
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Metas */}
+              {(visibleHealthGoals.length > 0 || visibleAestheticGoals.length > 0) && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-base">
+                      <DSIcon name="target" size={18} className="text-brand-primary" />
+                      Metas
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    {visibleHealthGoals.length > 0 && (
+                      <div>
+                        <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-text-muted">Meta de Saúde</p>
+                        <div className="space-y-1.5">
+                          {visibleHealthGoals.map((gi) => (
+                            <div key={gi.key} className="flex justify-between rounded-lg bg-success/5 px-3 py-1.5 text-sm">
+                              <span className="text-text-secondary">{gi.label}</span>
+                              <span className="font-semibold text-success">{String(m[gi.key] ?? '')} {gi.unit}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    {visibleAestheticGoals.length > 0 && (
+                      <div>
+                        <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-text-muted">Meta Estética</p>
+                        <div className="space-y-1.5">
+                          {visibleAestheticGoals.map((gi) => (
+                            <div key={gi.key} className="flex justify-between rounded-lg bg-brand-primary/5 px-3 py-1.5 text-sm">
+                              <span className="text-text-secondary">{gi.label}</span>
+                              <span className="font-semibold text-brand-primary">{String(m[gi.key] ?? '')} {gi.unit}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+          )
+        })()}
 
         {/* Health Indicators — S09-07 Anamnese & Hábitos Visual */}
         <HealthIndicatorsSection assessment={assessment} />
