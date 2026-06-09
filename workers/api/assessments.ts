@@ -991,10 +991,15 @@ assessments.get('/compare', async (c) => {
 assessments.get('/:id', async (c) => {
   const userId = c.get('userId')
   const userType = c.get('userType')
+  const userRole = c.get('userRole') as string | undefined
   const id = c.req.param('id')
 
   const assessment = await findAssessmentById(c.env, id)
   if (!assessment) throw new NotFoundError('Avaliação')
+
+  if (userRole === 'super_admin' || userRole === 'admin') {
+    return success({ assessment })
+  }
 
   if (userType === 'personal' && assessment.personal_id !== userId) {
     throw new ForbiddenError('Sem permissão')
