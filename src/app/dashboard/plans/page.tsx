@@ -712,11 +712,7 @@ export default function PlansPage() {
       setTimeout(() => setShowSuccess(null), 4000)
       return
     }
-    if (slug === 'trial') {
-      router.push('/dashboard/settings')
-    } else {
-      router.push(`/dashboard/plans/checkout?plan=${slug}&billing=${isAnnual ? 'annual' : 'monthly'}`)
-    }
+    router.push('/dashboard/payments')
   }
 
   return (

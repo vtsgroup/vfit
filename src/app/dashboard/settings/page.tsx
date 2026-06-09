@@ -197,39 +197,25 @@ export default function SettingsPage() {
                 <div className="flex items-center gap-3">
                   <div className={cn(
                     'flex h-10 w-10 items-center justify-center rounded-xl',
-                    personalProfile?.plan_type === 'max'
-                      ? 'bg-amber-500/10 text-amber-500'
-                      : personalProfile?.plan_type === 'pro'
-                        ? 'bg-brand-primary/10 text-brand-primary'
-                        : 'bg-text-secondary/10 text-text-secondary'
+                    'bg-brand-primary/10 text-brand-primary'
                   )}>
-                    <DSIcon name={personalProfile?.plan_type === 'max' ? 'crown' : personalProfile?.plan_type === 'pro' ? 'rocket' : 'user'} size={18} />
+                    <DSIcon name="briefcase" size={18} />
                   </div>
                   <div>
                     <p className="text-sm font-bold text-text-primary">
-                      {personalProfile?.plan_type === 'max' ? 'Max' : personalProfile?.plan_type === 'pro' ? 'Trainer Pro' : 'Essencial (Free)'}
+                      Conta Profissional
                     </p>
                     <p className="text-xs text-text-muted">
-                      {personalProfile?.plan_type === 'trial'
-                        ? 'Até 5 alunos · Recursos básicos'
-                        : personalProfile?.plan_type === 'pro'
-                          ? 'Alunos ilimitados · IA + automação'
-                          : 'Experiência premium completa'}
+                      Sem assinatura obrigatória · Monetize com alunos e consultorias
                     </p>
                   </div>
                 </div>
                 <Button
-                  variant={personalProfile?.plan_type === 'trial' ? 'primary' : 'outline'}
+                  variant="outline"
                   size="sm"
-                  onClick={() => router.push('/dashboard/plans')}
+                  onClick={() => router.push('/dashboard/payments')}
                 >
-                  {personalProfile?.plan_type === 'trial' ? (
-                    <>
-                      <DSIcon name="zap" size={14} /> Upgrade
-                    </>
-                  ) : (
-                    'Ver planos'
-                  )}
+                  Ver monetizacao
                 </Button>
               </div>
             </GlassCardContent>

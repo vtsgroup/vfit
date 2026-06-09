@@ -14,11 +14,13 @@
 // ============================================
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { api } from '@/lib/api-client'
 import { useAuthStore } from '@/stores/auth-store'
 import { toast } from '@/stores/app-store'
 import { PLANS } from '@config/constants'
 import { getB2BPrices } from '@lib/pricing'
+
+const DEPRECATED_CREATOR_BILLING_MESSAGE =
+  'Cobrança de planos para profissionais foi descontinuada. Use monetização por alunos e consultorias no VFIT.'
 
 /* ─── Types ─── */
 export type PlatformPlanSlug = 'trial' | 'pro' | 'profissional' | 'max'
@@ -83,10 +85,7 @@ export function usePlatformSubscription() {
 
   return useQuery<PlatformSubscription | null>({
     queryKey: ['platform-subscription'],
-    queryFn: async () => {
-      const res = await api.get<{ subscription: PlatformSubscription | null }>('/platform/subscription')
-      return res.data.subscription
-    },
+    queryFn: async () => null,
     enabled: isReady,
     staleTime: 5 * 60 * 1000, // 5 min
   })
@@ -107,8 +106,8 @@ export function useCurrentPlan() {
     index: planIndex,
     isFree: planSlug === 'trial',
     isMax: planSlug === 'max',
-    canUpgrade: planSlug !== 'max',
-    canDowngrade: planSlug !== 'trial',
+    canUpgrade: false,
+    canDowngrade: false,
     isUpgradeFrom: (otherSlug: PlatformPlanSlug) => PLAN_ORDER.indexOf(otherSlug) > planIndex,
     isDowngradeFrom: (otherSlug: PlatformPlanSlug) => PLAN_ORDER.indexOf(otherSlug) < planIndex,
   }
@@ -121,13 +120,11 @@ export function useCreateCheckout() {
   const queryClient = useQueryClient()
 
   return useMutation<CheckoutSession, Error, UpgradePlanInput>({
-    mutationFn: async (data) => {
-      const res = await api.post<{ checkout: CheckoutSession }>('/platform/checkout', data)
-      return res.data.checkout
+    mutationFn: async () => {
+      throw new Error(DEPRECATED_CREATOR_BILLING_MESSAGE)
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['platform-subscription'] })
-      toast.success(`Checkout criado para o plano ${PLAN_NAMES[data.plan_slug]}`)
     },
     onError: (error) => {
       toast.error(error.message || 'Erro ao criar checkout')
@@ -142,14 +139,12 @@ export function useUpgradePlan() {
   const queryClient = useQueryClient()
 
   return useMutation<{ success: boolean }, Error, { plan_slug: PlatformPlanSlug; billing_cycle: BillingCycle }>({
-    mutationFn: async (data) => {
-      const res = await api.post<{ success: boolean }>('/platform/upgrade', data)
-      return res.data
+    mutationFn: async () => {
+      throw new Error(DEPRECATED_CREATOR_BILLING_MESSAGE)
     },
-    onSuccess: (_, variables) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['platform-subscription'] })
       queryClient.invalidateQueries({ queryKey: ['profile'] })
-      toast.success(`Upgrade para ${PLAN_NAMES[variables.plan_slug]} realizado!`)
     },
     onError: (error) => {
       toast.error(error.message || 'Erro ao fazer upgrade')
@@ -164,14 +159,12 @@ export function useDowngradePlan() {
   const queryClient = useQueryClient()
 
   return useMutation<{ success: boolean }, Error, { plan_slug: PlatformPlanSlug }>({
-    mutationFn: async (data) => {
-      const res = await api.post<{ success: boolean }>('/platform/downgrade', data)
-      return res.data
+    mutationFn: async () => {
+      throw new Error(DEPRECATED_CREATOR_BILLING_MESSAGE)
     },
-    onSuccess: (_, variables) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['platform-subscription'] })
       queryClient.invalidateQueries({ queryKey: ['profile'] })
-      toast.success(`Plano alterado para ${PLAN_NAMES[variables.plan_slug]}`)
     },
     onError: (error) => {
       toast.error(error.message || 'Erro ao alterar plano')
@@ -187,12 +180,10 @@ export function useCancelPlatformSubscription() {
 
   return useMutation<{ success: boolean }, Error, void>({
     mutationFn: async () => {
-      const res = await api.post<{ success: boolean }>('/platform/subscription/cancel')
-      return res.data
+      throw new Error(DEPRECATED_CREATOR_BILLING_MESSAGE)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['platform-subscription'] })
-      toast.success('Assinatura cancelada. Acesso mantido até o fim do período.')
     },
     onError: (error) => {
       toast.error(error.message || 'Erro ao cancelar assinatura')
