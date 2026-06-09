@@ -683,6 +683,12 @@ assessments.get('/', requireType('personal'), async (c) => {
 // ============================================
 assessments.get('/my', requireType('student'), async (c) => {
   const studentId = c.get('userId')
+  const userRole = c.get('userRole') as string
+  // super_admin/admin vê tanto as avaliações onde é aluno quanto as que criou como personal
+  const isAdmin = userRole === 'super_admin' || userRole === 'admin'
+  const whereClause = isAdmin
+    ? 'WHERE (a.student_id = $1 OR a.personal_id = $1)'
+    : 'WHERE a.student_id = $1'
   const url = new URL(c.req.url)
 
   const page = Math.max(1, Number(url.searchParams.get('page')) || 1)
@@ -691,7 +697,7 @@ assessments.get('/my', requireType('student'), async (c) => {
 
   const { rows: countRows } = await pgQuery<{ count: number }>(
     c.env,
-    'SELECT COUNT(*)::int as count FROM assessments WHERE student_id = $1',
+    `SELECT COUNT(*)::int as count FROM assessments a ${whereClause}`,
     [studentId]
   )
 
@@ -700,7 +706,7 @@ assessments.get('/my', requireType('student'), async (c) => {
     `SELECT a.*, pu.full_name as personal_name
      FROM assessments a
      LEFT JOIN users pu ON pu.id = a.personal_id
-     WHERE a.student_id = $1
+     ${whereClause}
      ORDER BY a.assessment_date DESC
      LIMIT $2 OFFSET $3`,
     [studentId, perPage, offset]

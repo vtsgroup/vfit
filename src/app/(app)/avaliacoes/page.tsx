@@ -39,9 +39,9 @@ function DeltaBadge({ current, previous, unit, invert }: {
 }
 
 const TILE_TONES = {
-  emerald: { iconBg: 'bg-emerald-500/12', iconRing: 'ring-emerald-400/25', icon: 'text-emerald-300', glow: 'shadow-[0_12px_34px_-16px_rgba(16,185,129,0.7)]' },
-  blue: { iconBg: 'bg-sky-500/12', iconRing: 'ring-sky-400/25', icon: 'text-sky-300', glow: 'shadow-[0_12px_34px_-16px_rgba(56,189,248,0.65)]' },
-  amber: { iconBg: 'bg-amber-500/12', iconRing: 'ring-amber-400/25', icon: 'text-amber-300', glow: 'shadow-[0_12px_34px_-16px_rgba(245,158,11,0.65)]' },
+  emerald: { iconBg: 'bg-emerald-500/18', iconRing: 'ring-emerald-400/35', icon: 'text-emerald-300', glow: 'shadow-[0_12px_34px_-16px_rgba(16,185,129,0.7)]' },
+  blue: { iconBg: 'bg-sky-500/18', iconRing: 'ring-sky-400/35', icon: 'text-sky-300', glow: 'shadow-[0_12px_34px_-16px_rgba(56,189,248,0.65)]' },
+  amber: { iconBg: 'bg-amber-500/18', iconRing: 'ring-amber-400/35', icon: 'text-amber-300', glow: 'shadow-[0_12px_34px_-16px_rgba(245,158,11,0.65)]' },
 } as const
 
 /** Premium dark-glass metric tile */
@@ -56,13 +56,13 @@ function MetricTile({ icon, label, value, unit, tone, delta, valueClass }: {
 }) {
   const t = TILE_TONES[tone]
   return (
-    <div className={`relative overflow-hidden rounded-2xl border border-white/8 bg-white/4 px-2.5 py-3 backdrop-blur-sm ${t.glow}`}>
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-white/15 to-transparent" />
+    <div className={`relative overflow-hidden rounded-2xl border border-white/12 bg-white/8 px-2.5 py-3 backdrop-blur-sm ${t.glow}`}>
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-white/20 to-transparent" />
       <div className="mb-2 flex items-center gap-1.5">
         <div className={`flex h-6 w-6 items-center justify-center rounded-lg ${t.iconBg} ring-1 ${t.iconRing}`}>
           <DSIcon name={icon} size={11} className={t.icon} />
         </div>
-        <p className="text-[9px] font-bold uppercase tracking-wider text-text-muted">{label}</p>
+        <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">{label}</p>
       </div>
       <p className={`text-xl font-black tabular-nums leading-none ${valueClass ?? 'text-white'}`}>
         {value}{unit && <span className="ml-0.5 text-[10px] font-bold text-text-muted">{unit}</span>}
@@ -93,11 +93,21 @@ function InfoChip({ children, tone = 'emerald' }: {
 }
 
 /** Map BMI value to a chip tone */
-function bmiTone(bmi: number): 'blue' | 'emerald' | 'amber' | 'red' {
-  if (bmi < 18.5) return 'blue'
-  if (bmi < 25) return 'emerald'
-  if (bmi < 30) return 'amber'
+function bmiTone(bmi: number | string | null | undefined): 'blue' | 'emerald' | 'amber' | 'red' {
+  const n = Number(bmi)
+  if (n < 18.5) return 'blue'
+  if (n < 25) return 'emerald'
+  if (n < 30) return 'amber'
   return 'red'
+}
+
+/** Safely format numeric values — Neon returns PostgreSQL NUMERIC as strings */
+function fmt(v: number | string | null | undefined, decimals?: number): string {
+  if (v == null || v === '') return '—'
+  const n = Number(v)
+  if (isNaN(n)) return '—'
+  if (decimals !== undefined) return n.toFixed(decimals)
+  return n % 1 === 0 ? String(n) : n.toFixed(1)
 }
 
 export default function AvaliacoesPage() {
@@ -249,7 +259,7 @@ export default function AvaliacoesPage() {
         <section className="space-y-3">
           <div className="flex items-center gap-2 px-0.5">
             <DSIcon name="user" size={13} className="text-emerald-400" />
-            <h2 className="text-[11px] font-bold uppercase tracking-[0.16em] text-text-muted">Minhas avaliações</h2>
+            <h2 className="text-[12px] font-bold uppercase tracking-[0.16em] text-zinc-300">Minhas avaliações</h2>
           </div>
           {assessments!.map((a, i) => {
             const date = new Date(a.created_at)
@@ -259,18 +269,18 @@ export default function AvaliacoesPage() {
               <Link
                 key={a.id}
                 href={`/avaliacoes/${a.id}`}
-                className={`group relative block overflow-hidden rounded-3xl border p-4 transition-all active:translate-y-px ${isFirst ? 'border-emerald-400/18 bg-white/5' : 'border-white/8 bg-white/3 hover:border-white/12'}`}
+                className={`group relative block overflow-hidden rounded-3xl border p-4 transition-all active:translate-y-px ${isFirst ? 'border-emerald-400/30 bg-white/10' : 'border-white/12 bg-white/6 hover:border-white/18 hover:bg-white/8'}`}
                 style={isFirst ? { boxShadow: '0 18px 48px -24px rgba(16,185,129,0.55)' } : undefined}
               >
                 {isFirst && <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-emerald-500/12 blur-3xl" />}
                 <div className="relative mb-3 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     {isFirst && <InfoChip tone="emerald">Mais recente</InfoChip>}
-                    <span className="text-[11px] font-semibold text-text-muted">
+                    <span className="text-[12px] font-semibold text-zinc-300">
                       {date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
                     </span>
                   </div>
-                  <DSIcon name="chevronRight" size={16} className="text-text-muted transition-transform group-hover:translate-x-0.5" />
+                  <DSIcon name="chevronRight" size={16} className="text-zinc-500 transition-transform group-hover:translate-x-0.5" />
                 </div>
 
                 <div className="relative grid grid-cols-3 gap-2">
@@ -278,27 +288,27 @@ export default function AvaliacoesPage() {
                     icon="scale"
                     label="Peso"
                     tone="emerald"
-                    value={a.weight_kg.toString()}
-                    unit="kg"
-                    delta={prev ? <DeltaBadge current={a.weight_kg} previous={prev.weight_kg} unit="kg" /> : undefined}
+                    value={fmt(a.weight_kg)}
+                    unit={a.weight_kg != null ? 'kg' : ''}
+                    delta={prev ? <DeltaBadge current={Number(a.weight_kg)} previous={Number(prev.weight_kg)} unit="kg" /> : undefined}
                   />
                   <MetricTile
                     icon="activity"
                     label="IMC"
                     tone="blue"
-                    value={a.bmi.toString()}
-                    valueClass={getBMIColor(a.bmi)}
-                    delta={prev ? <DeltaBadge current={a.bmi} previous={prev.bmi} unit="" /> : undefined}
+                    value={fmt(a.bmi)}
+                    valueClass={getBMIColor(Number(a.bmi))}
+                    delta={prev ? <DeltaBadge current={Number(a.bmi)} previous={Number(prev.bmi)} unit="" /> : undefined}
                   />
                   <MetricTile
                     icon="percent"
                     label="Gordura"
                     tone="amber"
-                    value={a.body_fat_percentage ? a.body_fat_percentage.toString() : '—'}
-                    unit={a.body_fat_percentage ? '%' : ''}
+                    value={fmt(a.body_fat_percentage)}
+                    unit={a.body_fat_percentage != null ? '%' : ''}
                     delta={
-                      prev && a.body_fat_percentage && prev.body_fat_percentage ? (
-                        <DeltaBadge current={a.body_fat_percentage} previous={prev.body_fat_percentage} unit="%" invert />
+                      prev && a.body_fat_percentage != null && prev.body_fat_percentage != null ? (
+                        <DeltaBadge current={Number(a.body_fat_percentage)} previous={Number(prev.body_fat_percentage)} unit="%" invert />
                       ) : undefined
                     }
                   />
@@ -326,7 +336,7 @@ export default function AvaliacoesPage() {
         <section className="mt-7 space-y-3">
           <div className="flex items-center gap-2 px-0.5">
             <DSIcon name="clipboard" size={13} className="text-violet-400" />
-            <h2 className="text-[11px] font-bold uppercase tracking-[0.16em] text-text-muted">Avaliações do personal</h2>
+            <h2 className="text-[12px] font-bold uppercase tracking-[0.16em] text-zinc-300">Avaliações do personal</h2>
           </div>
           {proAssessments.map((a, i) => {
             const date = new Date(a.assessment_date)
@@ -336,24 +346,24 @@ export default function AvaliacoesPage() {
               <Link
                 key={a.id}
                 href={`/dashboard/assessments/view?id=${a.id}`}
-                className={`group relative block overflow-hidden rounded-3xl border p-4 transition-all active:translate-y-px ${isFirst ? 'border-violet-400/18 bg-white/5' : 'border-white/8 bg-white/3 hover:border-white/12'}`}
+                className={`group relative block overflow-hidden rounded-3xl border p-4 transition-all active:translate-y-px ${isFirst ? 'border-violet-400/30 bg-white/10' : 'border-white/12 bg-white/6 hover:border-white/18 hover:bg-white/8'}`}
                 style={isFirst ? { boxShadow: '0 18px 48px -24px rgba(139,92,246,0.5)' } : undefined}
               >
                 {isFirst && <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-violet-500/12 blur-3xl" />}
                 <div className="relative mb-3 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     {isFirst && <InfoChip tone="violet">Mais recente</InfoChip>}
-                    <span className="text-[11px] font-semibold text-text-muted">
+                    <span className="text-[12px] font-semibold text-zinc-300">
                       {date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
                     </span>
                   </div>
-                  <DSIcon name="chevronRight" size={16} className="text-text-muted transition-transform group-hover:translate-x-0.5" />
+                  <DSIcon name="chevronRight" size={16} className="text-zinc-500 transition-transform group-hover:translate-x-0.5" />
                 </div>
 
                 <div className="relative grid grid-cols-3 gap-2">
-                  <MetricTile icon="scale" label="Peso" tone="emerald" value={String(a.weight_kg ?? '—')} unit={a.weight_kg ? 'kg' : ''} />
-                  <MetricTile icon="activity" label="IMC" tone="blue" value={String(a.bmi ?? '—')} valueClass={a.bmi ? getBMIColor(Number(a.bmi)) : undefined} />
-                  <MetricTile icon="percent" label="Gordura" tone="amber" value={a.body_fat_percentage ? String(a.body_fat_percentage) : '—'} unit={a.body_fat_percentage ? '%' : ''} />
+                  <MetricTile icon="scale" label="Peso" tone="emerald" value={fmt(a.weight_kg)} unit={a.weight_kg != null ? 'kg' : ''} />
+                  <MetricTile icon="activity" label="IMC" tone="blue" value={fmt(a.bmi)} valueClass={a.bmi != null ? getBMIColor(Number(a.bmi)) : undefined} />
+                  <MetricTile icon="percent" label="Gordura" tone="amber" value={fmt(a.body_fat_percentage)} unit={a.body_fat_percentage != null ? '%' : ''} />
                 </div>
 
                 <div className="relative mt-3 flex flex-wrap items-center gap-2">
