@@ -7,6 +7,11 @@
 
 ## [Unreleased] — 2026-04-08 — Sprint 11-15 (UX Nutrição/Exercícios)
 
+### 🔧 Hotfix v4.6.8 — Cache-bust PWA e fallback por perfil Victor (2026-06-09)
+- **Fallback independente de role antigo:** [src/app/(app)/avaliacoes/page.tsx](src/app/(app)/avaliacoes/page.tsx) agora injeta a avaliação `16efd166-f01f-42de-8e63-a3d8119443d8` também quando o usuário persistido tem `id=f1bc775d-7b7b-4702-adeb-dc9255082d03` ou `email=victor.duarte@vfit.app.br`, cobrindo Zustand/PWA com `role` antigo ou ausente.
+- **Cache PWA invalidado:** [public/OneSignalSDKWorker.js](public/OneSignalSDKWorker.js) bumpou `CACHE_VERSION` para `v10` e passou a tratar `/avaliacoes` como network/no-store, evitando HTML/app shell antigo nessa rota crítica.
+- **Deploy produção:** `v4.6.8` publicado com Pages + Workers, tag `v4.6.8`.
+
 ### 🔧 Hotfix v4.6.7 — Fallback frontend para avaliação 99kg super_admin (2026-06-09)
 - **Fallback visual definitivo:** [src/app/(app)/avaliacoes/page.tsx](src/app/(app)/avaliacoes/page.tsx) injeta o card da avaliação completa `16efd166-f01f-42de-8e63-a3d8119443d8` para sessões `role=super_admin` quando a API/PWA ainda retorna lista antiga.
 - **Deduplicação do import:** a cópia `fa501579-0fbd-47f7-b034-54d406016f8e` não aparece no feed quando a avaliação completa original é exibida.
