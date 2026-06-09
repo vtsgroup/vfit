@@ -424,7 +424,7 @@ export function useMyAssessments(params: MyAssessmentsParams = {}) {
   const isReady = useAuthStore((s) => {
     const userType = s.user?.user_type
     const role = s.user?.role
-    const isStudentLike = userType === 'student' || userType === 'admin' || role === 'super_admin'
+    const isStudentLike = userType === 'student' || userType === 'personal' || userType === 'admin' || role === 'super_admin'
     return s.isAuthenticated && s.isHydrated && isStudentLike
   })
 

@@ -681,14 +681,16 @@ assessments.get('/', requireType('personal'), async (c) => {
 // ============================================
 // GET /assessments/my — Minhas avaliações (student)
 // ============================================
-assessments.get('/my', requireType('student'), async (c) => {
+assessments.get('/my', requireType('student', 'personal', 'admin', 'super_admin'), async (c) => {
   const studentId = c.get('userId')
   const userRole = c.get('userRole') as string
+  const userType = c.get('userType') as string
   // super_admin/admin vê tanto as avaliações onde é aluno quanto as que criou como personal
   const isAdmin = userRole === 'super_admin' || userRole === 'admin'
+  const isPersonal = userType === 'personal'
   const whereClause = isAdmin
     ? 'WHERE (a.student_id = $1 OR a.personal_id = $1)'
-    : 'WHERE a.student_id = $1'
+    : (isPersonal ? 'WHERE a.personal_id = $1' : 'WHERE a.student_id = $1')
   const url = new URL(c.req.url)
 
   const page = Math.max(1, Number(url.searchParams.get('page')) || 1)

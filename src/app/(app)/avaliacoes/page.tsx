@@ -62,10 +62,10 @@ function MetricTile({ icon, label, value, unit, tone, delta, valueClass }: {
         <div className={`flex h-6 w-6 items-center justify-center rounded-lg ${t.iconBg} ring-1 ${t.iconRing}`}>
           <DSIcon name={icon} size={11} className={t.icon} />
         </div>
-        <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">{label}</p>
+        <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-500">{label}</p>
       </div>
-      <p className={`text-xl font-black tabular-nums leading-none ${valueClass ?? 'text-white'}`}>
-        {value}{unit && <span className="ml-0.5 text-[10px] font-bold text-text-muted">{unit}</span>}
+      <p className={`text-xl font-black tabular-nums leading-none ${valueClass ?? 'text-slate-900'}`}>
+        {value}{unit && <span className="ml-0.5 text-[10px] font-bold text-zinc-600">{unit}</span>}
       </p>
       {delta && <div className="mt-1.5 leading-none">{delta}</div>}
     </div>
