@@ -7,6 +7,14 @@
 
 ## [Unreleased] — 2026-04-08 — Sprint 11-15 (UX Nutrição/Exercícios)
 
+### 🔧 Hotfix v4.6.5 — Feed de avaliações inclui avaliação completa de 99kg (2026-06-09)
+- **Raiz corrigida:** `GET /self-assessments` agora une autoavaliações com avaliações profissionais completas vinculadas ao mesmo usuário (`student_id` ou `personal_id`), garantindo que a avaliação `16efd166-f01f-42de-8e63-a3d8119443d8` apareça no feed aluno.
+- **Sem duplicação do import PDF:** linhas importadas em `self_assessments` com nota `Importado automaticamente da avaliação PDF%` são ocultadas quando o feed já exibe a avaliação completa original.
+- **Compatibilidade PostgreSQL:** `assessments.id` (`uuid`) é convertido para `text` no `UNION ALL`, evitando erro `uuid = text`/tipo incompatível no Worker.
+- **Cache:** resposta de `/self-assessments` envia `Cache-Control: no-store` para reduzir stale data no app/PWA.
+- **Validação:** query final retornou 2 registros para Victor: `94kg` (`cc7546d6...`) e `99kg` (`16efd166...`).
+- **Deploy produção:** `v4.6.5` publicado com Pages + Workers, tag `v4.6.5`.
+
 ### 🔧 Hotfix v4.6.3 — Avaliação completa no perfil super_admin aluno (2026-06-09)
 - **Avaliação completa localizada e confirmada:** registro `16efd166-f01f-42de-8e63-a3d8119443d8` está vinculado ao usuário `f1bc775d-7b7b-4702-adeb-dc9255082d03` como `student_id` e `personal_id`, com peso `99.00kg`, IMC `29.56` e gordura `17.61%`.
 - **Acesso super_admin no detalhe corrigido:** `GET /assessments/:id` agora respeita `userRole = admin|super_admin` como bypass administrativo antes das regras de `userType`, evitando 403/“não encontrada” quando o token do super_admin tem `type=personal`.
