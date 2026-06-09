@@ -103,15 +103,48 @@ app.get('/', async (c) => {
 
   const { rows } = await pgQuery(
     env,
-    `SELECT id, weight_kg, height_cm, bmi, bmi_category,
+    `WITH self_rows AS (
+       SELECT id, weight_kg, height_cm, bmi, bmi_category,
+              body_fat_percentage, activity_level, goal, created_at
+       FROM self_assessments
+       WHERE user_id = $1
+         AND COALESCE(notes, '') NOT LIKE 'Importado automaticamente da avaliação PDF%'
+     ), complete_rows AS (
+       SELECT a.id,
+              a.weight_kg,
+              a.height_cm,
+              a.bmi,
+              COALESCE(
+                a.bmi_classification,
+                CASE
+                  WHEN a.bmi < 18.5 THEN 'Abaixo do peso'
+                  WHEN a.bmi < 25 THEN 'Normal'
+                  WHEN a.bmi < 30 THEN 'Sobrepeso'
+                  WHEN a.bmi < 35 THEN 'Obesidade Grau I'
+                  WHEN a.bmi < 40 THEN 'Obesidade Grau II'
+                  ELSE 'Obesidade Grau III'
+                END
+              ) AS bmi_category,
+              a.body_fat_percentage,
+              NULL::text AS activity_level,
+              NULL::text AS goal,
+              COALESCE(a.assessment_date::timestamptz, a.created_at) AS created_at
+       FROM assessments a
+       WHERE a.student_id::text = $1 OR a.personal_id::text = $1
+     )
+     SELECT id, weight_kg, height_cm, bmi, bmi_category,
             body_fat_percentage, activity_level, goal, created_at
-     FROM self_assessments
-     WHERE user_id = $1
+     FROM (
+       SELECT * FROM self_rows
+       UNION ALL
+       SELECT * FROM complete_rows
+     ) merged
      ORDER BY created_at DESC
      LIMIT $2`,
     [userId, limit]
   )
 
+  c.header('Cache-Control', 'no-store')
   return success(rows)
 })
 
