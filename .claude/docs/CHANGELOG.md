@@ -7,6 +7,12 @@
 
 ## [Unreleased] — 2026-04-08 — Sprint 11-15 (UX Nutrição/Exercícios)
 
+### 🔧 Hotfix v4.6.3 — Avaliação completa no perfil super_admin aluno (2026-06-09)
+- **Avaliação completa localizada e confirmada:** registro `16efd166-f01f-42de-8e63-a3d8119443d8` está vinculado ao usuário `f1bc775d-7b7b-4702-adeb-dc9255082d03` como `student_id` e `personal_id`, com peso `99.00kg`, IMC `29.56` e gordura `17.61%`.
+- **Acesso super_admin no detalhe corrigido:** `GET /assessments/:id` agora respeita `userRole = admin|super_admin` como bypass administrativo antes das regras de `userType`, evitando 403/“não encontrada” quando o token do super_admin tem `type=personal`.
+- **Modo aluno forçado operacionalmente:** sessão `admin-simulation:f1bc775d-7b7b-4702-adeb-dc9255082d03` gravada no KV remoto `KV_SESSIONS` com `mode=student` e TTL de 8h.
+- **Deploy produção:** `v4.6.3` publicado com Pages + Workers, tag `v4.6.3`.
+
 ### 🎨 Hotfix v4.6.0 — Avaliações ultra legível + visual premium (2026-06-09)
 - **Contraste corrigido de forma estrutural:** os cards da listagem e do detalhe saíram de superfícies claras/translúcidas para superfícies escuras elevadas (`bg-slate-950/80`, `bg-slate-900/70`) com bordas visíveis (`border-slate-700/65+`) e tipografia de alto contraste.
 - **Listagem principal modernizada:** [src/app/(app)/avaliacoes/page.tsx](src/app/(app)/avaliacoes/page.tsx) agora usa cards dark premium para “Minhas avaliações” e “Avaliações do personal”, com métricas legíveis em qualquer tema e estado de hover mais claro.
