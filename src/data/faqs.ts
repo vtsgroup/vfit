@@ -230,33 +230,33 @@ export const FAQ_BLOG_COBRANCA: FaqItem[] = [
 /* ─── Pricing ─── */
 export const FAQ_PRICING: FaqItem[] = [
   {
-    question: 'Posso testar o VFIT antes de assinar?',
+    question: 'Profissional precisa assinar plano para usar o VFIT?',
     answer:
-      'Sim! O plano Grátis é 100% gratuito e permite até 5 alunos ativos. Você pode usar sem limite de tempo para conhecer a plataforma antes de fazer upgrade.',
+      'Nao. O modelo atual nao exige assinatura obrigatoria de personal ou nutricionista para operar no VFIT.',
   },
   {
-    question: 'Existe desconto para pagamento anual?',
+    question: 'Como o VFIT monetiza agora?',
     answer:
-      'Sim. Todos os planos pagos têm 20% de desconto no pagamento anual. Por exemplo, o plano Pro sai de R$ 29,90/mês para R$ 23,92/mês quando pago anualmente.',
+      'A receita principal vem de alunos pagantes e de consultorias oficiais com pagamento dentro da API da plataforma.',
   },
   {
-    question: 'Posso cancelar a qualquer momento?',
+    question: 'Consultoria pode ser cobrada fora do VFIT?',
     answer:
-      'Sim, sem multa e sem burocracia. Você cancela diretamente nas configurações da conta e mantém acesso até o final do período pago. Não fazemos retenção forçada.',
+      'Para consultoria oficial da plataforma, nao. O fluxo exige pagamento confirmado no VFIT antes da entrega premium.',
   },
   {
-    question: 'Quais formas de pagamento são aceitas?',
+    question: 'Quais pagamentos continuam no produto?',
     answer:
-      'Aceitamos PIX (instantâneo, menor taxa), cartão de crédito (recorrência automática) e boleto bancário. Todos os pagamentos são processados pelo Asaas com segurança PCI DSS.',
+      'Pagamentos de aluno e consultoria continuam com PIX, cartao e boleto, processados via integracao de pagamento da plataforma.',
   },
   {
-    question: 'Posso mudar de plano depois?',
+    question: 'O aluno premium continua com assinatura?',
     answer:
-      'Sim, upgrade e downgrade são instantâneos. No upgrade, você paga apenas a diferença proporcional. No downgrade, o saldo restante é convertido em crédito para os próximos meses.',
+      'Sim. O billing do aluno permanece ativo e separado do fluxo de creator.',
   },
   {
-    question: 'O plano Grátis tem alguma limitação escondida?',
+    question: 'O que muda para quem ja usava plano de creator?',
     answer:
-      'Não. O Grátis inclui gamificação, cobranças, app PWA completo e suporte por e-mail. A única limitação é o máximo de 5 alunos ativos. Sem trial, sem prazo — é grátis para sempre.',
+      'Os fluxos legados de assinatura de creator foram descontinuados e a operacao segue no modelo student-first.',
   },
 ]

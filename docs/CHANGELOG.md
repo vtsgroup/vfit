@@ -12,6 +12,8 @@
 - Frontend de assinatura de creator ajustado em [src/hooks/use-platform-subscription.ts](../src/hooks/use-platform-subscription.ts): hooks de checkout/upgrade/downgrade/cancel agora tratam o fluxo como deprecado para evitar novas transações B2B.
 - UI de conta profissional atualizada em [src/app/dashboard/settings/page.tsx](../src/app/dashboard/settings/page.tsx) para remover CTA de upgrade e direcionar para monetização.
 - Fluxo de seleção de planos em [src/app/dashboard/plans/page.tsx](../src/app/dashboard/plans/page.tsx) redirecionado para área de monetização, evitando entrada no checkout legado de creator.
+- Limpeza de caminhos legados em [src/app/dashboard/plans/checkout/page.tsx](../src/app/dashboard/plans/checkout/page.tsx) e [src/app/dashboard/plans/checkout/success/page.tsx](../src/app/dashboard/plans/checkout/success/page.tsx), agora exibindo estado de deprecação e rota para monetização.
+- Pricing e narrativa pública alinhados ao modelo sem assinatura de creator em [src/data/pricing-plans.ts](../src/data/pricing-plans.ts), [src/app/(public)/pricing/page.tsx](../src/app/(public)/pricing/page.tsx) e [src/data/faqs.ts](../src/data/faqs.ts).
 - Validação executada: `npm run type-check` e checagem de erros por arquivo alterado sem regressões.
 - Deploy patch publicado com sucesso: Pages + Workers + git/tag em `v4.4.7` (commit `1d41b060`).
 - Exceção operacional: notificações WhatsApp start/end seguiram indisponíveis (`Host desativado por segurança`), deploy executado com `--allow-no-whatsapp`.

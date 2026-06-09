@@ -1,7 +1,7 @@
 # TRACKING — Alunos Pagam, Profissionais Sem Plano
 
 Última atualização: 2026-06-09
-Progresso: 3/24 (13%)
+Progresso: 6/24 (25%)
 
 ## Fase 0 — Direção e contratos
 - [ ] T0.1 ADR monetização student-first aprovada
@@ -9,9 +9,9 @@ Progresso: 3/24 (13%)
 - [ ] T0.3 Matriz de flags e rollback aprovada
 
 ## Fase 1 — Entitlement sem plano profissional
-- [ ] T1.1 Remover gating por subscription_plan para personal
-- [ ] T1.2 Remover gating por subscription_plan para nutricionista
-- [ ] T1.3 Manter gating de aluno premium intacto
+- [x] T1.1 Remover gating por subscription_plan para personal
+- [x] T1.2 Remover gating por subscription_plan para nutricionista
+- [x] T1.3 Manter gating de aluno premium intacto
 - [ ] T1.4 Testes de regressão de permissões
 
 ## Fase 2 — Consultation commerce
@@ -33,7 +33,7 @@ Progresso: 3/24 (13%)
 - [x] T4.1 Deprecar GET /platform/subscription para creators
 - [x] T4.2 Deprecar POST /platform/checkout para creators
 - [x] T4.3 Atualizar páginas de pricing e copy comercial
-- [ ] T4.4 Limpeza de caminhos legados de plano creator
+- [x] T4.4 Limpeza de caminhos legados de plano creator
 
 ## Fase 5 — Operação
 - [ ] T5.1 Alertas P1/P2 em produção
@@ -46,3 +46,4 @@ Progresso: 3/24 (13%)
 | Versão | Data | Sprint | Commit | Notas |
 |---|---|---|---|---|
 | v4.4.7 | 2026-06-09 | R4 (parcial) | 1d41b060 | Deprecação de platform billing + UI inicial de monetização |
+| - | 2026-06-09 | R4 (limpeza) | - | Checkout legado de creator removido e pricing/FAQ alinhados |

@@ -18,7 +18,6 @@ import { buildSeoMetadata } from '@/lib/seo'
 import { PageHero } from '@/components/shared/page-hero'
 import { FAQ_PRICING } from '@/data/faqs'
 import { PricingSection } from '@/components/pricing/pricing-section'
-import { PLANS } from '@config/constants'
 import { Button } from '@/components/ui/button'
 
 // Perf: FaqInline é below-the-fold → lazy load para reduzir JS inicial
@@ -28,9 +27,9 @@ const FaqInline = dynamic(
 )
 
 export const metadata: Metadata = buildSeoMetadata({
-  title: 'Planos e Preços — VFIT',
+  title: 'Modelo Comercial — VFIT',
   description:
-    'Compare os planos do VFIT: Grátis, Pro, Pro+ e Max. Desconto de 20% no anual. Comece grátis sem cartão de crédito.',
+    'No VFIT, profissionais e nutricionistas operam sem assinatura obrigatoria. A monetizacao acontece por alunos e consultorias pagas na API.',
   path: '/pricing',
   ogImage: '/og/og-pricing.png',
 })
@@ -45,8 +44,8 @@ export default function PricingPage() {
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'WebPage',
-            name: 'Planos e Preços — VFIT',
-            description: 'Compare os planos do VFIT para personal trainers.',
+            name: 'Modelo Comercial — VFIT',
+            description: 'Modelo student-first com consultoria paga dentro da plataforma.',
             url: 'https://vfit.app.br/pricing',
             mainEntity: {
               '@type': 'ItemList',
@@ -58,8 +57,8 @@ export default function PricingPage() {
                 {
                   '@type': 'Product',
                   position: 1,
-                  name: 'VFIT Grátis',
-                  description: 'Plano gratuito para sempre. Até 5 alunos ativos.',
+                  name: 'Creator Free',
+                  description: 'Conta profissional sem assinatura obrigatoria.',
                   image: 'https://vfit.app.br/og/og-pricing.png',
                   brand: { '@type': 'Brand', name: 'VFIT' },
                   aggregateRating: { '@type': 'AggregateRating', ratingValue: '4.7', bestRating: '5', ratingCount: '86' },
@@ -79,15 +78,15 @@ export default function PricingPage() {
                 {
                   '@type': 'Product',
                   position: 2,
-                  name: 'VFIT Pro',
-                  description: 'Alunos ilimitados e automação completa.',
+                  name: 'Monetizacao por Aluno',
+                  description: 'Receita principal por assinatura e cobranca do aluno.',
                   image: 'https://vfit.app.br/og/og-pricing.png',
                   brand: { '@type': 'Brand', name: 'VFIT' },
                   aggregateRating: { '@type': 'AggregateRating', ratingValue: '4.8', bestRating: '5', ratingCount: '142' },
                   review: { '@type': 'Review', author: { '@type': 'Person', name: 'Fernanda Oliveira' }, datePublished: '2026-02-10', reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' }, reviewBody: 'Melhor custo-benefício. Automação de cobranças e treinos economiza horas do meu dia.' },
                   offers: {
                     '@type': 'Offer',
-                    price: String(PLANS.pro.price_brl),
+                    price: '0',
                     priceCurrency: 'BRL',
                     priceValidUntil: '2026-12-31',
                     availability: 'https://schema.org/InStock',
@@ -100,15 +99,15 @@ export default function PricingPage() {
                 {
                   '@type': 'Product',
                   position: 3,
-                  name: 'VFIT Pro+',
-                  description: 'Contratos, invoices e NFs em um único app.',
+                  name: 'Consultoria Paga',
+                  description: 'Consultoria oficial com pagamento dentro da API VFIT.',
                   image: 'https://vfit.app.br/og/og-pricing.png',
                   brand: { '@type': 'Brand', name: 'VFIT' },
                   aggregateRating: { '@type': 'AggregateRating', ratingValue: '4.9', bestRating: '5', ratingCount: '67' },
                   review: { '@type': 'Review', author: { '@type': 'Person', name: 'Ricardo Santos' }, datePublished: '2026-02-25', reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' }, reviewBody: 'Contratos e NFs integrados facilitaram muito a gestão financeira do meu studio.' },
                   offers: {
                     '@type': 'Offer',
-                    price: String(PLANS.profissional.price_brl),
+                    price: '0',
                     priceCurrency: 'BRL',
                     priceValidUntil: '2026-12-31',
                     availability: 'https://schema.org/InStock',
@@ -121,15 +120,15 @@ export default function PricingPage() {
                 {
                   '@type': 'Product',
                   position: 4,
-                  name: 'VFIT Max',
-                  description: 'White-label completo com domínio próprio.',
+                  name: 'Financeiro Escalavel',
+                  description: 'Ledger, conciliacao e controle de repasse para escala.',
                   image: 'https://vfit.app.br/og/og-pricing.png',
                   brand: { '@type': 'Brand', name: 'VFIT' },
                   aggregateRating: { '@type': 'AggregateRating', ratingValue: '4.9', bestRating: '5', ratingCount: '31' },
                   review: { '@type': 'Review', author: { '@type': 'Person', name: 'Carla Ribeiro' }, datePublished: '2026-03-05', reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' }, reviewBody: 'White-label perfeito. Meus alunos acessam pelo meu domínio, com minha marca.' },
                   offers: {
                     '@type': 'Offer',
-                    price: String(PLANS.max.price_brl),
+                    price: '0',
                     priceCurrency: 'BRL',
                     priceValidUntil: '2026-12-31',
                     availability: 'https://schema.org/InStock',
@@ -146,12 +145,12 @@ export default function PricingPage() {
       />
 
       <PageHero
-        title="Planos e Preços"
-        subtitle="Do gratuito ao premium. Escolha o plano certo para o tamanho da sua operação."
-        badge="Pricing"
+        title="Modelo Comercial"
+        subtitle="Profissionais e nutricionistas sem assinatura obrigatoria. Receita por alunos e consultorias no VFIT."
+        badge="Student-First"
         breadcrumbs={[
           { label: 'Home', href: '/' },
-          { label: 'Preços' },
+          { label: 'Modelo comercial' },
         ]}
       />
 
@@ -181,19 +180,19 @@ export default function PricingPage() {
         {/* CTA Final */}
         <section className="text-center rounded-2xl border border-brand-primary/30 bg-linear-to-b from-brand-primary/8 to-transparent p-8 sm:p-12 space-y-5 backdrop-blur-sm shadow-[0_4px_24px_rgba(0,0,0,0.15)]">
           <h2 className="text-2xl font-bold text-white sm:text-3xl">
-            Pronto para digitalizar seu trabalho?
+            Pronto para monetizar sem plano de creator?
           </h2>
           <p className="mx-auto max-w-lg text-sm text-zinc-300 sm:text-base">
-            Junte-se a centenas de personal trainers que já usam o VFIT para gerenciar alunos, cobrar automaticamente e escalar sua operação.
+            Ative sua operacao com modelo student-first e consultoria paga dentro da plataforma.
           </p>
           <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
             <Link href="/register">
               <Button
                 size="lg"
-                aria-label="Começar grátis"
+                aria-label="Comecar agora"
                 data-testid="pricing-cta-register"
               >
-                Começar grátis
+                Comecar agora
                 <DSIcon name="arrowRight" size={16} />
               </Button>
             </Link>
