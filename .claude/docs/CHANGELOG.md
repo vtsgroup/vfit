@@ -7,6 +7,13 @@
 
 ## [Unreleased] — 2026-04-08 — Sprint 11-15 (UX Nutrição/Exercícios)
 
+### 🎨 Hotfix v4.6.0 — Avaliações ultra legível + visual premium (2026-06-09)
+- **Contraste corrigido de forma estrutural:** os cards da listagem e do detalhe saíram de superfícies claras/translúcidas para superfícies escuras elevadas (`bg-slate-950/80`, `bg-slate-900/70`) com bordas visíveis (`border-slate-700/65+`) e tipografia de alto contraste.
+- **Listagem principal modernizada:** [src/app/(app)/avaliacoes/page.tsx](src/app/(app)/avaliacoes/page.tsx) agora usa cards dark premium para “Minhas avaliações” e “Avaliações do personal”, com métricas legíveis em qualquer tema e estado de hover mais claro.
+- **Página completa da avaliação modernizada:** [src/app/(app)/avaliacoes/[id]/client-page.tsx](src/app/(app)/avaliacoes/[id]/client-page.tsx) recebeu o mesmo sistema visual premium nos blocos de IMC, evolução, atividade/objetivo, medidas, notas e convite do personal.
+- **Legibilidade reforçada:** labels, datas, unidades e ícones foram ajustados para evitar “texto apagado” em mobile.
+- **Deploy produção:** `v4.6.0` publicado com Pages + Workers, tag `v4.6.0`.
+
 ### 🔧 Hotfix v4.5.9 — Avaliações no perfil correto + leitura clara (2026-06-09)
 - **Perfil corrigido no banco:** avaliação `16efd166-f01f-42de-8e63-a3d8119443d8` foi vinculada ao perfil `f1bc775d-7b7b-4702-adeb-dc9255082d03` (Victor), após criação do registro correspondente em `students` para satisfazer FK.
 - **Acesso por tipo de conta ajustado:** `GET /assessments/my` agora aceita `student`, `personal`, `admin` e `super_admin`.
