@@ -7,6 +7,17 @@
 
 ## [Unreleased] — 2026-04-08 — Sprint 11-15 (UX Nutrição/Exercícios)
 
+### 🔧 Hotfix v4.5.9 — Avaliações no perfil correto + leitura clara (2026-06-09)
+- **Perfil corrigido no banco:** avaliação `16efd166-f01f-42de-8e63-a3d8119443d8` foi vinculada ao perfil `f1bc775d-7b7b-4702-adeb-dc9255082d03` (Victor), após criação do registro correspondente em `students` para satisfazer FK.
+- **Acesso por tipo de conta ajustado:** `GET /assessments/my` agora aceita `student`, `personal`, `admin` e `super_admin`.
+- **Escopo de consulta por ator:**
+  - `super_admin/admin`: `(student_id = userId OR personal_id = userId)`
+  - `personal`: `personal_id = userId`
+  - `student`: `student_id = userId`
+- **Hook de frontend destravado:** `useMyAssessments` passa a habilitar também para `user_type = personal`.
+- **Legibilidade dos cards de métricas:** textos e unidades foram escurecidos para evitar números “sumidos” em superfícies claras.
+- **Deploy produção:** `v4.5.9` publicado com Pages + Workers + tag `v4.5.9`.
+
 ### 🔧 Hotfix v4.5.7 — Avaliações: email, visibilidade super_admin, contraste e dados (2026-06-09)
 - **Email atualizado:** `victor.duarte@iapersonal.app.br` → `victor.duarte@vfit.app.br` direto no banco (UPDATE users WHERE id = f1bc775d).
 - **super_admin vê assessments profissionais próprias:** `GET /assessments/my` agora usa `WHERE (student_id = $1 OR personal_id = $1)` para usuários com role `super_admin`/`admin`, permitindo que Victor veja a avaliação que ele mesmo criou como personal.
