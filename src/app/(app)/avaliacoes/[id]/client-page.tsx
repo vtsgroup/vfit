@@ -152,9 +152,8 @@ export default function AvaliacaoDetalhePage() {
 
       <div className="mt-5 space-y-5 px-4">
       {/* BMI category */}
-      <div className="relative overflow-hidden rounded-2xl border border-slate-700/65 bg-slate-950/80 p-5 text-center">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-white/15 to-transparent" />
-        <p className="mb-1.5 text-[11px] font-bold uppercase tracking-[0.16em] text-zinc-300">Classificação IMC</p>
+      <div className="relative overflow-hidden rounded-2xl border border-slate-600/40 bg-slate-900 p-5 text-center">
+        <p className="mb-1.5 text-[11px] font-bold uppercase tracking-[0.16em] text-white">Classificação IMC</p>
         <p className={`text-[22px] font-black tracking-tight ${getBMIColor(assessment.bmi)}`}>
           {assessment.bmi_category}
         </p>
@@ -168,8 +167,8 @@ export default function AvaliacaoDetalhePage() {
             <DSIcon name="trendingUp" size={12} className="text-brand-primary" />
             Evolução
           </h3>
-          <div className="rounded-2xl border border-slate-700/65 bg-slate-900/70 p-4">
-            <p className="mb-3 text-[11px] text-zinc-300">
+          <div className="rounded-2xl border border-slate-600/40 bg-slate-900 p-4">
+            <p className="mb-3 text-[11px] text-white">
               vs. {new Date(prev.created_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })}
             </p>
             <div className="grid grid-cols-3 gap-3">
@@ -220,7 +219,7 @@ export default function AvaliacaoDetalhePage() {
             <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-500/12 ring-1 ring-emerald-400/25">
               <DSIcon name="target" size={12} className="text-emerald-300" />
             </div>
-            <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-300">Objetivo</p>
+            <p className="text-[10px] font-bold uppercase tracking-wider text-white">Objetivo</p>
           </div>
           <p className="text-[13px] font-bold text-white">{getGoalLabel(assessment.goal)}</p>
         </div>
@@ -232,10 +231,10 @@ export default function AvaliacaoDetalhePage() {
           <DSIcon name="ruler" size={12} className="text-brand-primary" />
           Medidas
         </h3>
-        <div className="rounded-2xl border border-slate-700/65 bg-slate-900/70 divide-y divide-slate-700/55">
+        <div className="rounded-2xl border border-slate-600/40 bg-slate-900 divide-y divide-slate-600/40">
           {measurements.map((m) => (
             <div key={m.label} className="flex items-center justify-between px-4 py-2.5">
-              <span className="text-[13px] text-zinc-300">{m.label}</span>
+              <span className="text-[13px] text-white">{m.label}</span>
               <span className="text-[14px] font-semibold text-white tabular-nums">
                 {m.value !== null ? `${m.value} ${m.unit}` : '—'}
               </span>
@@ -246,8 +245,8 @@ export default function AvaliacaoDetalhePage() {
 
       {/* Notes */}
       {assessment.notes && (
-        <div className="rounded-xl border border-slate-700/65 bg-slate-900/70 p-4">
-          <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-zinc-300">Notas</p>
+        <div className="rounded-xl border border-slate-600/40 bg-slate-900 p-4">
+          <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-white">Notas</p>
           <p className="text-[13px] text-zinc-300">{assessment.notes}</p>
         </div>
       )}
@@ -264,11 +263,11 @@ export default function AvaliacaoDetalhePage() {
           </div>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-2xl border border-slate-700/65 bg-slate-900/70">
+        <div className="overflow-hidden rounded-2xl border border-slate-600/40 bg-slate-900">
           <button
             type="button"
             onClick={() => setInviteOpen((v) => !v)}
-            className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-slate-800/80"
+            className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-slate-800"
           >
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-primary/12 ring-1 ring-brand-primary/25">
               <DSIcon name="userPlus" size={18} className="text-emerald-300" />

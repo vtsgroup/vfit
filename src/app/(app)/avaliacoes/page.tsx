@@ -56,16 +56,15 @@ function MetricTile({ icon, label, value, unit, tone, delta, valueClass }: {
 }) {
   const t = TILE_TONES[tone]
   return (
-    <div className={`relative overflow-hidden rounded-2xl border border-slate-700/70 bg-slate-950/80 px-2.5 py-3 backdrop-blur-sm ${t.glow}`}>
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-white/25 to-transparent" />
+    <div className={`relative overflow-hidden rounded-2xl border border-slate-600/40 bg-slate-900 px-2.5 py-3 ${t.glow}`}>
       <div className="mb-2 flex items-center gap-1.5">
         <div className={`flex h-6 w-6 items-center justify-center rounded-lg ${t.iconBg} ring-1 ${t.iconRing}`}>
           <DSIcon name={icon} size={11} className={t.icon} />
         </div>
-        <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-300">{label}</p>
+        <p className="text-[10px] font-bold uppercase tracking-wider text-white">{label}</p>
       </div>
       <p className={`text-xl font-black tabular-nums leading-none ${valueClass ?? 'text-white'}`}>
-        {value}{unit && <span className="ml-0.5 text-[10px] font-bold text-zinc-300">{unit}</span>}
+        {value}{unit && <span className="ml-0.5 text-[10px] font-bold text-zinc-100">{unit}</span>}
       </p>
       {delta && <div className="mt-1.5 leading-none">{delta}</div>}
     </div>
@@ -269,7 +268,7 @@ export default function AvaliacoesPage() {
               <Link
                 key={a.id}
                 href={`/avaliacoes/${a.id}`}
-                className={`group relative block overflow-hidden rounded-3xl border p-4 transition-all active:translate-y-px ${isFirst ? 'border-emerald-400/35 bg-slate-950/78' : 'border-slate-700/65 bg-slate-900/65 hover:border-slate-600/75 hover:bg-slate-900/75'}`}
+                className={`group relative block overflow-hidden rounded-3xl border p-4 transition-all active:translate-y-px ${isFirst ? 'border-emerald-400/50 bg-slate-900' : 'border-slate-600/40 bg-slate-900 hover:border-slate-500/50 hover:bg-slate-800'}`}
                 style={isFirst ? { boxShadow: '0 18px 48px -24px rgba(16,185,129,0.55)' } : undefined}
               >
                 {isFirst && <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-emerald-500/12 blur-3xl" />}
@@ -346,18 +345,18 @@ export default function AvaliacoesPage() {
               <Link
                 key={a.id}
                 href={`/dashboard/assessments/view?id=${a.id}`}
-                className={`group relative block overflow-hidden rounded-3xl border p-4 transition-all active:translate-y-px ${isFirst ? 'border-violet-400/35 bg-slate-950/78' : 'border-slate-700/65 bg-slate-900/65 hover:border-slate-600/75 hover:bg-slate-900/75'}`}
+                className={`group relative block overflow-hidden rounded-3xl border p-4 transition-all active:translate-y-px ${isFirst ? 'border-violet-400/50 bg-slate-900' : 'border-slate-600/40 bg-slate-900 hover:border-slate-500/50 hover:bg-slate-800'}`}
                 style={isFirst ? { boxShadow: '0 18px 48px -24px rgba(139,92,246,0.5)' } : undefined}
               >
                 {isFirst && <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-violet-500/12 blur-3xl" />}
                 <div className="relative mb-3 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     {isFirst && <InfoChip tone="violet">Mais recente</InfoChip>}
-                    <span className="text-[12px] font-semibold text-zinc-200">
+                    <span className="text-[12px] font-semibold text-white">
                       {date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
                     </span>
                   </div>
-                  <DSIcon name="chevronRight" size={16} className="text-zinc-300 transition-transform group-hover:translate-x-0.5" />
+                  <DSIcon name="chevronRight" size={16} className="text-zinc-100 transition-transform group-hover:translate-x-0.5" />
                 </div>
 
                 <div className="relative grid grid-cols-3 gap-2">
@@ -394,11 +393,11 @@ export default function AvaliacoesPage() {
             </div>
           </div>
         ) : (
-          <div className="overflow-hidden rounded-2xl border border-slate-700/65 bg-slate-900/70">
+          <div className="overflow-hidden rounded-2xl border border-slate-600/40 bg-slate-900">
             <button
               type="button"
               onClick={() => setInviteOpen((v) => !v)}
-              className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-slate-800/80"
+              className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-slate-800"
             >
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-primary/12 ring-1 ring-brand-primary/25">
                 <DSIcon name="userPlus" size={18} className="text-emerald-300" />
