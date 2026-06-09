@@ -110,7 +110,7 @@ app.get('/', async (c) => {
        WHERE user_id = $1
          AND COALESCE(notes, '') NOT LIKE 'Importado automaticamente da avaliação PDF%'
      ), complete_rows AS (
-       SELECT a.id,
+      SELECT a.id::text AS id,
               a.weight_kg,
               a.height_cm,
               a.bmi,
