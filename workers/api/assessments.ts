@@ -994,6 +994,10 @@ assessments.get('/:id', async (c) => {
   if (userType === 'student' && assessment.student_id !== userId) {
     throw new ForbiddenError('Sem permissão')
   }
+  if (userType === 'nutritionist') {
+    const linked = await isNutritionistLinkedToStudent(c.env, userId, assessment.student_id)
+    if (!linked) throw new ForbiddenError('Sem permissão')
+  }
 
   return success({ assessment })
 })
@@ -1252,6 +1256,10 @@ assessments.get('/:id/pdf', async (c) => {
   if (userType === 'student' && assessment.student_id !== userId) {
     throw new ForbiddenError('Sem permissão')
   }
+  if (userType === 'nutritionist') {
+    const linked = await isNutritionistLinkedToStudent(c.env, userId, assessment.student_id)
+    if (!linked) throw new ForbiddenError('Sem permissão')
+  }
 
   // force=1 → regenerar PDF mesmo se já existir (ex: após upgrade de template)
   const forceRegenerate = c.req.query('force') === '1' || c.req.query('force') === 'true'
@@ -1396,6 +1404,16 @@ interface BadgeRow {
   badge_icon_svg: string | null
   earned_at: string
   metadata: unknown
+}
+
+async function isNutritionistLinkedToStudent(env: Bindings, nutritionistId: string, studentId: string): Promise<boolean> {
+  const result = await pgQueryOne<{ linked: boolean }>(
+    env,
+    `SELECT (metadata->>'nutritionist_id' = $1) AS linked
+     FROM students WHERE id = $2 LIMIT 1`,
+    [nutritionistId, studentId]
+  )
+  return result?.linked === true
 }
 
 async function findAssessmentById(env: Bindings, id: string): Promise<AssessmentRow | null> {
@@ -2008,6 +2026,10 @@ assessments.get('/:id/evolution', async (c) => {
   }
   if (userType === 'student' && assessment.student_id !== userId) {
     throw new ForbiddenError('Sem permissão')
+  }
+  if (userType === 'nutritionist') {
+    const linked = await isNutritionistLinkedToStudent(c.env, userId, assessment.student_id)
+    if (!linked) throw new ForbiddenError('Sem permissão')
   }
 
   const evolution = await pgQueryOne<{
