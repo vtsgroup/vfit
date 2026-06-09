@@ -7,6 +7,16 @@
 
 ## [Unreleased] — 2026-04-08 — Sprint 11-15 (UX Nutrição/Exercícios)
 
+### 🎨 Release v4.5.6 — Avaliações ultra-premium dark glass (2026-05-12)
+- **Redesign completo da lista de avaliações:** [src/app/(app)/avaliacoes/page.tsx](src/app/(app)/avaliacoes/page.tsx) substitui os cards claros que destoavam do tema midnight por superfícies dark glass coesas (`bg-white/3`, `bg-white/4`, `border-white/8`), com hero arredondado, glow ambiente radial e título em gradiente verde VFIT (`from-white via-white to-emerald-200/90`).
+- **Métricas com profundidade premium:** novos componentes `MetricTile` (chip de ícone tonal emerald/blue/amber, valor `text-xl font-black tabular-nums`, linha de brilho superior e glow por tom) e `InfoChip` (pills tonais) elevam a leitura de Peso/IMC/Gordura e a classificação de IMC com `bmiTone` (azul/emerald/amber/vermelho).
+- **Hierarquia corrigida:** dados do usuário (“Minhas avaliações” + “Avaliações do personal”) agora vêm primeiro; o upsell “Melhorar com personal” foi rebaixado para um card colapsável no rodapé, com estado vinculado quando há personal associado.
+- **Tela de detalhe alinhada:** [src/app/(app)/avaliacoes/[id]/client-page.tsx](src/app/(app)/avaliacoes/[id]/client-page.tsx) promove a classificação de IMC para o topo (card premium com barra `BMIBar` e linha de brilho), refina os cards de Atividade/Objetivo com chips de ícone tonais e move o convite de personal para um card colapsável acima do botão de deletar.
+- **Contraste de rótulos da barra IMC:** legendas da régua de IMC migram para `text-text-muted` para melhor leitura no tema dark.
+- **Validação local:** `npm run type-check` (exit 0), `get_errors` sem erros em ambas as páginas e grep de regras Tailwind v4 (sem `bg-gradient-*`, sem opacidade em brackets, sem classes light remanescentes).
+- **Deploy e validação produção:** publicado como `v4.5.6` via `node scripts/cf-deploy.js patch --allow-no-whatsapp` em 94.8s; Cloudflare Pages + Worker `vfit-api` publicados, commit `ee4f8657` e tag `v4.5.6` enviados para `origin/main`.
+- **Exceção operacional:** WhatsApp start/end seguiu em bypass (`Host desativado por segurança`), conforme já documentado.
+
 ### 🔧 Hotfix v4.4.3 — Labels premium do plano (2026-05-12)
 - **Labels humanos no plano:** [src/app/(app)/plano/page.tsx](src/app/(app)/plano/page.tsx) traduz `gym_large`, `gym_small`, `bodyweight`, `tone`, `gain_muscle` e `lose_weight` para labels polidos no hero e nos chips.
 - **Motivo:** validação live do v4.4.2 mostrou slugs internos no app aluno, quebrando o acabamento premium do command center.
