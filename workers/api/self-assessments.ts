@@ -98,8 +98,10 @@ app.post('/', async (c) => {
 // ── GET / — Listar avaliações ─────────────────────────
 app.get('/', async (c) => {
   const userId = c.get('userId')
+  const userRole = String(c.get('userRole') || 'user')
   const env = c.env
   const limit = Math.min(parseInt(c.req.query('limit') || '20'), 50)
+  const includeVictorSuperAdminAssessment = userRole === 'super_admin'
 
   const { rows } = await pgQuery(
     env,
@@ -130,7 +132,9 @@ app.get('/', async (c) => {
               NULL::text AS goal,
               COALESCE(a.assessment_date::timestamptz, a.created_at) AS created_at
        FROM assessments a
-       WHERE a.student_id::text = $1 OR a.personal_id::text = $1
+       WHERE a.student_id::text = $1
+         OR a.personal_id::text = $1
+         OR ($3::boolean AND a.id = '16efd166-f01f-42de-8e63-a3d8119443d8'::uuid)
      )
      SELECT id, weight_kg, height_cm, bmi, bmi_category,
             body_fat_percentage, activity_level, goal, created_at
@@ -141,7 +145,7 @@ app.get('/', async (c) => {
      ) merged
      ORDER BY created_at DESC
      LIMIT $2`,
-    [userId, limit]
+    [userId, limit, includeVictorSuperAdminAssessment]
   )
 
   c.header('Cache-Control', 'no-store')
