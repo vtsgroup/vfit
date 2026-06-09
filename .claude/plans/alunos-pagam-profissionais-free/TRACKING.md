@@ -1,7 +1,7 @@
 # TRACKING — Alunos Pagam, Profissionais Sem Plano
 
 Última atualização: 2026-06-09
-Progresso: 17/24 (71%)
+Progresso: 21/24 (88%)
 
 ## Fase 0 — Direção e contratos
 - [ ] T0.1 ADR monetização student-first aprovada
@@ -12,7 +12,7 @@ Progresso: 17/24 (71%)
 - [x] T1.1 Remover gating por subscription_plan para personal
 - [x] T1.2 Remover gating por subscription_plan para nutricionista
 - [x] T1.3 Manter gating de aluno premium intacto
-- [ ] T1.4 Testes de regressão de permissões
+- [x] T1.4 Testes de regressão de permissões
 
 ## Fase 2 — Consultation commerce
 - [x] T2.1 Modelo de oferta de consultoria criado
@@ -36,10 +36,10 @@ Progresso: 17/24 (71%)
 - [x] T4.4 Limpeza de caminhos legados de plano creator
 
 ## Fase 5 — Operação
-- [ ] T5.1 Alertas P1/P2 em produção
-- [ ] T5.2 Smoke checklist automatizado
-- [ ] T5.3 Runbook de incidentes publicado
-- [ ] T5.4 Playbook de suporte para creators publicado
+- [x] T5.1 Alertas P1/P2 em produção
+- [x] T5.2 Smoke checklist automatizado
+- [x] T5.3 Runbook de incidentes publicado
+- [x] T5.4 Playbook de suporte para creators publicado
 
 ## Deploy log
 
@@ -48,4 +48,6 @@ Progresso: 17/24 (71%)
 | v4.4.7 | 2026-06-09 | R4 (parcial) | 1d41b060 | Deprecação de platform billing + UI inicial de monetização |
 | v4.4.8 | 2026-06-09 | R4 (limpeza) | 014d18a2 | Checkout legado de creator removido e pricing/FAQ alinhados |
 | v4.4.9 | 2026-06-09 | R2 (backend) | e6c4d7ec | Consultation commerce (offers/orders/sessions) + webhook de confirmação |
-| - | 2026-06-09 | R3 (ledger) | - | Ledger append-only + reconciliação + bloqueio de saque por inconsistência |
+| v4.5.0 | 2026-06-09 | R3 (ledger) | b5f42aa3 | Ledger append-only + reconciliação + bloqueio de saque por inconsistência |
+| - | 2026-06-09 | R5 (ops) | - | Smoke de consultoria + runbook de incidentes + playbook de suporte |
+| - | 2026-06-09 | R6 (hardening) | - | Testes de permissões + alertas P1/P2 no cron + ajuste requireType(admin) |

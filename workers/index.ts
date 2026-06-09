@@ -750,7 +750,7 @@ async function handleScheduled(
       ctx.waitUntil(
         runConsultationReconciliation(env)
           .then((r) => {
-            console.log(`[Cron] Consultation reconciliation: missing=${r.missingEntries}`)
+            console.log(`[Cron] Consultation reconciliation: missing=${r.missingEntries}, severity=${r.severity}`)
           })
           .catch((err) => {
             console.error('[Cron] Consultation reconciliation failed:', err)

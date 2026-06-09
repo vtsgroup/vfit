@@ -1,6 +1,6 @@
 {
   "name": "vfit",
-  "version": "4.5.0",
+  "version": "4.5.1",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -44,6 +44,8 @@
     "smoke:notifications": "node scripts/smoke-notifications.mjs",
     "smoke:notifications:local": "set -a && . ./.env.local && set +a && node scripts/smoke-notifications.mjs",
     "smoke:notifications:local:clean": "set -a && . ./.env.local && set +a && SMOKE_CLEAN=1 node scripts/smoke-notifications.mjs",
+    "smoke:consultations": "node scripts/run-consultation-smoke.mjs",
+    "smoke:consultations:local": "set -a && . ./.env.local && set +a && node scripts/run-consultation-smoke.mjs",
     "notify:start": "set -a && . ./.env.local && set +a && node scripts/whatsapp-task.mjs start",
     "notify:end": "set -a && . ./.env.local && set +a && node scripts/whatsapp-task.mjs end",
     "db:self-check": "node scripts/db-self-check.mjs",

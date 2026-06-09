@@ -30,7 +30,7 @@
 - Webhook Asaas estendido para confirmar/refundir orders de consultoria e criar/cancelar sessão em [workers/api/payments.ts](../workers/api/payments.ts).
 - Validação local: `npm run type-check` passou após ajuste de tipagem Zod.
 
-### 🧩 Unreleased — Consultation ledger e reconciliação (2026-06-09)
+### 🚀 Release v4.5.0 — Consultation ledger e reconciliação (2026-06-09)
 - Ledger append-only de consultoria implementado em [lib/consultation-ledger.ts](../lib/consultation-ledger.ts) com eventos padronizados `order_paid`, `fee_charged`, `creator_settled`, `refunded` e `security_violation`.
 - Novo schema de ledger em [migrations/hyperdrive/0035_consultation_ledger.sql](../migrations/hyperdrive/0035_consultation_ledger.sql) com tabela `consultation_ledger_events` + índices de ordem, creator e tipo de evento.
 - Fluxo de confirmação/refund conectado ao ledger em [workers/api/payments.ts](../workers/api/payments.ts) (webhook Asaas) e em confirmação manual em [workers/api/consultations.ts](../workers/api/consultations.ts).
@@ -38,6 +38,26 @@
 - Bloqueio de saque por inconsistência de ledger aplicado em [workers/api/payments.ts](../workers/api/payments.ts) no endpoint `POST /payments/transfers/pix`.
 - Job de reconciliação ativado no cron `0 */4 * * *` via [workers/cron/consultation-reconciliation.ts](../workers/cron/consultation-reconciliation.ts) e [workers/index.ts](../workers/index.ts).
 - Validação local: `npm run type-check` passou.
+- Deploy patch publicado com sucesso: Pages + Workers + git/tag em `v4.5.0` (commit `b5f42aa3`).
+- Exceção operacional: notificações WhatsApp start/end indisponíveis (`Host desativado por segurança`), deploy executado com `--allow-no-whatsapp`.
+
+### 🧩 Unreleased — Consultation operations kit (2026-06-09)
+- Smoke automatizado de consultoria implementado em [scripts/run-consultation-smoke.mjs](../scripts/run-consultation-smoke.mjs) e scripts npm adicionados em [package.json](../package.json): `smoke:consultations` e `smoke:consultations:local`.
+- Evidência de execução gerada em [.claude/docs/archive/legacy-plans/CONSULTATION-SMOKE.generated.md](../.claude/docs/archive/legacy-plans/CONSULTATION-SMOKE.generated.md).
+- Runbook de incidente publicado em [.claude/docs/CONSULTATION-INCIDENT-RUNBOOK.md](../.claude/docs/CONSULTATION-INCIDENT-RUNBOOK.md).
+- Playbook de suporte para creators publicado em [.claude/docs/CONSULTATION-CREATOR-SUPPORT-PLAYBOOK.md](../.claude/docs/CONSULTATION-CREATOR-SUPPORT-PLAYBOOK.md).
+- Resultado da execução atual do smoke: falhas por tokens expirados e falhas intermitentes de rede (`fetch failed`) em checks com admin/personal, exigindo renovação dos `SMOKE_*_TOKEN` para concluir o gate operacional.
+
+### 🧩 Unreleased — Consultation hardening (2026-06-09)
+- Regressão de permissões coberta por suíte dedicada em [tests/api/consultations-permissions.test.ts](../tests/api/consultations-permissions.test.ts), validando regras de acesso para personal, student, nutritionist, admin e super_admin no fluxo de consultorias.
+- Middleware de autorização ajustado em [workers/middleware/auth.ts](../workers/middleware/auth.ts) para permitir `role=admin` quando a rota declara explicitamente acesso `admin` em `requireType(...)`.
+- Alertas operacionais P1/P2 de consultoria formalizados em [.claude/docs/CONSULTATION-ALERTS.md](../.claude/docs/CONSULTATION-ALERTS.md).
+- Cron de reconciliação ampliado em [workers/cron/consultation-reconciliation.ts](../workers/cron/consultation-reconciliation.ts) para emitir alertas:
+  - P1 `alerts.consultation.p1.ledger_mismatch` quando há divergência de ledger.
+  - P1 `alerts.consultation.p1.unauthorized_premium_attempts` quando há spike de `security_violation`.
+  - P2 `alerts.consultation.p2.stale_pending_orders` quando pagamentos pending ficam estagnados.
+- Log do cron atualizado em [workers/index.ts](../workers/index.ts) para incluir severidade calculada da reconciliação.
+- Validação local: `npm run test -- tests/api/consultations-permissions.test.ts tests/api/auth-middleware.test.ts` e `npm run type-check` passaram.
 
 ### 🔧 Hotfix v4.4.3 — Labels premium do plano (2026-05-12)
 - [src/app/(app)/plano/page.tsx](../src/app/(app)/plano/page.tsx) agora traduz os slugs do onboarding (`gym_large`, `gym_small`, `bodyweight`, `tone`, `gain_muscle`, `lose_weight`) para labels humanos no hero e nos chips do plano.

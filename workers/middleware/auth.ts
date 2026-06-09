@@ -121,6 +121,9 @@ export function requireType(...types: Array<'personal' | 'student' | 'nutritioni
     const userRole = c.get('userRole') as string
     // super_admin tem acesso universal (via role no JWT)
     if (userRole === 'super_admin' || userType === 'super_admin') return next()
+    // admin com role explícita pode acessar rotas que permitem admin,
+    // mesmo quando o user_type persistido é personal.
+    if (userRole === 'admin' && types.includes('admin')) return next()
     if (!types.includes(userType as 'personal' | 'student' | 'nutritionist' | 'admin' | 'super_admin')) {
       throw new UnauthorizedError(`Acesso restrito`)
     }
