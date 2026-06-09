@@ -46,6 +46,7 @@ import { fetchAssessmentPdfData, generateAndStoreAssessmentPdf } from '@lib/asse
 import { notifyEvent, notify } from '@lib/onesignal'
 import { dispatchCalendarReminders } from '@lib/calendar-reminders'
 import { handleXPExpiration } from './cron/xp-expiration'
+import { runConsultationReconciliation } from './cron/consultation-reconciliation'
 import { captureWorkerException } from '@lib/sentry-worker'
 
 // API Routes
@@ -745,8 +746,20 @@ async function handleScheduled(
       break
 
     case '0 */4 * * *':
-      // Payment checks every 4 hours
-      console.log('[Cron] Payment checks - TODO: implement in LOTE 08')
+      // Consultation ledger reconciliation every 4 hours
+      ctx.waitUntil(
+        runConsultationReconciliation(env)
+          .then((r) => {
+            console.log(`[Cron] Consultation reconciliation: missing=${r.missingEntries}`)
+          })
+          .catch((err) => {
+            console.error('[Cron] Consultation reconciliation failed:', err)
+            captureWorkerException(env, err, {
+              source: 'cron.consultation_reconciliation',
+              cron: cronExpression,
+            })
+          })
+      )
       break
 
     case '0 2 * * 1':

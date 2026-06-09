@@ -12,6 +12,12 @@ import { pgQuery, pgQueryOne, generateId } from '@lib/db'
 import { success, created } from '@lib/response'
 import { BadRequestError, NotFoundError, ForbiddenError } from '@lib/errors'
 import { createAsaasPayment, getOrCreateCustomer, getPixQrCode } from '@lib/asaas'
+import {
+  appendConsultationLedgerEvent,
+  getConsultationLedgerReconciliationSummary,
+  getCreatorConsultationLedgerStatus,
+  recordConsultationOrderPaid,
+} from '@lib/consultation-ledger'
 
 const consultations = new Hono<AppContext>()
 consultations.use('*', authMiddleware)
@@ -216,7 +222,15 @@ consultations.post('/orders/:id/confirm', requireType('admin', 'super_admin'), a
   const id = c.req.param('id')
   const now = new Date().toISOString()
 
-  const { rows } = await pgQuery(c.env, `
+  const { rows } = await pgQuery<{
+    id: string
+    offer_id: string
+    student_id: string
+    creator_id: string
+    amount: number
+    status: string
+    paid_at: string
+  }>(c.env, `
     UPDATE consultation_orders
     SET status = 'paid', paid_at = $1, updated_at = $1
     WHERE id = $2 AND status <> 'paid'
@@ -232,7 +246,36 @@ consultations.post('/orders/:id/confirm', requireType('admin', 'super_admin'), a
     ON CONFLICT (order_id) DO NOTHING
   `, [generateId(), rows[0].id, rows[0].student_id, rows[0].creator_id, JSON.stringify({ created_by: 'manual_confirm' })])
 
+  await recordConsultationOrderPaid(c.env, {
+    orderId: rows[0].id,
+    creatorId: rows[0].creator_id,
+    grossAmount: Number(rows[0].amount),
+    paidAt: rows[0].paid_at,
+    metadata: { source: 'admin_confirm' },
+  })
+
   return success({ order: rows[0] })
+})
+
+consultations.get('/admin/ledger/reconciliation', requireType('admin', 'super_admin'), async (c) => {
+  const days = Math.min(180, Math.max(1, Number(c.req.query('days')) || 30))
+  const summary = await getConsultationLedgerReconciliationSummary(c.env, days)
+
+  return success({
+    summary,
+    healthy: summary.missingEntries === 0,
+  })
+})
+
+consultations.get('/admin/ledger/creator/:id/status', requireType('admin', 'super_admin'), async (c) => {
+  const creatorId = c.req.param('id')
+  const status = await getCreatorConsultationLedgerStatus(c.env, creatorId)
+
+  return success({
+    creator_id: creatorId,
+    ...status,
+    payout_blocked: status.inconsistentOrders > 0,
+  })
 })
 
 consultations.post('/sessions/:id/start', requireType('personal', 'nutritionist', 'student', 'admin', 'super_admin'), async (c) => {
@@ -241,6 +284,7 @@ consultations.post('/sessions/:id/start', requireType('personal', 'nutritionist'
 
   const session = await pgQueryOne<{
     id: string
+    order_id: string
     student_id: string
     creator_id: string
     status: string
@@ -248,6 +292,7 @@ consultations.post('/sessions/:id/start', requireType('personal', 'nutritionist'
   }>(c.env, `
     SELECT
       cs.id,
+      cs.order_id,
       cs.student_id,
       cs.creator_id,
       cs.status,
@@ -264,7 +309,22 @@ consultations.post('/sessions/:id/start', requireType('personal', 'nutritionist'
   const isParticipant = session.student_id === jwt.sub || session.creator_id === jwt.sub
 
   if (!isAdmin && !isParticipant) throw new ForbiddenError('Você não tem acesso a esta sessão')
-  if (session.order_status !== 'paid') throw new BadRequestError('Sessão bloqueada: pagamento da consultoria ainda não confirmado')
+  if (session.order_status !== 'paid') {
+    await appendConsultationLedgerEvent(c.env, {
+      orderId: session.order_id,
+      creatorId: session.creator_id,
+      eventType: 'security_violation',
+      direction: 'debit',
+      accountType: 'risk_events',
+      amount: 0.01,
+      idempotencyKey: `consult:${session.order_id}:security:${generateId()}`,
+      metadata: {
+        reason: 'session_start_without_paid_order',
+        actor_user_id: jwt.sub,
+      },
+    })
+    throw new BadRequestError('Sessão bloqueada: pagamento da consultoria ainda não confirmado')
+  }
 
   const now = new Date().toISOString()
   await pgQuery(c.env, `

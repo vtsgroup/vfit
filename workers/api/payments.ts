@@ -63,6 +63,11 @@ import {
   mapPixKeyType,
   AsaasApiError,
 } from '@lib/asaas'
+import {
+  getCreatorConsultationLedgerStatus,
+  recordConsultationOrderPaid,
+  recordConsultationOrderRefunded,
+} from '@lib/consultation-ledger'
 import type { CreatePaymentInput as AsaasPaymentInput } from '@lib/asaas'
 import { PDFDocument, StandardFonts } from 'pdf-lib'
 
@@ -222,12 +227,13 @@ payments.post('/webhooks/asaas', async (c) => {
             id: string
             student_id: string
             creator_id: string
+            amount: number
           }>(
             c.env,
             `UPDATE consultation_orders
              SET status = 'paid', paid_at = $1, asaas_payment_id = $2, updated_at = $1
-             WHERE id = $3
-             RETURNING id, student_id, creator_id`,
+             WHERE id = $3 AND status <> 'paid'
+             RETURNING id, student_id, creator_id, amount::float`,
             [now, paymentData.id, orderId]
           )
 
@@ -240,14 +246,27 @@ payments.post('/webhooks/asaas', async (c) => {
                ON CONFLICT (order_id) DO NOTHING`,
               [generateId(), order.id, order.student_id, order.creator_id, JSON.stringify({ created_by: 'asaas_webhook' })]
             )
+
+            await recordConsultationOrderPaid(c.env, {
+              orderId: order.id,
+              creatorId: order.creator_id,
+              grossAmount: Number(order.amount),
+              paidAt: now,
+              metadata: { source: 'asaas_webhook' },
+            })
             console.log(`[Webhook Consult] Order ${order.id} confirmed and session scheduled`)
           }
         } else if (['REFUNDED', 'DELETED'].includes(event)) {
-          await pgQuery(
+          const { rows: refundedRows } = await pgQuery<{
+            id: string
+            creator_id: string
+            amount: number
+          }>(
             c.env,
             `UPDATE consultation_orders
              SET status = 'refunded', canceled_at = $1, updated_at = $1
-             WHERE id = $2`,
+             WHERE id = $2 AND status <> 'refunded'
+             RETURNING id, creator_id, amount::float`,
             [now, orderId]
           )
           await pgQuery(
@@ -257,6 +276,17 @@ payments.post('/webhooks/asaas', async (c) => {
              WHERE order_id = $2`,
             [now, orderId]
           )
+
+          if (refundedRows.length > 0) {
+            const order = refundedRows[0]
+            await recordConsultationOrderRefunded(c.env, {
+              orderId: order.id,
+              creatorId: order.creator_id,
+              grossAmount: Number(order.amount),
+              refundedAt: now,
+              metadata: { source: 'asaas_webhook' },
+            })
+          }
           console.log(`[Webhook Consult] Order ${orderId} refunded/deleted`)
         }
 
@@ -1663,6 +1693,13 @@ payments.post('/transfers/pix', requireType('personal'), async (c) => {
   const isSuperAdmin = userRole === 'super_admin'
   const body = await c.req.json()
   const parsed = requestPixTransferSchema.parse(body)
+
+  const ledgerStatus = await getCreatorConsultationLedgerStatus(c.env, personalId)
+  if (ledgerStatus.inconsistentOrders > 0) {
+    throw new BadRequestError(
+      'Saque bloqueado temporariamente: inconsistencias no ledger de consultorias. Contate o suporte para reconciliacao.'
+    )
+  }
 
   // Verificar saldo interno (pagamentos - saques)
   const { rows: balanceRows } = await pgQuery<{ total_received: number; total_withdrawn: number }>(

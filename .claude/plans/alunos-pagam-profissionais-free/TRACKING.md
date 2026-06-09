@@ -1,7 +1,7 @@
 # TRACKING — Alunos Pagam, Profissionais Sem Plano
 
 Última atualização: 2026-06-09
-Progresso: 12/24 (50%)
+Progresso: 17/24 (71%)
 
 ## Fase 0 — Direção e contratos
 - [ ] T0.1 ADR monetização student-first aprovada
@@ -23,11 +23,11 @@ Progresso: 12/24 (50%)
 - [x] T2.6 Sessão premium liberada com paid
 
 ## Fase 3 — Ledger e settlement
-- [ ] T3.1 Ledger append-only em produção
-- [ ] T3.2 Eventos financeiros padronizados
-- [ ] T3.3 Job reconciliação diária ativo
-- [ ] T3.4 Painel admin de reconciliação ativo
-- [ ] T3.5 Payout bloqueado em inconsistência
+- [x] T3.1 Ledger append-only em produção
+- [x] T3.2 Eventos financeiros padronizados
+- [x] T3.3 Job reconciliação diária ativo
+- [x] T3.4 Painel admin de reconciliação ativo
+- [x] T3.5 Payout bloqueado em inconsistência
 
 ## Fase 4 — Cutover e limpeza
 - [x] T4.1 Deprecar GET /platform/subscription para creators
@@ -47,4 +47,5 @@ Progresso: 12/24 (50%)
 |---|---|---|---|---|
 | v4.4.7 | 2026-06-09 | R4 (parcial) | 1d41b060 | Deprecação de platform billing + UI inicial de monetização |
 | v4.4.8 | 2026-06-09 | R4 (limpeza) | 014d18a2 | Checkout legado de creator removido e pricing/FAQ alinhados |
-| - | 2026-06-09 | R2 (backend) | - | Consultation commerce (offers/orders/sessions) + webhook de confirmação |
+| v4.4.9 | 2026-06-09 | R2 (backend) | e6c4d7ec | Consultation commerce (offers/orders/sessions) + webhook de confirmação |
+| - | 2026-06-09 | R3 (ledger) | - | Ledger append-only + reconciliação + bloqueio de saque por inconsistência |

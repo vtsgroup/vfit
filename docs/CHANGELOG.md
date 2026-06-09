@@ -30,6 +30,15 @@
 - Webhook Asaas estendido para confirmar/refundir orders de consultoria e criar/cancelar sessão em [workers/api/payments.ts](../workers/api/payments.ts).
 - Validação local: `npm run type-check` passou após ajuste de tipagem Zod.
 
+### 🧩 Unreleased — Consultation ledger e reconciliação (2026-06-09)
+- Ledger append-only de consultoria implementado em [lib/consultation-ledger.ts](../lib/consultation-ledger.ts) com eventos padronizados `order_paid`, `fee_charged`, `creator_settled`, `refunded` e `security_violation`.
+- Novo schema de ledger em [migrations/hyperdrive/0035_consultation_ledger.sql](../migrations/hyperdrive/0035_consultation_ledger.sql) com tabela `consultation_ledger_events` + índices de ordem, creator e tipo de evento.
+- Fluxo de confirmação/refund conectado ao ledger em [workers/api/payments.ts](../workers/api/payments.ts) (webhook Asaas) e em confirmação manual em [workers/api/consultations.ts](../workers/api/consultations.ts).
+- Rotas admin de reconciliação adicionadas em [workers/api/consultations.ts](../workers/api/consultations.ts): `GET /consultations/admin/ledger/reconciliation` e `GET /consultations/admin/ledger/creator/:id/status`.
+- Bloqueio de saque por inconsistência de ledger aplicado em [workers/api/payments.ts](../workers/api/payments.ts) no endpoint `POST /payments/transfers/pix`.
+- Job de reconciliação ativado no cron `0 */4 * * *` via [workers/cron/consultation-reconciliation.ts](../workers/cron/consultation-reconciliation.ts) e [workers/index.ts](../workers/index.ts).
+- Validação local: `npm run type-check` passou.
+
 ### 🔧 Hotfix v4.4.3 — Labels premium do plano (2026-05-12)
 - [src/app/(app)/plano/page.tsx](../src/app/(app)/plano/page.tsx) agora traduz os slugs do onboarding (`gym_large`, `gym_small`, `bodyweight`, `tone`, `gain_muscle`, `lose_weight`) para labels humanos no hero e nos chips do plano.
 - Motivo: validação live do v4.4.2 mostrou valores internos aparecendo no app aluno, o que quebrava o acabamento premium.
