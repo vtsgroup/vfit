@@ -22,51 +22,63 @@ function DeltaBadge({ current, previous, unit, invert }: {
   current: number
   previous: number
   unit: string
-  /** true = negative delta is good (e.g. weight loss when goal is lose_weight) */
   invert?: boolean
 }) {
   const diff = +(current - previous).toFixed(1)
   if (diff === 0) return null
   const isPositive = diff > 0
-  const color = invert
-    ? (isPositive ? 'text-red-500/80 font-bold' : 'text-emerald-600/80 font-bold')
-    : (isPositive ? 'text-emerald-600/80 font-bold' : 'text-red-500/80 font-bold')
-
+  const isGood = invert ? !isPositive : isPositive
   return (
-    <span className={`ml-1.5 text-[9px] tabular-nums ${color}`}>
+    <span className={`inline-flex items-center gap-0.5 rounded-full px-2 py-0.5 text-[9px] font-black tabular-nums ${
+      isGood
+        ? 'bg-emerald-500/20 text-emerald-300 ring-1 ring-emerald-500/30'
+        : 'bg-red-500/20 text-red-300 ring-1 ring-red-500/30'
+    }`}>
       {isPositive ? '↑' : '↓'}{Math.abs(diff)}{unit}
     </span>
   )
 }
 
 const TILE_TONES = {
-  emerald: { 
-    iconBg: 'bg-gradient-to-br from-emerald-400/40 to-emerald-500/25', 
-    iconRing: 'ring-2 ring-emerald-300 shadow-[0_0_12px_rgba(16,185,129,0.5)]', 
-    icon: 'text-emerald-500', 
-    label: 'text-emerald-700 font-bold',
-    border: 'border-t-emerald-400/80 border-r-emerald-300/50 border-b-emerald-500/60 border-l-emerald-300/50',
-    glow: 'shadow-[0_12px_32px_-8px_rgba(16,185,129,0.5),inset_0_1px_0_rgba(255,255,255,0.8)]' 
+  emerald: {
+    // Card background: dark glass com tint verde
+    card: 'bg-gradient-to-br from-emerald-950/80 via-emerald-900/60 to-slate-900/80',
+    border: 'border-emerald-500/30',
+    glow: 'shadow-[0_8px_24px_-6px_rgba(16,185,129,0.45),inset_0_1px_0_rgba(52,211,153,0.15)]',
+    // Ícone: círculo sólido colorido
+    iconBg: 'bg-gradient-to-br from-emerald-400 to-emerald-600',
+    iconShadow: 'shadow-[0_4px_12px_rgba(16,185,129,0.6)]',
+    icon: 'text-white',
+    // Tipografia
+    label: 'text-emerald-300/80',
+    value: 'text-white',
+    unit: 'text-emerald-300/70',
   },
-  blue: { 
-    iconBg: 'bg-gradient-to-br from-sky-400/40 to-sky-500/25', 
-    iconRing: 'ring-2 ring-sky-300 shadow-[0_0_12px_rgba(56,189,248,0.5)]', 
-    icon: 'text-sky-500', 
-    label: 'text-sky-700 font-bold',
-    border: 'border-t-sky-400/80 border-r-sky-300/50 border-b-sky-500/60 border-l-sky-300/50',
-    glow: 'shadow-[0_12px_32px_-8px_rgba(56,189,248,0.5),inset_0_1px_0_rgba(255,255,255,0.8)]' 
+  blue: {
+    card: 'bg-gradient-to-br from-sky-950/80 via-sky-900/60 to-slate-900/80',
+    border: 'border-sky-500/30',
+    glow: 'shadow-[0_8px_24px_-6px_rgba(14,165,233,0.45),inset_0_1px_0_rgba(56,189,248,0.15)]',
+    iconBg: 'bg-gradient-to-br from-sky-400 to-sky-600',
+    iconShadow: 'shadow-[0_4px_12px_rgba(14,165,233,0.6)]',
+    icon: 'text-white',
+    label: 'text-sky-300/80',
+    value: 'text-white',
+    unit: 'text-sky-300/70',
   },
-  amber: { 
-    iconBg: 'bg-gradient-to-br from-amber-400/40 to-amber-500/25', 
-    iconRing: 'ring-2 ring-amber-300 shadow-[0_0_12px_rgba(245,158,11,0.5)]', 
-    icon: 'text-amber-600', 
-    label: 'text-amber-800 font-bold',
-    border: 'border-t-amber-400/80 border-r-amber-300/50 border-b-amber-500/60 border-l-amber-300/50',
-    glow: 'shadow-[0_12px_32px_-8px_rgba(245,158,11,0.5),inset_0_1px_0_rgba(255,255,255,0.8)]' 
+  amber: {
+    card: 'bg-gradient-to-br from-amber-950/80 via-amber-900/60 to-slate-900/80',
+    border: 'border-amber-500/30',
+    glow: 'shadow-[0_8px_24px_-6px_rgba(245,158,11,0.45),inset_0_1px_0_rgba(251,191,36,0.15)]',
+    iconBg: 'bg-gradient-to-br from-amber-400 to-amber-600',
+    iconShadow: 'shadow-[0_4px_12px_rgba(245,158,11,0.6)]',
+    icon: 'text-white',
+    label: 'text-amber-300/80',
+    value: 'text-white',
+    unit: 'text-amber-300/70',
   },
 } as const
 
-/** Premium 3D metric tile with enhanced contrast & depth */
+/** Ultra-premium dark glass metric tile */
 function MetricTile({ icon, label, value, unit, tone, delta, valueClass }: {
   icon: DSIconName
   label: string
@@ -78,37 +90,39 @@ function MetricTile({ icon, label, value, unit, tone, delta, valueClass }: {
 }) {
   const t = TILE_TONES[tone]
   return (
-    <div className={`relative overflow-hidden rounded-[14px] ${t.border} border-2 bg-gradient-to-b from-white/96 to-white px-3.5 py-4 transition-all duration-150 active:translate-y-px active:scale-95 ${t.glow}`}>
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-white/12 via-transparent to-transparent pointer-events-none" />
-      <div className="mb-3 flex items-center gap-2.5">
-        <div className={`relative flex h-8 w-8 items-center justify-center rounded-[11px] ${t.iconBg} ${t.iconRing} transition-all active:scale-90`}>
-          <DSIcon name={icon} size={14} className={t.icon} />
-        </div>
-        <p className={`text-[8px] font-extrabold uppercase tracking-[0.14em] ${t.label}`}>{label}</p>
+    <div className={`relative overflow-hidden rounded-2xl border ${t.card} ${t.border} ${t.glow} px-3 py-3.5 transition-all duration-200 active:scale-95`}>
+      {/* Shimmer highlight ao topo */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+      {/* Ícone circular sólido */}
+      <div className={`mb-2.5 flex h-8 w-8 items-center justify-center rounded-full ${t.iconBg} ${t.iconShadow}`}>
+        <DSIcon name={icon} size={14} className={t.icon} />
       </div>
-      <p className={`text-lg font-black tabular-nums leading-tight tracking-tight ${valueClass ?? 'text-slate-950'}`}>
-        {value}{unit && <span className="ml-1 text-[8px] font-bold text-slate-700">{unit}</span>}
+      {/* Label */}
+      <p className={`mb-1.5 text-[8px] font-bold uppercase tracking-[0.15em] ${t.label}`}>{label}</p>
+      {/* Valor principal */}
+      <p className={`text-[18px] font-black tabular-nums leading-none tracking-tight ${valueClass ?? t.value}`}>
+        {value}<span className={`ml-0.5 text-[9px] font-semibold ${t.unit}`}>{unit}</span>
       </p>
-      {delta && <div className="mt-2.5 leading-none text-[10px]">{delta}</div>}
+      {delta && <div className="mt-2">{delta}</div>}
     </div>
   )
 }
 
-/** Premium glass chip with enhanced contrast & glow */
+/** Ultra-premium status chip — pill com glow */
 function InfoChip({ children, tone = 'emerald' }: {
   children: React.ReactNode
   tone?: 'emerald' | 'amber' | 'violet' | 'red' | 'blue'
 }) {
   const tones = {
-    emerald: { bg: 'bg-gradient-to-r from-emerald-500/28 to-emerald-600/20', border: 'border-emerald-400/80', text: 'text-emerald-800', dot: 'bg-emerald-600', glow: 'shadow-[0_6px_16px_-3px_rgba(16,185,129,0.4)]' },
-    amber: { bg: 'bg-gradient-to-r from-amber-500/28 to-amber-600/20', border: 'border-amber-400/80', text: 'text-amber-800', dot: 'bg-amber-600', glow: 'shadow-[0_6px_16px_-3px_rgba(245,158,11,0.4)]' },
-    violet: { bg: 'bg-gradient-to-r from-violet-500/28 to-violet-600/20', border: 'border-violet-400/80', text: 'text-violet-800', dot: 'bg-violet-600', glow: 'shadow-[0_6px_16px_-3px_rgba(139,92,246,0.4)]' },
-    red: { bg: 'bg-gradient-to-r from-red-500/28 to-red-600/20', border: 'border-red-400/80', text: 'text-red-800', dot: 'bg-red-600', glow: 'shadow-[0_6px_16px_-3px_rgba(239,68,68,0.4)]' },
-    blue: { bg: 'bg-gradient-to-r from-sky-500/28 to-sky-600/20', border: 'border-sky-400/80', text: 'text-sky-800', dot: 'bg-sky-600', glow: 'shadow-[0_6px_16px_-3px_rgba(56,189,248,0.4)]' },
+    emerald: { bg: 'bg-emerald-500/15 border-emerald-400/40', text: 'text-emerald-300', dot: 'bg-emerald-400', glow: 'shadow-[0_0_16px_rgba(16,185,129,0.25)]' },
+    amber:   { bg: 'bg-amber-500/15 border-amber-400/40',   text: 'text-amber-300',   dot: 'bg-amber-400',   glow: 'shadow-[0_0_16px_rgba(245,158,11,0.25)]' },
+    violet:  { bg: 'bg-violet-500/15 border-violet-400/40', text: 'text-violet-300',  dot: 'bg-violet-400',  glow: 'shadow-[0_0_16px_rgba(139,92,246,0.25)]' },
+    red:     { bg: 'bg-red-500/15 border-red-400/40',       text: 'text-red-300',     dot: 'bg-red-400',     glow: 'shadow-[0_0_16px_rgba(239,68,68,0.25)]' },
+    blue:    { bg: 'bg-sky-500/15 border-sky-400/40',       text: 'text-sky-300',     dot: 'bg-sky-400',     glow: 'shadow-[0_0_16px_rgba(56,189,248,0.25)]' },
   }[tone]
   return (
-    <span className={`inline-flex items-center gap-2 rounded-full border-2 px-3.5 py-2 text-[9px] font-extrabold uppercase tracking-wider transition-all ${tones.bg} ${tones.border} ${tones.text} ${tones.glow}`}>
-      <span className={`h-2.5 w-2.5 rounded-full ${tones.dot} shadow-[0_0_6px_currentColor] animate-pulse opacity-90`} />
+    <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.1em] backdrop-blur-sm ${tones.bg} ${tones.text} ${tones.glow}`}>
+      <span className={`h-1.5 w-1.5 rounded-full ${tones.dot} animate-pulse`} />
       {children}
     </span>
   )
@@ -328,21 +342,41 @@ export default function AvaliacoesPage() {
               <Link
                 key={a.id}
                 href={`/avaliacoes/${a.id}`}
-                className={`group relative block overflow-hidden rounded-[22px] border-2 p-4 transition-all duration-200 active:translate-y-px active:scale-[0.98] ${isFirst ? 'border-t-emerald-400/100 border-r-emerald-300/70 border-b-emerald-500/80 border-l-emerald-300/70 bg-gradient-to-b from-white/97 to-white/95' : 'border-t-slate-300/80 border-r-slate-200/50 border-b-slate-400/60 border-l-slate-200/50 bg-gradient-to-b from-white/96 to-white/90 hover:border-t-slate-400/90 hover:border-b-slate-500/70'}`}
-                style={isFirst ? { boxShadow: '0 24px 48px -16px rgba(16,185,129,0.6),inset_0_1px_0_rgba(255,255,255,1)' } : { boxShadow: '0 16px 40px -12px rgba(15,23,42,0.2),inset_0_1px_0_rgba(255,255,255,0.5)' }}
+                className={`group relative block overflow-hidden rounded-3xl border p-5 transition-all duration-200 active:scale-[0.97] ${
+                  isFirst
+                    ? 'border-emerald-500/30 bg-gradient-to-br from-slate-900/95 via-emerald-950/70 to-slate-950/95'
+                    : 'border-white/8 bg-gradient-to-br from-slate-900/90 via-slate-800/50 to-slate-900/90'
+                }`}
+                style={isFirst
+                  ? { boxShadow: '0 0 0 1px rgba(52,211,153,0.12), 0 20px 60px -20px rgba(16,185,129,0.5), inset 0 1px 0 rgba(52,211,153,0.15)' }
+                  : { boxShadow: '0 0 0 1px rgba(255,255,255,0.05), 0 16px 40px -16px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06)' }
+                }
               >
-                {isFirst && <div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-gradient-to-b from-emerald-400/25 via-emerald-500/12 to-transparent blur-3xl" />}
+                {/* Shimmer top line */}
+                <div className={`pointer-events-none absolute inset-x-0 top-0 h-px ${isFirst ? 'bg-gradient-to-r from-transparent via-emerald-400/60 to-transparent' : 'bg-gradient-to-r from-transparent via-white/15 to-transparent'}`} />
+                {/* Ambient glow corner */}
+                {isFirst && <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-emerald-500/10 blur-3xl" />}
+
+                {/* Header row */}
                 <div className="relative mb-4 flex items-center justify-between">
-                  <div className="flex items-center gap-2.5">
-                    {isFirst && <InfoChip tone="emerald">Mais recente</InfoChip>}
-                    <span className={`text-[11px] font-bold tabular-nums tracking-wide ${isFirst ? 'text-slate-700' : 'text-slate-600'}`}>
+                  <div className="flex items-center gap-2">
+                    {isFirst
+                      ? <InfoChip tone="emerald">Mais recente</InfoChip>
+                      : <span className="text-[10px] font-semibold text-white/40 uppercase tracking-widest">Avaliação</span>
+                    }
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[11px] font-semibold tabular-nums text-white/60">
                       {date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
                     </span>
+                    <div className={`flex h-7 w-7 items-center justify-center rounded-full transition-all duration-200 group-hover:translate-x-0.5 ${isFirst ? 'bg-emerald-500/20' : 'bg-white/8'}`}>
+                      <DSIcon name="chevronRight" size={13} className={isFirst ? 'text-emerald-400' : 'text-white/40'} />
+                    </div>
                   </div>
-                  <DSIcon name="chevronRight" size={18} className={`transition-all duration-200 ${isFirst ? 'text-emerald-400/60 group-hover:text-emerald-500 group-hover:translate-x-1' : 'text-slate-400 group-hover:text-slate-500 group-hover:translate-x-0.5'}`} />
                 </div>
 
-                <div className="relative grid grid-cols-3 gap-2.5">
+                {/* Metric tiles */}
+                <div className="relative grid grid-cols-3 gap-2">
                   <MetricTile
                     icon="scale"
                     label="Peso"
@@ -374,7 +408,7 @@ export default function AvaliacoesPage() {
                 </div>
 
                 {a.bmi_category && (
-                  <div className="relative mt-4 pt-3 border-t border-slate-200/50">
+                  <div className="relative mt-4 flex items-center gap-2 pt-3.5 border-t border-white/8">
                     <InfoChip tone={bmiTone(a.bmi)}>{a.bmi_category}</InfoChip>
                   </div>
                 )}
@@ -405,31 +439,47 @@ export default function AvaliacoesPage() {
               <Link
                 key={a.id}
                 href={`/avaliacoes/${a.id}`}
-                className={`group relative block overflow-hidden rounded-[24px] border p-4 transition-all duration-150 active:translate-y-px ${isFirst ? 'border-t-violet-300/60 border-r-violet-200/30 border-b-violet-400/25 border-l-violet-200/30 bg-gradient-to-b from-white/98 to-white' : 'border-t-slate-200/80 border-r-slate-100/50 border-b-slate-300/40 border-l-slate-100/50 bg-gradient-to-b from-white/95 to-white/90 hover:border-t-slate-300/80 hover:border-b-slate-400/50'}`}
-                style={isFirst ? { boxShadow: '0 20px 50px -16px rgba(139,92,246,0.35),inset_0_1px_0_rgba(255,255,255,0.6)' } : { boxShadow: '0 12px 32px -12px rgba(15,23,42,0.15),inset_0_1px_0_rgba(255,255,255,0.3)' }}
+                className={`group relative block overflow-hidden rounded-3xl border p-5 transition-all duration-200 active:scale-[0.97] ${
+                  isFirst
+                    ? 'border-violet-500/30 bg-gradient-to-br from-slate-900/95 via-violet-950/60 to-slate-950/95'
+                    : 'border-white/8 bg-gradient-to-br from-slate-900/90 via-slate-800/50 to-slate-900/90'
+                }`}
+                style={isFirst
+                  ? { boxShadow: '0 0 0 1px rgba(167,139,250,0.12), 0 20px 60px -20px rgba(139,92,246,0.45), inset 0 1px 0 rgba(167,139,250,0.15)' }
+                  : { boxShadow: '0 0 0 1px rgba(255,255,255,0.05), 0 16px 40px -16px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06)' }
+                }
               >
-                {isFirst && <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-gradient-to-b from-violet-500/20 via-violet-500/10 to-transparent blur-3xl" />}
+                <div className={`pointer-events-none absolute inset-x-0 top-0 h-px ${isFirst ? 'bg-gradient-to-r from-transparent via-violet-400/60 to-transparent' : 'bg-gradient-to-r from-transparent via-white/15 to-transparent'}`} />
+                {isFirst && <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-violet-500/10 blur-3xl" />}
+
                 <div className="relative mb-4 flex items-center justify-between">
-                  <div className="flex items-center gap-2.5">
-                    {isFirst && <InfoChip tone="violet">Mais recente</InfoChip>}
-                    <span className={`text-[11px] font-bold tabular-nums tracking-wide ${isFirst ? 'text-slate-700' : 'text-slate-600'}`}>
+                  <div className="flex items-center gap-2">
+                    {isFirst
+                      ? <InfoChip tone="violet">Mais recente</InfoChip>
+                      : <span className="text-[10px] font-semibold text-white/40 uppercase tracking-widest">Avaliação</span>
+                    }
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[11px] font-semibold tabular-nums text-white/60">
                       {date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
                     </span>
+                    <div className={`flex h-7 w-7 items-center justify-center rounded-full transition-all duration-200 group-hover:translate-x-0.5 ${isFirst ? 'bg-violet-500/20' : 'bg-white/8'}`}>
+                      <DSIcon name="chevronRight" size={13} className={isFirst ? 'text-violet-400' : 'text-white/40'} />
+                    </div>
                   </div>
-                  <DSIcon name="chevronRight" size={18} className={`transition-all duration-200 ${isFirst ? 'text-violet-400/60 group-hover:text-violet-500 group-hover:translate-x-1' : 'text-slate-400 group-hover:text-slate-500 group-hover:translate-x-0.5'}`} />
                 </div>
 
-                <div className="relative grid grid-cols-3 gap-2.5">
+                <div className="relative grid grid-cols-3 gap-2">
                   <MetricTile icon="scale" label="Peso" tone="emerald" value={fmt(a.weight_kg)} unit={a.weight_kg != null ? 'kg' : ''} />
                   <MetricTile icon="activity" label="IMC" tone="blue" value={fmt(a.bmi)} valueClass={a.bmi != null ? getBMIColor(Number(a.bmi)) : undefined} />
                   <MetricTile icon="percent" label="Gordura" tone="amber" value={fmt(a.body_fat_percentage)} unit={a.body_fat_percentage != null ? '%' : ''} />
                 </div>
 
-                <div className="relative mt-4 flex flex-wrap items-center gap-2 pt-3 border-t border-slate-200/50">
+                <div className="relative mt-4 flex flex-wrap items-center gap-2 pt-3.5 border-t border-white/8">
                   {a.fat_classification && <InfoChip tone="violet">{a.fat_classification}</InfoChip>}
                   {personalName && (
-                    <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-slate-700">
-                      <DSIcon name="user" size={12} className="text-violet-500/70" />
+                    <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold text-white/50">
+                      <DSIcon name="user" size={11} className="text-violet-400/60" />
                       {personalName}
                     </span>
                   )}
