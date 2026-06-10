@@ -337,37 +337,35 @@ export default function AvaliacoesPage() {
               <Link
                 key={a.id}
                 href={`/avaliacoes/${a.id}`}
-                className="group relative block overflow-hidden rounded-[32px] border border-white/10 bg-slate-950/95 shadow-glass transition duration-300 hover:-translate-y-0.5 hover:shadow-glow-primary"
+                className="group relative block overflow-hidden rounded-[36px] border border-white/10 bg-slate-950/95 shadow-glow-primary transition duration-300 hover:-translate-y-0.5 hover:shadow-glow-primary"
               >
-                <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_top_left,rgba(34,197,94,0.18),transparent_24%),radial-gradient(circle_at_bottom_right,rgba(59,130,246,0.12),transparent_22%)]" />
-                <div className="absolute -left-6 top-16 h-28 w-28 rounded-full bg-emerald-500/10 blur-3xl" />
-                <div className="absolute -right-10 bottom-8 h-36 w-36 rounded-full bg-sky-500/8 blur-3xl" />
+                <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.12),transparent_24%),radial-gradient(circle_at_bottom_right,rgba(34,197,94,0.14),transparent_24%)]" />
+                <div className="absolute inset-x-6 top-6 h-px bg-gradient-to-r from-emerald-300/0 via-emerald-300/20 to-emerald-300/0" />
                 <div className="relative p-6 sm:p-7">
-                  <div className="mb-5 flex items-start justify-between gap-4">
+                  <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div className="min-w-0">
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-text-muted">
+                      <p className="text-[10px] uppercase tracking-[0.32em] text-text-muted">
                         Avaliação
                       </p>
-                      <h2 className="mt-2 max-w-[12rem] text-xl font-black leading-tight text-white">
+                      <h2 className="mt-2 text-2xl font-black leading-tight text-white">
                         {date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}
                       </h2>
                     </div>
-                    <div className="flex items-center gap-2 rounded-full border border-emerald-300/20 bg-white/5 px-3 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-emerald-300">
-                      <DSIcon name="sparkles" size={14} className="text-emerald-300" />
+                    <InfoChip tone={isFirst ? 'emerald' : 'blue'}>
                       {isFirst ? 'Mais recente' : 'Histórico'}
-                    </div>
+                    </InfoChip>
                   </div>
 
-                  <div className="grid gap-4 lg:grid-cols-[1.7fr_1fr]">
-                    <div className="rounded-[28px] border border-white/10 bg-slate-950/90 px-5 py-6 shadow-[0_30px_90px_-38px_rgba(34,197,94,0.45)]">
-                      <div className="flex items-center justify-between gap-3">
+                  <div className="grid gap-4">
+                    <div className="rounded-[32px] border border-white/10 bg-slate-900/95 p-5 shadow-[0_24px_70px_-34px_rgba(34,197,94,0.54)]">
+                      <div className="flex items-start justify-between gap-4">
                         <div>
-                          <p className="text-[11px] uppercase tracking-[0.24em] text-text-muted">
+                          <p className="text-[10px] uppercase tracking-[0.28em] text-text-muted">
                             Peso atual
                           </p>
-                          <p className="mt-3 text-[5.1rem] font-black leading-[0.92] tracking-[-0.05em] text-white sm:text-[5.5rem]">
+                          <p className="mt-3 text-[4.3rem] font-black leading-none tracking-[-0.05em] text-white sm:text-[4.8rem]">
                             {fmt(a.weight_kg)}
-                            <span className="ml-2 align-super text-sm uppercase tracking-[0.28em] text-text-muted">
+                            <span className="ml-2 align-super text-xs uppercase tracking-[0.32em] text-text-muted">
                               kg
                             </span>
                           </p>
@@ -376,12 +374,12 @@ export default function AvaliacoesPage() {
                           <DSIcon name="scale" size={22} />
                         </div>
                       </div>
-                      <p className="mt-5 max-w-[24rem] text-sm leading-6 text-text-secondary">
-                        Uma leitura premium com contraste forte e espaço para interpretar sua evolução com clareza.
+                      <p className="mt-5 max-w-[23rem] text-sm leading-6 text-text-secondary">
+                        Um painel premium com contraste refinado, acentos verdes e leitura imediata de sua evolução.
                       </p>
                     </div>
 
-                    <div className="grid gap-4">
+                    <div className="grid gap-3 sm:grid-cols-2">
                       <MetricTile
                         icon="activity"
                         label="IMC"
@@ -404,18 +402,18 @@ export default function AvaliacoesPage() {
                         }
                       />
                     </div>
-                  </div>
 
-                  <div className="mt-5 flex flex-wrap items-center gap-3 border-t border-white/10 pt-4">
-                    {a.bmi_category && <InfoChip tone={bmiTone(a.bmi)}>{a.bmi_category}</InfoChip>}
-                    {prev && (
-                      <span className="text-[10px] uppercase tracking-[0.32em] text-text-muted">
-                        Tendência baseada na última avaliação
-                      </span>
-                    )}
-                    <div className="ml-auto inline-flex h-11 items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 text-xs font-semibold uppercase tracking-[0.24em] text-text-muted">
-                      <DSIcon name="chevronRight" size={12} className="text-slate-300" />
-                      Ver detalhes
+                    <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-white/10 pt-4">
+                      {a.bmi_category && <InfoChip tone={bmiTone(a.bmi)}>{a.bmi_category}</InfoChip>}
+                      {prev && (
+                        <span className="text-[10px] uppercase tracking-[0.32em] text-text-muted">
+                          Tendência baseada na última avaliação
+                        </span>
+                      )}
+                      <div className="ml-auto inline-flex h-11 items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 text-xs font-semibold uppercase tracking-[0.24em] text-text-muted">
+                        <DSIcon name="chevronRight" size={12} className="text-slate-300" />
+                        Ver detalhes
+                      </div>
                     </div>
                   </div>
                 </div>
