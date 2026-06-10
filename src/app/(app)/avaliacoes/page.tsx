@@ -1,23 +1,34 @@
-/**
- * src/app/(app)/avaliacoes/page.tsx
- *
- * Sprint 26 + FASE 5 — Listagem de auto-avaliações com deltas de evolução
- */
-
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { useSelfAssessments, getBMIColor, type SelfAssessment } from '@/hooks/use-self-assessments'
+import { useSelfAssessments, type SelfAssessment } from '@/hooks/use-self-assessments'
 import { useMyAssessments } from '@/hooks/use-assessments'
 import { useLinkPersonalTrainer, useStudentProfile } from '@/hooks/use-student-app'
 import { useAuthStore } from '@/stores/auth-store'
 
-/** Delta pill — strong premium status for evolution changes */
+// ─── Design Tokens (iOS Light) ─────────────
+const ios = {
+  bg: '#F2F2F7',
+  card: '#FFFFFF',
+  separator: '#E5E5EA',
+  text: '#000000',
+  secondary: '#8E8E93',
+  tertiary: '#AEAEB2',
+  blue: '#007AFF',
+  green: '#34C759',
+  orange: '#FF9500',
+  red: '#FF3B30',
+  purple: '#AF52DE',
+} as const
+
+const springEasing = 'cubic-bezier(0.25, 0.1, 0.25, 1)'
+
+/** Delta pill — iOS-style evolution indicator */
 function DeltaBadge({ current, previous, unit, invert }: {
   current: number
   previous: number
@@ -28,105 +39,69 @@ function DeltaBadge({ current, previous, unit, invert }: {
   if (diff === 0) return null
   const isPositive = diff > 0
   const isGood = invert ? !isPositive : isPositive
-  const tone = isGood ? 'emerald' : 'rose'
 
   return (
-    <span className={`inline-flex items-center gap-1 rounded-full border px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] shadow-sm transition ${
-      isGood
-        ? 'border-emerald-300/25 bg-emerald-300/8 text-emerald-200'
-        : 'border-rose-300/25 bg-rose-300/8 text-rose-200'
-    }`}>
-      <span className={`text-xs ${tone === 'emerald' ? 'text-emerald-300' : 'text-rose-300'}`}>
-        {isPositive ? '▲' : '▼'}
-      </span>
+    <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold"
+      style={{
+        backgroundColor: isGood ? '#34C7591A' : '#FF3B301A',
+        color: isGood ? ios.green : ios.red,
+      }}
+    >
+      <span className="text-[10px]">{isPositive ? '▲' : '▼'}</span>
       <span>{Math.abs(diff)}{unit}</span>
     </span>
   )
 }
 
-const METRIC_TONE_CLASSES: Record<string, string> = {
-  emerald: 'text-emerald-300',
-  blue: 'text-sky-300',
-  amber: 'text-amber-300',
-  red: 'text-rose-300',
-  slate: 'text-slate-200',
-}
-
-/** Metric tile: premium glass stat card */
+/** Metric tile — iOS-style card cell */
 function MetricTile({
   icon,
   label,
   value,
   unit,
   delta,
-  variant = 'mini',
-  tone = 'slate',
-  valueClass,
+  tone = 'emerald',
 }: {
   icon: DSIconName
   label: string
   value: string
   unit?: string
   delta?: React.ReactNode
-  variant?: 'hero' | 'mini'
-  tone?: 'emerald' | 'blue' | 'amber' | 'red' | 'slate'
-  valueClass?: string
+  tone?: 'emerald' | 'blue' | 'amber' | 'rose' | 'violet'
 }) {
-  const accent = valueClass ?? METRIC_TONE_CLASSES[tone] ?? METRIC_TONE_CLASSES.slate
+  const colorMap = {
+    emerald: ios.green,
+    blue: ios.blue,
+    amber: ios.orange,
+    rose: ios.red,
+    violet: ios.purple,
+  }
+  const c = colorMap[tone]
+
   return (
-    <div className={`flex min-w-0 flex-col gap-3 rounded-3xl border border-white/10 bg-white/5 px-4 py-4 shadow-glass transition duration-300 ${
-      variant === 'hero' ? 'lg:px-5 lg:py-5' : ''
-    }`}>
-      <div className="flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-slate-200 ring-1 ring-white/10">
-          <DSIcon name={icon} size={16} />
-        </div>
-        <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-text-muted">
+    <div className="flex flex-col gap-1.5 rounded-xl bg-[#F9F9FB] px-3.5 py-3 transition-colors duration-200">
+      <div className="flex items-center gap-1.5">
+        <DSIcon name={icon} size={12} style={{ color: c }} />
+        <span className="text-[10px] font-semibold uppercase tracking-[0.12em]" style={{ color: ios.tertiary }}>
           {label}
         </span>
+        {delta && <div className="ml-auto">{delta}</div>}
       </div>
-
-      <div className="flex items-end gap-2 min-[400px]:items-baseline">
-        <span className={`font-black leading-none tabular-nums ${variant === 'hero' ? 'text-[3rem] sm:text-[3.75rem]' : 'text-3xl'} ${accent}`}>
+      <div className="flex items-baseline gap-1">
+        <span className="text-xl font-bold leading-none tabular-nums tracking-tight" style={{ color: ios.text }}>
           {value}
         </span>
-        {unit ? (
-          <span className="pb-1 text-xs uppercase tracking-[0.32em] text-text-muted">
+        {unit && (
+          <span className="text-[10px] font-medium uppercase tracking-[0.12em]" style={{ color: ios.tertiary }}>
             {unit}
           </span>
-        ) : null}
+        )}
       </div>
-
-      {delta ? <div>{delta}</div> : null}
     </div>
   )
 }
 
-/** Status chip — semantic color with icon, minimal pill */
-function InfoChip({ children, tone = 'emerald' }: {
-  children: React.ReactNode
-  tone?: 'emerald' | 'amber' | 'violet' | 'red' | 'blue'
-}) {
-  const tones = {
-    emerald: 'bg-emerald-500/12 text-emerald-600 border-emerald-200',
-    amber:   'bg-amber-500/12 text-amber-600 border-amber-200',
-    violet:  'bg-violet-500/12 text-violet-600 border-violet-200',
-    red:     'bg-red-500/12 text-red-600 border-red-200',
-    blue:    'bg-sky-500/12 text-sky-600 border-sky-200',
-  }[tone]
-  const dots = {
-    emerald: 'bg-emerald-500', amber: 'bg-amber-500', violet: 'bg-violet-500',
-    red: 'bg-red-500', blue: 'bg-sky-500',
-  }[tone]
-  return (
-    <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.06em] ${tones}`}>
-      <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${dots}`} />
-      {children}
-    </span>
-  )
-}
-
-/** Map BMI value to a chip tone */
+/** Map BMI value to chip tone */
 function bmiTone(bmi: number | string | null | undefined): 'blue' | 'emerald' | 'amber' | 'red' {
   const n = Number(bmi)
   if (n < 18.5) return 'blue'
@@ -135,7 +110,7 @@ function bmiTone(bmi: number | string | null | undefined): 'blue' | 'emerald' | 
   return 'red'
 }
 
-/** Safely format numeric values — Neon returns PostgreSQL NUMERIC as strings */
+/** Safely format numeric values */
 function fmt(v: number | string | null | undefined, decimals?: number): string {
   if (v == null || v === '') return '—'
   const n = Number(v)
@@ -176,12 +151,11 @@ export default function AvaliacoesPage() {
         setPersonalInviteQrUrl('')
         return
       }
-
       try {
         const dataUrl = await (await import('qrcode')).default.toDataURL(personalInviteLink, {
           margin: 1,
           width: 280,
-          color: { dark: '#0a0f0a', light: '#ffffff' },
+          color: { dark: '#000000', light: '#FFFFFF' },
         })
         if (!cancelled) setPersonalInviteQrUrl(dataUrl)
       } catch {
@@ -190,10 +164,7 @@ export default function AvaliacoesPage() {
     }
 
     void generateQr()
-
-    return () => {
-      cancelled = true
-    }
+    return () => { cancelled = true }
   }, [showPersonalQr, personalInviteLink])
 
   const displayAssessments = useMemo<SelfAssessment[]>(() => {
@@ -204,85 +175,84 @@ export default function AvaliacoesPage() {
 
     if (!isVictorSuperAdmin) return base
 
-    const hasCompleteAssessment = base.some((a) => a.id === '16efd166-f01f-42de-8e63-a3d8119443d8')
-    if (hasCompleteAssessment) return base
+    const hasComplete = base.some((a) => a.id === '16efd166-f01f-42de-8e63-a3d8119443d8')
+    if (hasComplete) return base
 
-    const fallback: SelfAssessment = {
+    const fb: SelfAssessment = {
       id: '16efd166-f01f-42de-8e63-a3d8119443d8',
-      weight_kg: 99,
-      height_cm: 183,
-      bmi: 29.56,
-      bmi_category: 'Sobrepeso',
+      weight_kg: 99, height_cm: 183, bmi: 29.56, bmi_category: 'Sobrepeso',
       body_fat_percentage: 17.61,
-      waist_cm: null,
-      hip_cm: null,
-      chest_cm: null,
-      arm_left_cm: null,
-      arm_right_cm: null,
-      thigh_left_cm: null,
-      thigh_right_cm: null,
-      calf_left_cm: null,
-      calf_right_cm: null,
-      activity_level: null,
-      goal: null,
+      waist_cm: null, hip_cm: null, chest_cm: null,
+      arm_left_cm: null, arm_right_cm: null,
+      thigh_left_cm: null, thigh_right_cm: null,
+      calf_left_cm: null, calf_right_cm: null,
+      activity_level: null, goal: null,
       notes: 'Avaliação completa importada do PDF',
       created_at: '2026-01-28T00:00:00.000Z',
     }
 
-    return [...base, fallback].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+    return [...base, fb].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
   }, [assessments, user?.email, user?.id, user?.role])
 
   const hasSelf = displayAssessments.length > 0
   const isLinked = !!studentProfile?.personal_name
 
+  // ─── tone helpers ───
+  const toneColor = (t: ReturnType<typeof bmiTone>) =>
+    t === 'blue' ? ios.blue : t === 'emerald' ? ios.green : t === 'amber' ? ios.orange : ios.red
+
   return (
-    <div className="relative mx-auto min-h-dvh max-w-lg bg-linear-to-b from-slate-100 via-slate-50 to-slate-100 px-4 pb-28">
-      {/* ─── Hero ─── */}
-      <div
-        className="relative -mx-4 mb-6 overflow-hidden rounded-b-[32px] px-4 pb-6 pt-5 backdrop-blur-md"
-        style={{ background: 'linear-gradient(to bottom, #0b1d36 0%, #0c1f38 20%, #0b1c35 40%, #0a1830 65%, #071628 85%, #050A12 100%)', boxShadow: '0 6px 28px 0 rgba(5,10,18,0.6)' }}
-      >
-        {/* Ambient glow */}
-        <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_85%_18%,rgba(34,197,94,0.20),transparent_55%),radial-gradient(circle_at_8%_92%,rgba(56,189,248,0.12),transparent_55%)]" />
-        <div className="relative z-1 flex items-center gap-3 pt-4">
+    <div className="relative mx-auto min-h-dvh max-w-lg pb-28 font-[-apple-system,BlinkMacSystemFont,'SF_Pro_Display','Helvetica_Neue',sans-serif]" style={{ backgroundColor: ios.bg }}>
+      {/* ─── Header ─── */}
+      <div className="sticky top-0 z-20 px-5 pb-3 pt-6" style={{ backgroundColor: ios.bg }}>
+        <div className="flex items-center justify-between gap-3">
           <button
             aria-label="Voltar"
             onClick={() => router.back()}
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-white/12 bg-white/6 text-white/75 transition-all hover:border-white/20 hover:bg-white/10 hover:text-white"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-opacity hover:opacity-70 active:opacity-50"
+            style={{ backgroundColor: '#E5E5EA80' }}
           >
-            <DSIcon name="arrowLeft" size={18} />
+            <DSIcon name="arrowLeft" size={18} style={{ color: ios.blue }} />
           </button>
-          <div className="min-w-0 flex-1">
-            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-emerald-400">Acompanhamento</p>
-            <h1 className="bg-linear-to-br from-white via-white to-emerald-200/90 bg-clip-text text-[34px] font-black leading-none text-transparent">
-              Avaliações
-            </h1>
-          </div>
+          <div className="flex-1" />
           <Link href="/avaliacoes/nova">
-            <Button size="sm">
-              <DSIcon name="plus" size={16} />
+            <Button
+              size="sm"
+              className="gap-1 rounded-full border-0 px-5 py-2 text-[14px] font-semibold shadow-none hover:opacity-90 active:opacity-70"
+              style={{ backgroundColor: ios.blue, color: '#FFFFFF' }}
+            >
+              <DSIcon name="plus" size={14} style={{ color: '#FFFFFF' }} />
               Nova
             </Button>
           </Link>
         </div>
+        <div className="mt-4">
+          <p className="text-[12px] font-semibold uppercase tracking-[0.2em]" style={{ color: ios.secondary }}>
+            Acompanhamento
+          </p>
+          <h1 className="text-[34px] font-extrabold leading-none tracking-[-0.02em] mt-1.5" style={{ color: ios.text }}>
+            Avaliações
+          </h1>
+        </div>
 
-        {/* Hero summary strip */}
         {hasSelf && (
-          <div className="relative z-1 mt-5 flex items-center gap-4 rounded-2xl border border-white/8 bg-white/4 px-4 py-3 backdrop-blur-sm">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-primary/12 ring-1 ring-brand-primary/25">
-              <DSIcon name="trendingUp" size={18} className="text-emerald-300" />
+          <div className="mt-4 flex items-center gap-3 rounded-2xl px-4 py-3 shadow-sm"
+            style={{ backgroundColor: ios.card, border: `1px solid ${ios.separator}` }}>
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl" style={{ backgroundColor: '#34C7591A' }}>
+              <DSIcon name="trendingUp" size={16} style={{ color: ios.green }} />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-[11px] font-medium text-text-muted">
+              <p className="text-[12px] font-medium" style={{ color: ios.secondary }}>
                 {displayAssessments.length === 1 ? '1 avaliação registrada' : `${displayAssessments.length} avaliações registradas`}
               </p>
-              <p className="truncate text-[13px] font-bold text-white">
+              <p className="truncate text-[13px] font-semibold" style={{ color: ios.text }}>
                 Última em {new Date(displayAssessments[0].created_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long' })}
               </p>
             </div>
             {isLinked && (
-              <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-emerald-400/25 bg-emerald-500/10 px-2.5 py-1 text-[10px] font-bold text-emerald-300">
-                <DSIcon name="checkCircle" size={12} />
+              <span className="inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold"
+                style={{ backgroundColor: '#34C7591A', color: ios.green }}>
+                <DSIcon name="checkCircle" size={12} style={{ color: ios.green }} />
                 Personal
               </span>
             )}
@@ -290,130 +260,140 @@ export default function AvaliacoesPage() {
         )}
       </div>
 
-      {/* Loading */}
+      {/* ─── Loading ─── */}
       {isLoading && (
         <div className="flex items-center justify-center py-20">
-          <DSIcon name="loader" size={24} className="animate-spin text-text-muted" />
+          <DSIcon name="loader" size={24} className="animate-spin" style={{ color: ios.blue }} />
         </div>
       )}
 
-      {/* Empty — premium */}
+      {/* ─── Empty State ─── */}
       {!isLoading && displayAssessments.length === 0 && (
-        <div className="flex flex-col items-center gap-4 py-16 text-center">
-          <div
-            className="relative flex h-20 w-20 items-center justify-center rounded-2xl"
-            style={{
-              background: 'radial-gradient(circle at 30% 30%, rgba(34,197,94,0.22) 0%, rgba(22,101,52,0.12) 60%, rgba(5,10,18,0.6) 100%)',
-              border: '1px solid rgba(74,222,128,0.32)',
-              boxShadow: '0 0 30px rgba(34,197,94,0.22), inset 0 1px 0 rgba(255,255,255,0.08)',
-            }}
-          >
-            <DSIcon name="clipboardList" size={32} className="text-emerald-300" />
+        <div className="flex flex-col items-center gap-5 px-8 py-16 text-center">
+          <div className="flex h-24 w-24 items-center justify-center rounded-[28px] shadow-sm"
+            style={{ backgroundColor: ios.card, border: `1px solid ${ios.separator}` }}>
+            <DSIcon name="clipboardList" size={36} style={{ color: ios.blue }} />
           </div>
           <div>
-            <h2 className="text-[18px] font-black tracking-tight text-text-primary">Sua jornada começa aqui</h2>
-            <p className="mx-auto mt-2 max-w-72 text-[13px] leading-relaxed text-text-muted">
+            <h2 className="text-[20px] font-bold tracking-[-0.01em]" style={{ color: ios.text }}>
+              Sua jornada começa aqui
+            </h2>
+            <p className="mx-auto mt-2 max-w-64 text-[14px] leading-relaxed" style={{ color: ios.secondary }}>
               Faça sua primeira avaliação e descubra seu IMC, percentual de gordura e veja sua evolução ao longo do tempo.
             </p>
           </div>
           <Link href="/avaliacoes/nova">
-            <Button>
-              <DSIcon name="plus" size={18} />
+            <Button
+              className="gap-2 rounded-full border-0 px-6 py-3 text-[15px] font-semibold shadow-sm hover:opacity-90 active:opacity-70"
+              style={{ backgroundColor: ios.blue, color: '#FFFFFF' }}
+            >
+              <DSIcon name="plus" size={16} style={{ color: '#FFFFFF' }} />
               Fazer minha avaliação
             </Button>
           </Link>
         </div>
       )}
 
-      {/* Self-assessments — the data hero */}
+      {/* ─── Self Assessments ─── */}
       {hasSelf && (
-        <section className="space-y-3">
-          <p className="px-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-white/30">Minhas avaliações</p>
+        <section className="space-y-3 px-5 pb-2">
+          <p className="px-1 text-[12px] font-semibold uppercase tracking-[0.16em]" style={{ color: ios.secondary }}>
+            Minhas avaliações
+          </p>
           {displayAssessments.map((a, i) => {
             const date = new Date(a.created_at)
             const isFirst = i === 0
             const prev = displayAssessments[i + 1] ?? null
+            const bTone = bmiTone(a.bmi)
+            const tc = toneColor(bTone)
+
             return (
               <Link
                 key={a.id}
                 href={`/avaliacoes/${a.id}`}
-                className="group relative block overflow-hidden rounded-[36px] border border-white/10 bg-slate-950/95 shadow-glow-primary transition duration-300 hover:-translate-y-0.5 hover:shadow-glow-primary"
+                className="group block overflow-hidden rounded-2xl shadow-sm transition-all duration-200 active:scale-[0.985]"
+                style={{ backgroundColor: ios.card, border: `1px solid ${ios.separator}` }}
               >
-                <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.12),transparent_24%),radial-gradient(circle_at_bottom_right,rgba(34,197,94,0.14),transparent_24%)]" />
-                <div className="absolute inset-x-6 top-6 h-px bg-gradient-to-r from-emerald-300/0 via-emerald-300/20 to-emerald-300/0" />
-                <div className="relative p-6 sm:p-7">
-                  <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                <div className="p-5">
+                  {/* Header row */}
+                  <div className="mb-4 flex items-center justify-between gap-3">
                     <div className="min-w-0">
-                      <p className="text-[10px] uppercase tracking-[0.32em] text-text-muted">
+                      <p className="text-[11px] font-medium uppercase tracking-[0.2em]" style={{ color: ios.tertiary }}>
                         Avaliação
                       </p>
-                      <h2 className="mt-2 text-2xl font-black leading-tight text-white">
+                      <h2 className="mt-1 text-[20px] font-bold leading-tight tracking-[-0.01em]" style={{ color: ios.text }}>
                         {date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}
                       </h2>
                     </div>
-                    <InfoChip tone={isFirst ? 'emerald' : 'blue'}>
+                    <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em]"
+                      style={{
+                        backgroundColor: isFirst ? `${ios.blue}1A` : `${ios.secondary}14`,
+                        color: isFirst ? ios.blue : ios.secondary,
+                      }}>
+                      <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: isFirst ? ios.blue : ios.tertiary }} />
                       {isFirst ? 'Mais recente' : 'Histórico'}
-                    </InfoChip>
+                    </span>
                   </div>
 
-                  <div className="grid gap-4">
-                    <div className="rounded-[32px] border border-white/10 bg-slate-900/95 p-5 shadow-[0_24px_70px_-34px_rgba(34,197,94,0.54)]">
-                      <div className="flex items-start justify-between gap-4">
-                        <div>
-                          <p className="text-[10px] uppercase tracking-[0.28em] text-text-muted">
-                            Peso atual
-                          </p>
-                          <p className="mt-3 text-[4.3rem] font-black leading-none tracking-[-0.05em] text-white sm:text-[4.8rem]">
+                  {/* Weight hero */}
+                  <div className="mb-3 rounded-2xl p-4" style={{ backgroundColor: '#F9F9FB' }}>
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="min-w-0">
+                        <p className="text-[10px] font-semibold uppercase tracking-[0.2em]" style={{ color: ios.tertiary }}>Peso atual</p>
+                        <div className="mt-1 flex items-baseline gap-1.5">
+                          <span className="text-[3.5rem] font-extrabold leading-none tracking-[-0.04em]" style={{ color: ios.text }}>
                             {fmt(a.weight_kg)}
-                            <span className="ml-2 align-super text-xs uppercase tracking-[0.32em] text-text-muted">
-                              kg
-                            </span>
-                          </p>
-                        </div>
-                        <div className="flex h-14 w-14 items-center justify-center rounded-3xl border border-white/10 bg-white/5 text-slate-200">
-                          <DSIcon name="scale" size={22} />
+                          </span>
+                          <span className="text-xs font-semibold uppercase tracking-[0.2em]" style={{ color: ios.secondary }}>kg</span>
                         </div>
                       </div>
-                      <p className="mt-5 max-w-[23rem] text-sm leading-6 text-text-secondary">
-                        Um painel premium com contraste refinado, acentos verdes e leitura imediata de sua evolução.
-                      </p>
-                    </div>
-
-                    <div className="grid gap-3 sm:grid-cols-2">
-                      <MetricTile
-                        icon="activity"
-                        label="IMC"
-                        value={fmt(a.bmi)}
-                        variant="mini"
-                        tone="blue"
-                        delta={prev ? <DeltaBadge current={Number(a.bmi)} previous={Number(prev.bmi)} unit="" /> : undefined}
-                      />
-                      <MetricTile
-                        icon="percent"
-                        label="Gordura"
-                        value={fmt(a.body_fat_percentage)}
-                        unit={a.body_fat_percentage != null ? '%' : ''}
-                        variant="mini"
-                        tone="amber"
-                        delta={
-                          prev && a.body_fat_percentage != null && prev.body_fat_percentage != null ? (
-                            <DeltaBadge current={Number(a.body_fat_percentage)} previous={Number(prev.body_fat_percentage)} unit="%" invert />
-                          ) : undefined
-                        }
-                      />
-                    </div>
-
-                    <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-white/10 pt-4">
-                      {a.bmi_category && <InfoChip tone={bmiTone(a.bmi)}>{a.bmi_category}</InfoChip>}
-                      {prev && (
-                        <span className="text-[10px] uppercase tracking-[0.32em] text-text-muted">
-                          Tendência baseada na última avaliação
-                        </span>
-                      )}
-                      <div className="ml-auto inline-flex h-11 items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 text-xs font-semibold uppercase tracking-[0.24em] text-text-muted">
-                        <DSIcon name="chevronRight" size={12} className="text-slate-300" />
-                        Ver detalhes
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl" style={{ backgroundColor: '#34C75914' }}>
+                        <DSIcon name="scale" size={20} style={{ color: ios.green }} />
                       </div>
+                    </div>
+                  </div>
+
+                  {/* Metric tiles */}
+                  <div className="grid grid-cols-2 gap-2.5">
+                    <MetricTile
+                      icon="activity"
+                      label="IMC"
+                      value={fmt(a.bmi)}
+                      tone={bTone === 'red' ? 'rose' : bTone as 'emerald' | 'blue' | 'amber'}
+                      delta={prev ? <DeltaBadge current={Number(a.bmi)} previous={Number(prev.bmi)} unit="" /> : undefined}
+                    />
+                    <MetricTile
+                      icon="percent"
+                      label="Gordura"
+                      value={fmt(a.body_fat_percentage)}
+                      unit={a.body_fat_percentage != null ? '%' : ''}
+                      tone="amber"
+                      delta={
+                        prev && a.body_fat_percentage != null && prev.body_fat_percentage != null ? (
+                          <DeltaBadge current={Number(a.body_fat_percentage)} previous={Number(prev.body_fat_percentage)} unit="%" invert />
+                        ) : undefined
+                      }
+                    />
+                  </div>
+
+                  {/* Footer */}
+                  <div className="mt-3 flex flex-wrap items-center gap-2.5 border-t pt-3" style={{ borderColor: ios.separator }}>
+                    {a.bmi_category && (
+                      <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em]"
+                        style={{ backgroundColor: `${tc}1A`, color: tc }}>
+                        <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: tc }} />
+                        {a.bmi_category}
+                      </span>
+                    )}
+                    {prev && (
+                      <span className="text-[10px] font-medium uppercase tracking-[0.2em]" style={{ color: ios.tertiary }}>
+                        vs. última
+                      </span>
+                    )}
+                    <div className="ml-auto inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] transition-colors group-hover:opacity-70"
+                      style={{ color: ios.blue }}>
+                      <DSIcon name="chevronRight" size={11} style={{ color: ios.blue }} />
+                      Detalhes
                     </div>
                   </div>
                 </div>
@@ -423,18 +403,20 @@ export default function AvaliacoesPage() {
         </section>
       )}
 
-      {/* ── Avaliações do Personal ────────────────────── */}
+      {/* ─── Professional Assessments ─── */}
       {proLoading && !proAssessments.length && (
         <div className="mt-6 flex items-center justify-center py-6">
-          <DSIcon name="loader" size={20} className="animate-spin text-text-muted" />
+          <DSIcon name="loader" size={20} className="animate-spin" style={{ color: ios.blue }} />
         </div>
       )}
 
       {proAssessments.length > 0 && (
-        <section className="mt-7 space-y-3">
-          <div className="flex items-center gap-2 px-0.5">
-            <DSIcon name="clipboard" size={13} className="text-violet-400" />
-            <h2 className="text-[12px] font-bold uppercase tracking-[0.16em] text-zinc-300">Avaliações completas</h2>
+        <section className="mt-8 space-y-3 px-5">
+          <div className="flex items-center gap-2 px-1">
+            <DSIcon name="clipboard" size={13} style={{ color: ios.purple }} />
+            <h2 className="text-[12px] font-semibold uppercase tracking-[0.16em]" style={{ color: ios.secondary }}>
+              Avaliações completas
+            </h2>
           </div>
           {proAssessments.map((a, i) => {
             const date = new Date(a.assessment_date)
@@ -444,46 +426,54 @@ export default function AvaliacoesPage() {
               <Link
                 key={a.id}
                 href={`/avaliacoes/${a.id}`}
-                className="group relative block overflow-hidden rounded-[32px] border border-white/10 bg-slate-950/95 shadow-glass transition duration-300 hover:-translate-y-0.5 hover:shadow-glow-primary"
+                className="group block overflow-hidden rounded-2xl shadow-sm transition-all duration-200 active:scale-[0.985]"
+                style={{ backgroundColor: ios.card, border: `1px solid ${ios.separator}` }}
               >
-                <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_top_left,rgba(167,139,250,0.16),transparent_25%),radial-gradient(circle_at_bottom_right,rgba(34,197,94,0.12),transparent_22%)]" />
-                <div className="absolute -right-10 top-8 h-24 w-24 rounded-full bg-violet-500/10 blur-3xl" />
-                <div className="absolute -left-10 bottom-10 h-32 w-32 rounded-full bg-emerald-500/8 blur-3xl" />
-                <div className="relative p-5 sm:p-6">
-                  <div className="mb-5 flex items-center justify-between gap-3">
+                <div className="p-5">
+                  <div className="mb-4 flex items-center justify-between gap-3">
                     <div className="min-w-0">
-                      <p className="text-[10px] uppercase tracking-[0.26em] text-text-muted">
+                      <p className="text-[11px] font-medium uppercase tracking-[0.2em]" style={{ color: ios.tertiary }}>
                         Avaliação completa
                       </p>
-                      <p className="mt-2 text-sm font-bold uppercase tracking-[0.2em] text-white/85">
+                      <p className="mt-1 text-[15px] font-semibold leading-tight" style={{ color: ios.text }}>
                         {date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
                       </p>
                     </div>
-                    <div className={`inline-flex items-center gap-2 rounded-full px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] transition ${
-                      isFirst ? 'border border-violet-300/20 bg-violet-500/10 text-violet-200' : 'border border-white/10 bg-white/5 text-text-muted'
-                    }`}>
-                      {isFirst ? <DSIcon name="sparkles" size={14} /> : <DSIcon name="clock" size={14} />}
+                    <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em]"
+                      style={{
+                        backgroundColor: isFirst ? `${ios.purple}1A` : `${ios.secondary}14`,
+                        color: isFirst ? ios.purple : ios.secondary,
+                      }}>
+                      <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: isFirst ? ios.purple : ios.tertiary }} />
                       {isFirst ? 'Mais recente' : 'Histórico'}
-                    </div>
+                    </span>
                   </div>
 
-                  <div className="grid gap-3 sm:grid-cols-3">
+                  <div className="grid grid-cols-3 gap-2.5">
                     <MetricTile icon="scale" label="Peso" tone="emerald" value={fmt(a.weight_kg)} unit={a.weight_kg != null ? 'kg' : ''} />
-                    <MetricTile icon="activity" label="IMC" tone="blue" value={fmt(a.bmi)} valueClass={a.bmi != null ? getBMIColor(Number(a.bmi)) : undefined} />
+                    <MetricTile icon="activity" label="IMC" tone="blue" value={fmt(a.bmi)} />
                     <MetricTile icon="percent" label="Gordura" tone="amber" value={fmt(a.body_fat_percentage)} unit={a.body_fat_percentage != null ? '%' : ''} />
                   </div>
 
-                  <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-white/10 pt-4">
-                    {a.fat_classification && <InfoChip tone="violet">{a.fat_classification}</InfoChip>}
+                  <div className="mt-3 flex flex-wrap items-center gap-2.5 border-t pt-3" style={{ borderColor: ios.separator }}>
+                    {a.fat_classification && (
+                      <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em]"
+                        style={{ backgroundColor: `${ios.purple}1A`, color: ios.purple }}>
+                        <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: ios.purple }} />
+                        {a.fat_classification}
+                      </span>
+                    )}
                     {personalName && (
-                      <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-2 text-[10px] font-medium uppercase tracking-[0.2em] text-text-muted">
-                        <DSIcon name="user" size={10} className="text-slate-200" />
+                      <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.14em]"
+                        style={{ backgroundColor: `${ios.secondary}14`, color: ios.secondary }}>
+                        <DSIcon name="user" size={10} style={{ color: ios.secondary }} />
                         {personalName}
                       </span>
                     )}
-                    <div className="ml-auto inline-flex h-11 items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 text-xs font-semibold uppercase tracking-[0.24em] text-text-muted">
-                      <DSIcon name="chevronRight" size={12} className="text-slate-300" />
-                      Ver detalhes
+                    <div className="ml-auto inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] transition-colors group-hover:opacity-70"
+                      style={{ color: ios.purple }}>
+                      <DSIcon name="chevronRight" size={11} style={{ color: ios.purple }} />
+                      Detalhes
                     </div>
                   </div>
                 </div>
@@ -493,37 +483,39 @@ export default function AvaliacoesPage() {
         </section>
       )}
 
-      {/* ── Personal invite — elegant, collapsible, below data ── */}
-      <div className="mt-7">
+      {/* ─── Personal Trainer ─── */}
+      <div className="mt-8 px-5">
         {isLinked ? (
-          <div className="flex items-center gap-3 rounded-2xl border border-emerald-400/18 bg-emerald-500/8 px-4 py-3.5">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-500/15 ring-1 ring-emerald-400/30">
-              <DSIcon name="checkCircle" size={18} className="text-emerald-300" />
+          <div className="flex items-center gap-3 rounded-2xl px-4 py-3.5 shadow-sm"
+            style={{ backgroundColor: ios.card, border: `1px solid ${ios.separator}` }}>
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl" style={{ backgroundColor: '#34C7591A' }}>
+              <DSIcon name="checkCircle" size={16} style={{ color: ios.green }} />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-400/90">Personal vinculado</p>
-              <p className="truncate text-[14px] font-bold text-white">{studentProfile!.personal_name}</p>
+              <p className="text-[10px] font-bold uppercase tracking-wider" style={{ color: ios.green }}>Personal vinculado</p>
+              <p className="truncate text-[14px] font-semibold" style={{ color: ios.text }}>{studentProfile!.personal_name}</p>
             </div>
           </div>
         ) : (
-          <div className="overflow-hidden rounded-2xl border border-slate-600/40 bg-slate-900">
+          <div className="overflow-hidden rounded-2xl shadow-sm" style={{ backgroundColor: ios.card, border: `1px solid ${ios.separator}` }}>
             <button
               type="button"
               onClick={() => setInviteOpen((v) => !v)}
-              className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-slate-800"
+              className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-[#F2F2F7]/50 active:bg-[#F2F2F7]"
             >
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-primary/12 ring-1 ring-brand-primary/25">
-                <DSIcon name="userPlus" size={18} className="text-emerald-300" />
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl" style={{ backgroundColor: `${ios.blue}14` }}>
+                <DSIcon name="userPlus" size={16} style={{ color: ios.blue }} />
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-[13px] font-bold text-white">Avaliação completa com personal</p>
-                <p className="mt-0.5 text-[11px] text-text-muted">Convide um treinador para validar sua avaliação</p>
+                <p className="text-[13px] font-semibold" style={{ color: ios.text }}>Avaliação completa com personal</p>
+                <p className="mt-0.5 text-[11px]" style={{ color: ios.secondary }}>Convide um treinador para validar sua avaliação</p>
               </div>
-              <DSIcon name="chevronDown" size={18} className={`shrink-0 text-text-muted transition-transform ${inviteOpen ? 'rotate-180' : ''}`} />
+              <DSIcon name="chevronDown" size={16} className={`shrink-0 transition-transform ${inviteOpen ? 'rotate-180' : ''}`}
+                style={{ color: ios.tertiary }} />
             </button>
 
             {inviteOpen && (
-              <div className="border-t border-white/6 px-4 pb-4 pt-3.5">
+              <div className="border-t px-4 pb-4 pt-3.5" style={{ borderColor: ios.separator }}>
                 <div className="mb-3 flex gap-2">
                   <Input
                     value={personalReferralCode}
@@ -535,37 +527,44 @@ export default function AvaliacoesPage() {
                     onClick={() => linkPersonalTrainer.mutate(personalReferralCode)}
                     loading={linkPersonalTrainer.isPending}
                     disabled={!personalReferralCode.trim() || !!studentProfile?.personal_id}
+                    style={{ backgroundColor: ios.blue, color: '#FFFFFF', border: 'none' }}
+                    className="rounded-full px-5 text-[14px] font-semibold shadow-none hover:opacity-90"
                   >
                     Vincular
                   </Button>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  <Button variant="outline" size="sm" onClick={() => navigator.clipboard.writeText(personalInviteLink)}>
-                    <DSIcon name="copy" size={14} />
-                    Copiar link
-                  </Button>
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => window.open(`mailto:?subject=${encodeURIComponent('Convite VFIT — Avaliação Completa')}&body=${encodeURIComponent(`Olá! Quero te convidar para me acompanhar no VFIT e completar minha avaliação física.\n\nCadastro: ${personalInviteLink}`)}`, '_blank')}
+                    onClick={() => navigator.clipboard.writeText(personalInviteLink)}
+                    className="rounded-full border px-4 text-[13px] font-medium shadow-none hover:opacity-80"
+                    style={{ borderColor: ios.separator, color: ios.text, backgroundColor: 'transparent' }}
                   >
-                    <DSIcon name="mail" size={14} />
-                    Email
+                    <DSIcon name="copy" size={13} style={{ color: ios.secondary }} />
+                    Link
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(`Olá! Quero te convidar para completar minha avaliação física no VFIT.\n\nCadastro: ${personalInviteLink}`)}`, '_blank')}
+                    className="rounded-full border px-4 text-[13px] font-medium shadow-none hover:opacity-80"
+                    style={{ borderColor: ios.separator, color: ios.text, backgroundColor: 'transparent' }}
                   >
-                    <DSIcon name="share2" size={14} />
+                    <DSIcon name="share2" size={13} style={{ color: ios.secondary }} />
                     WhatsApp
                   </Button>
                   <Button
-                    variant={showPersonalQr ? 'primary' : 'outline'}
                     size="sm"
                     onClick={() => setShowPersonalQr((v) => !v)}
+                    className="rounded-full border px-4 text-[13px] font-medium shadow-none hover:opacity-80"
+                    style={{
+                      borderColor: showPersonalQr ? ios.blue : ios.separator,
+                      color: showPersonalQr ? '#FFFFFF' : ios.text,
+                      backgroundColor: showPersonalQr ? ios.blue : 'transparent',
+                    }}
                   >
-                    <DSIcon name="qrcode" size={14} />
+                    <DSIcon name="qrcode" size={13} style={{ color: showPersonalQr ? '#FFFFFF' : ios.secondary }} />
                     QR Code
                   </Button>
                 </div>
@@ -575,11 +574,12 @@ export default function AvaliacoesPage() {
                       <img
                         src={personalInviteQrUrl}
                         alt="QR Code convite personal"
-                        className="h-44 w-44 rounded-2xl border border-white/10 bg-white p-2"
+                        className="h-44 w-44 rounded-2xl border bg-white p-2"
+                        style={{ borderColor: ios.separator }}
                       />
                     ) : (
-                      <div className="flex h-44 w-44 items-center justify-center rounded-2xl border border-white/10 bg-white/5">
-                        <DSIcon name="loader" size={20} className="animate-spin text-text-muted" />
+                      <div className="flex h-44 w-44 items-center justify-center rounded-2xl border" style={{ borderColor: ios.separator, backgroundColor: '#F9F9FB' }}>
+                        <DSIcon name="loader" size={20} className="animate-spin" style={{ color: ios.blue }} />
                       </div>
                     )}
                   </div>
