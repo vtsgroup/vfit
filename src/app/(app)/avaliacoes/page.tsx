@@ -41,28 +41,28 @@ function DeltaBadge({ current, previous, unit, invert }: {
 
 const TILE_TONES = {
   emerald: { 
-    iconBg: 'bg-gradient-to-br from-emerald-500/25 to-emerald-600/15', 
-    iconRing: 'ring-1 ring-emerald-400/40 shadow-[0_0_8px_rgba(16,185,129,0.3)]', 
-    icon: 'text-emerald-300', 
-    label: 'text-emerald-900/70',
-    border: 'border-t-emerald-300/40 border-r-emerald-200/25 border-b-emerald-400/20 border-l-emerald-200/25',
-    glow: 'shadow-[0_16px_40px_-12px_rgba(16,185,129,0.35),_inset_0_1px_0_rgba(255,255,255,0.4)]' 
+    iconBg: 'bg-gradient-to-br from-emerald-400/40 to-emerald-500/25', 
+    iconRing: 'ring-2 ring-emerald-300 shadow-[0_0_12px_rgba(16,185,129,0.5)]', 
+    icon: 'text-emerald-500', 
+    label: 'text-emerald-700 font-bold',
+    border: 'border-t-emerald-400/80 border-r-emerald-300/50 border-b-emerald-500/60 border-l-emerald-300/50',
+    glow: 'shadow-[0_12px_32px_-8px_rgba(16,185,129,0.5),inset_0_1px_0_rgba(255,255,255,0.8)]' 
   },
   blue: { 
-    iconBg: 'bg-gradient-to-br from-sky-500/25 to-sky-600/15', 
-    iconRing: 'ring-1 ring-sky-400/40 shadow-[0_0_8px_rgba(56,189,248,0.3)]', 
-    icon: 'text-sky-300', 
-    label: 'text-sky-900/70',
-    border: 'border-t-sky-300/40 border-r-sky-200/25 border-b-sky-400/20 border-l-sky-200/25',
-    glow: 'shadow-[0_16px_40px_-12px_rgba(56,189,248,0.3),_inset_0_1px_0_rgba(255,255,255,0.4)]' 
+    iconBg: 'bg-gradient-to-br from-sky-400/40 to-sky-500/25', 
+    iconRing: 'ring-2 ring-sky-300 shadow-[0_0_12px_rgba(56,189,248,0.5)]', 
+    icon: 'text-sky-500', 
+    label: 'text-sky-700 font-bold',
+    border: 'border-t-sky-400/80 border-r-sky-300/50 border-b-sky-500/60 border-l-sky-300/50',
+    glow: 'shadow-[0_12px_32px_-8px_rgba(56,189,248,0.5),inset_0_1px_0_rgba(255,255,255,0.8)]' 
   },
   amber: { 
-    iconBg: 'bg-gradient-to-br from-amber-500/25 to-amber-600/15', 
-    iconRing: 'ring-1 ring-amber-400/40 shadow-[0_0_8px_rgba(245,158,11,0.3)]', 
-    icon: 'text-amber-300', 
-    label: 'text-amber-900/70',
-    border: 'border-t-amber-300/40 border-r-amber-200/25 border-b-amber-400/20 border-l-amber-200/25',
-    glow: 'shadow-[0_16px_40px_-12px_rgba(245,158,11,0.3),_inset_0_1px_0_rgba(255,255,255,0.4)]' 
+    iconBg: 'bg-gradient-to-br from-amber-400/40 to-amber-500/25', 
+    iconRing: 'ring-2 ring-amber-300 shadow-[0_0_12px_rgba(245,158,11,0.5)]', 
+    icon: 'text-amber-600', 
+    label: 'text-amber-800 font-bold',
+    border: 'border-t-amber-400/80 border-r-amber-300/50 border-b-amber-500/60 border-l-amber-300/50',
+    glow: 'shadow-[0_12px_32px_-8px_rgba(245,158,11,0.5),inset_0_1px_0_rgba(255,255,255,0.8)]' 
   },
 } as const
 
@@ -78,18 +78,18 @@ function MetricTile({ icon, label, value, unit, tone, delta, valueClass }: {
 }) {
   const t = TILE_TONES[tone]
   return (
-    <div className={`relative overflow-hidden rounded-[16px] ${t.border} border bg-gradient-to-b from-white/95 to-white px-3 py-3.5 transition-all duration-150 active:translate-y-px ${t.glow}`}>
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-white/8 via-transparent to-transparent pointer-events-none" />
-      <div className="mb-2.5 flex items-center gap-2">
-        <div className={`relative flex h-7 w-7 items-center justify-center rounded-[10px] ${t.iconBg} ${t.iconRing} transition-all active:scale-95`}>
-          <DSIcon name={icon} size={12} className={t.icon} />
+    <div className={`relative overflow-hidden rounded-[14px] ${t.border} border-2 bg-gradient-to-b from-white/96 to-white px-3.5 py-4 transition-all duration-150 active:translate-y-px active:scale-95 ${t.glow}`}>
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-white/12 via-transparent to-transparent pointer-events-none" />
+      <div className="mb-3 flex items-center gap-2.5">
+        <div className={`relative flex h-8 w-8 items-center justify-center rounded-[11px] ${t.iconBg} ${t.iconRing} transition-all active:scale-90`}>
+          <DSIcon name={icon} size={14} className={t.icon} />
         </div>
-        <p className={`text-[9px] font-bold uppercase tracking-[0.12em] ${t.label}`}>{label}</p>
+        <p className={`text-[8px] font-extrabold uppercase tracking-[0.14em] ${t.label}`}>{label}</p>
       </div>
       <p className={`text-lg font-black tabular-nums leading-tight tracking-tight ${valueClass ?? 'text-slate-950'}`}>
-        {value}{unit && <span className="ml-1 text-[9px] font-bold text-slate-600">{unit}</span>}
+        {value}{unit && <span className="ml-1 text-[8px] font-bold text-slate-700">{unit}</span>}
       </p>
-      {delta && <div className="mt-2 leading-none text-[11px]">{delta}</div>}
+      {delta && <div className="mt-2.5 leading-none text-[10px]">{delta}</div>}
     </div>
   )
 }
@@ -100,15 +100,15 @@ function InfoChip({ children, tone = 'emerald' }: {
   tone?: 'emerald' | 'amber' | 'violet' | 'red' | 'blue'
 }) {
   const tones = {
-    emerald: { bg: 'bg-gradient-to-r from-emerald-500/20 to-emerald-600/15', border: 'border-emerald-400/50', text: 'text-emerald-700', dot: 'bg-emerald-500', glow: 'shadow-[0_4px_12px_-2px_rgba(16,185,129,0.25)]' },
-    amber: { bg: 'bg-gradient-to-r from-amber-500/20 to-amber-600/15', border: 'border-amber-400/50', text: 'text-amber-700', dot: 'bg-amber-500', glow: 'shadow-[0_4px_12px_-2px_rgba(245,158,11,0.25)]' },
-    violet: { bg: 'bg-gradient-to-r from-violet-500/20 to-violet-600/15', border: 'border-violet-400/50', text: 'text-violet-700', dot: 'bg-violet-500', glow: 'shadow-[0_4px_12px_-2px_rgba(139,92,246,0.25)]' },
-    red: { bg: 'bg-gradient-to-r from-red-500/20 to-red-600/15', border: 'border-red-400/50', text: 'text-red-700', dot: 'bg-red-500', glow: 'shadow-[0_4px_12px_-2px_rgba(239,68,68,0.25)]' },
-    blue: { bg: 'bg-gradient-to-r from-sky-500/20 to-sky-600/15', border: 'border-sky-400/50', text: 'text-sky-700', dot: 'bg-sky-500', glow: 'shadow-[0_4px_12px_-2px_rgba(56,189,248,0.25)]' },
+    emerald: { bg: 'bg-gradient-to-r from-emerald-500/28 to-emerald-600/20', border: 'border-emerald-400/80', text: 'text-emerald-800', dot: 'bg-emerald-600', glow: 'shadow-[0_6px_16px_-3px_rgba(16,185,129,0.4)]' },
+    amber: { bg: 'bg-gradient-to-r from-amber-500/28 to-amber-600/20', border: 'border-amber-400/80', text: 'text-amber-800', dot: 'bg-amber-600', glow: 'shadow-[0_6px_16px_-3px_rgba(245,158,11,0.4)]' },
+    violet: { bg: 'bg-gradient-to-r from-violet-500/28 to-violet-600/20', border: 'border-violet-400/80', text: 'text-violet-800', dot: 'bg-violet-600', glow: 'shadow-[0_6px_16px_-3px_rgba(139,92,246,0.4)]' },
+    red: { bg: 'bg-gradient-to-r from-red-500/28 to-red-600/20', border: 'border-red-400/80', text: 'text-red-800', dot: 'bg-red-600', glow: 'shadow-[0_6px_16px_-3px_rgba(239,68,68,0.4)]' },
+    blue: { bg: 'bg-gradient-to-r from-sky-500/28 to-sky-600/20', border: 'border-sky-400/80', text: 'text-sky-800', dot: 'bg-sky-600', glow: 'shadow-[0_6px_16px_-3px_rgba(56,189,248,0.4)]' },
   }[tone]
   return (
-    <span className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider transition-all ${tones.bg} ${tones.border} ${tones.text} ${tones.glow}`}>
-      <span className={`h-2 w-2 rounded-full ${tones.dot} shadow-[0_0_4px_currentColor] opacity-80`} />
+    <span className={`inline-flex items-center gap-2 rounded-full border-2 px-3.5 py-2 text-[9px] font-extrabold uppercase tracking-wider transition-all ${tones.bg} ${tones.border} ${tones.text} ${tones.glow}`}>
+      <span className={`h-2.5 w-2.5 rounded-full ${tones.dot} shadow-[0_0_6px_currentColor] animate-pulse opacity-90`} />
       {children}
     </span>
   )
@@ -328,10 +328,10 @@ export default function AvaliacoesPage() {
               <Link
                 key={a.id}
                 href={`/avaliacoes/${a.id}`}
-                className={`group relative block overflow-hidden rounded-[24px] border p-4 transition-all duration-150 active:translate-y-px ${isFirst ? 'border-t-emerald-300/60 border-r-emerald-200/30 border-b-emerald-400/25 border-l-emerald-200/30 bg-gradient-to-b from-white/98 to-white' : 'border-t-slate-200/80 border-r-slate-100/50 border-b-slate-300/40 border-l-slate-100/50 bg-gradient-to-b from-white/95 to-white/90 hover:border-t-slate-300/80 hover:border-b-slate-400/50'}`}
-                style={isFirst ? { boxShadow: '0 20px 50px -16px rgba(16,185,129,0.4), inset 0 1px 0 rgba(255,255,255,0.6)' } : { boxShadow: '0 12px 32px -12px rgba(15,23,42,0.15), inset 0 1px 0 rgba(255,255,255,0.3)' }}
+                className={`group relative block overflow-hidden rounded-[22px] border-2 p-4 transition-all duration-200 active:translate-y-px active:scale-[0.98] ${isFirst ? 'border-t-emerald-400/100 border-r-emerald-300/70 border-b-emerald-500/80 border-l-emerald-300/70 bg-gradient-to-b from-white/97 to-white/95' : 'border-t-slate-300/80 border-r-slate-200/50 border-b-slate-400/60 border-l-slate-200/50 bg-gradient-to-b from-white/96 to-white/90 hover:border-t-slate-400/90 hover:border-b-slate-500/70'}`}
+                style={isFirst ? { boxShadow: '0 24px 48px -16px rgba(16,185,129,0.6),inset_0_1px_0_rgba(255,255,255,1)' } : { boxShadow: '0 16px 40px -12px rgba(15,23,42,0.2),inset_0_1px_0_rgba(255,255,255,0.5)' }}
               >
-                {isFirst && <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-gradient-to-b from-emerald-500/20 via-emerald-500/10 to-transparent blur-3xl" />}
+                {isFirst && <div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-gradient-to-b from-emerald-400/25 via-emerald-500/12 to-transparent blur-3xl" />}
                 <div className="relative mb-4 flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
                     {isFirst && <InfoChip tone="emerald">Mais recente</InfoChip>}
@@ -406,7 +406,7 @@ export default function AvaliacoesPage() {
                 key={a.id}
                 href={`/avaliacoes/${a.id}`}
                 className={`group relative block overflow-hidden rounded-[24px] border p-4 transition-all duration-150 active:translate-y-px ${isFirst ? 'border-t-violet-300/60 border-r-violet-200/30 border-b-violet-400/25 border-l-violet-200/30 bg-gradient-to-b from-white/98 to-white' : 'border-t-slate-200/80 border-r-slate-100/50 border-b-slate-300/40 border-l-slate-100/50 bg-gradient-to-b from-white/95 to-white/90 hover:border-t-slate-300/80 hover:border-b-slate-400/50'}`}
-                style={isFirst ? { boxShadow: '0 20px 50px -16px rgba(139,92,246,0.35), inset 0 1px 0 rgba(255,255,255,0.6)' } : { boxShadow: '0 12px 32px -12px rgba(15,23,42,0.15), inset 0 1px 0 rgba(255,255,255,0.3)' }}
+                style={isFirst ? { boxShadow: '0 20px 50px -16px rgba(139,92,246,0.35),inset_0_1px_0_rgba(255,255,255,0.6)' } : { boxShadow: '0 12px 32px -12px rgba(15,23,42,0.15),inset_0_1px_0_rgba(255,255,255,0.3)' }}
               >
                 {isFirst && <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-gradient-to-b from-violet-500/20 via-violet-500/10 to-transparent blur-3xl" />}
                 <div className="relative mb-4 flex items-center justify-between">
