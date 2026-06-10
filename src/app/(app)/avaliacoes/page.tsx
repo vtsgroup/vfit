@@ -64,7 +64,7 @@ const TILE_TONES = {
   },
 } as const
 
-/** Metric tile: horizontal layout, number-first, minimal */
+/** Metric tile: number hero, clean glass */
 function MetricTile({ icon, label, value, unit, tone, delta, valueClass }: {
   icon: DSIconName
   label: string
@@ -76,19 +76,27 @@ function MetricTile({ icon, label, value, unit, tone, delta, valueClass }: {
 }) {
   const t = TILE_TONES[tone]
   return (
-    <div className={`relative flex flex-col justify-between rounded-2xl border ${t.accentBorder} bg-white/4 px-4 py-4 backdrop-blur-sm transition-all duration-150 active:scale-[0.97]`}>
-      {/* Top row: label + icon */}
-      <div className="mb-3 flex items-center justify-between">
-        <span className={`text-[9px] font-bold uppercase tracking-[0.13em] text-white/40`}>{label}</span>
-        <div className={`flex h-6 w-6 items-center justify-center rounded-lg ${t.accentBg}`}>
-          <DSIcon name={icon} size={11} className={t.iconColor} />
-        </div>
+    <div
+      className="relative flex flex-col rounded-2xl px-3.5 py-3.5 transition-all duration-150 active:scale-[0.95]"
+      style={{
+        background: 'rgba(255,255,255,0.055)',
+        border: '1px solid rgba(255,255,255,0.09)',
+        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08)',
+      }}
+    >
+      {/* Label + icon row */}
+      <div className="mb-2.5 flex items-center justify-between">
+        <span className="text-[8px] font-bold uppercase tracking-[0.14em] text-white/35">{label}</span>
+        <DSIcon name={icon} size={11} className={`${t.iconColor} opacity-70`} />
       </div>
-      {/* Value — big, dominant */}
-      <div className="flex items-baseline gap-1">
-        <span className={`text-[26px] font-black tabular-nums leading-none tracking-tight ${valueClass ?? 'text-white'}`}>{value}</span>
-        {unit && <span className="text-[10px] font-semibold text-white/40">{unit}</span>}
-      </div>
+      {/* BIG number */}
+      <span className={`text-[28px] font-black tabular-nums leading-none tracking-[-0.02em] ${valueClass ?? 'text-white'}`}>
+        {value}
+      </span>
+      {/* Unit below */}
+      {unit && (
+        <span className={`mt-0.5 text-[9px] font-semibold ${t.accent} opacity-70`}>{unit}</span>
+      )}
       {/* Delta */}
       {delta && <div className="mt-2">{delta}</div>}
     </div>
