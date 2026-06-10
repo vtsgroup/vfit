@@ -902,10 +902,13 @@ select option {
   --ds-glass-red-border: rgba(239, 68, 68, 0.18);
 
   --ds-mesh-primary: radial-gradient(ellipse 70% 50% at 15% 40%, rgba(34,197,94,0.06) 0%, transparent 60%),
-                     radial-gradient(ellipse 50% 40% at 85% 15%, rgba(132,204,22,0.04) 0%, transparent 55%);
-  --ds-mesh-subtle: radial-gradient(ellipse 60% 40% at 20% 50%, rgba(34,197,94,0.04) 0%, transparent 55%);
+                     radial-gradient(ellipse 50% 40% at 85% 15%, rgba(132,204,22,0.04) 0%, transparent 55%),
+                     radial-gradient(ellipse 40% 30% at 50% 95%, rgba(59,130,246,0.04) 0%, transparent 45%);
+  --ds-mesh-subtle: radial-gradient(ellipse 60% 40% at 20% 50%, rgba(34,197,94,0.04) 0%, transparent 55%),
+                    radial-gradient(ellipse 40% 30% at 80% 20%, rgba(132,204,22,0.04) 0%, transparent 50%);
   --ds-mesh-athletic: radial-gradient(ellipse 80% 60% at 10% 30%, rgba(34,197,94,0.07) 0%, transparent 55%),
-                      radial-gradient(ellipse 60% 50% at 90% 70%, rgba(132,204,22,0.04) 0%, transparent 50%);
+                      radial-gradient(ellipse 60% 50% at 90% 70%, rgba(132,204,22,0.04) 0%, transparent 50%),
+                      radial-gradient(ellipse 50% 40% at 50% 100%, rgba(52,211,153,0.05) 0%, transparent 40%);
 
   --ds-surface-shine: linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 50%, rgba(34,197,94,0.02) 100%);
   --ds-surface-shine-strong: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0) 40%, rgba(34,197,94,0.03) 100%);
@@ -3170,4 +3173,12 @@ html.light {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   animation: ds-shimmer-brand 3s linear infinite;
+}
+
+/* Custom Utility: text-56px for massive hero numbers (Figma-worthy assessment cards) */
+@layer utilities {
+  .text-56px {
+    font-size: 56px;
+    line-height: 1;
+  }
 }

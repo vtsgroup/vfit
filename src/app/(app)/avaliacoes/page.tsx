@@ -17,7 +17,7 @@ import { useMyAssessments } from '@/hooks/use-assessments'
 import { useLinkPersonalTrainer, useStudentProfile } from '@/hooks/use-student-app'
 import { useAuthStore } from '@/stores/auth-store'
 
-/** Delta badge — inline pill with arrow */
+/** Delta badge — minimal, semantic text only (no background pill) */
 function DeltaBadge({ current, previous, unit, invert }: {
   current: number
   previous: number
@@ -29,98 +29,76 @@ function DeltaBadge({ current, previous, unit, invert }: {
   const isPositive = diff > 0
   const isGood = invert ? !isPositive : isPositive
   return (
-    <span className={`inline-flex items-center gap-0.5 rounded-md px-1.5 py-0.5 text-[9px] font-bold tabular-nums ${
-      isGood ? 'bg-emerald-500/15 text-emerald-400' : 'bg-rose-500/15 text-rose-400'
+    <span className={`flex items-center gap-0.5 text-[10px] font-semibold tabular-nums ${
+      isGood ? 'text-emerald-400' : 'text-red-400'
     }`}>
-      {isPositive ? '▲' : '▼'} {Math.abs(diff)}{unit}
+      {isPositive ? '↑' : '↓'} {Math.abs(diff)}{unit}
     </span>
   )
 }
 
-const TILE_TONES = {
-  emerald: {
-    accent: 'text-emerald-400',
-    accentBg: 'bg-emerald-400/10',
-    accentBorder: 'border-emerald-400/20',
-    iconColor: 'text-emerald-400',
-    dot: 'bg-emerald-400',
-    divider: 'bg-emerald-400/15',
-  },
-  blue: {
-    accent: 'text-sky-400',
-    accentBg: 'bg-sky-400/10',
-    accentBorder: 'border-sky-400/20',
-    iconColor: 'text-sky-400',
-    dot: 'bg-sky-400',
-    divider: 'bg-sky-400/15',
-  },
-  amber: {
-    accent: 'text-amber-400',
-    accentBg: 'bg-amber-400/10',
-    accentBorder: 'border-amber-400/20',
-    iconColor: 'text-amber-400',
-    dot: 'bg-amber-400',
-    divider: 'bg-amber-400/15',
-  },
+// Simplified: metrics are typography-only (no colored tiles/backgrounds)
+// Color used only for semantic BMI status below the card
+const METRIC_TONES = {
+  primary: { label: 'text-slate-500', number: 'text-slate-900', unit: 'text-slate-500' },
+  secondary: { label: 'text-slate-500', number: 'text-slate-900', unit: 'text-slate-500' },
+  tertiary: { label: 'text-slate-500', number: 'text-slate-900', unit: 'text-slate-500' },
 } as const
 
-/** Metric tile: number hero, clean glass */
-function MetricTile({ icon, label, value, unit, tone, delta, valueClass }: {
+/** Metric tile: MASSIVE number, minimal layout (Figma-worthy) */
+function MetricTile({ icon, label, value, unit, delta }: {
   icon: DSIconName
   label: string
   value: string
   unit?: string
-  tone: keyof typeof TILE_TONES
   delta?: React.ReactNode
-  valueClass?: string
 }) {
-  const t = TILE_TONES[tone]
   return (
-    <div
-      className="relative flex flex-col rounded-2xl px-3.5 py-3.5 transition-all duration-150 active:scale-[0.95]"
-      style={{
-        background: 'rgba(255,255,255,0.055)',
-        border: '1px solid rgba(255,255,255,0.09)',
-        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08)',
-      }}
-    >
-      {/* Label + icon row */}
-      <div className="mb-2.5 flex items-center justify-between">
-        <span className="text-[8px] font-bold uppercase tracking-[0.14em] text-white/35">{label}</span>
-        <DSIcon name={icon} size={11} className={`${t.iconColor} opacity-70`} />
+    <div className="flex flex-col items-start gap-2">
+      {/* Label row: icon + uppercase label */}
+      <div className="flex items-center gap-1.5">
+        <DSIcon name={icon} size={13} className="text-slate-400" />
+        <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500">
+          {label}
+        </span>
       </div>
-      {/* BIG number */}
-      <span className={`text-[28px] font-black tabular-nums leading-none tracking-[-0.02em] ${valueClass ?? 'text-white'}`}>
+
+      {/* MASSIVE NUMBER — hero element */}
+      <span className="text-56px font-black leading-none tabular-nums tracking-[-0.03em] text-slate-900">
         {value}
       </span>
-      {/* Unit below */}
+
+      {/* Unit (below number, small) */}
       {unit && (
-        <span className={`mt-0.5 text-[9px] font-semibold ${t.accent} opacity-70`}>{unit}</span>
+        <span className="text-[11px] font-medium uppercase text-slate-500">
+          {unit}
+        </span>
       )}
-      {/* Delta */}
-      {delta && <div className="mt-2">{delta}</div>}
+
+      {/* Delta (if provided) */}
+      {delta && <div className="mt-1">{delta}</div>}
     </div>
   )
 }
 
-/** Status chip — clean, readable */
+/** Status chip — semantic color with icon, minimal pill */
 function InfoChip({ children, tone = 'emerald' }: {
   children: React.ReactNode
   tone?: 'emerald' | 'amber' | 'violet' | 'red' | 'blue'
 }) {
   const tones = {
-    emerald: 'bg-emerald-400/12 text-emerald-300 border-emerald-400/25',
-    amber:   'bg-amber-400/12 text-amber-300 border-amber-400/25',
-    violet:  'bg-violet-400/12 text-violet-300 border-violet-400/25',
-    red:     'bg-rose-400/12 text-rose-300 border-rose-400/25',
-    blue:    'bg-sky-400/12 text-sky-300 border-sky-400/25',
+    emerald: 'bg-emerald-500/12 text-emerald-600 border-emerald-200',
+    amber:   'bg-amber-500/12 text-amber-600 border-amber-200',
+    violet:  'bg-violet-500/12 text-violet-600 border-violet-200',
+    red:     'bg-red-500/12 text-red-600 border-red-200',
+    blue:    'bg-sky-500/12 text-sky-600 border-sky-200',
   }[tone]
   const dots = {
-    emerald: 'bg-emerald-400', amber: 'bg-amber-400', violet: 'bg-violet-400',
-    red: 'bg-rose-400', blue: 'bg-sky-400',
+    emerald: 'bg-emerald-500', amber: 'bg-amber-500', violet: 'bg-violet-500',
+    red: 'bg-red-500', blue: 'bg-sky-500',
   }[tone]
   return (
-    <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.08em] ${tones}`}>
+    <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.06em] ${tones}`}>
       <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${dots}`} />
       {children}
     </span>
@@ -338,52 +316,27 @@ export default function AvaliacoesPage() {
               <Link
                 key={a.id}
                 href={`/avaliacoes/${a.id}`}
-                className="group relative block overflow-hidden rounded-[28px] transition-all duration-200 active:scale-[0.985]"
-                style={{
-                  background: isFirst
-                    ? 'linear-gradient(145deg, rgba(15,23,42,0.97) 0%, rgba(6,30,20,0.95) 60%, rgba(5,46,22,0.90) 100%)'
-                    : 'linear-gradient(145deg, rgba(15,23,42,0.95) 0%, rgba(20,27,45,0.92) 100%)',
-                  boxShadow: isFirst
-                    ? '0 1px 0 rgba(52,211,153,0.2) inset, 0 -1px 0 rgba(0,0,0,0.4) inset, 0 24px 48px -12px rgba(0,0,0,0.6), 0 0 0 1px rgba(52,211,153,0.15)'
-                    : '0 1px 0 rgba(255,255,255,0.07) inset, 0 -1px 0 rgba(0,0,0,0.4) inset, 0 16px 32px -8px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06)',
-                }}
+                className="group relative block overflow-hidden rounded-xl border border-slate-200 bg-white transition-all duration-200 hover:border-slate-300 hover:shadow-sm active:scale-[0.98]"
               >
-                {/* Ambient emerald glow top-right for first */}
-                {isFirst && (
-                  <div className="pointer-events-none absolute right-0 top-0 h-32 w-32 rounded-full opacity-30"
-                    style={{ background: 'radial-gradient(circle at 100% 0%, rgba(52,211,153,0.35) 0%, transparent 70%)' }} />
-                )}
-
-                <div className="relative p-5">
-                  {/* ── Header ── */}
-                  <div className="mb-5 flex items-center justify-between">
+                <div className="p-6 sm:p-8">
+                  {/* ── Header: Date + Badge ── */}
+                  <div className="mb-6 flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      {isFirst ? (
-                        <InfoChip tone="emerald">Mais recente</InfoChip>
-                      ) : (
-                        <span className="text-[10px] font-medium text-white/30 uppercase tracking-[0.12em]">
-                          {date.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}
-                        </span>
-                      )}
+                      <span className="text-xs font-semibold uppercase tracking-widest text-slate-400">
+                        {date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
+                      </span>
+                      {isFirst && <InfoChip tone="emerald">Mais Recente</InfoChip>}
                     </div>
-                    <div className="flex items-center gap-2">
-                      {isFirst && (
-                        <span className="text-[11px] tabular-nums text-white/40">
-                          {date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
-                        </span>
-                      )}
-                      <div className={`flex h-7 w-7 items-center justify-center rounded-full transition-transform duration-200 group-hover:translate-x-0.5 ${isFirst ? 'bg-emerald-500/15' : 'bg-white/6'}`}>
-                        <DSIcon name="chevronRight" size={12} className={isFirst ? 'text-emerald-400' : 'text-white/30'} />
-                      </div>
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 transition-all duration-200 group-hover:translate-x-0.5 group-hover:border-slate-300">
+                      <DSIcon name="chevronRight" size={14} className="text-slate-400" />
                     </div>
                   </div>
 
-                  {/* ── 3 Metric Tiles ── */}
-                  <div className="grid grid-cols-3 gap-2.5">
+                  {/* ── 3 Metric Tiles (Typography-only, MASSIVE numbers) ── */}
+                  <div className="mb-6 grid grid-cols-3 gap-8">
                     <MetricTile
                       icon="scale"
                       label="Peso"
-                      tone="emerald"
                       value={fmt(a.weight_kg)}
                       unit={a.weight_kg != null ? 'kg' : ''}
                       delta={prev ? <DeltaBadge current={Number(a.weight_kg)} previous={Number(prev.weight_kg)} unit="kg" /> : undefined}
@@ -391,15 +344,13 @@ export default function AvaliacoesPage() {
                     <MetricTile
                       icon="activity"
                       label="IMC"
-                      tone="blue"
                       value={fmt(a.bmi)}
-                      valueClass={getBMIColor(Number(a.bmi))}
+                      unit={a.bmi != null ? '' : ''}
                       delta={prev ? <DeltaBadge current={Number(a.bmi)} previous={Number(prev.bmi)} unit="" /> : undefined}
                     />
                     <MetricTile
                       icon="percent"
                       label="Gordura"
-                      tone="amber"
                       value={fmt(a.body_fat_percentage)}
                       unit={a.body_fat_percentage != null ? '%' : ''}
                       delta={
@@ -410,9 +361,9 @@ export default function AvaliacoesPage() {
                     />
                   </div>
 
-                  {/* ── BMI Category ── */}
+                  {/* ── BMI Category: Semantic color chip ── */}
                   {a.bmi_category && (
-                    <div className="mt-4 border-t border-white/6 pt-3.5">
+                    <div className="border-t border-slate-100 pt-4">
                       <InfoChip tone={bmiTone(a.bmi)}>{a.bmi_category}</InfoChip>
                     </div>
                   )}
