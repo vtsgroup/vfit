@@ -29,23 +29,44 @@ function DeltaBadge({ current, previous, unit, invert }: {
   if (diff === 0) return null
   const isPositive = diff > 0
   const color = invert
-    ? (isPositive ? 'text-red-400' : 'text-brand-primary')
-    : (isPositive ? 'text-brand-primary' : 'text-red-400')
+    ? (isPositive ? 'text-red-500/80 font-bold' : 'text-emerald-600/80 font-bold')
+    : (isPositive ? 'text-emerald-600/80 font-bold' : 'text-red-500/80 font-bold')
 
   return (
-    <span className={`ml-1 text-[10px] font-semibold tabular-nums ${color}`}>
+    <span className={`ml-1.5 text-[9px] tabular-nums ${color}`}>
       {isPositive ? '↑' : '↓'}{Math.abs(diff)}{unit}
     </span>
   )
 }
 
 const TILE_TONES = {
-  emerald: { iconBg: 'bg-emerald-500/18', iconRing: 'ring-emerald-400/35', icon: 'text-emerald-300', glow: 'shadow-[0_12px_34px_-16px_rgba(16,185,129,0.7)]' },
-  blue: { iconBg: 'bg-sky-500/18', iconRing: 'ring-sky-400/35', icon: 'text-sky-300', glow: 'shadow-[0_12px_34px_-16px_rgba(56,189,248,0.65)]' },
-  amber: { iconBg: 'bg-amber-500/18', iconRing: 'ring-amber-400/35', icon: 'text-amber-300', glow: 'shadow-[0_12px_34px_-16px_rgba(245,158,11,0.65)]' },
+  emerald: { 
+    iconBg: 'bg-gradient-to-br from-emerald-500/25 to-emerald-600/15', 
+    iconRing: 'ring-1 ring-emerald-400/40 shadow-[0_0_8px_rgba(16,185,129,0.3)]', 
+    icon: 'text-emerald-300', 
+    label: 'text-emerald-900/70',
+    border: 'border-t-emerald-300/40 border-r-emerald-200/25 border-b-emerald-400/20 border-l-emerald-200/25',
+    glow: 'shadow-[0_16px_40px_-12px_rgba(16,185,129,0.35),inset_0_1px_0_rgba(255,255,255,0.4)]' 
+  },
+  blue: { 
+    iconBg: 'bg-gradient-to-br from-sky-500/25 to-sky-600/15', 
+    iconRing: 'ring-1 ring-sky-400/40 shadow-[0_0_8px_rgba(56,189,248,0.3)]', 
+    icon: 'text-sky-300', 
+    label: 'text-sky-900/70',
+    border: 'border-t-sky-300/40 border-r-sky-200/25 border-b-sky-400/20 border-l-sky-200/25',
+    glow: 'shadow-[0_16px_40px_-12px_rgba(56,189,248,0.3),inset_0_1px_0_rgba(255,255,255,0.4)]' 
+  },
+  amber: { 
+    iconBg: 'bg-gradient-to-br from-amber-500/25 to-amber-600/15', 
+    iconRing: 'ring-1 ring-amber-400/40 shadow-[0_0_8px_rgba(245,158,11,0.3)]', 
+    icon: 'text-amber-300', 
+    label: 'text-amber-900/70',
+    border: 'border-t-amber-300/40 border-r-amber-200/25 border-b-amber-400/20 border-l-amber-200/25',
+    glow: 'shadow-[0_16px_40px_-12px_rgba(245,158,11,0.3),inset_0_1px_0_rgba(255,255,255,0.4)]' 
+  },
 } as const
 
-/** Premium dark-glass metric tile */
+/** Premium 3D metric tile with enhanced contrast & depth */
 function MetricTile({ icon, label, value, unit, tone, delta, valueClass }: {
   icon: DSIconName
   label: string
@@ -57,36 +78,37 @@ function MetricTile({ icon, label, value, unit, tone, delta, valueClass }: {
 }) {
   const t = TILE_TONES[tone]
   return (
-    <div className={`relative overflow-hidden rounded-2xl border border-slate-200 bg-white px-2.5 py-3 shadow-[0_10px_28px_-24px_rgba(15,23,42,0.45)] ${t.glow}`}>
-      <div className="mb-2 flex items-center gap-1.5">
-        <div className={`flex h-6 w-6 items-center justify-center rounded-lg ${t.iconBg} ring-1 ${t.iconRing}`}>
-          <DSIcon name={icon} size={11} className={t.icon} />
+    <div className={`relative overflow-hidden rounded-[16px] ${t.border} border bg-gradient-to-b from-white/95 to-white px-3 py-3.5 transition-all duration-150 active:translate-y-px ${t.glow}`}>
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-white/8 via-transparent to-transparent pointer-events-none" />
+      <div className="mb-2.5 flex items-center gap-2">
+        <div className={`relative flex h-7 w-7 items-center justify-center rounded-[10px] ${t.iconBg} ${t.iconRing} transition-all active:scale-95`}>
+          <DSIcon name={icon} size={12} className={t.icon} />
         </div>
-        <p className="text-[10px] font-bold uppercase tracking-wider text-slate-600">{label}</p>
+        <p className={`text-[9px] font-bold uppercase tracking-[0.12em] ${t.label}`}>{label}</p>
       </div>
-      <p className={`text-xl font-black tabular-nums leading-none ${valueClass ?? 'text-slate-950'}`}>
-        {value}{unit && <span className="ml-0.5 text-[10px] font-bold text-slate-500">{unit}</span>}
+      <p className={`text-lg font-black tabular-nums leading-tight tracking-tight ${valueClass ?? 'text-slate-950'}`}>
+        {value}{unit && <span className="ml-1 text-[9px] font-bold text-slate-600">{unit}</span>}
       </p>
-      {delta && <div className="mt-1.5 leading-none">{delta}</div>}
+      {delta && <div className="mt-2 leading-none text-[11px]">{delta}</div>}
     </div>
   )
 }
 
-/** Subtle pill chip for classification labels */
+/** Premium glass chip with enhanced contrast & glow */
 function InfoChip({ children, tone = 'emerald' }: {
   children: React.ReactNode
   tone?: 'emerald' | 'amber' | 'violet' | 'red' | 'blue'
 }) {
   const tones = {
-    emerald: 'border-emerald-400/20 bg-emerald-500/10 text-emerald-300',
-    amber: 'border-amber-400/20 bg-amber-500/10 text-amber-300',
-    violet: 'border-violet-400/20 bg-violet-500/10 text-violet-300',
-    red: 'border-red-400/20 bg-red-500/10 text-red-300',
-    blue: 'border-sky-400/20 bg-sky-500/10 text-sky-300',
+    emerald: { bg: 'bg-gradient-to-r from-emerald-500/20 to-emerald-600/15', border: 'border-emerald-400/50', text: 'text-emerald-700', dot: 'bg-emerald-500', glow: 'shadow-[0_4px_12px_-2px_rgba(16,185,129,0.25)]' },
+    amber: { bg: 'bg-gradient-to-r from-amber-500/20 to-amber-600/15', border: 'border-amber-400/50', text: 'text-amber-700', dot: 'bg-amber-500', glow: 'shadow-[0_4px_12px_-2px_rgba(245,158,11,0.25)]' },
+    violet: { bg: 'bg-gradient-to-r from-violet-500/20 to-violet-600/15', border: 'border-violet-400/50', text: 'text-violet-700', dot: 'bg-violet-500', glow: 'shadow-[0_4px_12px_-2px_rgba(139,92,246,0.25)]' },
+    red: { bg: 'bg-gradient-to-r from-red-500/20 to-red-600/15', border: 'border-red-400/50', text: 'text-red-700', dot: 'bg-red-500', glow: 'shadow-[0_4px_12px_-2px_rgba(239,68,68,0.25)]' },
+    blue: { bg: 'bg-gradient-to-r from-sky-500/20 to-sky-600/15', border: 'border-sky-400/50', text: 'text-sky-700', dot: 'bg-sky-500', glow: 'shadow-[0_4px_12px_-2px_rgba(56,189,248,0.25)]' },
   }[tone]
   return (
-    <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider ${tones}`}>
-      <span className="h-1.5 w-1.5 rounded-full bg-current opacity-70" />
+    <span className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider transition-all ${tones.bg} ${tones.border} ${tones.text} ${tones.glow}`}>
+      <span className={`h-2 w-2 rounded-full ${tones.dot} shadow-[0_0_4px_currentColor] opacity-80`} />
       {children}
     </span>
   )
@@ -306,21 +328,21 @@ export default function AvaliacoesPage() {
               <Link
                 key={a.id}
                 href={`/avaliacoes/${a.id}`}
-                className={`group relative block overflow-hidden rounded-3xl border p-4 transition-all active:translate-y-px ${isFirst ? 'border-emerald-300 bg-white' : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50'}`}
-                style={isFirst ? { boxShadow: '0 18px 48px -24px rgba(16,185,129,0.55)' } : undefined}
+                className={`group relative block overflow-hidden rounded-[24px] border p-4 transition-all duration-150 active:translate-y-px ${isFirst ? 'border-t-emerald-300/60 border-r-emerald-200/30 border-b-emerald-400/25 border-l-emerald-200/30 bg-gradient-to-b from-white/98 to-white' : 'border-t-slate-200/80 border-r-slate-100/50 border-b-slate-300/40 border-l-slate-100/50 bg-gradient-to-b from-white/95 to-white/90 hover:border-t-slate-300/80 hover:border-b-slate-400/50'}`}
+                style={isFirst ? { boxShadow: '0 20px 50px -16px rgba(16,185,129,0.4),inset_0_1px_0_rgba(255,255,255,0.6)' } : { boxShadow: '0 12px 32px -12px rgba(15,23,42,0.15),inset_0_1px_0_rgba(255,255,255,0.3)' }}
               >
-                {isFirst && <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-emerald-500/12 blur-3xl" />}
-                <div className="relative mb-3 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
+                {isFirst && <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-gradient-to-b from-emerald-500/20 via-emerald-500/10 to-transparent blur-3xl" />}
+                <div className="relative mb-4 flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
                     {isFirst && <InfoChip tone="emerald">Mais recente</InfoChip>}
-                    <span className="text-[12px] font-semibold text-slate-600">
+                    <span className={`text-[11px] font-bold tabular-nums tracking-wide ${isFirst ? 'text-slate-700' : 'text-slate-600'}`}>
                       {date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
                     </span>
                   </div>
-                  <DSIcon name="chevronRight" size={16} className="text-slate-400 transition-transform group-hover:translate-x-0.5" />
+                  <DSIcon name="chevronRight" size={18} className={`transition-all duration-200 ${isFirst ? 'text-emerald-400/60 group-hover:text-emerald-500 group-hover:translate-x-1' : 'text-slate-400 group-hover:text-slate-500 group-hover:translate-x-0.5'}`} />
                 </div>
 
-                <div className="relative grid grid-cols-3 gap-2">
+                <div className="relative grid grid-cols-3 gap-2.5">
                   <MetricTile
                     icon="scale"
                     label="Peso"
@@ -352,7 +374,7 @@ export default function AvaliacoesPage() {
                 </div>
 
                 {a.bmi_category && (
-                  <div className="relative mt-3">
+                  <div className="relative mt-4 pt-3 border-t border-slate-200/50">
                     <InfoChip tone={bmiTone(a.bmi)}>{a.bmi_category}</InfoChip>
                   </div>
                 )}
@@ -383,31 +405,31 @@ export default function AvaliacoesPage() {
               <Link
                 key={a.id}
                 href={`/avaliacoes/${a.id}`}
-                className={`group relative block overflow-hidden rounded-3xl border p-4 transition-all active:translate-y-px ${isFirst ? 'border-violet-300 bg-white' : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50'}`}
-                style={isFirst ? { boxShadow: '0 18px 48px -24px rgba(139,92,246,0.5)' } : undefined}
+                className={`group relative block overflow-hidden rounded-[24px] border p-4 transition-all duration-150 active:translate-y-px ${isFirst ? 'border-t-violet-300/60 border-r-violet-200/30 border-b-violet-400/25 border-l-violet-200/30 bg-gradient-to-b from-white/98 to-white' : 'border-t-slate-200/80 border-r-slate-100/50 border-b-slate-300/40 border-l-slate-100/50 bg-gradient-to-b from-white/95 to-white/90 hover:border-t-slate-300/80 hover:border-b-slate-400/50'}`}
+                style={isFirst ? { boxShadow: '0 20px 50px -16px rgba(139,92,246,0.35),inset_0_1px_0_rgba(255,255,255,0.6)' } : { boxShadow: '0 12px 32px -12px rgba(15,23,42,0.15),inset_0_1px_0_rgba(255,255,255,0.3)' }}
               >
-                {isFirst && <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-violet-500/12 blur-3xl" />}
-                <div className="relative mb-3 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
+                {isFirst && <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-gradient-to-b from-violet-500/20 via-violet-500/10 to-transparent blur-3xl" />}
+                <div className="relative mb-4 flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
                     {isFirst && <InfoChip tone="violet">Mais recente</InfoChip>}
-                    <span className="text-[12px] font-semibold text-white">
+                    <span className={`text-[11px] font-bold tabular-nums tracking-wide ${isFirst ? 'text-slate-700' : 'text-slate-600'}`}>
                       {date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
                     </span>
                   </div>
-                  <DSIcon name="chevronRight" size={16} className="text-slate-400 transition-transform group-hover:translate-x-0.5" />
+                  <DSIcon name="chevronRight" size={18} className={`transition-all duration-200 ${isFirst ? 'text-violet-400/60 group-hover:text-violet-500 group-hover:translate-x-1' : 'text-slate-400 group-hover:text-slate-500 group-hover:translate-x-0.5'}`} />
                 </div>
 
-                <div className="relative grid grid-cols-3 gap-2">
+                <div className="relative grid grid-cols-3 gap-2.5">
                   <MetricTile icon="scale" label="Peso" tone="emerald" value={fmt(a.weight_kg)} unit={a.weight_kg != null ? 'kg' : ''} />
                   <MetricTile icon="activity" label="IMC" tone="blue" value={fmt(a.bmi)} valueClass={a.bmi != null ? getBMIColor(Number(a.bmi)) : undefined} />
                   <MetricTile icon="percent" label="Gordura" tone="amber" value={fmt(a.body_fat_percentage)} unit={a.body_fat_percentage != null ? '%' : ''} />
                 </div>
 
-                <div className="relative mt-3 flex flex-wrap items-center gap-2">
+                <div className="relative mt-4 flex flex-wrap items-center gap-2 pt-3 border-t border-slate-200/50">
                   {a.fat_classification && <InfoChip tone="violet">{a.fat_classification}</InfoChip>}
                   {personalName && (
-                    <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-violet-300/90">
-                      <DSIcon name="user" size={11} />
+                    <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-slate-700">
+                      <DSIcon name="user" size={12} className="text-violet-500/70" />
                       {personalName}
                     </span>
                   )}
