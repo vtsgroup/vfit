@@ -17,7 +17,7 @@ import { useMyAssessments } from '@/hooks/use-assessments'
 import { useLinkPersonalTrainer, useStudentProfile } from '@/hooks/use-student-app'
 import { useAuthStore } from '@/stores/auth-store'
 
-/** Delta badge — minimal, semantic text only (no background pill) */
+/** Delta pill — strong premium status for evolution changes */
 function DeltaBadge({ current, previous, unit, invert }: {
   current: number
   previous: number
@@ -28,55 +28,76 @@ function DeltaBadge({ current, previous, unit, invert }: {
   if (diff === 0) return null
   const isPositive = diff > 0
   const isGood = invert ? !isPositive : isPositive
+  const tone = isGood ? 'emerald' : 'rose'
+
   return (
-    <span className={`flex items-center gap-0.5 text-[10px] font-semibold tabular-nums ${
-      isGood ? 'text-emerald-400' : 'text-red-400'
+    <span className={`inline-flex items-center gap-1 rounded-full border px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] shadow-sm transition ${
+      isGood
+        ? 'border-emerald-300/25 bg-emerald-300/8 text-emerald-200'
+        : 'border-rose-300/25 bg-rose-300/8 text-rose-200'
     }`}>
-      {isPositive ? '↑' : '↓'} {Math.abs(diff)}{unit}
+      <span className={`text-xs ${tone === 'emerald' ? 'text-emerald-300' : 'text-rose-300'}`}>
+        {isPositive ? '▲' : '▼'}
+      </span>
+      <span>{Math.abs(diff)}{unit}</span>
     </span>
   )
 }
 
-// Simplified: metrics are typography-only (no colored tiles/backgrounds)
-// Color used only for semantic BMI status below the card
-const METRIC_TONES = {
-  primary: { label: 'text-slate-500', number: 'text-slate-900', unit: 'text-slate-500' },
-  secondary: { label: 'text-slate-500', number: 'text-slate-900', unit: 'text-slate-500' },
-  tertiary: { label: 'text-slate-500', number: 'text-slate-900', unit: 'text-slate-500' },
-} as const
+const METRIC_TONE_CLASSES: Record<string, string> = {
+  emerald: 'text-emerald-300',
+  blue: 'text-sky-300',
+  amber: 'text-amber-300',
+  red: 'text-rose-300',
+  slate: 'text-slate-200',
+}
 
-/** Metric tile: MASSIVE number, minimal layout (Figma-worthy) */
-function MetricTile({ icon, label, value, unit, delta }: {
+/** Metric tile: premium glass stat card */
+function MetricTile({
+  icon,
+  label,
+  value,
+  unit,
+  delta,
+  variant = 'mini',
+  tone = 'slate',
+  valueClass,
+}: {
   icon: DSIconName
   label: string
   value: string
   unit?: string
   delta?: React.ReactNode
+  variant?: 'hero' | 'mini'
+  tone?: 'emerald' | 'blue' | 'amber' | 'red' | 'slate'
+  valueClass?: string
 }) {
+  const accent = valueClass ?? METRIC_TONE_CLASSES[tone] ?? METRIC_TONE_CLASSES.slate
   return (
-    <div className="flex flex-col items-start gap-2">
-      {/* Label row: icon + uppercase label */}
-      <div className="flex items-center gap-1.5">
-        <DSIcon name={icon} size={13} className="text-slate-400" />
-        <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500">
+    <div className={`flex min-w-0 flex-col gap-3 rounded-3xl border border-white/10 bg-white/5 px-4 py-4 shadow-glass transition duration-300 ${
+      variant === 'hero' ? 'lg:px-5 lg:py-5' : ''
+    }`}>
+      <div className="flex items-center gap-3">
+        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-slate-200 ring-1 ring-white/10">
+          <DSIcon name={icon} size={16} />
+        </div>
+        <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-text-muted">
           {label}
         </span>
       </div>
 
-      {/* MASSIVE NUMBER — hero element */}
-      <span className="text-56px font-black leading-none tabular-nums tracking-[-0.03em] text-slate-900">
-        {value}
-      </span>
-
-      {/* Unit (below number, small) */}
-      {unit && (
-        <span className="text-[11px] font-medium uppercase text-slate-500">
-          {unit}
+      <div className="flex items-end gap-2 min-[400px]:items-baseline">
+        <span className={`font-black leading-none tabular-nums ${variant === 'hero' ? 'text-[3rem] sm:text-[3.75rem]' : 'text-3xl'} ${accent}`}>
+          {value}
         </span>
-      )}
+        {unit ? (
+          <span className="pb-1 text-xs uppercase tracking-[0.32em] text-text-muted">
+            {unit}
+          </span>
+        ) : null}
+      </div>
 
-      {/* Delta (if provided) */}
-      {delta && <div className="mt-1">{delta}</div>}
+      {delta ? <div>{delta}</div> : null}
     </div>
   )
 }
@@ -316,57 +337,87 @@ export default function AvaliacoesPage() {
               <Link
                 key={a.id}
                 href={`/avaliacoes/${a.id}`}
-                className="group relative block overflow-hidden rounded-xl border border-slate-200 bg-white transition-all duration-200 hover:border-slate-300 hover:shadow-sm active:scale-[0.98]"
+                className="group relative block overflow-hidden rounded-[32px] border border-white/10 bg-slate-950/95 shadow-glass transition duration-300 hover:-translate-y-0.5 hover:shadow-glow-primary"
               >
-                <div className="p-6 sm:p-8">
-                  {/* ── Header: Date + Badge ── */}
-                  <div className="mb-6 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-semibold uppercase tracking-widest text-slate-400">
-                        {date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
+                <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_top_left,rgba(34,197,94,0.18),transparent_24%),radial-gradient(circle_at_bottom_right,rgba(59,130,246,0.12),transparent_22%)]" />
+                <div className="absolute -left-6 top-16 h-28 w-28 rounded-full bg-emerald-500/10 blur-3xl" />
+                <div className="absolute -right-10 bottom-8 h-36 w-36 rounded-full bg-sky-500/8 blur-3xl" />
+                <div className="relative p-6 sm:p-7">
+                  <div className="mb-5 flex items-start justify-between gap-4">
+                    <div className="min-w-0">
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-text-muted">
+                        Avaliação
+                      </p>
+                      <h2 className="mt-2 max-w-[12rem] text-xl font-black leading-tight text-white">
+                        {date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}
+                      </h2>
+                    </div>
+                    <div className="flex items-center gap-2 rounded-full border border-emerald-300/20 bg-white/5 px-3 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-emerald-300">
+                      <DSIcon name="sparkles" size={14} className="text-emerald-300" />
+                      {isFirst ? 'Mais recente' : 'Histórico'}
+                    </div>
+                  </div>
+
+                  <div className="grid gap-4 lg:grid-cols-[1.7fr_1fr]">
+                    <div className="rounded-[28px] border border-white/10 bg-slate-950/90 px-5 py-6 shadow-[0_30px_90px_-38px_rgba(34,197,94,0.45)]">
+                      <div className="flex items-center justify-between gap-3">
+                        <div>
+                          <p className="text-[11px] uppercase tracking-[0.24em] text-text-muted">
+                            Peso atual
+                          </p>
+                          <p className="mt-3 text-[5.1rem] font-black leading-[0.92] tracking-[-0.05em] text-white sm:text-[5.5rem]">
+                            {fmt(a.weight_kg)}
+                            <span className="ml-2 align-super text-sm uppercase tracking-[0.28em] text-text-muted">
+                              kg
+                            </span>
+                          </p>
+                        </div>
+                        <div className="flex h-14 w-14 items-center justify-center rounded-3xl border border-white/10 bg-white/5 text-slate-200">
+                          <DSIcon name="scale" size={22} />
+                        </div>
+                      </div>
+                      <p className="mt-5 max-w-[24rem] text-sm leading-6 text-text-secondary">
+                        Uma leitura premium com contraste forte e espaço para interpretar sua evolução com clareza.
+                      </p>
+                    </div>
+
+                    <div className="grid gap-4">
+                      <MetricTile
+                        icon="activity"
+                        label="IMC"
+                        value={fmt(a.bmi)}
+                        variant="mini"
+                        tone="blue"
+                        delta={prev ? <DeltaBadge current={Number(a.bmi)} previous={Number(prev.bmi)} unit="" /> : undefined}
+                      />
+                      <MetricTile
+                        icon="percent"
+                        label="Gordura"
+                        value={fmt(a.body_fat_percentage)}
+                        unit={a.body_fat_percentage != null ? '%' : ''}
+                        variant="mini"
+                        tone="amber"
+                        delta={
+                          prev && a.body_fat_percentage != null && prev.body_fat_percentage != null ? (
+                            <DeltaBadge current={Number(a.body_fat_percentage)} previous={Number(prev.body_fat_percentage)} unit="%" invert />
+                          ) : undefined
+                        }
+                      />
+                    </div>
+                  </div>
+
+                  <div className="mt-5 flex flex-wrap items-center gap-3 border-t border-white/10 pt-4">
+                    {a.bmi_category && <InfoChip tone={bmiTone(a.bmi)}>{a.bmi_category}</InfoChip>}
+                    {prev && (
+                      <span className="text-[10px] uppercase tracking-[0.32em] text-text-muted">
+                        Tendência baseada na última avaliação
                       </span>
-                      {isFirst && <InfoChip tone="emerald">Mais Recente</InfoChip>}
-                    </div>
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 transition-all duration-200 group-hover:translate-x-0.5 group-hover:border-slate-300">
-                      <DSIcon name="chevronRight" size={14} className="text-slate-400" />
+                    )}
+                    <div className="ml-auto inline-flex h-11 items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 text-xs font-semibold uppercase tracking-[0.24em] text-text-muted">
+                      <DSIcon name="chevronRight" size={12} className="text-slate-300" />
+                      Ver detalhes
                     </div>
                   </div>
-
-                  {/* ── 3 Metric Tiles (Typography-only, MASSIVE numbers) ── */}
-                  <div className="mb-6 grid grid-cols-3 gap-8">
-                    <MetricTile
-                      icon="scale"
-                      label="Peso"
-                      value={fmt(a.weight_kg)}
-                      unit={a.weight_kg != null ? 'kg' : ''}
-                      delta={prev ? <DeltaBadge current={Number(a.weight_kg)} previous={Number(prev.weight_kg)} unit="kg" /> : undefined}
-                    />
-                    <MetricTile
-                      icon="activity"
-                      label="IMC"
-                      value={fmt(a.bmi)}
-                      unit={a.bmi != null ? '' : ''}
-                      delta={prev ? <DeltaBadge current={Number(a.bmi)} previous={Number(prev.bmi)} unit="" /> : undefined}
-                    />
-                    <MetricTile
-                      icon="percent"
-                      label="Gordura"
-                      value={fmt(a.body_fat_percentage)}
-                      unit={a.body_fat_percentage != null ? '%' : ''}
-                      delta={
-                        prev && a.body_fat_percentage != null && prev.body_fat_percentage != null ? (
-                          <DeltaBadge current={Number(a.body_fat_percentage)} previous={Number(prev.body_fat_percentage)} unit="%" invert />
-                        ) : undefined
-                      }
-                    />
-                  </div>
-
-                  {/* ── BMI Category: Semantic color chip ── */}
-                  {a.bmi_category && (
-                    <div className="border-t border-slate-100 pt-4">
-                      <InfoChip tone={bmiTone(a.bmi)}>{a.bmi_category}</InfoChip>
-                    </div>
-                  )}
                 </div>
               </Link>
             )
@@ -395,57 +446,47 @@ export default function AvaliacoesPage() {
               <Link
                 key={a.id}
                 href={`/avaliacoes/${a.id}`}
-                className="group relative block overflow-hidden rounded-[28px] transition-all duration-200 active:scale-[0.985]"
-                style={{
-                  background: isFirst
-                    ? 'linear-gradient(145deg, rgba(15,23,42,0.97) 0%, rgba(20,10,45,0.95) 60%, rgba(30,15,60,0.90) 100%)'
-                    : 'linear-gradient(145deg, rgba(15,23,42,0.95) 0%, rgba(20,27,45,0.92) 100%)',
-                  boxShadow: isFirst
-                    ? '0 1px 0 rgba(167,139,250,0.2) inset, 0 -1px 0 rgba(0,0,0,0.4) inset, 0 24px 48px -12px rgba(0,0,0,0.6), 0 0 0 1px rgba(167,139,250,0.15)'
-                    : '0 1px 0 rgba(255,255,255,0.07) inset, 0 -1px 0 rgba(0,0,0,0.4) inset, 0 16px 32px -8px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06)',
-                }}
+                className="group relative block overflow-hidden rounded-[32px] border border-white/10 bg-slate-950/95 shadow-glass transition duration-300 hover:-translate-y-0.5 hover:shadow-glow-primary"
               >
-                {isFirst && (
-                  <div className="pointer-events-none absolute right-0 top-0 h-32 w-32 rounded-full opacity-25"
-                    style={{ background: 'radial-gradient(circle at 100% 0%, rgba(167,139,250,0.5) 0%, transparent 70%)' }} />
-                )}
-                <div className="relative p-5">
-                  <div className="mb-5 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      {isFirst ? (
-                        <InfoChip tone="violet">Mais recente</InfoChip>
-                      ) : (
-                        <span className="text-[10px] font-medium text-white/30 uppercase tracking-[0.12em]">
-                          {date.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}
-                        </span>
-                      )}
+                <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_top_left,rgba(167,139,250,0.16),transparent_25%),radial-gradient(circle_at_bottom_right,rgba(34,197,94,0.12),transparent_22%)]" />
+                <div className="absolute -right-10 top-8 h-24 w-24 rounded-full bg-violet-500/10 blur-3xl" />
+                <div className="absolute -left-10 bottom-10 h-32 w-32 rounded-full bg-emerald-500/8 blur-3xl" />
+                <div className="relative p-5 sm:p-6">
+                  <div className="mb-5 flex items-center justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="text-[10px] uppercase tracking-[0.26em] text-text-muted">
+                        Avaliação completa
+                      </p>
+                      <p className="mt-2 text-sm font-bold uppercase tracking-[0.2em] text-white/85">
+                        {date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
+                      </p>
                     </div>
-                    <div className="flex items-center gap-2">
-                      {isFirst && (
-                        <span className="text-[11px] tabular-nums text-white/40">
-                          {date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
-                        </span>
-                      )}
-                      <div className={`flex h-7 w-7 items-center justify-center rounded-full transition-transform duration-200 group-hover:translate-x-0.5 ${isFirst ? 'bg-violet-500/15' : 'bg-white/6'}`}>
-                        <DSIcon name="chevronRight" size={12} className={isFirst ? 'text-violet-400' : 'text-white/30'} />
-                      </div>
+                    <div className={`inline-flex items-center gap-2 rounded-full px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] transition ${
+                      isFirst ? 'border border-violet-300/20 bg-violet-500/10 text-violet-200' : 'border border-white/10 bg-white/5 text-text-muted'
+                    }`}>
+                      {isFirst ? <DSIcon name="sparkles" size={14} /> : <DSIcon name="clock" size={14} />}
+                      {isFirst ? 'Mais recente' : 'Histórico'}
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-3 gap-2.5">
+                  <div className="grid gap-3 sm:grid-cols-3">
                     <MetricTile icon="scale" label="Peso" tone="emerald" value={fmt(a.weight_kg)} unit={a.weight_kg != null ? 'kg' : ''} />
                     <MetricTile icon="activity" label="IMC" tone="blue" value={fmt(a.bmi)} valueClass={a.bmi != null ? getBMIColor(Number(a.bmi)) : undefined} />
                     <MetricTile icon="percent" label="Gordura" tone="amber" value={fmt(a.body_fat_percentage)} unit={a.body_fat_percentage != null ? '%' : ''} />
                   </div>
 
-                  <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-white/6 pt-3.5">
+                  <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-white/10 pt-4">
                     {a.fat_classification && <InfoChip tone="violet">{a.fat_classification}</InfoChip>}
                     {personalName && (
-                      <span className="inline-flex items-center gap-1.5 text-[10px] font-medium text-white/35">
-                        <DSIcon name="user" size={10} className="text-violet-400/50" />
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-2 text-[10px] font-medium uppercase tracking-[0.2em] text-text-muted">
+                        <DSIcon name="user" size={10} className="text-slate-200" />
                         {personalName}
                       </span>
                     )}
+                    <div className="ml-auto inline-flex h-11 items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 text-xs font-semibold uppercase tracking-[0.24em] text-text-muted">
+                      <DSIcon name="chevronRight" size={12} className="text-slate-300" />
+                      Ver detalhes
+                    </div>
                   </div>
                 </div>
               </Link>
