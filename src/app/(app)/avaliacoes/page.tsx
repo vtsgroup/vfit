@@ -46,7 +46,7 @@ const TILE_TONES = {
     icon: 'text-emerald-300', 
     label: 'text-emerald-900/70',
     border: 'border-t-emerald-300/40 border-r-emerald-200/25 border-b-emerald-400/20 border-l-emerald-200/25',
-    glow: 'shadow-[0_16px_40px_-12px_rgba(16,185,129,0.35),inset_0_1px_0_rgba(255,255,255,0.4)]' 
+    glow: 'shadow-[0_16px_40px_-12px_rgba(16,185,129,0.35),_inset_0_1px_0_rgba(255,255,255,0.4)]' 
   },
   blue: { 
     iconBg: 'bg-gradient-to-br from-sky-500/25 to-sky-600/15', 
@@ -54,7 +54,7 @@ const TILE_TONES = {
     icon: 'text-sky-300', 
     label: 'text-sky-900/70',
     border: 'border-t-sky-300/40 border-r-sky-200/25 border-b-sky-400/20 border-l-sky-200/25',
-    glow: 'shadow-[0_16px_40px_-12px_rgba(56,189,248,0.3),inset_0_1px_0_rgba(255,255,255,0.4)]' 
+    glow: 'shadow-[0_16px_40px_-12px_rgba(56,189,248,0.3),_inset_0_1px_0_rgba(255,255,255,0.4)]' 
   },
   amber: { 
     iconBg: 'bg-gradient-to-br from-amber-500/25 to-amber-600/15', 
@@ -62,7 +62,7 @@ const TILE_TONES = {
     icon: 'text-amber-300', 
     label: 'text-amber-900/70',
     border: 'border-t-amber-300/40 border-r-amber-200/25 border-b-amber-400/20 border-l-amber-200/25',
-    glow: 'shadow-[0_16px_40px_-12px_rgba(245,158,11,0.3),inset_0_1px_0_rgba(255,255,255,0.4)]' 
+    glow: 'shadow-[0_16px_40px_-12px_rgba(245,158,11,0.3),_inset_0_1px_0_rgba(255,255,255,0.4)]' 
   },
 } as const
 
@@ -329,7 +329,7 @@ export default function AvaliacoesPage() {
                 key={a.id}
                 href={`/avaliacoes/${a.id}`}
                 className={`group relative block overflow-hidden rounded-[24px] border p-4 transition-all duration-150 active:translate-y-px ${isFirst ? 'border-t-emerald-300/60 border-r-emerald-200/30 border-b-emerald-400/25 border-l-emerald-200/30 bg-gradient-to-b from-white/98 to-white' : 'border-t-slate-200/80 border-r-slate-100/50 border-b-slate-300/40 border-l-slate-100/50 bg-gradient-to-b from-white/95 to-white/90 hover:border-t-slate-300/80 hover:border-b-slate-400/50'}`}
-                style={isFirst ? { boxShadow: '0 20px 50px -16px rgba(16,185,129,0.4),inset_0_1px_0_rgba(255,255,255,0.6)' } : { boxShadow: '0 12px 32px -12px rgba(15,23,42,0.15),inset_0_1px_0_rgba(255,255,255,0.3)' }}
+                style={isFirst ? { boxShadow: '0 20px 50px -16px rgba(16,185,129,0.4), inset 0 1px 0 rgba(255,255,255,0.6)' } : { boxShadow: '0 12px 32px -12px rgba(15,23,42,0.15), inset 0 1px 0 rgba(255,255,255,0.3)' }}
               >
                 {isFirst && <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-gradient-to-b from-emerald-500/20 via-emerald-500/10 to-transparent blur-3xl" />}
                 <div className="relative mb-4 flex items-center justify-between">
@@ -406,7 +406,7 @@ export default function AvaliacoesPage() {
                 key={a.id}
                 href={`/avaliacoes/${a.id}`}
                 className={`group relative block overflow-hidden rounded-[24px] border p-4 transition-all duration-150 active:translate-y-px ${isFirst ? 'border-t-violet-300/60 border-r-violet-200/30 border-b-violet-400/25 border-l-violet-200/30 bg-gradient-to-b from-white/98 to-white' : 'border-t-slate-200/80 border-r-slate-100/50 border-b-slate-300/40 border-l-slate-100/50 bg-gradient-to-b from-white/95 to-white/90 hover:border-t-slate-300/80 hover:border-b-slate-400/50'}`}
-                style={isFirst ? { boxShadow: '0 20px 50px -16px rgba(139,92,246,0.35),inset_0_1px_0_rgba(255,255,255,0.6)' } : { boxShadow: '0 12px 32px -12px rgba(15,23,42,0.15),inset_0_1px_0_rgba(255,255,255,0.3)' }}
+                style={isFirst ? { boxShadow: '0 20px 50px -16px rgba(139,92,246,0.35), inset 0 1px 0 rgba(255,255,255,0.6)' } : { boxShadow: '0 12px 32px -12px rgba(15,23,42,0.15), inset 0 1px 0 rgba(255,255,255,0.3)' }}
               >
                 {isFirst && <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-gradient-to-b from-violet-500/20 via-violet-500/10 to-transparent blur-3xl" />}
                 <div className="relative mb-4 flex items-center justify-between">
