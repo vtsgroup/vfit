@@ -17,7 +17,7 @@ import { useMyAssessments } from '@/hooks/use-assessments'
 import { useLinkPersonalTrainer, useStudentProfile } from '@/hooks/use-student-app'
 import { useAuthStore } from '@/stores/auth-store'
 
-/** Format delta with sign and color */
+/** Delta badge — inline pill with arrow */
 function DeltaBadge({ current, previous, unit, invert }: {
   current: number
   previous: number
@@ -29,56 +29,42 @@ function DeltaBadge({ current, previous, unit, invert }: {
   const isPositive = diff > 0
   const isGood = invert ? !isPositive : isPositive
   return (
-    <span className={`inline-flex items-center gap-0.5 rounded-full px-2 py-0.5 text-[9px] font-black tabular-nums ${
-      isGood
-        ? 'bg-emerald-500/20 text-emerald-300 ring-1 ring-emerald-500/30'
-        : 'bg-red-500/20 text-red-300 ring-1 ring-red-500/30'
+    <span className={`inline-flex items-center gap-0.5 rounded-md px-1.5 py-0.5 text-[9px] font-bold tabular-nums ${
+      isGood ? 'bg-emerald-500/15 text-emerald-400' : 'bg-rose-500/15 text-rose-400'
     }`}>
-      {isPositive ? '↑' : '↓'}{Math.abs(diff)}{unit}
+      {isPositive ? '▲' : '▼'} {Math.abs(diff)}{unit}
     </span>
   )
 }
 
 const TILE_TONES = {
   emerald: {
-    // Card background: dark glass com tint verde
-    card: 'bg-gradient-to-br from-emerald-950/80 via-emerald-900/60 to-slate-900/80',
-    border: 'border-emerald-500/30',
-    glow: 'shadow-[0_8px_24px_-6px_rgba(16,185,129,0.45),inset_0_1px_0_rgba(52,211,153,0.15)]',
-    // Ícone: círculo sólido colorido
-    iconBg: 'bg-gradient-to-br from-emerald-400 to-emerald-600',
-    iconShadow: 'shadow-[0_4px_12px_rgba(16,185,129,0.6)]',
-    icon: 'text-white',
-    // Tipografia
-    label: 'text-emerald-300/80',
-    value: 'text-white',
-    unit: 'text-emerald-300/70',
+    accent: 'text-emerald-400',
+    accentBg: 'bg-emerald-400/10',
+    accentBorder: 'border-emerald-400/20',
+    iconColor: 'text-emerald-400',
+    dot: 'bg-emerald-400',
+    divider: 'bg-emerald-400/15',
   },
   blue: {
-    card: 'bg-gradient-to-br from-sky-950/80 via-sky-900/60 to-slate-900/80',
-    border: 'border-sky-500/30',
-    glow: 'shadow-[0_8px_24px_-6px_rgba(14,165,233,0.45),inset_0_1px_0_rgba(56,189,248,0.15)]',
-    iconBg: 'bg-gradient-to-br from-sky-400 to-sky-600',
-    iconShadow: 'shadow-[0_4px_12px_rgba(14,165,233,0.6)]',
-    icon: 'text-white',
-    label: 'text-sky-300/80',
-    value: 'text-white',
-    unit: 'text-sky-300/70',
+    accent: 'text-sky-400',
+    accentBg: 'bg-sky-400/10',
+    accentBorder: 'border-sky-400/20',
+    iconColor: 'text-sky-400',
+    dot: 'bg-sky-400',
+    divider: 'bg-sky-400/15',
   },
   amber: {
-    card: 'bg-gradient-to-br from-amber-950/80 via-amber-900/60 to-slate-900/80',
-    border: 'border-amber-500/30',
-    glow: 'shadow-[0_8px_24px_-6px_rgba(245,158,11,0.45),inset_0_1px_0_rgba(251,191,36,0.15)]',
-    iconBg: 'bg-gradient-to-br from-amber-400 to-amber-600',
-    iconShadow: 'shadow-[0_4px_12px_rgba(245,158,11,0.6)]',
-    icon: 'text-white',
-    label: 'text-amber-300/80',
-    value: 'text-white',
-    unit: 'text-amber-300/70',
+    accent: 'text-amber-400',
+    accentBg: 'bg-amber-400/10',
+    accentBorder: 'border-amber-400/20',
+    iconColor: 'text-amber-400',
+    dot: 'bg-amber-400',
+    divider: 'bg-amber-400/15',
   },
 } as const
 
-/** Ultra-premium dark glass metric tile */
+/** Metric tile: horizontal layout, number-first, minimal */
 function MetricTile({ icon, label, value, unit, tone, delta, valueClass }: {
   icon: DSIconName
   label: string
@@ -90,39 +76,44 @@ function MetricTile({ icon, label, value, unit, tone, delta, valueClass }: {
 }) {
   const t = TILE_TONES[tone]
   return (
-    <div className={`relative overflow-hidden rounded-2xl border ${t.card} ${t.border} ${t.glow} px-3 py-3.5 transition-all duration-200 active:scale-95`}>
-      {/* Shimmer highlight ao topo */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-      {/* Ícone circular sólido */}
-      <div className={`mb-2.5 flex h-8 w-8 items-center justify-center rounded-full ${t.iconBg} ${t.iconShadow}`}>
-        <DSIcon name={icon} size={14} className={t.icon} />
+    <div className={`relative flex flex-col justify-between rounded-2xl border ${t.accentBorder} bg-white/4 px-4 py-4 backdrop-blur-sm transition-all duration-150 active:scale-[0.97]`}>
+      {/* Top row: label + icon */}
+      <div className="mb-3 flex items-center justify-between">
+        <span className={`text-[9px] font-bold uppercase tracking-[0.13em] text-white/40`}>{label}</span>
+        <div className={`flex h-6 w-6 items-center justify-center rounded-lg ${t.accentBg}`}>
+          <DSIcon name={icon} size={11} className={t.iconColor} />
+        </div>
       </div>
-      {/* Label */}
-      <p className={`mb-1.5 text-[8px] font-bold uppercase tracking-[0.15em] ${t.label}`}>{label}</p>
-      {/* Valor principal */}
-      <p className={`text-[18px] font-black tabular-nums leading-none tracking-tight ${valueClass ?? t.value}`}>
-        {value}<span className={`ml-0.5 text-[9px] font-semibold ${t.unit}`}>{unit}</span>
-      </p>
+      {/* Value — big, dominant */}
+      <div className="flex items-baseline gap-1">
+        <span className={`text-[26px] font-black tabular-nums leading-none tracking-tight ${valueClass ?? 'text-white'}`}>{value}</span>
+        {unit && <span className="text-[10px] font-semibold text-white/40">{unit}</span>}
+      </div>
+      {/* Delta */}
       {delta && <div className="mt-2">{delta}</div>}
     </div>
   )
 }
 
-/** Ultra-premium status chip — pill com glow */
+/** Status chip — clean, readable */
 function InfoChip({ children, tone = 'emerald' }: {
   children: React.ReactNode
   tone?: 'emerald' | 'amber' | 'violet' | 'red' | 'blue'
 }) {
   const tones = {
-    emerald: { bg: 'bg-emerald-500/15 border-emerald-400/40', text: 'text-emerald-300', dot: 'bg-emerald-400', glow: 'shadow-[0_0_16px_rgba(16,185,129,0.25)]' },
-    amber:   { bg: 'bg-amber-500/15 border-amber-400/40',   text: 'text-amber-300',   dot: 'bg-amber-400',   glow: 'shadow-[0_0_16px_rgba(245,158,11,0.25)]' },
-    violet:  { bg: 'bg-violet-500/15 border-violet-400/40', text: 'text-violet-300',  dot: 'bg-violet-400',  glow: 'shadow-[0_0_16px_rgba(139,92,246,0.25)]' },
-    red:     { bg: 'bg-red-500/15 border-red-400/40',       text: 'text-red-300',     dot: 'bg-red-400',     glow: 'shadow-[0_0_16px_rgba(239,68,68,0.25)]' },
-    blue:    { bg: 'bg-sky-500/15 border-sky-400/40',       text: 'text-sky-300',     dot: 'bg-sky-400',     glow: 'shadow-[0_0_16px_rgba(56,189,248,0.25)]' },
+    emerald: 'bg-emerald-400/12 text-emerald-300 border-emerald-400/25',
+    amber:   'bg-amber-400/12 text-amber-300 border-amber-400/25',
+    violet:  'bg-violet-400/12 text-violet-300 border-violet-400/25',
+    red:     'bg-rose-400/12 text-rose-300 border-rose-400/25',
+    blue:    'bg-sky-400/12 text-sky-300 border-sky-400/25',
+  }[tone]
+  const dots = {
+    emerald: 'bg-emerald-400', amber: 'bg-amber-400', violet: 'bg-violet-400',
+    red: 'bg-rose-400', blue: 'bg-sky-400',
   }[tone]
   return (
-    <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.1em] backdrop-blur-sm ${tones.bg} ${tones.text} ${tones.glow}`}>
-      <span className={`h-1.5 w-1.5 rounded-full ${tones.dot} animate-pulse`} />
+    <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.08em] ${tones}`}>
+      <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${dots}`} />
       {children}
     </span>
   )
@@ -330,10 +321,7 @@ export default function AvaliacoesPage() {
       {/* Self-assessments — the data hero */}
       {hasSelf && (
         <section className="space-y-3">
-          <div className="flex items-center gap-2 px-0.5">
-            <DSIcon name="user" size={13} className="text-emerald-400" />
-            <h2 className="text-[12px] font-bold uppercase tracking-[0.16em] text-zinc-300">Minhas avaliações</h2>
-          </div>
+          <p className="px-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-white/30">Minhas avaliações</p>
           {displayAssessments.map((a, i) => {
             const date = new Date(a.created_at)
             const isFirst = i === 0
@@ -342,76 +330,85 @@ export default function AvaliacoesPage() {
               <Link
                 key={a.id}
                 href={`/avaliacoes/${a.id}`}
-                className={`group relative block overflow-hidden rounded-3xl border p-5 transition-all duration-200 active:scale-[0.97] ${
-                  isFirst
-                    ? 'border-emerald-500/30 bg-gradient-to-br from-slate-900/95 via-emerald-950/70 to-slate-950/95'
-                    : 'border-white/8 bg-gradient-to-br from-slate-900/90 via-slate-800/50 to-slate-900/90'
-                }`}
-                style={isFirst
-                  ? { boxShadow: '0 0 0 1px rgba(52,211,153,0.12), 0 20px 60px -20px rgba(16,185,129,0.5), inset 0 1px 0 rgba(52,211,153,0.15)' }
-                  : { boxShadow: '0 0 0 1px rgba(255,255,255,0.05), 0 16px 40px -16px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06)' }
-                }
+                className="group relative block overflow-hidden rounded-[28px] transition-all duration-200 active:scale-[0.985]"
+                style={{
+                  background: isFirst
+                    ? 'linear-gradient(145deg, rgba(15,23,42,0.97) 0%, rgba(6,30,20,0.95) 60%, rgba(5,46,22,0.90) 100%)'
+                    : 'linear-gradient(145deg, rgba(15,23,42,0.95) 0%, rgba(20,27,45,0.92) 100%)',
+                  boxShadow: isFirst
+                    ? '0 1px 0 rgba(52,211,153,0.2) inset, 0 -1px 0 rgba(0,0,0,0.4) inset, 0 24px 48px -12px rgba(0,0,0,0.6), 0 0 0 1px rgba(52,211,153,0.15)'
+                    : '0 1px 0 rgba(255,255,255,0.07) inset, 0 -1px 0 rgba(0,0,0,0.4) inset, 0 16px 32px -8px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06)',
+                }}
               >
-                {/* Shimmer top line */}
-                <div className={`pointer-events-none absolute inset-x-0 top-0 h-px ${isFirst ? 'bg-gradient-to-r from-transparent via-emerald-400/60 to-transparent' : 'bg-gradient-to-r from-transparent via-white/15 to-transparent'}`} />
-                {/* Ambient glow corner */}
-                {isFirst && <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-emerald-500/10 blur-3xl" />}
+                {/* Ambient emerald glow top-right for first */}
+                {isFirst && (
+                  <div className="pointer-events-none absolute right-0 top-0 h-32 w-32 rounded-full opacity-30"
+                    style={{ background: 'radial-gradient(circle at 100% 0%, rgba(52,211,153,0.35) 0%, transparent 70%)' }} />
+                )}
 
-                {/* Header row */}
-                <div className="relative mb-4 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    {isFirst
-                      ? <InfoChip tone="emerald">Mais recente</InfoChip>
-                      : <span className="text-[10px] font-semibold text-white/40 uppercase tracking-widest">Avaliação</span>
-                    }
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-[11px] font-semibold tabular-nums text-white/60">
-                      {date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
-                    </span>
-                    <div className={`flex h-7 w-7 items-center justify-center rounded-full transition-all duration-200 group-hover:translate-x-0.5 ${isFirst ? 'bg-emerald-500/20' : 'bg-white/8'}`}>
-                      <DSIcon name="chevronRight" size={13} className={isFirst ? 'text-emerald-400' : 'text-white/40'} />
+                <div className="relative p-5">
+                  {/* ── Header ── */}
+                  <div className="mb-5 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      {isFirst ? (
+                        <InfoChip tone="emerald">Mais recente</InfoChip>
+                      ) : (
+                        <span className="text-[10px] font-medium text-white/30 uppercase tracking-[0.12em]">
+                          {date.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {isFirst && (
+                        <span className="text-[11px] tabular-nums text-white/40">
+                          {date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
+                        </span>
+                      )}
+                      <div className={`flex h-7 w-7 items-center justify-center rounded-full transition-transform duration-200 group-hover:translate-x-0.5 ${isFirst ? 'bg-emerald-500/15' : 'bg-white/6'}`}>
+                        <DSIcon name="chevronRight" size={12} className={isFirst ? 'text-emerald-400' : 'text-white/30'} />
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Metric tiles */}
-                <div className="relative grid grid-cols-3 gap-2">
-                  <MetricTile
-                    icon="scale"
-                    label="Peso"
-                    tone="emerald"
-                    value={fmt(a.weight_kg)}
-                    unit={a.weight_kg != null ? 'kg' : ''}
-                    delta={prev ? <DeltaBadge current={Number(a.weight_kg)} previous={Number(prev.weight_kg)} unit="kg" /> : undefined}
-                  />
-                  <MetricTile
-                    icon="activity"
-                    label="IMC"
-                    tone="blue"
-                    value={fmt(a.bmi)}
-                    valueClass={getBMIColor(Number(a.bmi))}
-                    delta={prev ? <DeltaBadge current={Number(a.bmi)} previous={Number(prev.bmi)} unit="" /> : undefined}
-                  />
-                  <MetricTile
-                    icon="percent"
-                    label="Gordura"
-                    tone="amber"
-                    value={fmt(a.body_fat_percentage)}
-                    unit={a.body_fat_percentage != null ? '%' : ''}
-                    delta={
-                      prev && a.body_fat_percentage != null && prev.body_fat_percentage != null ? (
-                        <DeltaBadge current={Number(a.body_fat_percentage)} previous={Number(prev.body_fat_percentage)} unit="%" invert />
-                      ) : undefined
-                    }
-                  />
-                </div>
-
-                {a.bmi_category && (
-                  <div className="relative mt-4 flex items-center gap-2 pt-3.5 border-t border-white/8">
-                    <InfoChip tone={bmiTone(a.bmi)}>{a.bmi_category}</InfoChip>
+                  {/* ── 3 Metric Tiles ── */}
+                  <div className="grid grid-cols-3 gap-2.5">
+                    <MetricTile
+                      icon="scale"
+                      label="Peso"
+                      tone="emerald"
+                      value={fmt(a.weight_kg)}
+                      unit={a.weight_kg != null ? 'kg' : ''}
+                      delta={prev ? <DeltaBadge current={Number(a.weight_kg)} previous={Number(prev.weight_kg)} unit="kg" /> : undefined}
+                    />
+                    <MetricTile
+                      icon="activity"
+                      label="IMC"
+                      tone="blue"
+                      value={fmt(a.bmi)}
+                      valueClass={getBMIColor(Number(a.bmi))}
+                      delta={prev ? <DeltaBadge current={Number(a.bmi)} previous={Number(prev.bmi)} unit="" /> : undefined}
+                    />
+                    <MetricTile
+                      icon="percent"
+                      label="Gordura"
+                      tone="amber"
+                      value={fmt(a.body_fat_percentage)}
+                      unit={a.body_fat_percentage != null ? '%' : ''}
+                      delta={
+                        prev && a.body_fat_percentage != null && prev.body_fat_percentage != null ? (
+                          <DeltaBadge current={Number(a.body_fat_percentage)} previous={Number(prev.body_fat_percentage)} unit="%" invert />
+                        ) : undefined
+                      }
+                    />
                   </div>
-                )}
+
+                  {/* ── BMI Category ── */}
+                  {a.bmi_category && (
+                    <div className="mt-4 border-t border-white/6 pt-3.5">
+                      <InfoChip tone={bmiTone(a.bmi)}>{a.bmi_category}</InfoChip>
+                    </div>
+                  )}
+                </div>
               </Link>
             )
           })}
@@ -439,50 +436,58 @@ export default function AvaliacoesPage() {
               <Link
                 key={a.id}
                 href={`/avaliacoes/${a.id}`}
-                className={`group relative block overflow-hidden rounded-3xl border p-5 transition-all duration-200 active:scale-[0.97] ${
-                  isFirst
-                    ? 'border-violet-500/30 bg-gradient-to-br from-slate-900/95 via-violet-950/60 to-slate-950/95'
-                    : 'border-white/8 bg-gradient-to-br from-slate-900/90 via-slate-800/50 to-slate-900/90'
-                }`}
-                style={isFirst
-                  ? { boxShadow: '0 0 0 1px rgba(167,139,250,0.12), 0 20px 60px -20px rgba(139,92,246,0.45), inset 0 1px 0 rgba(167,139,250,0.15)' }
-                  : { boxShadow: '0 0 0 1px rgba(255,255,255,0.05), 0 16px 40px -16px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06)' }
-                }
+                className="group relative block overflow-hidden rounded-[28px] transition-all duration-200 active:scale-[0.985]"
+                style={{
+                  background: isFirst
+                    ? 'linear-gradient(145deg, rgba(15,23,42,0.97) 0%, rgba(20,10,45,0.95) 60%, rgba(30,15,60,0.90) 100%)'
+                    : 'linear-gradient(145deg, rgba(15,23,42,0.95) 0%, rgba(20,27,45,0.92) 100%)',
+                  boxShadow: isFirst
+                    ? '0 1px 0 rgba(167,139,250,0.2) inset, 0 -1px 0 rgba(0,0,0,0.4) inset, 0 24px 48px -12px rgba(0,0,0,0.6), 0 0 0 1px rgba(167,139,250,0.15)'
+                    : '0 1px 0 rgba(255,255,255,0.07) inset, 0 -1px 0 rgba(0,0,0,0.4) inset, 0 16px 32px -8px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06)',
+                }}
               >
-                <div className={`pointer-events-none absolute inset-x-0 top-0 h-px ${isFirst ? 'bg-gradient-to-r from-transparent via-violet-400/60 to-transparent' : 'bg-gradient-to-r from-transparent via-white/15 to-transparent'}`} />
-                {isFirst && <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-violet-500/10 blur-3xl" />}
-
-                <div className="relative mb-4 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    {isFirst
-                      ? <InfoChip tone="violet">Mais recente</InfoChip>
-                      : <span className="text-[10px] font-semibold text-white/40 uppercase tracking-widest">Avaliação</span>
-                    }
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-[11px] font-semibold tabular-nums text-white/60">
-                      {date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
-                    </span>
-                    <div className={`flex h-7 w-7 items-center justify-center rounded-full transition-all duration-200 group-hover:translate-x-0.5 ${isFirst ? 'bg-violet-500/20' : 'bg-white/8'}`}>
-                      <DSIcon name="chevronRight" size={13} className={isFirst ? 'text-violet-400' : 'text-white/40'} />
+                {isFirst && (
+                  <div className="pointer-events-none absolute right-0 top-0 h-32 w-32 rounded-full opacity-25"
+                    style={{ background: 'radial-gradient(circle at 100% 0%, rgba(167,139,250,0.5) 0%, transparent 70%)' }} />
+                )}
+                <div className="relative p-5">
+                  <div className="mb-5 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      {isFirst ? (
+                        <InfoChip tone="violet">Mais recente</InfoChip>
+                      ) : (
+                        <span className="text-[10px] font-medium text-white/30 uppercase tracking-[0.12em]">
+                          {date.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {isFirst && (
+                        <span className="text-[11px] tabular-nums text-white/40">
+                          {date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
+                        </span>
+                      )}
+                      <div className={`flex h-7 w-7 items-center justify-center rounded-full transition-transform duration-200 group-hover:translate-x-0.5 ${isFirst ? 'bg-violet-500/15' : 'bg-white/6'}`}>
+                        <DSIcon name="chevronRight" size={12} className={isFirst ? 'text-violet-400' : 'text-white/30'} />
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="relative grid grid-cols-3 gap-2">
-                  <MetricTile icon="scale" label="Peso" tone="emerald" value={fmt(a.weight_kg)} unit={a.weight_kg != null ? 'kg' : ''} />
-                  <MetricTile icon="activity" label="IMC" tone="blue" value={fmt(a.bmi)} valueClass={a.bmi != null ? getBMIColor(Number(a.bmi)) : undefined} />
-                  <MetricTile icon="percent" label="Gordura" tone="amber" value={fmt(a.body_fat_percentage)} unit={a.body_fat_percentage != null ? '%' : ''} />
-                </div>
+                  <div className="grid grid-cols-3 gap-2.5">
+                    <MetricTile icon="scale" label="Peso" tone="emerald" value={fmt(a.weight_kg)} unit={a.weight_kg != null ? 'kg' : ''} />
+                    <MetricTile icon="activity" label="IMC" tone="blue" value={fmt(a.bmi)} valueClass={a.bmi != null ? getBMIColor(Number(a.bmi)) : undefined} />
+                    <MetricTile icon="percent" label="Gordura" tone="amber" value={fmt(a.body_fat_percentage)} unit={a.body_fat_percentage != null ? '%' : ''} />
+                  </div>
 
-                <div className="relative mt-4 flex flex-wrap items-center gap-2 pt-3.5 border-t border-white/8">
-                  {a.fat_classification && <InfoChip tone="violet">{a.fat_classification}</InfoChip>}
-                  {personalName && (
-                    <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold text-white/50">
-                      <DSIcon name="user" size={11} className="text-violet-400/60" />
-                      {personalName}
-                    </span>
-                  )}
+                  <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-white/6 pt-3.5">
+                    {a.fat_classification && <InfoChip tone="violet">{a.fat_classification}</InfoChip>}
+                    {personalName && (
+                      <span className="inline-flex items-center gap-1.5 text-[10px] font-medium text-white/35">
+                        <DSIcon name="user" size={10} className="text-violet-400/50" />
+                        {personalName}
+                      </span>
+                    )}
+                  </div>
                 </div>
               </Link>
             )
