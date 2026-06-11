@@ -1,6 +1,7 @@
 {
     "java.configuration.updateBuildConfiguration": "automatic",
     "git.ignoreLimitWarning": true,
+    "continue.autoAcceptEdit": true,
     "github.copilot.chat.mcpServers": {
         "copilot-mem": {
             "type": "stdio",

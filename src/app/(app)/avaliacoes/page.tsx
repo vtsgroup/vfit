@@ -43,7 +43,7 @@ function DeltaBadge({ current, previous, unit, invert }: {
   return (
     <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold"
       style={{
-        backgroundColor: isGood ? '#34C7591A' : '#FF3B301A',
+        backgroundColor: isGood ? 'rgba(52,199,89,0.2)' : 'rgba(255,59,48,0.2)',
         color: isGood ? ios.green : ios.red,
       }}
     >
@@ -79,20 +79,20 @@ function MetricTile({
   const c = colorMap[tone]
 
   return (
-    <div className="flex flex-col gap-1.5 rounded-xl bg-[#F9F9FB] px-3.5 py-3 transition-colors duration-200">
+    <div className="flex flex-col gap-1.5 rounded-xl border border-white/8 bg-slate-950/48 px-3.5 py-3 shadow-glass-inset-sm transition-colors duration-200">
       <div className="flex items-center gap-1.5">
         <DSIcon name={icon} size={12} style={{ color: c }} />
-        <span className="text-[10px] font-semibold uppercase tracking-[0.12em]" style={{ color: ios.tertiary }}>
+        <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-500">
           {label}
         </span>
         {delta && <div className="ml-auto">{delta}</div>}
       </div>
       <div className="flex items-baseline gap-1">
-        <span className="text-xl font-bold leading-none tabular-nums tracking-tight" style={{ color: ios.text }}>
+        <span className="text-xl font-bold leading-none tabular-nums tracking-tight text-white">
           {value}
         </span>
         {unit && (
-          <span className="text-[10px] font-medium uppercase tracking-[0.12em]" style={{ color: ios.tertiary }}>
+          <span className="text-[10px] font-medium uppercase tracking-[0.12em] text-slate-500">
             {unit}
           </span>
         )}
@@ -202,19 +202,24 @@ export default function AvaliacoesPage() {
     t === 'blue' ? ios.blue : t === 'emerald' ? ios.green : t === 'amber' ? ios.orange : ios.red
 
   return (
-    <div className="relative mx-auto min-h-dvh max-w-lg pb-28 font-[-apple-system,BlinkMacSystemFont,'SF_Pro_Display','Helvetica_Neue',sans-serif]" style={{ backgroundColor: ios.bg }}>
-      {/* ─── Header ─── */}
-      <div className="sticky top-0 z-20 px-5 pb-3 pt-6" style={{ backgroundColor: ios.bg }}>
-        <div className="flex items-center justify-between gap-3">
-          <button
-            aria-label="Voltar"
-            onClick={() => router.back()}
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-opacity hover:opacity-70 active:opacity-50"
-            style={{ backgroundColor: '#E5E5EA80' }}
-          >
-            <DSIcon name="arrowLeft" size={18} style={{ color: ios.blue }} />
-          </button>
-          <div className="flex-1" />
+
+
+    <div className="relative mx-auto min-h-dvh max-w-lg pb-28" style={{ backgroundColor: '#050A12' }}>
+      {/* ─── Hero ─── */}
+      <div
+        className="relative mb-5 overflow-hidden rounded-b-3xl border-b-0 px-4 py-5 backdrop-blur-md"
+        style={{ background: 'linear-gradient(to bottom, #0b1d36 0%, #0c1f38 20%, #0b1c35 40%, #0a1830 65%, #071628 85%, #050A12 100%)', boxShadow: '0 6px 28px 0 rgba(5,10,18,0.6)' }}
+      >
+        <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_85%_25%,rgba(34,197,94,0.18),transparent_55%)]" />
+
+        <div className="relative z-1 flex items-start justify-between gap-3">
+          <div className="min-w-0 flex-1">
+            <p className="text-xs font-semibold text-emerald-400">Acompanhamento</p>
+            <h1 className="bg-linear-to-r from-vfit-primary-100 to-vfit-primary-400 bg-clip-text text-4xl font-black text-transparent">
+              Avaliações
+            </h1>
+            <p className="mt-1 text-xs text-emerald-200/80">Evolução física e métricas corporais</p>
+          </div>
           <Link href="/avaliacoes/nova">
             <Button
               size="sm"
@@ -226,33 +231,23 @@ export default function AvaliacoesPage() {
             </Button>
           </Link>
         </div>
-        <div className="mt-4">
-          <p className="text-[12px] font-semibold uppercase tracking-[0.2em]" style={{ color: ios.secondary }}>
-            Acompanhamento
-          </p>
-          <h1 className="text-[34px] font-extrabold leading-none tracking-[-0.02em] mt-1.5" style={{ color: ios.text }}>
-            Avaliações
-          </h1>
-        </div>
 
         {hasSelf && (
-          <div className="mt-4 flex items-center gap-3 rounded-2xl px-4 py-3 shadow-sm"
-            style={{ backgroundColor: ios.card, border: `1px solid ${ios.separator}` }}>
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl" style={{ backgroundColor: '#34C7591A' }}>
-              <DSIcon name="trendingUp" size={16} style={{ color: ios.green }} />
+          <div className="relative z-1 mt-4 flex items-center gap-3 rounded-2xl border border-white/12 bg-white/7 px-4 py-3 shadow-glass-inset-sm backdrop-blur">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-500/20">
+              <DSIcon name="trendingUp" size={16} className="text-emerald-400" />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-[12px] font-medium" style={{ color: ios.secondary }}>
+              <p className="text-[12px] font-medium text-slate-300">
                 {displayAssessments.length === 1 ? '1 avaliação registrada' : `${displayAssessments.length} avaliações registradas`}
               </p>
-              <p className="truncate text-[13px] font-semibold" style={{ color: ios.text }}>
+              <p className="truncate text-[13px] font-semibold text-white">
                 Última em {new Date(displayAssessments[0].created_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long' })}
               </p>
             </div>
             {isLinked && (
-              <span className="inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold"
-                style={{ backgroundColor: '#34C7591A', color: ios.green }}>
-                <DSIcon name="checkCircle" size={12} style={{ color: ios.green }} />
+              <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-emerald-500/20 px-2.5 py-1 text-[11px] font-semibold text-emerald-400">
+                <DSIcon name="checkCircle" size={12} className="text-emerald-400" />
                 Personal
               </span>
             )}
@@ -270,15 +265,14 @@ export default function AvaliacoesPage() {
       {/* ─── Empty State ─── */}
       {!isLoading && displayAssessments.length === 0 && (
         <div className="flex flex-col items-center gap-5 px-8 py-16 text-center">
-          <div className="flex h-24 w-24 items-center justify-center rounded-[28px] shadow-sm"
-            style={{ backgroundColor: ios.card, border: `1px solid ${ios.separator}` }}>
-            <DSIcon name="clipboardList" size={36} style={{ color: ios.blue }} />
+          <div className="flex h-24 w-24 items-center justify-center rounded-[28px] border border-white/12 bg-white/7 shadow-glass-inset-sm backdrop-blur">
+            <DSIcon name="clipboardList" size={36} className="text-brand-primary" />
           </div>
           <div>
-            <h2 className="text-[20px] font-bold tracking-[-0.01em]" style={{ color: ios.text }}>
+            <h2 className="text-[20px] font-bold tracking-[-0.01em] text-white">
               Sua jornada começa aqui
             </h2>
-            <p className="mx-auto mt-2 max-w-64 text-[14px] leading-relaxed" style={{ color: ios.secondary }}>
+            <p className="mx-auto mt-2 max-w-64 text-[14px] leading-relaxed text-slate-300">
               Faça sua primeira avaliação e descubra seu IMC, percentual de gordura e veja sua evolução ao longo do tempo.
             </p>
           </div>
@@ -297,7 +291,7 @@ export default function AvaliacoesPage() {
       {/* ─── Self Assessments ─── */}
       {hasSelf && (
         <section className="space-y-3 px-5 pb-2">
-          <p className="px-1 text-[12px] font-semibold uppercase tracking-[0.16em]" style={{ color: ios.secondary }}>
+          <p className="px-1 text-[12px] font-semibold uppercase tracking-[0.16em] text-slate-400">
             Minhas avaliações
           </p>
           {displayAssessments.map((a, i) => {
@@ -311,44 +305,43 @@ export default function AvaliacoesPage() {
               <Link
                 key={a.id}
                 href={`/avaliacoes/${a.id}`}
-                className="group block overflow-hidden rounded-2xl shadow-sm transition-all duration-200 active:scale-[0.985]"
-                style={{ backgroundColor: ios.card, border: `1px solid ${ios.separator}` }}
+                className="group block overflow-hidden rounded-2xl border border-white/12 bg-white/7 shadow-glass-inset-sm backdrop-blur transition-all duration-200 active:scale-[0.985]"
               >
                 <div className="p-5">
                   {/* Header row */}
                   <div className="mb-4 flex items-center justify-between gap-3">
                     <div className="min-w-0">
-                      <p className="text-[11px] font-medium uppercase tracking-[0.2em]" style={{ color: ios.tertiary }}>
+                      <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-slate-500">
                         Avaliação
                       </p>
-                      <h2 className="mt-1 text-[20px] font-bold leading-tight tracking-[-0.01em]" style={{ color: ios.text }}>
+                      <h2 className="mt-1 text-[20px] font-bold leading-tight tracking-[-0.01em] text-white">
                         {date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}
                       </h2>
                     </div>
                     <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em]"
                       style={{
-                        backgroundColor: isFirst ? `${ios.blue}1A` : `${ios.secondary}14`,
-                        color: isFirst ? ios.blue : ios.secondary,
+                        backgroundColor: isFirst ? `${ios.blue}1A` : 'rgba(255,255,255,0.08)',
+                        color: isFirst ? ios.blue : '#AEAEB2',
                       }}>
-                      <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: isFirst ? ios.blue : ios.tertiary }} />
+                      <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: isFirst ? ios.blue : '#AEAEB2' }} />
                       {isFirst ? 'Mais recente' : 'Histórico'}
                     </span>
                   </div>
 
                   {/* Weight hero */}
-                  <div className="mb-3 rounded-2xl p-4" style={{ backgroundColor: '#F9F9FB' }}>
+                  <div className="mb-3 rounded-2xl border border-white/8 bg-slate-950/48 p-4 shadow-glass-inset-sm">
                     <div className="flex items-start justify-between gap-4">
                       <div className="min-w-0">
-                        <p className="text-[10px] font-semibold uppercase tracking-[0.2em]" style={{ color: ios.tertiary }}>Peso atual</p>
+                        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">Peso atual</p>
                         <div className="mt-1 flex items-baseline gap-1.5">
-                          <span className="text-[3.5rem] font-extrabold leading-none tracking-[-0.04em]" style={{ color: ios.text }}>
+                          <span className="text-[3.5rem] font-extrabold leading-none tracking-[-0.04em] text-white">
                             {fmt(a.weight_kg)}
                           </span>
-                          <span className="text-xs font-semibold uppercase tracking-[0.2em]" style={{ color: ios.secondary }}>kg</span>
+                          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">kg</span>
                         </div>
                       </div>
-                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl" style={{ backgroundColor: '#34C75914' }}>
-                        <DSIcon name="scale" size={20} style={{ color: ios.green }} />
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-emerald-500/20">
+                        <DSIcon name="scale" size={20} className="text-emerald-400" />
                       </div>
                     </div>
                   </div>
@@ -377,7 +370,7 @@ export default function AvaliacoesPage() {
                   </div>
 
                   {/* Footer */}
-                  <div className="mt-3 flex flex-wrap items-center gap-2.5 border-t pt-3" style={{ borderColor: ios.separator }}>
+                  <div className="mt-3 flex flex-wrap items-center gap-2.5 border-t border-white/8 pt-3">
                     {a.bmi_category && (
                       <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em]"
                         style={{ backgroundColor: `${tc}1A`, color: tc }}>
@@ -386,13 +379,12 @@ export default function AvaliacoesPage() {
                       </span>
                     )}
                     {prev && (
-                      <span className="text-[10px] font-medium uppercase tracking-[0.2em]" style={{ color: ios.tertiary }}>
+                      <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-slate-500">
                         vs. última
                       </span>
                     )}
-                    <div className="ml-auto inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] transition-colors group-hover:opacity-70"
-                      style={{ color: ios.blue }}>
-                      <DSIcon name="chevronRight" size={11} style={{ color: ios.blue }} />
+                    <div className="ml-auto inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-primary transition-colors group-hover:opacity-70">
+                      <DSIcon name="chevronRight" size={11} className="text-brand-primary" />
                       Detalhes
                     </div>
                   </div>
@@ -413,8 +405,8 @@ export default function AvaliacoesPage() {
       {proAssessments.length > 0 && (
         <section className="mt-8 space-y-3 px-5">
           <div className="flex items-center gap-2 px-1">
-            <DSIcon name="clipboard" size={13} style={{ color: ios.purple }} />
-            <h2 className="text-[12px] font-semibold uppercase tracking-[0.16em]" style={{ color: ios.secondary }}>
+            <DSIcon name="clipboard" size={13} className="text-violet-400" />
+            <h2 className="text-[12px] font-semibold uppercase tracking-[0.16em] text-slate-400">
               Avaliações completas
             </h2>
           </div>
@@ -426,25 +418,24 @@ export default function AvaliacoesPage() {
               <Link
                 key={a.id}
                 href={`/avaliacoes/${a.id}`}
-                className="group block overflow-hidden rounded-2xl shadow-sm transition-all duration-200 active:scale-[0.985]"
-                style={{ backgroundColor: ios.card, border: `1px solid ${ios.separator}` }}
+                className="group block overflow-hidden rounded-2xl border border-white/12 bg-white/7 shadow-glass-inset-sm backdrop-blur transition-all duration-200 active:scale-[0.985]"
               >
                 <div className="p-5">
                   <div className="mb-4 flex items-center justify-between gap-3">
                     <div className="min-w-0">
-                      <p className="text-[11px] font-medium uppercase tracking-[0.2em]" style={{ color: ios.tertiary }}>
+                      <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-slate-500">
                         Avaliação completa
                       </p>
-                      <p className="mt-1 text-[15px] font-semibold leading-tight" style={{ color: ios.text }}>
+                      <p className="mt-1 text-[15px] font-semibold leading-tight text-white">
                         {date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
                       </p>
                     </div>
                     <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em]"
                       style={{
-                        backgroundColor: isFirst ? `${ios.purple}1A` : `${ios.secondary}14`,
-                        color: isFirst ? ios.purple : ios.secondary,
+                        backgroundColor: isFirst ? `${ios.purple}1A` : 'rgba(255,255,255,0.08)',
+                        color: isFirst ? ios.purple : '#AEAEB2',
                       }}>
-                      <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: isFirst ? ios.purple : ios.tertiary }} />
+                      <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: isFirst ? ios.purple : '#AEAEB2' }} />
                       {isFirst ? 'Mais recente' : 'Histórico'}
                     </span>
                   </div>
@@ -455,7 +446,7 @@ export default function AvaliacoesPage() {
                     <MetricTile icon="percent" label="Gordura" tone="amber" value={fmt(a.body_fat_percentage)} unit={a.body_fat_percentage != null ? '%' : ''} />
                   </div>
 
-                  <div className="mt-3 flex flex-wrap items-center gap-2.5 border-t pt-3" style={{ borderColor: ios.separator }}>
+                  <div className="mt-3 flex flex-wrap items-center gap-2.5 border-t border-white/8 pt-3">
                     {a.fat_classification && (
                       <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em]"
                         style={{ backgroundColor: `${ios.purple}1A`, color: ios.purple }}>
@@ -464,15 +455,13 @@ export default function AvaliacoesPage() {
                       </span>
                     )}
                     {personalName && (
-                      <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.14em]"
-                        style={{ backgroundColor: `${ios.secondary}14`, color: ios.secondary }}>
-                        <DSIcon name="user" size={10} style={{ color: ios.secondary }} />
+                      <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.14em] bg-white/8 text-slate-400">
+                        <DSIcon name="user" size={10} className="text-slate-400" />
                         {personalName}
                       </span>
                     )}
-                    <div className="ml-auto inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] transition-colors group-hover:opacity-70"
-                      style={{ color: ios.purple }}>
-                      <DSIcon name="chevronRight" size={11} style={{ color: ios.purple }} />
+                    <div className="ml-auto inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-violet-400 transition-colors group-hover:opacity-70">
+                      <DSIcon name="chevronRight" size={11} className="text-violet-400" />
                       Detalhes
                     </div>
                   </div>
@@ -486,42 +475,41 @@ export default function AvaliacoesPage() {
       {/* ─── Personal Trainer ─── */}
       <div className="mt-8 px-5">
         {isLinked ? (
-          <div className="flex items-center gap-3 rounded-2xl px-4 py-3.5 shadow-sm"
-            style={{ backgroundColor: ios.card, border: `1px solid ${ios.separator}` }}>
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl" style={{ backgroundColor: '#34C7591A' }}>
-              <DSIcon name="checkCircle" size={16} style={{ color: ios.green }} />
+          <div className="flex items-center gap-3 rounded-2xl border border-white/12 bg-white/7 px-4 py-3.5 shadow-glass-inset-sm backdrop-blur">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-500/20">
+              <DSIcon name="checkCircle" size={16} className="text-emerald-400" />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-[10px] font-bold uppercase tracking-wider" style={{ color: ios.green }}>Personal vinculado</p>
-              <p className="truncate text-[14px] font-semibold" style={{ color: ios.text }}>{studentProfile!.personal_name}</p>
+              <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">Personal vinculado</p>
+              <p className="truncate text-[14px] font-semibold text-white">{studentProfile!.personal_name}</p>
             </div>
           </div>
         ) : (
-          <div className="overflow-hidden rounded-2xl shadow-sm" style={{ backgroundColor: ios.card, border: `1px solid ${ios.separator}` }}>
+          <div className="overflow-hidden rounded-2xl border border-white/12 bg-white/7 shadow-glass-inset-sm backdrop-blur">
             <button
               type="button"
               onClick={() => setInviteOpen((v) => !v)}
-              className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-[#F2F2F7]/50 active:bg-[#F2F2F7]"
+              className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-white/5 active:bg-white/10"
             >
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl" style={{ backgroundColor: `${ios.blue}14` }}>
-                <DSIcon name="userPlus" size={16} style={{ color: ios.blue }} />
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-primary/20">
+                <DSIcon name="userPlus" size={16} className="text-brand-primary" />
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-[13px] font-semibold" style={{ color: ios.text }}>Avaliação completa com personal</p>
-                <p className="mt-0.5 text-[11px]" style={{ color: ios.secondary }}>Convide um treinador para validar sua avaliação</p>
+                <p className="text-[13px] font-semibold text-white">Avaliação completa com personal</p>
+                <p className="mt-0.5 text-[11px] text-slate-400">Convide um treinador para validar sua avaliação</p>
               </div>
-              <DSIcon name="chevronDown" size={16} className={`shrink-0 transition-transform ${inviteOpen ? 'rotate-180' : ''}`}
-                style={{ color: ios.tertiary }} />
+              <DSIcon name="chevronDown" size={16} className={`shrink-0 transition-transform text-slate-500 ${inviteOpen ? 'rotate-180' : ''}`} />
             </button>
 
             {inviteOpen && (
-              <div className="border-t px-4 pb-4 pt-3.5" style={{ borderColor: ios.separator }}>
+              <div className="border-t border-white/8 px-4 pb-4 pt-3.5">
                 <div className="mb-3 flex gap-2">
                   <Input
                     value={personalReferralCode}
                     onChange={(e) => setPersonalReferralCode(e.target.value.toUpperCase())}
                     placeholder="Código do personal"
                     disabled={linkPersonalTrainer.isPending || !!studentProfile?.personal_id}
+                    className="border-white/12 bg-white/7 text-white placeholder:text-slate-500"
                   />
                   <Button
                     onClick={() => linkPersonalTrainer.mutate(personalReferralCode)}
@@ -538,20 +526,18 @@ export default function AvaliacoesPage() {
                     variant="outline"
                     size="sm"
                     onClick={() => navigator.clipboard.writeText(personalInviteLink)}
-                    className="rounded-full border px-4 text-[13px] font-medium shadow-none hover:opacity-80"
-                    style={{ borderColor: ios.separator, color: ios.text, backgroundColor: 'transparent' }}
+                    className="rounded-full border border-white/12 px-4 text-[13px] font-medium text-white shadow-none hover:opacity-80"
                   >
-                    <DSIcon name="copy" size={13} style={{ color: ios.secondary }} />
+                    <DSIcon name="copy" size={13} className="text-slate-400" />
                     Link
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(`Olá! Quero te convidar para completar minha avaliação física no VFIT.\n\nCadastro: ${personalInviteLink}`)}`, '_blank')}
-                    className="rounded-full border px-4 text-[13px] font-medium shadow-none hover:opacity-80"
-                    style={{ borderColor: ios.separator, color: ios.text, backgroundColor: 'transparent' }}
+                    className="rounded-full border border-white/12 px-4 text-[13px] font-medium text-white shadow-none hover:opacity-80"
                   >
-                    <DSIcon name="share2" size={13} style={{ color: ios.secondary }} />
+                    <DSIcon name="share2" size={13} className="text-slate-400" />
                     WhatsApp
                   </Button>
                   <Button
@@ -559,12 +545,12 @@ export default function AvaliacoesPage() {
                     onClick={() => setShowPersonalQr((v) => !v)}
                     className="rounded-full border px-4 text-[13px] font-medium shadow-none hover:opacity-80"
                     style={{
-                      borderColor: showPersonalQr ? ios.blue : ios.separator,
-                      color: showPersonalQr ? '#FFFFFF' : ios.text,
+                      borderColor: showPersonalQr ? ios.blue : 'rgba(255,255,255,0.12)',
+                      color: showPersonalQr ? '#FFFFFF' : '#FFFFFF',
                       backgroundColor: showPersonalQr ? ios.blue : 'transparent',
                     }}
                   >
-                    <DSIcon name="qrcode" size={13} style={{ color: showPersonalQr ? '#FFFFFF' : ios.secondary }} />
+                    <DSIcon name="qrcode" size={13} style={{ color: showPersonalQr ? '#FFFFFF' : '#AEAEB2' }} />
                     QR Code
                   </Button>
                 </div>
@@ -574,12 +560,11 @@ export default function AvaliacoesPage() {
                       <img
                         src={personalInviteQrUrl}
                         alt="QR Code convite personal"
-                        className="h-44 w-44 rounded-2xl border bg-white p-2"
-                        style={{ borderColor: ios.separator }}
+                        className="h-44 w-44 rounded-2xl border border-white/12 bg-white p-2"
                       />
                     ) : (
-                      <div className="flex h-44 w-44 items-center justify-center rounded-2xl border" style={{ borderColor: ios.separator, backgroundColor: '#F9F9FB' }}>
-                        <DSIcon name="loader" size={20} className="animate-spin" style={{ color: ios.blue }} />
+                      <div className="flex h-44 w-44 items-center justify-center rounded-2xl border border-white/12 bg-white/7">
+                        <DSIcon name="loader" size={20} className="animate-spin text-brand-primary" />
                       </div>
                     )}
                   </div>
