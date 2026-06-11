@@ -7,6 +7,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
@@ -78,18 +79,18 @@ function MetricTile({ icon, label, value, unit, tone, delta, valueClass }: {
 }) {
   const t = TILE_TONES[tone]
   return (
-    <div className={`relative overflow-hidden rounded-[16px] ${t.border} border bg-gradient-to-b from-white/95 to-white px-3 py-3.5 transition-all duration-150 active:translate-y-px ${t.glow}`}>
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-white/8 via-transparent to-transparent pointer-events-none" />
-      <div className="mb-2.5 flex items-center gap-2">
-        <div className={`relative flex h-7 w-7 items-center justify-center rounded-[10px] ${t.iconBg} ${t.iconRing} transition-all active:scale-95`}>
-          <DSIcon name={icon} size={12} className={t.icon} />
+    <div className={`relative overflow-hidden rounded-[22px] border border-slate-200/70 bg-white/85 backdrop-blur-sm px-3 py-4 shadow-[0_20px_50px_-28px_rgba(15,23,42,0.14)] transition-all duration-200 hover:-translate-y-0.5 active:translate-y-px ${t.glow}`}>
+      <div className="absolute inset-0 -z-10 bg-linear-to-b from-white/40 via-transparent to-transparent pointer-events-none" />
+      <div className="mb-3 flex items-center gap-2">
+        <div className={`relative flex h-8 w-8 items-center justify-center rounded-[12px] ${t.iconBg} ${t.iconRing} transition-all duration-200 active:scale-95`}>
+          <DSIcon name={icon} size={14} className={t.icon} />
         </div>
-        <p className={`text-[9px] font-bold uppercase tracking-[0.12em] ${t.label}`}>{label}</p>
+        <p className={`text-[10px] font-semibold uppercase tracking-[0.16em] ${t.label}`}>{label}</p>
       </div>
-      <p className={`text-lg font-black tabular-nums leading-tight tracking-tight ${valueClass ?? 'text-slate-950'}`}>
-        {value}{unit && <span className="ml-1 text-[9px] font-bold text-slate-600">{unit}</span>}
+      <p className={`text-xl font-black tabular-nums leading-tight tracking-tight ${valueClass ?? 'text-slate-950'}`}>
+        {value}{unit && <span className="ml-1 text-[10px] font-semibold text-slate-500">{unit}</span>}
       </p>
-      {delta && <div className="mt-2 leading-none text-[11px]">{delta}</div>}
+      {delta && <div className="mt-3 leading-none text-[11px] text-slate-600">{delta}</div>}
     </div>
   )
 }
@@ -100,15 +101,15 @@ function InfoChip({ children, tone = 'emerald' }: {
   tone?: 'emerald' | 'amber' | 'violet' | 'red' | 'blue'
 }) {
   const tones = {
-    emerald: { bg: 'bg-gradient-to-r from-emerald-500/20 to-emerald-600/15', border: 'border-emerald-400/50', text: 'text-emerald-700', dot: 'bg-emerald-500', glow: 'shadow-[0_4px_12px_-2px_rgba(16,185,129,0.25)]' },
-    amber: { bg: 'bg-gradient-to-r from-amber-500/20 to-amber-600/15', border: 'border-amber-400/50', text: 'text-amber-700', dot: 'bg-amber-500', glow: 'shadow-[0_4px_12px_-2px_rgba(245,158,11,0.25)]' },
-    violet: { bg: 'bg-gradient-to-r from-violet-500/20 to-violet-600/15', border: 'border-violet-400/50', text: 'text-violet-700', dot: 'bg-violet-500', glow: 'shadow-[0_4px_12px_-2px_rgba(139,92,246,0.25)]' },
-    red: { bg: 'bg-gradient-to-r from-red-500/20 to-red-600/15', border: 'border-red-400/50', text: 'text-red-700', dot: 'bg-red-500', glow: 'shadow-[0_4px_12px_-2px_rgba(239,68,68,0.25)]' },
-    blue: { bg: 'bg-gradient-to-r from-sky-500/20 to-sky-600/15', border: 'border-sky-400/50', text: 'text-sky-700', dot: 'bg-sky-500', glow: 'shadow-[0_4px_12px_-2px_rgba(56,189,248,0.25)]' },
+    emerald: { bg: 'bg-gradient-to-r from-emerald-500/20 to-emerald-600/15', border: 'border-emerald-400/40', text: 'text-emerald-800', dot: 'bg-emerald-500', glow: 'shadow-[0_10px_30px_-18px_rgba(16,185,129,0.28)]' },
+    amber: { bg: 'bg-gradient-to-r from-amber-500/20 to-amber-600/15', border: 'border-amber-400/40', text: 'text-amber-800', dot: 'bg-amber-500', glow: 'shadow-[0_10px_30px_-18px_rgba(245,158,11,0.28)]' },
+    violet: { bg: 'bg-gradient-to-r from-violet-500/20 to-violet-600/15', border: 'border-violet-400/40', text: 'text-violet-800', dot: 'bg-violet-500', glow: 'shadow-[0_10px_30px_-18px_rgba(139,92,246,0.28)]' },
+    red: { bg: 'bg-gradient-to-r from-red-500/20 to-red-600/15', border: 'border-red-400/40', text: 'text-red-800', dot: 'bg-red-500', glow: 'shadow-[0_10px_30px_-18px_rgba(239,68,68,0.28)]' },
+    blue: { bg: 'bg-gradient-to-r from-sky-500/20 to-sky-600/15', border: 'border-sky-400/40', text: 'text-sky-800', dot: 'bg-sky-500', glow: 'shadow-[0_10px_30px_-18px_rgba(56,189,248,0.28)]' },
   }[tone]
   return (
-    <span className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider transition-all ${tones.bg} ${tones.border} ${tones.text} ${tones.glow}`}>
-      <span className={`h-2 w-2 rounded-full ${tones.dot} shadow-[0_0_4px_currentColor] opacity-80`} />
+    <span className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider transition-all ${tones.bg} ${tones.border} ${tones.text} ${tones.glow}`}>
+      <span className={`h-2.5 w-2.5 rounded-full ${tones.dot} shadow-[0_0_4px_currentColor] opacity-90`} />
       {children}
     </span>
   )
@@ -317,8 +318,8 @@ export default function AvaliacoesPage() {
       {hasSelf && (
         <section className="space-y-3">
           <div className="flex items-center gap-2 px-0.5">
-            <DSIcon name="user" size={13} className="text-emerald-400" />
-            <h2 className="text-[12px] font-bold uppercase tracking-[0.16em] text-zinc-300">Minhas avaliações</h2>
+            <DSIcon name="user" size={13} className="text-emerald-500" />
+            <h2 className="text-[12px] font-bold uppercase tracking-[0.18em] text-slate-700">Minhas avaliações</h2>
           </div>
           {displayAssessments.map((a, i) => {
             const date = new Date(a.created_at)
@@ -328,10 +329,9 @@ export default function AvaliacoesPage() {
               <Link
                 key={a.id}
                 href={`/avaliacoes/${a.id}`}
-                className={`group relative block overflow-hidden rounded-[24px] border p-4 transition-all duration-150 active:translate-y-px ${isFirst ? 'border-t-emerald-300/60 border-r-emerald-200/30 border-b-emerald-400/25 border-l-emerald-200/30 bg-gradient-to-b from-white/98 to-white' : 'border-t-slate-200/80 border-r-slate-100/50 border-b-slate-300/40 border-l-slate-100/50 bg-gradient-to-b from-white/95 to-white/90 hover:border-t-slate-300/80 hover:border-b-slate-400/50'}`}
-                style={isFirst ? { boxShadow: '0 20px 50px -16px rgba(16,185,129,0.4),inset_0_1px_0_rgba(255,255,255,0.6)' } : { boxShadow: '0 12px 32px -12px rgba(15,23,42,0.15),inset_0_1px_0_rgba(255,255,255,0.3)' }}
+                className={`group relative block overflow-hidden rounded-[28px] border border-slate-200/60 bg-white/80 p-4 shadow-[0_24px_60px_-32px_rgba(15,23,42,0.16)] backdrop-blur-xl transition-all duration-200 active:translate-y-px ${isFirst ? 'border-emerald-200/70 bg-linear-to-br from-emerald-50/90 via-white/90 to-white/95 hover:shadow-[0_28px_70px_-34px_rgba(16,185,129,0.16)]' : 'hover:-translate-y-0.5 hover:border-slate-300/90 hover:shadow-[0_26px_65px_-34px_rgba(15,23,42,0.14)]'}`}
               >
-                {isFirst && <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-gradient-to-b from-emerald-500/20 via-emerald-500/10 to-transparent blur-3xl" />}
+                {isFirst && <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-linear-to-b from-emerald-500/20 via-emerald-500/10 to-transparent blur-3xl" />}
                 <div className="relative mb-4 flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
                     {isFirst && <InfoChip tone="emerald">Mais recente</InfoChip>}
@@ -405,10 +405,9 @@ export default function AvaliacoesPage() {
               <Link
                 key={a.id}
                 href={`/avaliacoes/${a.id}`}
-                className={`group relative block overflow-hidden rounded-[24px] border p-4 transition-all duration-150 active:translate-y-px ${isFirst ? 'border-t-violet-300/60 border-r-violet-200/30 border-b-violet-400/25 border-l-violet-200/30 bg-gradient-to-b from-white/98 to-white' : 'border-t-slate-200/80 border-r-slate-100/50 border-b-slate-300/40 border-l-slate-100/50 bg-gradient-to-b from-white/95 to-white/90 hover:border-t-slate-300/80 hover:border-b-slate-400/50'}`}
-                style={isFirst ? { boxShadow: '0 20px 50px -16px rgba(139,92,246,0.35),inset_0_1px_0_rgba(255,255,255,0.6)' } : { boxShadow: '0 12px 32px -12px rgba(15,23,42,0.15),inset_0_1px_0_rgba(255,255,255,0.3)' }}
+                className={`group relative block overflow-hidden rounded-[28px] border border-slate-200/60 bg-white/80 p-4 shadow-[0_24px_60px_-32px_rgba(15,23,42,0.16)] backdrop-blur-xl transition-all duration-200 active:translate-y-px ${isFirst ? 'border-violet-200/70 bg-linear-to-br from-violet-50/90 via-white/90 to-white/95 hover:shadow-[0_28px_70px_-34px_rgba(139,92,246,0.16)]' : 'hover:-translate-y-0.5 hover:border-slate-300/90 hover:shadow-[0_26px_65px_-34px_rgba(15,23,42,0.14)]'}`}
               >
-                {isFirst && <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-gradient-to-b from-violet-500/20 via-violet-500/10 to-transparent blur-3xl" />}
+                {isFirst && <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-linear-to-b from-violet-500/20 via-violet-500/10 to-transparent blur-3xl" />}
                 <div className="relative mb-4 flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
                     {isFirst && <InfoChip tone="violet">Mais recente</InfoChip>}
@@ -519,11 +518,15 @@ export default function AvaliacoesPage() {
                 {showPersonalQr && (
                   <div className="mt-4 flex justify-center">
                     {personalInviteQrUrl ? (
-                      <img
-                        src={personalInviteQrUrl}
-                        alt="QR Code convite personal"
-                        className="h-44 w-44 rounded-2xl border border-white/10 bg-white p-2"
-                      />
+                      <div className="relative h-44 w-44 overflow-hidden rounded-2xl border border-white/10 bg-white p-2">
+                        <Image
+                          src={personalInviteQrUrl}
+                          alt="QR Code convite personal"
+                          fill
+                          sizes="176px"
+                          className="object-contain"
+                        />
+                      </div>
                     ) : (
                       <div className="flex h-44 w-44 items-center justify-center rounded-2xl border border-white/10 bg-white/5">
                         <DSIcon name="loader" size={20} className="animate-spin text-text-muted" />

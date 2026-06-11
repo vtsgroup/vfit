@@ -70,6 +70,7 @@ import { feedbackRoutes } from './api/feedback'
 import { debugRoutes } from './api/debug'
 import { calendarRoutes } from './api/calendar'
 import { exerciseMediaRoutes } from './api/exercise-media'
+import { b2cExerciseMediaRoutes } from './api/b2c-exercise-media'
 import { agentsRoutes } from './api/agents'
 import { default as xpRoutes } from './api/xp'
 import { searchRoutes } from './api/search'
@@ -537,6 +538,7 @@ app.route('/api/v1/feedback', feedbackRoutes)
 app.route('/api/v1/debug', debugRoutes)
 app.route('/api/v1/calendar', calendarRoutes)
 app.route('/api/v1/exercises', exerciseMediaRoutes)
+app.route('/api/v1/b2c/exercises', b2cExerciseMediaRoutes)
 app.route('/api/v1/agents', agentsRoutes)
 app.route('/api/v1/cpf', cpfRoutes)
 app.route('/api/v1/platform', platformRoutes)
