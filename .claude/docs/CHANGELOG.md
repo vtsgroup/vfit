@@ -7,10 +7,21 @@
 
 ## [Unreleased] — 2026-04-08 — Sprint 11-15 (UX Nutrição/Exercícios)
 
+### ✨ VFIT ULTRA — Plano mestre + nova tela de loading (2026-06-21)
+- **Plano mestre `.claude/plans/vfit-ultra/`** (16 docs): trial 30d sem cartão, onboarding/login instantâneos, cobertura total dos 4 painéis, backend hardening, design system unificado, redesign de login/públicas, pipeline de conteúdo, expansões (WhatsApp + loop viral), e roadmap em sprints. Inclui REVIEW-REPORTS (CEO+Eng+Design).
+- **Nova tela de loading leve + ultramoderna:**
+  - `src/components/ui/brand-loader.tsx` (NOVO) — `BrandLoader` CSS-only, variantes page/inline, acessível (role=status, reduced-motion), exportado no barrel.
+  - `src/components/ui/splash-screen.tsx` reescrito (v4) — removidas 30 partículas + 3 auroras + cor hardcoded de className (RULES §12); mesma API `isReady`; ~1.8s (antes ~2.8s).
+- **Validação:** `tsc --noEmit` 0 erros · `eslint` 0 problemas · `next build` OK (141 páginas).
+
 ### 🔧 Hotfix v4.6.8 — Cache-bust PWA e fallback por perfil Victor (2026-06-09)
 - **Fallback independente de role antigo:** [src/app/(app)/avaliacoes/page.tsx](src/app/(app)/avaliacoes/page.tsx) agora injeta a avaliação `16efd166-f01f-42de-8e63-a3d8119443d8` também quando o usuário persistido tem `id=f1bc775d-7b7b-4702-adeb-dc9255082d03` ou `email=victor.duarte@vfit.app.br`, cobrindo Zustand/PWA com `role` antigo ou ausente.
 - **Cache PWA invalidado:** [public/OneSignalSDKWorker.js](public/OneSignalSDKWorker.js) bumpou `CACHE_VERSION` para `v10` e passou a tratar `/avaliacoes` como network/no-store, evitando HTML/app shell antigo nessa rota crítica.
 - **Deploy produção:** `v4.6.8` publicado com Pages + Workers, tag `v4.6.8`.
+
+### 🔧 Unreleased — self-assessments detail fallback fix
+ - **Detalhe de autoavaliação alinhado:** `GET /self-assessments/:id` agora devolve avaliações completas de `/assessments/:id` quando o registro de `self_assessments` não existe, mantendo as mesmas permissões de `student`, `personal`, `nutritionist`, `admin` e `super_admin`.
+ - **Objetivo:** evitar o erro `Avaliação não encontrada` para IDs importados ou vinculados apenas na tabela `assessments` quando a lista de `/avaliacoes` inclui o item.
 
 ### 🔧 Hotfix v4.6.7 — Fallback frontend para avaliação 99kg super_admin (2026-06-09)
 - **Fallback visual definitivo:** [src/app/(app)/avaliacoes/page.tsx](src/app/(app)/avaliacoes/page.tsx) injeta o card da avaliação completa `16efd166-f01f-42de-8e63-a3d8119443d8` para sessões `role=super_admin` quando a API/PWA ainda retorna lista antiga.

@@ -1,45 +1,36 @@
 /**
  * src/components/ui/splash-screen.tsx
  *
- * SplashScreen — Ultra-modern VFIT PWA opening animation
+ * SplashScreen — Abertura VFIT ultraleve e ultramoderna
  *
  * Exports: SplashScreen
- * Hooks: useState, useEffect, useMemo
+ * Hooks: useState, useEffect, useRef
  * Features: 'use client'
+ *
+ * v4 (2026-06-21): reescrita leve.
+ *  - Removidas 30 partículas animadas e 3 camadas de aurora (custo de DOM/CPU).
+ *  - Removida cor hardcoded de className (RULES §12) → background via inline style.
+ *  - Mantida a MESMA máquina de estados + API `isReady` + válvula de segurança
+ *    (cobre validação de /auth/me sem prender o usuário atrás do splash).
+ *  - Mark V desenha + halo suave (CSS-only) + wordmark + barra. ~1.8s total.
  */
-
-// ============================================
-// SplashScreen — VFIT brand opening animation
-// V icon draws in with stroke animation, then "VFIT" text fades in
-// Smooth aurora background, particles, cinematic feel
-// Duration: ~2.8s total (icon ~600ms + text ~400ms + breathe ~800ms + exit)
-// ============================================
 
 'use client'
 
-import { useState, useEffect, useMemo, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { cn } from '@/lib/utils'
 
 const VFIT_LETTERS = 'VFIT'.split('')
-const LETTER_DELAY = 90 // ms per letter
-const ICON_SETTLE = 500 // icon draws in for 500ms
-const TEXT_START = ICON_SETTLE + 200 // text starts 200ms after icon settles
-const TYPING_DURATION = VFIT_LETTERS.length * LETTER_DELAY // ~360ms
-const BREATHE_START = TEXT_START + TYPING_DURATION + 300
-const SPLASH_TOTAL = BREATHE_START + 700
-const SPLASH_KEY = 'vfit-splash-v3'
+const ICON_DRAW = 700       // V desenha em 700ms
+const TEXT_START = 360      // wordmark começa após o V pegar tração
+const BREATHE_START = ICON_DRAW + 400
+const SPLASH_TOTAL = BREATHE_START + 600
+const SPLASH_KEY = 'vfit-splash-v4'
 
-/* ─── Inline V Icon (no external image dependency) ─── */
-function VFITIcon({ size, className, glowing }: { size: number; className?: string; glowing?: boolean }) {
+/* ─── Mark V inline (gradiente da marca, sem <img>) ─── */
+function VFITIcon({ size, drawn }: { size: number; drawn: boolean }) {
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 200 200"
-      fill="none"
-      className={className}
-      aria-hidden="true"
-    >
+    <svg width={size} height={size} viewBox="0 0 200 200" fill="none" aria-hidden="true">
       <defs>
         <linearGradient id="splash-bg" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
           <stop offset="0%" stopColor="#56EF85" />
@@ -63,8 +54,8 @@ function VFITIcon({ size, className, glowing }: { size: number; className?: stri
         strokeLinejoin="round"
         style={{
           strokeDasharray: 340,
-          strokeDashoffset: glowing ? 0 : 340,
-          transition: 'stroke-dashoffset 0.6s cubic-bezier(0.16,1,0.3,1)',
+          strokeDashoffset: drawn ? 0 : 340,
+          transition: 'stroke-dashoffset 0.7s cubic-bezier(0.16,1,0.3,1)',
         }}
       />
     </svg>
@@ -72,237 +63,124 @@ function VFITIcon({ size, className, glowing }: { size: number; className?: stri
 }
 
 export function SplashScreen({ isReady }: { isReady?: boolean }) {
-  const [phase, setPhase] = useState<'init' | 'icon' | 'typing' | 'breathe' | 'exit' | 'done'>('init')
-  const [typedCount, setTypedCount] = useState(0)
+  const [phase, setPhase] = useState<'init' | 'icon' | 'breathe' | 'exit' | 'done'>('init')
   const [shouldShow, setShouldShow] = useState(false)
-  const [minAnimationComplete, setMinAnimationComplete] = useState(false)
-  const bootStartedRef = useRef(false)
+  const [minComplete, setMinComplete] = useState(false)
+  const bootRef = useRef(false)
   const ready = isReady ?? true
 
-  // Stable particle positions
-  const particles = useMemo(() =>
-    Array.from({ length: 30 }, (_, i) => ({
-      id: i,
-      size: 1.5 + Math.random() * 3,
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-      duration: 12 + Math.random() * 20,
-      delay: Math.random() * -15,
-      opacity: 0.1 + Math.random() * 0.4,
-    })),
-  [])
-
+  // ─── Boot: máquina de estados (preservada da v3) ───
   useEffect(() => {
-    if (bootStartedRef.current) return
-    bootStartedRef.current = true
+    if (bootRef.current) return
+    bootRef.current = true
 
-    // Depois da primeira abertura da sessão, ainda cobrimos validações de auth.
-    // Sem isso, o app pode ficar em branco enquanto AuthProvider checa /auth/me.
+    // Reabertura na mesma sessão: ainda cobrimos validações de auth.
     if (sessionStorage.getItem(SPLASH_KEY)) {
-      if (ready) {
-        setPhase('done')
-        return
-      }
+      if (ready) { setPhase('done'); return }
       setShouldShow(true)
-      setTypedCount(VFIT_LETTERS.length)
       setPhase('breathe')
-      setMinAnimationComplete(true)
+      setMinComplete(true)
       return
     }
 
     setShouldShow(true)
     sessionStorage.setItem(SPLASH_KEY, '1')
 
-    // Icon draws in
-    const tIcon = setTimeout(() => setPhase('icon'), 100)
+    const tIcon = setTimeout(() => setPhase('icon'), 80)
+    const tBreathe = setTimeout(() => setPhase('breathe'), 80 + BREATHE_START)
+    const tMin = setTimeout(() => setMinComplete(true), 80 + BREATHE_START + 150)
 
-    // Text typing starts after icon settles
-    const tTyping = setTimeout(() => setPhase('typing'), 100 + TEXT_START)
-
-    // VFIT letters — typed one by one
-    const letterTimers: ReturnType<typeof setTimeout>[] = []
-    for (let i = 0; i < VFIT_LETTERS.length; i++) {
-      letterTimers.push(
-        setTimeout(() => setTypedCount(i + 1), 100 + TEXT_START + (i + 1) * LETTER_DELAY)
-      )
-    }
-
-    // Breathe phase
-    const tBreathe = setTimeout(() => setPhase('breathe'), 100 + BREATHE_START)
-    const tMinDone = setTimeout(() => setMinAnimationComplete(true), 100 + BREATHE_START + 200)
-
-    return () => {
-      clearTimeout(tIcon)
-      clearTimeout(tTyping)
-      letterTimers.forEach(clearTimeout)
-      clearTimeout(tBreathe)
-      clearTimeout(tMinDone)
-    }
+    return () => { clearTimeout(tIcon); clearTimeout(tBreathe); clearTimeout(tMin) }
   }, [ready])
 
+  // ─── Sair quando pronto + animação mínima concluída ───
   useEffect(() => {
-    if (!shouldShow || !ready || !minAnimationComplete || phase === 'exit' || phase === 'done') return
-
+    if (!shouldShow || !ready || !minComplete || phase === 'exit' || phase === 'done') return
     setPhase('exit')
-
-  }, [minAnimationComplete, phase, ready, shouldShow])
+  }, [minComplete, phase, ready, shouldShow])
 
   useEffect(() => {
     if (phase !== 'exit') return
-
-    const tDone = setTimeout(() => setPhase('done'), 700)
-
-    return () => clearTimeout(tDone)
+    const t = setTimeout(() => setPhase('done'), 600)
+    return () => clearTimeout(t)
   }, [phase])
 
+  // ─── Válvula de segurança: nunca prender o usuário atrás do splash ───
   useEffect(() => {
     if (!shouldShow || phase === 'exit' || phase === 'done') return
-
-    // Hard safety valve: never let auth/network edge cases trap the user behind splash.
-    // The app content behind it is guarded independently by AuthProvider/AuthGate.
-    const tFallback = setTimeout(() => {
+    const t = setTimeout(() => {
       setPhase('exit')
-      setTimeout(() => setPhase('done'), 700)
+      setTimeout(() => setPhase('done'), 600)
     }, SPLASH_TOTAL + 1800)
-
-    return () => clearTimeout(tFallback)
+    return () => clearTimeout(t)
   }, [phase, shouldShow])
 
   if (phase === 'done' || !shouldShow) return null
 
-  const iconReady = phase !== 'init'
-  const allTyped = typedCount === VFIT_LETTERS.length
+  const drawn = phase !== 'init'
+  const settled = phase === 'breathe' || phase === 'exit'
   const isExiting = phase === 'exit'
 
   return (
     <div
       className={cn(
         'dark fixed inset-0 z-9999 flex items-center justify-center',
-        'transition-all duration-700 ease-out-expo',
-        isExiting ? 'pointer-events-none' : 'pointer-events-auto',
-        isExiting ? 'opacity-0 scale-105' : 'opacity-100 scale-100'
+        'transition-all duration-600 ease-out-expo',
+        isExiting ? 'pointer-events-none opacity-0 scale-105' : 'pointer-events-auto opacity-100 scale-100',
       )}
-      style={{ colorScheme: 'dark' }}
+      style={{
+        colorScheme: 'dark',
+        background: 'radial-gradient(ellipse 120% 80% at 50% 38%, #0a1322 0%, #050a12 72%)',
+      }}
       aria-hidden="true"
     >
-      {/* ─── Aurora Background ─── */}
-      <div className="absolute inset-0 overflow-hidden bg-[#050A12]">
-        {/* Aurora blobs — ultra smooth */}
-        <div
-          className="absolute inset-0 opacity-50"
-          style={{
-            background: 'radial-gradient(ellipse 130% 70% at 30% 70%, rgba(16,185,129,0.15) 0%, transparent 55%)',
-            animation: 'splashAurora1 18s ease-in-out infinite alternate',
-          }}
-        />
-        <div
-          className="absolute inset-0 opacity-35"
-          style={{
-            background: 'radial-gradient(ellipse 100% 50% at 75% 35%, rgba(52,211,153,0.12) 0%, transparent 50%)',
-            animation: 'splashAurora2 22s ease-in-out infinite alternate',
-          }}
-        />
-        <div
-          className="absolute inset-0 opacity-20"
-          style={{
-            background: 'radial-gradient(ellipse 80% 45% at 50% 55%, rgba(56,189,248,0.08) 0%, transparent 45%)',
-            animation: 'splashAurora3 15s ease-in-out infinite alternate',
-          }}
-        />
+      {/* Aurora única, suave (CSS-only) */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: 'radial-gradient(ellipse 120% 60% at 50% 60%, rgba(16,185,129,0.14) 0%, transparent 58%)',
+          animation: 'splashAurora 16s ease-in-out infinite alternate',
+        }}
+      />
+      {/* Vignette */}
+      <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at center, transparent 35%, rgba(5,10,18,0.65) 100%)' }} />
 
-        {/* Center spotlight that grows with animation */}
-        <div
-          className={cn(
-            'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full',
-            'transition-all duration-1500 ease-out',
-            phase === 'init'
-              ? 'h-0 w-0 opacity-0'
-              : 'h-125 w-125 opacity-100'
-          )}
-          style={{
-            background: 'radial-gradient(circle, rgba(16,185,129,0.12) 0%, rgba(16,185,129,0.04) 40%, transparent 65%)',
-          }}
-        />
-
-        {/* Floating particles */}
-        {particles.map((p) => (
-          <div
-            key={p.id}
-            className="absolute rounded-full bg-emerald-400"
-            style={{
-              width: p.size,
-              height: p.size,
-              left: `${p.x}%`,
-              top: `${p.y}%`,
-              opacity: p.opacity,
-              filter: p.size > 3 ? 'blur(0.5px)' : 'none',
-              animation: `splashParticle ${p.duration}s ease-in-out ${p.delay}s infinite`,
-            }}
-          />
-        ))}
-
-        {/* Vignette */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(5,10,18,0.7)_100%)]" />
-      </div>
-
-      {/* ─── Logo + VFIT Text Animation ─── */}
       <div className="relative z-10 flex flex-col items-center gap-6">
-        {/* Outer glow ring */}
+        {/* Anel pulsante único */}
         <div
           className={cn(
-            'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full',
-            'border border-brand-primary/15',
+            'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-brand-primary/15',
             'transition-all duration-1200 ease-out-expo',
             phase === 'init' && 'h-20 w-20 opacity-0',
-            (phase === 'icon' || phase === 'typing') && !allTyped && 'h-44 w-44 opacity-100',
-            allTyped && 'h-72 w-72 opacity-40',
-            isExiting && 'h-125 w-125 opacity-0',
+            (phase === 'icon') && 'h-44 w-44 opacity-100',
+            settled && 'h-64 w-64 opacity-40',
+            isExiting && 'h-96 w-96 opacity-0',
           )}
         />
 
-        {/* Second ring */}
-        <div
-          className={cn(
-            'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full',
-            'border border-brand-primary/8',
-            'transition-all duration-1400 ease-out-expo',
-            phase === 'init' && 'h-10 w-10 opacity-0',
-            (phase === 'icon' || phase === 'typing') && !allTyped && 'h-56 w-56 opacity-60',
-            allTyped && 'h-96 w-96 opacity-25',
-            isExiting && 'h-150 w-150 opacity-0',
-          )}
-        />
-
-        {/* V Icon + VFIT text row */}
+        {/* Mark + wordmark */}
         <div
           className={cn(
             'relative flex items-center gap-4 transition-all duration-500',
-            phase === 'init' && 'opacity-0 scale-90',
-            phase !== 'init' && 'opacity-100 scale-100',
+            phase === 'init' ? 'opacity-0 scale-90' : 'opacity-100 scale-100',
             isExiting && 'opacity-0 scale-95 -translate-y-2',
           )}
         >
-          {/* V Icon with glow */}
           <div className="relative">
             <div
               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl pointer-events-none"
               style={{
-                width: '120px',
-                height: '120px',
-                background: 'radial-gradient(circle, rgba(34,197,94,0.45) 0%, rgba(34,197,94,0.12) 40%, transparent 65%)',
-                animation: allTyped ? 'splashLogoGlow 3s ease-in-out infinite' : 'none',
-                opacity: allTyped ? 1 : 0.4,
+                width: 120,
+                height: 120,
+                background: 'radial-gradient(circle, rgba(34,197,94,0.40) 0%, rgba(34,197,94,0.10) 42%, transparent 66%)',
+                animation: settled ? 'splashGlow 3s ease-in-out infinite' : 'none',
+                opacity: settled ? 1 : 0.4,
                 transition: 'opacity 0.8s ease',
               }}
             />
-            <VFITIcon
-              size={72}
-              className="relative z-10"
-              glowing={iconReady}
-            />
+            <VFITIcon size={72} drawn={drawn} />
           </div>
 
-          {/* VFIT letters */}
           <span
             className="inline-flex items-center"
             style={{
@@ -310,7 +188,7 @@ export function SplashScreen({ isReady }: { isReady?: boolean }) {
               fontWeight: 900,
               fontSize: 'clamp(36px, 10vw, 56px)',
               letterSpacing: '-0.03em',
-              lineHeight: '1',
+              lineHeight: 1,
               color: 'white',
             }}
           >
@@ -319,10 +197,10 @@ export function SplashScreen({ isReady }: { isReady?: boolean }) {
                 key={idx}
                 className="inline-block"
                 style={{
-                  opacity: idx < typedCount ? 1 : 0,
-                  transform: idx < typedCount ? 'translateY(0)' : 'translateY(8px)',
-                  transition: 'opacity 0.15s ease-out, transform 0.2s ease-out',
-                  textShadow: idx < typedCount ? '0 0 30px rgba(34,197,94,0.3)' : 'none',
+                  opacity: drawn ? 1 : 0,
+                  transform: drawn ? 'translateY(0)' : 'translateY(8px)',
+                  transition: `opacity 0.3s ease-out ${TEXT_START + idx * 60}ms, transform 0.35s ease-out ${TEXT_START + idx * 60}ms`,
+                  textShadow: '0 0 30px rgba(34,197,94,0.3)',
                 }}
               >
                 {letter}
@@ -331,61 +209,40 @@ export function SplashScreen({ isReady }: { isReady?: boolean }) {
           </span>
         </div>
 
-        {/* Subtitle */}
+        {/* Subtítulo + barra */}
         <div
           className={cn(
             'flex flex-col items-center gap-3 transition-all duration-500',
-            allTyped ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3',
+            settled ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3',
             isExiting && 'opacity-0 -translate-y-1',
           )}
         >
           <span
             className="text-[10px] uppercase text-brand-primary/80"
-            style={{
-              fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
-              fontWeight: 700,
-              letterSpacing: '0.2em',
-            }}
+            style={{ fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace', fontWeight: 700, letterSpacing: '0.2em' }}
           >
             PLATAFORMA PARA PERSONAL TRAINERS
           </span>
-
-          {/* Loading bar */}
-          <div className="w-32 h-0.5 rounded-full bg-white/6 overflow-hidden">
+          <div className="h-0.5 w-32 overflow-hidden rounded-full bg-white/6">
             <div
               className="h-full rounded-full bg-linear-to-r from-brand-primary/60 via-brand-primary to-emerald-400/80"
-              style={{
-                width: allTyped ? '100%' : '0%',
-                transition: 'width 1.2s ease-out',
-              }}
+              style={{ width: settled ? '100%' : '8%', transition: 'width 1.1s ease-out' }}
             />
           </div>
         </div>
       </div>
 
-      {/* Keyframes */}
       <style>{`
-        @keyframes splashLogoGlow {
-          0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
-          50% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
+        @keyframes splashGlow {
+          0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.65; }
+          50% { transform: translate(-50%, -50%) scale(1.28); opacity: 1; }
         }
-        @keyframes splashAurora1 {
+        @keyframes splashAurora {
           0% { transform: translate(0, 0) scale(1); }
-          100% { transform: translate(6%, -4%) scale(1.08); }
+          100% { transform: translate(3%, -3%) scale(1.06); }
         }
-        @keyframes splashAurora2 {
-          0% { transform: translate(0, 0) scale(1); }
-          100% { transform: translate(-8%, 5%) scale(1.12); }
-        }
-        @keyframes splashAurora3 {
-          0% { transform: translate(0, 0) scale(1); }
-          100% { transform: translate(4%, 8%) scale(1.05); }
-        }
-        @keyframes splashParticle {
-          0%, 100% { transform: translate(0, 0); }
-          25% { transform: translate(20px, -30px); }
-          50% { transform: translate(-15px, -50px); }
-          75% { transform: translate(25px, -15px); }
+        @media (prefers-reduced-motion: reduce) {
+          [style*="splashGlow"], [style*="splashAurora"] { animation: none !important; }
         }
       `}</style>
     </div>

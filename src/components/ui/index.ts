@@ -88,3 +88,4 @@ export {
 } from './skeleton'
 export { DateRangePicker, type DateRange } from './date-range-picker'
 export { SmartAppBanner } from './smart-app-banner'
+export { BrandLoader, type BrandLoaderProps } from './brand-loader'
