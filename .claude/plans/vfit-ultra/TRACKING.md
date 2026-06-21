@@ -152,6 +152,7 @@
 | Versão | Sprint | Data | Commit | Arquivos | Notas |
 |--------|--------|------|--------|----------|-------|
 | v4.8.4 | LOAD/REV | 2026-06-21 | f0ab6c9b | loading screen + plano (16 docs) | ✅ Pages (frontend) LIVE · ❌ Worker bloqueado (R2 não habilitado na conta, code 10136/10042) · API segue v anterior, health 200 · WhatsApp notify off (Unipile a configurar) |
+| v4.8.5 | S-REDESIGN | 2026-06-21 | (release) | hero + login redesign | ✅ Pages LIVE (290 arquivos) — novo hero "Seu personal trainer com IA, no seu bolso" + posicionamento 30d sem cartão; confirmado em prod (curl). Worker pulado (R2). WhatsApp off. |
 
 ---
 

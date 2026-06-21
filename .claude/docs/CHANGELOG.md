@@ -15,6 +15,11 @@
 - **Validação:** `tsc --noEmit` 0 erros · `eslint` 0 problemas · `next build` OK (141 páginas).
 - **Deploy v4.8.4 (2026-06-21):** ✅ **Pages/frontend LIVE** (vfit.app.br, 359 arquivos) — nova tela de loading no ar. Git push `origin/main` + tag v4.8.4. ❌ **Worker/API não deployou** — R2 não habilitado na conta CF (`vfit-videos`, code 10136/10042); API segue versão anterior (health 200, sem regressão). **Ação pendente do dono:** habilitar R2 no Cloudflare Dashboard para liberar deploys de worker. WhatsApp notify off (migrando para Unipile).
 
+### 🎨 Redesign hero + login — posicionamento trial 30d (2026-06-21)
+- **Hero (homepage)**: headline em caixa mista (saiu o all-caps, achado da auditoria) → "Seu personal trainer com IA, no seu bolso"; label/subtítulo/trust badges agora comunicam **30 dias grátis · sem cartão · cancele quando quiser**.
+- **Login**: CTA de cadastro e selo de confiança comunicam "30 dias grátis sem cartão". Lógica de auth intacta.
+- **Deploy v4.8.5 (2026-06-21):** ✅ **Pages LIVE** (290 arquivos), `--skip-workers` (R2 ainda não habilitado). Confirmado em produção via `curl` (novo hero presente, HTTP 200). Push `origin/main` + tag v4.8.5.
+
 ### 🔧 Hotfix v4.6.8 — Cache-bust PWA e fallback por perfil Victor (2026-06-09)
 - **Fallback independente de role antigo:** [src/app/(app)/avaliacoes/page.tsx](src/app/(app)/avaliacoes/page.tsx) agora injeta a avaliação `16efd166-f01f-42de-8e63-a3d8119443d8` também quando o usuário persistido tem `id=f1bc775d-7b7b-4702-adeb-dc9255082d03` ou `email=victor.duarte@vfit.app.br`, cobrindo Zustand/PWA com `role` antigo ou ausente.
 - **Cache PWA invalidado:** [public/OneSignalSDKWorker.js](public/OneSignalSDKWorker.js) bumpou `CACHE_VERSION` para `v10` e passou a tratar `/avaliacoes` como network/no-store, evitando HTML/app shell antigo nessa rota crítica.
