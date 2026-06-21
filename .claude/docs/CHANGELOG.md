@@ -20,6 +20,12 @@
 - **Login**: CTA de cadastro e selo de confiança comunicam "30 dias grátis sem cartão". Lógica de auth intacta.
 - **Deploy v4.8.5 (2026-06-21):** ✅ **Pages LIVE** (290 arquivos), `--skip-workers` (R2 ainda não habilitado). Confirmado em produção via `curl` (novo hero presente, HTTP 200). Push `origin/main` + tag v4.8.5.
 
+### ✨ Fundação do trial 30d + posicionamento no funil (2026-06-21)
+- **`lib/entitlements.ts`** (NOVO): fonte única de verdade de plano/trial (pure, compartilhado app+worker). Base do S1 (doc 02).
+- **Trial 14d → 30d**: `auth.ts` usa `TRIAL_DAYS` no signup (staged — sobe quando o worker deployar via R2).
+- **Posicionamento "30 dias grátis · sem cartão"** consistente em hero, login, CTA da home e welcome; headlines em caixa mista (achado da auditoria de design).
+- **Deploy v4.8.6 (2026-06-21):** ✅ **Pages LIVE** (289 arquivos), `--skip-workers`. Confirmado em prod via `curl` (welcome + CTA com novo copy, HTTP 200). Push `origin/main` + tag v4.8.6. tsc app+workers 0 erros.
+
 ### 🔧 Hotfix v4.6.8 — Cache-bust PWA e fallback por perfil Victor (2026-06-09)
 - **Fallback independente de role antigo:** [src/app/(app)/avaliacoes/page.tsx](src/app/(app)/avaliacoes/page.tsx) agora injeta a avaliação `16efd166-f01f-42de-8e63-a3d8119443d8` também quando o usuário persistido tem `id=f1bc775d-7b7b-4702-adeb-dc9255082d03` ou `email=victor.duarte@vfit.app.br`, cobrindo Zustand/PWA com `role` antigo ou ausente.
 - **Cache PWA invalidado:** [public/OneSignalSDKWorker.js](public/OneSignalSDKWorker.js) bumpou `CACHE_VERSION` para `v10` e passou a tratar `/avaliacoes` como network/no-store, evitando HTML/app shell antigo nessa rota crítica.

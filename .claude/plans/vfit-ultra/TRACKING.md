@@ -15,8 +15,8 @@
 
 ## S1 — Trial & Paywall
 - [ ] T1.1 Migration trial unificado (+rollback)
-- [ ] T1.2 `lib/entitlements.ts` (fonte única)
-- [ ] T1.3 Signup personal+aluno: trial 30d sem Asaas
+- [x] T1.2 `lib/entitlements.ts` (fonte única) ✅ criado (pure, app+workers tsc OK)
+- [~] T1.3 Signup: trial **30d** (auth.ts via `TRIAL_DAYS`) ✅ staged (deploya com R2); aluno sem Asaas = pendente backend
 - [ ] T1.4 `/auth/me` retorna entitlements (corrige bug check `false`)
 - [ ] T1.5 Middleware gating premium
 - [ ] T1.6 Cron expiração + reminders D-5/D-2/D-0
@@ -153,6 +153,7 @@
 |--------|--------|------|--------|----------|-------|
 | v4.8.4 | LOAD/REV | 2026-06-21 | f0ab6c9b | loading screen + plano (16 docs) | ✅ Pages (frontend) LIVE · ❌ Worker bloqueado (R2 não habilitado na conta, code 10136/10042) · API segue v anterior, health 200 · WhatsApp notify off (Unipile a configurar) |
 | v4.8.5 | S-REDESIGN | 2026-06-21 | (release) | hero + login redesign | ✅ Pages LIVE (290 arquivos) — novo hero "Seu personal trainer com IA, no seu bolso" + posicionamento 30d sem cartão; confirmado em prod (curl). Worker pulado (R2). WhatsApp off. |
+| v4.8.6 | S1/S-REDESIGN | 2026-06-21 | (release) | entitlements + trial 30d + CTA/welcome 30d | ✅ Pages LIVE (289 arquivos) — `lib/entitlements.ts`, trial 14→30d (auth.ts staged), CTA/welcome com 30d sem cartão; confirmado em prod (curl). Worker pulado (R2). |
 
 ---
 
