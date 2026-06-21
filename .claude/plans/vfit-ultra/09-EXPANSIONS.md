@@ -16,24 +16,30 @@ O brasileiro vive no WhatsApp. Hoje o WhatsApp no VFIT é só processo operacion
 3. **Cobrança via WhatsApp** — link de pagamento Asaas (PIX) enviado pelo WhatsApp pelo personal; confirmação automática via webhook.
 4. **Onboarding assist** — boas-vindas + ativação do trial via WhatsApp.
 
+### Provider: Unipile API ✅ (decisão do usuário)
+- **Usaremos a Unipile API** para o WhatsApp (não WhatsApp Business API/HSM direto).
+- **Já há infra:** `lib/unipile-agents.ts` no projeto (hoje dispatch de Instagram) → estender para WhatsApp.
+- Vantagem: sem fila de aprovação de templates HSM; envio/recepção via Unipile; mesma camada para múltiplos canais.
+
 ### Apoio em infra existente
-- Gateway WhatsApp citado em `.claude/docs/WHATSAPP-GATEWAY.md`.
+- `lib/unipile-agents.ts` (cliente Unipile já presente).
 - Pagamentos Asaas (PIX/link) já robustos (`payments.ts`).
 - OneSignal/notifications como fallback.
 
 ### Backend novo
-- `workers/api/whatsapp.ts` — webhook de entrada (respostas), envio de templates, opt-in/opt-out.
-- Templates aprovados no WhatsApp Business API (HSM) — **dependência externa, planejar antecedência**.
+- `workers/api/whatsapp.ts` — webhook de entrada (respostas via Unipile), envio de mensagens, opt-in/opt-out.
+- `lib/unipile-whatsapp.ts` — wrapper sobre a Unipile API (send/receive), reaproveitando padrão de `unipile-agents.ts`.
+- Secret `UNIPILE_API_KEY` / `UNIPILE_DSN` (env local autorizado).
 - Tabela `whatsapp_optin` (LGPD: consentimento explícito) + `whatsapp_messages` (log).
 
 ### Riscos
-- Aprovação de templates no WhatsApp Business (lead time) → começar cedo.
 - LGPD: opt-in obrigatório, opt-out fácil.
-- Custo por mensagem (BSP) → medir.
+- Limites/custo da conta Unipile → medir.
+- Mapeamento de conta WhatsApp ↔ Unipile (provisionar conexão).
 
 ### Tarefas (ver TRACKING S-WA)
-- [ ] WA.1 Provisionar WhatsApp Business API + templates HSM
-- [ ] WA.2 `workers/api/whatsapp.ts` (envio + webhook entrada)
+- [ ] WA.1 Conectar conta WhatsApp na Unipile + `lib/unipile-whatsapp.ts`
+- [ ] WA.2 `workers/api/whatsapp.ts` (envio + webhook entrada via Unipile)
 - [ ] WA.3 Opt-in/opt-out + tabela consentimento (LGPD)
 - [ ] WA.4 Lembrete de treino (cron + template)
 - [ ] WA.5 Check-in do aluno (resposta → adesão)

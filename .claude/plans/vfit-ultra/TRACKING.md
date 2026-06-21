@@ -105,9 +105,9 @@
 - [ ] T8.5 QA fim-a-fim de todos os fluxos
 - [ ] T8.6 Docs (DESIGN-SYSTEM/BACKEND/RULES/CHANGELOG) + sync-ai-docs
 
-## S-WA — WhatsApp como canal de produto (E1, novo escopo)
-- [ ] WA.1 WhatsApp Business API + templates HSM
-- [ ] WA.2 `workers/api/whatsapp.ts` (envio + webhook)
+## S-WA — WhatsApp como canal de produto (E1, novo escopo) — provider: Unipile API
+- [ ] WA.1 Conectar conta WhatsApp na Unipile + `lib/unipile-whatsapp.ts`
+- [ ] WA.2 `workers/api/whatsapp.ts` (envio + webhook via Unipile)
 - [ ] WA.3 Opt-in/opt-out + consentimento LGPD
 - [ ] WA.4 Lembrete de treino (cron + template)
 - [ ] WA.5 Check-in do aluno (resposta → adesão)

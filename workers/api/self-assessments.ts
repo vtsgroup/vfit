@@ -15,7 +15,7 @@ import type { AppContext } from '@workers/types'
 import { authMiddleware } from '@workers/middleware/auth'
 import { pgQuery, pgQueryOne, generateId } from '@lib/db'
 import { success, created, noContent } from '@lib/response'
-import { BadRequestError, NotFoundError } from '@lib/errors'
+import { BadRequestError, ForbiddenError, NotFoundError } from '@lib/errors'
 
 const app = new Hono<AppContext>()
 
@@ -155,6 +155,7 @@ app.get('/', async (c) => {
 // ── GET /:id — Detalhe ───────────────────────────────
 app.get('/:id', async (c) => {
   const userId = c.get('userId')
+  const userRole = String(c.get('userRole') || 'user')
   const env = c.env
   const id = c.req.param('id')
 
@@ -164,9 +165,47 @@ app.get('/:id', async (c) => {
     [id, userId]
   )
 
-  if (!row) throw new NotFoundError('Avaliação não encontrada')
+  if (row) {
+    return success(row)
+  }
 
-  return success(row)
+  const completeAssessment = await pgQueryOne(
+    env,
+    `SELECT a.*
+     FROM assessments a
+     WHERE a.id = $1
+     LIMIT 1`,
+    [id]
+  )
+
+  if (!completeAssessment) {
+    throw new NotFoundError('Avaliação não encontrada')
+  }
+
+  if (userRole !== 'super_admin' && userRole !== 'admin') {
+    const userType = String(c.get('userType') || 'user')
+    if (userType === 'personal' && completeAssessment.personal_id !== userId) {
+      throw new ForbiddenError('Sem permissão')
+    }
+    if (userType === 'student' && completeAssessment.student_id !== userId) {
+      throw new ForbiddenError('Sem permissão')
+    }
+    if (userType === 'nutritionist') {
+      const linked = await pgQueryOne<{ linked: boolean }>(
+        env,
+        `SELECT (metadata->>'nutritionist_id' = $1) AS linked
+         FROM students
+         WHERE id = $2
+         LIMIT 1`,
+        [userId, completeAssessment.student_id]
+      )
+      if (!linked?.linked) {
+        throw new ForbiddenError('Sem permissão')
+      }
+    }
+  }
+
+  return success(completeAssessment)
 })
 
 // ── DELETE /:id — Deletar avaliação definitivamente ───────────────
