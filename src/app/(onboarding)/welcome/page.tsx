@@ -126,7 +126,7 @@ export default function WelcomePage() {
             <span className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-400 text-bg-base">
               <DSIcon name="sparkles" size={15} />
             </span>
-            Plano grátis pronto no final
+            30 dias grátis · sem cartão
           </div>
           <h1
             className="max-w-2xl text-[38px] leading-[1.01] text-white min-[380px]:text-[42px] sm:text-6xl lg:text-[76px]"

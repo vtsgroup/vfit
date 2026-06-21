@@ -90,21 +90,21 @@ export function CtaSection() {
         {/* Heading — slightly smaller, balanced */}
         <IntersectionReveal animation="blur-in" delay={50}>
           <h2
-            className="font-syne mx-auto max-w-4xl text-3xl uppercase leading-[0.96] text-white sm:text-5xl"
+            className="font-syne mx-auto max-w-4xl text-3xl font-black leading-[0.98] tracking-tight text-white sm:text-5xl"
           >
-            COMECE SEU{' '}
+            Comece seu{' '}
             <span className="bg-linear-to-r from-brand-primary via-brand-mint to-brand-accent bg-clip-text text-transparent">
-              TREINO
+              treino
             </span>
             <br />
-            COM PERSONAL E IA
+            com personal e IA
           </h2>
         </IntersectionReveal>
 
         {/* Subtitle */}
         <IntersectionReveal animation="fade-in" delay={100}>
           <p className="mx-auto mt-5 max-w-lg text-sm leading-relaxed text-white/60 sm:text-base">
-            Crie sua conta grátis, receba um plano claro e acompanhe sua evolução sem depender de planilha solta.
+            30 dias grátis, sem cartão. Receba um plano claro e acompanhe sua evolução sem planilha solta — cancele quando quiser.
           </p>
         </IntersectionReveal>
 

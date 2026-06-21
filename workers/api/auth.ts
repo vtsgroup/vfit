@@ -72,6 +72,7 @@ import {
 import { authMiddleware } from '@workers/middleware/auth'
 import { notifyEvent, notifyNewStudent } from '@lib/onesignal'
 import { sendEmailWithResend } from '@lib/email-resend'
+import { TRIAL_DAYS } from '@lib/entitlements'
 
 const auth = new Hono<AppContext>()
 
@@ -247,8 +248,8 @@ auth.post('/register/personal', async (c) => {
   const verificationToken = generateToken()
   const now = new Date().toISOString()
 
-  // Calcular trial end (14 dias)
-  const trialEnd = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString()
+  // Calcular trial end (VFIT ULTRA: 30 dias grátis sem cartão — doc 02)
+  const trialEnd = new Date(Date.now() + TRIAL_DAYS * 24 * 60 * 60 * 1000).toISOString()
 
   // 1) Insert user
   try {
