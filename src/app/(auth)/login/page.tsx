@@ -363,11 +363,11 @@ export default function LoginPage() {
           <p className="text-[13px] text-slate-400">
             Novo por aqui?{' '}
             <Link href="/register" className="font-black text-brand-primary hover:text-brand-primary/80 transition-colors">
-              Comece grátis agora
+              Teste 30 dias grátis
             </Link>
           </p>
           <span className="mt-2 flex items-center justify-center gap-1.5 text-[9px] text-slate-600" style={monoLabel}>
-            <DSIcon name="shield" size={12} /> SSL · LGPD · SEM CARTÃO NO CADASTRO
+            <DSIcon name="shield" size={12} /> SSL · LGPD · 30 DIAS GRÁTIS SEM CARTÃO
           </span>
         </div>
 

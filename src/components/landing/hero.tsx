@@ -156,19 +156,19 @@ export function Hero() {
               >
                 <span className="h-1.5 w-1.5 rounded-full bg-brand-primary animate-pulse" />
                 {headlineVariant === 'A'
-                  ? 'App de treino com personal trainer online'
-                  : 'Treino inteligente para evoluir de verdade'}
+                  ? '30 dias grátis · sem cartão'
+                  : 'Comece grátis · sem cartão de crédito'}
               </span>
             </div>
           </IntersectionReveal>
 
-          {/* Headline */}
-          <h1 className="font-syne mx-auto mb-6 max-w-5xl text-balance text-4xl uppercase leading-[0.96] text-white sm:text-6xl lg:text-7xl">
-            Treine com personal trainer e{' '}
+          {/* Headline — caixa mista, hierarquia forte (DS unificado) */}
+          <h1 className="font-syne mx-auto mb-6 max-w-5xl text-balance text-4xl font-black leading-[0.98] tracking-tight text-white sm:text-6xl lg:text-7xl">
+            Seu personal trainer com{' '}
             <span className="bg-linear-to-r from-brand-primary via-brand-mint to-brand-accent bg-clip-text text-transparent">
               IA
             </span>
-            {' '}no celular
+            , no seu bolso
           </h1>
 
           {/* Slide indicators */}
@@ -189,10 +189,10 @@ export function Hero() {
 
           {/* Subtitle */}
           <IntersectionReveal animation="fade-in" delay={150}>
-            <p className="mx-auto max-w-xl text-base leading-relaxed text-white/50 sm:text-lg">
+            <p className="mx-auto max-w-xl text-base leading-relaxed text-white/55 sm:text-lg">
               {headlineVariant === 'A'
-                ? 'Receba um plano de treino personalizado, acompanhe sua evolução por dados e mantenha constância com gamificação no app.'
-                : 'Comece grátis, veja seu próximo treino com clareza e evolua com apoio de IA, personal e nutricionista quando precisar.'}
+                ? 'Plano de treino personalizado, evolução por dados e gamificação no app. Teste tudo por 30 dias grátis — sem pedir cartão.'
+                : 'Veja seu próximo treino com clareza e evolua com IA, personal e nutricionista. 30 dias grátis, sem cartão de crédito.'}
             </p>
           </IntersectionReveal>
 
@@ -238,7 +238,7 @@ export function Hero() {
             <div className="mt-8 flex flex-wrap items-center justify-center gap-4 sm:gap-8 text-white/25" style={monoLabel}>
               <span className="inline-flex items-center gap-2 text-[10px] uppercase">
                 <DSIcon name="check" size={14} className="text-brand-primary/50" />
-                PLANO GRATUITO
+                30 DIAS GRÁTIS
               </span>
               <span className="inline-flex items-center gap-2 text-[10px] uppercase">
                 <DSIcon name="check" size={14} className="text-brand-primary/50" />
@@ -246,7 +246,7 @@ export function Hero() {
               </span>
               <span className="inline-flex items-center gap-2 text-[10px] uppercase">
                 <DSIcon name="check" size={14} className="text-brand-primary/50" />
-                TREINO NO CELULAR
+                CANCELE QUANDO QUISER
               </span>
             </div>
           </IntersectionReveal>
