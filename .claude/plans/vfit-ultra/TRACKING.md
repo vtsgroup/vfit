@@ -151,7 +151,7 @@
 ## Tabela de Deploys
 | Versão | Sprint | Data | Commit | Arquivos | Notas |
 |--------|--------|------|--------|----------|-------|
-| — | — | — | — | — | (preencher a cada deploy) |
+| v4.8.4 | LOAD/REV | 2026-06-21 | f0ab6c9b | loading screen + plano (16 docs) | ✅ Pages (frontend) LIVE · ❌ Worker bloqueado (R2 não habilitado na conta, code 10136/10042) · API segue v anterior, health 200 · WhatsApp notify off (Unipile a configurar) |
 
 ---
 

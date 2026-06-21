@@ -13,6 +13,7 @@
   - `src/components/ui/brand-loader.tsx` (NOVO) — `BrandLoader` CSS-only, variantes page/inline, acessível (role=status, reduced-motion), exportado no barrel.
   - `src/components/ui/splash-screen.tsx` reescrito (v4) — removidas 30 partículas + 3 auroras + cor hardcoded de className (RULES §12); mesma API `isReady`; ~1.8s (antes ~2.8s).
 - **Validação:** `tsc --noEmit` 0 erros · `eslint` 0 problemas · `next build` OK (141 páginas).
+- **Deploy v4.8.4 (2026-06-21):** ✅ **Pages/frontend LIVE** (vfit.app.br, 359 arquivos) — nova tela de loading no ar. Git push `origin/main` + tag v4.8.4. ❌ **Worker/API não deployou** — R2 não habilitado na conta CF (`vfit-videos`, code 10136/10042); API segue versão anterior (health 200, sem regressão). **Ação pendente do dono:** habilitar R2 no Cloudflare Dashboard para liberar deploys de worker. WhatsApp notify off (migrando para Unipile).
 
 ### 🔧 Hotfix v4.6.8 — Cache-bust PWA e fallback por perfil Victor (2026-06-09)
 - **Fallback independente de role antigo:** [src/app/(app)/avaliacoes/page.tsx](src/app/(app)/avaliacoes/page.tsx) agora injeta a avaliação `16efd166-f01f-42de-8e63-a3d8119443d8` também quando o usuário persistido tem `id=f1bc775d-7b7b-4702-adeb-dc9255082d03` ou `email=victor.duarte@vfit.app.br`, cobrindo Zustand/PWA com `role` antigo ou ausente.
