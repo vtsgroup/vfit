@@ -81,10 +81,10 @@ export default function RegisterPage() {
             </p>
           </div>
           <h1 className="text-[2rem] text-white leading-none" style={headingFont}>
-            Começar grátis
+            Teste 30 dias grátis
           </h1>
           <p className="mt-1.5 text-[13px] text-slate-400">
-            Escolha seu perfil para personalizar a experiência
+            Sem cartão. Escolha seu perfil para personalizar a experiência
           </p>
         </div>
 
@@ -93,7 +93,7 @@ export default function RegisterPage() {
           {/* Personal Trainer Card — 3D with green accent */}
           <Link
             href={`/register/personal${refQuery}`}
-            className="vfit-flow-panel group relative block rounded-[1.75rem] p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_28px_70px_rgba(34,197,94,0.16)] active:translate-y-0.5"
+            className="vfit-flow-panel group relative block rounded-[1.75rem] p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_28px_70px_rgba(34,197,94,0.16)] active:translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
           >
             {/* Shine effect */}
             <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
@@ -110,7 +110,7 @@ export default function RegisterPage() {
                   <div className="flex items-center gap-2">
                     <h3 className="text-[18px] text-white" style={headingFont}>Personal Trainer</h3>
                     <span className="rounded-full bg-brand-primary/15 px-2 py-0.5 text-[8px] font-bold uppercase text-brand-primary" style={monoLabel}>
-                      PRO
+                      Pro
                     </span>
                   </div>
                   <p className="text-[12px] text-slate-400 mt-0.5">
@@ -129,13 +129,19 @@ export default function RegisterPage() {
                 <FeaturePill icon={<DSIcon name="rocket" size={10} />} label="MARKETPLACE" included />
                 <FeaturePill icon={<DSIcon name="calendarCheck" size={10} />} label="AGENDAMENTOS" included />
               </div>
+
+              {/* Trial reassurance */}
+              <div className="mt-3 flex items-center gap-1.5 text-[10px] text-brand-primary/80" style={monoLabel}>
+                <DSIcon name="shieldCheck" size={12} className="text-brand-primary" />
+                30 DIAS GRÁTIS · SEM CARTÃO
+              </div>
             </div>
           </Link>
 
           {/* Student Card — 3D with brand accent */}
           <Link
             href={`/register/student${refQuery}`}
-            className="vfit-flow-panel-soft group relative block rounded-[1.75rem] p-6 transition-all duration-300 hover:-translate-y-1 hover:bg-white/8 active:translate-y-0.5"
+            className="vfit-flow-panel-soft group relative block rounded-[1.75rem] p-6 transition-all duration-300 hover:-translate-y-1 hover:bg-white/8 active:translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
           >
             {/* Shine effect */}
             <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
@@ -152,7 +158,7 @@ export default function RegisterPage() {
                   <div className="flex items-center gap-2">
                     <h3 className="text-[18px] text-white" style={headingFont}>Aluno</h3>
                     <span className="rounded-full bg-brand-primary/15 px-2 py-0.5 text-[8px] font-bold uppercase text-brand-primary" style={monoLabel}>
-                      FREE
+                      Grátis
                     </span>
                   </div>
                   <p className="text-[12px] text-slate-400 mt-0.5">

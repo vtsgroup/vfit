@@ -226,7 +226,9 @@ export const Turnstile = forwardRef<TurnstileRef, TurnstileProps>(
     return (
       <div
         ref={containerRef}
-        className={mode === 'invisible' ? '' : 'flex min-h-18 w-full items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white/95 p-2 shadow-[0_10px_30px_rgba(2,8,16,0.22)] animate-blur-in [&>iframe]:w-full! [&>div]:w-full!'}
+        role={mode === 'invisible' ? undefined : 'group'}
+        aria-label={mode === 'invisible' ? undefined : 'Verificação de segurança'}
+        className={mode === 'invisible' ? '' : 'flex min-h-18 w-full items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white/95 p-2 shadow-glass-lg motion-safe:animate-blur-in [&>iframe]:w-full! [&>div]:w-full!'}
         style={{ opacity: mode === 'invisible' && !isVerified ? 0 : 1 }}
       />
     )

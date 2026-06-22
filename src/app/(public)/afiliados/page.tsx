@@ -80,11 +80,12 @@ export default function AfiliadosPublicPage() {
 
         <div className="mt-4 overflow-hidden rounded-xl border border-white/8">
           <table className="w-full text-sm">
+            <caption className="sr-only">Tiers do programa de afiliados com comissão e requisitos de ativação</caption>
             <thead>
               <tr className="border-b border-white/8 bg-white/4">
-                <th className="px-3 py-2 text-left text-text-secondary">Tier</th>
-                <th className="px-3 py-2 text-left text-text-secondary">Comissão</th>
-                <th className="px-3 py-2 text-left text-text-secondary">Ativação</th>
+                <th scope="col" className="px-3 py-2 text-left text-text-secondary">Tier</th>
+                <th scope="col" className="px-3 py-2 text-left text-text-secondary">Comissão</th>
+                <th scope="col" className="px-3 py-2 text-left text-text-secondary">Ativação</th>
               </tr>
             </thead>
             <tbody>

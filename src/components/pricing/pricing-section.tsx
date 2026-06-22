@@ -21,7 +21,7 @@ const PricingTable = dynamic(
   () => import('@/components/pricing/pricing-table').then((m) => ({ default: m.PricingTable })),
   {
     loading: () => (
-      <div className="h-96 animate-pulse rounded-2xl bg-white/5" />
+      <div className="h-96 motion-safe:animate-pulse rounded-2xl bg-white/5" aria-hidden="true" />
     ),
   }
 )

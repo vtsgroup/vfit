@@ -91,7 +91,7 @@ export default function NutricionistasPage() {
         <h2 className="text-lg font-bold text-text-primary">Painel colaborativo: treino + dieta</h2>
         <div className="mt-3 grid gap-4 md:grid-cols-2">
           <article className="rounded-xl border border-white/8 bg-white/4 p-4">
-            <h3 className="text-sm font-bold text-text-primary uppercase tracking-wider">O que a nutrição acompanha</h3>
+            <h3 className="text-sm font-bold text-text-primary tracking-wider">O que a nutrição acompanha</h3>
             <ul className="mt-2 space-y-1 text-sm text-text-secondary">
               <li>• Frequência e consistência de treino</li>
               <li>• Indicadores de progresso e adesão</li>
@@ -99,7 +99,7 @@ export default function NutricionistasPage() {
             </ul>
           </article>
           <article className="rounded-xl border border-white/8 bg-white/4 p-4">
-            <h3 className="text-sm font-bold text-text-primary uppercase tracking-wider">Comunicação entre profissionais</h3>
+            <h3 className="text-sm font-bold text-text-primary tracking-wider">Comunicação entre profissionais</h3>
             <ul className="mt-2 space-y-1 text-sm text-text-secondary">
               <li>• Chat entre personal e nutricionista no caso do aluno</li>
               <li>• Ajustes rápidos para manter plano coerente</li>
@@ -125,7 +125,7 @@ export default function NutricionistasPage() {
         <h2 className="text-lg font-bold text-text-primary">Integração treino + nutrição: MVP e roadmap</h2>
         <div className="mt-3 grid gap-4 md:grid-cols-2">
           <article className="rounded-xl border border-white/8 bg-white/4 p-4">
-            <h3 className="text-sm font-bold text-text-primary uppercase tracking-wider">MVP (já disponível)</h3>
+            <h3 className="text-sm font-bold text-text-primary tracking-wider">MVP (já disponível)</h3>
             <ul className="mt-2 space-y-1 text-sm text-text-secondary">
               <li>• Contexto de treino para leitura clínica da conduta</li>
               <li>• Jornada do paciente alinhada ao acompanhamento do personal</li>
@@ -135,7 +135,7 @@ export default function NutricionistasPage() {
           </article>
 
           <article className="rounded-xl border border-white/8 bg-white/4 p-4">
-            <h3 className="text-sm font-bold text-text-primary uppercase tracking-wider">Roadmap (próxima fase)</h3>
+            <h3 className="text-sm font-bold text-text-primary tracking-wider">Roadmap (próxima fase)</h3>
             <ul className="mt-2 space-y-1 text-sm text-text-secondary">
               <li>• Camada de plano alimentar integrada ao fluxo do aluno</li>
               <li>• Relatórios conjuntos treino + nutrição para consulta</li>

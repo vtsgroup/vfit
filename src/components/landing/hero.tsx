@@ -125,7 +125,8 @@ export function Hero() {
       />
 
       {/* Subtle grid */}
-      <div className="absolute inset-0 opacity-[0.025]" style={{
+      <div className="absolute inset-0" style={{
+        opacity: 0.025,
         backgroundImage: 'linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)',
         backgroundSize: '80px 80px',
       }} />
@@ -154,10 +155,10 @@ export function Hero() {
                 className="inline-flex items-center gap-2 rounded-full border border-brand-primary/15 bg-brand-primary/6 px-4 py-1.5 text-[11px] text-brand-primary/80 uppercase"
                 style={monoLabel}
               >
-                <span className="h-1.5 w-1.5 rounded-full bg-brand-primary animate-pulse" />
+                <span className="h-1.5 w-1.5 rounded-full bg-brand-primary motion-safe:animate-pulse" />
                 {headlineVariant === 'A'
                   ? '30 dias grátis · sem cartão'
-                  : 'Comece grátis · sem cartão de crédito'}
+                  : '30 dias grátis · sem cartão de crédito'}
               </span>
             </div>
           </IntersectionReveal>
@@ -178,10 +179,11 @@ export function Hero() {
                 <button
                   key={i}
                   onClick={() => setCurrentSlide(i)}
-                  className={`h-1 rounded-full transition-all duration-500 ${
+                  className={`h-1 rounded-full transition-all duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base ${
                     currentSlide === i ? 'w-8 bg-brand-primary' : 'w-2 bg-white/20 hover:bg-white/40'
                   }`}
-                  aria-label={`Slide ${i + 1}`}
+                  aria-label={`Ir para slide ${i + 1}${currentSlide === i ? ' (atual)' : ''}`}
+                  aria-current={currentSlide === i ? 'true' : undefined}
                 />
               ))}
             </div>
@@ -189,7 +191,7 @@ export function Hero() {
 
           {/* Subtitle */}
           <IntersectionReveal animation="fade-in" delay={150}>
-            <p className="mx-auto max-w-xl text-base leading-relaxed text-white/55 sm:text-lg">
+            <p className="mx-auto max-w-xl text-base leading-relaxed text-white/70 sm:text-lg">
               {headlineVariant === 'A'
                 ? 'Plano de treino personalizado, evolução por dados e gamificação no app. Teste tudo por 30 dias grátis — sem pedir cartão.'
                 : 'Veja seu próximo treino com clareza e evolua com IA, personal e nutricionista. 30 dias grátis, sem cartão de crédito.'}
@@ -235,7 +237,7 @@ export function Hero() {
 
           {/* Trust badges */}
           <IntersectionReveal animation="fade-in" delay={350}>
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-4 sm:gap-8 text-white/25" style={monoLabel}>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-4 sm:gap-8 text-white/70" style={monoLabel}>
               <span className="inline-flex items-center gap-2 text-[10px] uppercase">
                 <DSIcon name="check" size={14} className="text-brand-primary/50" />
                 30 DIAS GRÁTIS
@@ -276,7 +278,7 @@ export function Hero() {
                   <span className="font-syne text-xl font-black text-white sm:text-3xl">
                     {stat.value}
                   </span>
-                  <span className="mt-1 text-[9px] sm:text-[10px] text-white/30 uppercase" style={monoLabel}>
+                  <span className="mt-1 text-[9px] sm:text-[10px] text-white/60 uppercase" style={monoLabel}>
                     {stat.label}
                   </span>
                 </div>

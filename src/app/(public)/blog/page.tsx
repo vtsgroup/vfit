@@ -54,22 +54,22 @@ export default function BlogPage() {
           </p>
 
           <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            <TrackedCtaLink href="/" cta="Sou aluno" placement="blog_hub_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 transition-colors hover:border-brand-primary/30 hover:bg-brand-primary/8">
+            <TrackedCtaLink href="/" cta="Sou aluno" placement="blog_hub_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 transition-colors hover:border-brand-primary/30 hover:bg-brand-primary/8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base">
               <h3 className="text-sm font-bold text-white">Sou aluno</h3>
               <p className="mt-1 text-xs text-zinc-400">Treino com IA, evolução e constância no app.</p>
             </TrackedCtaLink>
 
-            <TrackedCtaLink href="/app-personal-trainer" cta="Sou personal trainer" placement="blog_hub_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 transition-colors hover:border-brand-primary/30 hover:bg-brand-primary/8">
+            <TrackedCtaLink href="/app-personal-trainer" cta="Sou personal trainer" placement="blog_hub_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 transition-colors hover:border-brand-primary/30 hover:bg-brand-primary/8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base">
               <h3 className="text-sm font-bold text-white">Sou personal trainer</h3>
               <p className="mt-1 text-xs text-zinc-400">IA, gestão, colaboração com nutrição e escala.</p>
             </TrackedCtaLink>
 
-            <TrackedCtaLink href="/nutricionistas" cta="Sou nutricionista" placement="blog_hub_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 transition-colors hover:border-brand-primary/30 hover:bg-brand-primary/8">
+            <TrackedCtaLink href="/nutricionistas" cta="Sou nutricionista" placement="blog_hub_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 transition-colors hover:border-brand-primary/30 hover:bg-brand-primary/8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base">
               <h3 className="text-sm font-bold text-white">Sou nutricionista</h3>
               <p className="mt-1 text-xs text-zinc-400">Área de nutrição e trabalho conjunto com personal.</p>
             </TrackedCtaLink>
 
-            <TrackedCtaLink href="/afiliados" cta="Quero ser afiliado" placement="blog_hub_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 transition-colors hover:border-brand-primary/30 hover:bg-brand-primary/8">
+            <TrackedCtaLink href="/afiliados" cta="Quero ser afiliado" placement="blog_hub_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 transition-colors hover:border-brand-primary/30 hover:bg-brand-primary/8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base">
               <h3 className="text-sm font-bold text-white">Quero ser afiliado</h3>
               <p className="mt-1 text-xs text-zinc-400">Indique e ganhe comissão recorrente.</p>
             </TrackedCtaLink>
@@ -84,16 +84,17 @@ export default function BlogPage() {
           <p className="text-sm text-zinc-400 mb-6">
             Cadastre-se para receber artigos e dicas exclusivas no seu e-mail.
           </p>
-          <div className="flex max-w-md mx-auto gap-3">
+          <form className="flex max-w-md mx-auto gap-3">
             <input
               type="email"
+              aria-label="Seu e-mail"
               placeholder="seu@email.com"
               className="flex-1 rounded-xl border border-white/10 bg-white/4 px-4 py-2.5 text-sm text-white placeholder:text-zinc-500 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 focus:outline-none transition-all"
             />
-            <Button size="md">
+            <Button type="submit" size="md">
               Assinar
             </Button>
-          </div>
+          </form>
         </section>
       </div>
     </>

@@ -217,7 +217,7 @@ function Stars({ count }: { count: number }) {
     <div className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1.5 ring-1 ring-amber-200/60">
       <div className="flex gap-0.5">
         {Array.from({ length: count }).map((_, i) => (
-          <svg key={i} className="h-3.5 w-3.5 text-amber-400 drop-shadow-sm" fill="currentColor" viewBox="0 0 20 20">
+          <svg key={i} aria-hidden="true" focusable="false" className="h-3.5 w-3.5 text-amber-400 drop-shadow-sm" fill="currentColor" viewBox="0 0 20 20">
             <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
           </svg>
         ))}
@@ -261,9 +261,9 @@ function TestimonialCard({ t }: { t: Testimonial }) {
   const parts = t.text.split(t.highlight)
 
   return (
-    <div className="group relative flex h-60 w-80 shrink-0 flex-col overflow-hidden rounded-3xl border border-gray-200 bg-white p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-all duration-300 hover:shadow-[0_20px_50px_rgba(16,185,129,0.15)] hover:-translate-y-3 cursor-pointer sm:h-80 sm:w-96 sm:p-7 lg:w-105">
+    <div className="group relative flex h-60 w-80 shrink-0 flex-col overflow-hidden rounded-3xl border border-gray-200 bg-white p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-all duration-300 hover:shadow-[0_20px_50px_rgba(16,185,129,0.15)] hover:-translate-y-3 sm:h-80 sm:w-96 sm:p-7 lg:w-105">
       {/* Quote watermark */}
-      <svg className="pointer-events-none absolute -right-2 -top-2 h-16 w-16 text-brand-primary/4 transition-all duration-300 group-hover:text-brand-primary/8 sm:h-24 sm:w-24" fill="currentColor" viewBox="0 0 24 24">
+      <svg aria-hidden="true" focusable="false" className="pointer-events-none absolute -right-2 -top-2 h-16 w-16 text-brand-primary/4 transition-all duration-300 group-hover:text-brand-primary/8 sm:h-24 sm:w-24" fill="currentColor" viewBox="0 0 24 24">
         <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10H14.017zM0 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151C7.546 6.068 5.983 8.789 5.983 11h4v10H0z" />
       </svg>
 
@@ -355,7 +355,7 @@ export function HowItWorksV2() {
         {/* Heading — Koyeb ultra-bold */}
         <IntersectionReveal animation="fade-in" delay={50}>
           <h2
-            className="mx-auto max-w-4xl text-center uppercase text-gray-950 mb-4"
+            className="mx-auto max-w-4xl text-center text-gray-950 mb-4"
             style={{
               ...headingFont,
               fontSize: 'clamp(2rem, 5.5vw, 3.75rem)',
@@ -411,6 +411,8 @@ export function HowItWorksV2() {
             style={{ animation: 'testimonialMarquee 60s linear infinite' }}
             onMouseEnter={(e) => { e.currentTarget.style.animationPlayState = 'paused' }}
             onMouseLeave={(e) => { e.currentTarget.style.animationPlayState = 'running' }}
+            onFocusCapture={(e) => { e.currentTarget.style.animationPlayState = 'paused' }}
+            onBlurCapture={(e) => { e.currentTarget.style.animationPlayState = 'running' }}
           >
             {[...currentTab.data, ...currentTab.data].map((t, i) => (
               <div key={`${activeTab}-${i}`}>

@@ -36,10 +36,10 @@ export default function StatusPage() {
     <div className="mx-auto max-w-2xl px-4 py-16 sm:py-24">
       {/* Header */}
       <div className="text-center mb-12">
-        <div className="inline-flex items-center gap-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 px-4 py-2 mb-6">
+        <div role="status" aria-live="polite" className="inline-flex items-center gap-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 px-4 py-2 mb-6">
           <span className="relative flex h-2.5 w-2.5">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
+            <span aria-hidden="true" className="absolute inline-flex h-full w-full motion-safe:animate-ping rounded-full bg-emerald-400 opacity-75" />
+            <span aria-hidden="true" className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
           </span>
           <span className="text-sm font-semibold text-emerald-400">Todos os sistemas operacionais</span>
         </div>
@@ -79,11 +79,11 @@ export default function StatusPage() {
 
       {/* Footer info */}
       <div className="mt-10 text-center">
-        <p className="text-sm text-zinc-600">
+        <p className="text-sm text-zinc-400">
           Última verificação: agora ·{' '}
           <a
             href="https://vfit.app.br"
-            className="text-emerald-500 hover:text-emerald-400 transition-colors"
+            className="text-emerald-400 hover:text-emerald-300 transition-colors"
           >
             Voltar ao site
           </a>

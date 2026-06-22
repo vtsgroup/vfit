@@ -11,6 +11,7 @@
 //   metadata — Metadata Next.js para SEO
 //   LgpdPage — page component (RSC)
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { DSIcon } from '@/components/ui/ds-icon'
 import type { DSIconName } from '@/components/ui/ds-icon'
 import { buildSeoMetadata } from '@/lib/seo'
@@ -95,7 +96,7 @@ export default function LgpdPage() {
           </div>
           <div>
             <h3 className="text-lg font-semibold text-white mb-2">Dados de Navegação</h3>
-            <p>Analytics via Google Analytics 4 (anonimizado), Cloudflare Analytics Engine. Cookies essenciais e de performance (veja nossa <a href="/cookies" className="text-brand-primary hover:underline">Política de Cookies</a>).</p>
+            <p>Analytics via Google Analytics 4 (anonimizado), Cloudflare Analytics Engine. Cookies essenciais e de performance (veja nossa <Link href="/cookies" className="text-brand-primary hover:underline">Política de Cookies</Link>).</p>
           </div>
         </div>
       </section>
@@ -128,7 +129,7 @@ export default function LgpdPage() {
         </p>
         <a
           href="mailto:lgpd@vfit.app.br"
-          className="inline-flex items-center gap-2 rounded-xl bg-brand-primary px-6 py-3 text-sm font-semibold text-bg-dark transition-all hover:bg-brand-primary-hover"
+          className="inline-flex items-center gap-2 rounded-xl bg-brand-primary px-6 py-3 text-sm font-semibold text-bg-dark transition-all hover:bg-brand-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base"
         >
           <DSIcon name="mail" size={16} />
           lgpd@vfit.app.br

@@ -42,21 +42,21 @@ export function CtaSection() {
       </div>
 
       {/* Overlay escuro cinematográfico */}
-      <div className="absolute inset-0 bg-bg-primary/85" />
+      <div aria-hidden="true" className="absolute inset-0 bg-bg-primary/85" />
 
       {/* Camada tonal da marca */}
-      <div className="absolute inset-0 bg-brand-primary/40 mix-blend-multiply" />
+      <div aria-hidden="true" className="absolute inset-0 bg-brand-primary/40 mix-blend-multiply" />
 
       {/* Bottom gradient fade to dark (transitions into footer) */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-linear-to-t from-bg-primary to-transparent" />
+      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-linear-to-t from-bg-primary to-transparent" />
 
       {/* Top gradient fade from light testimonials */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-linear-to-b from-bg-primary to-transparent" />
+      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-linear-to-b from-bg-primary to-transparent" />
 
       {/* Perspective grid — subtle over photo */}
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 flex items-center justify-center">
         <div
-          className="h-full w-full opacity-[0.04]"
+          className="h-full w-full opacity-4"
           style={{
             backgroundImage: `
               linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px),
@@ -72,7 +72,7 @@ export function CtaSection() {
       </div>
 
       {/* Subtle green glow behind heading */}
-      <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-80 w-80 rounded-full bg-brand-primary/8 blur-[150px]" />
+      <div aria-hidden="true" className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-80 w-80 rounded-full bg-brand-primary/8 blur-[150px]" />
 
       <div className="relative z-10 mx-auto max-w-5xl px-6 text-center">
         {/* Label */}
@@ -154,10 +154,10 @@ export function CtaSection() {
 
         {/* Trust badges — minimal mono */}
         <IntersectionReveal animation="fade-in" delay={400}>
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-4 text-white/50 sm:gap-8" style={monoLabel}>
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-4 text-white/70 sm:gap-8" style={monoLabel}>
             <span className="inline-flex items-center gap-2 text-[10px] uppercase">
               <DSIcon name="check" size={14} className="text-brand-primary/50" />
-              PLANO GRATUITO
+              30 DIAS GRÁTIS
             </span>
             <span className="inline-flex items-center gap-2 text-[10px] uppercase">
               <DSIcon name="check" size={14} className="text-brand-primary/50" />

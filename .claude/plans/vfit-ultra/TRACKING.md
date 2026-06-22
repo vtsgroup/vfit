@@ -121,15 +121,15 @@
 - [ ] V.4 UI "indique e ganhe" (compartilha via WhatsApp E1)
 - [ ] V.5 Métricas de viralidade (k-factor) no admin
 
-## S-REDESIGN — Login + Páginas Públicas (doc 10)
-- [ ] R.1 Tokens no login + telas irmãs (zero hardcode, lógica auth intacta)
-- [ ] R.2 Split-screen premium no login + prova social
-- [ ] R.3 oauth-buttons: hardcode → tokens
-- [ ] R.4 Landing hero + seções (bento, prova, planos, FAQ) com Card único
-- [ ] R.5 Pricing alinhado ao trial 30d
-- [ ] R.6 Demais públicas: shell + tipografia + estados
-- [ ] R.7 Performance (LCP, imagens, lazy)
-- [ ] R.8 A11y (aria/foco/teclado)
+## S-REDESIGN — Login + Páginas Públicas (doc 10) ✅ entregue (2026-06-22)
+- [x] R.1 Tokens no login + telas irmãs ✅ (3 `bg-[#]`→token; shadows rgba→aliases; grep zero; auth intacto)
+- [x] R.2 Split-screen premium no login + prova social ✅ (já premium em layout-client.tsx — verificado)
+- [x] R.3 oauth-buttons: hardcode → tokens ✅ (`bg-[#0d0d0f]`→`bg-bg-primary` + shadows→elevation aliases + SVGs aria-hidden)
+- [~] R.4 Landing hero + seções ✅ tipografia (uppercase removido), contraste, trial copy, a11y; bento/Card único = adiado (refactor maior)
+- [~] R.5 Pricing alinhado ao trial 30d ✅ landing pricing 30d + a11y toggle; `/pricing` modelo student-first mantido (decisão de produto adiada); 4 reviews fabricadas removidas
+- [x] R.6 Demais públicas: tipografia + estados + a11y ✅ (PageHero natural-case → 13 páginas; faq-inline aria; tabelas scope/caption; contraste)
+- [~] R.7 Performance ✅ reduced-motion (motion-safe); Hero RSC extraction + numbers SSR-counters = adiado
+- [x] R.8 A11y (aria/foco/teclado) ✅ (aria-label/hidden/expanded/current/live, role=switch/dialog, focus-visible, remoção tabIndex=-1)
 
 ## S-CONTENT — Pipeline de conteúdo (doc 12)
 - [ ] C.1 Habilitar CF Image Resizing + URLs otimizadas

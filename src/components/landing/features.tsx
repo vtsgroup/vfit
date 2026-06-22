@@ -157,13 +157,13 @@ const TABS = [
    HOW IT WORKS — Steps per perspective
    ═══════════════════════════════════════════ */
 const PERSONAL_STEPS: Step[] = [
-  { icon: 'userPlus', number: '01', title: 'Crie sua conta', description: 'Cadastro em 30 segundos. Plano Grátis para começar sem cartão de crédito.' },
+  { icon: 'userPlus', number: '01', title: 'Crie sua conta', description: 'Cadastro em 30 segundos. São 30 dias grátis, sem cartão de crédito.' },
   { icon: 'users', number: '02', title: 'Cadastre seus alunos', description: 'Adicione alunos manualmente ou envie convites por link direto pelo app.' },
   { icon: 'brainCircuit', number: '03', title: 'Gere treinos com IA', description: 'Defina os objetivos e deixe a inteligência artificial criar treinos perfeitos.' },
 ]
 
 const ALUNO_STEPS: Step[] = [
-  { icon: 'userPlus', number: '01', title: 'Crie seu perfil', description: 'Informe objetivo, nível, rotina e limitações. O cadastro começa grátis e sem cartão.' },
+  { icon: 'userPlus', number: '01', title: 'Crie seu perfil', description: 'Informe objetivo, nível, rotina e limitações. São 30 dias grátis, sem cartão.' },
   { icon: 'brainCircuit', number: '02', title: 'Receba seu treino', description: 'A IA monta o plano e o personal pode acompanhar sua evolução quando você quiser.' },
   { icon: 'dumbbell', number: '03', title: 'Treine e evolua', description: 'Siga o app, registre cargas, ganhe XP e veja seu progresso com dados reais.' },
 ]
@@ -195,7 +195,7 @@ function FeatureCard({ feat, index }: { feat: Feature; index: number }) {
           </div>
 
           {/* Title */}
-          <h3 className="font-syne text-lg uppercase tracking-tight text-gray-950">
+          <h3 className="font-syne text-lg tracking-tight text-gray-950">
             {feat.title}
           </h3>
 
@@ -251,10 +251,10 @@ export function Features() {
                 className="inline-flex items-center gap-2 rounded-full border border-brand-primary/30 bg-brand-primary/10 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-brand-primary"
                 style={monoLabel}
               >
-                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-brand-primary" />
+                <span className="h-1.5 w-1.5 motion-safe:animate-pulse rounded-full bg-brand-primary" />
                 App de treino
               </span>
-              <h2 className="font-syne mt-6 text-3xl uppercase tracking-tight text-gray-950 sm:text-4xl lg:text-5xl">
+              <h2 className="font-syne mt-6 text-3xl tracking-tight text-gray-950 sm:text-4xl lg:text-5xl">
                 Entenda seu treino,{' '}
                 <span className="text-brand-primary">execute</span> melhor
               </h2>
@@ -308,6 +308,11 @@ export function Features() {
               </span>
               <span className="hidden h-3 w-px bg-gray-300 sm:block" />
               <span className="flex items-center gap-2">
+                <DSIcon name="check" size={16} className="text-brand-primary" />
+                30 DIAS GRÁTIS
+              </span>
+              <span className="hidden h-3 w-px bg-gray-300 sm:block" />
+              <span className="flex items-center gap-2">
                 <DSIcon name="creditCard" size={16} className="text-brand-primary" />
                 SEM CARTÃO NO CADASTRO
               </span>
@@ -346,7 +351,7 @@ export function Features() {
               >
                 COMO FUNCIONA
               </span>
-              <h2 className="font-syne mt-3 text-3xl font-black uppercase tracking-tight text-gray-950 sm:text-4xl lg:text-5xl">
+              <h2 className="font-syne mt-3 text-3xl font-black tracking-tight text-gray-950 sm:text-4xl lg:text-5xl">
                 Comece em{' '}
                 <span className="bg-linear-to-r from-brand-primary via-brand-mint to-brand-accent bg-clip-text text-transparent">
                   3 passos

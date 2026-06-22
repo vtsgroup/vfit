@@ -65,14 +65,14 @@ export default function VerifyEmailPage() {
       <div className="animate-blur-in">
         {/* ─── Loading State ─── */}
         {state === 'loading' && (
-          <div className="py-8 text-center">
+          <div role="status" aria-live="polite" className="py-8 text-center">
             <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-primary/10 border border-brand-primary/20">
               <DSIcon name="loader" size={32} className="animate-spin text-brand-primary" />
             </div>
             <h1 className="text-[1.5rem] text-white leading-none" style={headingFont}>
               Verificando email...
             </h1>
-            <p className="mt-2 text-[13px] text-zinc-600">
+            <p className="mt-2 text-[13px] text-zinc-400">
               Aguarde enquanto confirmamos seu email.
             </p>
           </div>
@@ -96,13 +96,13 @@ export default function VerifyEmailPage() {
               <h1 className="text-[1.75rem] text-white leading-none text-center" style={headingFont}>
                 Email verificado!
               </h1>
-              <p className="mt-2 text-[13px] text-zinc-600 text-center">
+              <p className="mt-2 text-[13px] text-zinc-400 text-center">
                 Seu email foi verificado com sucesso. Agora você pode acessar sua conta.
               </p>
             </div>
 
             {/* Success alert — glass style */}
-            <div className="flex items-start gap-3 rounded-2xl border border-brand-primary/20 bg-brand-primary/6 px-4 py-3.5 mb-5">
+            <div role="status" aria-live="polite" className="flex items-start gap-3 rounded-2xl border border-brand-primary/20 bg-brand-primary/6 px-4 py-3.5 mb-5">
               <div className="mt-0.5 h-2 w-2 rounded-full bg-brand-primary shrink-0 animate-pulse" />
               <p className="text-[12px] font-medium leading-relaxed text-brand-primary">
                 Conta ativada! Faça login para começar a usar a plataforma.
@@ -112,7 +112,7 @@ export default function VerifyEmailPage() {
             {/* CTA — 3D button */}
             <Link
               href="/login?verified=true"
-              className="auth-submit-cta group relative flex w-full items-center justify-center gap-2.5 rounded-2xl py-4 text-[14px] font-black uppercase transition-all duration-200 hover:-translate-y-0.5 active:translate-y-1"
+              className="auth-submit-cta group relative flex w-full items-center justify-center gap-2.5 rounded-2xl py-4 text-[14px] font-black uppercase transition-all duration-200 hover:-translate-y-0.5 active:translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
               style={headingFont}
             >
               <div className="absolute inset-0 rounded-2xl overflow-hidden">
@@ -144,14 +144,14 @@ export default function VerifyEmailPage() {
               <h1 className="text-[1.5rem] text-white leading-none text-center" style={headingFont}>
                 Verificação falhou
               </h1>
-              <p className="mt-2 text-[13px] text-zinc-600 text-center">
+              <p className="mt-2 text-[13px] text-zinc-400 text-center">
                 O link de verificação é inválido ou expirou.
                 Faça login para solicitar um novo email de verificação.
               </p>
             </div>
 
             {/* Error alert */}
-            <div className="flex items-start gap-3 rounded-2xl border border-red-500/20 bg-red-500/6 px-4 py-3.5 mb-5">
+            <div role="alert" className="flex items-start gap-3 rounded-2xl border border-red-500/20 bg-red-500/6 px-4 py-3.5 mb-5">
               <div className="mt-0.5 h-2 w-2 rounded-full bg-red-400 shrink-0" />
               <p className="text-[12px] font-medium leading-relaxed text-red-400">
                 Links de verificação expiram em 24 horas. Solicite um novo pelo painel.
@@ -161,7 +161,7 @@ export default function VerifyEmailPage() {
             {/* CTA — outline */}
             <Link
               href="/login"
-              className="w-full group flex items-center justify-center gap-2 rounded-xl border border-zinc-700/50 bg-zinc-800/40 py-3.5 text-[13px] font-semibold text-zinc-400 transition-all hover:border-zinc-600 hover:text-white hover:bg-zinc-800/60"
+              className="w-full group flex items-center justify-center gap-2 rounded-xl border border-zinc-700/50 bg-zinc-800/40 py-3.5 text-[13px] font-semibold text-zinc-400 transition-all hover:border-zinc-600 hover:text-white hover:bg-zinc-800/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
             >
               Ir para o login
               <DSIcon name="arrowRight" size={14} className="transition-transform group-hover:translate-x-1" />
@@ -187,14 +187,14 @@ export default function VerifyEmailPage() {
               <h1 className="text-[1.5rem] text-white leading-none text-center" style={headingFont}>
                 Link inválido
               </h1>
-              <p className="mt-2 text-[13px] text-zinc-600 text-center">
+              <p className="mt-2 text-[13px] text-zinc-400 text-center">
                 Nenhum token de verificação encontrado.
                 Verifique se o link está correto ou solicite um novo email.
               </p>
             </div>
 
             {/* Warning alert */}
-            <div className="flex items-start gap-3 rounded-2xl border border-amber-500/20 bg-amber-500/6 px-4 py-3.5 mb-5">
+            <div role="status" aria-live="polite" className="flex items-start gap-3 rounded-2xl border border-amber-500/20 bg-amber-500/6 px-4 py-3.5 mb-5">
               <div className="mt-0.5 h-2 w-2 rounded-full bg-amber-400 shrink-0" />
               <p className="text-[12px] font-medium leading-relaxed text-amber-400">
                 Copie o link completo do email recebido e cole no navegador.
@@ -204,7 +204,7 @@ export default function VerifyEmailPage() {
             {/* CTA — outline */}
             <Link
               href="/login"
-              className="w-full group flex items-center justify-center gap-2 rounded-xl border border-zinc-700/50 bg-zinc-800/40 py-3.5 text-[13px] font-semibold text-zinc-400 transition-all hover:border-zinc-600 hover:text-white hover:bg-zinc-800/60"
+              className="w-full group flex items-center justify-center gap-2 rounded-xl border border-zinc-700/50 bg-zinc-800/40 py-3.5 text-[13px] font-semibold text-zinc-400 transition-all hover:border-zinc-600 hover:text-white hover:bg-zinc-800/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
             >
               Ir para o login
               <DSIcon name="arrowRight" size={14} className="transition-transform group-hover:translate-x-1" />

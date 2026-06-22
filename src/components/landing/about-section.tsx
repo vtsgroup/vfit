@@ -61,7 +61,7 @@ export function AboutSection() {
   return (
     <section id="about" className="relative bg-bg-landing-light py-16 sm:py-32" aria-label="Sobre a VFIT">
       {/* Top separator */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gray-200" />
+      <div aria-hidden="true" className="absolute top-0 left-0 right-0 h-px bg-gray-200" />
 
       <div className="mx-auto max-w-6xl px-6">
         {/* Label */}
@@ -79,7 +79,7 @@ export function AboutSection() {
         {/* Heading */}
         <IntersectionReveal animation="blur-in" delay={50}>
           <h2
-            className="mb-6 text-center uppercase text-gray-950"
+            className="mb-6 text-center text-gray-950"
             style={{ ...headingFont, fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: '0.95' }}
           >
             FEITO POR QUEM{' '}
@@ -154,8 +154,9 @@ export function AboutSection() {
                   <a
                     href="https://vts.victor.pt"
                     target="_blank"
-                    rel="noopener"
+                    rel="noopener noreferrer"
                     title="VTS GROUP — Software House de desenvolvimento web, IA e sistemas financeiros"
+                    aria-label="vts.victor.pt (abre em nova aba)"
                     className="text-gray-500 underline decoration-gray-300 underline-offset-2 transition-colors duration-200 hover:text-brand-primary hover:decoration-brand-primary"
                   >
                     vts.victor.pt
@@ -164,8 +165,9 @@ export function AboutSection() {
                   <a
                     href="https://victor.pt"
                     target="_blank"
-                    rel="noopener"
+                    rel="noopener noreferrer"
                     title="Victor Duarte — CEO & CTO da VTS GROUP, Desenvolvedor Full-Stack"
+                    aria-label="victor.pt (abre em nova aba)"
                     className="text-gray-500 underline decoration-gray-300 underline-offset-2 transition-colors duration-200 hover:text-brand-primary hover:decoration-brand-primary"
                   >
                     victor.pt

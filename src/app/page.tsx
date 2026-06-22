@@ -69,7 +69,7 @@ export default function Home() {
       <main id="main-content">
         <Hero />
         <section className="relative overflow-hidden border-y border-white/6 bg-bg-primary" aria-label="Comece como aluno">
-          <div className="pointer-events-none absolute inset-0 opacity-[0.03]" style={{
+          <div className="pointer-events-none absolute inset-0 opacity-3" style={{
             backgroundImage: 'linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)',
             backgroundSize: '56px 56px',
           }} />
@@ -80,7 +80,7 @@ export default function Home() {
                 Treino de personal trainer online, criado com IA e pronto para começar hoje.
               </h2>
               <p className="mt-3 max-w-2xl text-sm leading-relaxed text-text-secondary sm:text-base">
-                Sem planilha perdida, sem cartão no cadastro e sem dúvida sobre o próximo exercício. O VFIT guia seu treino, mostra evolução e conecta você a profissionais quando fizer sentido.
+                Sem planilha perdida e sem dúvida sobre o próximo exercício. São 30 dias grátis, sem cartão — o VFIT guia seu treino, mostra evolução e conecta você a profissionais quando fizer sentido.
               </p>
               <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                 <TrackedCtaLink href="/welcome" cta="Começar grátis como aluno" placement="student_trust_strip" pageSegment="home" event="lp_register_start">

@@ -129,11 +129,12 @@ export default function MelhoresAppsPersonalTrainer2026Page() {
         <div className="overflow-hidden rounded-2xl border border-white/10">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
+              <caption className="sr-only">Comparativo de apps para personal trainer</caption>
               <thead>
                 <tr className="border-b border-white/10 bg-white/3">
-                  <th className="px-4 py-3 text-left text-zinc-400">Opção</th>
-                  <th className="px-4 py-3 text-left text-zinc-500">Força principal</th>
-                  <th className="px-4 py-3 text-left text-brand-primary">Melhor para</th>
+                  <th scope="col" className="px-4 py-3 text-left text-zinc-400">Opção</th>
+                  <th scope="col" className="px-4 py-3 text-left text-zinc-500">Força principal</th>
+                  <th scope="col" className="px-4 py-3 text-left text-brand-primary">Melhor para</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5">
@@ -163,15 +164,15 @@ export default function MelhoresAppsPersonalTrainer2026Page() {
       <section className="rounded-2xl border border-white/8 bg-white/3 p-6 space-y-4">
         <h2 className="text-xl font-bold text-white">Direcione seu próximo passo</h2>
         <div className="grid gap-3 sm:grid-cols-3">
-          <TrackedCtaLink href="/app-personal-trainer" cta="Avaliar solução para personal" placement="blog_comparativo_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-brand-primary/30">
+          <TrackedCtaLink href="/app-personal-trainer" cta="Avaliar solução para personal" placement="blog_comparativo_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-brand-primary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base">
             <h3 className="text-sm font-bold text-white">Sou personal trainer</h3>
             <p className="mt-1 text-xs text-zinc-400">Avalie stack de operação e escala.</p>
           </TrackedCtaLink>
-          <TrackedCtaLink href="/afiliados" cta="Quero monetizar indicação" placement="blog_comparativo_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-brand-primary/30">
+          <TrackedCtaLink href="/afiliados" cta="Quero monetizar indicação" placement="blog_comparativo_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-brand-primary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base">
             <h3 className="text-sm font-bold text-white">Quero monetizar indicação</h3>
             <p className="mt-1 text-xs text-zinc-400">Ative comissão recorrente por conversão.</p>
           </TrackedCtaLink>
-          <TrackedCtaLink href="/" cta="Sou aluno" placement="blog_comparativo_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-brand-primary/30">
+          <TrackedCtaLink href="/" cta="Sou aluno" placement="blog_comparativo_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-brand-primary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base">
             <h3 className="text-sm font-bold text-white">Sou aluno</h3>
             <p className="mt-1 text-xs text-zinc-400">Conheça a experiência aluno-first da home.</p>
           </TrackedCtaLink>
@@ -199,9 +200,9 @@ export default function MelhoresAppsPersonalTrainer2026Page() {
       <section className="text-center rounded-2xl border border-brand-primary/30 bg-linear-to-b from-brand-primary/10 to-transparent p-8 sm:p-10 space-y-5">
         <h2 className="text-2xl font-bold text-white">Quer comparar na prática?</h2>
         <p className="mx-auto max-w-md text-sm text-zinc-400">
-          Teste o VFIT grátis e veja como uma operação mais integrada pode melhorar gestão, retenção e receita.
+          Teste o VFIT 30 dias grátis, sem cartão, e veja como uma operação mais integrada pode melhorar gestão, retenção e receita.
         </p>
-        <TrackedCtaLink href="/app-personal-trainer" cta="Ver solução para personais" placement="blog_melhores_apps_personal_cta" pageSegment="blog" event="lp_cta_primary_click" className="inline-flex items-center gap-2 rounded-xl bg-brand-primary px-6 py-3 text-sm font-bold text-bg-dark hover:bg-brand-primary-hover transition-colors shadow-lg shadow-brand-primary/20">
+        <TrackedCtaLink href="/app-personal-trainer" cta="Ver solução para personais" placement="blog_melhores_apps_personal_cta" pageSegment="blog" event="lp_cta_primary_click" className="inline-flex items-center gap-2 rounded-xl bg-brand-primary px-6 py-3 text-sm font-bold text-bg-dark hover:bg-brand-primary-hover transition-colors shadow-lg shadow-brand-primary/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base">
           Ver solução para personais
           <DSIcon name="arrowRight" size={16} />
         </TrackedCtaLink>

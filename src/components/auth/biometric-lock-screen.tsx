@@ -155,11 +155,14 @@ export function BiometricLockScreen({ onDismiss }: BiometricLockScreenProps) {
 
   return (
     <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Desbloqueio biométrico"
       className="fixed inset-0 z-9999 flex items-center justify-center"
       style={{ colorScheme: 'dark' }}
     >
       {/* ─── Background ─── */}
-      <div className="absolute inset-0 bg-[#050A12]">
+      <div className="absolute inset-0 bg-bg-primary" aria-hidden="true">
         {/* Aurora blobs */}
         <div
           className="absolute inset-0 opacity-40"
@@ -176,7 +179,13 @@ export function BiometricLockScreen({ onDismiss }: BiometricLockScreenProps) {
           }}
         />
         {/* Vignette */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(5,10,18,0.7)_100%)]" />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(ellipse at center, transparent 30%, rgba(5,10,18,0.7) 100%)',
+          }}
+        />
       </div>
 
       {/* ─── Content ─── */}
@@ -243,9 +252,9 @@ export function BiometricLockScreen({ onDismiss }: BiometricLockScreenProps) {
               'flex h-20 w-20 items-center justify-center rounded-full transition-all duration-500',
               status === 'idle' && 'bg-white/5 ring-2 ring-white/10',
               status === 'prompting' &&
-                'bg-brand-primary/10 ring-2 ring-brand-primary/30 shadow-[0_0_40px_rgba(34,197,94,0.15)]',
+                'bg-brand-primary/10 ring-2 ring-brand-primary/30 shadow-glow-primary',
               status === 'success' &&
-                'bg-brand-primary/20 ring-2 ring-brand-primary/40 shadow-[0_0_60px_rgba(34,197,94,0.25)]',
+                'bg-brand-primary/20 ring-2 ring-brand-primary/40 shadow-glow-primary',
               status === 'error' && 'bg-red-500/10 ring-2 ring-red-500/20'
             )}
           >
@@ -271,6 +280,8 @@ export function BiometricLockScreen({ onDismiss }: BiometricLockScreenProps) {
 
           {/* Status text */}
           <p
+            role="status"
+            aria-live="polite"
             className={cn(
               'text-sm font-medium transition-colors duration-300',
               status === 'idle' && 'text-zinc-500',
@@ -296,7 +307,7 @@ export function BiometricLockScreen({ onDismiss }: BiometricLockScreenProps) {
                 setErrorMsg(null)
                 setTimeout(triggerBiometric, 300)
               }}
-              className="flex items-center gap-2 rounded-2xl bg-white/5 px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-white/10 active:scale-95"
+              className="flex items-center gap-2 rounded-2xl bg-white/5 px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-white/10 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
             >
               <DSIcon name="fingerprint" size={16} />
               Tentar novamente
@@ -308,7 +319,7 @@ export function BiometricLockScreen({ onDismiss }: BiometricLockScreenProps) {
         {status !== 'success' && (
           <button
             onClick={onDismiss}
-            className="mt-2 text-sm font-medium text-zinc-600 transition-colors hover:text-zinc-400"
+            className="mt-2 rounded-md text-sm font-medium text-zinc-400 transition-colors hover:text-zinc-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
           >
             Usar senha
           </button>

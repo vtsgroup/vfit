@@ -169,13 +169,13 @@ export default function LoginPage() {
       <div className="animate-blur-in">
         {/* ─── Alerts ─── */}
         {alertMsg && (
-          <div className="mb-5 flex items-center gap-2.5 rounded-2xl border border-brand-primary/20 bg-brand-primary/6 px-4 py-3">
+          <div role="status" aria-live="polite" className="mb-5 flex items-center gap-2.5 rounded-2xl border border-brand-primary/20 bg-brand-primary/6 px-4 py-3">
             <div className="h-2 w-2 rounded-full bg-brand-primary animate-pulse shrink-0" />
             <span className="text-[12px] font-semibold text-brand-primary">{alertMsg}</span>
           </div>
         )}
         {errorMsg && (
-          <div className="mb-5 flex items-center gap-2.5 rounded-2xl border border-red-500/20 bg-red-500/6 px-4 py-3">
+          <div role="alert" className="mb-5 flex items-center gap-2.5 rounded-2xl border border-red-500/20 bg-red-500/6 px-4 py-3">
             <div className="h-2 w-2 rounded-full bg-red-400 shrink-0" />
             <span className="text-[12px] font-semibold text-red-400">{errorMsg}</span>
           </div>
@@ -264,8 +264,8 @@ export default function LoginPage() {
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
-                className="absolute right-1.5 top-1/2 -translate-y-1/2 p-2 text-slate-400 hover:text-emerald-300 transition-colors rounded-lg hover:bg-white/6"
-                tabIndex={-1}
+                aria-pressed={showPassword}
+                className="absolute right-1.5 top-1/2 -translate-y-1/2 p-2 text-slate-400 hover:text-emerald-300 transition-colors rounded-lg hover:bg-white/6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
               >
                 {showPassword ? <DSIcon name="eyeOff" size={16} /> : <DSIcon name="eye" size={16} />}
               </button>
@@ -317,7 +317,7 @@ export default function LoginPage() {
                 />
                 <div className="h-4.5 w-4.5 rounded-md border border-zinc-600 bg-zinc-800 peer-checked:bg-brand-primary peer-checked:border-brand-primary transition-all duration-200 flex items-center justify-center">
                   {remember && (
-                    <svg className="h-2.5 w-2.5 text-bg-dark" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3.5}>
+                    <svg className="h-2.5 w-2.5 text-bg-dark" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3.5} aria-hidden="true" focusable="false">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
                   )}
@@ -349,7 +349,7 @@ export default function LoginPage() {
 
           {/* ─── Login Error ─── */}
           {login.isError && !((login.error as Error)?.message || '').includes('2FA obrigat') && (
-            <div className="flex items-center gap-2.5 rounded-2xl border border-red-500/20 bg-red-500/6 px-4 py-3">
+            <div role="alert" className="flex items-center gap-2.5 rounded-2xl border border-red-500/20 bg-red-500/6 px-4 py-3">
               <div className="h-2 w-2 rounded-full bg-red-400 shrink-0" />
               <p className="text-[12px] font-medium text-red-400">
                 {(login.error as Error)?.message || 'CPF/email ou senha incorretos'}

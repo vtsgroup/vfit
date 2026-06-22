@@ -28,7 +28,7 @@ export function PricingToggle({ isAnnual, onChange }: PricingToggleProps) {
         aria-checked={isAnnual}
         aria-label={isAnnual ? 'Alternar para plano mensal' : 'Alternar para plano anual'}
         onClick={() => onChange(!isAnnual)}
-        className="relative inline-flex h-7 w-13 items-center rounded-full border border-white/10 bg-white/5 transition-colors hover:bg-white/8"
+        className="relative inline-flex h-7 w-13 items-center rounded-full border border-white/10 bg-white/5 transition-colors hover:bg-white/8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base"
       >
         <span
           className={`inline-block h-5 w-5 rounded-full bg-brand-primary transition-transform ${
