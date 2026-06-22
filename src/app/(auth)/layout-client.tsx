@@ -512,13 +512,13 @@ export function AuthLayoutClient({ children }: { children: ReactNode }) {
 
           {/* Mobile header — hidden on student register (has own cover logo) */}
           {!hidesMobileLogo && (
-            <header className="relative z-10 flex items-center justify-center px-5 pt-5 pb-2 lg:hidden">
+            <header className="relative z-10 flex items-center justify-center px-5 pt-[max(0.5rem,env(safe-area-inset-top))] pb-1 lg:hidden">
               <AnimatedAuthLogo size="small" />
             </header>
           )}
 
-          {/* Form container */}
-          <main className="relative z-10 flex flex-1 items-center justify-center px-5 py-2 sm:px-8 lg:px-14 lg:py-4 xl:px-20">
+          {/* Form container — mobile fills viewport (no-scroll), desktop centered */}
+          <main className="relative z-10 flex flex-1 items-start justify-center px-5 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-2 sm:px-8 sm:py-2 lg:items-center lg:px-14 lg:py-4 xl:px-20">
             <div className="w-full max-w-105">
               {children}
             </div>

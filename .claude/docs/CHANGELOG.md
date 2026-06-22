@@ -5,6 +5,18 @@
 
 ---
 
+## [Unreleased] — 2026-06-22 — Mobile login: no-scroll + Turnstile gap fix
+
+### 📱 Login mobile redesenhado (app-style, sem scroll)
+> Verificado visualmente via Playwright (viewport 390×844): `scrollH === clientH` → zero scroll. Desktop split-screen intacto. Lógica de auth 100% preservada.
+
+- **Causa-raiz do gap morto** (entre SENHA e LEMBRAR): o widget **Turnstile** em modo invisível ficava `opacity:0` mas **ocupava ~120px no fluxo**. Fix: `turnstile.tsx` modo invisível → `position:absolute` (out-of-flow) → reserva **0px**; mesmo render (full-size, opacity 0) → emissão de token idêntica. (RULES §4: CSS-only, sem tocar verificação.)
+- **Ritmo mobile comprimido** (`login/page.tsx`): heading/divider/form/labels/trust −110px; versão escondida no mobile (`hidden sm:block`); contraste do selo SSL slate-600→slate-400 (AA).
+- **Layout** (`layout-client.tsx`): mobile top-aligned (`items-start lg:items-center`) + `safe-area-inset` (notch/gesture-bar); header mobile compacto.
+- **Validação**: `tsc` 0 erros · `next build` OK · grep anti-regressão zero.
+
+---
+
 ## [Unreleased] — 2026-06-22 — S-REDESIGN (Login + Públicas: a11y/tipografia/SEO)
 
 ### 🎨 S-REDESIGN — Redesign de páginas públicas + auth (doc 10, sem R2)

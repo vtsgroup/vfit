@@ -222,13 +222,15 @@ export const Turnstile = forwardRef<TurnstileRef, TurnstileProps>(
 
     if (!isEnvironmentChecked || bypassLocal) return null
 
-    // Invisible mode: container is empty (0px). Interactive: shows the checkbox.
+    // Invisible mode: widget renders out-of-flow (absolute) so it reserves ZERO
+    // layout height — keeps token issuance identical (full-size render, opacity 0),
+    // just no longer pushes the form apart. Interactive: in-flow visible checkbox.
     return (
       <div
         ref={containerRef}
         role={mode === 'invisible' ? undefined : 'group'}
         aria-label={mode === 'invisible' ? undefined : 'Verificação de segurança'}
-        className={mode === 'invisible' ? '' : 'flex min-h-18 w-full items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white/95 p-2 shadow-glass-lg motion-safe:animate-blur-in [&>iframe]:w-full! [&>div]:w-full!'}
+        className={mode === 'invisible' ? 'pointer-events-none absolute' : 'flex min-h-18 w-full items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white/95 p-2 shadow-glass-lg motion-safe:animate-blur-in [&>iframe]:w-full! [&>div]:w-full!'}
         style={{ opacity: mode === 'invisible' && !isVerified ? 0 : 1 }}
       />
     )

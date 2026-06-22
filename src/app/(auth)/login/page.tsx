@@ -182,8 +182,8 @@ export default function LoginPage() {
         )}
 
         {/* ─── Page heading ─── */}
-        <div className="mb-4">
-          <div className="flex items-center gap-2 mb-2">
+        <div className="mb-3">
+          <div className="flex items-center gap-2 mb-1.5">
             <DSIcon name="sparkles" size={14} className="text-brand-primary/60" />
             <p className="text-[9px] uppercase text-brand-primary/70" style={monoLabel}>
               ACESSE SUA CONTA
@@ -209,7 +209,7 @@ export default function LoginPage() {
         </div>
 
         {/* ─── Divider ─── */}
-        <div className="relative my-3">
+        <div className="relative my-2.5">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-white/6" />
           </div>
@@ -224,10 +224,10 @@ export default function LoginPage() {
         </div>
 
         {/* ─── Form ─── */}
-        <form onSubmit={handleSubmit} className="space-y-3">
+        <form onSubmit={handleSubmit} className="space-y-2.5">
           {/* Unified identifier field — CPF or Email auto-detected */}
           <div>
-            <label className="flex items-center gap-1.5 text-[10px] uppercase text-zinc-400 mb-2" style={monoLabel}>
+            <label className="flex items-center gap-1.5 text-[10px] uppercase text-zinc-400 mb-1.5" style={monoLabel}>
               <DSIcon name={looksLikeCpf ? 'fingerprint' : 'mail'} size={12} className="text-zinc-500 transition-all duration-200" />
               {looksLikeCpf ? 'CPF' : identifier.includes('@') ? 'EMAIL' : 'CPF OU EMAIL'}
             </label>
@@ -247,7 +247,7 @@ export default function LoginPage() {
 
           {/* Password */}
           <div>
-            <label className="flex items-center gap-1.5 text-[10px] uppercase text-zinc-400 mb-2" style={monoLabel}>
+            <label className="flex items-center gap-1.5 text-[10px] uppercase text-zinc-400 mb-1.5" style={monoLabel}>
               <DSIcon name="lock" size={12} className="text-zinc-500" /> SENHA
             </label>
             <div className="relative">
@@ -359,20 +359,20 @@ export default function LoginPage() {
         </form>
 
         {/* ─── Register link + Trust badges — sales-focused, no guest bypass ─── */}
-        <div className="mt-4 rounded-2xl border border-emerald-400/15 bg-emerald-400/5 px-4 py-3 text-center">
+        <div className="mt-3 rounded-2xl border border-emerald-400/15 bg-emerald-400/5 px-4 py-2.5 text-center">
           <p className="text-[13px] text-slate-400">
             Novo por aqui?{' '}
             <Link href="/register" className="font-black text-brand-primary hover:text-brand-primary/80 transition-colors">
               Teste 30 dias grátis
             </Link>
           </p>
-          <span className="mt-2 flex items-center justify-center gap-1.5 text-[9px] text-slate-600" style={monoLabel}>
+          <span className="mt-1.5 flex items-center justify-center gap-1.5 text-[9px] text-slate-400" style={monoLabel}>
             <DSIcon name="shield" size={12} /> SSL · LGPD · 30 DIAS GRÁTIS SEM CARTÃO
           </span>
         </div>
 
-        {/* Version */}
-        <p className="mt-3 text-center text-[9px] text-slate-600 select-none" style={monoLabel}>
+        {/* Version — hidden on mobile to keep no-scroll composition */}
+        <p className="mt-2 hidden text-center text-[9px] text-slate-500 select-none sm:block" style={monoLabel}>
           v{APP_VERSION}
         </p>
       </div>
