@@ -66,7 +66,7 @@ export const useOnboardingStore = create<OnboardingState>()(
   persist(
     (set) => ({
       currentStep: 0,
-      totalSteps: 17,
+      totalSteps: 15, // VFIT ULTRA: quiz enxuto — removidos passos sem-input Motivational + SocialProof (doc 02 B.3)
       data: { ...initialData },
       isCompleted: false,
 

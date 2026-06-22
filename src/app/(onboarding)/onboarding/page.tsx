@@ -21,7 +21,6 @@ import {
   StepGoal,
   StepLocation,
   StepBodyMap,
-  StepMotivational,
   StepAge,
   StepHeight,
   StepWeight,
@@ -30,7 +29,6 @@ import {
   StepSessionDuration,
   StepInjuries,
   StepPreferredTime,
-  StepSocialProof,
   StepReady,
 } from '@/components/onboarding'
 import { hapticLight } from '@/lib/haptics'
@@ -85,12 +83,6 @@ const STEPS: StepConfig[] = [
     isValid: (d) => d.target_muscles.length > 0,
   },
   {
-    title: 'Você está no caminho certo',
-    component: StepMotivational,
-    isValid: () => true, // auto-valid, just read
-    continueLabel: 'Continuar',
-  },
-  {
     title: 'Quantos anos você tem?',
     subtitle: 'Ajustamos a intensidade para sua faixa etária',
     component: StepAge,
@@ -137,13 +129,6 @@ const STEPS: StepConfig[] = [
     subtitle: 'Personalizamos lembretes no melhor momento',
     component: StepPreferredTime,
     isValid: (d) => d.preferred_time !== null,
-  },
-  {
-    title: 'Por que o VFIT?',
-    subtitle: 'Veja o que nos diferencia',
-    component: StepSocialProof,
-    isValid: () => true,
-    continueLabel: 'Quase lá!',
   },
   {
     title: 'Estamos prontos!',
