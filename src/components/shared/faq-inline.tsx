@@ -71,13 +71,16 @@ export function FaqInline({ items, title = 'Perguntas Frequentes', schema = true
             }`}>
               <button
                 onClick={() => toggle(i)}
-                className="flex w-full items-center gap-3 px-3.5 py-3.5 text-left transition-colors hover:text-brand-primary sm:px-4 sm:py-4"
+                aria-expanded={isOpen}
+                aria-controls={`faq-panel-${i}`}
+                id={`faq-trigger-${i}`}
+                className="flex w-full items-center gap-3 px-3.5 py-3.5 text-left transition-colors hover:text-brand-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base rounded-xl sm:px-4 sm:py-4"
               >
                 {/* Number indicator */}
                 <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-[10px] font-bold transition-all duration-300 ${
                   isOpen
                     ? 'bg-brand-primary/15 text-brand-primary shadow-[0_0_12px_rgba(16,185,129,0.15)]'
-                    : 'bg-white/5 text-white/30'
+                    : 'bg-white/5 text-white/60'
                 }`} style={{ fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace' }}>
                   {String(i + 1).padStart(2, '0')}
                 </span>
@@ -96,6 +99,9 @@ export function FaqInline({ items, title = 'Perguntas Frequentes', schema = true
                 </span>
               </button>
               <div
+                id={`faq-panel-${i}`}
+                role="region"
+                aria-labelledby={`faq-trigger-${i}`}
                 className="grid transition-all duration-300"
                 style={{ gridTemplateRows: isOpen ? '1fr' : '0fr' }}
               >

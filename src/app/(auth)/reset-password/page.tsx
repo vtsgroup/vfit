@@ -164,8 +164,9 @@ function ResetPasswordInner() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-lg p-2 text-slate-400 transition-colors hover:bg-white/6 hover:text-emerald-300"
-                tabIndex={-1}
+                aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+                aria-pressed={showPassword}
+                className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-lg p-2 text-slate-400 transition-colors hover:bg-white/6 hover:text-emerald-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
               >
                 {showPassword ? <DSIcon name="eyeOff" size={16} /> : <DSIcon name="eye" size={16} />}
               </button>
@@ -205,7 +206,7 @@ function ResetPasswordInner() {
 
           {/* Error */}
           {resetPassword.isError && (
-            <div className="flex items-center gap-2.5 rounded-2xl border border-red-500/20 bg-red-500/6 px-4 py-3">
+            <div role="alert" className="flex items-center gap-2.5 rounded-2xl border border-red-500/20 bg-red-500/6 px-4 py-3">
               <div className="h-2 w-2 rounded-full bg-red-400 shrink-0" />
               <p className="text-[12px] font-medium text-red-400">
                 Erro ao redefinir senha. Verifique os dados e tente novamente.
@@ -216,7 +217,7 @@ function ResetPasswordInner() {
           {/* Success */}
           {resetPassword.isSuccess && (
             <div className="space-y-4">
-              <div className="flex items-start gap-3 rounded-2xl border border-brand-primary/20 bg-brand-primary/6 px-4 py-3.5">
+              <div role="status" aria-live="polite" className="flex items-start gap-3 rounded-2xl border border-brand-primary/20 bg-brand-primary/6 px-4 py-3.5">
                 <div className="mt-0.5 h-2 w-2 rounded-full bg-brand-primary shrink-0 animate-pulse" />
                 <p className="text-[12px] font-medium leading-relaxed text-brand-primary">
                   Senha redefinida com sucesso! Agora você pode fazer login com a nova senha.
@@ -224,7 +225,7 @@ function ResetPasswordInner() {
               </div>
               <Link
                 href="/login"
-                className="auth-submit-cta group relative flex w-full items-center justify-center gap-2.5 rounded-2xl py-4 text-[14px] font-black uppercase transition-all duration-200 hover:-translate-y-0.5 active:translate-y-1"
+                className="auth-submit-cta group relative flex w-full items-center justify-center gap-2.5 rounded-2xl py-4 text-[14px] font-black uppercase transition-all duration-200 hover:-translate-y-0.5 active:translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
                 style={headingFont}
               >
                 <div className="absolute inset-0 rounded-2xl overflow-hidden">
@@ -239,7 +240,7 @@ function ResetPasswordInner() {
           )}
 
           {!usingTokenFlow && !resetPassword.isSuccess && (
-            <p className="text-center text-[11px] text-zinc-600">
+            <p className="text-center text-[11px] text-zinc-400">
               Não recebeu o código?{' '}
               <Link href="/forgot-password" className="font-bold text-brand-primary hover:text-brand-primary/80 transition-colors">
                 solicitar novo envio

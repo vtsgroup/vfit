@@ -173,6 +173,8 @@ export function Navbar() {
                 {/* Trigger */}
                 <a
                   href={item.href}
+                  aria-haspopup={item.dropdown ? true : undefined}
+                  aria-expanded={item.dropdown ? activeDropdown === item.label : undefined}
                   onClick={() => {
                     trackLandingEvent('lp_cta_secondary_click', {
                       placement: 'navbar',
@@ -180,7 +182,7 @@ export function Navbar() {
                     })
                     setActiveDropdown(null)
                   }}
-                  className="flex items-center gap-1 rounded-lg px-3 py-2 text-[13px] font-medium text-white/55 transition-all duration-200 hover:text-white hover:bg-white/5"
+                  className="flex items-center gap-1 rounded-lg px-3 py-2 text-[13px] font-medium text-white/70 transition-all duration-200 hover:text-white hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
                 >
                   {item.label}
                   {item.dropdown && (
@@ -314,8 +316,9 @@ export function Navbar() {
             {/* Hamburger button */}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="flex flex-col justify-center items-center gap-1.5 p-2 -mr-2 rounded-lg transition-colors hover:bg-white/5"
+              className="flex flex-col justify-center items-center gap-1.5 p-2 -mr-2 rounded-lg transition-colors hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
               aria-label={mobileOpen ? 'Fechar menu' : 'Abrir menu'}
+              aria-controls="mobile-menu-panel"
               aria-expanded={mobileOpen}
             >
               <span className={`block h-[1.5px] w-5 rounded-full bg-white transition-all duration-300 origin-center ${mobileOpen ? 'rotate-45 translate-y-1.75' : ''}`} />
@@ -344,6 +347,11 @@ export function Navbar() {
 
       {/* Slide-in panel */}
       <div
+        id="mobile-menu-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Menu de navegação"
+        aria-hidden={!mobileOpen}
         className={`
           lg:hidden fixed inset-y-0 right-0 z-50 w-full max-w-sm flex flex-col
           transition-transform duration-500
@@ -372,7 +380,7 @@ export function Navbar() {
           </Link>
           <button
             onClick={closeMobile}
-            className="flex items-center justify-center h-9 w-9 rounded-xl bg-white/4 border border-white/8 transition-colors hover:bg-white/8"
+            className="flex items-center justify-center h-9 w-9 rounded-xl bg-white/4 border border-white/8 transition-colors hover:bg-white/8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
             aria-label="Fechar menu"
           >
             <DSIcon name="x" size={18} className="text-white/60" />
@@ -389,7 +397,9 @@ export function Navbar() {
                     {/* Accordion trigger */}
                     <button
                       onClick={() => setMobileAccordion(mobileAccordion === item.label ? null : item.label)}
-                      className="w-full flex items-center justify-between rounded-xl px-4 py-3.5 text-[15px] font-semibold text-white/90 transition-all duration-200 hover:bg-white/8 hover:text-white"
+                      aria-expanded={mobileAccordion === item.label}
+                      aria-controls={`mobile-accordion-${item.label}`}
+                      className="w-full flex items-center justify-between rounded-xl px-4 py-3.5 text-[15px] font-semibold text-white/90 transition-all duration-200 hover:bg-white/8 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
                     >
                       <span>{item.label}</span>
                       <DSIcon
@@ -401,6 +411,7 @@ export function Navbar() {
 
                     {/* Accordion content */}
                     <div
+                      id={`mobile-accordion-${item.label}`}
                       className="overflow-hidden transition-all duration-300"
                       style={{
                         maxHeight: mobileAccordion === item.label ? `${item.dropdown.length * 60 + 16}px` : '0px',
@@ -518,8 +529,8 @@ export function Navbar() {
               </Button>
             </Link>
           </div>
-          <p className="mt-3 text-center text-[10px] text-white/20">
-            Sem cartão de crédito necessário
+          <p className="mt-3 text-center text-[10px] text-white/70">
+            30 dias grátis, sem cartão de crédito
           </p>
         </div>
       </div>

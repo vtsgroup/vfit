@@ -74,8 +74,8 @@ function CookieCard({ name, type, purpose, duration, required }: {
       </div>
       <p className="mt-2 text-xs text-zinc-500">{purpose}</p>
       <div className="mt-2 flex items-center gap-1.5">
-        <DSIcon name="clock" size={12} className="text-zinc-600" />
-        <span className="text-[10px] text-zinc-600">{duration}</span>
+        <DSIcon name="clock" size={12} className="text-zinc-400" />
+        <span className="text-xs text-zinc-400">{duration}</span>
       </div>
     </div>
   )
@@ -220,12 +220,12 @@ export default function CookiesPage() {
           </p>
           <ul className="mt-1 space-y-1 text-xs">
             <li>
-              <a href="https://onesignal.com/privacy_policy" target="_blank" rel="noopener" className="inline-flex items-center gap-1 text-brand-primary hover:underline">
+              <a href="https://onesignal.com/privacy_policy" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-brand-primary hover:underline">
                 OneSignal Privacy Policy <DSIcon name="externalLink" size={12} />
               </a>
             </li>
             <li>
-              <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" className="inline-flex items-center gap-1 text-brand-primary hover:underline">
+              <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-brand-primary hover:underline">
                 Google Privacy Policy <DSIcon name="externalLink" size={12} />
               </a>
             </li>
@@ -250,7 +250,7 @@ export default function CookiesPage() {
                 </div>
                 <div>
                   <p className="text-xs font-semibold text-white">{item.browser}</p>
-                  <code className="text-[10px] text-zinc-500">{item.url}</code>
+                  <code className="text-xs text-zinc-400">{item.url}</code>
                 </div>
               </div>
             ))}

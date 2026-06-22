@@ -61,8 +61,6 @@ export default function PricingPage() {
                   description: 'Conta profissional sem assinatura obrigatoria.',
                   image: 'https://vfit.app.br/og/og-pricing.png',
                   brand: { '@type': 'Brand', name: 'VFIT' },
-                  aggregateRating: { '@type': 'AggregateRating', ratingValue: '4.7', bestRating: '5', ratingCount: '86' },
-                  review: { '@type': 'Review', author: { '@type': 'Person', name: 'Lucas Mendes' }, datePublished: '2026-01-15', reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' }, reviewBody: 'Excelente para começar! Gerencio meus 5 primeiros alunos sem pagar nada.' },
                   offers: {
                     '@type': 'Offer',
                     price: '0',
@@ -82,8 +80,6 @@ export default function PricingPage() {
                   description: 'Receita principal por assinatura e cobranca do aluno.',
                   image: 'https://vfit.app.br/og/og-pricing.png',
                   brand: { '@type': 'Brand', name: 'VFIT' },
-                  aggregateRating: { '@type': 'AggregateRating', ratingValue: '4.8', bestRating: '5', ratingCount: '142' },
-                  review: { '@type': 'Review', author: { '@type': 'Person', name: 'Fernanda Oliveira' }, datePublished: '2026-02-10', reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' }, reviewBody: 'Melhor custo-benefício. Automação de cobranças e treinos economiza horas do meu dia.' },
                   offers: {
                     '@type': 'Offer',
                     price: '0',
@@ -103,8 +99,6 @@ export default function PricingPage() {
                   description: 'Consultoria oficial com pagamento dentro da API VFIT.',
                   image: 'https://vfit.app.br/og/og-pricing.png',
                   brand: { '@type': 'Brand', name: 'VFIT' },
-                  aggregateRating: { '@type': 'AggregateRating', ratingValue: '4.9', bestRating: '5', ratingCount: '67' },
-                  review: { '@type': 'Review', author: { '@type': 'Person', name: 'Ricardo Santos' }, datePublished: '2026-02-25', reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' }, reviewBody: 'Contratos e NFs integrados facilitaram muito a gestão financeira do meu studio.' },
                   offers: {
                     '@type': 'Offer',
                     price: '0',
@@ -124,8 +118,6 @@ export default function PricingPage() {
                   description: 'Ledger, conciliacao e controle de repasse para escala.',
                   image: 'https://vfit.app.br/og/og-pricing.png',
                   brand: { '@type': 'Brand', name: 'VFIT' },
-                  aggregateRating: { '@type': 'AggregateRating', ratingValue: '4.9', bestRating: '5', ratingCount: '31' },
-                  review: { '@type': 'Review', author: { '@type': 'Person', name: 'Carla Ribeiro' }, datePublished: '2026-03-05', reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' }, reviewBody: 'White-label perfeito. Meus alunos acessam pelo meu domínio, com minha marca.' },
                   offers: {
                     '@type': 'Offer',
                     price: '0',

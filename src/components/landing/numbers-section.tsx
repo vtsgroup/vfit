@@ -104,7 +104,7 @@ function StatCard({ stat }: { stat: typeof NUMBERS[0] }) {
       <div className="mt-2 text-xs font-bold text-white/70 uppercase" style={monoLabel}>
         {stat.label}
       </div>
-      <div className="mt-1 text-[11px] text-white/30">
+      <div className="mt-1 text-[11px] text-white/60">
         {stat.desc}
       </div>
     </div>
@@ -115,7 +115,7 @@ export function NumbersSection() {
   return (
     <section className="relative overflow-hidden bg-bg-primary py-16 sm:py-32" aria-label="Números da plataforma">
       {/* Subtle grid */}
-      <div className="pointer-events-none absolute inset-0 opacity-[0.03]" style={{
+      <div className="pointer-events-none absolute inset-0 opacity-3" style={{
         backgroundImage: 'linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)',
         backgroundSize: '60px 60px',
       }} />
@@ -135,7 +135,7 @@ export function NumbersSection() {
 
         {/* Heading */}
         <IntersectionReveal animation="blur-in" delay={50}>
-          <h2 className="font-syne mb-4 text-center text-3xl uppercase leading-[0.96] text-white sm:text-5xl">
+          <h2 className="font-syne mb-4 text-center text-3xl leading-[0.96] text-white sm:text-5xl">
             GENTE REAL{' '}
             <span className="bg-linear-to-r from-brand-primary via-brand-mint to-brand-accent bg-clip-text text-transparent">
               TREINANDO
@@ -144,7 +144,7 @@ export function NumbersSection() {
         </IntersectionReveal>
 
         <IntersectionReveal animation="fade-in" delay={100}>
-          <p className="mx-auto mb-14 max-w-lg text-center text-sm leading-relaxed text-white/40 sm:text-base">
+          <p className="mx-auto mb-14 max-w-lg text-center text-sm leading-relaxed text-white/60 sm:text-base">
             O VFIT combina treino personalizado, acompanhamento profissional e motivação diária em uma experiência simples de usar.
           </p>
         </IntersectionReveal>

@@ -78,9 +78,10 @@ export function PageHero({ title, subtitle, badge, breadcrumbs, appHeaderContinu
         )}
 
         {/* Title H1 — LCP element: render direto sem IntersectionReveal.
-            CSS-only animation para fade-in suave sem depender de JS hydration. */}
+            CSS-only animation para fade-in suave sem depender de JS hydration.
+            Natural-case (sem all-caps) para hierarquia premium — doc 10 §2. */}
         <h1
-          className="mt-5 max-w-3xl text-white uppercase"
+          className="mt-5 max-w-3xl text-balance text-white"
           style={{
             ...headingFont,
             fontSize: 'clamp(2rem, 5vw, 3.5rem)',

@@ -75,7 +75,7 @@ const SOCIALS = [
 const TRUST_ITEMS = [
   { icon: 'shield' as DSIconName, label: 'Dados Protegidos' },
   { icon: 'lock' as DSIconName, label: 'SSL Criptografado' },
-  { icon: 'flame' as DSIconName, label: 'LGPD Conforme' },
+  { icon: 'shieldCheck' as DSIconName, label: 'LGPD Conforme' },
 ]
 
 /* ─── Back to top ─── */
@@ -89,7 +89,7 @@ export function Footer() {
   return (
     <footer className="relative bg-bg-page">
       {/* ── Gradient separator from previous section ── */}
-      <div className="absolute -top-px left-0 right-0 h-px bg-linear-to-r from-transparent via-brand-primary/30 to-transparent" />
+      <div aria-hidden="true" className="absolute -top-px left-0 right-0 h-px bg-linear-to-r from-transparent via-brand-primary/30 to-transparent" />
 
       {/* ══════════════════════════════════════════════
           TOP BAND — Mini CTA
@@ -103,7 +103,7 @@ export function Footer() {
               Pronto para treinar com um plano claro?
             </h3>
             <p className="mt-1 text-sm text-bg-primary/80">
-              Comece grátis, sem cartão, direto pelo celular.
+              Comece com 30 dias grátis, sem cartão, direto pelo celular.
             </p>
           </div>
           <Link href="/welcome">
@@ -168,7 +168,7 @@ export function Footer() {
                   {'icon' in social && social.icon ? (
                     <DSIcon name={social.icon} size={16} />
                   ) : (
-                    <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                    <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                       <path d={social.svgPath} />
                     </svg>
                   )}
@@ -195,7 +195,7 @@ export function Footer() {
                     >
                       {link.label}
                       {'external' in link && link.external && (
-                                                <DSIcon name="externalLink" size={12} className="text-white/25" />
+                                                <DSIcon name="externalLink" size={12} className="text-white/70" />
                       )}
                     </Link>
                   </li>
@@ -220,7 +220,7 @@ export function Footer() {
           {/* Status indicator */}
           <div className="flex items-center gap-1.5 text-white/60 sm:gap-2">
             <span className="relative flex h-1.5 w-1.5 sm:h-2 sm:w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+              <span className="absolute inline-flex h-full w-full motion-safe:animate-ping rounded-full bg-emerald-400 opacity-75" />
               <span className="relative inline-flex h-full w-full rounded-full bg-emerald-500" />
             </span>
             <span className="text-[9px] uppercase sm:text-[10px]" style={monoLabel}><span className="hidden sm:inline">Sistemas </span>Online</span>

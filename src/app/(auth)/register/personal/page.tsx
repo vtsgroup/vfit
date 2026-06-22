@@ -274,7 +274,7 @@ export default function RegisterPersonalPage() {
                   onClick={() => { setTurnstileError(false); setTurnstileLoading(true); turnstileRef.current?.reset() }}
                   className="shrink-0 rounded-lg bg-amber-500/15 px-2 py-1 text-[9px] font-bold text-amber-400 hover:bg-amber-500/25 transition-colors"
                 >
-                  Retry
+                  Tentar novamente
                 </button>
               </div>
             )}
@@ -304,6 +304,12 @@ export default function RegisterPersonalPage() {
           <p className="mt-1.5 text-[13px] text-slate-400">
             {step === 1 ? 'Informações pessoais e acesso' : 'CREF e informações complementares'}
           </p>
+          {step === 1 && (
+            <p className="mt-2 flex items-center gap-1.5 text-[10px] uppercase text-brand-primary/80" style={monoLabel}>
+              <DSIcon name="shieldCheck" size={12} className="text-brand-primary" />
+              30 DIAS GRÁTIS · SEM CARTÃO
+            </p>
+          )}
 
           {/* Step indicator */}
           <div className="mt-4 flex gap-2">
@@ -363,23 +369,25 @@ export default function RegisterPersonalPage() {
                   required
                   className={`${inputClass} ${cpfValidated ? 'border-brand-primary/50! ring-1! ring-brand-primary/30!' : cpfError ? 'border-red-500/50! ring-1! ring-red-500/30!' : ''}`}
                 />
-                {cpfChecking && (
-                  <div className="mt-2 flex items-center gap-2">
-                    <DSIcon name="loader" size={14} className="text-brand-primary animate-spin" />
-                    <span className="text-[11px] text-zinc-400">Validando CPF...</span>
-                  </div>
-                )}
-                {cpfValidated && !cpfChecking && (
-                  <div className="mt-2 flex items-center gap-2">
-                    <DSIcon name="checkCircle2" size={14} className="text-brand-primary" />
-                    <span className="text-[11px] text-brand-primary">
-                      CPF validado{cpfLookupName ? ` para ${cpfLookupName}` : ''}
-                    </span>
-                  </div>
-                )}
-                {cpfError && (
-                  <p className="mt-1.5 text-[11px] text-red-400">{cpfError}</p>
-                )}
+                <div role="status" aria-live="polite">
+                  {cpfChecking && (
+                    <div className="mt-2 flex items-center gap-2">
+                      <DSIcon name="loader" size={14} className="text-brand-primary animate-spin" />
+                      <span className="text-[11px] text-zinc-400">Validando CPF...</span>
+                    </div>
+                  )}
+                  {cpfValidated && !cpfChecking && (
+                    <div className="mt-2 flex items-center gap-2">
+                      <DSIcon name="checkCircle2" size={14} className="text-brand-primary" />
+                      <span className="text-[11px] text-brand-primary">
+                        CPF validado{cpfLookupName ? ` para ${cpfLookupName}` : ''}
+                      </span>
+                    </div>
+                  )}
+                  {cpfError && (
+                    <p className="mt-1.5 text-[11px] text-red-400">{cpfError}</p>
+                  )}
+                </div>
               </div>
 
               {/* Data de Nascimento */}
@@ -448,8 +456,9 @@ export default function RegisterPersonalPage() {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-lg p-2 text-slate-400 transition-colors hover:bg-white/6 hover:text-emerald-300"
-                    tabIndex={-1}
+                    aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+                    aria-pressed={showPassword}
+                    className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-lg p-2 text-slate-400 transition-colors hover:bg-white/6 hover:text-emerald-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
                   >
                     {showPassword ? <DSIcon name="eyeOff" size={16} /> : <DSIcon name="eye" size={16} />}
                   </button>
@@ -503,7 +512,7 @@ export default function RegisterPersonalPage() {
                   required
                   className={`${inputClass} uppercase`}
                 />
-                <p className="mt-1 text-[10px] text-zinc-600">Apenas o número do CREF · O estado é selecionado abaixo</p>
+                <p className="mt-1 text-[10px] text-zinc-400">Apenas o número do CREF · O estado é selecionado abaixo</p>
               </div>
 
               {/* Estado CREF */}
@@ -576,7 +585,7 @@ export default function RegisterPersonalPage() {
                   />
                   <div className="h-4.5 w-4.5 rounded-md border border-zinc-600 bg-zinc-800 peer-checked:bg-brand-primary peer-checked:border-brand-primary transition-all duration-200 flex items-center justify-center">
                     {acceptedTerms && (
-                      <svg className="h-2.5 w-2.5 text-bg-dark" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3.5}>
+                      <svg className="h-2.5 w-2.5 text-bg-dark" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3.5} aria-hidden="true" focusable="false">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                       </svg>
                     )}
@@ -584,9 +593,9 @@ export default function RegisterPersonalPage() {
                 </div>
                 <span className="text-[11px] leading-relaxed text-zinc-500">
                   Li e aceito os{' '}
-                  <Link href="/termos" target="_blank" className="font-bold text-brand-primary hover:underline">Termos de Uso</Link>
+                  <Link href="/termos" target="_blank" rel="noreferrer" className="font-bold text-brand-primary hover:underline">Termos de Uso</Link>
                   {' '}e a{' '}
-                  <Link href="/privacidade" target="_blank" className="font-bold text-brand-primary hover:underline">Política de Privacidade</Link>
+                  <Link href="/privacidade" target="_blank" rel="noreferrer" className="font-bold text-brand-primary hover:underline">Política de Privacidade</Link>
                   , incluindo tratamento dos meus dados conforme a LGPD.
                 </span>
               </label>
@@ -613,7 +622,7 @@ export default function RegisterPersonalPage() {
 
                 return (
                   <div className="space-y-2">
-                    <div className="flex items-start gap-2.5 rounded-2xl border border-red-500/20 bg-red-500/6 px-4 py-3">
+                    <div role="alert" className="flex items-start gap-2.5 rounded-2xl border border-red-500/20 bg-red-500/6 px-4 py-3">
                       <div className="mt-1 h-2 w-2 rounded-full bg-red-400 shrink-0" />
                       <div className="min-w-0">
                         <p className="text-[12px] font-medium text-red-400">

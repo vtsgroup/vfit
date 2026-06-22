@@ -5,6 +5,23 @@
 
 ---
 
+## [Unreleased] — 2026-06-22 — S-REDESIGN (Login + Públicas: a11y/tipografia/SEO)
+
+### 🎨 S-REDESIGN — Redesign de páginas públicas + auth (doc 10, sem R2)
+> Execução guiada por auditoria multi-agente (10 agentes: SEO-infra + 8 auditores + síntese) e aplicação paralela (8 agentes, 161 edits). **164 edits em 44 arquivos.** Lógica de auth, metadata e JSON-LD preservados.
+
+- **Tipografia**: removido `uppercase` agressivo de ~14 headings de display (features, numbers, how-it-works, gamification, blog, faq, about, pricing-koyeb banners+CTAs, marketing cards) e do `PageHero` (→ ~13 páginas públicas) → hierarquia natural-case premium. Eyebrows mono mantidos uppercase (intencional). `text-balance` no H1 do PageHero.
+- **A11y (WCAG AA)**: `aria-label` em botões icon-only (toggles de senha + removido `tabIndex={-1}`), `aria-hidden`/`focusable=false` em SVGs decorativos, `role=switch`/`aria-checked`/`aria-pressed` no toggle de billing, `aria-expanded`+`aria-controls`+`role=region` em accordions (faq-inline), `aria-current` em slides/dot-nav, `role=status`/`aria-live` em texto async (login/forgot/reset/verify/CPF/passkey/biometric), `role=dialog`+`aria-modal` no biometric-lock-screen, `scope=col`+`<caption>` sr-only em tabelas, form semantics + `aria-label` no newsletter do blog, `rel=noreferrer` em `target=_blank`, focus-visible rings em CTAs/cards/links button-styled, h1 garantido no register/student.
+- **Contraste**: elevado texto de baixa opacidade para atingir AA (white/25→/70, /30→/60, /55→/70, zinc-600→zinc-400, emerald-500→400) em hero, numbers, pricing, públicas.
+- **Trial copy**: "Comece grátis" → **"30 dias grátis, sem cartão"** (hero variant B, register, app-personal-trainer); nomes de plano canônicos (Grátis/Pro/Pro+/Max) no register.
+- **Hardcode → token**: 3 `bg-[#]` (oauth/passkey/biometric → `bg-bg-primary`), shadows rgba arbitrários → aliases (`shadow-elevation-1/2`, `shadow-glow-primary`, `shadow-glass-lg`, `shadow-card-glow`), vignettes `bg-[radial-gradient]` → inline style. Grep anti-regressão (RULES §12-13) **zero** no escopo público.
+- **Reduced-motion**: `motion-safe:` em animações `animate-*` (passkey spinner, turnstile card).
+- **SEO**: metadata/canonical/OG/robots/JSON-LD **preservados** (regra do doc 10). Removidas **4 reviews/aggregateRating fabricadas** do JSON-LD de `/pricing` (anti manual-action). BreadcrumbList já emitido por `Breadcrumbs` (verificado — não duplicado).
+- **Validação**: `tsc --noEmit` 0 erros · `next build` OK (141 páginas) · grep anti-regressão zero · zero `use client`/metadata/auth-logic tocados.
+- **Diferido (decisão/QA)**: `/pricing` mantém modelo "student-first" (decisão de produto — adiada); Hero RSC extraction (perf LCP) e numbers-section SSR-counters (mostram "0") — refactors maiores adiados.
+
+---
+
 ## [Unreleased] — 2026-04-08 — Sprint 11-15 (UX Nutrição/Exercícios)
 
 ### ✨ VFIT ULTRA — Plano mestre + nova tela de loading (2026-06-21)

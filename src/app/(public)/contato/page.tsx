@@ -92,12 +92,10 @@ export default function ContatoPage() {
 
       {/* Contact channels */}
       <section className="grid gap-4 sm:grid-cols-2">
-        {CHANNELS.map((ch) => (
-          <a
-            key={ch.title}
-            href={ch.href}
-            className="group rounded-2xl border border-white/8 bg-white/3 p-6 transition-all duration-300 hover:border-brand-primary/25 hover:shadow-[0_0_30px_rgba(16,185,129,0.06)] backdrop-blur-sm"
-          >
+        {CHANNELS.map((ch) => {
+          const cardClassName =
+            'group rounded-2xl border border-white/8 bg-white/3 p-6 transition-all duration-300 hover:border-brand-primary/25 hover:shadow-[0_0_30px_rgba(16,185,129,0.06)] backdrop-blur-sm'
+          const content = (
             <div className="flex items-start gap-4">
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary transition-all duration-300 group-hover:scale-110 group-hover:-rotate-6">
                 <DSIcon name={ch.icon} />
@@ -108,8 +106,28 @@ export default function ContatoPage() {
                 <p className="mt-1 text-sm font-medium text-brand-primary">{ch.value}</p>
               </div>
             </div>
-          </a>
-        ))}
+          )
+
+          // Informational-only channels (no real destination) render as a non-interactive div.
+          if (ch.href === '#') {
+            return (
+              <div key={ch.title} className={cardClassName}>
+                {content}
+              </div>
+            )
+          }
+
+          return (
+            <a
+              key={ch.title}
+              href={ch.href}
+              className={`${cardClassName} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base`}
+              {...(ch.href.startsWith('http') ? { target: '_blank', rel: 'noreferrer' } : {})}
+            >
+              {content}
+            </a>
+          )
+        })}
       </section>
 
       {/* Contact Form */}
@@ -118,26 +136,30 @@ export default function ContatoPage() {
         <form className="space-y-5">
           <div className="grid gap-5 sm:grid-cols-2">
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-zinc-300">Nome</label>
+              <label htmlFor="contato-nome" className="mb-1.5 block text-sm font-medium text-zinc-300">Nome</label>
               <input
+                id="contato-nome"
+                name="nome"
                 type="text"
                 placeholder="Seu nome"
-                className="w-full rounded-xl border border-white/8 bg-white/3 px-4 py-2.5 text-sm text-white placeholder:text-zinc-500 focus:border-brand-primary focus:outline-none"
+                className="w-full rounded-xl border border-white/8 bg-white/3 px-4 py-2.5 text-sm text-white placeholder:text-zinc-500 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 focus:outline-none"
               />
             </div>
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-zinc-300">E-mail</label>
+              <label htmlFor="contato-email" className="mb-1.5 block text-sm font-medium text-zinc-300">E-mail</label>
               <input
+                id="contato-email"
+                name="email"
                 type="email"
                 placeholder="seu@email.com"
-                className="w-full rounded-xl border border-white/8 bg-white/3 px-4 py-2.5 text-sm text-white placeholder:text-zinc-500 focus:border-brand-primary focus:outline-none"
+                className="w-full rounded-xl border border-white/8 bg-white/3 px-4 py-2.5 text-sm text-white placeholder:text-zinc-500 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 focus:outline-none"
               />
             </div>
           </div>
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-zinc-300">Assunto</label>
+            <label htmlFor="contato-assunto" className="mb-1.5 block text-sm font-medium text-zinc-300">Assunto</label>
             <div className="relative">
-              <select className="w-full cursor-pointer appearance-none rounded-xl border border-white/8 bg-white/3 px-4 py-2.5 pr-10 text-sm text-white transition-colors duration-200 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 focus:outline-none">
+              <select id="contato-assunto" name="assunto" className="w-full cursor-pointer appearance-none rounded-xl border border-white/8 bg-white/3 px-4 py-2.5 pr-10 text-sm text-white transition-colors duration-200 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 focus:outline-none">
                 <option value="" className="bg-bg-dark text-zinc-400">Selecione</option>
                 <option value="support" className="bg-bg-dark text-white">Suporte Técnico</option>
                 <option value="partnership" className="bg-bg-dark text-white">Parcerias</option>
@@ -149,11 +171,13 @@ export default function ContatoPage() {
             </div>
           </div>
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-zinc-300">Mensagem</label>
+            <label htmlFor="contato-mensagem" className="mb-1.5 block text-sm font-medium text-zinc-300">Mensagem</label>
             <textarea
+              id="contato-mensagem"
+              name="mensagem"
               rows={5}
               placeholder="Escreva sua mensagem..."
-              className="w-full rounded-xl border border-white/8 bg-white/3 px-4 py-2.5 text-sm text-white placeholder:text-zinc-500 focus:border-brand-primary focus:outline-none resize-none"
+              className="w-full rounded-xl border border-white/8 bg-white/3 px-4 py-2.5 text-sm text-white placeholder:text-zinc-500 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 focus:outline-none resize-none"
             />
           </div>
           <Button type="submit" size="lg">

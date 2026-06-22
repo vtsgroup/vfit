@@ -194,11 +194,12 @@ export default function IAPersonalTrainerPage() {
         <div className="overflow-hidden rounded-2xl border border-white/10">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
+              <caption className="sr-only">IA genérica vs IA especializada</caption>
               <thead>
                 <tr className="border-b border-white/10 bg-white/3">
-                  <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-zinc-400">Critério</th>
-                  <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-zinc-500">IA Genérica</th>
-                  <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-brand-primary">IA Especializada</th>
+                  <th scope="col" className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-zinc-400">Critério</th>
+                  <th scope="col" className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-zinc-500">IA Genérica</th>
+                  <th scope="col" className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-brand-primary">IA Especializada</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5">
@@ -263,15 +264,15 @@ export default function IAPersonalTrainerPage() {
       <section className="rounded-2xl border border-white/8 bg-white/3 p-6 space-y-4">
         <h2 className="text-xl font-bold text-white">Rota recomendada por perfil</h2>
         <div className="grid gap-3 sm:grid-cols-3">
-          <TrackedCtaLink href="/app-personal-trainer" cta="Sou personal trainer" placement="blog_ia_legacy_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-brand-primary/30">
+          <TrackedCtaLink href="/app-personal-trainer" cta="Sou personal trainer" placement="blog_ia_legacy_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-brand-primary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base">
             <h3 className="text-sm font-bold text-white">Sou personal trainer</h3>
             <p className="mt-1 text-xs text-zinc-400">Gestão, IA e operação em escala.</p>
           </TrackedCtaLink>
-          <TrackedCtaLink href="/nutricionistas" cta="Sou nutricionista" placement="blog_ia_legacy_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-brand-primary/30">
+          <TrackedCtaLink href="/nutricionistas" cta="Sou nutricionista" placement="blog_ia_legacy_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-brand-primary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base">
             <h3 className="text-sm font-bold text-white">Sou nutricionista</h3>
             <p className="mt-1 text-xs text-zinc-400">Integração com treino e acompanhamento conjunto.</p>
           </TrackedCtaLink>
-          <TrackedCtaLink href="/afiliados" cta="Quero monetizar indicação" placement="blog_ia_legacy_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-brand-primary/30">
+          <TrackedCtaLink href="/afiliados" cta="Quero monetizar indicação" placement="blog_ia_legacy_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-brand-primary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base">
             <h3 className="text-sm font-bold text-white">Quero monetizar indicação</h3>
             <p className="mt-1 text-xs text-zinc-400">Ganhe comissão recorrente com afiliados.</p>
           </TrackedCtaLink>
@@ -304,7 +305,7 @@ export default function IAPersonalTrainerPage() {
         <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-primary" style={{ fontFamily: 'ui-monospace, monospace' }}>/PRÓXIMO PASSO</span>
         <h2 className="text-2xl font-bold text-white">Quer testar a IA na prática?</h2>
         <p className="text-sm text-zinc-400 max-w-md mx-auto leading-relaxed">
-          Crie sua conta gratuita no VFIT e gere seu primeiro treino com inteligência artificial em menos de 2 minutos. Sem cartão, sem compromisso.
+          30 dias grátis, sem cartão — crie sua conta no VFIT e gere seu primeiro treino com inteligência artificial em menos de 2 minutos.
         </p>
         <TrackedCtaLink
           href="/register"
@@ -312,7 +313,7 @@ export default function IAPersonalTrainerPage() {
           placement="blog_ia_legacy_cta"
           pageSegment="blog"
           event="lp_register_start"
-          className="inline-flex items-center gap-2 rounded-xl bg-brand-primary px-6 py-3 text-sm font-bold text-bg-dark hover:bg-brand-primary-hover transition-colors shadow-lg shadow-brand-primary/20"
+          className="inline-flex items-center gap-2 rounded-xl bg-brand-primary px-6 py-3 text-sm font-bold text-bg-dark hover:bg-brand-primary-hover transition-colors shadow-lg shadow-brand-primary/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base"
         >
           Criar conta grátis
           <DSIcon name="arrowRight" size={16} />

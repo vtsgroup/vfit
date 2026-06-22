@@ -239,7 +239,7 @@ export function PricingKoyeb() {
             </span>
           </div>
           <h2
-            className="mx-auto mb-4 max-w-3xl text-center font-black uppercase tracking-tight text-white"
+            className="mx-auto mb-4 max-w-3xl text-center font-black tracking-tight text-white"
             style={{
               ...headingFont,
               fontSize: 'clamp(2.5rem, 6vw, 4.5rem)',
@@ -252,7 +252,7 @@ export function PricingKoyeb() {
             </span>
           </h2>
           <p className="mx-auto mb-12 max-w-xl text-center text-sm leading-relaxed text-text-secondary-cool sm:text-base">
-            Comece grátis. Pague apenas pelo que precisa. Evolua conforme seu negócio cresce.
+            30 dias grátis, sem cartão. Depois, pague apenas pelo que precisa e evolua conforme seu negócio cresce.
           </p>
         </IntersectionReveal>
 
@@ -261,11 +261,12 @@ export function PricingKoyeb() {
           <div className="mb-14 flex items-center justify-center gap-3">
             <button
               onClick={() => handleToggle(false)}
+              aria-pressed={!isAnnual}
               style={monoStyle}
-              className={`rounded-lg px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
+              className={`rounded-lg px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base ${
                 !isAnnual
                   ? 'bg-white/10 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]'
-                  : 'text-text-muted-cool hover:text-white/60'
+                  : 'text-text-muted-cool hover:text-white/70'
               }`}
             >
               Mensal
@@ -274,7 +275,9 @@ export function PricingKoyeb() {
             {/* Toggle switch */}
             <button
               onClick={() => handleToggle(!isAnnual)}
-              className="relative h-7 w-12 rounded-full bg-white/10 p-0.5 transition-colors duration-300 hover:bg-white/15"
+              role="switch"
+              aria-checked={isAnnual}
+              className="relative h-7 w-12 rounded-full bg-white/10 p-0.5 transition-colors duration-300 hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base"
               aria-label="Alternar entre plano mensal e anual"
             >
               <div
@@ -288,11 +291,12 @@ export function PricingKoyeb() {
 
             <button
               onClick={() => handleToggle(true)}
+              aria-pressed={isAnnual}
               style={monoStyle}
-              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
+              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base ${
                 isAnnual
                   ? 'bg-white/10 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]'
-                  : 'text-text-muted-cool hover:text-white/60'
+                  : 'text-text-muted-cool hover:text-white/70'
               }`}
             >
               Anual
@@ -448,17 +452,18 @@ export function PricingKoyeb() {
                           <span className={`mt-0.5 inline-flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-full border ${
                             feature.highlight
                               ? 'border-brand-primary/50 bg-brand-primary/20 text-brand-primary'
-                              : 'border-white/12 bg-white/3 text-white/30'
+                              : 'border-white/12 bg-white/3 text-white/60'
                           }`}>
                             <svg
                               className="h-3 w-3"
                               fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.8}
+                              aria-hidden="true" focusable="false"
                             >
                               <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                             </svg>
                           </span>
                           <div className="flex min-w-0 items-center gap-2">
-                            <span className={feature.highlight ? 'font-medium text-white/85' : 'text-white/55'}>
+                            <span className={feature.highlight ? 'font-medium text-white/85' : 'text-white/70'}>
                               {feature.text}
                             </span>
                             {feature.highlight && (
@@ -502,7 +507,7 @@ export function PricingKoyeb() {
                       <Button
                         variant={plan.popular ? 'primary' : 'outline'}
                         size="lg"
-                        className="w-full text-xs uppercase tracking-wider"
+                        className="w-full text-xs tracking-wider"
                       >
                         <DSIcon name="play" size={12} />
                         {plan.cta}
@@ -522,7 +527,8 @@ export function PricingKoyeb() {
               key={plan.tier}
               onClick={() => scrollToCard(i)}
               aria-label={`Ver plano ${plan.name}`}
-              className={`rounded-full transition-all duration-300 ${
+              aria-current={activeCard === i ? 'true' : undefined}
+              className={`rounded-full transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base ${
                 activeCard === i
                   ? 'h-2.5 w-7 bg-brand-primary shadow-[0_0_8px_rgba(16,185,129,0.4)]'
                   : 'h-2.5 w-2.5 bg-white/15 hover:bg-white/25'
@@ -547,7 +553,7 @@ export function PricingKoyeb() {
               <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/14" />
               <div className="pointer-events-none absolute -inset-px rounded-2xl bg-linear-to-br from-brand-primary/30 via-transparent to-white/16 opacity-60" />
               {/* Koyeb-style circuit decoration */}
-              <svg className="pointer-events-none absolute right-0 top-0 h-full w-1/2 text-brand-primary opacity-[0.12]" viewBox="0 0 200 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg className="pointer-events-none absolute right-0 top-0 h-full w-1/2 text-brand-primary opacity-[0.12]" viewBox="0 0 200 150" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
                 <path d="M120 0v40h80" stroke="currentColor" strokeWidth="1" />
                 <path d="M160 0v70h40" stroke="currentColor" strokeWidth="0.5" />
                 <path d="M140 30h60" stroke="currentColor" strokeWidth="0.5" />
@@ -570,10 +576,10 @@ export function PricingKoyeb() {
               <div className="relative">
                 <div className="mb-2 flex items-center gap-2">
                   <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-primary/20">
-                    <svg className="h-4 w-4 text-brand-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M13 7l5 5-5 5M6 7l5 5-5 5" /></svg>
+                    <svg className="h-4 w-4 text-brand-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true" focusable="false"><path d="M13 7l5 5-5 5M6 7l5 5-5 5" /></svg>
                   </div>
-                  <h3 className="text-sm font-black uppercase tracking-wider text-white" style={monoStyle}>
-                    Diferenciais Únicos
+                  <h3 className="text-sm font-black tracking-wider text-white" style={monoStyle}>
+                    Diferenciais únicos
                   </h3>
                 </div>
                 <p className="text-[13px] leading-relaxed text-text-secondary-cool">
@@ -585,7 +591,7 @@ export function PricingKoyeb() {
                   style={monoStyle}
                   className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-brand-primary transition-colors hover:text-brand-primary-hover"
                 >
-                  <svg className="h-3 w-3" viewBox="0 0 12 12" fill="currentColor">
+                  <svg className="h-3 w-3" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true" focusable="false">
                     <path d="M2 1.5l7.5 4.5-7.5 4.5V1.5z" />
                   </svg>
                   Ver todos os recursos
@@ -608,7 +614,7 @@ export function PricingKoyeb() {
               <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/14" />
               <div className="pointer-events-none absolute -inset-px rounded-2xl bg-linear-to-br from-white/20 via-transparent to-brand-primary/20 opacity-60" />
               {/* Koyeb-style circuit decoration */}
-              <svg className="pointer-events-none absolute right-0 top-0 h-full w-1/2 text-brand-primary opacity-[0.08]" viewBox="0 0 200 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg className="pointer-events-none absolute right-0 top-0 h-full w-1/2 text-brand-primary opacity-[0.08]" viewBox="0 0 200 150" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
                 <path d="M100 0v50h100" stroke="currentColor" strokeWidth="1" />
                 <path d="M130 30h70" stroke="currentColor" strokeWidth="0.5" />
                 <path d="M150 0v80" stroke="currentColor" strokeWidth="0.5" />
@@ -623,10 +629,10 @@ export function PricingKoyeb() {
               <div className="relative">
                 <div className="mb-2 flex items-center gap-2">
                   <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-primary/20">
-                    <svg className="h-4 w-4 text-brand-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M13 7l5 5-5 5M6 7l5 5-5 5" /></svg>
+                    <svg className="h-4 w-4 text-brand-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true" focusable="false"><path d="M13 7l5 5-5 5M6 7l5 5-5 5" /></svg>
                   </div>
-                  <h3 className="text-sm font-black uppercase tracking-wider text-white" style={monoStyle}>
-                    Plano Anual
+                  <h3 className="text-sm font-black tracking-wider text-white" style={monoStyle}>
+                    Plano anual
                   </h3>
                 </div>
                 <p className="text-[13px] leading-relaxed text-text-secondary-cool">
@@ -636,9 +642,9 @@ export function PricingKoyeb() {
                 <button
                   onClick={() => handleToggle(true)}
                   style={monoStyle}
-                  className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-brand-primary transition-colors hover:text-brand-primary-hover"
+                  className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-brand-primary transition-colors hover:text-brand-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base"
                 >
-                  <svg className="h-3 w-3" viewBox="0 0 12 12" fill="currentColor">
+                  <svg className="h-3 w-3" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true" focusable="false">
                     <path d="M2 1.5l7.5 4.5-7.5 4.5V1.5z" />
                   </svg>
                   Ativar plano anual

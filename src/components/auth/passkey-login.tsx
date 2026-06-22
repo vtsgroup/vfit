@@ -185,14 +185,15 @@ export function PasskeyLogin({ onLoadingChange }: PasskeyLoginProps) {
         type="button"
         onClick={handlePasskeyLogin}
         disabled={loginWithPasskey.isPending || isPendingRef.current}
-        className="w-full group flex items-center justify-center gap-2.5 rounded-xl border border-brand-primary/30 bg-brand-primary/5 py-2.5 text-sm font-semibold text-brand-primary transition-all hover:bg-brand-primary/10 hover:border-brand-primary/50 hover:shadow-glow-primary active:scale-[0.98] disabled:opacity-60"
+        aria-busy={loginWithPasskey.isPending}
+        className="w-full group flex items-center justify-center gap-2.5 rounded-xl border border-brand-primary/30 bg-brand-primary/5 py-2.5 text-sm font-semibold text-brand-primary transition-all hover:bg-brand-primary/10 hover:border-brand-primary/50 hover:shadow-glow-primary active:scale-[0.98] disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
       >
         {loginWithPasskey.isPending ? (
-          <DSIcon name="loader" size={16} className="animate-spin" />
+          <DSIcon name="loader" size={16} className="motion-safe:animate-spin" />
         ) : (
           <DSIcon name="fingerprint" size={20} />
         )}
-        <span>
+        <span aria-live="polite">
           {loginWithPasskey.isPending
             ? 'Autenticando...'
             : `Entrar com biometria`}
@@ -200,7 +201,7 @@ export function PasskeyLogin({ onLoadingChange }: PasskeyLoginProps) {
       </button>
 
       {/* Subtitle */}
-      <p className="text-center text-[10px] text-zinc-600">
+      <p className="text-center text-[10px] text-zinc-400">
         {maskedEmail} · Face ID / Impressão digital
       </p>
 
@@ -210,7 +211,7 @@ export function PasskeyLogin({ onLoadingChange }: PasskeyLoginProps) {
           <div className="w-full border-t border-white/6" />
         </div>
         <div className="relative flex justify-center">
-          <span className="bg-[#0d0d0f] px-3 text-[9px] uppercase tracking-widest text-zinc-600">
+          <span className="bg-bg-primary px-3 text-[9px] uppercase tracking-widest text-zinc-400">
             ou com senha
           </span>
         </div>

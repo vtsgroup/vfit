@@ -64,10 +64,10 @@ const gameBadges: { icon: DSIconName; label: string; desc: string }[] = [
 
 /* ─── Position icon resolver ─── */
 function PosIcon({ pos }: { pos: number }) {
-  if (pos === 1) return <DSIcon name="trophy" size={14} />
-  if (pos === 2) return <DSIcon name="medal" size={14} />
-  if (pos === 3) return <DSIcon name="award" size={14} />
-  return <DSIcon name="star" size={14} />
+  if (pos === 1) return <DSIcon name="trophy" size={14} aria-label="Posição 1" />
+  if (pos === 2) return <DSIcon name="medal" size={14} aria-label="Posição 2" />
+  if (pos === 3) return <DSIcon name="award" size={14} aria-label="Posição 3" />
+  return <DSIcon name="star" size={14} aria-label={`Posição ${pos}`} />
 }
 
 /* ─── XP bar component ─── */
@@ -163,13 +163,13 @@ export function GamificationSection() {
   return (
     <section id="gamification" className="relative overflow-hidden bg-bg-primary py-16 sm:py-32" aria-label="Sistema de gamificação">
       {/* Subtle grid bg */}
-      <div className="pointer-events-none absolute inset-0 opacity-[0.03]" style={{
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-3" style={{
         backgroundImage: 'linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)',
         backgroundSize: '60px 60px',
       }} />
 
       {/* Glow */}
-      <div className="pointer-events-none absolute top-1/3 left-1/2 -translate-x-1/2 h-96 w-96 rounded-full bg-brand-primary/5 blur-[180px]" />
+      <div aria-hidden="true" className="pointer-events-none absolute top-1/3 left-1/2 -translate-x-1/2 h-96 w-96 rounded-full bg-brand-primary/5 blur-[180px]" />
 
       <div className="relative z-10 mx-auto max-w-6xl px-6">
         {/* Label */}
@@ -184,7 +184,7 @@ export function GamificationSection() {
         {/* Heading */}
         <IntersectionReveal animation="blur-in" delay={50}>
           <h2
-            className="mb-4 text-center text-3xl uppercase leading-[0.96] text-white sm:text-5xl"
+            className="mb-4 text-center text-3xl leading-[0.96] text-white sm:text-5xl"
             style={headingFont}
           >
             CONSTÂNCIA QUE{' '}
@@ -195,7 +195,7 @@ export function GamificationSection() {
         </IntersectionReveal>
 
         <IntersectionReveal animation="fade-in" delay={100}>
-          <p className="mx-auto mb-14 max-w-lg text-center text-sm leading-relaxed text-white/40 sm:text-base">
+          <p className="mx-auto mb-14 max-w-lg text-center text-sm leading-relaxed text-white/60 sm:text-base">
             XP, badges e rankings deixam o treino menos solitário e dão ao aluno um motivo a mais para voltar amanhã.
           </p>
         </IntersectionReveal>
@@ -224,7 +224,7 @@ export function GamificationSection() {
                   </div>
                   <div>
                     <div className="text-[10px] font-bold text-white/70 uppercase" style={monoLabel}>{badge.label}</div>
-                    <div className="text-[10px] text-white/30">{badge.desc}</div>
+                    <div className="text-[10px] text-white/60">{badge.desc}</div>
                   </div>
                 </div>
               ))}

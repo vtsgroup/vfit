@@ -203,8 +203,8 @@ export default function RegisterStudentPage() {
 
             {/* Grid */}
             <div
-              className="absolute inset-0 opacity-[0.04]"
-              style={{ backgroundImage: 'linear-gradient(rgba(16,185,129,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(16,185,129,0.4) 1px, transparent 1px)', backgroundSize: '60px 60px' }}
+              className="absolute inset-0"
+              style={{ opacity: 0.04, backgroundImage: 'linear-gradient(rgba(16,185,129,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(16,185,129,0.4) 1px, transparent 1px)', backgroundSize: '60px 60px' }}
             />
 
             {/* Particles */}
@@ -273,8 +273,9 @@ export default function RegisterStudentPage() {
                     </div>
                   </div>
                   {personalInfo.personal_cref_verified && (
-                    <div className="absolute -bottom-1 -right-1 rounded-full bg-emerald-500 p-1.5 shadow-lg shadow-emerald-500/50 ring-2 ring-bg-surface-1">
+                    <div className="absolute -bottom-1 -right-1 rounded-full bg-emerald-500 p-1.5 shadow-lg shadow-emerald-500/50 ring-2 ring-bg-surface-1" title="CREF verificado">
                       <DSIcon name="shieldCheck" size={14} className="text-white" />
+                      <span className="sr-only">CREF verificado</span>
                     </div>
                   )}
                 </div>
@@ -351,9 +352,9 @@ export default function RegisterStudentPage() {
           {/* ═══════════════ GOOGLE OAUTH — Opção rápida ═══════════════ */}
           <div style={{ animation: 'slideUp 0.4s ease-out' }}>
             <div className="mb-4">
-              <h3 className="text-lg font-black text-white" style={headingFont}>
+              <h1 className="text-lg font-black text-white" style={headingFont}>
                 Crie sua conta
-              </h3>
+              </h1>
               <p className="text-[13px] text-zinc-500 mt-1">
                 Cadastro rápido com Google ou email e senha.
               </p>
@@ -429,19 +430,21 @@ export default function RegisterStudentPage() {
                         : ''
                     }`}
                   />
-                  {cpfValidation.touched && cpfValidation.hasError ? (
-                    <p className="mt-1.5 text-[10px] text-red-500">
-                      {cpfValidation.errorMessage}
-                    </p>
-                  ) : cpfValidation.touched && cpfValidation.isValid ? (
-                    <p className="mt-1.5 text-[10px] text-emerald-500">
-                      CPF validado ✓
-                    </p>
-                  ) : (
-                    <p className="mt-1.5 text-[10px] text-zinc-500">
-                      Necessário para gerar o pagamento via PIX
-                    </p>
-                  )}
+                  <div role="status" aria-live="polite">
+                    {cpfValidation.touched && cpfValidation.hasError ? (
+                      <p className="mt-1.5 text-[10px] text-red-400">
+                        {cpfValidation.errorMessage}
+                      </p>
+                    ) : cpfValidation.touched && cpfValidation.isValid ? (
+                      <p className="mt-1.5 text-[10px] text-emerald-400">
+                        CPF validado ✓
+                      </p>
+                    ) : (
+                      <p className="mt-1.5 text-[10px] text-zinc-500">
+                        Necessário para gerar o pagamento via PIX
+                      </p>
+                    )}
+                  </div>
                 </div>
               )}
 
@@ -463,8 +466,9 @@ export default function RegisterStudentPage() {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-zinc-400 hover:text-zinc-600 transition-colors rounded-lg"
-                    tabIndex={-1}
+                    aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+                    aria-pressed={showPassword}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-zinc-400 hover:text-emerald-300 transition-colors rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
                   >
                     {showPassword ? <DSIcon name="eyeOff" size={16} /> : <DSIcon name="eye" size={16} />}
                   </button>
@@ -497,7 +501,7 @@ export default function RegisterStudentPage() {
                   />
                   <div className="h-4.5 w-4.5 rounded-md border border-zinc-700 bg-zinc-900 peer-checked:bg-emerald-500 peer-checked:border-emerald-500 transition-all duration-200 flex items-center justify-center">
                     {acceptedTerms && (
-                      <svg className="h-2.5 w-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3.5}>
+                      <svg className="h-2.5 w-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3.5} aria-hidden="true" focusable="false">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                       </svg>
                     )}
@@ -505,9 +509,9 @@ export default function RegisterStudentPage() {
                 </div>
                 <span className="text-[11px] leading-relaxed text-zinc-500">
                   Li e aceito os{' '}
-                  <Link href="/termos" target="_blank" className="font-bold text-emerald-400 hover:underline">Termos de Uso</Link>
+                  <Link href="/termos" target="_blank" rel="noreferrer" className="font-bold text-emerald-400 hover:underline">Termos de Uso</Link>
                   {' '}e a{' '}
-                  <Link href="/privacidade" target="_blank" className="font-bold text-emerald-400 hover:underline">Política de Privacidade</Link>
+                  <Link href="/privacidade" target="_blank" rel="noreferrer" className="font-bold text-emerald-400 hover:underline">Política de Privacidade</Link>
                 </span>
               </label>
 
@@ -529,7 +533,7 @@ export default function RegisterStudentPage() {
 
               {/* Error */}
               {register.isError && (
-                <div className="flex items-center gap-2.5 rounded-2xl border border-red-500/20 bg-red-500/6 px-4 py-3">
+                <div role="alert" className="flex items-center gap-2.5 rounded-2xl border border-red-500/20 bg-red-500/6 px-4 py-3">
                   <DSIcon name="alertCircle" size={16} className="text-red-400 shrink-0" />
                   <p className="text-[12px] font-medium text-red-400">
                     {register.error instanceof ApiClientError ? register.error.message : 'Erro ao criar conta. Tente novamente.'}

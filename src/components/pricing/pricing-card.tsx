@@ -103,7 +103,7 @@ export function PricingCard({ plan, isAnnual }: PricingCardProps) {
       {/* CTA */}
       <Link
         href={plan.href}
-        className={`mt-8 flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-bold transition-all ${
+        className={`mt-8 flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base ${
           isPopular
             ? 'bg-brand-primary text-gray-900 hover:bg-brand-primary/90 shadow-lg shadow-brand-primary/20'
             : 'border border-white/15 bg-white/5 text-white hover:bg-white/10'

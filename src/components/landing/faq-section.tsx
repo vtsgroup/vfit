@@ -43,7 +43,7 @@ const FAQ_ITEMS: FaqItem[] = [
   {
     icon: 'creditCard',
     q: 'É gratuito? Preciso de cartão de crédito?',
-    a: 'Para alunos, o início é gratuito e sem cartão de crédito. Planos profissionais de operação (personal e nutrição) ficam nas páginas dedicadas para cada perfil.',
+    a: 'Para alunos, são 30 dias grátis, sem cartão de crédito. Planos profissionais de operação (personal e nutrição) ficam nas páginas dedicadas para cada perfil.',
   },
   {
     icon: 'brain',
@@ -53,7 +53,7 @@ const FAQ_ITEMS: FaqItem[] = [
   {
     icon: 'creditCard',
     q: 'Preciso pagar para usar como aluno?',
-    a: 'Você pode começar como aluno sem cartão de crédito. Quando houver contratação de acompanhamento profissional, as condições aparecem de forma clara no fluxo correspondente.',
+    a: 'Você pode começar como aluno com 30 dias grátis, sem cartão de crédito. Quando houver contratação de acompanhamento profissional, as condições aparecem de forma clara no fluxo correspondente.',
   },
   {
     icon: 'smartphone',
@@ -113,7 +113,7 @@ function AccordionItem({ item, isOpen, toggle, index }: { item: FaqItem; isOpen:
         onClick={toggle}
         aria-expanded={isOpen}
         aria-controls={panelId}
-        className="flex w-full items-center gap-3 px-3.5 py-3.5 text-left transition-colors duration-200 hover:text-brand-primary sm:gap-4 sm:px-5 sm:py-4"
+        className="flex w-full items-center gap-3 rounded-xl px-3.5 py-3.5 text-left transition-colors duration-200 hover:text-brand-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-landing-light sm:gap-4 sm:px-5 sm:py-4"
       >
         {/* Number indicator */}
         <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-[10px] font-bold transition-all duration-300 ${
@@ -186,7 +186,7 @@ export function FaqSection() {
         {/* Heading */}
         <IntersectionReveal animation="blur-in" delay={50}>
           <h2
-            className="mb-10 text-center uppercase text-gray-950 sm:mb-14"
+            className="mb-10 text-center text-gray-950 sm:mb-14"
             style={{ ...headingFont, fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: '0.95' }}
           >
             PERGUNTAS{' '}

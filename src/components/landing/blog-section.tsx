@@ -90,7 +90,7 @@ function BlogCard({ post }: { post: BlogPost }) {
         {/* Overlay gradient on hover */}
         <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
         {/* Reading time badge */}
-        <div className="absolute top-3 right-3 flex items-center gap-1 rounded-lg bg-black/50 px-2 py-1 text-[10px] font-bold text-white/80 backdrop-blur-sm">
+        <div className="absolute top-3 right-3 flex items-center gap-1 rounded-lg bg-black/70 px-2 py-1 text-[10px] font-bold text-white backdrop-blur-sm">
           <DSIcon name="clock" size={10} />
           5 MIN
         </div>
@@ -164,7 +164,7 @@ export function BlogSection() {
         {/* Heading */}
         <IntersectionReveal animation="blur-in" delay={50}>
           <h2
-            className="font-syne mb-10 text-center uppercase text-gray-950 sm:mb-16"
+            className="font-syne mb-10 text-center text-gray-950 sm:mb-16"
             style={{
               fontSize: 'clamp(2rem, 5vw, 3.5rem)',
               lineHeight: '0.95',

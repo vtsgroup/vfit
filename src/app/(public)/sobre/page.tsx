@@ -159,9 +159,10 @@ export default function SobrePage() {
         <Link href="/register/personal">
           <Button size="lg">
             <DSIcon name="checkCircle" size={16} />
-            Começar Gratuitamente
+            Começar grátis
           </Button>
         </Link>
+        <p className="mt-4 text-sm text-zinc-400">30 dias grátis, sem cartão.</p>
       </section>
       </div>
     </>

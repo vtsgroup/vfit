@@ -100,7 +100,7 @@ export default function ForgotPasswordPage() {
         {sent ? (
           <div className="space-y-5">
             {/* Success alert — glass style */}
-            <div className="flex items-start gap-3 rounded-2xl border border-brand-primary/20 bg-brand-primary/6 px-4 py-3.5">
+            <div role="status" aria-live="polite" className="flex items-start gap-3 rounded-2xl border border-brand-primary/20 bg-brand-primary/6 px-4 py-3.5">
               <div className="mt-0.5 h-2 w-2 rounded-full bg-brand-primary shrink-0 animate-pulse" />
               <p className="text-[12px] font-medium leading-relaxed text-brand-primary">
                 Se o email informado estiver cadastrado, você receberá um link e um código de recuperação em instantes.
@@ -171,7 +171,7 @@ export default function ForgotPasswordPage() {
 
             {/* Error */}
             {forgotPassword.isError && (
-              <div className="flex items-center gap-2.5 rounded-2xl border border-red-500/20 bg-red-500/6 px-4 py-3">
+              <div role="alert" className="flex items-center gap-2.5 rounded-2xl border border-red-500/20 bg-red-500/6 px-4 py-3">
                 <div className="h-2 w-2 rounded-full bg-red-400 shrink-0" />
                 <p className="text-[12px] font-medium text-red-400">
                   Erro ao enviar email de recuperação. Tente novamente.

@@ -69,7 +69,7 @@ export default function AppPersonalTrainerPage() {
         <h2 className="text-lg font-bold text-text-primary">Trabalho conjunto com nutricionista</h2>
         <div className="mt-3 grid gap-4 md:grid-cols-2">
           <article className="rounded-xl border border-white/8 bg-white/4 p-4">
-            <h3 className="text-sm font-bold text-text-primary uppercase tracking-wider">Visão clínica integrada</h3>
+            <h3 className="text-sm font-bold text-text-primary tracking-wider">Visão clínica integrada</h3>
             <ul className="mt-2 space-y-1 text-sm text-text-secondary">
               <li>• Entenda a estratégia alimentar ativa do aluno</li>
               <li>• Ajuste periodização com base na adesão nutricional</li>
@@ -77,7 +77,7 @@ export default function AppPersonalTrainerPage() {
             </ul>
           </article>
           <article className="rounded-xl border border-white/8 bg-white/4 p-4">
-            <h3 className="text-sm font-bold text-text-primary uppercase tracking-wider">Chat entre profissionais</h3>
+            <h3 className="text-sm font-bold text-text-primary tracking-wider">Chat entre profissionais</h3>
             <ul className="mt-2 space-y-1 text-sm text-text-secondary">
               <li>• Personal e nutricionista conversam no contexto do aluno</li>
               <li>• Decisões mais rápidas para ajuste de treino e dieta</li>
@@ -110,6 +110,7 @@ export default function AppPersonalTrainerPage() {
           <TrackedCtaLink href="/pricing" cta="Ver planos" placement="personal_page_main_cta" pageSegment="personal" event="lp_cta_secondary_click"><Button variant="outline">Ver planos</Button></TrackedCtaLink>
           <TrackedCtaLink href="/nutricionistas" cta="Parceria com nutrição" placement="personal_page_main_cta" pageSegment="personal" event="lp_cta_secondary_click"><Button variant="ghost">Parceria com nutrição</Button></TrackedCtaLink>
         </div>
+        <p className="mt-3 text-sm text-text-secondary">30 dias grátis, sem cartão.</p>
       </section>
 
       <section className="mt-6 surface-card rounded-2xl p-5">

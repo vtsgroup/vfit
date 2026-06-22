@@ -54,11 +54,12 @@ function DataTable({ rows }: { rows: { data: string; purpose: string; base: stri
   return (
     <div className="overflow-x-auto rounded-xl border border-white/6">
       <table className="w-full text-sm">
+        <caption className="sr-only">Dados coletados, sua finalidade e a base legal correspondente</caption>
         <thead>
           <tr className="border-b border-white/8 bg-white/3">
-            <th className="px-4 py-3 text-left font-semibold text-zinc-300">Dado</th>
-            <th className="px-4 py-3 text-left font-semibold text-zinc-300">Finalidade</th>
-            <th className="px-4 py-3 text-left font-semibold text-zinc-300">Base Legal</th>
+            <th scope="col" className="px-4 py-3 text-left font-semibold text-zinc-300">Dado</th>
+            <th scope="col" className="px-4 py-3 text-left font-semibold text-zinc-300">Finalidade</th>
+            <th scope="col" className="px-4 py-3 text-left font-semibold text-zinc-300">Base Legal</th>
           </tr>
         </thead>
         <tbody>

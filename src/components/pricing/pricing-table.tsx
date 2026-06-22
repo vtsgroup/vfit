@@ -21,9 +21,15 @@ interface PricingTableProps {
 function CellValue({ value }: { value: string | boolean }) {
   if (typeof value === 'boolean') {
     return value ? (
-      <DSIcon name="check" size={16} className="mx-auto text-emerald-400" />
+      <>
+        <DSIcon name="check" size={16} className="mx-auto text-emerald-400" />
+        <span className="sr-only">Incluído</span>
+      </>
     ) : (
-      <DSIcon name="x" size={16} className="mx-auto text-zinc-600" />
+      <>
+        <DSIcon name="x" size={16} className="mx-auto text-zinc-400" />
+        <span className="sr-only">Não incluído</span>
+      </>
     )
   }
   return <span className="text-sm text-zinc-300">{value}</span>
@@ -41,12 +47,14 @@ export function PricingTable({ rows }: PricingTableProps) {
       aria-label="Tabela comparativa de planos"
     >
       <table className="w-full text-left">
+        <caption className="sr-only">Comparativo de recursos por plano</caption>
         <thead>
           <tr className="border-b border-white/8">
-            <th className="py-4 pr-4 text-sm font-medium text-zinc-300">Recurso</th>
+            <th scope="col" className="py-4 pr-4 text-sm font-medium text-zinc-300">Recurso</th>
             {plans.map((p) => (
               <th
                 key={p}
+                scope="col"
                 className={`font-syne py-4 px-3 text-center text-xs uppercase tracking-wider ${
                   p === 'pro' ? 'text-brand-primary' : 'text-zinc-400'
                 }`}
