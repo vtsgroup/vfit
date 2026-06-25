@@ -5,6 +5,17 @@
 
 ---
 
+## [4.9.4] — 2026-06-25 — Refino: vídeo CTA, métricas about, FAQ fix, footer wordmark
+
+> Deploy via `cf:deploy --allow-no-whatsapp` (v4.9.4, verificado em prod). Workers não redeployado (R2 `[10136]`).
+
+- **CTA "COMECE AGORA"**: fundo de **vídeo real de academia** (`/videos/gym-bg.mp4`, 924K, autoplay mudo loop + poster) com overlay cinematográfico e zoom lento.
+- **About**: coluna "NOSSA STACK" preenchida com **grid de métricas de infra** (99.9% uptime, <50ms edge, 300+ pontos, escala serverless).
+- **FAQ**: corrigido glitch de CSS (accent bar/recorte) + ledger mais limpo — linha ativa com borda gradiente persistente + glow + número/toggle navy-no-verde, reveal grid-collapse. A11y mantida.
+- **Footer**: logo maior + CTA/newsletter centralizado + **wordmark "VFIT" gigante** sangrando na base.
+
+---
+
 ## [4.9.3] — 2026-06-25 — Redesign ultra-premium: About, FAQ, CTA, Footer, Blog
 
 ### ✨ 5 seções elevadas (blueprints de workflow + padrões shipados) — DEPLOYED
