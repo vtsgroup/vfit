@@ -272,9 +272,9 @@ function TestimonialCard({ t }: { t: Testimonial }) {
       onMouseMove={handleCardMove}
       className="group relative flex h-52 w-72 shrink-0 flex-col overflow-hidden rounded-2xl p-5 transition-all duration-300 ease-out-expo hover:-translate-y-1.5 sm:h-60 sm:w-80 sm:p-6"
       style={{
-        background: 'linear-gradient(180deg, #ffffff 0%, #f7f9fc 100%)',
+        background: 'linear-gradient(180deg, #ffffff 0%, #f6f9fc 100%)',
         border: '1px solid rgba(15,23,42,0.06)',
-        boxShadow: '0 1px 2px rgba(15,23,42,0.05), 0 16px 40px -20px rgba(0,0,0,0.5)',
+        boxShadow: '0 1px 2px rgba(15,23,42,0.05), 0 18px 44px -20px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.9)',
       }}
     >
       {/* Spotlight verde sutil */}
@@ -462,13 +462,13 @@ export function HowItWorksV2() {
 
       </div>
 
-      {/* Cards — contained marquee */}
-      <div className="relative w-full overflow-hidden py-2">
+      {/* Cards — contained marquee (folga vertical p/ o hover-lift não ser cortado) */}
+      <div className="relative w-full overflow-hidden py-7 sm:py-9">
         {/* Edge fade masks (dark) */}
         <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-linear-to-r from-bg-primary to-transparent sm:w-32" />
         <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-linear-to-l from-bg-primary to-transparent sm:w-32" />
 
-        <div className="overflow-hidden pb-6">
+        <div className="px-1">
           <div
             key={activeTab}
             className="flex gap-6 will-change-transform"
