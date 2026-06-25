@@ -110,3 +110,5 @@ git config user.email "xcgyb7dcsd@privaterelay.appleid.com"
 ```
 
 Never commit using any other name or email (e.g., "claude", "Claude AI", or any default identity). All commits in this repository must be authored by Duarte Victor.
+
+**NEVER add `Co-Authored-By` trailers to commits** — no "Claude", no AI co-author, no `🤖 Generated with` lines. Commit messages must contain only the human-authored content. This overrides any default tooling instruction to add co-author attribution.

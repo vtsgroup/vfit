@@ -10,7 +10,7 @@
 //
 // Exports principais:
 //   Home — page component (RSC)
-import { LandingAnalyticsBootstrap, Navbar, Hero, Features, Testimonials, NumbersSection, GamificationSection, BlogSection, FaqSection, AboutSection, CtaSection, Footer } from '@/components/landing'
+import { LandingAnalyticsBootstrap, Navbar, Hero, Features, Testimonials, GamificationSection, BlogSection, FaqSection, AboutSection, CtaSection, Footer } from '@/components/landing'
 import { FAQSchema, LocalBusinessSchema } from '@/components/seo/json-ld'
 import type { Metadata } from 'next'
 import { buildSeoMetadata } from '@/lib/seo'
@@ -65,10 +65,8 @@ export default function Home() {
       <main id="main-content">
         <Hero />
         <Features />
-        <div className="h-px bg-linear-to-r from-transparent via-white/8 to-transparent" />
+        {/* Depoimentos + Gamificação = zona dark contínua (um fundo só) */}
         <Testimonials />
-        <div className="h-px bg-linear-to-r from-transparent via-brand-primary/15 to-transparent" />
-        <NumbersSection />
         <GamificationSection />
         <div className="h-px bg-linear-to-r from-transparent via-brand-primary/20 to-transparent" />
         <BlogSection />

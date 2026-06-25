@@ -373,7 +373,7 @@ export function Features() {
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
                   className={`relative z-10 flex flex-1 items-center justify-center gap-1.5 rounded-xl px-3 py-2.5 text-[11px] uppercase tracking-wider transition-colors duration-300 ${
-                    activeTab === tab.id ? 'text-white [text-shadow:0_1px_1px_rgba(2,44,34,0.4)]' : 'text-slate-400 hover:text-slate-600'
+                    activeTab === tab.id ? 'text-[#08122B]' : 'text-slate-400 hover:text-slate-600'
                   }`}
                   style={monoLabel}
                 >

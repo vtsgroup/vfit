@@ -11,12 +11,19 @@
 //   HowItWorksV2 — seção de steps "como funciona"
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, type MouseEvent } from 'react'
 import Link from 'next/link'
 import { IntersectionReveal } from '@/components/ui/intersection-reveal'
 import { trackLandingEvent } from '@/lib/landing-analytics'
-import { Button } from '@/components/ui/button'
 import { DSIcon } from '@/components/ui/ds-icon'
+
+/* Spotlight verde que segue o cursor (via CSS vars, sem re-render) */
+function handleCardMove(e: MouseEvent<HTMLDivElement>) {
+  const el = e.currentTarget
+  const r = el.getBoundingClientRect()
+  el.style.setProperty('--mx', `${e.clientX - r.left}px`)
+  el.style.setProperty('--my', `${e.clientY - r.top}px`)
+}
 
 /* ─── Typography — Koyeb-style heavy uppercase ─── */
 const headingFont = {
@@ -211,18 +218,18 @@ const TABS = [
   { id: 'personals', label: 'PROFISSIONAIS', data: PERSONALS },
 ] as const
 
-/* ─── Stars — modern pill badge ─── */
+/* ─── Stars — light pill badge ─── */
 function Stars({ count }: { count: number }) {
   return (
-    <div className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1.5 ring-1 ring-amber-200/60">
+    <div className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-2.5 py-1 ring-1 ring-amber-200/70">
       <div className="flex gap-0.5">
         {Array.from({ length: count }).map((_, i) => (
-          <svg key={i} aria-hidden="true" focusable="false" className="h-3.5 w-3.5 text-amber-400 drop-shadow-sm" fill="currentColor" viewBox="0 0 20 20">
+          <svg key={i} aria-hidden="true" focusable="false" className="h-3 w-3 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
             <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
           </svg>
         ))}
       </div>
-      <span className="text-[11px] font-bold text-amber-600">{count}.0</span>
+      <span className="text-[10px] font-bold text-amber-500">{count}.0</span>
     </div>
   )
 }
@@ -236,7 +243,7 @@ function Avatar({ name, photo }: { name: string; photo: string }) {
     .slice(0, 2)
 
   return (
-    <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full bg-linear-to-br from-brand-primary to-brand-accent ring-2 ring-brand-primary/25 shadow-md sm:h-14 sm:w-14 sm:ring-[3px]">
+    <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-full bg-linear-to-br from-brand-primary to-brand-accent ring-2 ring-brand-primary/25 shadow-sm sm:h-10 sm:w-10">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={photo}
@@ -256,45 +263,73 @@ function Avatar({ name, photo }: { name: string; photo: string }) {
   )
 }
 
-/* ─── Card — modern glassmorphism-lite ─── */
+/* ─── Card — white, compact, premium (floats on dark) ─── */
 function TestimonialCard({ t }: { t: Testimonial }) {
   const parts = t.text.split(t.highlight)
 
   return (
-    <div className="group relative flex h-60 w-80 shrink-0 flex-col overflow-hidden rounded-3xl border border-gray-200 bg-white p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-all duration-300 hover:shadow-[0_20px_50px_rgba(16,185,129,0.15)] hover:-translate-y-3 sm:h-80 sm:w-96 sm:p-7 lg:w-105">
+    <div
+      onMouseMove={handleCardMove}
+      className="group relative flex h-52 w-72 shrink-0 flex-col overflow-hidden rounded-2xl p-5 transition-all duration-300 ease-out-expo hover:-translate-y-1.5 sm:h-60 sm:w-80 sm:p-6"
+      style={{
+        background: 'linear-gradient(180deg, #ffffff 0%, #f7f9fc 100%)',
+        border: '1px solid rgba(15,23,42,0.06)',
+        boxShadow: '0 1px 2px rgba(15,23,42,0.05), 0 16px 40px -20px rgba(0,0,0,0.5)',
+      }}
+    >
+      {/* Spotlight verde sutil */}
+      <span
+        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        style={{ background: 'radial-gradient(300px circle at var(--mx,50%) var(--my,0%), rgba(34,197,94,0.07), transparent 60%)' }}
+      />
+      {/* Borda gradiente no hover */}
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        style={{
+          padding: '1px',
+          background: 'linear-gradient(135deg, rgba(34,197,94,0.5) 0%, rgba(132,204,22,0.2) 45%, transparent 75%)',
+          WebkitMask: 'linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)',
+          WebkitMaskComposite: 'xor',
+          maskComposite: 'exclude',
+        }}
+      />
+      {/* Glow verde no hover */}
+      <span className="pointer-events-none absolute -inset-px rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100 shadow-[0_24px_50px_-20px_rgba(34,197,94,0.5)]" />
+
       {/* Quote watermark */}
-      <svg aria-hidden="true" focusable="false" className="pointer-events-none absolute -right-2 -top-2 h-16 w-16 text-brand-primary/4 transition-all duration-300 group-hover:text-brand-primary/8 sm:h-24 sm:w-24" fill="currentColor" viewBox="0 0 24 24">
+      <svg aria-hidden="true" focusable="false" className="pointer-events-none absolute -right-1 -top-1 h-12 w-12 text-brand-primary/8 transition-all duration-300 group-hover:text-brand-primary/14 sm:h-16 sm:w-16" fill="currentColor" viewBox="0 0 24 24">
         <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10H14.017zM0 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151C7.546 6.068 5.983 8.789 5.983 11h4v10H0z" />
       </svg>
 
-      {/* Stars — top right */}
-      <div className="mb-3 sm:mb-5">
+      {/* Stars — top */}
+      <div className="relative mb-3">
         <Stars count={t.rating} />
       </div>
 
       {/* Quote */}
-      <blockquote className="flex-1 text-sm leading-relaxed text-gray-600 sm:text-[15px] sm:leading-[1.7]">
+      <blockquote className="relative flex-1 overflow-hidden text-[13px] leading-relaxed text-slate-600 sm:text-sm sm:leading-[1.65]">
         &ldquo;{parts.map((part, i, arr) => (
           <span key={i}>
             {part}
             {i < arr.length - 1 && (
-              <strong className="font-semibold text-gray-900">{t.highlight}</strong>
+              <strong className="font-semibold text-emerald-600">{t.highlight}</strong>
             )}
           </span>
         ))}&rdquo;
       </blockquote>
 
       {/* Divider */}
-      <div className="my-3 h-px bg-gray-100 sm:my-5" />
+      <div className="relative my-3 h-px bg-slate-100" />
 
       {/* Footer: Avatar + Info */}
-      <div className="flex items-center gap-2.5 sm:gap-3.5">
+      <div className="relative flex items-center gap-2.5">
         <Avatar name={t.name} photo={t.photo} />
         <div className="min-w-0 flex-1">
-          <div className="truncate text-[15px] font-bold text-gray-900" style={headingFont}>
+          <div className="truncate text-[13px] font-bold text-gray-900" style={headingFont}>
             {t.name}
           </div>
-          <div className="truncate text-[10px] text-gray-400 uppercase tracking-wider" style={monoLabel}>
+          <div className="truncate text-[9px] text-gray-400 uppercase tracking-wider" style={monoLabel}>
             {t.role}
           </div>
         </div>
@@ -321,45 +356,62 @@ export function HowItWorksV2() {
   return (
     <section
       id="testimonials"
-      className="relative overflow-hidden bg-bg-landing-light py-16 sm:py-32"
+      className="relative overflow-hidden bg-bg-primary pt-16 pb-10 sm:pt-32 sm:pb-14"
       aria-label="Depoimentos e como funciona"
     >
-      {/* Subtle grid pattern — Koyeb style */}
+      {/* Topo dark — vinheta de profundidade (sem fade cinza) */}
       <div
-        className="pointer-events-none absolute inset-0"
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-40"
+        style={{ background: 'linear-gradient(to bottom, rgba(2,6,16,0.55) 0%, transparent 100%)' }}
+      />
+
+      {/* Subtle grid pattern (dark) */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 opacity-[0.04]"
         style={{
           backgroundImage: `
-            linear-gradient(rgba(0,0,0,0.035) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(0,0,0,0.035) 1px, transparent 1px)
+            linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)
           `,
           backgroundSize: '80px 80px',
         }}
       />
-
-      {/* Solid divider — clean separation from dark pricing section */}
-      <div className="absolute top-0 left-0 right-0 h-0.5 bg-gray-300" />
+      {/* Glow verde ambiente */}
+      <div aria-hidden="true" className="pointer-events-none absolute left-1/2 top-1/3 h-[28rem] w-[28rem] -translate-x-1/2 rounded-full bg-brand-primary/5 blur-[160px]" />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6">
-        {/* Section Label */}
+        {/* Section Label — pílula glass com gradiente */}
         <IntersectionReveal animation="fade-in">
-          <div className="text-center mb-5">
+          <div className="mb-6 flex justify-center">
             <span
-              className="inline-block text-xs text-gray-400 uppercase"
-              style={monoLabel}
+              className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[11px] uppercase tracking-[0.2em]"
+              style={{
+                ...monoLabel,
+                background: 'linear-gradient(180deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.025) 100%)',
+                border: '1px solid rgba(34,197,94,0.28)',
+                boxShadow: '0 8px 24px -10px rgba(34,197,94,0.4), inset 0 1px 0 rgba(255,255,255,0.12)',
+              }}
             >
-              /DEPOIMENTOS
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full rounded-full bg-brand-primary opacity-70 motion-safe:animate-ping" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-brand-primary" />
+              </span>
+              <span className="bg-linear-to-r from-brand-primary to-brand-mint bg-clip-text text-transparent">Depoimentos</span>
             </span>
           </div>
         </IntersectionReveal>
 
-        {/* Heading — Koyeb ultra-bold */}
+        {/* Heading — ultra-bold */}
         <IntersectionReveal animation="fade-in" delay={50}>
           <h2
-            className="mx-auto max-w-4xl text-center text-gray-950 mb-4"
+            className="mx-auto max-w-4xl text-center text-white mb-4 [text-shadow:0_2px_24px_rgba(0,0,0,0.4)]"
             style={{
               ...headingFont,
-              fontSize: 'clamp(2rem, 5.5vw, 3.75rem)',
-              lineHeight: '0.95',
+              fontSize: 'clamp(2.25rem, 5.8vw, 4rem)',
+              lineHeight: '0.94',
+              letterSpacing: '-0.02em',
             }}
           >
             QUEM USA,{' '}
@@ -369,26 +421,38 @@ export function HowItWorksV2() {
 
         {/* Subtitle */}
         <IntersectionReveal animation="fade-in" delay={100}>
-          <p className="mx-auto max-w-lg text-center text-base text-gray-500 mb-10 sm:mb-14">
+          <p className="mx-auto max-w-lg text-center text-base text-white/55 mb-10 sm:mb-14">
             Alunos que saíram da planilha, treinaram com mais clareza e continuaram aparecendo na academia.
           </p>
         </IntersectionReveal>
 
-        {/* Tabs — pill style like Koyeb */}
+        {/* Tabs — pill com indicador deslizante (dark) */}
         <IntersectionReveal animation="fade-in" delay={150}>
-          <div className="flex justify-center mb-10 sm:mb-14">
-            <div className="inline-flex rounded-full border border-gray-300 bg-white p-1 shadow-sm">
+          <div className="mb-10 flex justify-center sm:mb-14">
+            <div
+              className="relative flex w-full max-w-xs rounded-2xl border border-white/10 p-1.5 sm:max-w-sm"
+              style={{ background: 'rgba(255,255,255,0.04)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06), 0 12px 30px -14px rgba(0,0,0,0.6)' }}
+            >
+              {/* Indicador verde gradiente deslizante */}
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-y-1.5 rounded-xl transition-all duration-300 ease-out-expo"
+                style={{
+                  ...(activeTab === 'alunos' ? { left: '0.375rem', right: '50%' } : { left: '50%', right: '0.375rem' }),
+                  background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
+                  boxShadow: '0 6px 18px -4px rgba(34,197,94,0.6), inset 0 1px 0 rgba(255,255,255,0.4), inset 0 -1px 0 rgba(6,78,59,0.4)',
+                }}
+              />
               {TABS.map(tab => (
                 <button
                   key={tab.id}
                   onClick={() => handleTabClick(tab.id)}
                   style={monoLabel}
-                  className={`relative rounded-full px-5 py-2.5 text-[11px] transition-all duration-300 ${
-                    activeTab === tab.id
-                      ? 'bg-brand-primary text-gray-900 shadow-md'
-                      : 'text-gray-500 hover:text-gray-900'
+                  className={`relative z-10 flex flex-1 items-center justify-center gap-1.5 rounded-xl px-4 py-2.5 text-[11px] transition-colors duration-300 ${
+                    activeTab === tab.id ? 'text-[#08122B]' : 'text-white/45 hover:text-white/70'
                   }`}
                 >
+                  <DSIcon name={tab.id === 'alunos' ? 'userCheck' : 'briefcase'} size={13} />
                   {tab.label}
                 </button>
               ))}
@@ -400,9 +464,9 @@ export function HowItWorksV2() {
 
       {/* Cards — contained marquee */}
       <div className="relative w-full overflow-hidden py-2">
-        {/* Edge fade masks */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-linear-to-r from-bg-landing-light to-transparent sm:w-32" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-linear-to-l from-bg-landing-light to-transparent sm:w-32" />
+        {/* Edge fade masks (dark) */}
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-linear-to-r from-bg-primary to-transparent sm:w-32" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-linear-to-l from-bg-primary to-transparent sm:w-32" />
 
         <div className="overflow-hidden pb-6">
           <div
@@ -425,9 +489,9 @@ export function HowItWorksV2() {
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6">
 
-        {/* CTA — DS Button */}
+        {/* CTA — botão "claim your spot" (navy no verde + sheen) */}
         <IntersectionReveal animation="fade-in" delay={350}>
-          <div className="mt-8 flex justify-center">
+          <div className="mt-10 flex flex-col items-center gap-3">
             <Link
               href="/welcome"
               onClick={() => {
@@ -437,11 +501,27 @@ export function HowItWorksV2() {
                 })
               }}
             >
-              <Button variant="gradient" size="lg" className="text-xs uppercase tracking-widest">
-                <DSIcon name="sparkles" size={14} />
-                COMEÇAR COMO ALUNO
-              </Button>
+              <span
+                onMouseMove={handleCardMove}
+                className="group/cta relative inline-flex h-13 items-center gap-3 overflow-hidden rounded-full pl-2.5 pr-6 text-[13px] font-black uppercase tracking-widest text-[#08122B] transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98]"
+                style={{
+                  background: 'linear-gradient(135deg, #34e565 0%, #22c55e 52%, #16a34a 100%)',
+                  boxShadow: '0 12px 30px -8px rgba(34,197,94,0.6), inset 0 1px 0 rgba(255,255,255,0.45), inset 0 -1px 0 rgba(6,78,59,0.4)',
+                }}
+              >
+                {/* Cursor sheen */}
+                <span className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover/cta:opacity-100" style={{ background: 'radial-gradient(180px circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,0.4), transparent 60%)' }} />
+                {/* Light sweep */}
+                <span className="pointer-events-none absolute inset-0 -translate-x-[120%] bg-linear-to-r from-transparent via-white/45 to-transparent transition-transform duration-700 group-hover/cta:translate-x-[120%]" />
+                {/* Trophy chip */}
+                <span className="relative z-10 flex h-8 w-8 items-center justify-center rounded-full bg-[#08122B] shadow-[inset_0_1px_0_rgba(255,255,255,0.14)]">
+                  <DSIcon name="trophy" size={14} className="text-[#4ADE80]" />
+                </span>
+                <span className="relative z-10">Começar como aluno</span>
+                <DSIcon name="arrowRight" size={15} className="relative z-10 transition-transform duration-300 group-hover/cta:translate-x-0.5" />
+              </span>
             </Link>
+            <span className="text-[10px] text-white/45" style={monoLabel}>Suba no ranking desde o 1º treino</span>
           </div>
         </IntersectionReveal>
       </div>
