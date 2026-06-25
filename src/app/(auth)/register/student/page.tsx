@@ -18,7 +18,6 @@
 
 import { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { useRegisterStudent } from '@/hooks/use-auth'
@@ -224,15 +223,16 @@ export default function RegisterStudentPage() {
             {/* Centered Logo — top of banner, above photo overlap zone */}
             <div className="relative z-10 flex items-start justify-center pt-6 sm:pt-8 h-full lg:hidden">
               <Link href="/" className="flex items-center gap-3 group">
-                <Image
-                  src="/images/vfit-logo-white.svg"
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/favicons/favicon.svg"
                   alt="VFIT"
-                  width={160}
-                  height={32}
-                  className="w-auto transition-transform duration-300 group-hover:scale-105"
-                  style={{ width: 'auto', height: '40px', filter: 'drop-shadow(0 0 20px rgba(16,185,129,0.7))' }}
-                  priority
+                  width={40}
+                  height={40}
+                  className="transition-transform duration-300 group-hover:scale-105"
+                  style={{ height: '40px', width: '40px', filter: 'drop-shadow(0 0 20px rgba(34,197,94,0.7))' }}
                 />
+                <span className="text-2xl font-black tracking-tight text-white">VFIT</span>
               </Link>
             </div>
 

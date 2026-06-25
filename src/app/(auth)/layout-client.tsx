@@ -78,7 +78,7 @@ function ImageSlideshow() {
 
 const VFIT_LETTERS = 'VFIT'.split('')
 
-function AnimatedAuthLogo({ size = 'large' }: { size?: 'large' | 'small' }) {
+function AnimatedAuthLogo({ size = 'large', theme = 'dark' }: { size?: 'large' | 'small'; theme?: 'light' | 'dark' }) {
   const [typedCount, setTypedCount] = useState(0)
 
   useEffect(() => {
@@ -97,6 +97,7 @@ function AnimatedAuthLogo({ size = 'large' }: { size?: 'large' | 'small' }) {
   const fontSize = isLarge ? '54px' : '38px'
   const lineH = isLarge ? '62px' : '44px'
   const cursorH = isLarge ? '50px' : '34px'
+  const wordmarkColor = theme === 'light' ? '#0F172A' : 'white'
 
   return (
     <Link href="/" className="flex items-center gap-0 group shrink-0" aria-label="VFIT - Início">
@@ -109,7 +110,7 @@ function AnimatedAuthLogo({ size = 'large' }: { size?: 'large' | 'small' }) {
             fontSize,
             letterSpacing: '0',
             lineHeight: lineH,
-            color: 'white',
+            color: wordmarkColor,
           }}
         >
           {VFIT_LETTERS.map((letter, idx) => (
@@ -329,6 +330,7 @@ function TestimonialCarousel() {
 export function AuthLayoutClient({ children }: { children: ReactNode }) {
   const pathname = usePathname()
   const hidesMobileLogo = pathname?.startsWith('/register/student')
+  const isLoginLight = pathname === '/login'
 
   return (
     <>
@@ -493,19 +495,36 @@ export function AuthLayoutClient({ children }: { children: ReactNode }) {
         </div>
 
         {/* ─── RIGHT PANEL — Form ─── */}
-        <div className="flex w-full lg:w-[52%] xl:w-1/2 flex-col relative">
+        <div
+          className={
+            isLoginLight
+              ? 'light flex w-full lg:w-[52%] xl:w-1/2 flex-col relative bg-[#F5F7FA]'
+              : 'flex w-full lg:w-[52%] xl:w-1/2 flex-col relative'
+          }
+          style={isLoginLight ? { colorScheme: 'light' } : undefined}
+        >
           {/* Ambient glow */}
-          <div className="pointer-events-none absolute inset-0 overflow-hidden">
-            <div className="absolute -top-40 right-[-10%] h-96 w-96 rounded-full bg-emerald-500/4 blur-[120px]" />
-            <div className="absolute bottom-[-10%] left-[-5%] h-60 w-60 rounded-full bg-emerald-400/3 blur-[100px]" />
-          </div>
+          {isLoginLight ? (
+            <div className="pointer-events-none absolute inset-0 overflow-hidden">
+              {/* Soft brand-green tint blooms on white (light mode) */}
+              <div className="absolute -top-40 right-[-10%] h-96 w-96 rounded-full blur-[120px]" style={{ background: 'rgba(34,197,94,0.06)' }} />
+              <div className="absolute bottom-[-10%] left-[-5%] h-72 w-72 rounded-full blur-[110px]" style={{ background: 'rgba(34,197,94,0.05)' }} />
+            </div>
+          ) : (
+            <div className="pointer-events-none absolute inset-0 overflow-hidden">
+              <div className="absolute -top-40 right-[-10%] h-96 w-96 rounded-full bg-emerald-500/4 blur-[120px]" />
+              <div className="absolute bottom-[-10%] left-[-5%] h-60 w-60 rounded-full bg-emerald-400/3 blur-[100px]" />
+            </div>
+          )}
 
-          {/* Subtle grid on right panel */}
+          {/* Subtle grid on right panel — lightened for white bg on login */}
           <div
             className="pointer-events-none absolute inset-0"
             style={{
-              opacity: 0.015,
-              backgroundImage: 'linear-gradient(rgba(255,255,255,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.15) 1px, transparent 1px)',
+              opacity: isLoginLight ? 0.5 : 0.015,
+              backgroundImage: isLoginLight
+                ? 'linear-gradient(rgba(15,23,42,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(15,23,42,0.025) 1px, transparent 1px)'
+                : 'linear-gradient(rgba(255,255,255,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.15) 1px, transparent 1px)',
               backgroundSize: '60px 60px',
             }}
           />
@@ -513,7 +532,7 @@ export function AuthLayoutClient({ children }: { children: ReactNode }) {
           {/* Mobile header — hidden on student register (has own cover logo) */}
           {!hidesMobileLogo && (
             <header className="relative z-10 flex items-center justify-center px-5 pt-[max(0.5rem,env(safe-area-inset-top))] pb-1 lg:hidden">
-              <AnimatedAuthLogo size="small" />
+              <AnimatedAuthLogo size="small" theme={isLoginLight ? 'light' : 'dark'} />
             </header>
           )}
 
@@ -526,7 +545,7 @@ export function AuthLayoutClient({ children }: { children: ReactNode }) {
 
           {/* Footer */}
           <footer
-            className="relative z-10 hidden py-2 text-center text-[9px] text-zinc-700 sm:block"
+            className={`relative z-10 hidden py-2 text-center text-[9px] sm:block ${isLoginLight ? 'text-slate-400' : 'text-zinc-700'}`}
             style={{ fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace', fontWeight: 700, letterSpacing: '0.15em' }}
           >
             © {new Date().getFullYear()} VFIT · TODOS OS DIREITOS RESERVADOS

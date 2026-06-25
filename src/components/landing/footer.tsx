@@ -12,7 +12,6 @@
 'use client'
 
 import Link from 'next/link'
-import Image from 'next/image'
 import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
 
@@ -124,14 +123,15 @@ export function Footer() {
           <div className="col-span-2">
             {/* Logo */}
             <Link href="/" className="group inline-flex items-center gap-2.5">
-              <Image
-                src="/images/vfit-logo-white.svg"
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/favicons/favicon.svg"
                 alt="VFIT"
-                width={180}
+                width={36}
                 height={36}
-                className="h-9 w-auto transition-transform duration-300 group-hover:scale-105"
-                style={{ width: 'auto' }}
+                className="h-9 w-9 transition-transform duration-300 group-hover:scale-105"
               />
+              <span className="text-xl font-black tracking-tight text-white">VFIT</span>
             </Link>
 
             {/* Description */}

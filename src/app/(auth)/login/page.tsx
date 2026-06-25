@@ -1,7 +1,7 @@
 /**
  * src/app/(auth)/login/page.tsx
  *
- * Login Page — Ultra-Modern · 3D Buttons · CPF/Email
+ * Login Page — Ultra-Modern · LIGHT theme · 3D Buttons · CPF/Email
  *
  * Exports: LoginPage
  * Hooks: useState, useRef, useEffect, useCallback, useSearchParams, useLogin
@@ -9,8 +9,8 @@
  */
 
 // ============================================
-// Login Page — Ultra-Modern · 3D Buttons · CPF/Email
-// Koyeb-inspired clean design, dark theme
+// Login Page — Ultra-Modern · LIGHT theme · 3D Buttons · CPF/Email
+// Figma-style staggered entrance, clean light surfaces
 // Turnstile-robust: auto-retry, pending submit, hard refresh
 // ============================================
 
@@ -166,36 +166,37 @@ export default function LoginPage() {
         <BiometricLockScreen onDismiss={() => setShowBiometricLock(false)} />
       )}
 
-      <div className="animate-blur-in">
+      {/* Figma-style staggered entrance — each child slides up + fades in */}
+      <div className="login-stagger">
         {/* ─── Alerts ─── */}
         {alertMsg && (
-          <div role="status" aria-live="polite" className="mb-5 flex items-center gap-2.5 rounded-2xl border border-brand-primary/20 bg-brand-primary/6 px-4 py-3">
-            <div className="h-2 w-2 rounded-full bg-brand-primary animate-pulse shrink-0" />
-            <span className="text-[12px] font-semibold text-brand-primary">{alertMsg}</span>
+          <div role="status" aria-live="polite" className="mb-5 flex items-center gap-2.5 rounded-2xl border border-emerald-500/25 bg-emerald-50 px-4 py-3">
+            <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+            <span className="text-[12px] font-semibold text-emerald-700">{alertMsg}</span>
           </div>
         )}
         {errorMsg && (
-          <div role="alert" className="mb-5 flex items-center gap-2.5 rounded-2xl border border-red-500/20 bg-red-500/6 px-4 py-3">
-            <div className="h-2 w-2 rounded-full bg-red-400 shrink-0" />
-            <span className="text-[12px] font-semibold text-red-400">{errorMsg}</span>
+          <div role="alert" className="mb-5 flex items-center gap-2.5 rounded-2xl border border-red-300 bg-red-50 px-4 py-3">
+            <div className="h-2 w-2 rounded-full bg-red-500 shrink-0" />
+            <span className="text-[12px] font-semibold text-red-600">{errorMsg}</span>
           </div>
         )}
 
         {/* ─── Page heading ─── */}
         <div className="mb-3">
           <div className="flex items-center gap-2 mb-1.5">
-            <DSIcon name="sparkles" size={14} className="text-brand-primary/60" />
-            <p className="text-[9px] uppercase text-brand-primary/70" style={monoLabel}>
+            <DSIcon name="sparkles" size={14} className="text-emerald-600" />
+            <p className="text-[9px] uppercase text-emerald-600" style={monoLabel}>
               ACESSE SUA CONTA
             </p>
           </div>
           <h1
-            className="text-[1.75rem] text-white leading-none"
+            className="text-[1.75rem] text-slate-900 leading-none"
             style={headingFont}
           >
             Entrar
           </h1>
-          <p className="mt-1 text-[12px] text-slate-400">
+          <p className="mt-1 text-[12px] text-slate-500">
             Evolua com inteligência — login unificado
           </p>
         </div>
@@ -211,11 +212,11 @@ export default function LoginPage() {
         {/* ─── Divider ─── */}
         <div className="relative my-2.5">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-white/6" />
+            <div className="w-full border-t border-slate-200" />
           </div>
           <div className="relative flex justify-center">
             <span
-              className="rounded-full border border-white/10 bg-bg-surface-1/85 px-4 py-1.5 text-[9px] uppercase text-slate-500 shadow-lg backdrop-blur-sm"
+              className="rounded-full border border-slate-200 bg-white px-4 py-1.5 text-[9px] uppercase text-slate-400 shadow-sm"
               style={monoLabel}
             >
               OU COM CPF / EMAIL
@@ -224,11 +225,11 @@ export default function LoginPage() {
         </div>
 
         {/* ─── Form ─── */}
-        <form onSubmit={handleSubmit} className="space-y-2.5">
+        <form onSubmit={handleSubmit} className="login-stagger space-y-2.5">
           {/* Unified identifier field — CPF or Email auto-detected */}
           <div>
-            <label className="flex items-center gap-1.5 text-[10px] uppercase text-zinc-400 mb-1.5" style={monoLabel}>
-              <DSIcon name={looksLikeCpf ? 'fingerprint' : 'mail'} size={12} className="text-zinc-500 transition-all duration-200" />
+            <label className="flex items-center gap-1.5 text-[10px] uppercase text-slate-500 mb-1.5" style={monoLabel}>
+              <DSIcon name={looksLikeCpf ? 'fingerprint' : 'mail'} size={12} className="text-slate-400 transition-all duration-200" />
               {looksLikeCpf ? 'CPF' : identifier.includes('@') ? 'EMAIL' : 'CPF OU EMAIL'}
             </label>
             <input
@@ -241,14 +242,14 @@ export default function LoginPage() {
               onChange={handleIdentifierChange}
               autoComplete="username"
               required
-              className="vfit-flow-field h-12 w-full rounded-2xl px-4 text-[14px] transition-all duration-200 focus:outline-none"
+              className="auth-light-field h-12 w-full rounded-2xl px-4 text-[14px] transition-all duration-200 focus:outline-none"
             />
           </div>
 
           {/* Password */}
           <div>
-            <label className="flex items-center gap-1.5 text-[10px] uppercase text-zinc-400 mb-1.5" style={monoLabel}>
-              <DSIcon name="lock" size={12} className="text-zinc-500" /> SENHA
+            <label className="flex items-center gap-1.5 text-[10px] uppercase text-slate-500 mb-1.5" style={monoLabel}>
+              <DSIcon name="lock" size={12} className="text-slate-400" /> SENHA
             </label>
             <div className="relative">
               <input
@@ -258,14 +259,14 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete="current-password"
                 required
-                className="vfit-flow-field h-12 w-full rounded-2xl px-4 pr-12 text-[14px] transition-all duration-200 focus:outline-none"
+                className="auth-light-field h-12 w-full rounded-2xl px-4 pr-12 text-[14px] transition-all duration-200 focus:outline-none"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
                 aria-pressed={showPassword}
-                className="absolute right-1.5 top-1/2 -translate-y-1/2 p-2 text-slate-400 hover:text-emerald-300 transition-colors rounded-lg hover:bg-white/6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
+                className="absolute right-1.5 top-1/2 -translate-y-1/2 p-2 text-slate-400 hover:text-emerald-600 transition-colors rounded-lg hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
               >
                 {showPassword ? <DSIcon name="eyeOff" size={16} /> : <DSIcon name="eye" size={16} />}
               </button>
@@ -275,13 +276,13 @@ export default function LoginPage() {
           {/* ─── 2FA — conditional ─── */}
           {show2FA && (
             <div className="animate-blur-in space-y-2">
-              <div className="flex items-center gap-2 rounded-2xl border border-amber-500/20 bg-amber-500/4 px-3.5 py-2.5">
-                <DSIcon name="shieldCheck" size={14} className="text-amber-400 shrink-0" />
-                <p className="text-[11px] text-amber-400/90">Conta com 2FA — informe o código do autenticador.</p>
+              <div className="flex items-center gap-2 rounded-2xl border border-amber-300 bg-amber-50 px-3.5 py-2.5">
+                <DSIcon name="shieldCheck" size={14} className="text-amber-600 shrink-0" />
+                <p className="text-[11px] text-amber-700">Conta com 2FA — informe o código do autenticador.</p>
               </div>
               <div>
-                <label className="flex items-center gap-1.5 text-[10px] uppercase text-zinc-500 mb-2" style={monoLabel}>
-                  <DSIcon name="shieldCheck" size={12} className="text-zinc-600" /> CÓDIGO 2FA
+                <label className="flex items-center gap-1.5 text-[10px] uppercase text-slate-500 mb-2" style={monoLabel}>
+                  <DSIcon name="shieldCheck" size={12} className="text-slate-400" /> CÓDIGO 2FA
                 </label>
                 <input
                   ref={twoFactorInputRef}
@@ -292,7 +293,7 @@ export default function LoginPage() {
                   placeholder="000000"
                   value={twoFactorCode}
                   onChange={(e) => setTwoFactorCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                  className="w-full h-12 rounded-xl border border-amber-300/30 bg-amber-950/20 px-4 text-[15px] text-white placeholder:text-amber-300/45 tracking-[0.35em] text-center shadow-[0_1px_3px_rgba(0,0,0,0.24)] transition-all duration-200 focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20"
+                  className="w-full h-12 rounded-xl border border-amber-300 bg-amber-50 px-4 text-[15px] text-slate-900 placeholder:text-amber-400 tracking-[0.35em] text-center shadow-[inset_0_1px_2px_rgba(15,23,42,0.04)] transition-all duration-200 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-400/30"
                 />
               </div>
             </div>
@@ -315,33 +316,33 @@ export default function LoginPage() {
                   onChange={(e) => setRemember(e.target.checked)}
                   className="peer sr-only"
                 />
-                <div className="h-4.5 w-4.5 rounded-md border border-zinc-600 bg-zinc-800 peer-checked:bg-brand-primary peer-checked:border-brand-primary transition-all duration-200 flex items-center justify-center">
+                <div className="h-4.5 w-4.5 rounded-md border border-slate-300 bg-white peer-checked:bg-emerald-500 peer-checked:border-emerald-500 transition-all duration-200 flex items-center justify-center">
                   {remember && (
-                    <svg className="h-2.5 w-2.5 text-bg-dark" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3.5} aria-hidden="true" focusable="false">
+                    <svg className="h-2.5 w-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3.5} aria-hidden="true" focusable="false">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
                   )}
                 </div>
               </div>
-              <span className="text-[12px] text-zinc-500 group-hover:text-zinc-300 select-none transition-colors">
+              <span className="text-[12px] text-slate-500 group-hover:text-slate-700 select-none transition-colors">
                 Lembrar de mim
               </span>
             </label>
             <Link
               href="/forgot-password"
-              className="text-[12px] font-semibold text-brand-primary/70 hover:text-brand-primary transition-colors"
+              className="text-[12px] font-semibold text-emerald-600 hover:text-emerald-700 transition-colors"
             >
               Esqueceu a senha?
             </Link>
           </div>
 
-          {/* ─── Submit — 3D CTA button ─── */}
+          {/* ─── Submit — light 3D CTA button ─── */}
           <Button
             type="submit"
             size="lg"
             disabled={!isFormFilled}
             loading={login.isPending}
-            className="auth-submit-cta w-full uppercase font-black"
+            className="auth-submit-cta-light w-full uppercase font-black"
           >
             ENTRAR
             <DSIcon name="arrowRight" size={16} />
@@ -349,9 +350,9 @@ export default function LoginPage() {
 
           {/* ─── Login Error ─── */}
           {login.isError && !((login.error as Error)?.message || '').includes('2FA obrigat') && (
-            <div role="alert" className="flex items-center gap-2.5 rounded-2xl border border-red-500/20 bg-red-500/6 px-4 py-3">
-              <div className="h-2 w-2 rounded-full bg-red-400 shrink-0" />
-              <p className="text-[12px] font-medium text-red-400">
+            <div role="alert" className="flex items-center gap-2.5 rounded-2xl border border-red-300 bg-red-50 px-4 py-3">
+              <div className="h-2 w-2 rounded-full bg-red-500 shrink-0" />
+              <p className="text-[12px] font-medium text-red-600">
                 {(login.error as Error)?.message || 'CPF/email ou senha incorretos'}
               </p>
             </div>
@@ -359,10 +360,10 @@ export default function LoginPage() {
         </form>
 
         {/* ─── Register link + Trust badges — sales-focused, no guest bypass ─── */}
-        <div className="mt-3 rounded-2xl border border-emerald-400/15 bg-emerald-400/5 px-4 py-2.5 text-center">
-          <p className="text-[13px] text-slate-400">
+        <div className="mt-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-2.5 text-center">
+          <p className="text-[13px] text-slate-600">
             Novo por aqui?{' '}
-            <Link href="/register" className="font-black text-brand-primary hover:text-brand-primary/80 transition-colors">
+            <Link href="/register" className="font-black text-emerald-600 hover:text-emerald-700 transition-colors">
               Teste 30 dias grátis
             </Link>
           </p>
@@ -372,7 +373,7 @@ export default function LoginPage() {
         </div>
 
         {/* Version — hidden on mobile to keep no-scroll composition */}
-        <p className="mt-2 hidden text-center text-[9px] text-slate-500 select-none sm:block" style={monoLabel}>
+        <p className="mt-2 hidden text-center text-[9px] text-slate-400 select-none sm:block" style={monoLabel}>
           v{APP_VERSION}
         </p>
       </div>

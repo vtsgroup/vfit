@@ -1,3 +1,5 @@
+'use client'
+
 /**
  * VFIT Redesign Showcase — Professional Edition
  *

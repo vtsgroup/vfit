@@ -854,13 +854,14 @@ export function MobileDrawer() {
           >
             {/* Header — logo left, close button right */}
             <div className="flex h-16 items-center justify-between border-b border-white/8 px-4">
-              <div className="flex items-center gap-0">
+              <div className="flex items-center gap-2">
                 <img
-                  src="/images/vfit-logo-white.svg"
+                  src="/favicons/favicon.svg"
                   alt="VFIT"
-                  className="h-6 w-auto"
-                  style={{ filter: 'drop-shadow(0 0 8px rgba(16,185,129,0.35))' }}
+                  className="h-7 w-7"
+                  style={{ filter: 'drop-shadow(0 0 8px rgba(34,197,94,0.4))' }}
                 />
+                <span className="text-base font-black tracking-tight text-white">VFIT</span>
               </div>
               <button
                 onClick={() => setOpen(false)}

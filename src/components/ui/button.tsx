@@ -28,28 +28,29 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 // ── Variant Styles ──────────────────────────
-// Each variant uses a multi-layer shadow system:
-//   Layer 1: 3D depth (bottom edge)
-//   Layer 2: Ambient spread (color bleed)
-//   Layer 3: Inner top highlight (inset)
-//   + border for glass edge definition
+// Modern layered depth system (2026) — replaces hard-edge block shadows.
+// Each 3D variant composes:
+//   Layer 1: tight contact shadow (crisp grounding, ~0_1-2px)
+//   Layer 2: soft ambient key shadow in the variant's color (spread, low opacity)
+//   Layer 3: inset top highlight (glass edge) + subtle inset bottom seam
+// Hover lifts -translate-y-px with a softer, wider colored glow.
+// Active settles translate-y-px with a gentle inset pressed shadow.
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary: [
-    // Surface: solid VFIT green with precise dark-green 3D depth
+    // Surface: solid VFIT green — refined layered depth, no hard block edge
     'bg-brand-primary',
     'text-white font-black',
     '[text-shadow:0_1px_2px_rgba(2,44,34,0.38)]',
-    // Border + depth: all green, no neutral gray in the 3D system
-    'border border-emerald-900/85',
-    'shadow-[0_5px_0_0_#064e3b,0_15px_32px_-14px_rgba(6,95,70,0.76),0_0_0_1px_rgba(6,78,59,0.24),0_0_34px_-18px_rgba(34,197,94,0.74),inset_0_1px_0_rgba(255,255,255,0.22),inset_0_-1px_0_rgba(6,78,59,0.30)]',
-    'hover:-translate-y-0.5',
+    'border border-emerald-900/70',
+    'shadow-[0_1px_2px_rgba(2,44,34,0.4),0_4px_12px_-3px_rgba(6,95,70,0.5),0_10px_28px_-8px_rgba(6,95,70,0.42),inset_0_1px_0_rgba(255,255,255,0.22),inset_0_-1px_0_rgba(6,78,59,0.28)]',
+    'hover:-translate-y-px',
     'hover:bg-brand-primary-hover',
-    'hover:shadow-[0_7px_0_0_#064e3b,0_20px_42px_-13px_rgba(6,95,70,0.84),0_0_0_1px_rgba(6,78,59,0.24),0_0_46px_-18px_rgba(34,197,94,0.82),inset_0_1px_0_rgba(255,255,255,0.26),inset_0_-1px_0_rgba(6,78,59,0.32)]',
-    // Active: press down + inner shadow
-    'active:translate-y-[3px] active:scale-[0.98]',
-    'active:shadow-[0_1px_0_0_#064e3b,0_4px_12px_-8px_rgba(6,95,70,0.6),inset_0_2px_8px_rgba(2,44,34,0.24)]',
-    'active:brightness-95',
+    'hover:shadow-[0_2px_4px_rgba(2,44,34,0.42),0_8px_20px_-4px_rgba(6,95,70,0.55),0_16px_40px_-10px_rgba(6,95,70,0.5),0_0_30px_-10px_rgba(34,197,94,0.55),inset_0_1px_0_rgba(255,255,255,0.26),inset_0_-1px_0_rgba(6,78,59,0.30)]',
+    // Active: settle + soft inner press
+    'active:translate-y-px active:scale-[0.985]',
+    'active:shadow-[0_1px_2px_rgba(2,44,34,0.4),0_2px_6px_-2px_rgba(6,95,70,0.4),inset_0_2px_6px_rgba(2,44,34,0.28)]',
+    'active:brightness-[0.97]',
     'focus-visible:ring-emerald-400/40',
   ].join(' '),
 
@@ -58,14 +59,14 @@ const variantStyles: Record<ButtonVariant, string> = {
     'bg-linear-to-b from-slate-300 via-slate-600 to-slate-950',
     'text-white font-black',
     '[text-shadow:0_1px_2px_rgba(2,6,23,0.42)]',
-    'border border-slate-950/80',
-    'shadow-[0_5px_0_0_#020617,0_14px_32px_-14px_rgba(15,23,42,0.9),0_0_0_1px_rgba(186,230,253,0.14),0_0_34px_-20px_rgba(125,211,252,0.58),inset_0_1px_0_rgba(255,255,255,0.34)]',
-    'hover:-translate-y-0.5',
-    'hover:shadow-[0_7px_0_0_#020617,0_18px_40px_-14px_rgba(15,23,42,0.94),0_0_44px_-18px_rgba(125,211,252,0.66),inset_0_1px_0_rgba(255,255,255,0.40)]',
+    'border border-slate-950/70',
+    'shadow-[0_1px_2px_rgba(2,6,23,0.45),0_4px_12px_-3px_rgba(15,23,42,0.5),0_10px_28px_-8px_rgba(15,23,42,0.45),inset_0_1px_0_rgba(255,255,255,0.32)]',
+    'hover:-translate-y-px',
+    'hover:shadow-[0_2px_4px_rgba(2,6,23,0.48),0_8px_20px_-4px_rgba(15,23,42,0.55),0_16px_40px_-10px_rgba(15,23,42,0.5),0_0_30px_-12px_rgba(125,211,252,0.45),inset_0_1px_0_rgba(255,255,255,0.38)]',
     'hover:brightness-105',
-    'active:translate-y-[3px] active:scale-[0.98]',
-    'active:shadow-[0_1px_0_0_#020617,0_4px_10px_-8px_rgba(15,23,42,0.72),inset_0_2px_6px_rgba(2,6,23,0.28)]',
-    'active:brightness-95',
+    'active:translate-y-px active:scale-[0.985]',
+    'active:shadow-[0_1px_2px_rgba(2,6,23,0.45),0_2px_6px_-2px_rgba(15,23,42,0.45),inset_0_2px_6px_rgba(2,6,23,0.32)]',
+    'active:brightness-[0.97]',
     'focus-visible:ring-sky-300/45',
   ].join(' '),
 
@@ -74,21 +75,21 @@ const variantStyles: Record<ButtonVariant, string> = {
     'bg-linear-to-b from-white via-zinc-100 to-zinc-200',
     'text-zinc-700 font-semibold',
     '[text-shadow:0_1px_1px_rgba(255,255,255,0.7)]',
-    'border border-t-white/80 border-x-zinc-200/50 border-b-zinc-400/40',
-    'shadow-[0_3px_0_0_#3f3f46,0_5px_16px_-4px_rgba(63,63,70,0.2),inset_0_1px_0_rgba(255,255,255,0.75)]',
-    'hover:-translate-y-0.5',
-    'hover:shadow-[0_5px_0_0_#3f3f46,0_8px_24px_-4px_rgba(63,63,70,0.28),inset_0_1px_0_rgba(255,255,255,0.8)]',
+    'border border-t-white/80 border-x-zinc-200/60 border-b-zinc-400/50',
+    'shadow-[0_1px_2px_rgba(63,63,70,0.16),0_3px_10px_-3px_rgba(63,63,70,0.18),0_8px_22px_-8px_rgba(63,63,70,0.16),inset_0_1px_0_rgba(255,255,255,0.85)]',
+    'hover:-translate-y-px',
+    'hover:shadow-[0_2px_4px_rgba(63,63,70,0.18),0_6px_16px_-4px_rgba(63,63,70,0.22),0_12px_30px_-10px_rgba(63,63,70,0.2),inset_0_1px_0_rgba(255,255,255,0.9)]',
     'hover:brightness-[1.02]',
-    'active:translate-y-[3px] active:scale-[0.98]',
-    'active:shadow-[0_1px_0_0_#3f3f46,0_2px_6px_-2px_rgba(63,63,70,0.12),inset_0_2px_4px_rgba(0,0,0,0.08)]',
-    'active:brightness-95',
+    'active:translate-y-px active:scale-[0.985]',
+    'active:shadow-[0_1px_2px_rgba(63,63,70,0.14),0_2px_5px_-2px_rgba(63,63,70,0.12),inset_0_2px_4px_rgba(0,0,0,0.08)]',
+    'active:brightness-[0.98]',
     // Dark
     'dark:from-zinc-600 dark:via-zinc-700 dark:to-zinc-800',
     'dark:text-zinc-100 dark:[text-shadow:0_1px_2px_rgba(0,0,0,0.35)]',
-    'dark:border-t-zinc-500/25 dark:border-x-zinc-700/30 dark:border-b-zinc-900/50',
-    'dark:shadow-[0_3px_0_0_#18181b,0_5px_16px_-4px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.08)]',
-    'dark:hover:shadow-[0_5px_0_0_#18181b,0_8px_24px_-4px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.11)]',
-    'dark:active:shadow-[0_1px_0_0_#18181b,0_2px_8px_-2px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(0,0,0,0.25)]',
+    'dark:border-t-zinc-500/25 dark:border-x-zinc-700/40 dark:border-b-zinc-900/60',
+    'dark:shadow-[0_1px_2px_rgba(0,0,0,0.5),0_4px_12px_-3px_rgba(0,0,0,0.5),0_10px_26px_-8px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.08)]',
+    'dark:hover:shadow-[0_2px_4px_rgba(0,0,0,0.55),0_8px_20px_-4px_rgba(0,0,0,0.6),0_16px_38px_-10px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.11)]',
+    'dark:active:shadow-[0_1px_2px_rgba(0,0,0,0.5),0_2px_6px_-2px_rgba(0,0,0,0.45),inset_0_2px_4px_rgba(0,0,0,0.25)]',
     'focus-visible:ring-zinc-400/40',
   ].join(' '),
 
@@ -103,12 +104,12 @@ const variantStyles: Record<ButtonVariant, string> = {
     'text-white font-bold',
     '[text-shadow:0_1px_2px_rgba(0,0,0,0.2)]',
     'border border-t-red-300/40 border-x-red-500/30 border-b-red-700/50',
-    'shadow-[0_4px_0_0_#b91c1c,0_6px_20px_-4px_rgba(239,68,68,0.45),inset_0_1px_0_rgba(255,255,255,0.2)]',
-    'hover:-translate-y-0.5',
-    'hover:shadow-[0_6px_0_0_#b91c1c,0_10px_30px_-4px_rgba(239,68,68,0.55),0_0_50px_-10px_rgba(248,113,113,0.2),inset_0_1px_0_rgba(255,255,255,0.25)]',
+    'shadow-[0_1px_2px_rgba(127,29,29,0.4),0_4px_12px_-3px_rgba(239,68,68,0.4),0_10px_26px_-8px_rgba(239,68,68,0.35),inset_0_1px_0_rgba(255,255,255,0.2)]',
+    'hover:-translate-y-px',
+    'hover:shadow-[0_2px_4px_rgba(127,29,29,0.42),0_8px_20px_-4px_rgba(239,68,68,0.48),0_16px_38px_-10px_rgba(239,68,68,0.42),0_0_30px_-10px_rgba(248,113,113,0.4),inset_0_1px_0_rgba(255,255,255,0.25)]',
     'hover:brightness-105',
-    'active:translate-y-[3px] active:scale-[0.98]',
-    'active:shadow-[0_1px_0_0_#b91c1c,0_2px_8px_-2px_rgba(239,68,68,0.3),inset_0_2px_6px_rgba(0,0,0,0.15)]',
+    'active:translate-y-px active:scale-[0.985]',
+    'active:shadow-[0_1px_2px_rgba(127,29,29,0.4),0_2px_6px_-2px_rgba(239,68,68,0.35),inset_0_2px_6px_rgba(0,0,0,0.16)]',
     'focus-visible:ring-red-400/40',
   ].join(' '),
 
@@ -117,12 +118,12 @@ const variantStyles: Record<ButtonVariant, string> = {
     'text-slate-900 dark:text-white font-bold',
     '[text-shadow:0_1px_2px_rgba(0,0,0,0.2)]',
     'border border-t-amber-300/40 border-x-amber-500/30 border-b-amber-700/50',
-    'shadow-[0_4px_0_0_#b45309,0_6px_20px_-4px_rgba(245,158,11,0.45),inset_0_1px_0_rgba(255,255,255,0.2)]',
-    'hover:-translate-y-0.5',
-    'hover:shadow-[0_6px_0_0_#b45309,0_10px_30px_-4px_rgba(245,158,11,0.55),0_0_50px_-10px_rgba(252,211,77,0.2),inset_0_1px_0_rgba(255,255,255,0.25)]',
+    'shadow-[0_1px_2px_rgba(120,53,15,0.4),0_4px_12px_-3px_rgba(245,158,11,0.4),0_10px_26px_-8px_rgba(245,158,11,0.35),inset_0_1px_0_rgba(255,255,255,0.2)]',
+    'hover:-translate-y-px',
+    'hover:shadow-[0_2px_4px_rgba(120,53,15,0.42),0_8px_20px_-4px_rgba(245,158,11,0.48),0_16px_38px_-10px_rgba(245,158,11,0.42),0_0_30px_-10px_rgba(252,211,77,0.4),inset_0_1px_0_rgba(255,255,255,0.25)]',
     'hover:brightness-105',
-    'active:translate-y-[3px] active:scale-[0.98]',
-    'active:shadow-[0_1px_0_0_#b45309,0_2px_8px_-2px_rgba(245,158,11,0.3),inset_0_2px_6px_rgba(0,0,0,0.15)]',
+    'active:translate-y-px active:scale-[0.985]',
+    'active:shadow-[0_1px_2px_rgba(120,53,15,0.4),0_2px_6px_-2px_rgba(245,158,11,0.35),inset_0_2px_6px_rgba(0,0,0,0.16)]',
     'focus-visible:ring-amber-400/40',
   ].join(' '),
 
@@ -130,11 +131,11 @@ const variantStyles: Record<ButtonVariant, string> = {
     'bg-linear-to-b from-emerald-400 via-emerald-500 to-emerald-600',
     'text-slate-900 dark:text-white font-bold',
     'border border-t-emerald-300/40 border-x-emerald-500/30 border-b-emerald-700/50',
-    'shadow-[0_4px_0_0_#065F46,0_6px_20px_-4px_rgba(16,185,129,0.45),0_0_30px_-8px_rgba(16,185,129,0.2),inset_0_1px_0_rgba(255,255,255,0.2)]',
-    'hover:-translate-y-0.5',
-    'hover:shadow-[0_6px_0_0_#065F46,0_10px_30px_-4px_rgba(16,185,129,0.55),0_0_50px_-10px_rgba(52,211,153,0.25),inset_0_1px_0_rgba(255,255,255,0.25)]',
-    'active:translate-y-[3px] active:scale-[0.98]',
-    'active:shadow-[0_1px_0_0_#065F46,0_2px_8px_-2px_rgba(16,185,129,0.3),inset_0_2px_6px_rgba(0,0,0,0.15)]',
+    'shadow-[0_1px_2px_rgba(6,95,70,0.4),0_4px_12px_-3px_rgba(16,185,129,0.4),0_10px_26px_-8px_rgba(16,185,129,0.35),0_0_24px_-10px_rgba(16,185,129,0.3),inset_0_1px_0_rgba(255,255,255,0.2)]',
+    'hover:-translate-y-px',
+    'hover:shadow-[0_2px_4px_rgba(6,95,70,0.42),0_8px_20px_-4px_rgba(16,185,129,0.48),0_16px_38px_-10px_rgba(16,185,129,0.42),0_0_30px_-10px_rgba(52,211,153,0.45),inset_0_1px_0_rgba(255,255,255,0.25)]',
+    'active:translate-y-px active:scale-[0.985]',
+    'active:shadow-[0_1px_2px_rgba(6,95,70,0.4),0_2px_6px_-2px_rgba(16,185,129,0.35),inset_0_2px_6px_rgba(0,0,0,0.16)]',
     'focus-visible:ring-emerald-400/40',
   ].join(' '),
 
@@ -142,11 +143,11 @@ const variantStyles: Record<ButtonVariant, string> = {
     'bg-linear-to-b from-violet-400 via-violet-500 to-violet-600',
     'text-slate-900 dark:text-white font-bold',
     'border border-t-violet-300/40 border-x-violet-500/30 border-b-violet-700/50',
-    'shadow-[0_4px_0_0_#4C1D95,0_6px_20px_-4px_rgba(139,92,246,0.45),0_0_30px_-8px_rgba(139,92,246,0.2),inset_0_1px_0_rgba(255,255,255,0.2)]',
-    'hover:-translate-y-0.5',
-    'hover:shadow-[0_6px_0_0_#4C1D95,0_10px_30px_-4px_rgba(139,92,246,0.55),0_0_50px_-10px_rgba(167,139,250,0.25),inset_0_1px_0_rgba(255,255,255,0.25)]',
-    'active:translate-y-[3px] active:scale-[0.98]',
-    'active:shadow-[0_1px_0_0_#4C1D95,0_2px_8px_-2px_rgba(139,92,246,0.3),inset_0_2px_6px_rgba(0,0,0,0.15)]',
+    'shadow-[0_1px_2px_rgba(76,29,149,0.4),0_4px_12px_-3px_rgba(139,92,246,0.4),0_10px_26px_-8px_rgba(139,92,246,0.35),0_0_24px_-10px_rgba(139,92,246,0.3),inset_0_1px_0_rgba(255,255,255,0.2)]',
+    'hover:-translate-y-px',
+    'hover:shadow-[0_2px_4px_rgba(76,29,149,0.42),0_8px_20px_-4px_rgba(139,92,246,0.48),0_16px_38px_-10px_rgba(139,92,246,0.42),0_0_30px_-10px_rgba(167,139,250,0.45),inset_0_1px_0_rgba(255,255,255,0.25)]',
+    'active:translate-y-px active:scale-[0.985]',
+    'active:shadow-[0_1px_2px_rgba(76,29,149,0.4),0_2px_6px_-2px_rgba(139,92,246,0.35),inset_0_2px_6px_rgba(0,0,0,0.16)]',
     'focus-visible:ring-violet-400/40',
   ].join(' '),
 
@@ -154,11 +155,11 @@ const variantStyles: Record<ButtonVariant, string> = {
     'bg-linear-to-b from-amber-400 via-amber-500 to-amber-600',
     'text-slate-900 dark:text-white font-bold',
     'border border-t-amber-300/40 border-x-amber-500/30 border-b-amber-700/50',
-    'shadow-[0_4px_0_0_#92400E,0_6px_20px_-4px_rgba(245,158,11,0.45),0_0_30px_-8px_rgba(245,158,11,0.2),inset_0_1px_0_rgba(255,255,255,0.2)]',
-    'hover:-translate-y-0.5',
-    'hover:shadow-[0_6px_0_0_#92400E,0_10px_30px_-4px_rgba(245,158,11,0.55),0_0_50px_-10px_rgba(252,211,77,0.25),inset_0_1px_0_rgba(255,255,255,0.25)]',
-    'active:translate-y-[3px] active:scale-[0.98]',
-    'active:shadow-[0_1px_0_0_#92400E,0_2px_8px_-2px_rgba(245,158,11,0.3),inset_0_2px_6px_rgba(0,0,0,0.15)]',
+    'shadow-[0_1px_2px_rgba(146,64,14,0.4),0_4px_12px_-3px_rgba(245,158,11,0.4),0_10px_26px_-8px_rgba(245,158,11,0.35),0_0_24px_-10px_rgba(245,158,11,0.3),inset_0_1px_0_rgba(255,255,255,0.2)]',
+    'hover:-translate-y-px',
+    'hover:shadow-[0_2px_4px_rgba(146,64,14,0.42),0_8px_20px_-4px_rgba(245,158,11,0.48),0_16px_38px_-10px_rgba(245,158,11,0.42),0_0_30px_-10px_rgba(252,211,77,0.45),inset_0_1px_0_rgba(255,255,255,0.25)]',
+    'active:translate-y-px active:scale-[0.985]',
+    'active:shadow-[0_1px_2px_rgba(146,64,14,0.4),0_2px_6px_-2px_rgba(245,158,11,0.35),inset_0_2px_6px_rgba(0,0,0,0.16)]',
     'focus-visible:ring-amber-400/40',
   ].join(' '),
 
@@ -182,14 +183,14 @@ const variantStyles: Record<ButtonVariant, string> = {
     'bg-linear-to-r from-emerald-400 via-emerald-500 to-lime-400',
     'text-white font-black',
     '[text-shadow:0_1px_2px_rgba(2,44,34,0.35)]',
-    'border border-emerald-900/65',
-    'shadow-[0_5px_0_0_#064e3b,0_14px_32px_-12px_rgba(6,95,70,0.72),0_0_0_1px_rgba(6,78,59,0.14),inset_0_1px_0_rgba(255,255,255,0.34)]',
-    'hover:-translate-y-0.5',
-    'hover:shadow-[0_7px_0_0_#064e3b,0_18px_40px_-12px_rgba(6,95,70,0.78),0_0_46px_-18px_rgba(132,204,22,0.72),inset_0_1px_0_rgba(255,255,255,0.42)]',
+    'border border-emerald-900/55',
+    'shadow-[0_1px_2px_rgba(2,44,34,0.38),0_4px_12px_-3px_rgba(6,95,70,0.45),0_10px_28px_-8px_rgba(6,95,70,0.4),inset_0_1px_0_rgba(255,255,255,0.34)]',
+    'hover:-translate-y-px',
+    'hover:shadow-[0_2px_4px_rgba(2,44,34,0.4),0_8px_20px_-4px_rgba(6,95,70,0.5),0_16px_40px_-10px_rgba(6,95,70,0.45),0_0_30px_-10px_rgba(132,204,22,0.5),inset_0_1px_0_rgba(255,255,255,0.42)]',
     'hover:brightness-105',
-    'active:translate-y-[3px] active:scale-[0.98]',
-    'active:shadow-[0_1px_0_0_#064e3b,0_4px_12px_-8px_rgba(6,95,70,0.6),inset_0_2px_8px_rgba(2,44,34,0.24)]',
-    'active:brightness-95',
+    'active:translate-y-px active:scale-[0.985]',
+    'active:shadow-[0_1px_2px_rgba(2,44,34,0.38),0_2px_6px_-2px_rgba(6,95,70,0.4),inset_0_2px_6px_rgba(2,44,34,0.26)]',
+    'active:brightness-[0.97]',
     'focus-visible:ring-emerald-400/40',
   ].join(' '),
 
@@ -255,8 +256,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         onClick={handleClick}
         className={cn(
           'group/btn relative inline-flex items-center justify-center font-medium overflow-hidden',
-          // Spring-feel transition
-          'transition-all duration-200 ease-bounce',
+          // Refined premium transition — crisp ease-out, no jelly overshoot
+          'transition-all duration-200 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
           'focus-visible:ring-offset-bg-primary',
           'disabled:pointer-events-none disabled:opacity-50 disabled:saturate-50',
