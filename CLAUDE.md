@@ -94,3 +94,19 @@ Key routing rules:
 - Architecture review -> invoke plan-eng-review
 - Save progress, checkpoint, resume -> invoke checkpoint
 - Code quality, health check -> invoke health
+
+## Git Identity
+
+Always configure git commits to use the owner's personal identity. Before making any commit, ensure the git user is set to:
+
+- **Name:** Duarte Victor
+- **Email:** `xcgyb7dcsd@privaterelay.appleid.com`
+
+To enforce this, always run these commands before committing:
+
+```bash
+git config user.name "Duarte Victor"
+git config user.email "xcgyb7dcsd@privaterelay.appleid.com"
+```
+
+Never commit using any other name or email (e.g., "claude", "Claude AI", or any default identity). All commits in this repository must be authored by Duarte Victor.
