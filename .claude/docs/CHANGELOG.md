@@ -5,6 +5,20 @@
 
 ---
 
+## [4.9.0] — 2026-06-25 — Parte 2 figma-pro: Features + Como Funciona
+
+### 🎨 Seções abaixo do hero (fundo claro) — DEPLOYED
+> Deploy via `cf:deploy --allow-no-whatsapp`. Pages publicado e verificado (`vfit.app.br` → `manifest.json` v4.9.0). Workers não redeployado (sem mudança de backend; falha de binding R2/infra `[code: 10136]` no ambiente) → sem impacto no frontend.
+
+- **Cards de features**: material glass premium, **spotlight** no cursor, borda gradiente + glow verde no hover, chips de ícone verde refinados, lift mais marcante.
+- **Toggle Para Alunos/Profissionais**: indicador **verde gradiente deslizante** + ícones (userCheck/briefcase) + container premium.
+- **Badges**: unificadas (gradiente verde + texto navy `#08122B`) — fim da alternância verde/preto. Eyebrow "App de treino" → **gradiente glass** + ping dot + texto gradiente.
+- **Tipografia**: título `font-black` maior (`lg:text-6xl`), "execute" em gradiente verde→mint→accent (igual "3 passos").
+- **Como Funciona**: step cards premium, números 01/02/03 em **gradiente**, spotlight.
+- **Fundos sutis**: grão/noise SVG, orbs com deriva lenta (22–26s), marcas "+" blueprint, nós luminosos na grade — baixa opacidade, respeita `prefers-reduced-motion`.
+
+---
+
 ## [4.8.9] — 2026-06-25 — Redesign ultra-moderno: navbar, hero, stats, badge, submenu
 
 ### 🎨 Landing redesign (glassmorphism 2026) — DEPLOYED
