@@ -5,6 +5,18 @@
 
 ---
 
+## [4.9.1] — 2026-06-25 — Depoimentos dark + Gamificação "LIGA VFIT"
+
+### 🎮 Depoimentos + Gamificação (zona dark contínua) — DEPLOYED
+> Deploy via `cf:deploy --allow-no-whatsapp`. Pages publicado e verificado (`vfit.app.br` → v4.9.1). Workers não redeployado (binding R2 `[10136]` / sem mudança de backend) → sem impacto.
+
+- **Depoimentos**: fundo **dark contínuo** (funde com a gamificação); removida a `NumbersSection` (prova social redundante com os stats do hero); **cards brancos compactos** flutuando no dark (antes dark glass pesado); eyebrow gradiente glass; toggle deslizante com **texto navy no verde**; tipografia reforçada; novo **CTA** navy-no-verde com chip de troféu + sheen + legenda.
+- **Gamificação "LIGA VFIT · TEMPORADA 01"**: leaderboards como *season ledger* — **trono do #1** (coroa, halo cônico girando, XP gradiente grande, "+XP hoje"), linhas com **delta de movimento** + barra **"faltam X XP p/ subir"** + chama de streak que brilha conforme a sequência, linha **"VOCÊ"**, urgência **"termina em 12d"**.
+- **Badges → insígnias** com **raridade** (COMUM/RARO/ÉPICO/LENDÁRIO), estados **locked/unlocked**, progresso real + **"FALTA POUCO"**, e barra **"PRÓXIMA RECOMPENSA"**. Conceito sintetizado de um workflow de 3 lentes (esports/rewards/fintech).
+- Tudo reusa a linguagem de hover já shipada (spotlight + borda gradiente xor + glow + hairline). `prefers-reduced-motion` respeitado. Também: toggle do Features com texto navy-no-verde; espaçamento CTA→gamificação reduzido.
+
+---
+
 ## [4.9.0] — 2026-06-25 — Parte 2 figma-pro: Features + Como Funciona
 
 ### 🎨 Seções abaixo do hero (fundo claro) — DEPLOYED
