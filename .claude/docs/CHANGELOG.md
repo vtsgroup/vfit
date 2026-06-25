@@ -5,6 +5,20 @@
 
 ---
 
+## [4.8.9] — 2026-06-25 — Redesign ultra-moderno: navbar, hero, stats, badge, submenu
+
+### 🎨 Landing redesign (glassmorphism 2026) — DEPLOYED
+> Deploy via `cf:deploy --allow-no-whatsapp` (gateway WhatsApp desativado). Frontend (Pages) **publicado** e verificado em produção (`vfit.app.br` → `manifest.json` v4.8.9). Workers (`vfiti-api`) **não** redeployado — sem mudanças de backend + falha de conectividade CF no ambiente do agente → sem impacto no redesign.
+
+- **Navbar** (`navbar.tsx`): floating glass island arredondado; borda suavizada + base navy translúcida (legível sobre seções de fundo claro); logo restaurada p/ `/favicons/favicon.svg`; CTAs redondos (Entrar frosted + Começar Grátis verde c/ chip seta diagonal).
+- **Submenu**: mega-menu frosted **opaco** (contorna `backdrop-filter` anulado pelo nav pai, que deixava o hero vazar atrás e atrapalhava a leitura), largura fixa sem quebra de texto, ícones **verde + navy** estilo logo (desktop + accordion mobile).
+- **Hero** (`hero.tsx`): badge "pill dentro de pill" (verde profundo + bead navy glossy); "Ver como funciona" glass + chip play; **stats refeitos** como cards figma-pro (tilt 3D, count-up animado, spotlight no mouse, números gradiente, selo "ao vivo"); removida a faixa "Aluno primeiro"; headline `text-8xl`; verde unificado `#22c55e`.
+- **Limpeza**: removida página temp `button-lab`; removidos 3 SVGs de logo antigos; docs `design-system/` adicionados.
+- **Validação**: `tsc` 0 erros · `eslint` limpo · `next build` OK (142 páginas).
+- **Infra/docs**: blockers de deploy documentados em `DEPLOY.md` (WhatsApp host desativado → usar `--allow-no-whatsapp`; sandbox do agente não alcança a API do Cloudflare). Adicionada regra **Git Identity** ao `CLAUDE.md`.
+
+---
+
 ## [Unreleased] — 2026-06-22 — Mobile login: no-scroll + Turnstile gap fix
 
 ### 📱 Login mobile redesenhado (app-style, sem scroll)
