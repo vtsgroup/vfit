@@ -116,8 +116,10 @@ function BlogCard({ post }: { post: BlogPost }) {
           className="object-cover transition-transform duration-500 ease-out-expo group-hover:scale-[1.07]"
           sizes="(max-width: 768px) 100vw, 33vw"
         />
+        {/* Duotone verde sutil no hover */}
+        <div className="pointer-events-none absolute inset-0 bg-brand-primary/0 mix-blend-soft-light transition-colors duration-500 group-hover:bg-brand-primary/25" />
         {/* Gradiente inferior p/ profundidade */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-black/35 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-black/40 to-transparent" />
         {/* Tempo de leitura — glass pill */}
         <div
           className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-bold text-white"
