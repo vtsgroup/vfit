@@ -147,6 +147,55 @@ WHATSAPP_NOTIFY_TOKEN=<ADMIN_AUTH_TOKEN>
 
 ---
 
+## ⚠️ Problemas Conhecidos de Deploy (NÃO repetir)
+
+> Documentado em 25/06/2026 após deploy bloqueado. Ler ANTES de tentar `cf:deploy`.
+
+### 1. WhatsApp: "Host desativado por segurança" → deploy aborta no 1º passo
+
+**Sintoma:**
+
+```
+❌ [WhatsApp] task-notify (start) falhou: Host desativado por segurança
+Error: Falha ao enviar notificação obrigatória no grupo WhatsApp
+```
+
+**Causa:** a notificação WhatsApp é `required` no pipeline. O host do gateway
+(`WHATSAPP_NOTIFY_URL` → `whatsapp.vfit.app.br/task-notify`) está desativado/bloqueado
+por segurança. Sem o `start`, o `cf-deploy.js` lança e **não** bumpa/builda/deploya.
+
+**Workaround imediato (exceção documentada — flag já existe no script):**
+
+```bash
+node scripts/cf-deploy.js patch --allow-no-whatsapp     # full deploy, sem notificação
+```
+
+O flag torna a notificação opcional; o resto do pipeline roda normal (bump → build →
+Pages/Workers → git). Enquanto o host estiver desativado, **todo** deploy precisa dele.
+
+**Correção definitiva:** reabilitar/religar o worker do gateway (ver `WHATSAPP-GATEWAY.md`)
+ou liberar o host; depois remover o `--allow-no-whatsapp`.
+
+### 2. Deploy a partir do agente de IA / sandbox NÃO publica no Cloudflare
+
+O ambiente do agente **não alcança a API do Cloudflare** — `wrangler pages deploy`
+falha com `fetch failed` / "A fetch request failed, likely due to a connectivity issue".
+O gateway WhatsApp também é inalcançável daqui.
+
+- ✅ `next build` **funciona** no agente (as fontes Google carregam após alguns `Retrying`).
+- ❌ `wrangler pages/deploy` **não funciona** no agente — exige rede com acesso ao Cloudflare.
+
+**Fluxo recomendado quando o deploy for pedido ao agente:**
+
+1. Agente **commita** as mudanças e **valida o build** (`npm run build`).
+2. **Deploy final roda na máquina do dev:** `node scripts/cf-deploy.js patch --allow-no-whatsapp`
+   (ou `npm run cf:deploy` quando o WhatsApp voltar).
+
+> Não deixar bump/tag pendurado: se um deploy parcial bumpar a versão sem publicar,
+> reverter com `git checkout package.json lib/version.ts public/manifest.json`.
+
+---
+
 ## Documentação Pós-Deploy
 
 Após CADA deploy, atualizar **na mesma sessão**:
