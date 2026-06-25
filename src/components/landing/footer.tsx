@@ -84,48 +84,45 @@ export function Footer() {
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-[0.025]" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)', backgroundSize: '64px 64px', maskImage: 'linear-gradient(to bottom, black, transparent 60%)', WebkitMaskImage: 'linear-gradient(to bottom, black, transparent 60%)' }} />
       <div aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-brand-primary/40 to-transparent" />
 
-      {/* ══ CTA + Newsletter band ══ */}
-      <div className="relative mx-auto max-w-7xl px-5 pt-16 sm:px-6 sm:pt-20">
-        <div className="grid items-center gap-8 lg:grid-cols-[1.2fr_1fr]">
-          <div>
-            <h3 className="font-syne text-3xl font-black leading-[1.02] tracking-tight text-white sm:text-4xl">
-              Pronto para treinar com um{' '}
-              <span className="bg-linear-to-r from-brand-primary via-brand-mint to-brand-accent bg-clip-text text-transparent">plano claro?</span>
-            </h3>
-            <p className="mt-3 max-w-md text-sm text-white/55">
-              30 dias grátis, sem cartão. Receba novidades, dicas de treino e atualizações do produto direto no seu email.
-            </p>
-            <form onSubmit={onSubmit} className="mt-6 flex max-w-md flex-col gap-3 sm:flex-row">
-              <div className="group relative flex-1">
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="seu@email.com"
-                  aria-label="Seu email"
-                  className="w-full rounded-full border border-white/12 bg-white/6 px-5 py-3 text-sm text-white placeholder-white/35 transition-all duration-300 focus:border-brand-primary/45 focus:bg-white/10 focus:outline-none"
-                  style={{ backdropFilter: 'blur(16px)' }}
-                />
-              </div>
-              <button
-                type="submit"
-                className="group/sub relative inline-flex h-12 shrink-0 items-center justify-center gap-2 overflow-hidden rounded-full px-6 text-[12px] font-black uppercase tracking-wider text-[#08122B] transition-all duration-300 hover:-translate-y-px active:scale-[0.98]"
-                style={{ background: 'linear-gradient(135deg, #34e565 0%, #22c55e 52%, #16a34a 100%)', boxShadow: '0 10px 26px -8px rgba(34,197,94,0.55), inset 0 1px 0 rgba(255,255,255,0.45)' }}
-              >
-                <span className="pointer-events-none absolute inset-0 -translate-x-[120%] bg-linear-to-r from-transparent via-white/40 to-transparent transition-transform duration-700 group-hover/sub:translate-x-[120%]" />
-                <span className="relative z-10 inline-flex items-center gap-1.5">
-                  {sent ? <><DSIcon name="check" size={14} /> Enviado</> : <>Inscrever <DSIcon name="arrowRight" size={13} /></>}
-                </span>
-              </button>
-            </form>
+      {/* ══ CTA + Newsletter band (centralizado) ══ */}
+      <div className="relative mx-auto max-w-2xl px-5 pt-16 text-center sm:px-6 sm:pt-24">
+        {/* Logo grande */}
+        <Link href="/" className="group inline-flex items-center gap-3">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/favicons/favicon.svg" alt="VFIT" width={52} height={52} className="h-13 w-13 rounded-2xl shadow-[0_8px_30px_-6px_rgba(34,197,94,0.5)] transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-6" />
+          <span className="text-3xl font-black tracking-tight text-white">VFIT</span>
+        </Link>
+        <h3 className="font-syne mt-7 text-3xl font-black leading-[1.05] tracking-tight text-white sm:text-4xl">
+          Pronto para treinar com um{' '}
+          <span className="bg-linear-to-r from-brand-primary via-brand-mint to-brand-accent bg-clip-text text-transparent">plano claro?</span>
+        </h3>
+        <p className="mx-auto mt-3 max-w-md text-sm text-white/55">
+          30 dias grátis, sem cartão. Receba novidades, dicas de treino e atualizações do produto direto no seu email.
+        </p>
+        <form onSubmit={onSubmit} className="mx-auto mt-6 flex max-w-md flex-col gap-3 sm:flex-row">
+          <div className="group relative flex-1">
+            <input
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="seu@email.com"
+              aria-label="Seu email"
+              className="w-full rounded-full border border-white/12 bg-white/6 px-5 py-3 text-center text-sm text-white placeholder-white/35 transition-all duration-300 focus:border-brand-primary/45 focus:bg-white/10 focus:outline-none sm:text-left"
+              style={{ backdropFilter: 'blur(16px)' }}
+            />
           </div>
-
-          {/* Wordmark gigante */}
-          <div aria-hidden="true" className="relative hidden justify-end lg:flex">
-            <span className="ftr-wordmark select-none font-syne text-[7rem] font-black leading-none tracking-tighter xl:text-[9rem]" style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.10), rgba(34,197,94,0.10))', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' }}>VFIT</span>
-          </div>
-        </div>
+          <button
+            type="submit"
+            className="group/sub relative inline-flex h-12 shrink-0 items-center justify-center gap-2 overflow-hidden rounded-full px-6 text-[12px] font-black uppercase tracking-wider text-[#08122B] transition-all duration-300 hover:-translate-y-px active:scale-[0.98]"
+            style={{ background: 'linear-gradient(135deg, #34e565 0%, #22c55e 52%, #16a34a 100%)', boxShadow: '0 10px 26px -8px rgba(34,197,94,0.55), inset 0 1px 0 rgba(255,255,255,0.45)' }}
+          >
+            <span className="pointer-events-none absolute inset-0 -translate-x-[120%] bg-linear-to-r from-transparent via-white/40 to-transparent transition-transform duration-700 group-hover/sub:translate-x-[120%]" />
+            <span className="relative z-10 inline-flex items-center gap-1.5">
+              {sent ? <><DSIcon name="check" size={14} /> Enviado</> : <>Inscrever <DSIcon name="arrowRight" size={13} /></>}
+            </span>
+          </button>
+        </form>
       </div>
 
       {/* ══ Main grid ══ */}
@@ -192,6 +189,22 @@ export function Footer() {
             </span>
             <span className="text-[9px] uppercase sm:text-[10px]" style={monoLabel}>Sistemas Online</span>
           </div>
+        </div>
+      </div>
+
+      {/* ══ Wordmark gigante (statement de marca) ══ */}
+      <div aria-hidden="true" className="relative -mb-4 select-none overflow-hidden px-4 pt-6 sm:-mb-8">
+        <div
+          className="ftr-wordmark text-center font-syne font-black leading-[0.78] tracking-tighter"
+          style={{
+            fontSize: 'clamp(4.5rem, 21vw, 17rem)',
+            background: 'linear-gradient(180deg, rgba(255,255,255,0.09) 0%, rgba(34,197,94,0.12) 55%, rgba(34,197,94,0) 100%)',
+            WebkitBackgroundClip: 'text',
+            backgroundClip: 'text',
+            color: 'transparent',
+          }}
+        >
+          VFIT
         </div>
       </div>
 

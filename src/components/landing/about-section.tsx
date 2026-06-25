@@ -76,6 +76,14 @@ const techStack: { name: string; icon: DSIconName }[] = [
   { name: 'AI/ML', icon: 'brainCircuit' },
 ]
 
+/* ─── Métricas de infraestrutura (preenche a coluna da stack) ─── */
+const infraMetrics: { value: string; label: string }[] = [
+  { value: '99.9%', label: 'UPTIME' },
+  { value: '<50ms', label: 'LATÊNCIA EDGE' },
+  { value: '300+', label: 'PONTOS GLOBAIS' },
+  { value: '∞', label: 'ESCALA SERVERLESS' },
+]
+
 /* ─── Credenciais do fundador (chips) ─── */
 const founderChips: { icon: DSIconName; label: string }[] = [
   { icon: 'award', label: '15+ ANOS' },
@@ -255,6 +263,16 @@ export function AboutSection() {
                 <div className="flex w-max gap-3 [animation:aboutScrollRev_34s_linear_infinite]">
                   {[...techStack.slice().reverse(), ...techStack.slice().reverse()].map((t, i) => <TechChip key={`b-${i}`} tech={t} />)}
                 </div>
+              </div>
+
+              {/* Métricas de infra — preenchem a coluna + reforçam excelência */}
+              <div className="relative mt-6 grid grid-cols-2 gap-3">
+                {infraMetrics.map((m) => (
+                  <div key={m.label} className="group/m rounded-xl border border-slate-100 bg-slate-50/70 p-3.5 text-center transition-colors duration-200 hover:border-brand-primary/25 hover:bg-brand-primary/[0.04]">
+                    <div className="font-syne bg-linear-to-b from-gray-900 to-emerald-700 bg-clip-text text-2xl font-black leading-none text-transparent">{m.value}</div>
+                    <div className="mt-1.5 text-[9px] font-bold uppercase tracking-wider text-slate-400" style={monoLabel}>{m.label}</div>
+                  </div>
+                ))}
               </div>
 
               <div className="relative mt-auto pt-6">

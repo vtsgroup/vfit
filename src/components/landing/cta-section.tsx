@@ -22,20 +22,22 @@ const monoLabel = {
   letterSpacing: '0.15em',
 }
 
-const BG_IMAGES = ['/images/hero-1.webp', '/images/hero-2.webp', '/images/hero-3.webp', '/images/hero-4.webp']
-
 export function CtaSection() {
   return (
     <section className="relative overflow-hidden bg-bg-primary py-20 sm:py-36" aria-label="Chamada para ação">
-      {/* ── Fundo Ken-Burns + crossfade (video-like, sem asset extra) ── */}
+      {/* ── Fundo: vídeo real de academia (leve, autoplay mudo em loop) ── */}
       <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
-        {BG_IMAGES.map((src, i) => (
-          <div
-            key={src}
-            className="cta-bg absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url('${src}')`, animationDelay: `${i * 6}s`, opacity: 0 }}
-          />
-        ))}
+        <video
+          className="cta-video h-full w-full scale-105 object-cover"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          poster="/images/cta-bg.webp"
+        >
+          <source src="/videos/gym-bg.mp4" type="video/mp4" />
+        </video>
       </div>
 
       {/* Overlay cinematográfico */}
@@ -131,22 +133,14 @@ export function CtaSection() {
       </div>
 
       <style jsx global>{`
-        @keyframes ctaKenBurns {
-          0% { opacity: 0; transform: scale(1.02); }
-          4% { opacity: 1; }
-          25% { opacity: 1; transform: scale(1.1); }
-          29% { opacity: 0; }
-          100% { opacity: 0; transform: scale(1.04); }
-        }
-        .cta-bg { animation: ctaKenBurns 24s ease-in-out infinite; will-change: opacity, transform; }
+        @keyframes ctaZoom { 0%, 100% { transform: scale(1.05); } 50% { transform: scale(1.12); } }
+        .cta-video { animation: ctaZoom 22s ease-in-out infinite; will-change: transform; }
         @keyframes ctaGridPulse { 0%, 100% { opacity: 0.04; } 50% { opacity: 0.07; } }
         .cta-grid { opacity: 0.04; animation: ctaGridPulse 8s ease-in-out infinite; }
         @keyframes ctaOrbDrift { 0%, 100% { transform: translate(-50%, -50%) scale(1); } 50% { transform: translate(-46%, -54%) scale(1.1); } }
         .cta-orb { animation: ctaOrbDrift 16s ease-in-out infinite; will-change: transform; }
         @media (prefers-reduced-motion: reduce) {
-          .cta-bg { animation: none; }
-          .cta-bg:first-child { opacity: 1; }
-          .cta-grid, .cta-orb { animation: none; }
+          .cta-video, .cta-grid, .cta-orb { animation: none; }
         }
       `}</style>
     </section>
