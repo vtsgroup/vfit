@@ -5,6 +5,20 @@
 
 ---
 
+## [4.9.3] — 2026-06-25 — Redesign ultra-premium: About, FAQ, CTA, Footer, Blog
+
+### ✨ 5 seções elevadas (blueprints de workflow + padrões shipados) — DEPLOYED
+> Deploy via `cf:deploy --allow-no-whatsapp`. Pages publicado e verificado (`vfit.app.br` → v4.9.3). Workers não redeployado (binding R2 `[10136]` / sem mudança de backend).
+
+- **About "FEITO POR QUEM ENTENDE"**: Victor como **card de fundador** focal (halo cônico animado, spotlight, chips de credencial, bio expandida), VTS story glass + valores, **tech-stack marquee** duplo (direções opostas).
+- **FAQ ultra-moderna**: accordion "ledger" numerado — linha ativa vira card de vidro com **borda gradiente + spotlight + accent bar**, morph **+→×**, reveal com grid-collapse + blur clear. Acessível (aria + teclado).
+- **CTA "COMECE AGORA"**: fundo cinematográfico **Ken-Burns + crossfade** das fotos do hero (video-like, sem asset extra), eyebrow gradiente glass, CTA verde-gradiente navy com sheen + secundário dark glass, orbs/grid animados.
+- **Footer repensado**: **aurora animada** + wordmark VFIT flutuante, captura de **newsletter**, colunas com underline-grow no hover, status "Sistemas Online".
+- **Blog**: fix do hover (corte no overflow), inset highlight, **duotone verde** na imagem no hover.
+- Tudo reusa a linguagem de hover shipada (spotlight + borda xor + glow); toda animação respeita `prefers-reduced-motion`.
+
+---
+
 ## [4.9.1] — 2026-06-25 — Depoimentos dark + Gamificação "LIGA VFIT"
 
 ### 🎮 Depoimentos + Gamificação (zona dark contínua) — DEPLOYED
