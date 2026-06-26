@@ -161,14 +161,14 @@ export function CookieConsentBanner() {
         style={{ paddingBottom: 'calc(1rem + env(safe-area-inset-bottom, 0px))' }}
       >
         <div
-          className="mx-auto max-w-2xl overflow-hidden rounded-3xl backdrop-blur-3xl"
+          className="mx-auto max-w-2xl overflow-hidden rounded-3xl backdrop-blur-2xl"
           style={{
-            background: 'rgba(255, 255, 255, 0.08)',
-            border: '1px solid rgba(34, 197, 94, 0.2)',
+            background: 'rgba(255, 255, 255, 0.15)',
+            border: '1px solid rgba(34, 197, 94, 0.3)',
             boxShadow: `
-              0 0 40px rgba(34, 197, 94, 0.15),
-              0 20px 60px -20px rgba(0, 0, 0, 0.3),
-              inset 0 1px 1px rgba(255, 255, 255, 0.2)
+              0 0 50px rgba(34, 197, 94, 0.2),
+              0 24px 48px -12px rgba(0, 0, 0, 0.15),
+              inset 0 1px 1px rgba(255, 255, 255, 0.3)
             `
           }}
         >
@@ -295,28 +295,15 @@ export function CookieConsentBanner() {
                 )}
                 <button
                   onClick={handleAcceptAll}
-                  className="group relative rounded-2xl px-6 py-3 text-xs font-bold uppercase tracking-widest overflow-hidden transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] backdrop-blur-xl"
+                  className="group/sub relative inline-flex h-12 shrink-0 items-center justify-center gap-2 overflow-hidden rounded-full px-6 text-[12px] font-black uppercase tracking-wider text-[#08122B] transition-all duration-300 hover:-translate-y-px active:scale-[0.98]"
                   style={{
-                    background: 'linear-gradient(135deg, rgba(34,197,94,0.25) 0%, rgba(34,197,94,0.15) 100%)',
-                    border: '1px solid rgba(34,197,94,0.4)',
-                    color: '#22c55e',
-                    boxShadow: `
-                      0 0 30px rgba(34,197,94,0.25),
-                      0 8px 24px rgba(34,197,94,0.15),
-                      inset 0 1px 1px rgba(255,255,255,0.3)
-                    `
+                    background: 'linear-gradient(135deg, #34e565 0%, #22c55e 52%, #16a34a 100%)',
+                    boxShadow: '0 10px 26px -8px rgba(34,197,94,0.55), inset 0 1px 0 rgba(255,255,255,0.45)'
                   }}
                 >
-                  {/* Glow effect */}
-                  <span className="pointer-events-none absolute -inset-1 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{ background: 'radial-gradient(circle, rgba(34,197,94,0.2) 0%, transparent 70%)' }} />
-
-                  {/* Shine effect */}
-                  <span className="pointer-events-none absolute inset-0 -translate-x-[120%] bg-linear-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover:translate-x-[120%]" />
-
-                  {/* Button text */}
-                  <span className="relative flex items-center gap-2">
-                    Aceitar todos
-                    <span className="inline-block transition-transform group-hover:translate-x-1">→</span>
+                  <span className="pointer-events-none absolute inset-0 -translate-x-[120%] bg-linear-to-r from-transparent via-white/40 to-transparent transition-transform duration-700 group-hover/sub:translate-x-[120%]" />
+                  <span className="relative z-10 inline-flex items-center gap-1.5">
+                    {sent ? <><DSIcon name="check" size={14} /> Enviado</> : <>Aceitar todos <DSIcon name="arrowRight" size={13} /></>}
                   </span>
                 </button>
               </div>
