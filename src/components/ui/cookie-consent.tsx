@@ -303,7 +303,7 @@ export function CookieConsentBanner() {
                 >
                   <span className="pointer-events-none absolute inset-0 -translate-x-[120%] bg-linear-to-r from-transparent via-white/40 to-transparent transition-transform duration-700 group-hover/sub:translate-x-[120%]" />
                   <span className="relative z-10 inline-flex items-center gap-1.5">
-                    {sent ? <><DSIcon name="check" size={14} /> Enviado</> : <>Aceitar todos <DSIcon name="arrowRight" size={13} /></>}
+                    Aceitar todos <DSIcon name="arrowRight" size={13} />
                   </span>
                 </button>
               </div>
