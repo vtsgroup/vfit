@@ -250,13 +250,13 @@ export function CookieConsentBanner() {
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-center gap-4">
                 {/* Premium Icon Container with Glassmorphism */}
-                <div className="icon-container pulse-glow-animation relative flex shrink-0 items-center justify-center overflow-hidden rounded-xl backdrop-blur-md transition-all duration-300 hover:scale-105 hover:-translate-y-0.5"
+                <div className="icon-container relative flex shrink-0 items-center justify-center overflow-hidden rounded-xl backdrop-blur-md transition-all duration-300 hover:scale-105 hover:-translate-y-0.5"
                   style={{
                     width: '44px',
                     height: '44px',
-                    background: 'rgba(34, 197, 94, 0.08)',
-                    border: '1px solid rgba(34, 197, 94, 0.25)',
-                    boxShadow: '0 0 20px rgba(34, 197, 94, 0.2), inset 0 1px 1px rgba(255,255,255,0.1)'
+                    background: 'rgba(15, 23, 42, 0.6)',
+                    border: '1px solid rgba(34, 197, 94, 0.2)',
+                    boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1)'
                   }}
                 >
                   {/* Eye Icon with Glow */}
