@@ -236,12 +236,12 @@ export function CookieConsentBanner() {
           <div
             className="relative overflow-hidden rounded-3xl backdrop-blur-2xl"
             style={{
-              background: 'rgba(255, 255, 255, 0.15)',
-              border: '1px solid rgba(34, 197, 94, 0.3)',
+              background: 'rgba(255, 255, 255, 0.08)',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
               boxShadow: `
-                0 0 50px rgba(34, 197, 94, 0.2),
-                0 24px 48px -12px rgba(0, 0, 0, 0.15),
-                inset 0 1px 1px rgba(255, 255, 255, 0.3)
+                0 0 30px rgba(0, 0, 0, 0.1),
+                0 24px 48px -12px rgba(0, 0, 0, 0.12),
+                inset 0 1px 1px rgba(255, 255, 255, 0.2)
               `
             }}
           >
