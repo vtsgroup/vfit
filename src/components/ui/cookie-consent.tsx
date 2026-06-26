@@ -160,7 +160,7 @@ export function CookieConsentBanner() {
         className="fixed inset-x-0 bottom-0 z-9999 p-4 sm:p-6 animate-in slide-in-from-bottom duration-500"
         style={{ paddingBottom: 'calc(1rem + env(safe-area-inset-bottom, 0px))' }}
       >
-        <div className="mx-auto max-w-2xl overflow-hidden rounded-2xl border dark:border-white/8 light:border-slate-200 dark:bg-zinc-950/95 light:bg-white/95 shadow-2xl dark:shadow-black/50 light:shadow-black/10 backdrop-blur-xl">
+        <div className="mx-auto max-w-2xl overflow-hidden rounded-3xl border-2 shadow-2xl backdrop-blur-3xl dark:border-white/10 light:border-emerald-200/40 dark:bg-zinc-950/98 light:bg-gradient-to-br light:from-white light:to-emerald-50/50 dark:shadow-black/60 light:shadow-emerald-500/15">
           {/* Header */}
           <div className="p-5 pb-0 sm:p-6 sm:pb-0">
             <div className="flex items-start justify-between gap-3">
