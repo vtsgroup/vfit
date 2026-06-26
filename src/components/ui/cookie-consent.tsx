@@ -155,11 +155,22 @@ export function CookieConsentBanner() {
       {/* Backdrop blur */}
       <div className="fixed inset-0 z-9998 bg-black/20 backdrop-blur-[2px] animate-in fade-in duration-300" aria-hidden="true" />
 
-      {/* Banner */}
+      {/* Banner container with visual backdrop for light backgrounds */}
       <div
         className="fixed inset-x-0 bottom-0 z-9999 p-4 sm:p-6 animate-in slide-in-from-bottom duration-500"
         style={{ paddingBottom: 'calc(1rem + env(safe-area-inset-bottom, 0px))' }}
       >
+        {/* Visual backdrop — improves contrast on light backgrounds */}
+        <div
+          className="absolute inset-0 rounded-3xl pointer-events-none"
+          style={{
+            background: 'rgba(15, 23, 42, 0.35)',
+            filter: 'blur(12px)',
+            zIndex: -1
+          }}
+          aria-hidden="true"
+        />
+
         <div
           className="mx-auto max-w-2xl overflow-hidden rounded-3xl backdrop-blur-2xl"
           style={{
