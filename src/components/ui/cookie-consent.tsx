@@ -161,17 +161,15 @@ export function CookieConsentBanner() {
         style={{ paddingBottom: 'calc(1rem + env(safe-area-inset-bottom, 0px))' }}
       >
         <div
-          className="mx-auto max-w-2xl overflow-hidden rounded-3xl border shadow-2xl backdrop-blur-3xl"
+          className="mx-auto max-w-2xl overflow-hidden rounded-3xl backdrop-blur-3xl"
           style={{
-            background: typeof window !== 'undefined' && document.documentElement.classList.contains('light')
-              ? 'linear-gradient(135deg, rgba(255,255,255,0.99) 0%, rgba(236,253,243,0.98) 100%)'
-              : 'linear-gradient(135deg, rgba(9,9,11,0.98) 0%, rgba(9,9,11,0.96) 100%)',
-            borderColor: typeof window !== 'undefined' && document.documentElement.classList.contains('light')
-              ? 'rgba(34,197,94,0.25)'
-              : 'rgba(255,255,255,0.15)',
-            boxShadow: typeof window !== 'undefined' && document.documentElement.classList.contains('light')
-              ? '0 20px 50px -12px rgba(34,197,94,0.25), 0 0 1px rgba(34,197,94,0.3)'
-              : '0 20px 50px -12px rgba(0,0,0,0.5), 0 0 1px rgba(255,255,255,0.1)'
+            background: 'rgba(255, 255, 255, 0.08)',
+            border: '1px solid rgba(34, 197, 94, 0.2)',
+            boxShadow: `
+              0 0 40px rgba(34, 197, 94, 0.15),
+              0 20px 60px -20px rgba(0, 0, 0, 0.3),
+              inset 0 1px 1px rgba(255, 255, 255, 0.2)
+            `
           }}
         >
           {/* Header */}
@@ -283,37 +281,42 @@ export function CookieConsentBanner() {
                 {expanded && (
                   <button
                     onClick={handleSavePreferences}
-                    className="group rounded-xl px-4 py-2.5 text-xs font-medium uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 border"
+                    className="group relative rounded-2xl px-4 py-2.5 text-xs font-bold uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 backdrop-blur-lg border overflow-hidden"
                     style={{
-                      background: typeof window !== 'undefined' && document.documentElement.classList.contains('light')
-                        ? 'rgba(34,197,94,0.08)'
-                        : 'rgba(255,255,255,0.06)',
-                      borderColor: typeof window !== 'undefined' && document.documentElement.classList.contains('light')
-                        ? 'rgba(34,197,94,0.25)'
-                        : 'rgba(255,255,255,0.15)',
-                      color: typeof window !== 'undefined' && document.documentElement.classList.contains('light')
-                        ? 'rgb(34,197,94)'
-                        : 'rgb(236,253,243)',
+                      background: 'rgba(34, 197, 94, 0.12)',
+                      borderColor: 'rgba(34, 197, 94, 0.3)',
+                      color: 'rgba(34, 197, 94)',
+                      boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.2), 0 4px 16px rgba(34, 197, 94, 0.1)'
                     }}
                   >
-                    Salvar preferências
+                    <span className="pointer-events-none absolute inset-0 -translate-x-[120%] bg-linear-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-[120%]" />
+                    <span className="relative">Salvar preferências</span>
                   </button>
                 )}
                 <button
                   onClick={handleAcceptAll}
-                  className="group relative rounded-xl px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-gray-900 transition-all duration-300 overflow-hidden hover:-translate-y-0.5 active:scale-[0.98]"
+                  className="group relative rounded-2xl px-6 py-3 text-xs font-bold uppercase tracking-widest overflow-hidden transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] backdrop-blur-xl"
                   style={{
-                    background: 'linear-gradient(135deg, #34e565 0%, #22c55e 50%, #16a34a 100%)',
-                    boxShadow: '0 12px 28px -8px rgba(34,197,94,0.6), inset 0 1px 0 rgba(255,255,255,0.5)',
+                    background: 'linear-gradient(135deg, rgba(34,197,94,0.25) 0%, rgba(34,197,94,0.15) 100%)',
+                    border: '1px solid rgba(34,197,94,0.4)',
+                    color: '#22c55e',
+                    boxShadow: `
+                      0 0 30px rgba(34,197,94,0.25),
+                      0 8px 24px rgba(34,197,94,0.15),
+                      inset 0 1px 1px rgba(255,255,255,0.3)
+                    `
                   }}
                 >
+                  {/* Glow effect */}
+                  <span className="pointer-events-none absolute -inset-1 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{ background: 'radial-gradient(circle, rgba(34,197,94,0.2) 0%, transparent 70%)' }} />
+
                   {/* Shine effect */}
-                  <span className="pointer-events-none absolute inset-0 -translate-x-[120%] bg-linear-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover:translate-x-[120%]" />
+                  <span className="pointer-events-none absolute inset-0 -translate-x-[120%] bg-linear-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover:translate-x-[120%]" />
 
                   {/* Button text */}
-                  <span className="relative flex items-center gap-1.5">
+                  <span className="relative flex items-center gap-2">
                     Aceitar todos
-                    <span className="text-[10px] opacity-75">→</span>
+                    <span className="inline-block transition-transform group-hover:translate-x-1">→</span>
                   </span>
                 </button>
               </div>
