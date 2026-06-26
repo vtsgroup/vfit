@@ -161,6 +161,10 @@ export function CookieConsentBanner() {
         style={{ paddingBottom: 'calc(1rem + env(safe-area-inset-bottom, 0px))' }}
       >
         <style>{`
+          @keyframes shimmer-border-subtle {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+          }
           @keyframes pulse-glow-blue {
             0%, 100% { box-shadow: 0 0 20px rgba(15, 23, 42, 0.15), inset 0 1px 1px rgba(255,255,255,0.1); }
             50% { box-shadow: 0 0 30px rgba(15, 23, 42, 0.3), inset 0 1px 1px rgba(255,255,255,0.1); }
@@ -172,6 +176,18 @@ export function CookieConsentBanner() {
           @keyframes fade-scale-in {
             0% { opacity: 0; transform: scale(0.95); }
             100% { opacity: 1; transform: scale(1); }
+          }
+          .shimmer-border-subtle {
+            background: linear-gradient(
+              90deg,
+              rgba(34, 197, 94, 0.05) 0%,
+              rgba(34, 197, 94, 0.12) 25%,
+              rgba(34, 197, 94, 0.15) 50%,
+              rgba(34, 197, 94, 0.12) 75%,
+              rgba(34, 197, 94, 0.05) 100%
+            );
+            background-size: 1000px 100%;
+            animation: shimmer-border-subtle 4s infinite;
           }
           .icon-container {
             animation: fade-scale-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -185,7 +201,8 @@ export function CookieConsentBanner() {
           @media (prefers-reduced-motion: reduce) {
             .icon-container,
             .icon-glow-animation,
-            .pulse-glow-animation {
+            .pulse-glow-animation,
+            .shimmer-border-subtle {
               animation: none !important;
             }
           }
@@ -208,7 +225,7 @@ export function CookieConsentBanner() {
 
           {/* Shimmer border gradient layer */}
           <div
-            className="absolute inset-0 rounded-3xl pointer-events-none shimmer-border-animation"
+            className="absolute inset-0 rounded-3xl pointer-events-none shimmer-border-subtle"
             style={{
               padding: '1px'
             }}
