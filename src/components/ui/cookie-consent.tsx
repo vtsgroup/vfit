@@ -160,17 +160,45 @@ export function CookieConsentBanner() {
         className="fixed inset-x-0 bottom-0 z-9999 p-4 sm:p-6 animate-in slide-in-from-bottom duration-500"
         style={{ paddingBottom: 'calc(1rem + env(safe-area-inset-bottom, 0px))' }}
       >
+        <style>{`
+          @keyframes shimmer-border {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+          }
+          .shimmer-border-animation {
+            background: linear-gradient(
+              90deg,
+              rgba(34, 197, 94, 0.1) 0%,
+              rgba(34, 197, 94, 0.3) 25%,
+              rgba(34, 197, 94, 0.5) 50%,
+              rgba(34, 197, 94, 0.3) 75%,
+              rgba(34, 197, 94, 0.1) 100%
+            );
+            background-size: 1000px 100%;
+            animation: shimmer-border 3s infinite;
+          }
+        `}</style>
+
         <div className="mx-auto max-w-2xl relative">
           {/* Visual backdrop — only behind the card */}
           <div
             className="absolute inset-0 rounded-3xl pointer-events-none"
             style={{
-              background: 'rgba(15, 23, 42, 0.45)',
+              background: 'rgba(8, 23, 42, 0.70)',
               filter: 'blur(16px)',
               top: '8px',
               left: '8px',
               right: '8px',
               bottom: '8px'
+            }}
+            aria-hidden="true"
+          />
+
+          {/* Shimmer border gradient layer */}
+          <div
+            className="absolute inset-0 rounded-3xl pointer-events-none shimmer-border-animation"
+            style={{
+              padding: '1px'
             }}
             aria-hidden="true"
           />
@@ -192,8 +220,11 @@ export function CookieConsentBanner() {
           <div className="p-5 pb-0 sm:p-6 sm:pb-0">
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-primary/10">
-                  <DSIcon name="cookie" size={20} className="text-brand-primary" />
+                {/* Premium Eye Icon */}
+                <div className="relative flex h-10 w-10 shrink-0 items-center justify-center">
+                  <svg className="h-6 w-6 text-[#0f1729]" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
+                  </svg>
                 </div>
                 <div>
                   <h3 className="text-sm font-bold dark:text-white light:text-slate-900">Cookies & Privacidade</h3>
