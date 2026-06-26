@@ -160,7 +160,20 @@ export function CookieConsentBanner() {
         className="fixed inset-x-0 bottom-0 z-9999 p-4 sm:p-6 animate-in slide-in-from-bottom duration-500"
         style={{ paddingBottom: 'calc(1rem + env(safe-area-inset-bottom, 0px))' }}
       >
-        <div className="mx-auto max-w-2xl overflow-hidden rounded-3xl border-2 shadow-2xl backdrop-blur-3xl dark:border-white/10 light:border-emerald-200/40 dark:bg-zinc-950/98 light:bg-gradient-to-br light:from-white light:to-emerald-50/50 dark:shadow-black/60 light:shadow-emerald-500/15">
+        <div
+          className="mx-auto max-w-2xl overflow-hidden rounded-3xl border shadow-2xl backdrop-blur-3xl"
+          style={{
+            background: 'light' in document.documentElement.className
+              ? 'linear-gradient(135deg, rgba(255,255,255,0.99) 0%, rgba(236,253,243,0.98) 100%)'
+              : 'linear-gradient(135deg, rgba(9,9,11,0.98) 0%, rgba(9,9,11,0.96) 100%)',
+            borderColor: 'light' in document.documentElement.className
+              ? 'rgba(34,197,94,0.25)'
+              : 'rgba(255,255,255,0.15)',
+            boxShadow: 'light' in document.documentElement.className
+              ? '0 20px 50px -12px rgba(34,197,94,0.25), 0 0 1px rgba(34,197,94,0.3)'
+              : '0 20px 50px -12px rgba(0,0,0,0.5), 0 0 1px rgba(255,255,255,0.1)'
+          }}
+        >
           {/* Header */}
           <div className="p-5 pb-0 sm:p-6 sm:pb-0">
             <div className="flex items-start justify-between gap-3">
@@ -270,16 +283,38 @@ export function CookieConsentBanner() {
                 {expanded && (
                   <button
                     onClick={handleSavePreferences}
-                    className="rounded-xl border dark:border-white/8 light:border-slate-200 dark:bg-white/3 light:bg-slate-100 px-4 py-2 text-xs font-medium dark:text-zinc-300 light:text-slate-600 transition-colors dark:hover:bg-white/6 light:hover:bg-slate-200"
+                    className="group rounded-xl px-4 py-2.5 text-xs font-medium uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 border"
+                    style={{
+                      background: 'light' in document.documentElement.className
+                        ? 'rgba(34,197,94,0.08)'
+                        : 'rgba(255,255,255,0.06)',
+                      borderColor: 'light' in document.documentElement.className
+                        ? 'rgba(34,197,94,0.25)'
+                        : 'rgba(255,255,255,0.15)',
+                      color: 'light' in document.documentElement.className
+                        ? 'rgb(34,197,94)'
+                        : 'rgb(236,253,243)',
+                    }}
                   >
                     Salvar preferências
                   </button>
                 )}
                 <button
                   onClick={handleAcceptAll}
-                  className="rounded-xl bg-brand-primary px-5 py-2 text-xs font-bold text-gray-900 shadow-lg shadow-brand-primary/20 transition-all hover:bg-brand-primary/90 hover:shadow-brand-primary/30"
+                  className="group relative rounded-xl px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-gray-900 transition-all duration-300 overflow-hidden hover:-translate-y-0.5 active:scale-[0.98]"
+                  style={{
+                    background: 'linear-gradient(135deg, #34e565 0%, #22c55e 50%, #16a34a 100%)',
+                    boxShadow: '0 12px 28px -8px rgba(34,197,94,0.6), inset 0 1px 0 rgba(255,255,255,0.5)',
+                  }}
                 >
-                  Aceitar todos
+                  {/* Shine effect */}
+                  <span className="pointer-events-none absolute inset-0 -translate-x-[120%] bg-linear-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover:translate-x-[120%]" />
+
+                  {/* Button text */}
+                  <span className="relative flex items-center gap-1.5">
+                    Aceitar todos
+                    <span className="text-[10px] opacity-75">→</span>
+                  </span>
                 </button>
               </div>
             </div>
