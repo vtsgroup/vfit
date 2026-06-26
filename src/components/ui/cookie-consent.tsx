@@ -163,13 +163,13 @@ export function CookieConsentBanner() {
         <div
           className="mx-auto max-w-2xl overflow-hidden rounded-3xl border shadow-2xl backdrop-blur-3xl"
           style={{
-            background: 'light' in document.documentElement.className
+            background: typeof window !== 'undefined' && document.documentElement.classList.contains('light')
               ? 'linear-gradient(135deg, rgba(255,255,255,0.99) 0%, rgba(236,253,243,0.98) 100%)'
               : 'linear-gradient(135deg, rgba(9,9,11,0.98) 0%, rgba(9,9,11,0.96) 100%)',
-            borderColor: 'light' in document.documentElement.className
+            borderColor: typeof window !== 'undefined' && document.documentElement.classList.contains('light')
               ? 'rgba(34,197,94,0.25)'
               : 'rgba(255,255,255,0.15)',
-            boxShadow: 'light' in document.documentElement.className
+            boxShadow: typeof window !== 'undefined' && document.documentElement.classList.contains('light')
               ? '0 20px 50px -12px rgba(34,197,94,0.25), 0 0 1px rgba(34,197,94,0.3)'
               : '0 20px 50px -12px rgba(0,0,0,0.5), 0 0 1px rgba(255,255,255,0.1)'
           }}
@@ -285,13 +285,13 @@ export function CookieConsentBanner() {
                     onClick={handleSavePreferences}
                     className="group rounded-xl px-4 py-2.5 text-xs font-medium uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 border"
                     style={{
-                      background: 'light' in document.documentElement.className
+                      background: typeof window !== 'undefined' && document.documentElement.classList.contains('light')
                         ? 'rgba(34,197,94,0.08)'
                         : 'rgba(255,255,255,0.06)',
-                      borderColor: 'light' in document.documentElement.className
+                      borderColor: typeof window !== 'undefined' && document.documentElement.classList.contains('light')
                         ? 'rgba(34,197,94,0.25)'
                         : 'rgba(255,255,255,0.15)',
-                      color: 'light' in document.documentElement.className
+                      color: typeof window !== 'undefined' && document.documentElement.classList.contains('light')
                         ? 'rgb(34,197,94)'
                         : 'rgb(236,253,243)',
                     }}
