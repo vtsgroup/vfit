@@ -155,34 +155,39 @@ export function CookieConsentBanner() {
       {/* Backdrop blur */}
       <div className="fixed inset-0 z-9998 bg-black/20 backdrop-blur-[2px] animate-in fade-in duration-300" aria-hidden="true" />
 
-      {/* Banner container with visual backdrop for light backgrounds */}
+      {/* Banner */}
       <div
         className="fixed inset-x-0 bottom-0 z-9999 p-4 sm:p-6 animate-in slide-in-from-bottom duration-500"
         style={{ paddingBottom: 'calc(1rem + env(safe-area-inset-bottom, 0px))' }}
       >
-        {/* Visual backdrop — improves contrast on light backgrounds */}
-        <div
-          className="absolute inset-0 rounded-3xl pointer-events-none"
-          style={{
-            background: 'rgba(15, 23, 42, 0.35)',
-            filter: 'blur(12px)',
-            zIndex: -1
-          }}
-          aria-hidden="true"
-        />
+        <div className="mx-auto max-w-2xl relative">
+          {/* Visual backdrop — only behind the card */}
+          <div
+            className="absolute inset-0 rounded-3xl pointer-events-none"
+            style={{
+              background: 'rgba(15, 23, 42, 0.45)',
+              filter: 'blur(16px)',
+              top: '8px',
+              left: '8px',
+              right: '8px',
+              bottom: '8px'
+            }}
+            aria-hidden="true"
+          />
 
-        <div
-          className="mx-auto max-w-2xl overflow-hidden rounded-3xl backdrop-blur-2xl"
-          style={{
-            background: 'rgba(255, 255, 255, 0.15)',
-            border: '1px solid rgba(34, 197, 94, 0.3)',
-            boxShadow: `
-              0 0 50px rgba(34, 197, 94, 0.2),
-              0 24px 48px -12px rgba(0, 0, 0, 0.15),
-              inset 0 1px 1px rgba(255, 255, 255, 0.3)
-            `
-          }}
-        >
+          {/* Cookie card */}
+          <div
+            className="relative overflow-hidden rounded-3xl backdrop-blur-2xl"
+            style={{
+              background: 'rgba(255, 255, 255, 0.15)',
+              border: '1px solid rgba(34, 197, 94, 0.3)',
+              boxShadow: `
+                0 0 50px rgba(34, 197, 94, 0.2),
+                0 24px 48px -12px rgba(0, 0, 0, 0.15),
+                inset 0 1px 1px rgba(255, 255, 255, 0.3)
+              `
+            }}
+          >
           {/* Header */}
           <div className="p-5 pb-0 sm:p-6 sm:pb-0">
             <div className="flex items-start justify-between gap-3">
@@ -319,6 +324,7 @@ export function CookieConsentBanner() {
                 </button>
               </div>
             </div>
+          </div>
           </div>
         </div>
       </div>
