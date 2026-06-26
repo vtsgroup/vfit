@@ -161,48 +161,31 @@ export function CookieConsentBanner() {
         style={{ paddingBottom: 'calc(1rem + env(safe-area-inset-bottom, 0px))' }}
       >
         <style>{`
-          @keyframes shimmer-border {
-            0% { background-position: -1000px 0; }
-            100% { background-position: 1000px 0; }
+          @keyframes pulse-glow-blue {
+            0%, 100% { box-shadow: 0 0 20px rgba(15, 23, 42, 0.15), inset 0 1px 1px rgba(255,255,255,0.1); }
+            50% { box-shadow: 0 0 30px rgba(15, 23, 42, 0.3), inset 0 1px 1px rgba(255,255,255,0.1); }
           }
-          @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(34, 197, 94, 0.2), inset 0 1px 1px rgba(255,255,255,0.1); }
-            50% { box-shadow: 0 0 40px rgba(34, 197, 94, 0.4), inset 0 1px 1px rgba(255,255,255,0.1); }
-          }
-          @keyframes icon-glow {
-            0%, 100% { filter: drop-shadow(0 0 4px rgba(34, 197, 94, 0.3)); }
-            50% { filter: drop-shadow(0 0 12px rgba(34, 197, 94, 0.6)); }
+          @keyframes icon-glow-blue {
+            0%, 100% { filter: drop-shadow(0 0 3px rgba(15, 23, 42, 0.2)); }
+            50% { filter: drop-shadow(0 0 8px rgba(15, 23, 42, 0.4)); }
           }
           @keyframes fade-scale-in {
             0% { opacity: 0; transform: scale(0.95); }
             100% { opacity: 1; transform: scale(1); }
           }
-          .shimmer-border-animation {
-            background: linear-gradient(
-              90deg,
-              rgba(34, 197, 94, 0.1) 0%,
-              rgba(34, 197, 94, 0.3) 25%,
-              rgba(34, 197, 94, 0.5) 50%,
-              rgba(34, 197, 94, 0.3) 75%,
-              rgba(34, 197, 94, 0.1) 100%
-            );
-            background-size: 1000px 100%;
-            animation: shimmer-border 3s infinite;
-          }
           .icon-container {
             animation: fade-scale-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
           }
           .icon-glow-animation {
-            animation: icon-glow 3s ease-in-out infinite;
+            animation: icon-glow-blue 3s ease-in-out infinite;
           }
           .pulse-glow-animation {
-            animation: pulse-glow 4s ease-in-out infinite;
+            animation: pulse-glow-blue 4s ease-in-out infinite;
           }
           @media (prefers-reduced-motion: reduce) {
             .icon-container,
             .icon-glow-animation,
-            .pulse-glow-animation,
-            .shimmer-border-animation {
+            .pulse-glow-animation {
               animation: none !important;
             }
           }
@@ -250,18 +233,18 @@ export function CookieConsentBanner() {
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-center gap-4">
                 {/* Premium Icon Container with Glassmorphism */}
-                <div className="icon-container relative flex shrink-0 items-center justify-center overflow-hidden rounded-xl backdrop-blur-md transition-all duration-300 hover:scale-105 hover:-translate-y-0.5"
+                <div className="icon-container pulse-glow-animation relative flex shrink-0 items-center justify-center overflow-hidden rounded-2xl backdrop-blur-md transition-all duration-300 hover:scale-105 hover:-translate-y-0.5"
                   style={{
                     width: '44px',
                     height: '44px',
-                    background: 'rgba(15, 23, 42, 0.6)',
-                    border: '1px solid rgba(34, 197, 94, 0.2)',
+                    background: 'rgba(15, 23, 42, 0.8)',
+                    border: '1.5px solid rgba(15, 23, 42, 0.4)',
                     boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1)'
                   }}
                 >
-                  {/* Eye Icon with Dark Outline + Green Background */}
+                  {/* Eye Icon - Dark Blue */}
                   <svg className="icon-glow-animation h-6 w-6" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path fill="#22c55e" stroke="#0f1729" strokeWidth="1.5" d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
+                    <path fill="#0f1729" d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
                   </svg>
                 </div>
                 <div>
