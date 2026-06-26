@@ -254,8 +254,8 @@ export function CookieConsentBanner() {
                   style={{
                     width: '44px',
                     height: '44px',
-                    background: 'rgba(15, 23, 42, 0.8)',
-                    border: '1.5px solid rgba(15, 23, 42, 0.4)',
+                    background: 'rgba(34, 197, 94, 0.12)',
+                    border: '1.5px solid rgba(34, 197, 94, 0.3)',
                     boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1)'
                   }}
                 >
