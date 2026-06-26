@@ -87,48 +87,120 @@ export function Footer() {
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-[0.025]" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)', backgroundSize: '64px 64px', maskImage: 'linear-gradient(to bottom, black, transparent 60%)', WebkitMaskImage: 'linear-gradient(to bottom, black, transparent 60%)' }} />
       <div aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-brand-primary/40 to-transparent" />
 
-      {/* ══ Newsletter band — zona com gradiente próprio (diferencia do footer) ══ */}
-      <div className="relative" style={{ background: 'radial-gradient(60% 100% at 50% 0%, rgba(34,197,94,0.06) 0%, transparent 65%)' }}>
-      <div className="relative mx-auto max-w-2xl px-5 pb-14 pt-16 text-center sm:px-6 sm:pb-16 sm:pt-24">
-        <span className="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-[10px] uppercase tracking-[0.2em] text-brand-primary" style={{ ...monoLabel, background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.25)' }}>
-          <span className="relative flex h-1.5 w-1.5">
-            <span className="absolute inline-flex h-full w-full rounded-full bg-brand-primary opacity-70 motion-safe:animate-ping" />
-            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-brand-primary" />
-          </span>
-          Newsletter
-        </span>
-        <h3 className="font-syne mt-5 text-3xl font-black leading-[1.05] tracking-tight text-white sm:text-4xl">
-          Pronto para treinar com um{' '}
-          <span className="bg-linear-to-r from-brand-primary via-brand-mint to-brand-accent bg-clip-text text-transparent">plano claro?</span>
-        </h3>
-        <p className="mx-auto mt-3 max-w-md text-sm text-white/55">
-          30 dias grátis, sem cartão. Receba novidades, dicas de treino e atualizações do produto direto no seu email.
-        </p>
-        <form onSubmit={onSubmit} className="mx-auto mt-6 flex max-w-md flex-col gap-3 sm:flex-row">
-          <div className="group relative flex-1">
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="seu@email.com"
-              aria-label="Seu email"
-              className="w-full rounded-full border border-white/12 bg-white/6 px-5 py-3 text-center text-sm text-white placeholder-white/35 transition-all duration-300 focus:border-brand-primary/45 focus:bg-white/10 focus:outline-none sm:text-left"
-              style={{ backdropFilter: 'blur(16px)' }}
-            />
+      {/* ══ Newsletter band — Ultra modern, elegant layout ══ */}
+      <div className="relative" style={{ background: 'radial-gradient(ellipse 100% 80% at 50% 0%, rgba(34,197,94,0.08) 0%, transparent 70%)' }}>
+        <div aria-hidden="true" className="pointer-events-none absolute -top-40 left-1/4 h-96 w-96 rounded-full bg-brand-primary/8 blur-3xl" />
+        <div aria-hidden="true" className="pointer-events-none absolute bottom-0 right-1/4 h-80 w-80 rounded-full bg-brand-primary/6 blur-3xl" />
+
+        <div className="relative mx-auto max-w-7xl px-5 py-20 sm:px-6 sm:py-32">
+          <div className="grid gap-16 lg:grid-cols-2 lg:items-center lg:gap-20">
+            {/* Left: Content & Value Prop */}
+            <div className="flex flex-col justify-center">
+              <div className="inline-flex w-fit items-center gap-2.5 rounded-full px-4 py-2 backdrop-blur-md" style={{ background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.28)' }}>
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full rounded-full bg-brand-primary opacity-75 motion-safe:animate-ping" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-brand-primary" />
+                </span>
+                <span className="text-[11px] font-black uppercase tracking-widest text-brand-primary" style={monoLabel}>Stay Updated</span>
+              </div>
+
+              <h2 className="font-syne mt-6 text-4xl font-black leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl">
+                Treina com{' '}
+                <span className="bg-linear-to-r from-brand-primary via-emerald-400 to-brand-mint bg-clip-text text-transparent">clareza.</span>
+                {' '}Evolui com<br className="hidden sm:block" /> <span className="bg-linear-to-r from-brand-primary to-emerald-500 bg-clip-text text-transparent">dados.</span>
+              </h2>
+
+              <p className="mt-6 max-w-lg text-lg leading-relaxed text-white/60">
+                Receba treinos personalizados, dicas de evolução e as últimas novidades direto no seu email. <strong className="text-white/80">30 dias grátis</strong>, sem cartão de crédito.
+              </p>
+
+              {/* Benefits list */}
+              <div className="mt-8 space-y-3">
+                {[
+                  { icon: 'zap' as DSIconName, text: 'Dicas de treino exclusivas' },
+                  { icon: 'trendingUp' as DSIconName, text: 'Atualizações de produto' },
+                  { icon: 'award' as DSIconName, text: 'Acesso antecipado a features' },
+                ].map((item) => (
+                  <div key={item.text} className="flex items-center gap-3">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-primary/15">
+                      <DSIcon name={item.icon} size={18} className="text-brand-primary" />
+                    </div>
+                    <span className="text-sm text-white/70">{item.text}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right: Form Card */}
+            <div className="relative">
+              {/* Glow effect */}
+              <div aria-hidden="true" className="absolute -inset-0.5 rounded-3xl bg-linear-to-b from-brand-primary/30 to-brand-primary/5 opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100" style={{ pointerEvents: 'none' }} />
+
+              <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-white/8 to-white/3 p-8 backdrop-blur-2xl sm:p-10" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(34,197,94,0.06) 100%)' }}>
+                {/* Card shine effect */}
+                <div aria-hidden="true" className="pointer-events-none absolute -top-40 -right-40 h-80 w-80 rounded-full bg-gradient-to-br from-brand-primary/20 via-transparent to-transparent blur-3xl" />
+
+                <div className="relative">
+                  <h3 className="font-syne text-2xl font-black tracking-tight text-white sm:text-3xl">
+                    Comece agora
+                  </h3>
+                  <p className="mt-2 text-sm text-white/60">
+                    Seu email é sagrado. Sem spam, nunca.
+                  </p>
+
+                  <form onSubmit={onSubmit} className="mt-7 space-y-4">
+                    {/* Email input */}
+                    <div className="group relative">
+                      <div className="absolute inset-0 rounded-2xl bg-linear-to-r from-brand-primary/10 to-transparent opacity-0 transition-opacity duration-300 group-focus-within:opacity-100" />
+                      <input
+                        type="email"
+                        required
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="seu@email.com"
+                        aria-label="Seu email"
+                        className="relative w-full rounded-2xl border border-white/15 bg-white/6 px-5 py-4 text-sm text-white placeholder-white/40 transition-all duration-300 focus:border-brand-primary/50 focus:bg-white/8 focus:outline-none hover:bg-white/7"
+                        style={{ backdropFilter: 'blur(24px)' }}
+                      />
+                    </div>
+
+                    {/* Submit button */}
+                    <button
+                      type="submit"
+                      className="group/submit relative w-full overflow-hidden rounded-2xl py-4 text-[13px] font-black uppercase tracking-widest text-[#08122B] transition-all duration-300 hover:-translate-y-1"
+                      style={{
+                        background: 'linear-gradient(135deg, #34e565 0%, #22c55e 50%, #16a34a 100%)',
+                        boxShadow: '0 16px 32px -8px rgba(34,197,94,0.6), inset 0 1px 0 rgba(255,255,255,0.5)'
+                      }}
+                    >
+                      {/* Shimmer effect */}
+                      <span className="pointer-events-none absolute inset-0 -translate-x-[120%] bg-linear-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover/submit:translate-x-[120%]" />
+
+                      <span className="relative flex items-center justify-center gap-2.5">
+                        {sent ? (
+                          <>
+                            <DSIcon name="check" size={16} />
+                            <span>Confirmado!</span>
+                          </>
+                        ) : (
+                          <>
+                            <span>Inscrever Agora</span>
+                            <DSIcon name="arrowRight" size={15} className="transition-transform group-hover/submit:translate-x-1" />
+                          </>
+                        )}
+                      </span>
+                    </button>
+
+                    {/* Trust line */}
+                    <p className="text-[11px] text-white/45 text-center" style={monoLabel}>
+                      Sem spam. Cancelar a qualquer momento.
+                    </p>
+                  </form>
+                </div>
+              </div>
+            </div>
           </div>
-          <button
-            type="submit"
-            className="group/sub relative inline-flex h-12 shrink-0 items-center justify-center gap-2 overflow-hidden rounded-full px-6 text-[12px] font-black uppercase tracking-wider text-[#08122B] transition-all duration-300 hover:-translate-y-px active:scale-[0.98]"
-            style={{ background: 'linear-gradient(135deg, #34e565 0%, #22c55e 52%, #16a34a 100%)', boxShadow: '0 10px 26px -8px rgba(34,197,94,0.55), inset 0 1px 0 rgba(255,255,255,0.45)' }}
-          >
-            <span className="pointer-events-none absolute inset-0 -translate-x-[120%] bg-linear-to-r from-transparent via-white/40 to-transparent transition-transform duration-700 group-hover/sub:translate-x-[120%]" />
-            <span className="relative z-10 inline-flex items-center gap-1.5">
-              {sent ? <><DSIcon name="check" size={14} /> Enviado</> : <>Inscrever <DSIcon name="arrowRight" size={13} /></>}
-            </span>
-          </button>
-        </form>
-      </div>
+        </div>
       </div>
 
       {/* Divisor gradiente — diferencia newsletter ↔ footer */}

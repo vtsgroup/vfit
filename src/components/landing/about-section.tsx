@@ -12,7 +12,7 @@
 'use client'
 
 import Image from 'next/image'
-import { type MouseEvent } from 'react'
+import { type CSSProperties, type MouseEvent } from 'react'
 import { IntersectionReveal } from '@/components/ui/intersection-reveal'
 import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 
@@ -89,6 +89,21 @@ const infraMetrics: { value: string; label: string }[] = [
   { value: '<50ms', label: 'LATÊNCIA' },
   { value: '300+', label: 'GLOBAL' },
   { value: '∞', label: 'ESCALA' },
+]
+
+/* ─── Pipeline (arquitetura edge) ─── */
+const pipeline: { icon: DSIconName; label: string; tone: string }[] = [
+  { icon: 'cloud', label: 'EDGE', tone: '#f97316' },
+  { icon: 'zap', label: 'WORKERS', tone: '#22c55e' },
+  { icon: 'database', label: 'POSTGRES', tone: '#64748b' },
+  { icon: 'brainCircuit', label: 'AI/ML', tone: '#84cc16' },
+]
+
+/* ─── Linhas do console de deploy ─── */
+const deployLog: { cmd: string; out: string; live?: boolean }[] = [
+  { cmd: 'npm run build', out: '✓ compilado em 2.4s' },
+  { cmd: 'npm run quality:ci', out: '✓ 0 erros · types ok' },
+  { cmd: 'wrangler deploy --env prod', out: '→ publicando na edge…', live: true },
 ]
 
 /* ─── Credenciais do fundador (chips) ─── */
@@ -218,80 +233,151 @@ export function AboutSection() {
 
         {/* ── VTS story + tech stack ── */}
         <div className="grid gap-6 lg:grid-cols-2 lg:gap-8">
-          {/* VTS GROUP */}
+          {/* VTS GROUP — Full-bleed visual */}
           <IntersectionReveal animation="fade-in" delay={200}>
-            <div onMouseMove={handleCardMove} className="group relative flex h-full flex-col overflow-hidden rounded-2xl p-6 transition-all duration-300 ease-out-expo hover:-translate-y-1 sm:p-8" style={cardStyle}>
-              <HoverFX />
-              <div className="relative mb-5 flex items-center gap-3.5">
-                <Image src="/assets/images/profile-picture-vts-group.png" alt="VTS GROUP" width={52} height={52} className="h-12 w-12 shrink-0 rounded-xl object-cover ring-1 ring-slate-200" />
-                <div>
-                  <h3 className="text-lg font-black tracking-tight text-gray-950" style={{ fontFamily: headingFont.fontFamily }}>VTS GROUP</h3>
-                  <p className="text-[10px] uppercase text-slate-400" style={monoLabel}>SOFTWARE HOUSE · DESDE 2023</p>
+            <div onMouseMove={handleCardMove} className="group relative flex h-full flex-col overflow-hidden rounded-3xl p-8 transition-all duration-300 ease-out-expo hover:-translate-y-1 sm:p-12" style={cardStyle}>
+              <HoverFX rounded="rounded-3xl" />
+
+              {/* Decorative accent pattern */}
+              <div aria-hidden="true" className="pointer-events-none absolute top-0 right-0 h-96 w-96 bg-linear-to-bl from-brand-primary/8 via-transparent to-transparent rounded-full blur-3xl" />
+
+              <div className="relative mb-8 flex items-start gap-5">
+                <div className="group/logo">
+                  <Image src="/assets/images/profile-picture-vts-group.png" alt="VTS GROUP" width={72} height={72} className="h-16 w-16 shrink-0 rounded-2xl object-cover ring-2 ring-slate-200 transition-transform group-hover/logo:scale-105" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-3xl font-black tracking-tight text-gray-950" style={{ fontFamily: headingFont.fontFamily }}>VTS GROUP</h3>
+                  <p className="mt-2 text-[11px] uppercase text-emerald-600 font-bold tracking-widest" style={monoLabel}>SOFTWARE HOUSE · DESDE 2023</p>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {['WEB DEV', 'IA/ML', 'FINTECH', 'EDGE-FIRST'].map((tag) => (
+                      <span key={tag} className="inline-block rounded-full bg-emerald-50 px-3 py-1 text-[10px] font-bold text-emerald-700 uppercase tracking-wider">{tag}</span>
+                    ))}
+                  </div>
                 </div>
               </div>
-              <p className="relative mb-4 text-sm leading-relaxed text-slate-600">
-                Empresa de tecnologia especializada em desenvolvimento web, automação com IA e sistemas financeiros de alta performance. Atuação global, sede no Brasil — soluções digitais escaláveis que transformam negócios, operando como <em>trade name</em> de Victor Duarte há mais de uma década e formalizada em 2023.
-              </p>
-              <p className="relative mb-5 text-sm leading-relaxed text-slate-600">
-                A Vfit é o produto flagship: treinos personalizados, IA, pagamentos digitais e gamificação. Infraestrutura 100% serverless, distribuída globalmente pela Cloudflare — latência mínima, alta disponibilidade e segurança enterprise.
+
+              <p className="relative mb-6 text-base leading-relaxed text-slate-700 font-medium">
+                Tecnologia de ponta aplicada aos negócios. Especializada em desenvolvimento web, automação com IA e sistemas financeiros de <strong className="text-emerald-700">alta performance</strong>.
               </p>
 
-              {/* Valores */}
-              <div className="relative mt-auto grid grid-cols-2 gap-3">
+              {/* Highlight box */}
+              <div className="relative mb-8 overflow-hidden rounded-2xl bg-linear-to-br from-emerald-50 via-white to-transparent p-6 border border-emerald-100/50">
+                <div aria-hidden="true" className="absolute top-0 right-0 h-40 w-40 bg-brand-primary/5 rounded-full blur-2xl" />
+                <p className="relative text-sm leading-relaxed text-slate-700">
+                  <strong className="text-emerald-700 text-base">Vfit é o flagship:</strong> treinos personalizados, inteligência artificial, pagamentos digitais e gamificação. Infraestrutura <strong className="text-emerald-700">100% serverless</strong> distribuída globalmente pela Cloudflare.
+                </p>
+              </div>
+
+              {/* Values — full width grid */}
+              <div className="relative grid grid-cols-2 gap-4 mt-auto pt-6">
                 {values.map((v) => (
-                  <div key={v.title} className="rounded-xl p-3.5 transition-all duration-200 hover:-translate-y-0.5" style={subCardStyle}>
-                    <DSIcon name={v.icon} size={18} className="mb-1.5 text-brand-primary" />
-                    <div className="text-[10px] font-bold uppercase text-gray-950" style={monoLabel}>{v.title}</div>
-                    <div className="mt-0.5 text-[11px] leading-snug text-slate-500">{v.desc}</div>
+                  <div key={v.title} className="group/value rounded-2xl p-5 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg" style={subCardStyle}>
+                    <div className="flex items-start gap-3">
+                      <div className="shrink-0 mt-1">
+                        <DSIcon name={v.icon} size={24} className="text-brand-primary transition-transform group-hover/value:scale-110" />
+                      </div>
+                      <div>
+                        <div className="text-[11px] font-black uppercase text-gray-950 tracking-wide" style={monoLabel}>{v.title}</div>
+                        <div className="mt-2 text-[12px] leading-snug text-slate-600">{v.desc}</div>
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
 
-              <div className="relative mt-5 border-t border-slate-100 pt-4 text-center">
-                <p className="text-[10px] leading-relaxed text-slate-400" style={monoLabel}>VTS GROUP · CNPJ 51.430.605/0001-53</p>
+              <div className="relative mt-6 pt-6 border-t border-slate-100 text-center">
+                <p className="text-[11px] leading-relaxed text-slate-500 font-mono tracking-widest">VTS GROUP · CNPJ 51.430.605/0001-53</p>
               </div>
             </div>
           </IntersectionReveal>
 
-          {/* Tech stack — marquee */}
+          {/* Tech stack — Grid showcase + metrics + pipeline */}
           <IntersectionReveal animation="fade-in" delay={300}>
-            <div onMouseMove={handleCardMove} className="group relative flex h-full flex-col overflow-hidden rounded-2xl p-6 transition-all duration-300 ease-out-expo hover:-translate-y-1 sm:p-8" style={cardStyle}>
-              <HoverFX />
-              <h3 className="relative mb-5 text-xs uppercase text-slate-400" style={monoLabel}>NOSSA STACK</h3>
+            <div className="flex h-full flex-col gap-6">
+              {/* Tech Grid — Full prominence */}
+              <div onMouseMove={handleCardMove} className="group relative flex-1 overflow-hidden rounded-3xl p-8 transition-all duration-300 ease-out-expo hover:-translate-y-1 sm:p-10" style={cardStyle}>
+                <HoverFX rounded="rounded-3xl" />
 
-              {/* Marquee — 3 linhas, flex-1: a stack domina a altura (é o foco) */}
-              <div className="relative flex flex-1 flex-col justify-center gap-3.5 overflow-hidden py-3">
-                {/* fades laterais */}
-                <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-12 bg-linear-to-r from-white to-transparent" />
-                <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12 bg-linear-to-l from-white to-transparent" />
-                <div className="flex w-max gap-3 [animation:aboutScroll_30s_linear_infinite]">
-                  {[...techStack, ...techStack].map((t, i) => <TechChip key={`a-${i}`} tech={t} />)}
+                <h3 className="relative mb-8 text-sm uppercase text-slate-500 font-black tracking-widest" style={monoLabel}>Nossa Stack Completa</h3>
+
+                {/* Grid 2x4 — Large, prominent */}
+                <div className="relative grid grid-cols-2 gap-3 sm:grid-cols-4 mb-8">
+                  {techStack.map((tech) => (
+                    <div
+                      key={tech.name}
+                      className="group/tech relative overflow-hidden rounded-2xl p-5 flex flex-col items-center justify-center gap-3 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
+                      style={subCardStyle}
+                    >
+                      <span aria-hidden="true" className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover/tech:opacity-100" style={{ background: 'radial-gradient(circle at 50% 50%, rgba(34,197,94,0.15), transparent 60%)' }} />
+                      <DSIcon name={tech.icon} size={32} className="relative text-brand-primary transition-transform group-hover/tech:scale-125 group-hover/tech:rotate-6" />
+                      <span className="relative text-[11px] font-bold uppercase text-center text-slate-700 group-hover/tech:text-emerald-700 transition-colors">{tech.name}</span>
+                    </div>
+                  ))}
                 </div>
-                <div className="flex w-max gap-3 [animation:aboutScrollRev_36s_linear_infinite]">
-                  {[...techStack.slice().reverse(), ...techStack.slice().reverse()].map((t, i) => <TechChip key={`b-${i}`} tech={t} />)}
-                </div>
-                <div className="flex w-max gap-3 [animation:aboutScroll_44s_linear_infinite]">
-                  {[...techStack.slice(4), ...techStack.slice(0, 4), ...techStack.slice(4), ...techStack.slice(0, 4)].map((t, i) => <TechChip key={`c-${i}`} tech={t} />)}
+
+                {/* Infra metrics — below tech */}
+                <div className="relative grid grid-cols-4 gap-2">
+                  {infraMetrics.map((m) => (
+                    <div key={m.label} className="relative flex flex-col items-center justify-center overflow-hidden rounded-xl p-4 text-center group/metric transition-all hover:-translate-y-1" style={subCardStyle}>
+                      <div className="relative font-syne bg-linear-to-b from-gray-900 to-emerald-700 bg-clip-text text-lg font-black leading-tight text-transparent">{m.value}</div>
+                      <div className="relative mt-2 text-[8px] font-bold uppercase tracking-wider text-slate-500 group-hover/metric:text-emerald-600">{m.label}</div>
+                    </div>
+                  ))}
                 </div>
               </div>
 
-              {/* Métricas — compactas (secundárias à stack) */}
-              <div className="relative mt-4 grid grid-cols-4 gap-2">
-                {infraMetrics.map((m) => (
-                  <div key={m.label} className="relative flex flex-col items-center justify-center overflow-hidden rounded-lg px-1.5 py-2.5 text-center" style={subCardStyle}>
-                    <span aria-hidden="true" className="pointer-events-none absolute inset-0 rounded-lg" style={{ padding: '1px', background: 'linear-gradient(135deg, rgba(34,197,94,0.22), transparent 70%)', WebkitMask: 'linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude' }} />
-                    <div className="relative font-syne bg-linear-to-b from-gray-900 to-emerald-700 bg-clip-text text-base font-black leading-none text-transparent">{m.value}</div>
-                    <div className="relative mt-1 text-[7px] font-bold uppercase tracking-wide text-slate-400" style={monoLabel}>{m.label}</div>
+              {/* Pipeline + Console — Stacked below */}
+              <div onMouseMove={handleCardMove} className="group relative flex-1 overflow-hidden rounded-3xl p-6 transition-all duration-300 ease-out-expo hover:-translate-y-1 sm:p-8" style={cardStyle}>
+                <HoverFX rounded="rounded-3xl" />
+
+                <h3 className="relative mb-6 text-sm uppercase text-slate-500 font-black tracking-widest" style={monoLabel}>Pipeline Edge-First</h3>
+
+                {/* Pipeline — Large horizontal flow */}
+                <div className="relative mb-6 flex items-center gap-3">
+                  {pipeline.map((n, i) => (
+                    <div key={n.label} className="contents">
+                      <div className="pipe-node relative flex flex-1 flex-col items-center justify-center gap-2 rounded-2xl px-2 py-4" style={{ ...subCardStyle, '--tone': n.tone, '--i': String(i) } as CSSProperties}>
+                        <DSIcon name={n.icon} size={20} style={{ color: n.tone }} className="transition-transform group-hover:scale-110" />
+                        <span className="text-[9px] font-black uppercase tracking-wide text-slate-600">{n.label}</span>
+                      </div>
+                      {i < pipeline.length - 1 && <DSIcon name="chevronRight" size={18} className="shrink-0 text-slate-300" aria-hidden="true" />}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Console — Full width */}
+                <div className="relative overflow-hidden rounded-2xl border border-slate-800 bg-[#0a1020] p-4">
+                  <span aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'repeating-linear-gradient(0deg, #22c55e 0 1px, transparent 1px 3px)' }} />
+                  <div className="relative mb-3 flex items-center gap-1.5">
+                    <span className="h-2 w-2 rounded-full bg-[#ff5f57]" />
+                    <span className="h-2 w-2 rounded-full bg-[#febc2e]" />
+                    <span className="h-2 w-2 rounded-full bg-[#28c840]" />
+                    <span className="ml-2 text-[9px] uppercase tracking-[0.2em] text-slate-500" style={monoLabel}>vfit@edge</span>
                   </div>
-                ))}
-              </div>
+                  <div className="relative space-y-2 font-mono text-[11px] leading-tight">
+                    {deployLog.map((l, i) => (
+                      <div key={l.cmd} className="console-line flex items-start gap-2" style={{ '--row': String(i) } as CSSProperties}>
+                        <span className="text-brand-primary shrink-0">❯</span>
+                        <div className="flex-1 min-w-0">
+                          <div className="text-slate-300">{l.cmd}</div>
+                          <div className={`${l.live ? 'text-emerald-400 motion-safe:animate-pulse' : 'text-slate-500'} text-[10px]`}>
+                            {l.out}
+                            {l.live && <span className="caret ml-0.5 inline-block h-3 w-1.5 translate-y-px bg-brand-primary/80 align-middle" />}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
 
-              {/* Tagline com nuvem laranja */}
-              <div className="relative mt-4">
-                <div className="flex items-center justify-center gap-2 rounded-xl bg-bg-page px-4 py-3">
-                  <DSIcon name="cloud" size={14} className="text-orange-400" />
-                  <p className="text-[10px] uppercase text-white/60" style={monoLabel}>
-                    <span className="text-brand-primary">EDGE-FIRST</span> · SERVERLESS · GLOBALLY DISTRIBUTED
+                {/* Status badge */}
+                <div className="relative mt-4 inline-flex items-center gap-2 rounded-xl bg-emerald-50 px-4 py-2">
+                  <span className="relative flex h-2 w-2">
+                    <span className="absolute inline-flex h-full w-full rounded-full bg-brand-primary opacity-70 motion-safe:animate-ping" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-brand-primary" />
+                  </span>
+                  <p className="text-[10px] uppercase font-bold text-emerald-700 tracking-wider" style={monoLabel}>
+                    ✓ EDGE-FIRST · SERVERLESS
                   </p>
                 </div>
               </div>
@@ -305,9 +391,20 @@ export function AboutSection() {
         .about-ring { animation: aboutRing 12s linear infinite; will-change: transform; }
         @keyframes aboutScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
         @keyframes aboutScrollRev { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+        @keyframes pipeFlow {
+          0%, 70%, 100% { box-shadow: inset 0 0 0 0 transparent; }
+          35% { box-shadow: 0 0 0 1px color-mix(in srgb, var(--tone) 45%, transparent), 0 6px 16px -8px var(--tone); }
+        }
+        .pipe-node { animation: pipeFlow 3.2s ease-in-out infinite; animation-delay: calc(var(--i) * 0.4s); will-change: box-shadow; }
+        @keyframes consoleIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+        .console-line { animation: consoleIn 0.5s ease-out both; animation-delay: calc(0.25s + var(--row) * 0.55s); }
+        @keyframes caretBlink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+        .caret { animation: caretBlink 1s step-end infinite; }
         @media (prefers-reduced-motion: reduce) {
           .about-ring { animation: none; }
           [class*='aboutScroll'] { animation: none !important; }
+          .pipe-node, .console-line, .caret { animation: none !important; }
+          .console-line { opacity: 1; transform: none; }
         }
       `}</style>
     </section>
