@@ -59,15 +59,15 @@
   <!-- ===== BLOG ===== -->
   <url>
     <loc>https://vfit.app.br/blog</loc>
-    <lastmod>2026-04-12</lastmod>
+    <lastmod>2026-06-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://vfit.app.br/blog/app-treino-ia-gratis-iniciantes</loc>
-    <lastmod>2026-04-12</lastmod>
+    <lastmod>2026-06-26</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
     <image:image>
       <image:loc>https://vfit.app.br/blog/hero-treino-iniciante.webp</image:loc>
       <image:title>App de treino com IA grátis para iniciantes</image:title>
@@ -75,9 +75,9 @@
   </url>
   <url>
     <loc>https://vfit.app.br/blog/ia-montar-treinos-personalizados-personal</loc>
-    <lastmod>2026-04-12</lastmod>
+    <lastmod>2026-06-26</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
     <image:image>
       <image:loc>https://vfit.app.br/blog/hero-ia-personal-trainer.webp</image:loc>
       <image:title>IA para montar treinos personalizados</image:title>
@@ -85,9 +85,9 @@
   </url>
   <url>
     <loc>https://vfit.app.br/blog/melhores-apps-personal-trainer-2026</loc>
-    <lastmod>2026-04-12</lastmod>
+    <lastmod>2026-06-26</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
     <image:image>
       <image:loc>https://vfit.app.br/blog/hero-blog-index.webp</image:loc>
       <image:title>Melhores apps para personal trainer em 2026</image:title>
@@ -95,9 +95,9 @@
   </url>
   <url>
     <loc>https://vfit.app.br/blog/nutricionista-personal-trainer-trabalho-conjunto</loc>
-    <lastmod>2026-04-12</lastmod>
+    <lastmod>2026-06-26</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
     <image:image>
       <image:loc>https://vfit.app.br/blog/hero-nutricao-personal.webp</image:loc>
       <image:title>Nutricionista e personal trainer trabalhando juntos</image:title>
@@ -137,21 +137,21 @@
   <!-- ===== LEGAL ===== -->
   <url>
     <loc>https://vfit.app.br/termos</loc>
-    <lastmod>2026-03-15</lastmod>
+    <lastmod>2026-06-26</lastmod>
     <changefreq>yearly</changefreq>
-    <priority>0.2</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://vfit.app.br/privacidade</loc>
-    <lastmod>2026-03-15</lastmod>
+    <lastmod>2026-06-26</lastmod>
     <changefreq>yearly</changefreq>
-    <priority>0.2</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://vfit.app.br/cookies</loc>
-    <lastmod>2026-03-15</lastmod>
+    <lastmod>2026-06-26</lastmod>
     <changefreq>yearly</changefreq>
-    <priority>0.2</priority>
+    <priority>0.5</priority>
   </url>
 
   <!-- ===== PRICING ===== -->
@@ -165,9 +165,9 @@
   <!-- ===== CONTA ===== -->
   <url>
     <loc>https://vfit.app.br/excluir-conta</loc>
-    <lastmod>2026-03-15</lastmod>
+    <lastmod>2026-06-26</lastmod>
     <changefreq>yearly</changefreq>
-    <priority>0.2</priority>
+    <priority>0.5</priority>
   </url>
 
   <!-- /login e /register REMOVIDOS — têm noindex,nofollow no metadata -->
