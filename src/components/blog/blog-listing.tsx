@@ -33,17 +33,17 @@ export function BlogListing({ posts }: BlogListingProps) {
       <CategoryFilter categories={categories} selected={selected} onChange={setSelected} />
 
       {filtered.length === 0 ? (
-        <div className="text-center py-16 space-y-3">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white/4 border border-white/8">
-            <DSIcon name="search" size={24} className="text-zinc-500" />
+        <div className="space-y-3 py-16 text-center">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white ring-1 ring-slate-200">
+            <DSIcon name="search" size={24} className="text-slate-400" />
           </div>
-          <p className="text-zinc-400 font-medium">Nenhum artigo encontrado</p>
-          <p className="text-sm text-zinc-500">Tente outra categoria ou volte para ver todos.</p>
+          <p className="font-semibold text-slate-700">Nenhum artigo encontrado</p>
+          <p className="text-sm text-slate-400">Tente outra categoria ou volte para ver todos.</p>
         </div>
       ) : (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((post, i) => (
-            <BlogCard key={post.slug} post={post} featured={i === 0 && !selected} />
+        <div className="grid gap-5 sm:grid-cols-2 md:gap-7 lg:grid-cols-3">
+          {filtered.map((post) => (
+            <BlogCard key={post.slug} post={post} />
           ))}
         </div>
       )}

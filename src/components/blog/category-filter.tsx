@@ -21,29 +21,30 @@ interface CategoryFilterProps {
   onChange: (cat: BlogCategory | null) => void
 }
 
+const monoLabel = {
+  fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+  fontWeight: 700,
+  letterSpacing: '0.12em',
+}
+const activeStyle = {
+  background: 'linear-gradient(135deg, #34e565 0%, #22c55e 52%, #16a34a 100%)',
+  border: '1px solid rgba(20,120,60,0.28)',
+  boxShadow: '0 8px 18px -6px rgba(34,197,94,0.5), inset 0 1px 0 rgba(255,255,255,0.45)',
+}
+
 export function CategoryFilter({ categories, selected, onChange }: CategoryFilterProps) {
+  const base = 'rounded-full border px-4 py-1.5 text-[11px] uppercase transition-all duration-300'
+  const active = 'border-transparent text-[#08122B]'
+  const idle =
+    'border-slate-200 bg-[linear-gradient(180deg,#ffffff,#f5f8fc)] text-slate-500 shadow-[inset_0_1px_0_rgba(255,255,255,0.9)] hover:-translate-y-0.5 hover:border-brand-primary/40 hover:text-emerald-700'
+
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <button
-        onClick={() => onChange(null)}
-        className={`rounded-full border px-4 py-1.5 text-xs font-medium transition-all duration-300 ${
-          selected === null
-            ? 'border-brand-primary bg-brand-primary/10 text-brand-primary shadow-[0_0_12px_rgba(16,185,129,0.15)]'
-            : 'border-white/8 text-zinc-400 hover:border-white/15 hover:text-zinc-200'
-        }`}
-      >
+      <button onClick={() => onChange(null)} className={`${base} ${selected === null ? active : idle}`} style={selected === null ? { ...activeStyle, ...monoLabel } : monoLabel}>
         Todos
       </button>
       {categories.map((cat) => (
-        <button
-          key={cat}
-          onClick={() => onChange(cat)}
-          className={`rounded-full border px-4 py-1.5 text-xs font-medium transition-all duration-300 ${
-            selected === cat
-              ? 'border-brand-primary bg-brand-primary/10 text-brand-primary shadow-[0_0_12px_rgba(16,185,129,0.15)]'
-              : 'border-white/8 text-zinc-400 hover:border-white/15 hover:text-zinc-200'
-          }`}
-        >
+        <button key={cat} onClick={() => onChange(cat)} className={`${base} ${selected === cat ? active : idle}`} style={selected === cat ? { ...activeStyle, ...monoLabel } : monoLabel}>
           {cat}
         </button>
       ))}

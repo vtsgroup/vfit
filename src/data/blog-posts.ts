@@ -14,6 +14,8 @@
 //   getPost(slug) → BlogPost | undefined — busca por slug
 //   getRelatedPosts(post, limit) → BlogPost[] — posts relacionados
 //   getCategories() → BlogCategory[] — categorias únicas
+import type { DSIconName } from '@/components/ui/ds-icon'
+
 export interface BlogPost {
   slug: string
   title: string
@@ -38,7 +40,7 @@ export interface BlogAuthor {
 }
 
 export const BLOG_AUTHOR: BlogAuthor = {
-  name: 'Equipe VFIT',
+  name: 'Equipe Vfit',
   avatar: '/favicons/icon-192x192.png?v=4.3.4',
   role: 'Time de Conteúdo',
 }
@@ -59,6 +61,16 @@ export const CATEGORY_ACCENT: Record<BlogCategory, string> = {
   Financeiro: 'amber-500',
   Engajamento: 'pink-500',
   Negócios: 'cyan-500',
+}
+
+/** Ícone por categoria — distingue as tags dentro da gramática verde da home */
+export const CATEGORY_ICON: Record<BlogCategory, DSIconName> = {
+  Tecnologia: 'brainCircuit',
+  Gestão: 'layoutDashboard',
+  Fitness: 'dumbbell',
+  Financeiro: 'dollarSign',
+  Engajamento: 'heartHandshake',
+  Negócios: 'trendingUp',
 }
 
 export const BLOG_POSTS: BlogPost[] = [
