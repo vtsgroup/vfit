@@ -21,6 +21,7 @@ import { PageMetadata } from '@/components/shared/page-metadata'
 import { FaqInline } from '@/components/shared/faq-inline'
 import { ProfileReturnLink } from '@/components/profile/settings-shell'
 import { FAQ_TERMOS } from '@/data/faqs'
+import { LightBand } from '@/components/shared/light-section'
 
 export const metadata: Metadata = buildSeoMetadata({
   title: 'Termos de Uso da VFIT: condições da plataforma',
@@ -41,9 +42,9 @@ function Section({ icon, title, id, children }: {
         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-primary/10">
           <DSIcon name={icon} size={20} className="text-brand-primary" />
         </div>
-        <h2 className="text-xl font-bold text-white">{title}</h2>
+        <h2 className="text-xl font-bold text-gray-900">{title}</h2>
       </div>
-      <div className="space-y-3 pl-13 text-sm leading-relaxed text-zinc-400">
+      <div className="space-y-3 pl-13 text-sm leading-relaxed text-slate-500">
         {children}
       </div>
     </section>
@@ -63,11 +64,12 @@ export default function TermosPage() {
 
       <ProfileReturnLink />
 
-      <div className="mx-auto max-w-4xl px-6 space-y-12 pb-24">
+      <LightBand className="py-12 sm:py-16">
+        <div className="max-w-4xl mx-auto space-y-12">
       <PageMetadata lastUpdated={LAST_UPDATED} version={VERSION} readingTime="8 min" />
       {/* Table of Contents */}
-      <nav className="rounded-2xl border border-white/8 bg-white/3 p-6 backdrop-blur-sm shadow-[0_2px_12px_rgba(0,0,0,0.15)]">
-        <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-zinc-500">
+      <nav className="rounded-2xl border border-slate-200 bg-white p-6 backdrop-blur-sm shadow-[0_2px_12px_rgba(0,0,0,0.15)]">
+        <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-400">
           Índice
         </p>
         <div className="grid gap-2 sm:grid-cols-2">
@@ -86,7 +88,7 @@ export default function TermosPage() {
             <a
               key={item.id}
               href={`#${item.id}`}
-              className="rounded-lg px-3 py-2 text-sm text-zinc-400 transition-colors hover:bg-white/4 hover:text-white"
+              className="rounded-lg px-3 py-2 text-sm text-slate-500 transition-colors hover:bg-white hover:text-gray-900"
             >
               {item.label}
             </a>
@@ -98,8 +100,8 @@ export default function TermosPage() {
       <div className="space-y-10">
         <Section icon="shield" title="1. Aceitação dos Termos" id="aceitacao">
           <p>
-            Ao acessar ou utilizar a plataforma <strong className="text-white">VFIT</strong> (&ldquo;Plataforma&rdquo;),
-            operada por <strong className="text-white">VFIT (Personal IA Tecnologia LTDA)</strong>, inscrita no CNPJ/MF
+            Ao acessar ou utilizar a plataforma <strong className="text-gray-900">VFIT</strong> (&ldquo;Plataforma&rdquo;),
+            operada por <strong className="text-gray-900">VFIT (Personal IA Tecnologia LTDA)</strong>, inscrita no CNPJ/MF
             sob o nº XX.XXX.XXX/0001-XX, você (&ldquo;Usuário&rdquo;) concorda integralmente com estes Termos de Uso.
           </p>
           <p>
@@ -108,9 +110,9 @@ export default function TermosPage() {
           </p>
           <p>
             Estes Termos são regidos pela legislação brasileira, em especial o{' '}
-            <strong className="text-white">Marco Civil da Internet</strong> (Lei nº 12.965/2014),
-            o <strong className="text-white">Código de Defesa do Consumidor</strong> (Lei nº 8.078/1990)
-            e a <strong className="text-white">Lei Geral de Proteção de Dados</strong> (Lei nº 13.709/2018 — LGPD).
+            <strong className="text-gray-900">Marco Civil da Internet</strong> (Lei nº 12.965/2014),
+            o <strong className="text-gray-900">Código de Defesa do Consumidor</strong> (Lei nº 8.078/1990)
+            e a <strong className="text-gray-900">Lei Geral de Proteção de Dados</strong> (Lei nº 13.709/2018 — LGPD).
           </p>
         </Section>
 
@@ -126,7 +128,7 @@ export default function TermosPage() {
             <li>Programa de afiliados com comissões automáticas</li>
           </ul>
           <p>
-            A Plataforma atua como <strong className="text-white">intermediadora tecnológica</strong>,
+            A Plataforma atua como <strong className="text-gray-900">intermediadora tecnológica</strong>,
             não sendo responsável pela relação contratual entre personal trainers e alunos.
           </p>
         </Section>
@@ -140,28 +142,28 @@ export default function TermosPage() {
             <li>Para Personal Trainers: possuir registro ativo no CREF</li>
           </ul>
           <p>
-            O Usuário é <strong className="text-white">integralmente responsável</strong> por todas as atividades
+            O Usuário é <strong className="text-gray-900">integralmente responsável</strong> por todas as atividades
             realizadas em sua conta. Em caso de uso não autorizado, comunique imediatamente
-            através de <strong className="text-white">suporte@vfit.app.br</strong>.
+            através de <strong className="text-gray-900">suporte@vfit.app.br</strong>.
           </p>
         </Section>
 
         <Section icon="scale" title="4. Responsabilidades" id="responsabilidades">
-          <p><strong className="text-white">Da Plataforma:</strong></p>
+          <p><strong className="text-gray-900">Da Plataforma:</strong></p>
           <ul className="list-disc space-y-1.5 pl-5">
             <li>Manter os serviços disponíveis com SLA de 99.5% de uptime</li>
             <li>Proteger dados pessoais conforme a LGPD</li>
             <li>Processar pagamentos de forma segura via gateways certificados PCI-DSS</li>
             <li>Notificar usuários sobre alterações relevantes com antecedência mínima de 15 dias</li>
           </ul>
-          <p><strong className="text-white">Do Personal Trainer:</strong></p>
+          <p><strong className="text-gray-900">Do Personal Trainer:</strong></p>
           <ul className="list-disc space-y-1.5 pl-5">
             <li>Possuir habilitação profissional válida (CREF ativo)</li>
             <li>Responsabilizar-se pela prescrição de exercícios e segurança do aluno</li>
             <li>Cumprir obrigações tributárias e trabalhistas aplicáveis</li>
             <li>Manter dados de alunos em conformidade com a LGPD</li>
           </ul>
-          <p><strong className="text-white">Do Aluno:</strong></p>
+          <p><strong className="text-gray-900">Do Aluno:</strong></p>
           <ul className="list-disc space-y-1.5 pl-5">
             <li>Fornecer informações de saúde verdadeiras</li>
             <li>Consultar médico antes de iniciar qualquer programa de exercícios</li>
@@ -171,21 +173,21 @@ export default function TermosPage() {
 
         <Section icon="creditCard" title="5. Pagamentos e Taxas" id="pagamentos">
           <p>
-            Pagamentos são processados via <strong className="text-white">Asaas</strong> e/ou{' '}
-            <strong className="text-white">Stripe</strong>, gateways certificados PCI-DSS.
+            Pagamentos são processados via <strong className="text-gray-900">Asaas</strong> e/ou{' '}
+            <strong className="text-gray-900">Stripe</strong>, gateways certificados PCI-DSS.
           </p>
           <ul className="list-disc space-y-1.5 pl-5">
             <li>
-              <strong className="text-white">Taxa da plataforma:</strong> 3.5% sobre cada transação processada
+              <strong className="text-gray-900">Taxa da plataforma:</strong> 3.5% sobre cada transação processada
             </li>
             <li>
-              <strong className="text-white">Planos de assinatura:</strong> Grátis (gratuito para sempre, até 5 alunos), Pro (R$ 29,90/mês), Pro+ (R$ 69,90/mês), Max (R$ 129,90/mês)
+              <strong className="text-gray-900">Planos de assinatura:</strong> Grátis (gratuito para sempre, até 5 alunos), Pro (R$ 29,90/mês), Pro+ (R$ 69,90/mês), Max (R$ 129,90/mês)
             </li>
             <li>
-              <strong className="text-white">Saques:</strong> PIX instantâneo, sujeito ao saldo disponível e prazo de compensação
+              <strong className="text-gray-900">Saques:</strong> PIX instantâneo, sujeito ao saldo disponível e prazo de compensação
             </li>
             <li>
-              <strong className="text-white">Reembolsos:</strong> Conforme política do CDC, no prazo de 7 dias para arrependimento
+              <strong className="text-gray-900">Reembolsos:</strong> Conforme política do CDC, no prazo de 7 dias para arrependimento
             </li>
           </ul>
           <p>
@@ -204,7 +206,7 @@ export default function TermosPage() {
             <li>Criar contas falsas ou utilizar identidade de terceiros</li>
           </ul>
           <p>
-            Violações podem resultar em <strong className="text-white">suspensão ou exclusão imediata</strong> da conta,
+            Violações podem resultar em <strong className="text-gray-900">suspensão ou exclusão imediata</strong> da conta,
             sem prejuízo de medidas judiciais cabíveis.
           </p>
         </Section>
@@ -213,7 +215,7 @@ export default function TermosPage() {
           <p>
             Todo o conteúdo da Plataforma — incluindo marca, logotipo, layout, código-fonte,
             algoritmos de IA e textos — é de propriedade exclusiva da{' '}
-            <strong className="text-white">VFIT (Personal IA Tecnologia LTDA)</strong> ou de seus licenciantes.
+            <strong className="text-gray-900">VFIT (Personal IA Tecnologia LTDA)</strong> ou de seus licenciantes.
           </p>
           <p>
             Os treinos gerados por IA são licenciados ao Usuário para uso pessoal e profissional
@@ -229,7 +231,7 @@ export default function TermosPage() {
         <Section icon="alertTriangle" title="8. Rescisão" id="rescisao">
           <p>
             O Usuário pode encerrar sua conta a qualquer momento através das configurações
-            da Plataforma ou solicitando via <strong className="text-white">suporte@vfit.app.br</strong>.
+            da Plataforma ou solicitando via <strong className="text-gray-900">suporte@vfit.app.br</strong>.
           </p>
           <ul className="list-disc space-y-1.5 pl-5">
             <li>Dados pessoais serão anonimizados conforme a LGPD</li>
@@ -244,7 +246,7 @@ export default function TermosPage() {
 
         <Section icon="shield" title="9. Limitação de Responsabilidade" id="limitacao">
           <p>
-            A Plataforma <strong className="text-white">não se responsabiliza por</strong>:
+            A Plataforma <strong className="text-gray-900">não se responsabiliza por</strong>:
           </p>
           <ul className="list-disc space-y-1.5 pl-5">
             <li>Lesões ou danos decorrentes da execução de treinos prescritos</li>
@@ -260,19 +262,19 @@ export default function TermosPage() {
 
         <Section icon="gavel" title="10. Disposições Gerais" id="disposicoes">
           <p>
-            <strong className="text-white">Foro:</strong> Fica eleito o foro da Comarca de São Paulo/SP
+            <strong className="text-gray-900">Foro:</strong> Fica eleito o foro da Comarca de São Paulo/SP
             para dirimir quaisquer controvérsias.
           </p>
           <p>
-            <strong className="text-white">Alterações:</strong> A Plataforma pode atualizar estes Termos,
+            <strong className="text-gray-900">Alterações:</strong> A Plataforma pode atualizar estes Termos,
             notificando os Usuários com antecedência mínima de 15 dias via e-mail ou notificação in-app.
           </p>
           <p>
-            <strong className="text-white">Cessão:</strong> O Usuário não poderá ceder ou transferir seus
+            <strong className="text-gray-900">Cessão:</strong> O Usuário não poderá ceder ou transferir seus
             direitos sem consentimento prévio e expresso da Plataforma.
           </p>
           <p>
-            <strong className="text-white">Integralidade:</strong> Estes Termos, juntamente com a{' '}
+            <strong className="text-gray-900">Integralidade:</strong> Estes Termos, juntamente com a{' '}
             <Link href="/privacidade" className="text-brand-primary hover:underline">
               Política de Privacidade
             </Link>{' '}
@@ -289,13 +291,14 @@ export default function TermosPage() {
       <FaqInline items={FAQ_TERMOS} />
 
       {/* Contact */}
-      <div className="rounded-2xl border border-white/8 bg-white/3 p-6 text-center">
-        <p className="text-sm text-zinc-400">
+      <div className="rounded-2xl border border-slate-200 bg-white p-6 text-center">
+        <p className="text-sm text-slate-500">
           Dúvidas sobre estes Termos? Entre em contato:
         </p>
-        <p className="mt-2 text-sm font-semibold text-white">suporte@vfit.app.br</p>
+        <p className="mt-2 text-sm font-semibold text-gray-900">suporte@vfit.app.br</p>
       </div>
-      </div>
+        </div>
+      </LightBand>
     </>
   )
 }

@@ -19,6 +19,7 @@ import { PageMetadata } from '@/components/shared/page-metadata'
 import { FaqInline } from '@/components/shared/faq-inline'
 import { FAQ_CARREIRAS } from '@/data/faqs'
 import { Button } from '@/components/ui/button'
+import { LightBand } from '@/components/shared/light-section'
 
 export const metadata: Metadata = buildSeoMetadata({
   title: 'Carreiras na VFIT: vagas remotas em produto, design e growth',
@@ -68,7 +69,8 @@ export default function CarreirasPage() {
         breadcrumbs={[{ label: 'Carreiras', href: '/carreiras' }]}
       />
 
-      <div className="mx-auto max-w-5xl px-6 space-y-16 pb-24">
+      <LightBand className="py-12 sm:py-16">
+        <div className="max-w-4xl mx-auto space-y-12">
       <PageMetadata lastUpdated="5 de março de 2026" readingTime="4 min" />
 
       {/* JobPosting JSON-LD */}
@@ -123,25 +125,25 @@ export default function CarreirasPage() {
         {BENEFITS.map((b) => (
           <div
             key={b.title}
-            className="group rounded-2xl border border-white/8 bg-white/3 p-5 text-center transition-all duration-300 hover:border-brand-primary/25 hover:shadow-[0_0_24px_rgba(16,185,129,0.06)] backdrop-blur-sm"
+            className="group rounded-2xl border border-slate-200 bg-white p-5 text-center transition-all duration-300 hover:border-brand-primary/25 hover:shadow-[0_0_24px_rgba(16,185,129,0.06)] backdrop-blur-sm"
           >
             <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary mb-3 transition-all duration-300 group-hover:scale-110 group-hover:-rotate-6">
               <DSIcon name={b.icon} />
             </div>
-            <h3 className="text-sm font-semibold text-white">{b.title}</h3>
-            <p className="mt-1 text-xs text-zinc-500">{b.description}</p>
+            <h3 className="text-sm font-semibold text-gray-900">{b.title}</h3>
+            <p className="mt-1 text-xs text-slate-400">{b.description}</p>
           </div>
         ))}
       </section>
 
       {/* Open Positions */}
       <section>
-        <h2 className="text-2xl font-bold text-white text-center mb-8">Vagas Abertas</h2>
+        <h2 className="text-2xl font-bold text-gray-900 text-center mb-8">Vagas Abertas</h2>
         <div className="space-y-4">
           {OPENINGS.map((job) => (
             <div
               key={job.title}
-              className="group rounded-2xl border border-white/8 bg-white/3 p-6 transition-all duration-300 hover:border-brand-primary/25 hover:shadow-[0_0_30px_rgba(16,185,129,0.06)]"
+              className="group rounded-2xl border border-slate-200 bg-white p-6 transition-all duration-300 hover:border-brand-primary/25 hover:shadow-[0_0_30px_rgba(16,185,129,0.06)]"
             >
               <div className="flex items-start gap-4">
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary">
@@ -149,15 +151,15 @@ export default function CarreirasPage() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex flex-wrap items-center gap-3 mb-1">
-                    <h3 className="text-lg font-semibold text-white group-hover:text-brand-primary transition-colors">
+                    <h3 className="text-lg font-semibold text-gray-900 group-hover:text-brand-primary transition-colors">
                       {job.title}
                     </h3>
                     <span className="rounded-full bg-brand-primary/10 px-2.5 py-0.5 text-xs font-medium text-brand-primary">
                       {job.department}
                     </span>
                   </div>
-                  <p className="text-sm text-zinc-500 mb-2">{job.type}</p>
-                  <p className="text-sm text-zinc-400">{job.description}</p>
+                  <p className="text-sm text-slate-400 mb-2">{job.type}</p>
+                  <p className="text-sm text-slate-500">{job.description}</p>
                 </div>
                 <a
                   href="mailto:vagas@vfit.app.br"
@@ -179,8 +181,8 @@ export default function CarreirasPage() {
 
       {/* CTA */}
       <section className="text-center rounded-2xl border border-brand-primary/25 bg-brand-primary/3 p-8 backdrop-blur-sm shadow-[0_0_30px_rgba(16,185,129,0.04)]">
-        <h2 className="text-xl font-bold text-white mb-4">Não encontrou sua vaga?</h2>
-        <p className="text-zinc-400 mb-6 max-w-lg mx-auto">
+        <h2 className="text-xl font-bold text-gray-900 mb-4">Não encontrou sua vaga?</h2>
+        <p className="text-slate-500 mb-6 max-w-lg mx-auto">
           Envie seu currículo mesmo assim! Estamos sempre em busca de talentos
           que compartilham nossa paixão por tecnologia e fitness.
         </p>
@@ -191,7 +193,8 @@ export default function CarreirasPage() {
           </Button>
         </a>
       </section>
-      </div>
+        </div>
+      </LightBand>
     </>
   )
 }

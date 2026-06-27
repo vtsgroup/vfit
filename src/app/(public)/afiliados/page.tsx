@@ -6,8 +6,8 @@ import { TrackedCtaLink } from '@/components/analytics/tracked-cta-link'
 import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 import { AFFILIATE_PROGRAM, AFFILIATE_TIERS } from '@config/constants'
 import {
-  LightBand, SectionHead, HoverEdge, PillArrow,
-  lightCard, greenChip, monoLabel, pillPrimaryClass,
+  LightBand, SectionHead, HoverEdge, PillArrow, PillSweep,
+  lightCard, greenChip, monoLabel, badgeStyle, pillPrimaryClass,
 } from '@/components/shared/light-section'
 
 export const metadata: Metadata = buildSeoMetadata({
@@ -87,38 +87,22 @@ export default function AfiliadosPublicPage() {
           </div>
         </div>
 
-        {/* CTA — faixa verde de impacto */}
-        <div
-          className="relative overflow-hidden rounded-3xl px-7 py-11 text-center sm:px-10 sm:py-12"
-          style={{ background: 'linear-gradient(135deg, #15803d 0%, #16a34a 48%, #22c55e 100%)', boxShadow: '0 28px 70px -24px rgba(34,197,94,0.6), inset 0 1px 0 rgba(255,255,255,0.25)' }}
-        >
-          <span aria-hidden="true" className="pointer-events-none absolute inset-0" style={{ opacity: 0.12, backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.8) 1px, transparent 0)', backgroundSize: '26px 26px' }} />
-          <span aria-hidden="true" className="pointer-events-none absolute -top-24 left-1/2 h-48 w-96 -translate-x-1/2 rounded-full bg-white/20 blur-[80px]" />
-          <span className="relative mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15 ring-1 ring-white/30 backdrop-blur-sm">
-            <DSIcon name="rocket" size={26} className="text-white" />
-          </span>
-          <h3 className="relative font-syne text-2xl font-black tracking-tight text-white sm:text-3xl">Pronto pra começar?</h3>
-          <p className="relative mx-auto mt-2 max-w-md text-sm leading-relaxed text-white/85 sm:text-[15px]">
-            Ative seu programa, gere seu link e comece a indicar — sem limite de indicações.
-          </p>
-          <div className="relative mt-7 flex flex-col items-center gap-4">
-            <TrackedCtaLink
-              href="/dashboard/affiliates"
-              cta="Ativar programa"
-              placement="afiliados_page_main_cta"
-              pageSegment="afiliados"
-              event="lp_register_start"
-              className="group/cta inline-flex h-13 items-center gap-2.5 rounded-full bg-white pl-7 pr-2.5 text-[13px] font-black uppercase tracking-wider text-emerald-700 shadow-[0_14px_30px_-10px_rgba(0,0,0,0.35)] transition-all duration-300 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
-            >
-              Ativar programa
-              <span className="flex h-8 w-8 items-center justify-center rounded-full" style={{ background: 'linear-gradient(135deg, #34e565, #16a34a)' }}>
-                <DSIcon name="arrowRight" size={14} className="text-white transition-transform duration-300 group-hover/cta:translate-x-0.5" />
-              </span>
+        {/* CTA — card claro + pill perfeito */}
+        <div className="relative overflow-hidden rounded-3xl p-8 text-center sm:p-12" style={lightCard}>
+          <span aria-hidden="true" className="pointer-events-none absolute inset-x-12 top-0 h-px bg-linear-to-r from-transparent via-brand-primary/50 to-transparent" />
+          <span className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl text-brand-primary" style={greenChip}><DSIcon name="rocket" size={26} /></span>
+          <h3 className="font-syne text-2xl font-black tracking-tight text-gray-950 sm:text-3xl">Pronto pra <span className="bg-linear-to-r from-brand-primary via-brand-mint to-brand-accent bg-clip-text text-transparent">começar?</span></h3>
+          <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-slate-500 sm:text-[15px]">Ative seu programa, gere seu link e comece a indicar — sem limite de indicações.</p>
+          <div className="mt-7 flex flex-col items-center gap-4">
+            <TrackedCtaLink href="/dashboard/affiliates" cta="Ativar programa" placement="afiliados_page_main_cta" pageSegment="afiliados" event="lp_register_start" className={pillPrimaryClass}>
+              <PillSweep />
+              <span className="relative z-10">Ativar programa</span>
+              <PillArrow />
             </TrackedCtaLink>
-            <div className="flex items-center gap-3 text-[13px] font-semibold text-white/85">
-              <TrackedCtaLink href="/app-personal-trainer" cta="Sou personal trainer" placement="afiliados_page_main_cta" pageSegment="afiliados" event="lp_cta_secondary_click" className="underline-offset-4 transition-opacity hover:underline hover:opacity-100">Sou personal</TrackedCtaLink>
-              <span className="text-white/40">·</span>
-              <TrackedCtaLink href="/nutricionistas" cta="Sou nutricionista" placement="afiliados_page_main_cta" pageSegment="afiliados" event="lp_cta_secondary_click" className="underline-offset-4 transition-opacity hover:underline hover:opacity-100">Sou nutri</TrackedCtaLink>
+            <div className="flex items-center gap-3 text-[13px] font-semibold text-slate-500">
+              <TrackedCtaLink href="/app-personal-trainer" cta="Sou personal trainer" placement="afiliados_page_main_cta" pageSegment="afiliados" event="lp_cta_secondary_click" className="underline-offset-4 transition-colors hover:text-emerald-700 hover:underline">Sou personal</TrackedCtaLink>
+              <span className="text-slate-300">·</span>
+              <TrackedCtaLink href="/nutricionistas" cta="Sou nutricionista" placement="afiliados_page_main_cta" pageSegment="afiliados" event="lp_cta_secondary_click" className="underline-offset-4 transition-colors hover:text-emerald-700 hover:underline">Sou nutri</TrackedCtaLink>
             </div>
           </div>
         </div>
@@ -140,7 +124,7 @@ export default function AfiliadosPublicPage() {
                   {featured ? (
                     <>
                       <span aria-hidden="true" className="pointer-events-none absolute inset-0 rounded-2xl" style={{ padding: '1px', background: 'linear-gradient(135deg, rgba(34,197,94,0.75) 0%, rgba(132,204,22,0.45) 50%, rgba(34,197,94,0.55) 100%)', WebkitMask: 'linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude' }} />
-                      <span className="absolute right-4 top-4 inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[9px] uppercase text-[#08122B]" style={{ ...monoLabel, background: 'linear-gradient(135deg, #34e565, #16a34a)', boxShadow: '0 2px 8px -1px rgba(34,197,94,0.45)' }}><DSIcon name="crown" size={10} /> Top</span>
+                      <span className="absolute right-4 top-4 inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[9px] uppercase text-[#08122B]" style={badgeStyle}><DSIcon name="crown" size={10} /> Top</span>
                     </>
                   ) : (
                     <HoverEdge />

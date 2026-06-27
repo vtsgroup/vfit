@@ -19,6 +19,7 @@ import { PageHero } from '@/components/shared/page-hero'
 import { PageMetadata } from '@/components/shared/page-metadata'
 import { FaqInline } from '@/components/shared/faq-inline'
 import { FAQ_LGPD } from '@/data/faqs'
+import { LightBand } from '@/components/shared/light-section'
 
 export const metadata: Metadata = buildSeoMetadata({
   title: 'LGPD na VFIT: direitos, segurança e tratamento de dados',
@@ -57,45 +58,46 @@ export default function LgpdPage() {
         breadcrumbs={[{ label: 'Legal', href: '/termos' }, { label: 'LGPD', href: '/lgpd' }]}
       />
 
-      <div className="mx-auto max-w-5xl px-6 space-y-16 pb-24">
+      <LightBand className="py-12 sm:py-16">
+        <div className="max-w-4xl mx-auto space-y-12">
       <PageMetadata lastUpdated="14 de fevereiro de 2026" readingTime="4 min" />
       {/* Your Rights */}
       <section>
-        <h2 className="text-2xl font-bold text-white text-center mb-8">Seus Direitos</h2>
+        <h2 className="text-2xl font-bold text-gray-900 text-center mb-8">Seus Direitos</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {RIGHTS.map((right) => (
             <div
               key={right.title}
-              className="group rounded-2xl border border-white/8 bg-white/3 p-6 transition-all duration-300 hover:border-brand-primary/25 hover:shadow-[0_0_30px_rgba(16,185,129,0.06)]"
+              className="group rounded-2xl border border-slate-200 bg-white p-6 transition-all duration-300 hover:border-brand-primary/25 hover:shadow-[0_0_30px_rgba(16,185,129,0.06)]"
             >
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary mb-4 transition-all duration-300 group-hover:scale-110 group-hover:-rotate-6">
                 <DSIcon name={right.icon} size={20} />
               </div>
-              <h3 className="text-lg font-semibold text-white mb-1">{right.title}</h3>
-              <p className="text-sm text-zinc-400 leading-relaxed">{right.description}</p>
+              <h3 className="text-lg font-semibold text-gray-900 mb-1">{right.title}</h3>
+              <p className="text-sm text-slate-500 leading-relaxed">{right.description}</p>
             </div>
           ))}
         </div>
       </section>
 
       {/* Data Collection */}
-      <section className="rounded-2xl border border-white/8 bg-white/3 p-8">
-        <h2 className="text-2xl font-bold text-white mb-6">Dados que Coletamos</h2>
-        <div className="space-y-6 text-zinc-400 leading-relaxed">
+      <section className="rounded-2xl border border-slate-200 bg-white p-8">
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">Dados que Coletamos</h2>
+        <div className="space-y-6 text-slate-500 leading-relaxed">
           <div>
-            <h3 className="text-lg font-semibold text-white mb-2">Dados de Cadastro</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Dados de Cadastro</h3>
             <p>Nome completo, e-mail, telefone, data de nascimento, tipo de conta (personal trainer ou aluno). Para personal trainers: CREF, especialidades, foto de perfil.</p>
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-white mb-2">Dados de Saúde (Alunos)</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Dados de Saúde (Alunos)</h3>
             <p>Peso, altura, percentual de gordura, medidas corporais, histórico de treinos, fotos de evolução. Esses dados são coletados exclusivamente pelo seu personal trainer e tratados com consentimento explícito.</p>
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-white mb-2">Dados Financeiros</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Dados Financeiros</h3>
             <p>Informações de pagamento processadas pelo Asaas (intermediário PCI DSS compliant). Não armazenamos dados de cartão de crédito em nossos servidores.</p>
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-white mb-2">Dados de Navegação</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Dados de Navegação</h3>
             <p>Analytics via Google Analytics 4 (anonimizado), Cloudflare Analytics Engine. Cookies essenciais e de performance (veja nossa <Link href="/cookies" className="text-brand-primary hover:underline">Política de Cookies</Link>).</p>
           </div>
         </div>
@@ -103,11 +105,11 @@ export default function LgpdPage() {
 
       {/* Security Measures */}
       <section>
-        <h2 className="text-2xl font-bold text-white text-center mb-8">Medidas de Segurança</h2>
-        <div className="rounded-2xl border border-white/8 bg-white/3 p-8">
+        <h2 className="text-2xl font-bold text-gray-900 text-center mb-8">Medidas de Segurança</h2>
+        <div className="rounded-2xl border border-slate-200 bg-white p-8">
           <ul className="grid gap-3 sm:grid-cols-2">
             {MEASURES.map((measure) => (
-              <li key={measure} className="flex items-start gap-3 text-sm text-zinc-400">
+              <li key={measure} className="flex items-start gap-3 text-sm text-slate-500">
                 <div className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-primary" />
                 {measure}
               </li>
@@ -122,20 +124,21 @@ export default function LgpdPage() {
       {/* DPO Contact */}
       <section className="text-center rounded-2xl border border-brand-primary/20 bg-brand-primary/3 p-8">
         <DSIcon name="mail" size={32} className="mx-auto text-brand-primary mb-4" />
-        <h2 className="text-xl font-bold text-white mb-2">Encarregado de Dados (DPO)</h2>
-        <p className="text-zinc-400 mb-4 max-w-lg mx-auto">
+        <h2 className="text-xl font-bold text-gray-900 mb-2">Encarregado de Dados (DPO)</h2>
+        <p className="text-slate-500 mb-4 max-w-lg mx-auto">
           Para exercer seus direitos ou esclarecer dúvidas sobre o tratamento dos seus dados pessoais,
           entre em contato com nosso Encarregado de Proteção de Dados.
         </p>
         <a
           href="mailto:lgpd@vfit.app.br"
-          className="inline-flex items-center gap-2 rounded-xl bg-brand-primary px-6 py-3 text-sm font-semibold text-bg-dark transition-all hover:bg-brand-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base"
+          className="inline-flex items-center gap-2 rounded-xl bg-brand-primary px-6 py-3 text-sm font-semibold text-bg-dark transition-all hover:bg-brand-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-bg-landing-light"
         >
           <DSIcon name="mail" size={16} />
           lgpd@vfit.app.br
         </a>
       </section>
-      </div>
+        </div>
+      </LightBand>
     </>
   )
 }

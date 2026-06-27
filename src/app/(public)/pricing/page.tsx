@@ -15,7 +15,7 @@ import { buildSeoMetadata } from '@/lib/seo'
 import { PageHero } from '@/components/shared/page-hero'
 import { VFIT_PLANS } from '@config/constants'
 import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
-import { LightBand, monoLabel } from '@/components/shared/light-section'
+import { LightBand, monoLabel, lightCard, greenChip, pillPrimaryClass, PillSweep, PillArrow } from '@/components/shared/light-section'
 import { PricingContent } from '@/components/pricing/pricing-content'
 
 export const metadata: Metadata = buildSeoMetadata({
@@ -93,16 +93,32 @@ export default function PricingPage() {
         {/* Switch + planos + pagamento + FAQ */}
         <PricingContent />
 
-        {/* CTA final */}
-        <div className="relative overflow-hidden rounded-3xl px-7 py-10 text-center sm:px-10" style={{ background: 'linear-gradient(135deg, #15803d 0%, #16a34a 48%, #22c55e 100%)', boxShadow: '0 28px 70px -24px rgba(34,197,94,0.6), inset 0 1px 0 rgba(255,255,255,0.25)' }}>
-          <span aria-hidden="true" className="pointer-events-none absolute -top-24 left-1/2 h-48 w-96 -translate-x-1/2 rounded-full bg-white/20 blur-[80px]" />
-          <h2 className="relative font-syne text-2xl font-black tracking-tight text-white sm:text-3xl">Comece hoje, grátis</h2>
-          <p className="relative mx-auto mt-2 max-w-md text-sm text-white/85 sm:text-[15px]">30 dias pra testar tudo, sem cartão. Cancele quando quiser.</p>
-          <a href="/register" className="group/cta relative mt-6 inline-flex h-13 items-center gap-2.5 rounded-full bg-white pl-7 pr-2.5 text-[13px] font-black uppercase tracking-wider text-emerald-700 shadow-[0_14px_30px_-10px_rgba(0,0,0,0.35)] transition-all duration-300 hover:-translate-y-0.5">
-            <span className="sr-only">Começar grátis</span>Começar grátis
-            <span className="flex h-8 w-8 items-center justify-center rounded-full" style={{ background: 'linear-gradient(135deg, #34e565, #16a34a)' }}><DSIcon name="arrowRight" size={14} className="text-white transition-transform duration-300 group-hover/cta:translate-x-0.5" /></span>
-          </a>
-          <p className="relative mt-4 text-[11px] uppercase tracking-wider text-white/70" style={monoLabel}>Sem cartão · Sem fidelidade</p>
+        {/* CTA final — card claro com textura suave */}
+        <div className="relative overflow-hidden rounded-3xl p-8 text-center sm:p-14" style={lightCard}>
+          {/* hairline topo */}
+          <span aria-hidden="true" className="pointer-events-none absolute inset-x-12 top-0 h-px bg-linear-to-r from-transparent via-brand-primary/50 to-transparent" />
+          {/* dot grid verde (mascarado no centro) */}
+          <span aria-hidden="true" className="pointer-events-none absolute inset-0" style={{ opacity: 0.6, backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(34,197,94,0.10) 1px, transparent 0)', backgroundSize: '22px 22px', WebkitMaskImage: 'radial-gradient(ellipse 78% 70% at 50% 35%, #000, transparent 76%)', maskImage: 'radial-gradient(ellipse 78% 70% at 50% 35%, #000, transparent 76%)' }} />
+          {/* glow verde no topo + wash inferior */}
+          <span aria-hidden="true" className="pointer-events-none absolute -top-24 left-1/2 h-48 w-[30rem] -translate-x-1/2 rounded-full bg-brand-primary/10 blur-[90px]" />
+          <span aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-28" style={{ background: 'linear-gradient(to top, rgba(34,197,94,0.05), transparent)' }} />
+          {/* marcas "+" (blueprint sutil) */}
+          <span aria-hidden="true" className="pointer-events-none absolute left-7 top-7 text-brand-primary/25"><svg width="11" height="11" viewBox="0 0 12 12"><path d="M6 0v12M0 6h12" stroke="currentColor" strokeWidth="1.5" /></svg></span>
+          <span aria-hidden="true" className="pointer-events-none absolute bottom-7 right-7 text-brand-primary/25"><svg width="11" height="11" viewBox="0 0 12 12"><path d="M6 0v12M0 6h12" stroke="currentColor" strokeWidth="1.5" /></svg></span>
+
+          <div className="relative">
+            <span className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl text-brand-primary ring-1 ring-brand-primary/15" style={greenChip}><DSIcon name="rocket" size={26} /></span>
+            <h2 className="font-syne text-2xl font-black tracking-tight text-gray-950 sm:text-3xl">Comece hoje, <span className="bg-linear-to-r from-brand-primary via-brand-mint to-brand-accent bg-clip-text text-transparent">grátis</span></h2>
+            <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-slate-500 sm:text-[15px]">30 dias pra testar tudo, sem cartão. Cancele quando quiser.</p>
+            <div className="mt-7 flex justify-center">
+              <a href="/register" className={pillPrimaryClass}>
+                <PillSweep />
+                <span className="relative z-10">Começar grátis</span>
+                <PillArrow />
+              </a>
+            </div>
+            <p className="mt-4 text-[11px] uppercase tracking-wider text-slate-400" style={monoLabel}>Sem cartão · Sem fidelidade</p>
+          </div>
         </div>
       </LightBand>
     </>

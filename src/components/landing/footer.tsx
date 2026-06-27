@@ -149,9 +149,9 @@ export function Footer() {
                   </p>
 
                   <form onSubmit={onSubmit} className="mt-7 space-y-4">
-                    {/* Email input */}
-                    <div className="group relative">
-                      <div className="absolute inset-0 rounded-2xl bg-linear-to-r from-brand-primary/10 to-transparent opacity-0 transition-opacity duration-300 group-focus-within:opacity-100" />
+                    {/* Email input — branco com glow + efeitos moderno */}
+                    <div className="group/input relative">
+                      <div className="pointer-events-none absolute -inset-1 rounded-full bg-linear-to-r from-brand-primary/0 via-brand-primary/20 to-brand-primary/0 opacity-0 blur-lg transition-all duration-300 group-focus-within/input:opacity-100" />
                       <input
                         type="email"
                         required
@@ -159,36 +159,28 @@ export function Footer() {
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="seu@email.com"
                         aria-label="Seu email"
-                        className="relative w-full rounded-2xl border border-white/15 bg-white/6 px-5 py-4 text-sm text-white placeholder-white/40 transition-all duration-300 focus:border-brand-primary/50 focus:bg-white/8 focus:outline-none hover:bg-white/7"
-                        style={{ backdropFilter: 'blur(24px)' }}
+                        className="relative z-10 w-full rounded-full border border-white/30 bg-white px-5 py-4 text-sm text-gray-900 placeholder-slate-400 shadow-[0_8px_20px_-8px_rgba(0,0,0,0.45),inset_0_1px_2px_rgba(15,23,42,0.06),0_0_20px_rgba(34,197,94,0)] transition-all duration-200 group-focus-within/input:border-brand-primary/60 group-focus-within/input:shadow-[0_8px_20px_-8px_rgba(0,0,0,0.45),inset_0_1px_2px_rgba(15,23,42,0.06),0_0_24px_rgba(34,197,94,0.4)] focus:outline-none"
                       />
                     </div>
 
-                    {/* Submit button */}
+                    {/* Submit button — pill moderno + chip navy */}
                     <button
                       type="submit"
-                      className="group/submit relative w-full overflow-hidden rounded-2xl py-4 text-[13px] font-black uppercase tracking-widest text-[#08122B] transition-all duration-300 hover:-translate-y-1"
+                      className="group/submit relative flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-full py-3 pl-6 pr-3 text-[13px] font-black uppercase tracking-widest text-[#08122B] transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98]"
                       style={{
-                        background: 'linear-gradient(135deg, #34e565 0%, #22c55e 50%, #16a34a 100%)',
-                        boxShadow: '0 16px 32px -8px rgba(34,197,94,0.6), inset 0 1px 0 rgba(255,255,255,0.5)'
+                        background: 'linear-gradient(135deg, #34e565 0%, #22c55e 52%, #16a34a 100%)',
+                        boxShadow: '0 16px 32px -8px rgba(34,197,94,0.6), inset 0 1px 0 rgba(255,255,255,0.5), inset 0 -1px 0 rgba(6,78,59,0.4)',
                       }}
                     >
-                      {/* Shimmer effect */}
-                      <span className="pointer-events-none absolute inset-0 -translate-x-[120%] bg-linear-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 group-hover/submit:translate-x-[120%]" />
-
-                      <span className="relative flex items-center justify-center gap-2.5">
-                        {sent ? (
-                          <>
-                            <DSIcon name="check" size={16} />
-                            <span>Confirmado!</span>
-                          </>
-                        ) : (
-                          <>
-                            <span>Inscrever Agora</span>
-                            <DSIcon name="arrowRight" size={15} className="transition-transform group-hover/submit:translate-x-1" />
-                          </>
-                        )}
-                      </span>
+                      <span aria-hidden="true" className="pointer-events-none absolute inset-0 -translate-x-[120%] bg-linear-to-r from-transparent via-white/40 to-transparent transition-transform duration-700 group-hover/submit:translate-x-[120%]" />
+                      {sent ? (
+                        <span className="relative z-10 flex items-center gap-2"><DSIcon name="check" size={16} /> Confirmado!</span>
+                      ) : (
+                        <>
+                          <span className="relative z-10">Inscrever Agora</span>
+                          <span className="relative z-10 flex h-8 w-8 items-center justify-center rounded-full bg-[#08122B] shadow-[inset_0_1px_0_rgba(255,255,255,0.14)]"><DSIcon name="arrowRight" size={14} className="text-[#4ADE80] transition-transform duration-300 group-hover/submit:translate-x-0.5" /></span>
+                        </>
+                      )}
                     </button>
 
                     {/* Trust line */}

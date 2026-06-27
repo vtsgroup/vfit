@@ -20,6 +20,7 @@ import { PageMetadata } from '@/components/shared/page-metadata'
 import { FaqInline } from '@/components/shared/faq-inline'
 import { ProfileReturnLink } from '@/components/profile/settings-shell'
 import { FAQ_EXCLUIR_CONTA } from '@/data/faqs'
+import { LightBand } from '@/components/shared/light-section'
 
 export const metadata: Metadata = buildSeoMetadata({
   title: 'Excluir Conta e Dados — VFIT',
@@ -41,7 +42,8 @@ export default function ExcluirContaPage() {
 
       <ProfileReturnLink />
 
-      <div className="mx-auto max-w-2xl px-6 pb-24">
+      <LightBand className="py-12 sm:py-16">
+        <div className="max-w-2xl mx-auto space-y-12">
         <PageMetadata lastUpdated="14 de fevereiro de 2026" readingTime="3 min" />
 
         {/* Option 1: Self-service */}
@@ -50,11 +52,11 @@ export default function ExcluirContaPage() {
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-primary/10">
               <DSIcon name="settings" size={20} className="text-brand-primary" />
             </div>
-            <h2 className="text-lg font-semibold text-text-primary">
+            <h2 className="text-lg font-semibold text-gray-900">
               Opção 1 — Excluir pelo App (Recomendado)
             </h2>
           </div>
-          <ol className="ml-4 space-y-3 text-sm text-text-secondary list-decimal">
+          <ol className="ml-4 space-y-3 text-sm text-slate-600 list-decimal">
             <li>
               Faça login na sua conta em{' '}
               <Link href="/login" className="text-brand-primary hover:underline">
@@ -63,10 +65,10 @@ export default function ExcluirContaPage() {
             </li>
             <li>
               Acesse{' '}
-              <strong className="text-text-primary">Configurações</strong> no menu
+              <strong className="text-gray-900">Configurações</strong> no menu
             </li>
             <li>
-              Na seção <strong className="text-text-primary">Privacidade e LGPD</strong>,
+              Na seção <strong className="text-gray-900">Privacidade e LGPD</strong>,
               clique em <strong className="text-red-400">Excluir conta</strong>
             </li>
             <li>
@@ -76,7 +78,7 @@ export default function ExcluirContaPage() {
           <div className="mt-4">
             <Link
               href="/login"
-              className="inline-flex items-center gap-2 rounded-xl bg-brand-primary px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand-primary/90"
+              className="inline-flex items-center gap-2 rounded-xl bg-brand-primary px-4 py-2.5 text-sm font-medium text-gray-900 transition-colors hover:bg-brand-primary/90"
             >
               <DSIcon name="logIn" size={16} />
               Fazer login para excluir
@@ -90,11 +92,11 @@ export default function ExcluirContaPage() {
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-500/10">
               <DSIcon name="mail" size={20} className="text-amber-400" />
             </div>
-            <h2 className="text-lg font-semibold text-text-primary">
+            <h2 className="text-lg font-semibold text-gray-900">
               Opção 2 — Solicitar por E-mail
             </h2>
           </div>
-          <p className="mb-3 text-sm text-text-secondary">
+          <p className="mb-3 text-sm text-slate-600">
             Caso não consiga acessar sua conta, envie um e-mail para:
           </p>
           <a
@@ -104,7 +106,7 @@ export default function ExcluirContaPage() {
             <DSIcon name="mail" size={16} />
             contato@vfit.app.br
           </a>
-          <p className="mt-3 text-xs text-text-muted">
+          <p className="mt-3 text-xs text-slate-400">
             Inclua no e-mail: nome completo e e-mail cadastrado na plataforma.
           </p>
         </section>
@@ -115,11 +117,11 @@ export default function ExcluirContaPage() {
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-red-500/10">
               <DSIcon name="alertTriangle" size={20} className="text-red-400" />
             </div>
-            <h2 className="text-lg font-semibold text-text-primary">
+            <h2 className="text-lg font-semibold text-gray-900">
               O que será excluído
             </h2>
           </div>
-          <ul className="space-y-2 text-sm text-text-secondary">
+          <ul className="space-y-2 text-sm text-slate-600">
             {[
               'Dados pessoais (nome, e-mail, telefone, foto de perfil)',
               'Avaliações físicas e medidas corporais',
@@ -143,23 +145,23 @@ export default function ExcluirContaPage() {
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-primary/10">
               <DSIcon name="shield" size={20} className="text-brand-primary" />
             </div>
-            <h2 className="text-lg font-semibold text-text-primary">
+            <h2 className="text-lg font-semibold text-gray-900">
               Prazo e Base Legal
             </h2>
           </div>
-          <div className="space-y-3 text-sm text-text-secondary">
+          <div className="space-y-3 text-sm text-slate-600">
             <p>
-              <strong className="text-text-primary">Prazo:</strong> A exclusão é processada em até{' '}
-              <strong className="text-text-primary">15 dias úteis</strong> após a solicitação,
+              <strong className="text-gray-900">Prazo:</strong> A exclusão é processada em até{' '}
+              <strong className="text-gray-900">15 dias úteis</strong> após a solicitação,
               conforme Art. 18 da LGPD.
             </p>
             <p>
-              <strong className="text-text-primary">Anonimização:</strong> Dados pessoais são anonimizados
+              <strong className="text-gray-900">Anonimização:</strong> Dados pessoais são anonimizados
               (substituídos por valores genéricos). Dados agregados e estatísticos podem ser retidos
               de forma anônima para fins de melhoria do serviço.
             </p>
             <p>
-              <strong className="text-text-primary">Retenção legal:</strong> Registros financeiros
+              <strong className="text-gray-900">Retenção legal:</strong> Registros financeiros
               podem ser retidos por até 5 anos conforme legislação fiscal brasileira (Art. 174, CTN),
               mas sem vinculação a dados pessoais identificáveis.
             </p>
@@ -172,7 +174,7 @@ export default function ExcluirContaPage() {
         </div>
 
         {/* Footer links */}
-        <div className="flex flex-wrap justify-center gap-4 text-sm text-text-muted">
+        <div className="flex flex-wrap justify-center gap-4 text-sm text-slate-400">
           <Link href="/privacidade" className="hover:text-brand-primary transition-colors">
             Política de Privacidade
           </Link>
@@ -185,7 +187,8 @@ export default function ExcluirContaPage() {
             Voltar ao início
           </Link>
         </div>
-      </div>
+        </div>
+      </LightBand>
     </>
   )
 }

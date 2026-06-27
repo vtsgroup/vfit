@@ -40,15 +40,29 @@ export const greenChip: CSSProperties = {
 }
 
 /* ─── Classes de CTA (TrackedCtaLink só aceita className) ─── */
+// Pill primário verde — mesma receita do "Visite nosso blog" da home (shimmer via <PillSweep/>)
 export const pillPrimaryClass =
-  'group/cta inline-flex h-12 items-center gap-2 rounded-full pl-6 pr-2.5 text-[13px] font-black uppercase tracking-wider text-[#08122B] transition-all duration-300 hover:-translate-y-0.5 bg-[linear-gradient(135deg,#34e565_0%,#22c55e_52%,#16a34a_100%)] shadow-[0_10px_24px_-8px_rgba(34,197,94,0.55),inset_0_1px_0_rgba(255,255,255,0.45)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50'
+  'group/cta relative inline-flex h-12 items-center gap-2 overflow-hidden rounded-full pl-6 pr-2.5 text-[13px] font-black uppercase tracking-wider text-[#08122B] transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] bg-[linear-gradient(135deg,#34e565_0%,#22c55e_52%,#16a34a_100%)] shadow-[0_12px_28px_-8px_rgba(34,197,94,0.55),inset_0_1px_0_rgba(255,255,255,0.45),inset_0_-1px_0_rgba(6,78,59,0.4)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/50'
 export const pillGhostClass =
-  'inline-flex h-12 items-center gap-2 rounded-full border border-slate-300 bg-white px-5 text-[13px] font-bold text-slate-600 transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-primary/40 hover:text-emerald-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40'
+  'inline-flex h-12 items-center gap-2 rounded-full border border-slate-300 bg-white px-5 text-[13px] font-bold text-slate-600 transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-primary/40 hover:text-emerald-700 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40'
 
-/* Chip navy com seta — usado dentro do pill primário */
+/* Badge verde da home (gradiente + borda suave + glow + inset highlight) */
+export const badgeStyle: CSSProperties = {
+  ...monoLabel,
+  background: 'linear-gradient(135deg, #34e565 0%, #22c55e 52%, #16a34a 100%)',
+  border: '1px solid rgba(20,120,60,0.28)',
+  boxShadow: '0 2px 8px -1px rgba(34,197,94,0.42), inset 0 1px 0 rgba(255,255,255,0.45)',
+}
+
+/* Shimmer que varre o pill no hover (filho do pill) */
+export function PillSweep() {
+  return <span aria-hidden="true" className="pointer-events-none absolute inset-0 -translate-x-[120%] bg-linear-to-r from-transparent via-white/45 to-transparent transition-transform duration-700 group-hover/cta:translate-x-[120%]" />
+}
+
+/* Chip navy com seta — usado dentro do pill primário (acima do sweep) */
 export function PillArrow({ icon = 'arrowRight' }: { icon?: DSIconName }) {
   return (
-    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#08122B]">
+    <span className="relative z-10 flex h-8 w-8 items-center justify-center rounded-full bg-[#08122B] shadow-[inset_0_1px_0_rgba(255,255,255,0.14)]">
       <DSIcon name={icon} size={14} className="text-[#4ADE80] transition-transform duration-300 group-hover/cta:translate-x-0.5" />
     </span>
   )
@@ -144,8 +158,11 @@ export function FeatureCard({ icon, title, children }: { icon: DSIconName; title
 export function CheckItem({ children }: { children: ReactNode }) {
   return (
     <li className="flex items-start gap-2.5 text-sm leading-relaxed text-slate-600">
-      <span className="mt-0.5 flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-full text-brand-primary" style={greenChip}>
-        <DSIcon name="check" size={11} />
+      <span
+        className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-white"
+        style={{ background: 'linear-gradient(135deg, #34e565, #16a34a)', boxShadow: '0 2px 6px -1px rgba(34,197,94,0.45), inset 0 1px 0 rgba(255,255,255,0.4)' }}
+      >
+        <DSIcon name="check" size={12} />
       </span>
       <span>{children}</span>
     </li>

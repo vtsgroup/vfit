@@ -5,6 +5,21 @@
 
 ---
 
+## [5.0.9] — 2026-06-27 — Newsletter input glow + páginas legais light-theme
+
+> Deploy via `cf:deploy --allow-no-whatsapp` (v5.0.9, páginas legais agora em LightBand com padrão visual coerente).
+
+### Footer — Newsletter modernizada
+- **Input email**: glow effect verde no focus (radial-gradient + blur) + borda suave → efeito spotlight
+- **Sweep animation**: mantido no botão pill CTA
+
+### Páginas Legais — Conformidade com padrão light-theme
+- **/termos, /lgpd, /carreiras, /excluir-conta**: convertidas de inline light-theme para **LightBand** (dot-pattern, glow orbs, hairline de header)
+- **Atmosfera coerente**: mesmo padrão das ICP pages (/app-personal-trainer, /nutricionistas, /afiliados, /pricing)
+- **SEO intacto**: metadata, JSON-LD, FAQ preserved
+
+---
+
 ## [5.0.6] — 2026-06-27 — Onboarding reverse-trial (sem paywall) + gamificação ledger
 
 > Deploy via `cf:deploy --allow-no-whatsapp --skip-workers` (v5.0.6, prod `vfit.app.br` → 200, `/welcome` e `/register/student?from=onboarding` → 200). Frontend-only. WhatsApp end falhou (401 — gateway). Ledger da gamificação (commit anterior) saiu junto neste deploy.

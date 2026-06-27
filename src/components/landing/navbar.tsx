@@ -42,6 +42,8 @@ const NAV_ITEMS: NavItem[] = [
       { label: 'Progresso por dados', desc: 'Evolução corporal, cargas e frequência no app', href: '/#features', icon: 'trendingUp' },
       { label: 'Gamificação & XP', desc: 'Streaks, rankings e badges para manter constância', href: '/#gamification', icon: 'trophy' },
       { label: 'Para profissionais', desc: 'Gestão, cobranças e IA para personal trainers', href: '/app-personal-trainer', icon: 'briefcase' },
+      { label: 'Para nutricionistas', desc: 'Nutrição integrada ao treino do aluno', href: '/nutricionistas', icon: 'apple' },
+      { label: 'Programa de afiliados', desc: 'Indique o VFIT e ganhe comissão recorrente', href: '/afiliados', icon: 'share2', tag: 'Ganhe' },
     ],
   },
   {
