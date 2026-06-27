@@ -5,6 +5,17 @@
 
 ---
 
+## [5.0.5] — 2026-06-27 — Polish: seção de gamificação da landing
+
+> Deploy via `cf:deploy --allow-no-whatsapp --skip-workers` (v5.0.5, verificado em prod `vfit.app.br` → 200). Workers não redeployado (mudança frontend-only). WhatsApp end falhou (401 invalid credentials — gateway).
+
+- **Seção "CONSTÂNCIA QUE VIRA RESULTADO"** (`gamification-section.tsx`) — polish visual alinhado ao design system VFIT (teal `#0EA38A`, grid 8pt, glassmorphism):
+  - **3 cards de fonte de XP** (cada treino / streak / metas): layout horizontal→vertical centralizado, ícone 36px→56px, valor `text-sm`→`text-2xl` com gradiente, glass teal com borda/glow, hover scale 105%.
+  - **Heading**: drop-shadow teal no "VIRA RESULTADO" + tamanho maior.
+  - **"Próxima recompensa"**: barra fina de 2px → card glass completo com ícone gift + "90%" em destaque + barra 8px com glow.
+
+---
+
 ## [4.9.4] — 2026-06-25 — Refino: vídeo CTA, métricas about, FAQ fix, footer wordmark
 
 > Deploy via `cf:deploy --allow-no-whatsapp` (v4.9.4, verificado em prod). Workers não redeployado (R2 `[10136]`).
