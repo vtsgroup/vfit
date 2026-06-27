@@ -66,6 +66,8 @@ export const DS_ICON_NAMES = [
   // Batch 11 — missing icons (plans, logs, affiliates, content-generator, assessments)
   'terminal', 'infinity', 'repeat', 'store', 'headphones',
   'fileSignature', 'clipboard', 'gem', 'type', 'payments',
+  // Batch 12 — crypto/finance tokens
+  'cryptoCoin',
 ] as const
 
 export type DSIconName = (typeof DS_ICON_NAMES)[number]
@@ -296,6 +298,7 @@ const ICON_PATHS: Record<Exclude<DSIconName, 'aiBot'>, string> = {
   gem: '<path d="M6 3h12l4 6-10 13L2 9Z"/><path d="M11 3 8 9l4 13 4-13-3-6"/><path d="M2 9h20"/>',
   type: '<polyline points="4 7 4 4 20 4 20 7"/><line x1="9" x2="15" y1="20" y2="20"/><line x1="12" x2="12" y1="4" y2="20"/>',
   payments: '<rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/>',
+  cryptoCoin: '<circle cx="12" cy="12" r="10"/><path d="M12 5.5c3.59 0 6.5 2.91 6.5 6.5S15.59 18.5 12 18.5 5.5 15.59 5.5 12 8.41 5.5 12 5.5Z"/><path d="M12 7v10"/><path d="M9.5 10.5c0-.829.672-1.5 1.5-1.5.829 0 1.5.671 1.5 1.5 0 1.327-1.791.814-1.791 1.709 0 .455.448.791 1.291.791.844 0 1.209-.305 1.209-.791"/><path d="M12 7v2.5"/><path d="M12 15.5v2.5"/><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="0.5" opacity="0.3"/>',
 }
 
 // ─── Special overrides for strokeWidth ──────
