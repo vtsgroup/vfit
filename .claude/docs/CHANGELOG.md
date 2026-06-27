@@ -5,9 +5,9 @@
 
 ---
 
-## [5.0.10] — 2026-06-27 — Páginas legais: fix FAQ/metadata + hero + privacidade/cookies
+## [5.1.0] — 2026-06-27 — Páginas legais: fix FAQ/metadata + hero + privacidade/cookies
 
-> Deploy via `cf:deploy --allow-no-whatsapp` (v5.0.10). Correção dos problemas reportados após v5.0.9 (FAQ washed-out, botão branco no hero, páginas não modernizadas). Verificado via workflow de design-review adversarial (6 agents, 3 páginas clean).
+> Deploy via `cf:deploy --allow-no-whatsapp` (v5.1.0, prod `vfit.app.br` → 6/6 legal pages 200). Correção dos problemas reportados após v5.0.9 (FAQ washed-out, botão branco no hero, páginas não modernizadas). Verificado via workflow de design-review adversarial (6 agents, 3 páginas clean).
 
 ### Componentes compartilhados — convertidos dark → light kit (cascata p/ TODAS as páginas legais)
 - **`FaqInline`** (`faq-inline.tsx`): era dark puro (`bg-white/3 text-zinc-200/300/400` → invisível no claro). Redesenhado p/ kit light: card branco + borda slate, heading gray-950, chip verde, **número em badge com gradiente verde no estado aberto**, anel verde + glow no item aberto, círculo toggle com gradiente verde. **Resolve "cores da FAQ erradas".**
