@@ -256,8 +256,11 @@ export function AboutSection() {
                 </div>
               </div>
 
-              <p className="relative mb-6 text-base leading-relaxed text-slate-700 font-medium">
-                Tecnologia de ponta aplicada aos negócios. Especializada em desenvolvimento web, automação com IA e sistemas financeiros de <strong className="text-emerald-700">alta performance</strong>.
+              <p className="relative mb-5 text-base leading-relaxed text-slate-700 font-medium">
+                Somos uma software house que constrói produtos digitais de <strong className="text-emerald-700">alta performance</strong>. Unimos engenharia de ponta, design obsessivo e inteligência artificial para transformar ideias em plataformas que escalam de verdade.
+              </p>
+              <p className="relative mb-6 text-[15px] leading-relaxed text-slate-600">
+                Do desenvolvimento web e automação com IA a sistemas financeiros críticos, cada produto nasce com a mesma obsessão: <strong className="text-emerald-700">velocidade, segurança e uma experiência impecável</strong> para quem usa.
               </p>
 
               {/* Highlight box */}

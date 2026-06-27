@@ -145,6 +145,7 @@ function BlogCard({ post }: { post: BlogPost }) {
             style={{
               ...monoLabel,
               background: 'linear-gradient(135deg, #34e565 0%, #22c55e 52%, #16a34a 100%)',
+              border: '1px solid rgba(20,120,60,0.28)',
               boxShadow: '0 2px 8px -1px rgba(34,197,94,0.42), inset 0 1px 0 rgba(255,255,255,0.45)',
             }}
           >
