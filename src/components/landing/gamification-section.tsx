@@ -419,7 +419,7 @@ export function GamificationSection() {
         <IntersectionReveal animation="blur-in" delay={50}>
           <h2 className="mb-4 text-center text-3xl leading-[0.96] text-white sm:text-[3.25rem]" style={headingFont}>
             CONSTÂNCIA QUE{' '}
-            <span className="bg-linear-to-r from-brand-primary via-brand-mint to-brand-accent bg-clip-text text-transparent" style={{ filter: 'drop-shadow(0 4px 24px rgba(14,163,138,0.35))' }}>VIRA RESULTADO</span>
+            <span className="bg-linear-to-r from-brand-primary via-brand-mint to-brand-accent bg-clip-text text-transparent" style={{ filter: 'drop-shadow(0 4px 24px rgba(34,197,94,0.35))' }}>VIRA RESULTADO</span>
           </h2>
         </IntersectionReveal>
 
@@ -429,39 +429,125 @@ export function GamificationSection() {
           </p>
         </IntersectionReveal>
 
-        {/* Como ganha XP — mecânica do sistema (3 fontes de pontos) */}
+        {/* Como ganhar XP — fórmula do sistema (1 painel ledger = 3º irmão dos leaderboards) */}
         <IntersectionReveal animation="fade-in" delay={120}>
-          <div className="mx-auto mb-12 grid max-w-4xl grid-cols-1 gap-4 sm:mb-16 sm:grid-cols-3">
-            {[
-              { icon: 'dumbbell' as DSIconName, label: 'Cada treino', value: '+50 XP' },
-              { icon: 'flame' as DSIconName, label: 'Streak diário', value: 'multiplica' },
-              { icon: 'gift' as DSIconName, label: 'Metas e desafios', value: 'badge + XP' },
-            ].map((m) => (
-              <div
-                key={m.label}
-                onMouseMove={handleCardMove}
-                className="group relative flex flex-col items-center gap-4 overflow-hidden rounded-2xl px-6 py-6 text-center transition-all duration-300 hover:scale-105"
-                style={{
-                  ...glassShell,
-                  background: 'linear-gradient(135deg, rgba(14,163,138,0.10) 0%, rgba(22,181,159,0.05) 100%)',
-                  border: '1.5px solid rgba(14,163,138,0.25)',
-                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08), 0 24px 60px -28px rgba(14,163,138,0.3)',
-                }}
-              >
-                <HoverFX rounded="rounded-2xl" />
-                <div className="relative flex h-14 w-14 shrink-0 items-center justify-center rounded-xl" style={{
-                  background: 'linear-gradient(135deg, rgba(14,163,138,0.25) 0%, rgba(22,181,159,0.15) 100%)',
-                  border: '1.5px solid rgba(14,163,138,0.3)',
-                  boxShadow: '0 8px 20px rgba(14,163,138,0.2), inset 0 1px 0 rgba(255,255,255,0.1)',
-                }}>
-                  <DSIcon name={m.icon} size={24} className="text-brand-primary" />
+          <div
+            onMouseMove={handleCardMove}
+            className="group relative mx-auto mb-10 max-w-3xl overflow-hidden rounded-2xl sm:mb-14"
+            style={glassShell}
+          >
+            <HoverFX />
+
+            {/* Header — recipe idêntica ao LeaderboardCard */}
+            <div className="relative flex items-center justify-between px-4 py-3.5 sm:px-5">
+              <div className="flex items-center gap-2.5">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-primary/15 ring-1 ring-brand-primary/20">
+                  <DSIcon name="zap" size={15} className="text-brand-primary" />
                 </div>
-                <div className="relative min-w-0">
-                  <div className="text-[11px] uppercase tracking-wider text-white/60 font-semibold" style={monoLabel}>{m.label}</div>
-                  <div className="mt-2 bg-linear-to-r from-white via-emerald-200 to-brand-primary bg-clip-text text-2xl font-black text-transparent leading-tight">{m.value}</div>
-                </div>
+                <span className="text-xs text-white/65 uppercase" style={monoLabel}>COMO GANHAR XP</span>
               </div>
-            ))}
+              <div className="flex items-center gap-1.5">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="absolute inline-flex h-full w-full rounded-full bg-brand-primary opacity-70 motion-safe:animate-ping" />
+                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-brand-primary" />
+                </span>
+                <span className="hidden text-[9px] text-white/45 uppercase sm:inline" style={monoLabel}>a constância compõe</span>
+              </div>
+            </div>
+            {/* Hairline gradiente verde sob o header */}
+            <span className="block h-px bg-linear-to-r from-transparent via-brand-primary/45 to-transparent" />
+
+            {/* Fórmula — 3 segmentos: base × streak → payoff */}
+            <div className="relative flex flex-col sm:flex-row sm:items-stretch">
+              {[
+                { icon: 'dumbbell' as DSIconName, op: null as DSIconName | null, tag: '01', label: 'Cada treino', num: '+50', unit: 'XP', sub: 'base por sessão', hero: true },
+                { icon: 'flame' as DSIconName, op: 'x' as DSIconName | null, tag: '02', label: 'Streak diário', num: '×2', unit: 'XP', sub: '7 dias seguidos', hero: false },
+                { icon: 'gift' as DSIconName, op: 'arrowRight' as DSIconName | null, tag: '03', label: 'Metas e desafios', num: '+200', unit: 'XP + badge', sub: 'ao completar', hero: false },
+              ].map((m, i) => (
+                <div
+                  key={m.label}
+                  className="group/seg relative flex flex-1 items-center gap-3.5 px-4 py-4 transition-colors duration-200 hover:bg-white/2.5 sm:px-5 sm:py-5"
+                >
+                  {/* Hero (01) ganha o wash do trono — quebra a simetria, cria ordem de leitura */}
+                  {m.hero && (
+                    <>
+                      <span
+                        aria-hidden="true"
+                        className="pointer-events-none absolute inset-0"
+                        style={{ background: 'linear-gradient(90deg, rgba(34,197,94,0.10) 0%, rgba(34,197,94,0.02) 55%, transparent 100%)' }}
+                      />
+                      <span
+                        aria-hidden="true"
+                        className="pointer-events-none absolute left-0 top-1/2 h-10 w-0.5 -translate-y-1/2 rounded-full bg-linear-to-b from-brand-primary to-transparent"
+                      />
+                    </>
+                  )}
+
+                  {/* Hairline vertical verde entre segmentos (desktop) */}
+                  {i > 0 && (
+                    <span
+                      aria-hidden="true"
+                      className="pointer-events-none absolute left-0 top-0 hidden h-full w-px sm:block"
+                      style={{ background: 'linear-gradient(180deg, transparent, rgba(34,197,94,0.28) 50%, transparent)' }}
+                    />
+                  )}
+                  {/* Hairline horizontal verde entre segmentos (mobile/stack) */}
+                  {i > 0 && (
+                    <span
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-x-4 top-0 h-px sm:hidden"
+                      style={{ background: 'linear-gradient(90deg, transparent, rgba(34,197,94,0.22) 50%, transparent)' }}
+                    />
+                  )}
+
+                  {/* Operador flutuante na junção (× / →) — desktop only */}
+                  {m.op && (
+                    <span
+                      aria-hidden="true"
+                      className="pointer-events-none absolute -left-3 top-1/2 z-10 hidden h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full sm:flex"
+                      style={{
+                        background: 'linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02))',
+                        border: '1px solid rgba(34,197,94,0.30)',
+                        boxShadow: '0 4px 12px -4px rgba(34,197,94,0.4)',
+                        backdropFilter: 'blur(8px)',
+                        WebkitBackdropFilter: 'blur(8px)',
+                      }}
+                    >
+                      <DSIcon name={m.op} size={11} className="text-brand-primary" />
+                    </span>
+                  )}
+
+                  {/* Chip de ícone — recipe do header do leaderboard + índice de passo */}
+                  <div className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-primary/15 ring-1 ring-brand-primary/20 transition-transform duration-300 group-hover/seg:scale-105">
+                    <DSIcon name={m.icon} size={20} className="text-brand-primary" />
+                    <span className="absolute -right-1.5 -top-1.5 rounded bg-white/8 px-1 py-px text-[8px] text-brand-primary/70" style={monoLabel}>{m.tag}</span>
+                  </div>
+
+                  {/* Texto: label em cima, número-herói + unidade mono embaixo (ritmo ThroneRow) */}
+                  <div className="relative min-w-0 flex-1">
+                    <div className="truncate text-[10px] uppercase text-white/50" style={monoLabel}>{m.label}</div>
+                    <div className="mt-1 flex items-baseline gap-1.5">
+                      <span
+                        className={`bg-linear-to-r from-white via-emerald-200 to-brand-primary bg-clip-text font-syne font-black leading-none text-transparent ${m.hero ? 'text-3xl' : 'text-2xl'}`}
+                        style={m.hero ? { filter: 'drop-shadow(0 4px 24px rgba(34,197,94,0.35))' } : undefined}
+                      >
+                        {m.num}
+                      </span>
+                      <span className="text-[10px] font-bold uppercase text-white/45" style={monoLabel}>{m.unit}</span>
+                    </div>
+                    <div className="mt-1 truncate text-[9px] text-white/35">{m.sub}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Rodapé editorial — voz escrita (Syne) */}
+            <span className="block h-px bg-linear-to-r from-transparent via-white/8 to-transparent" />
+            <div className="px-5 py-2.5 text-center sm:text-left">
+              <span className="font-syne text-[11px] font-bold text-white/45">
+                treino <span className="text-brand-primary/70">×</span> constância <span className="text-brand-primary/70">=</span> evolução que não para
+              </span>
+            </div>
           </div>
         </IntersectionReveal>
 
@@ -479,8 +565,8 @@ export function GamificationSection() {
               className="mx-auto mb-9 max-w-lg overflow-hidden rounded-2xl px-5 py-4 sm:px-6 sm:py-5"
               style={{
                 ...glassShell,
-                background: 'linear-gradient(135deg, rgba(14,163,138,0.10) 0%, rgba(132,204,22,0.04) 100%)',
-                border: '1.5px solid rgba(14,163,138,0.22)',
+                background: 'linear-gradient(135deg, rgba(34,197,94,0.10) 0%, rgba(132,204,22,0.04) 100%)',
+                border: '1px solid rgba(255,255,255,0.08)',
               }}
             >
               <div className="flex items-center justify-between">
@@ -499,7 +585,7 @@ export function GamificationSection() {
                 </div>
               </div>
               <div className="mt-3.5 h-2 overflow-hidden rounded-full bg-white/10">
-                <div className="h-full rounded-full shadow-[0_0_12px_rgba(34,197,94,0.7)]" style={{ width: '90%', background: 'linear-gradient(90deg, #0EA38A, #22c55e, #84cc16, #34e565)' }} />
+                <div className="h-full rounded-full shadow-[0_0_12px_rgba(34,197,94,0.7)]" style={{ width: '90%', background: 'linear-gradient(90deg, #22c55e, #84cc16, #34e565)' }} />
               </div>
             </div>
 
