@@ -1,7 +1,7 @@
 /**
  * src/app/(auth)/forgot-password/page.tsx
  *
- * Forgot Password — Ultra-modern · 3D button · White inputs
+ * Forgot Password — Light premium · 3D button · White inputs
  *
  * Exports: ForgotPasswordPage
  * Hooks: useState, useRef, useForgotPassword
@@ -9,8 +9,8 @@
  */
 
 // ============================================
-// Forgot Password — Ultra-modern · 3D button · White inputs
-// Koyeb-inspired, matching login redesign
+// Forgot Password — Light premium · matching login redesign
+// White surfaces, brand-green accents, 3D CTA
 // ============================================
 
 'use client'
@@ -26,7 +26,7 @@ import { GuestGuard, Turnstile, type TurnstileRef } from '@/components/auth'
 const headingFont = {
   fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
   fontWeight: 900,
-  letterSpacing: '0',
+  letterSpacing: '-0.01em',
 }
 const monoLabel = {
   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
@@ -34,8 +34,14 @@ const monoLabel = {
   letterSpacing: '0',
 }
 
-/* ─── Input classes ─── */
-const inputClass = 'vfit-flow-field h-12 w-full rounded-2xl px-4 text-[14px] transition-all duration-200 focus:outline-none'
+/* ─── Light input ─── */
+const inputClass = 'auth-light-field h-12 w-full rounded-2xl px-4 text-[14px] transition-all duration-200 focus:outline-none'
+
+const STEPS = [
+  { icon: 'mail', label: 'Informe seu email' },
+  { icon: 'send', label: 'Receba o link + código' },
+  { icon: 'lock', label: 'Crie uma nova senha' },
+] as const
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('')
@@ -65,7 +71,7 @@ export default function ForgotPasswordPage() {
 
   return (
     <GuestGuard>
-      <div className="animate-blur-in">
+      <div className="login-stagger">
         {/* Turnstile — invisible-first, fallback to interactive */}
         <Turnstile
           ref={turnstileRef}
@@ -75,46 +81,50 @@ export default function ForgotPasswordPage() {
         />
 
         {/* ─── Header ─── */}
-        <div className="mb-7">
+        <div className="mb-5">
           <Link
             href="/login"
-            className="mb-3 flex items-center gap-1.5 text-[11px] text-zinc-500 hover:text-white transition-colors"
+            className="mb-4 inline-flex items-center gap-1.5 text-[12px] font-medium text-slate-500 hover:text-slate-800 transition-colors"
           >
             <DSIcon name="arrowLeft" size={14} /> Voltar ao login
           </Link>
 
-          <div className="flex items-center gap-2 mb-2">
-            <DSIcon name="mail" size={14} className="text-brand-primary/60" />
-            <p className="text-[9px] uppercase text-brand-primary/70" style={monoLabel}>
-              RECUPERAÇÃO
+          {/* Icon badge */}
+          <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-linear-to-br from-emerald-400 to-emerald-600 shadow-[0_10px_24px_-8px_rgba(34,197,94,0.55)]">
+            <DSIcon name="mail" size={22} className="text-white" />
+          </div>
+
+          <div className="flex items-center gap-2 mb-1.5">
+            <DSIcon name="sparkles" size={13} className="text-emerald-600" />
+            <p className="text-[9px] uppercase text-emerald-600" style={monoLabel}>
+              RECUPERAÇÃO DE SENHA
             </p>
           </div>
-          <h1 className="text-[1.75rem] text-white leading-none" style={headingFont}>
+          <h1 className="text-[1.75rem] text-slate-900 leading-none" style={headingFont}>
             Recuperar senha
           </h1>
-          <p className="mt-1.5 text-[13px] text-slate-400">
+          <p className="mt-1.5 text-[13px] text-slate-500">
             Informe seu email para receber um link e um código de recuperação
           </p>
         </div>
 
         {sent ? (
-          <div className="space-y-5">
-            {/* Success alert — glass style */}
-            <div role="status" aria-live="polite" className="flex items-start gap-3 rounded-2xl border border-brand-primary/20 bg-brand-primary/6 px-4 py-3.5">
-              <div className="mt-0.5 h-2 w-2 rounded-full bg-brand-primary shrink-0 animate-pulse" />
-              <p className="text-[12px] font-medium leading-relaxed text-brand-primary">
+          <div className="space-y-4">
+            {/* Success card */}
+            <div role="status" aria-live="polite" className="auth-light-soft flex items-start gap-3 rounded-2xl px-4 py-3.5">
+              <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-500 shadow-sm">
+                <svg className="h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3} aria-hidden="true" focusable="false">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <p className="text-[12px] font-medium leading-relaxed text-emerald-800">
                 Se o email informado estiver cadastrado, você receberá um link e um código de recuperação em instantes.
                 Verifique também sua caixa de spam.
               </p>
             </div>
 
-            {/* Resend — outline button */}
-            <Button
-              variant="secondary"
-              size="lg"
-              onClick={handleResend}
-              className="w-full"
-            >
+            {/* Resend */}
+            <Button variant="secondary" size="lg" onClick={handleResend} className="w-full">
               <DSIcon name="rotateCcw" size={14} />
               Enviar novamente
             </Button>
@@ -123,8 +133,8 @@ export default function ForgotPasswordPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Email */}
             <div>
-              <label className="flex items-center gap-1.5 text-[10px] uppercase text-zinc-400 mb-2" style={monoLabel}>
-                <DSIcon name="mail" size={12} className="text-zinc-500" /> EMAIL
+              <label className="flex items-center gap-1.5 text-[10px] uppercase text-slate-500 mb-1.5" style={monoLabel}>
+                <DSIcon name="mail" size={12} className="text-slate-400" /> EMAIL
               </label>
               <input
                 type="email"
@@ -139,8 +149,8 @@ export default function ForgotPasswordPage() {
             </div>
 
             {turnstileError && (
-              <div className="flex items-center justify-between gap-3 rounded-xl border border-amber-500/20 bg-amber-500/6 px-4 py-2.5">
-                <p className="text-[11px] text-amber-400">
+              <div className="flex items-center justify-between gap-3 rounded-xl border border-amber-300 bg-amber-50 px-4 py-2.5">
+                <p className="text-[11px] text-amber-700">
                   Verificação de segurança com problema.
                 </p>
                 <button
@@ -150,20 +160,20 @@ export default function ForgotPasswordPage() {
                     setTurnstileToken('')
                     turnstileRef.current?.reset()
                   }}
-                  className="shrink-0 rounded-lg bg-amber-500/15 px-3 py-1 text-[10px] font-bold text-amber-400 hover:bg-amber-500/25 transition-colors"
+                  className="shrink-0 rounded-lg bg-amber-100 px-3 py-1 text-[10px] font-bold text-amber-700 hover:bg-amber-200 transition-colors"
                 >
                   Tentar novamente
                 </button>
               </div>
             )}
 
-            {/* Submit — 3D button */}
+            {/* Submit */}
             <Button
               type="submit"
               size="lg"
               disabled={!email || !turnstileToken}
               loading={forgotPassword.isPending}
-              className="w-full uppercase font-black"
+              className="auth-submit-cta-light w-full uppercase font-black"
             >
               <DSIcon name="send" size={16} />
               ENVIAR RECUPERAÇÃO
@@ -171,9 +181,9 @@ export default function ForgotPasswordPage() {
 
             {/* Error */}
             {forgotPassword.isError && (
-              <div role="alert" className="flex items-center gap-2.5 rounded-2xl border border-red-500/20 bg-red-500/6 px-4 py-3">
-                <div className="h-2 w-2 rounded-full bg-red-400 shrink-0" />
-                <p className="text-[12px] font-medium text-red-400">
+              <div role="alert" className="flex items-center gap-2.5 rounded-2xl border border-red-300 bg-red-50 px-4 py-3">
+                <div className="h-2 w-2 rounded-full bg-red-500 shrink-0" />
+                <p className="text-[12px] font-medium text-red-600">
                   Erro ao enviar email de recuperação. Tente novamente.
                 </p>
               </div>
@@ -181,15 +191,35 @@ export default function ForgotPasswordPage() {
           </form>
         )}
 
+        {/* ─── How it works — fills space, reassures ─── */}
+        <div className="mt-6 rounded-2xl border border-slate-200 bg-white/70 px-4 py-3.5">
+          <p className="mb-3 text-[9px] uppercase text-slate-400" style={monoLabel}>
+            COMO FUNCIONA
+          </p>
+          <div className="space-y-2.5">
+            {STEPS.map((s, i) => (
+              <div key={s.label} className="flex items-center gap-3">
+                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 ring-1 ring-emerald-200">
+                  <DSIcon name={s.icon} size={13} />
+                </div>
+                <span className="text-[12px] text-slate-600">
+                  <span className="font-bold text-slate-400 mr-1.5">{i + 1}.</span>
+                  {s.label}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Footer */}
-        <div className="mt-7 flex items-center justify-between">
-          <p className="text-[13px] text-zinc-500">
+        <div className="mt-5 flex items-center justify-between">
+          <p className="text-[13px] text-slate-500">
             Lembrou a senha?{' '}
-            <Link href="/login" className="font-bold text-brand-primary hover:text-brand-primary/80 transition-colors">
+            <Link href="/login" className="font-bold text-emerald-600 hover:text-emerald-700 transition-colors">
               Entrar
             </Link>
           </p>
-          <span className="flex items-center gap-1.5 text-[9px] text-zinc-700" style={monoLabel}>
+          <span className="flex items-center gap-1.5 text-[9px] text-slate-400" style={monoLabel}>
             <DSIcon name="shield" size={12} /> SSL · LGPD
           </span>
         </div>

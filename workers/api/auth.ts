@@ -27,6 +27,7 @@ import { Hono } from 'hono'
 import type { AppContext } from '@workers/types'
 import {
   registerPersonalSchema,
+  registerNutritionistSchema,
   registerStudentSchema,
   loginSchema,
   refreshSchema,
@@ -680,6 +681,141 @@ auth.post('/register/student', async (c) => {
       expires_in: 3600,
     },
     session_id: sessionId,
+  })
+})
+
+// ============================================
+// POST /auth/register/nutritionist
+// Mirrors register/personal (CRN instead of CREF). Email-verification flow:
+// creates the user + nutritionist profile, sends verification email, and does
+// NOT auto-login (user activates via email, then logs in).
+// ============================================
+auth.post('/register/nutritionist', async (c) => {
+  const requestId = c.get('requestId')
+  const body = await c.req.json()
+  const parsed = registerNutritionistSchema.parse(body)
+
+  // Registration whitelist
+  if (!isRegistrationAllowed(parsed.email)) {
+    throw new ForbiddenError('Cadastro temporariamente indisponível. Tente novamente mais tarde.')
+  }
+
+  // Ban check — email, CPF, phone
+  const banResult = await checkBanned(c.env, [
+    { type: 'email', value: parsed.email.toLowerCase().trim() },
+    { type: 'cpf', value: parsed.cpf },
+    ...(parsed.phone ? [{ type: 'phone' as const, value: parsed.phone.replace(/\D/g, '') }] : []),
+  ])
+  if (banResult.banned) {
+    throw new ForbiddenError('Cadastro bloqueado permanentemente. Contacte o suporte.')
+  }
+
+  // Turnstile anti-bot (soft)
+  const turnstileValid = await softRequireTurnstile(
+    parsed.turnstile_token,
+    c.env.TURNSTILE_SECRET_KEY,
+    getClientIp(c.req.raw)
+  )
+  if (!turnstileValid) {
+    console.warn(`[Register] Turnstile soft-fail for nutritionist ${parsed.email}`)
+  }
+
+  // Duplicate checks (email + cpf)
+  const existingUser = await pgFindUserByEmail(c.env, parsed.email)
+  if (existingUser) {
+    throw new ConflictError('Email já cadastrado')
+  }
+  const existingCpf = await pgFindUserByCpf(c.env, parsed.cpf)
+  if (existingCpf) {
+    throw new ConflictError('CPF já cadastrado')
+  }
+
+  // IDs + hashes
+  const userId = generateId()
+  const passwordHash = await hashPassword(parsed.password)
+  const referralCode = generateReferralCode()
+  const verificationToken = generateToken()
+  const now = new Date().toISOString()
+  const trialEnd = new Date(Date.now() + TRIAL_DAYS * 24 * 60 * 60 * 1000).toISOString()
+
+  // 1) Insert user
+  try {
+    await pgExecute(c.env, `
+      INSERT INTO users (id, email, password_hash, phone, full_name, cpf, user_type, role, created_at, updated_at, metadata)
+      VALUES ($1, $2, $3, $4, $5, $6, 'nutritionist', 'user', $7, $7, $8)
+    `, [
+      userId,
+      parsed.email.toLowerCase().trim(),
+      passwordHash,
+      parsed.phone || null,
+      parsed.full_name.trim(),
+      parsed.cpf,
+      now,
+      JSON.stringify({ verification_token: verificationToken }),
+    ])
+  } catch (err) {
+    console.error('[Register] Failed to INSERT user (nutritionist):', err)
+    throw new BadRequestError('Falha ao criar conta. Verifique seus dados e tente novamente.')
+  }
+
+  // 2) Insert nutritionist profile
+  try {
+    const specialtiesLiteral = `{${(parsed.specialties || []).map((s: string) => {
+      const safe = s.replace(/[\\"\x00-\x1f]/g, '')
+      return `"${safe}"`
+    }).join(',')}}`
+    await pgExecute(c.env, `
+      INSERT INTO nutritionists (id, crn, crn_state, specialties, referral_code, subscription_plan, subscription_status, trial_ends_at, created_at, updated_at)
+      VALUES ($1, $2, $3, $4::TEXT[], $5, 'trial', 'trial', $6, $7, $7)
+    `, [
+      userId,
+      parsed.crn,
+      parsed.crn_state.toUpperCase(),
+      specialtiesLiteral,
+      referralCode,
+      trialEnd,
+      now,
+    ])
+  } catch (err) {
+    console.error('[Register] Failed to INSERT nutritionists:', err)
+    // Cleanup orphaned user
+    await pgExecute(c.env, 'DELETE FROM users WHERE id = $1', [userId]).catch(() => {})
+    throw new BadRequestError('Falha ao criar perfil profissional. Verifique o CRN e tente novamente.')
+  }
+
+  // 3) Verification email (best-effort, não falha o registro)
+  try {
+    await sendVerificationEmail(
+      c.env.EMAIL_QUEUE,
+      parsed.email.toLowerCase(),
+      parsed.full_name,
+      verificationToken,
+      'https://vfit.app.br',
+      requestId
+    )
+  } catch (err) {
+    console.error('[Auth] Failed to queue verification email:', err)
+  }
+
+  console.log(`[Register] Nutritionist created: ${userId} (${parsed.email})`)
+
+  return created({
+    user: {
+      id: userId,
+      email: parsed.email.toLowerCase(),
+      full_name: parsed.full_name,
+      user_type: 'nutritionist' as const,
+      is_active: true,
+      email_verified: false,
+    },
+    nutritionist: {
+      crn: parsed.crn,
+      crn_state: parsed.crn_state.toUpperCase(),
+      referral_code: referralCode,
+      subscription_plan: 'trial',
+      subscription_status: 'trial',
+      trial_ends_at: trialEnd,
+    },
   })
 })
 

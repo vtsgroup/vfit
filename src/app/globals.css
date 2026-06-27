@@ -1082,6 +1082,57 @@ select option {
   filter: none !important;
 }
 
+/* ─────────────────────────────────────────────
+   LIGHT PREMIUM — shared surfaces (login · register · forgot)
+   Crisp white cards, soft layered depth, brand-green accents.
+   ───────────────────────────────────────────── */
+
+/* Premium white card — page containers & option tiles */
+.auth-light-card {
+  background: #ffffff;
+  border: 1px solid #E8EDF3;
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 14px 38px -16px rgba(15, 23, 42, 0.16);
+}
+
+/* Subtle brand-tinted info / success box on light */
+.auth-light-soft {
+  background: linear-gradient(180deg, #F0FDF4 0%, #F7FEF9 100%);
+  border: 1px solid rgba(34, 197, 94, 0.22);
+}
+
+/* Segmented role switcher track */
+.auth-seg-track {
+  background: #EEF2F7;
+  border: 1px solid #E2E8F0;
+  box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.05);
+}
+
+/* Sliding active thumb for the role switcher */
+.auth-seg-thumb {
+  background: #ffffff;
+  border: 1px solid #E2E8F0;
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.06),
+    0 6px 16px -8px rgba(34, 197, 94, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Role-select reveal — adapts form when switching role */
+@keyframes authRoleReveal {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.auth-role-reveal {
+  animation: authRoleReveal 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .auth-seg-thumb { transition: none; }
+  .auth-role-reveal { animation: none; }
+}
+
 /* ─── Figma-style staggered entrance for the login form ─── */
 /* `both` fill mode holds opacity:0 + translateY during the delay (backwards)
    and opacity:1 after (forwards) — no separate base rule, so children that

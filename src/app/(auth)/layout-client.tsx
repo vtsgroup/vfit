@@ -80,8 +80,10 @@ const VFIT_LETTERS = 'VFIT'.split('')
 
 function AnimatedAuthLogo({ size = 'large', theme = 'dark' }: { size?: 'large' | 'small'; theme?: 'light' | 'dark' }) {
   const [typedCount, setTypedCount] = useState(0)
+  const [markIn, setMarkIn] = useState(false)
 
   useEffect(() => {
+    const markTimer = setTimeout(() => setMarkIn(true), 60)
     let i = 0
     const interval = setInterval(() => {
       i++
@@ -90,17 +92,45 @@ function AnimatedAuthLogo({ size = 'large', theme = 'dark' }: { size?: 'large' |
         clearInterval(interval)
       }
     }, 80)
-    return () => clearInterval(interval)
+    return () => { clearInterval(interval); clearTimeout(markTimer) }
   }, [])
 
   const isLarge = size === 'large'
-  const fontSize = isLarge ? '54px' : '38px'
-  const lineH = isLarge ? '62px' : '44px'
-  const cursorH = isLarge ? '50px' : '34px'
+  const markSize = isLarge ? 46 : 32
+  const fontSize = isLarge ? '46px' : '32px'
+  const lineH = isLarge ? '54px' : '38px'
+  const cursorH = isLarge ? '42px' : '28px'
   const wordmarkColor = theme === 'light' ? '#0F172A' : 'white'
 
   return (
-    <Link href="/" className="flex items-center gap-0 group shrink-0" aria-label="VFIT - Início">
+    <Link href="/" className="flex items-center gap-2.5 group shrink-0" aria-label="VFIT - Início">
+      {/* ─── Logomark (official SVG) ─── */}
+      <span
+        className="relative inline-flex shrink-0 transition-all duration-500 ease-out"
+        style={{
+          width: markSize,
+          height: markSize,
+          opacity: markIn ? 1 : 0,
+          transform: markIn ? 'scale(1)' : 'scale(0.6)',
+        }}
+      >
+        {/* Soft brand glow behind the mark */}
+        <span
+          aria-hidden="true"
+          className="absolute inset-0 rounded-[26%] blur-md"
+          style={{ background: 'rgba(34,197,94,0.45)', transform: 'scale(0.92)' }}
+        />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/favicons/favicon.svg"
+          alt=""
+          width={markSize}
+          height={markSize}
+          className="relative rounded-[26%] shadow-[0_8px_22px_-6px_rgba(34,197,94,0.55)] ring-1 ring-white/15 transition-transform duration-300 ease-out group-hover:scale-105 group-hover:-rotate-3"
+        />
+      </span>
+
+      {/* ─── Wordmark with typewriter ─── */}
       <div className="relative flex items-center">
         <span
           className="inline-flex items-center"
@@ -108,7 +138,7 @@ function AnimatedAuthLogo({ size = 'large', theme = 'dark' }: { size?: 'large' |
             fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
             fontWeight: 800,
             fontSize,
-            letterSpacing: '0',
+            letterSpacing: '-0.02em',
             lineHeight: lineH,
             color: wordmarkColor,
           }}
@@ -330,7 +360,9 @@ function TestimonialCarousel() {
 export function AuthLayoutClient({ children }: { children: ReactNode }) {
   const pathname = usePathname()
   const hidesMobileLogo = pathname?.startsWith('/register/student')
-  const isLoginLight = pathname === '/login'
+  // Light premium theme — unified across the primary auth pages.
+  // (Sub-flows like /register/personal and /register/student stay dark for now.)
+  const isLightAuth = pathname === '/login' || pathname === '/register' || pathname === '/forgot-password'
 
   return (
     <>
@@ -497,14 +529,14 @@ export function AuthLayoutClient({ children }: { children: ReactNode }) {
         {/* ─── RIGHT PANEL — Form ─── */}
         <div
           className={
-            isLoginLight
+            isLightAuth
               ? 'light flex w-full lg:w-[52%] xl:w-1/2 flex-col relative bg-[#F5F7FA]'
               : 'flex w-full lg:w-[52%] xl:w-1/2 flex-col relative'
           }
-          style={isLoginLight ? { colorScheme: 'light' } : undefined}
+          style={isLightAuth ? { colorScheme: 'light' } : undefined}
         >
           {/* Ambient glow */}
-          {isLoginLight ? (
+          {isLightAuth ? (
             <div className="pointer-events-none absolute inset-0 overflow-hidden">
               {/* Soft brand-green tint blooms on white (light mode) */}
               <div className="absolute -top-40 right-[-10%] h-96 w-96 rounded-full blur-[120px]" style={{ background: 'rgba(34,197,94,0.06)' }} />
@@ -521,8 +553,8 @@ export function AuthLayoutClient({ children }: { children: ReactNode }) {
           <div
             className="pointer-events-none absolute inset-0"
             style={{
-              opacity: isLoginLight ? 0.5 : 0.015,
-              backgroundImage: isLoginLight
+              opacity: isLightAuth ? 0.5 : 0.015,
+              backgroundImage: isLightAuth
                 ? 'linear-gradient(rgba(15,23,42,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(15,23,42,0.025) 1px, transparent 1px)'
                 : 'linear-gradient(rgba(255,255,255,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.15) 1px, transparent 1px)',
               backgroundSize: '60px 60px',
@@ -532,7 +564,7 @@ export function AuthLayoutClient({ children }: { children: ReactNode }) {
           {/* Mobile header — hidden on student register (has own cover logo) */}
           {!hidesMobileLogo && (
             <header className="relative z-10 flex items-center justify-center px-5 pt-[max(0.5rem,env(safe-area-inset-top))] pb-1 lg:hidden">
-              <AnimatedAuthLogo size="small" theme={isLoginLight ? 'light' : 'dark'} />
+              <AnimatedAuthLogo size="small" theme={isLightAuth ? 'light' : 'dark'} />
             </header>
           )}
 
@@ -545,7 +577,7 @@ export function AuthLayoutClient({ children }: { children: ReactNode }) {
 
           {/* Footer */}
           <footer
-            className={`relative z-10 hidden py-2 text-center text-[9px] sm:block ${isLoginLight ? 'text-slate-400' : 'text-zinc-700'}`}
+            className={`relative z-10 hidden py-2 text-center text-[9px] sm:block ${isLightAuth ? 'text-slate-400' : 'text-zinc-700'}`}
             style={{ fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace', fontWeight: 700, letterSpacing: '0.15em' }}
           >
             © {new Date().getFullYear()} VFIT · TODOS OS DIREITOS RESERVADOS

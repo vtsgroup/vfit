@@ -17,7 +17,7 @@
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { api, ApiClientError } from '@/lib/api-client'
-import { useAuthStore, type User, type PersonalProfile, type StudentProfile, type AuthTokens } from '@/stores/auth-store'
+import { useAuthStore, type User, type PersonalProfile, type StudentProfile, type NutritionistProfile, type AuthTokens } from '@/stores/auth-store'
 import { toast } from '@/stores/app-store'
 import { trackLandingEvent } from '@/lib/landing-analytics'
 
@@ -29,7 +29,7 @@ interface ApiAuthUser {
   id: string
   email: string
   full_name: string
-  user_type: 'personal' | 'student' | 'admin'
+  user_type: 'personal' | 'student' | 'nutritionist' | 'admin'
   role?: 'user' | 'admin' | 'super_admin' | null
   profile_photo_url?: string | null
   avatar_url?: string | null
@@ -61,6 +61,7 @@ interface LoginResponse {
   session_id: string
   personal?: PersonalProfile
   student?: StudentProfile
+  nutritionist?: NutritionistProfile
 }
 
 interface RegisterResponse {
@@ -74,6 +75,7 @@ interface RegisterResponse {
   session_id?: string
   personal?: PersonalProfile
   student?: StudentProfile
+  nutritionist?: NutritionistProfile
   message?: string
 }
 
@@ -108,6 +110,8 @@ export function useLogin(options?: { redirect?: string; onError?: (error: Error)
       const normalizedUser = normalizeAuthUser(data.user)
       const profile = normalizedUser.user_type === 'personal'
         ? data.personal
+        : normalizedUser.user_type === 'nutritionist'
+        ? data.nutritionist
         : data.student
       login({ user: normalizedUser, tokens, profile })
       toast.success('Login realizado com sucesso!')
@@ -167,6 +171,43 @@ export function useRegisterPersonal() {
     },
     onSuccess: () => {
       trackLandingEvent('lp_register_complete', { user_type: 'personal' })
+      toast.success('Conta criada!', 'Verifique seu email para ativar sua conta.')
+      router.push('/login?registered=true')
+    },
+    onError: (error: Error) => {
+      const msg = error instanceof ApiClientError
+        ? error.message
+        : 'Erro ao criar conta'
+      toast.error('Falha no cadastro', msg)
+    },
+  })
+}
+
+// ============================================
+// useRegisterNutritionist
+// ============================================
+
+export function useRegisterNutritionist() {
+  const router = useRouter()
+
+  return useMutation({
+    mutationFn: async (data: {
+      email: string
+      password: string
+      full_name: string
+      cpf: string
+      phone?: string
+      crn: string
+      crn_state: string
+      specialties?: string[]
+      referral_code?: string
+      turnstile_token: string
+    }) => {
+      const res = await api.post<RegisterResponse>('/api/v1/auth/register/nutritionist', data, { auth: false })
+      return res.data
+    },
+    onSuccess: () => {
+      trackLandingEvent('lp_register_complete', { user_type: 'nutritionist' })
       toast.success('Conta criada!', 'Verifique seu email para ativar sua conta.')
       router.push('/login?registered=true')
     },

@@ -31,7 +31,7 @@ import { ApiClientError } from '@/lib/api-client'
 const headingFont = {
   fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
   fontWeight: 900,
-  letterSpacing: '0',
+  letterSpacing: '-0.01em',
 }
 const monoLabel = {
   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
@@ -183,20 +183,23 @@ export default function LoginPage() {
         )}
 
         {/* ─── Page heading ─── */}
-        <div className="mb-3">
+        <div className="mb-4">
+          <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-linear-to-br from-emerald-400 to-emerald-600 shadow-[0_10px_24px_-8px_rgba(34,197,94,0.55)]">
+            <DSIcon name="fingerprint" size={22} className="text-white" />
+          </div>
           <div className="flex items-center gap-2 mb-1.5">
-            <DSIcon name="sparkles" size={14} className="text-emerald-600" />
+            <DSIcon name="sparkles" size={13} className="text-emerald-600" />
             <p className="text-[9px] uppercase text-emerald-600" style={monoLabel}>
               ACESSE SUA CONTA
             </p>
           </div>
           <h1
-            className="text-[1.75rem] text-slate-900 leading-none"
+            className="text-[1.9rem] text-slate-900 leading-none"
             style={headingFont}
           >
-            Entrar
+            Bem-vindo de volta
           </h1>
-          <p className="mt-1 text-[12px] text-slate-500">
+          <p className="mt-1.5 text-[12.5px] text-slate-500">
             Evolua com inteligência — login unificado
           </p>
         </div>

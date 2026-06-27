@@ -34,6 +34,25 @@ export const registerPersonalSchema = z.object({
   turnstile_token: z.string().default(''),
 })
 
+export const registerNutritionistSchema = z.object({
+  email: z.string().email('Email inválido'),
+  password: z.string().min(8, 'Mínimo 8 caracteres').max(128),
+  full_name: z.string().min(2, 'Nome muito curto').max(255),
+  cpf: z
+    .string()
+    .regex(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, 'CPF no formato 000.000.000-00'),
+  phone: z.string().min(10).max(20).optional(),
+  crn: z
+    .string()
+    .min(3, 'CRN muito curto')
+    .max(20, 'CRN muito longo')
+    .transform((val) => val.replace(/\s+/g, '').toUpperCase()),
+  crn_state: z.string().min(2, 'Selecione o estado').max(2, 'UF com 2 letras').transform((v) => v.toUpperCase()),
+  specialties: z.array(z.string()).optional().default([]),
+  referral_code: z.string().optional(),
+  turnstile_token: z.string().default(''),
+})
+
 export const registerStudentSchema = z.object({
   email: z.string().email('Email inválido'),
   password: z.string().min(8, 'Mínimo 8 caracteres').max(128),
@@ -134,6 +153,7 @@ export const oauthInitiateSchema = z.object({
 // Types inferred
 // ============================================
 export type RegisterPersonalInput = z.infer<typeof registerPersonalSchema>
+export type RegisterNutritionistInput = z.infer<typeof registerNutritionistSchema>
 export type RegisterStudentInput = z.infer<typeof registerStudentSchema>
 export type LoginInput = z.infer<typeof loginSchema>
 export type RefreshInput = z.infer<typeof refreshSchema>
