@@ -5,6 +5,23 @@
 
 ---
 
+## [5.0.6] — 2026-06-27 — Onboarding reverse-trial (sem paywall) + gamificação ledger
+
+> Deploy via `cf:deploy --allow-no-whatsapp --skip-workers` (v5.0.6, prod `vfit.app.br` → 200, `/welcome` e `/register/student?from=onboarding` → 200). Frontend-only. WhatsApp end falhou (401 — gateway). Ledger da gamificação (commit anterior) saiu junto neste deploy.
+
+### Onboarding — fluxo de retenção (estratégia revisada via CEO-review, aprovada)
+- **Paywall eliminado**: removida a oferta de 3 camadas (countdown 15min, 20%/40% off, modal de saída) do fim do fluxo. `/onboarding/paywall` e `/onboarding/notifications` ficam órfãos (fora do fluxo).
+- **Signup como fim do fluxo** (`OnboardingSignup`, novo `from=onboarding` do register/student): hero comemorativo "Seu plano está pronto", recap chip do plano (endowment), value stack "tudo liberado por 30 dias", Google 1-tap em destaque (`OAuthButtons compact`) + email/senha colapsado. Reusa `useRegisterStudent` → entra logado em `/treinos`. Mobile-first PWA, reduced-motion safe.
+- **Reverse trial**: 30 dias, tudo liberado, sem cartão. Sem seleção de plano, sem desconto, sem paywall.
+- **result page**: CTA → "Criar conta e salvar meu plano" → signup (logado → `/treinos`).
+- **welcome**: copy unificada à voz reverse-trial (matou "plano no final do fluxo / antes de decidir upgrade").
+- Pendência de polish (opcional): no desktop o layout `(auth)` mostra o aside de marketing de personal ao lado do signup do aluno — incongruente; mobile (caso primário) está perfeito.
+
+### Landing — gamificação
+- Bloco "como ganhar XP" virou **painel ledger único verde** (3º irmão dos leaderboards): header "COMO GANHAR XP", fórmula treino +50 × streak → metas +200, operadores, índices 01/02/03, caption Syne. Eliminado todo o teal (#0EA38A) da seção → família verde única.
+
+---
+
 ## [5.0.5] — 2026-06-27 — Polish: seção de gamificação da landing
 
 > Deploy via `cf:deploy --allow-no-whatsapp --skip-workers` (v5.0.5, verificado em prod `vfit.app.br` → 200). Workers não redeployado (mudança frontend-only). WhatsApp end falhou (401 invalid credentials — gateway).
