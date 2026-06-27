@@ -19,7 +19,6 @@ import { buildSeoMetadata } from '@/lib/seo'
 import { PageHero } from '@/components/shared/page-hero'
 import { PageMetadata } from '@/components/shared/page-metadata'
 import { FaqInline } from '@/components/shared/faq-inline'
-import { ProfileReturnLink } from '@/components/profile/settings-shell'
 import { FAQ_TERMOS } from '@/data/faqs'
 import { LightBand } from '@/components/shared/light-section'
 
@@ -62,8 +61,6 @@ export default function TermosPage() {
         appHeaderContinuation
       />
 
-      <ProfileReturnLink />
-
       <LightBand className="py-12 sm:py-16">
         <div className="max-w-4xl mx-auto space-y-12">
       <PageMetadata lastUpdated={LAST_UPDATED} version={VERSION} readingTime="8 min" />
@@ -88,7 +85,7 @@ export default function TermosPage() {
             <a
               key={item.id}
               href={`#${item.id}`}
-              className="rounded-lg px-3 py-2 text-sm text-slate-500 transition-colors hover:bg-white hover:text-gray-900"
+              className="rounded-lg px-3 py-2 text-sm text-slate-500 transition-colors hover:bg-slate-100 hover:text-gray-900"
             >
               {item.label}
             </a>

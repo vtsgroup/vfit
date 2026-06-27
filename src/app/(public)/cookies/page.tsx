@@ -19,8 +19,8 @@ import { buildSeoMetadata } from '@/lib/seo'
 import { PageHero } from '@/components/shared/page-hero'
 import { PageMetadata } from '@/components/shared/page-metadata'
 import { FaqInline } from '@/components/shared/faq-inline'
-import { ProfileReturnLink } from '@/components/profile/settings-shell'
 import { FAQ_COOKIES } from '@/data/faqs'
+import { LightBand } from '@/components/shared/light-section'
 
 export const metadata: Metadata = buildSeoMetadata({
   title: 'Política de Cookies da VFIT (LGPD)',
@@ -41,9 +41,9 @@ function Section({ icon, title, id, children }: {
         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-primary/10">
           <DSIcon name={icon} size={20} className="text-brand-primary" />
         </div>
-        <h2 className="text-xl font-bold text-white">{title}</h2>
+        <h2 className="text-xl font-bold text-gray-900">{title}</h2>
       </div>
-      <div className="space-y-3 pl-13 text-sm leading-relaxed text-zinc-400">
+      <div className="space-y-3 pl-13 text-sm leading-relaxed text-slate-500">
         {children}
       </div>
     </section>
@@ -54,28 +54,28 @@ function CookieCard({ name, type, purpose, duration, required }: {
   name: string; type: string; purpose: string; duration: string; required: boolean
 }) {
   return (
-    <div className="rounded-xl border border-white/8 bg-white/3 p-4">
+    <div className="rounded-xl border border-slate-200 bg-white p-4">
       <div className="flex items-start justify-between gap-2">
         <div>
-          <code className="text-xs font-semibold text-white">{name}</code>
+          <code className="text-xs font-semibold text-gray-900">{name}</code>
           <span className={`ml-2 inline-flex rounded-full px-2 py-0.5 text-[10px] font-medium ${
             required
-              ? 'bg-emerald-500/10 text-emerald-400'
+              ? 'bg-emerald-500/10 text-emerald-600'
               : 'bg-brand-primary/10 text-brand-primary'
           }`}>
             {type}
           </span>
         </div>
         {required && (
-          <span className="shrink-0 rounded-full bg-zinc-800 px-2 py-0.5 text-[10px] text-zinc-500">
+          <span className="shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-[10px] text-slate-400">
             Obrigatório
           </span>
         )}
       </div>
-      <p className="mt-2 text-xs text-zinc-500">{purpose}</p>
+      <p className="mt-2 text-xs text-slate-400">{purpose}</p>
       <div className="mt-2 flex items-center gap-1.5">
-        <DSIcon name="clock" size={12} className="text-zinc-400" />
-        <span className="text-xs text-zinc-400">{duration}</span>
+        <DSIcon name="clock" size={12} className="text-slate-500" />
+        <span className="text-xs text-slate-500">{duration}</span>
       </div>
     </div>
   )
@@ -92,9 +92,8 @@ export default function CookiesPage() {
         appHeaderContinuation
       />
 
-      <ProfileReturnLink />
-
-      <div className="mx-auto max-w-4xl px-6 space-y-12 pb-24">
+      <LightBand className="py-12 sm:py-16">
+        <div className="max-w-4xl mx-auto space-y-12">
       <PageMetadata lastUpdated={LAST_UPDATED} version={VERSION} readingTime="6 min" />
       {/* Summary Cards */}
       <div className="grid gap-4 sm:grid-cols-3">
@@ -103,10 +102,10 @@ export default function CookiesPage() {
           { icon: 'barChart' as DSIconName, title: 'Analytics Próprio', desc: 'Cloudflare Analytics Engine — privacy-first, sem cookies de terceiros' },
           { icon: 'toggleRight' as DSIconName, title: 'Seu Controle', desc: 'Gerencie cookies não essenciais a qualquer momento' },
         ].map((item, i) => (
-          <div key={i} className="rounded-xl border border-white/8 bg-white/3 p-5">
+          <div key={i} className="rounded-xl border border-slate-200 bg-white p-5">
             <DSIcon name={item.icon} size={20} className="mb-3 text-brand-primary" />
-            <p className="text-sm font-semibold text-white">{item.title}</p>
-            <p className="mt-1 text-xs text-zinc-500">{item.desc}</p>
+            <p className="text-sm font-semibold text-gray-900">{item.title}</p>
+            <p className="mt-1 text-xs text-slate-400">{item.desc}</p>
           </div>
         ))}
       </div>
@@ -120,7 +119,7 @@ export default function CookiesPage() {
             lembre suas preferências e melhore sua experiência.
           </p>
           <p>
-            Além de cookies, utilizamos <strong className="text-white">localStorage</strong> para
+            Além de cookies, utilizamos <strong className="text-gray-900">localStorage</strong> para
             dados de sessão e preferências do aplicativo.
           </p>
         </Section>
@@ -164,21 +163,21 @@ export default function CookiesPage() {
 
         <Section icon="barChart" title="3. Cookies de Analytics" id="analytics">
           <p className="mb-4">
-            Utilizamos o <strong className="text-white">Cloudflare Analytics Engine</strong> para
-            analytics. Esta tecnologia é <strong className="text-white">privacy-first</strong> e
+            Utilizamos o <strong className="text-gray-900">Cloudflare Analytics Engine</strong> para
+            analytics. Esta tecnologia é <strong className="text-gray-900">privacy-first</strong> e
             opera majoritariamente no edge (servidor), sem necessidade de cookies de
             rastreamento no navegador.
           </p>
           <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4">
             <div className="flex items-start gap-3">
-              <DSIcon name="shield" size={20} className="mt-0.5 shrink-0 text-emerald-400" />
+              <DSIcon name="shield" size={20} className="mt-0.5 shrink-0 text-emerald-600" />
               <div>
-                <p className="text-sm font-semibold text-emerald-400">Auto-aprovados por Legítimo Interesse</p>
-                <p className="mt-1 text-xs text-zinc-400">
+                <p className="text-sm font-semibold text-emerald-600">Auto-aprovados por Legítimo Interesse</p>
+                <p className="mt-1 text-xs text-slate-500">
                   Os cookies de analytics são aprovados automaticamente com base no legítimo
                   interesse (Art. 7º, IX — LGPD). Coletamos apenas dados agregados e
                   anonimizados: contagem de pageviews, rotas acessadas e performance.
-                  <strong className="text-white"> Nenhum dado pessoal identificável</strong> é processado via analytics.
+                  <strong className="text-gray-900"> Nenhum dado pessoal identificável</strong> é processado via analytics.
                 </p>
               </div>
             </div>
@@ -244,13 +243,13 @@ export default function CookiesPage() {
               { browser: 'Safari', url: 'Preferências → Privacidade' },
               { browser: 'Edge', url: 'edge://settings/content/cookies' },
             ].map((item, i) => (
-              <div key={i} className="flex items-center gap-3 rounded-xl border border-white/4 bg-white/1 p-3">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/5">
-                  <span className="text-xs font-bold text-zinc-300">{item.browser[0]}</span>
+              <div key={i} className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-3">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100">
+                  <span className="text-xs font-bold text-slate-600">{item.browser[0]}</span>
                 </div>
                 <div>
-                  <p className="text-xs font-semibold text-white">{item.browser}</p>
-                  <code className="text-xs text-zinc-400">{item.url}</code>
+                  <p className="text-xs font-semibold text-gray-900">{item.browser}</p>
+                  <code className="text-xs text-slate-500">{item.url}</code>
                 </div>
               </div>
             ))}
@@ -265,10 +264,10 @@ export default function CookiesPage() {
           <p>
             Para dúvidas sobre cookies ou exercício dos seus direitos, entre em contato:
           </p>
-          <div className="mt-3 rounded-xl border border-white/8 bg-white/3 p-4">
-            <ul className="space-y-1 text-xs text-zinc-400">
-              <li>📧 DPO: <strong className="text-white">dpo@vfit.app.br</strong></li>
-              <li>📧 Suporte: <strong className="text-white">suporte@vfit.app.br</strong></li>
+          <div className="mt-3 rounded-xl border border-slate-200 bg-white p-4">
+            <ul className="space-y-1 text-xs text-slate-500">
+              <li>📧 DPO: <strong className="text-gray-900">dpo@vfit.app.br</strong></li>
+              <li>📧 Suporte: <strong className="text-gray-900">suporte@vfit.app.br</strong></li>
             </ul>
           </div>
           <p className="mt-4">
@@ -282,7 +281,8 @@ export default function CookiesPage() {
         {/* FAQ */}
         <FaqInline items={FAQ_COOKIES} />
       </div>
-      </div>
+        </div>
+      </LightBand>
     </>
   )
 }

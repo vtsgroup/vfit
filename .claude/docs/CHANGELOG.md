@@ -5,6 +5,25 @@
 
 ---
 
+## [5.0.10] — 2026-06-27 — Páginas legais: fix FAQ/metadata + hero + privacidade/cookies
+
+> Deploy via `cf:deploy --allow-no-whatsapp` (v5.0.10). Correção dos problemas reportados após v5.0.9 (FAQ washed-out, botão branco no hero, páginas não modernizadas). Verificado via workflow de design-review adversarial (6 agents, 3 páginas clean).
+
+### Componentes compartilhados — convertidos dark → light kit (cascata p/ TODAS as páginas legais)
+- **`FaqInline`** (`faq-inline.tsx`): era dark puro (`bg-white/3 text-zinc-200/300/400` → invisível no claro). Redesenhado p/ kit light: card branco + borda slate, heading gray-950, chip verde, **número em badge com gradiente verde no estado aberto**, anel verde + glow no item aberto, círculo toggle com gradiente verde. **Resolve "cores da FAQ erradas".**
+- **`PageMetadata`** (`page-metadata.tsx`): era `bg-white/3 text-zinc-500` (card fantasma). Agora card branco, borda slate, ícones verdes sólidos.
+
+### Hero — botão branco fantasma removido
+- **`ProfileReturnLink`** tinha `-mt-8` (margem negativa) → pílula branca sangrava p/ dentro do hero escuro (clipado). Removido de `/termos`, `/excluir-conta`, `/privacidade`, `/cookies` (afFordância de perfil, deslocada em página pública; breadcrumb do hero já navega). **Resolve "botão branco no hero".**
+
+### Páginas legais — modernização completa p/ LightBand
+- **`/privacidade`** e **`/cookies`**: estavam **100% dark** (Section `text-white`, tabela de dados dark, cards `border-white/8 bg-white/3`, pills `bg-zinc-800`). Convertidas integralmente p/ LightBand + kit claro (23+ tokens cada). Tabela de dados legível no claro.
+- **`/excluir-conta`**: cards internos `bg-bg-secondary` (navy escuro) → `bg-white border-slate-200`; `text-red-400`/`text-amber-400` → `-600` (WCAG); code `bg-bg-primary` → `bg-slate-100`.
+- **`/termos`**, **`/lgpd`**, **`/carreiras`**: já em LightBand, herdam FaqInline/PageMetadata claros + fix TOC hover (`hover:bg-white` invisível → `hover:bg-slate-100`).
+- **SEO 100% preservado**: metadata, JSON-LD (FAQPage, JobPosting, ItemList), ids/âncoras de seção, breadcrumbs, todo o copy — intactos. Validado por verify adversarial.
+
+---
+
 ## [5.0.9] — 2026-06-27 — Newsletter input glow + páginas legais light-theme
 
 > Deploy via `cf:deploy --allow-no-whatsapp` (v5.0.9, páginas legais agora em LightBand com padrão visual coerente).

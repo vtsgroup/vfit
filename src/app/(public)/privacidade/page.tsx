@@ -19,8 +19,8 @@ import { buildSeoMetadata } from '@/lib/seo'
 import { PageHero } from '@/components/shared/page-hero'
 import { PageMetadata } from '@/components/shared/page-metadata'
 import { FaqInline } from '@/components/shared/faq-inline'
-import { ProfileReturnLink } from '@/components/profile/settings-shell'
 import { FAQ_PRIVACIDADE } from '@/data/faqs'
+import { LightBand } from '@/components/shared/light-section'
 
 export const metadata: Metadata = buildSeoMetadata({
   title: 'Política de Privacidade VFIT (LGPD)',
@@ -41,9 +41,9 @@ function Section({ icon, title, id, children }: {
         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-primary/10">
           <DSIcon name={icon} size={20} className="text-brand-primary" />
         </div>
-        <h2 className="text-xl font-bold text-white">{title}</h2>
+        <h2 className="text-xl font-bold text-gray-900">{title}</h2>
       </div>
-      <div className="space-y-3 pl-13 text-sm leading-relaxed text-zinc-400">
+      <div className="space-y-3 pl-13 text-sm leading-relaxed text-slate-500">
         {children}
       </div>
     </section>
@@ -52,21 +52,21 @@ function Section({ icon, title, id, children }: {
 
 function DataTable({ rows }: { rows: { data: string; purpose: string; base: string }[] }) {
   return (
-    <div className="overflow-x-auto rounded-xl border border-white/6">
+    <div className="overflow-x-auto rounded-xl border border-slate-200">
       <table className="w-full text-sm">
         <caption className="sr-only">Dados coletados, sua finalidade e a base legal correspondente</caption>
         <thead>
-          <tr className="border-b border-white/8 bg-white/3">
-            <th scope="col" className="px-4 py-3 text-left font-semibold text-zinc-300">Dado</th>
-            <th scope="col" className="px-4 py-3 text-left font-semibold text-zinc-300">Finalidade</th>
-            <th scope="col" className="px-4 py-3 text-left font-semibold text-zinc-300">Base Legal</th>
+          <tr className="border-b border-slate-200 bg-slate-50">
+            <th scope="col" className="px-4 py-3 text-left font-semibold text-slate-600">Dado</th>
+            <th scope="col" className="px-4 py-3 text-left font-semibold text-slate-600">Finalidade</th>
+            <th scope="col" className="px-4 py-3 text-left font-semibold text-slate-600">Base Legal</th>
           </tr>
         </thead>
         <tbody>
           {rows.map((row, i) => (
-            <tr key={i} className="border-b border-white/4 last:border-0">
-              <td className="px-4 py-3 text-zinc-300">{row.data}</td>
-              <td className="px-4 py-3 text-zinc-400">{row.purpose}</td>
+            <tr key={i} className="border-b border-slate-200 last:border-0">
+              <td className="px-4 py-3 text-slate-600">{row.data}</td>
+              <td className="px-4 py-3 text-slate-500">{row.purpose}</td>
               <td className="px-4 py-3">
                 <span className="rounded-full bg-brand-primary/10 px-2.5 py-0.5 text-xs font-medium text-brand-primary">
                   {row.base}
@@ -91,9 +91,8 @@ export default function PrivacidadePage() {
         appHeaderContinuation
       />
 
-      <ProfileReturnLink />
-
-      <div className="mx-auto max-w-4xl px-6 space-y-12 pb-24">
+      <LightBand className="py-12 sm:py-16">
+        <div className="max-w-4xl mx-auto space-y-12">
       <PageMetadata lastUpdated={LAST_UPDATED} version={VERSION} readingTime="10 min" />
       {/* LGPD Highlights */}
       <div className="grid gap-4 sm:grid-cols-3">
@@ -102,17 +101,17 @@ export default function PrivacidadePage() {
           { icon: 'lock' as DSIconName, title: 'Criptografia', desc: 'Dados em trânsito (TLS 1.3) e em repouso (AES-256)' },
           { icon: 'userX' as DSIconName, title: 'Direito ao Esquecimento', desc: 'Exclua sua conta e dados a qualquer momento' },
         ].map((item, i) => (
-          <div key={i} className="rounded-xl border border-white/8 bg-white/3 p-5">
+          <div key={i} className="rounded-xl border border-slate-200 bg-white p-5">
             <DSIcon name={item.icon} size={20} className="mb-3 text-brand-primary" />
-            <p className="text-sm font-semibold text-white">{item.title}</p>
-            <p className="mt-1 text-xs text-zinc-500">{item.desc}</p>
+            <p className="text-sm font-semibold text-gray-900">{item.title}</p>
+            <p className="mt-1 text-xs text-slate-400">{item.desc}</p>
           </div>
         ))}
       </div>
 
       {/* TOC */}
-      <nav className="rounded-2xl border border-white/8 bg-white/3 p-6 backdrop-blur-sm shadow-[0_2px_12px_rgba(0,0,0,0.15)]">
-        <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-zinc-500">
+      <nav className="rounded-2xl border border-slate-200 bg-white p-6 backdrop-blur-sm shadow-[0_1px_2px_rgba(15,23,42,0.04),0_10px_28px_-20px_rgba(15,23,42,0.18)]">
+        <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-400">
           Índice
         </p>
         <div className="grid gap-2 sm:grid-cols-2">
@@ -131,7 +130,7 @@ export default function PrivacidadePage() {
             <a
               key={item.id}
               href={`#${item.id}`}
-              className="rounded-lg px-3 py-2 text-sm text-zinc-400 transition-colors hover:bg-white/4 hover:text-white"
+              className="rounded-lg px-3 py-2 text-sm text-slate-500 transition-colors hover:bg-slate-100 hover:text-gray-900"
             >
               {item.label}
             </a>
@@ -143,10 +142,10 @@ export default function PrivacidadePage() {
       <div className="space-y-10">
         <Section icon="fileText" title="1. Controlador de Dados" id="controlador">
           <p>
-            <strong className="text-white">VFIT (Personal IA Tecnologia LTDA)</strong><br />
+            <strong className="text-gray-900">VFIT (Personal IA Tecnologia LTDA)</strong><br />
             CNPJ: XX.XXX.XXX/0001-XX<br />
             Endereço: São Paulo/SP, Brasil<br />
-            DPO (Encarregado): <strong className="text-white">dpo@vfit.app.br</strong>
+            DPO (Encarregado): <strong className="text-gray-900">dpo@vfit.app.br</strong>
           </p>
         </Section>
 
@@ -163,7 +162,7 @@ export default function PrivacidadePage() {
             { data: 'Dados de navegação', purpose: 'Melhoria da plataforma', base: 'Legítimo interesse' },
           ]} />
           <p className="mt-4">
-            <strong className="text-white">Dados sensíveis:</strong> Informações de saúde (peso, gordura corporal, restrições médicas)
+            <strong className="text-gray-900">Dados sensíveis:</strong> Informações de saúde (peso, gordura corporal, restrições médicas)
             são tratadas com proteção reforçada e somente com seu consentimento explícito.
           </p>
         </Section>
@@ -191,20 +190,20 @@ export default function PrivacidadePage() {
             { data: 'Resend', purpose: 'Email transacional', base: 'Execução contratual' },
           ]} />
           <p className="mt-4">
-            <strong className="text-white">Nunca vendemos seus dados.</strong> Compartilhamos apenas o
+            <strong className="text-gray-900">Nunca vendemos seus dados.</strong> Compartilhamos apenas o
             mínimo necessário com parceiros técnicos para operação dos serviços.
           </p>
         </Section>
 
         <Section icon="server" title="5. Armazenamento e Segurança" id="armazenamento">
           <ul className="list-disc space-y-1.5 pl-5">
-            <li><strong className="text-white">Dados em trânsito:</strong> TLS 1.3 em todas as comunicações</li>
-            <li><strong className="text-white">Senhas:</strong> Hash bcrypt (cost factor 12), nunca armazenadas em texto puro</li>
-            <li><strong className="text-white">Tokens:</strong> JWT com HMAC-SHA256, expiração em 1 hora</li>
-            <li><strong className="text-white">Banco de dados:</strong> PostgreSQL com SSL obrigatório (provedor gerenciado, região sa-east-1)</li>
-            <li><strong className="text-white">Arquivos:</strong> Cloudflare R2 com acesso autenticado</li>
-            <li><strong className="text-white">Rate limiting:</strong> Proteção contra ataques de força bruta</li>
-            <li><strong className="text-white">CAPTCHA:</strong> Cloudflare Turnstile em formulários sensíveis</li>
+            <li><strong className="text-gray-900">Dados em trânsito:</strong> TLS 1.3 em todas as comunicações</li>
+            <li><strong className="text-gray-900">Senhas:</strong> Hash bcrypt (cost factor 12), nunca armazenadas em texto puro</li>
+            <li><strong className="text-gray-900">Tokens:</strong> JWT com HMAC-SHA256, expiração em 1 hora</li>
+            <li><strong className="text-gray-900">Banco de dados:</strong> PostgreSQL com SSL obrigatório (provedor gerenciado, região sa-east-1)</li>
+            <li><strong className="text-gray-900">Arquivos:</strong> Cloudflare R2 com acesso autenticado</li>
+            <li><strong className="text-gray-900">Rate limiting:</strong> Proteção contra ataques de força bruta</li>
+            <li><strong className="text-gray-900">CAPTCHA:</strong> Cloudflare Turnstile em formulários sensíveis</li>
           </ul>
         </Section>
 
@@ -217,9 +216,9 @@ export default function PrivacidadePage() {
             </Link>.
           </p>
           <ul className="list-disc space-y-1.5 pl-5">
-            <li><strong className="text-white">Necessários:</strong> autenticação, sessão, preferências — não requerem consentimento</li>
-            <li><strong className="text-white">Analytics:</strong> Cloudflare Analytics Engine — auto-aprovados conforme legítimo interesse</li>
-            <li><strong className="text-white">Não utilizamos:</strong> cookies de terceiros para publicidade</li>
+            <li><strong className="text-gray-900">Necessários:</strong> autenticação, sessão, preferências — não requerem consentimento</li>
+            <li><strong className="text-gray-900">Analytics:</strong> Cloudflare Analytics Engine — auto-aprovados conforme legítimo interesse</li>
+            <li><strong className="text-gray-900">Não utilizamos:</strong> cookies de terceiros para publicidade</li>
           </ul>
         </Section>
 
@@ -234,19 +233,19 @@ export default function PrivacidadePage() {
               { icon: 'bell' as DSIconName, title: 'Oposição', desc: 'Revogar consentimento para tratamento específico' },
               { icon: 'lock' as DSIconName, title: 'Informação', desc: 'Saber com quem seus dados são compartilhados' },
             ].map((item, i) => (
-              <div key={i} className="flex items-start gap-3 rounded-xl border border-white/4 bg-white/1 p-3">
+              <div key={i} className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white p-3">
                 <DSIcon name={item.icon} size={16} className="mt-0.5 shrink-0 text-brand-primary" />
                 <div>
-                  <p className="text-xs font-semibold text-white">{item.title}</p>
-                  <p className="text-xs text-zinc-500">{item.desc}</p>
+                  <p className="text-xs font-semibold text-gray-900">{item.title}</p>
+                  <p className="text-xs text-slate-400">{item.desc}</p>
                 </div>
               </div>
             ))}
           </div>
           <p className="mt-4">
-            Para exercer qualquer direito, acesse <strong className="text-white">Configurações → Minha Conta</strong> na
-            Plataforma, ou envie e-mail para <strong className="text-white">dpo@vfit.app.br</strong>.
-            Responderemos em até <strong className="text-white">15 dias úteis</strong>.
+            Para exercer qualquer direito, acesse <strong className="text-gray-900">Configurações → Minha Conta</strong> na
+            Plataforma, ou envie e-mail para <strong className="text-gray-900">dpo@vfit.app.br</strong>.
+            Responderemos em até <strong className="text-gray-900">15 dias úteis</strong>.
           </p>
         </Section>
 
@@ -271,15 +270,15 @@ export default function PrivacidadePage() {
         <Section icon="bell" title="10. Alterações e Contato" id="alteracoes">
           <p>
             Podemos atualizar esta Política periodicamente. Alterações significativas
-            serão comunicadas com antecedência mínima de <strong className="text-white">15 dias</strong> via
+            serão comunicadas com antecedência mínima de <strong className="text-gray-900">15 dias</strong> via
             e-mail ou notificação in-app.
           </p>
-          <div className="mt-4 rounded-xl border border-white/8 bg-white/3 p-4">
-            <p className="text-xs font-semibold text-white">Canais de contato:</p>
-            <ul className="mt-2 space-y-1 text-xs text-zinc-400">
-              <li>📧 DPO: <strong className="text-white">dpo@vfit.app.br</strong></li>
-              <li>📧 Suporte: <strong className="text-white">suporte@vfit.app.br</strong></li>
-              <li>🌐 Site: <strong className="text-white">vfit.app.br</strong></li>
+          <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4">
+            <p className="text-xs font-semibold text-gray-900">Canais de contato:</p>
+            <ul className="mt-2 space-y-1 text-xs text-slate-500">
+              <li>📧 DPO: <strong className="text-gray-900">dpo@vfit.app.br</strong></li>
+              <li>📧 Suporte: <strong className="text-gray-900">suporte@vfit.app.br</strong></li>
+              <li>🌐 Site: <strong className="text-gray-900">vfit.app.br</strong></li>
             </ul>
           </div>
         </Section>
@@ -287,7 +286,8 @@ export default function PrivacidadePage() {
         {/* FAQ */}
         <FaqInline items={FAQ_PRIVACIDADE} />
       </div>
-      </div>
+        </div>
+      </LightBand>
     </>
   )
 }

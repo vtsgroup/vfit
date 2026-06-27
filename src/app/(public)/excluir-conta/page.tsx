@@ -18,7 +18,6 @@ import { buildSeoMetadata } from '@/lib/seo'
 import { PageHero } from '@/components/shared/page-hero'
 import { PageMetadata } from '@/components/shared/page-metadata'
 import { FaqInline } from '@/components/shared/faq-inline'
-import { ProfileReturnLink } from '@/components/profile/settings-shell'
 import { FAQ_EXCLUIR_CONTA } from '@/data/faqs'
 import { LightBand } from '@/components/shared/light-section'
 
@@ -40,14 +39,12 @@ export default function ExcluirContaPage() {
         appHeaderContinuation
       />
 
-      <ProfileReturnLink />
-
       <LightBand className="py-12 sm:py-16">
         <div className="max-w-2xl mx-auto space-y-12">
         <PageMetadata lastUpdated="14 de fevereiro de 2026" readingTime="3 min" />
 
         {/* Option 1: Self-service */}
-        <section className="mb-8 rounded-2xl border border-border-light bg-bg-secondary p-6">
+        <section className="mb-8 rounded-2xl border border-slate-200 bg-white p-6">
           <div className="mb-4 flex items-center gap-3">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-primary/10">
               <DSIcon name="settings" size={20} className="text-brand-primary" />
@@ -69,10 +66,10 @@ export default function ExcluirContaPage() {
             </li>
             <li>
               Na seção <strong className="text-gray-900">Privacidade e LGPD</strong>,
-              clique em <strong className="text-red-400">Excluir conta</strong>
+              clique em <strong className="text-red-600">Excluir conta</strong>
             </li>
             <li>
-              Confirme digitando <code className="rounded bg-bg-primary px-1.5 py-0.5 text-xs text-red-400">EXCLUIR</code> e clique em confirmar
+              Confirme digitando <code className="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-red-600">EXCLUIR</code> e clique em confirmar
             </li>
           </ol>
           <div className="mt-4">
@@ -87,10 +84,10 @@ export default function ExcluirContaPage() {
         </section>
 
         {/* Option 2: Email */}
-        <section className="mb-8 rounded-2xl border border-border-light bg-bg-secondary p-6">
+        <section className="mb-8 rounded-2xl border border-slate-200 bg-white p-6">
           <div className="mb-4 flex items-center gap-3">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-500/10">
-              <DSIcon name="mail" size={20} className="text-amber-400" />
+              <DSIcon name="mail" size={20} className="text-amber-600" />
             </div>
             <h2 className="text-lg font-semibold text-gray-900">
               Opção 2 — Solicitar por E-mail
@@ -101,7 +98,7 @@ export default function ExcluirContaPage() {
           </p>
           <a
             href="mailto:contato@vfit.app.br?subject=Solicita%C3%A7%C3%A3o%20de%20exclus%C3%A3o%20de%20conta&body=Ol%C3%A1%2C%20gostaria%20de%20solicitar%20a%20exclus%C3%A3o%20da%20minha%20conta%20e%20dados%20pessoais.%0A%0AE-mail%20cadastrado%3A%20%0ANome%20completo%3A%20"
-            className="inline-flex items-center gap-2 rounded-xl border border-amber-500/20 bg-amber-500/5 px-4 py-2.5 text-sm font-medium text-amber-400 transition-colors hover:bg-amber-500/10"
+            className="inline-flex items-center gap-2 rounded-xl border border-amber-500/20 bg-amber-500/5 px-4 py-2.5 text-sm font-medium text-amber-600 transition-colors hover:bg-amber-500/10"
           >
             <DSIcon name="mail" size={16} />
             contato@vfit.app.br
@@ -112,10 +109,10 @@ export default function ExcluirContaPage() {
         </section>
 
         {/* What gets deleted */}
-        <section className="mb-8 rounded-2xl border border-border-light bg-bg-secondary p-6">
+        <section className="mb-8 rounded-2xl border border-slate-200 bg-white p-6">
           <div className="mb-4 flex items-center gap-3">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-red-500/10">
-              <DSIcon name="alertTriangle" size={20} className="text-red-400" />
+              <DSIcon name="alertTriangle" size={20} className="text-red-600" />
             </div>
             <h2 className="text-lg font-semibold text-gray-900">
               O que será excluído
@@ -132,7 +129,7 @@ export default function ExcluirContaPage() {
               'Preferências e configurações',
             ].map((item) => (
               <li key={item} className="flex items-start gap-2">
-                <DSIcon name="checkCircle2" size={16} className="mt-0.5 shrink-0 text-red-400" />
+                <DSIcon name="checkCircle2" size={16} className="mt-0.5 shrink-0 text-red-600" />
                 {item}
               </li>
             ))}
@@ -140,7 +137,7 @@ export default function ExcluirContaPage() {
         </section>
 
         {/* Timeline and legal */}
-        <section className="mb-8 rounded-2xl border border-border-light bg-bg-secondary p-6">
+        <section className="mb-8 rounded-2xl border border-slate-200 bg-white p-6">
           <div className="mb-4 flex items-center gap-3">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-primary/10">
               <DSIcon name="shield" size={20} className="text-brand-primary" />
@@ -178,11 +175,11 @@ export default function ExcluirContaPage() {
           <Link href="/privacidade" className="hover:text-brand-primary transition-colors">
             Política de Privacidade
           </Link>
-          <span className="text-border-primary">·</span>
+          <span className="text-slate-300">·</span>
           <Link href="/termos" className="hover:text-brand-primary transition-colors">
             Termos de Uso
           </Link>
-          <span className="text-border-primary">·</span>
+          <span className="text-slate-300">·</span>
           <Link href="/" className="hover:text-brand-primary transition-colors">
             Voltar ao início
           </Link>
