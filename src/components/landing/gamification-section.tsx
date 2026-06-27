@@ -417,21 +417,21 @@ export function GamificationSection() {
 
         {/* Heading */}
         <IntersectionReveal animation="blur-in" delay={50}>
-          <h2 className="mb-4 text-center text-3xl leading-[0.96] text-white sm:text-5xl" style={headingFont}>
+          <h2 className="mb-4 text-center text-3xl leading-[0.96] text-white sm:text-[3.25rem]" style={headingFont}>
             CONSTÂNCIA QUE{' '}
-            <span className="bg-linear-to-r from-brand-primary via-brand-mint to-brand-accent bg-clip-text text-transparent">VIRA RESULTADO</span>
+            <span className="bg-linear-to-r from-brand-primary via-brand-mint to-brand-accent bg-clip-text text-transparent" style={{ filter: 'drop-shadow(0 4px 24px rgba(14,163,138,0.35))' }}>VIRA RESULTADO</span>
           </h2>
         </IntersectionReveal>
 
         <IntersectionReveal animation="fade-in" delay={100}>
-          <p className="mx-auto mb-8 max-w-lg text-center text-sm leading-relaxed text-white/60 sm:mb-10 sm:text-base">
+          <p className="mx-auto mb-8 max-w-xl text-center text-sm leading-relaxed text-white/65 sm:mb-12 sm:text-base">
             XP, badges e rankings deixam o treino menos solitário e dão ao aluno um motivo a mais para voltar amanhã.
           </p>
         </IntersectionReveal>
 
         {/* Como ganha XP — mecânica do sistema (3 fontes de pontos) */}
         <IntersectionReveal animation="fade-in" delay={120}>
-          <div className="mx-auto mb-12 grid max-w-3xl grid-cols-1 gap-3 sm:mb-16 sm:grid-cols-3">
+          <div className="mx-auto mb-12 grid max-w-4xl grid-cols-1 gap-4 sm:mb-16 sm:grid-cols-3">
             {[
               { icon: 'dumbbell' as DSIconName, label: 'Cada treino', value: '+50 XP' },
               { icon: 'flame' as DSIconName, label: 'Streak diário', value: 'multiplica' },
@@ -440,16 +440,25 @@ export function GamificationSection() {
               <div
                 key={m.label}
                 onMouseMove={handleCardMove}
-                className="group relative flex items-center gap-3 overflow-hidden rounded-2xl px-4 py-3.5"
-                style={glassShell}
+                className="group relative flex flex-col items-center gap-4 overflow-hidden rounded-2xl px-6 py-6 text-center transition-all duration-300 hover:scale-105"
+                style={{
+                  ...glassShell,
+                  background: 'linear-gradient(135deg, rgba(14,163,138,0.10) 0%, rgba(22,181,159,0.05) 100%)',
+                  border: '1.5px solid rgba(14,163,138,0.25)',
+                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08), 0 24px 60px -28px rgba(14,163,138,0.3)',
+                }}
               >
-                <HoverFX />
-                <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-primary/15 ring-1 ring-brand-primary/20">
-                  <DSIcon name={m.icon} size={16} className="text-brand-primary" />
+                <HoverFX rounded="rounded-2xl" />
+                <div className="relative flex h-14 w-14 shrink-0 items-center justify-center rounded-xl" style={{
+                  background: 'linear-gradient(135deg, rgba(14,163,138,0.25) 0%, rgba(22,181,159,0.15) 100%)',
+                  border: '1.5px solid rgba(14,163,138,0.3)',
+                  boxShadow: '0 8px 20px rgba(14,163,138,0.2), inset 0 1px 0 rgba(255,255,255,0.1)',
+                }}>
+                  <DSIcon name={m.icon} size={24} className="text-brand-primary" />
                 </div>
                 <div className="relative min-w-0">
-                  <div className="text-[10px] uppercase text-white/50" style={monoLabel}>{m.label}</div>
-                  <div className="bg-linear-to-r from-white to-emerald-200 bg-clip-text text-sm font-black text-transparent">{m.value}</div>
+                  <div className="text-[11px] uppercase tracking-wider text-white/60 font-semibold" style={monoLabel}>{m.label}</div>
+                  <div className="mt-2 bg-linear-to-r from-white via-emerald-200 to-brand-primary bg-clip-text text-2xl font-black text-transparent leading-tight">{m.value}</div>
                 </div>
               </div>
             ))}
@@ -466,13 +475,31 @@ export function GamificationSection() {
         <IntersectionReveal animation="fade-in" delay={350}>
           <div className="mt-14">
             {/* Próxima recompensa */}
-            <div className="mx-auto mb-7 max-w-md">
-              <div className="flex items-center justify-between text-[10px]" style={monoLabel}>
-                <span className="text-white/45 uppercase">Próxima recompensa</span>
-                <span className="text-brand-primary uppercase">Nível 10 · 90%</span>
+            <div
+              className="mx-auto mb-9 max-w-lg overflow-hidden rounded-2xl px-5 py-4 sm:px-6 sm:py-5"
+              style={{
+                ...glassShell,
+                background: 'linear-gradient(135deg, rgba(14,163,138,0.10) 0%, rgba(132,204,22,0.04) 100%)',
+                border: '1.5px solid rgba(14,163,138,0.22)',
+              }}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-primary/15 ring-1 ring-brand-primary/25">
+                    <DSIcon name="gift" size={17} className="text-brand-primary" />
+                  </div>
+                  <div>
+                    <div className="text-[10px] uppercase tracking-wider text-white/50" style={monoLabel}>Próxima recompensa</div>
+                    <div className="text-sm font-black text-white">Nível 10</div>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="bg-linear-to-r from-white to-brand-primary bg-clip-text text-2xl font-black text-transparent leading-none">90%</div>
+                  <div className="mt-0.5 text-[9px] uppercase text-white/40" style={monoLabel}>concluído</div>
+                </div>
               </div>
-              <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/10">
-                <div className="h-full rounded-full shadow-[0_0_10px_rgba(34,197,94,0.6)]" style={{ width: '90%', background: 'linear-gradient(90deg, #22c55e, #84cc16, #34e565)' }} />
+              <div className="mt-3.5 h-2 overflow-hidden rounded-full bg-white/10">
+                <div className="h-full rounded-full shadow-[0_0_12px_rgba(34,197,94,0.7)]" style={{ width: '90%', background: 'linear-gradient(90deg, #0EA38A, #22c55e, #84cc16, #34e565)' }} />
               </div>
             </div>
 
