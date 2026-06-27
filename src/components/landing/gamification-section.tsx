@@ -424,9 +424,36 @@ export function GamificationSection() {
         </IntersectionReveal>
 
         <IntersectionReveal animation="fade-in" delay={100}>
-          <p className="mx-auto mb-12 max-w-lg text-center text-sm leading-relaxed text-white/60 sm:mb-14 sm:text-base">
+          <p className="mx-auto mb-8 max-w-lg text-center text-sm leading-relaxed text-white/60 sm:mb-10 sm:text-base">
             XP, badges e rankings deixam o treino menos solitário e dão ao aluno um motivo a mais para voltar amanhã.
           </p>
+        </IntersectionReveal>
+
+        {/* Como ganha XP — mecânica do sistema (3 fontes de pontos) */}
+        <IntersectionReveal animation="fade-in" delay={120}>
+          <div className="mx-auto mb-12 grid max-w-3xl grid-cols-1 gap-3 sm:mb-16 sm:grid-cols-3">
+            {[
+              { icon: 'dumbbell' as DSIconName, label: 'Cada treino', value: '+50 XP' },
+              { icon: 'flame' as DSIconName, label: 'Streak diário', value: 'multiplica' },
+              { icon: 'gift' as DSIconName, label: 'Metas e desafios', value: 'badge + XP' },
+            ].map((m) => (
+              <div
+                key={m.label}
+                onMouseMove={handleCardMove}
+                className="group relative flex items-center gap-3 overflow-hidden rounded-2xl px-4 py-3.5"
+                style={glassShell}
+              >
+                <HoverFX />
+                <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-primary/15 ring-1 ring-brand-primary/20">
+                  <DSIcon name={m.icon} size={16} className="text-brand-primary" />
+                </div>
+                <div className="relative min-w-0">
+                  <div className="text-[10px] uppercase text-white/50" style={monoLabel}>{m.label}</div>
+                  <div className="bg-linear-to-r from-white to-emerald-200 bg-clip-text text-sm font-black text-transparent">{m.value}</div>
+                </div>
+              </div>
+            ))}
+          </div>
         </IntersectionReveal>
 
         {/* Leaderboards */}

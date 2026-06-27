@@ -383,31 +383,26 @@ export function Hero() {
                   boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.18), 0 12px 36px -12px rgba(0,0,0,0.7), 0 0 0 1px rgba(34,197,94,0.14)',
                 }}
               >
-                {/* Inner green pill — verde profundo, texto branco, bead navy glossy */}
+                {/* Inner green pill — gradiente premium com ícone estrela */}
                 <span
                   className="relative inline-flex items-center gap-1.5 overflow-hidden rounded-full px-3 py-1.5"
                   style={{
-                    background: 'linear-gradient(135deg, #18a64c 0%, #15893f 50%, #126733 100%)',
-                    boxShadow: '0 4px 16px -3px rgba(20,120,60,0.6), inset 0 1px 0 rgba(255,255,255,0.30), inset 0 -1px 0 rgba(3,40,22,0.55)',
+                    background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 52%, #14803d 100%)',
+                    boxShadow: '0 4px 18px -3px rgba(34,197,94,0.65), inset 0 1px 0 rgba(255,255,255,0.35), inset 0 -1px 0 rgba(3,50,26,0.45)',
                   }}
                 >
-                  {/* top shine sutil */}
-                  <span className="pointer-events-none absolute inset-x-0 top-0 h-1/2 bg-linear-to-b from-white/16 to-transparent" />
-                  {/* bead navy glossy — esfera 3D minúscula */}
-                  <span className="relative flex h-2 w-2">
-                    <span className="absolute inline-flex h-full w-full rounded-full bg-[#08122B] opacity-45 motion-safe:animate-ping" />
-                    <span
-                      className="relative inline-flex h-2 w-2 rounded-full"
-                      style={{
-                        background: 'radial-gradient(circle at 35% 28%, #38507a 0%, #0c1730 48%, #08122B 100%)',
-                        boxShadow: 'inset 0 0.5px 0 rgba(255,255,255,0.4), 0 0 4px rgba(0,0,0,0.45)',
-                      }}
-                    />
-                  </span>
-                  <span className="relative text-[10px] font-black uppercase tracking-[0.08em] text-white [text-shadow:0_1px_2px_rgba(3,30,18,0.55)]">30 dias grátis</span>
+                  {/* top shine */}
+                  <span className="pointer-events-none absolute inset-x-0 top-0 h-1/2 bg-linear-to-b from-white/20 to-transparent" />
+                  {/* shimmer sweep on hover */}
+                  <span className="pointer-events-none absolute inset-0 -translate-x-[110%] bg-linear-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover/badge:translate-x-[110%]" />
+                  {/* ícone estrela sólida */}
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" className="relative text-[#08122B]" aria-hidden="true">
+                    <path d="M12 2l2.9 6.26L22 9.27l-5 5.14 1.18 7.59L12 18.77l-6.18 3.23L7 14.41 2 9.27l7.1-1.01L12 2z" />
+                  </svg>
+                  <span className="relative text-[10px] font-black uppercase tracking-[0.08em] text-[#08122B] [text-shadow:0_0.5px_0_rgba(255,255,255,0.25)]">30 dias grátis</span>
                 </span>
                 {/* Outer label */}
-                <span className="text-[11px] font-semibold text-white/80" style={{ letterSpacing: '0.04em' }}>
+                <span className="text-[11px] font-semibold text-white/75" style={{ letterSpacing: '0.045em' }}>
                   sem cartão de crédito
                 </span>
               </span>
@@ -502,19 +497,17 @@ export function Hero() {
                   <span className="relative z-10 pr-4 text-[13px] font-black uppercase tracking-wider text-white [text-shadow:0_1px_2px_rgba(0,0,0,0.5)] sm:text-sm">
                     Ver como funciona
                   </span>
-                  {/* Play chip — navy gradient circle + glowing green triangle */}
+                  {/* Play chip — verde gradiente sólido, triângulo navy (espelha o CTA primário) */}
                   <span
                     className="relative z-10 flex h-11 w-11 items-center justify-center rounded-full transition-transform duration-300 group-hover/play:scale-105"
                     style={{
-                      background: 'radial-gradient(120% 120% at 50% 0%, #14233f 0%, #0a1530 55%, #06101f 100%)',
-                      boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.16), inset 0 0 0 1px rgba(34,197,94,0.18), 0 4px 14px -3px rgba(0,0,0,0.55)',
+                      background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 55%, #15803d 100%)',
+                      boxShadow: '0 4px 14px -3px rgba(34,197,94,0.55), inset 0 1px 0 rgba(255,255,255,0.4), inset 0 -1px 0 rgba(6,78,59,0.4)',
                     }}
                   >
-                    {/* soft pulse ring */}
-                    <span className="pointer-events-none absolute inset-0 rounded-full ring-1 ring-brand-primary/35 motion-safe:animate-ping" />
-                    {/* static brand ring */}
-                    <span className="pointer-events-none absolute inset-[3px] rounded-full ring-1 ring-brand-primary/25" />
-                    <svg width="12" height="14" viewBox="0 0 12 14" className="relative ml-0.5 fill-[#4ADE80] [filter:drop-shadow(0_0_5px_rgba(74,222,128,0.7))]" aria-hidden="true">
+                    {/* halo de pulso suave, único — sem bordas concorrentes */}
+                    <span className="pointer-events-none absolute -inset-1 rounded-full ring-1 ring-brand-primary/30 motion-safe:animate-ping" />
+                    <svg width="12" height="14" viewBox="0 0 12 14" className="relative ml-0.5 fill-[#08122B]" aria-hidden="true">
                       <path d="M1 1.3 11 7 1 12.7Z" />
                     </svg>
                   </span>
