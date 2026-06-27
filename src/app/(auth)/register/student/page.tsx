@@ -25,6 +25,7 @@ import { useCpfValidation } from '@/hooks/use-cpf-validation'
 import { Button } from '@/components/ui/button'
 import { GuestGuard, Turnstile, OAuthButtons, AuthDivider } from '@/components/auth'
 import { ApiClientError } from '@/lib/api-client'
+import { OnboardingSignup } from '@/components/onboarding/onboarding-signup'
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://api.vfit.app.br'
 
@@ -182,6 +183,10 @@ export default function RegisterStudentPage() {
 
   return (
     <GuestGuard>
+      {fromOnboarding ? (
+        <OnboardingSignup inviteToken={inviteToken} />
+      ) : (
+      <>
       <style>{`
         @keyframes coverShimmer { 0% { transform: translateX(-100%) } 100% { transform: translateX(100%) } }
         @keyframes slideUp { 0% { opacity:0; transform:translateY(20px) } 100% { opacity:1; transform:translateY(0) } }
@@ -557,6 +562,8 @@ export default function RegisterStudentPage() {
           </div>
         </div>
       </div>
+      </>
+      )}
     </GuestGuard>
   )
 }

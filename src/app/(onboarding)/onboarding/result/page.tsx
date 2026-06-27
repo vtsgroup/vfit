@@ -297,33 +297,23 @@ export default function OnboardingResultPage() {
         </div>
       </div>
 
-      {/* ─── Bottom CTA ─── */}
+      {/* ─── Bottom CTA — salvar plano + signup (reverse trial, sem paywall) ─── */}
       <div className="fixed inset-x-0 bottom-0 z-30 border-t border-white/8 bg-bg-base/88 px-6 pb-8 pt-4 backdrop-blur-2xl">
-        <div className="mx-auto max-w-md space-y-2">
+        <div className="mx-auto max-w-md space-y-3">
           {useAuthStore.getState().isAuthenticated ? (
-            /* Já logado — opções: ver treino grátis ou fazer upgrade */
-            <>
-              <Button
-                size="lg"
-                className="w-full"
-                onClick={() => {
-                  markCompleted()
-                  router.push('/onboarding/paywall')
-                }}
-              >
-                <DSIcon name="crown" className="h-4 w-4" />
-                Desbloquear Premium
-              </Button>
-              <button
-                onClick={() => {
-                  markCompleted()
-                  router.push('/treinos')
-                }}
-                className="w-full py-2 text-center text-xs text-text-muted hover:text-text-secondary"
-              >
-                Continuar gratuitamente
-              </button>
-            </>
+            /* Já logado — plano pronto, entra direto no app */
+            <Button
+              size="lg"
+              className="w-full"
+              onClick={() => {
+                markCompleted()
+                router.push('/treinos')
+              }}
+            >
+              <DSIcon name="sparkles" size={18} />
+              Começar agora
+              <DSIcon name="arrowRight" size={18} />
+            </Button>
           ) : (
             <>
               <Button
@@ -331,21 +321,17 @@ export default function OnboardingResultPage() {
                 className="w-full"
                 onClick={() => {
                   markCompleted()
-                  router.push('/onboarding/notifications')
+                  router.push('/register/student?from=onboarding')
                 }}
               >
-                <DSIcon name="sparkles" className="h-4 w-4" />
-                Continuar — Ativar Meu Plano
+                <DSIcon name="sparkles" size={18} />
+                Criar conta e salvar meu plano
+                <DSIcon name="arrowRight" size={18} />
               </Button>
-              <button
-                onClick={() => {
-                  markCompleted()
-                  router.push('/login?from=onboarding&plan=free')
-                }}
-                className="w-full py-2 text-center text-xs text-text-muted hover:text-text-secondary"
-              >
-                Continuar gratuitamente
-              </button>
+              <p className="flex items-center justify-center gap-1.5 text-center text-[11px] font-semibold text-slate-400">
+                <DSIcon name="shieldCheck" size={13} className="text-emerald-200" />
+                30 dias grátis · tudo liberado · sem cartão
+              </p>
             </>
           )}
         </div>

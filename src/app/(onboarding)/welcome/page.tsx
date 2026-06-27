@@ -41,9 +41,9 @@ const RETENTION_LOOP: { icon: DSIconName; title: string; text: string }[] = [
 ]
 
 const CONVERSION_POINTS: { icon: DSIconName; title: string; text: string }[] = [
-  { icon: 'sparkles', title: 'Plano no final do fluxo', text: 'Você entende seu treino antes de qualquer compromisso.' },
-  { icon: 'shieldCheck', title: 'Sem fricção inicial', text: 'Sem cartão, sem planilha, sem conversa longa.' },
-  { icon: 'trophy', title: 'Volta guiada', text: 'Você sempre sabe o próximo treino e a próxima vitória.' },
+  { icon: 'sparkles', title: 'Plano pronto hoje', text: 'Você sai com o treino montado e já começa a treinar.' },
+  { icon: 'shieldCheck', title: 'Tudo liberado', text: 'Sem cartão. 30 dias com acesso completo, de graça.' },
+  { icon: 'trophy', title: 'Sem compromisso', text: 'Use tudo por 30 dias. Continua só se quiser.' },
 ] as const
 
 export default function WelcomePage() {
@@ -167,7 +167,7 @@ export default function WelcomePage() {
                   Recomeçar do início
                 </button>
               ) : (
-                <span className="text-xs text-white/55">Sem cartão · resultado no final do fluxo</span>
+                <span className="text-xs text-white/55">30 dias grátis · tudo liberado · sem cartão</span>
               )}
             </div>
 
@@ -291,8 +291,8 @@ export default function WelcomePage() {
               <DSIcon name="graduationCap" size={20} />
             </div>
             <div>
-              <p className="text-sm font-black text-white">Comece como aluno, sem cartão</p>
-              <p className="text-xs text-slate-400">Receba um plano executável antes de decidir qualquer upgrade.</p>
+              <p className="text-sm font-black text-white">Comece como aluno, tudo liberado</p>
+              <p className="text-xs text-slate-400">30 dias grátis com acesso completo. Sem cartão, sem upgrade obrigatório.</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
