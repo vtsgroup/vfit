@@ -1357,8 +1357,16 @@ select option {
   from { transform: scaleX(0); }
   to { transform: scaleX(1); }
 }
+/* Palavra-acento que brilha (mesma gramática do hero da home) */
+@keyframes welcome-shimmer { to { background-position: -200% center; } }
+.welcome-shimmer { background-size: 200% auto; animation: welcome-shimmer 3.5s linear infinite; }
+/* Orbs de aurora à deriva */
+@keyframes welcome-orb1 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(40px,-30px) scale(1.08); } }
+@keyframes welcome-orb2 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-44px,20px) scale(0.93); } }
+.welcome-orb1 { animation: welcome-orb1 16s ease-in-out infinite; will-change: transform; }
+.welcome-orb2 { animation: welcome-orb2 20s ease-in-out infinite; will-change: transform; }
 @media (prefers-reduced-motion: reduce) {
-  [style*="welcome-fill"] { animation: none !important; }
+  [style*="welcome-fill"], .welcome-shimmer, .welcome-orb1, .welcome-orb2 { animation: none !important; }
 }
 
 /* DS V3 — Tooltip animations */

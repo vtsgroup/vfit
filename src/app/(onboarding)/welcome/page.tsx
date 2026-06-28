@@ -101,9 +101,9 @@ export default function WelcomePage() {
       <div className="pointer-events-none absolute inset-x-0 top-0 h-80 bg-linear-to-b from-vfit-primary-500/24 via-sky-300/8 to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-sky-200/45 to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-linear-to-t from-bg-base to-transparent" />
-      {/* atmosfera ultra-moderna: orbs de luz à deriva */}
-      <div aria-hidden="true" className="pointer-events-none absolute -right-24 -top-20 h-[26rem] w-[26rem] rounded-full bg-emerald-400/12 blur-[140px]" />
-      <div aria-hidden="true" className="pointer-events-none absolute -left-28 top-1/3 h-80 w-80 rounded-full bg-sky-400/8 blur-[150px]" />
+      {/* atmosfera ultra-moderna: orbs de aurora à deriva (gramática da home) */}
+      <div aria-hidden="true" className="welcome-orb1 pointer-events-none absolute -right-24 -top-20 h-112 w-112 rounded-full bg-emerald-400/16 blur-[130px]" />
+      <div aria-hidden="true" className="welcome-orb2 pointer-events-none absolute -left-28 top-1/3 h-80 w-80 rounded-full bg-lime-400/10 blur-[140px]" />
 
       {/* ─── Background image with overlay ─── */}
       <div className="absolute inset-0 opacity-78">
@@ -127,17 +127,37 @@ export default function WelcomePage() {
           className="flex flex-col items-start"
           style={{ animation: 'welcome-slide-down 0.7s ease-out both' }}
         >
-          <div className="mb-4 inline-flex items-center gap-2.5 rounded-full border border-emerald-300/18 bg-emerald-300/10 px-3 py-1.5 text-[11px] font-black uppercase text-emerald-100 shadow-glass-inset-sm backdrop-blur-xl sm:mb-5 sm:gap-3 sm:py-2 sm:text-xs">
-            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-400 text-bg-base">
-              <DSIcon name="sparkles" size={15} />
-            </span>
-            30 dias grátis · sem cartão
-          </div>
-          <h1
-            className="max-w-2xl text-[38px] leading-[1.01] text-white min-[380px]:text-[42px] sm:text-6xl lg:text-[76px]"
-            style={{ fontFamily: 'Inter, sans-serif', fontWeight: 900, letterSpacing: 0 }}
+          {/* Badge premium (gramática do hero da home: vidro externo + pill verde + shine + shimmer) */}
+          <div
+            className="group/badge mb-5 inline-flex items-center gap-2.5 rounded-full py-1 pl-1 pr-4 sm:mb-6"
+            style={{
+              background: 'linear-gradient(180deg, rgba(255,255,255,0.09) 0%, rgba(255,255,255,0.03) 100%)',
+              backdropFilter: 'blur(28px) saturate(200%)',
+              WebkitBackdropFilter: 'blur(28px) saturate(200%)',
+              border: '1px solid rgba(255,255,255,0.10)',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.18), 0 12px 36px -12px rgba(0,0,0,0.7), 0 0 0 1px rgba(34,197,94,0.14)',
+            }}
           >
-            Seu treino pronto hoje, feito para o seu corpo.
+            <span
+              className="relative inline-flex items-center gap-1.5 overflow-hidden rounded-full px-3 py-1.5"
+              style={{
+                background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 52%, #14803d 100%)',
+                boxShadow: '0 4px 18px -3px rgba(34,197,94,0.65), inset 0 1px 0 rgba(255,255,255,0.35), inset 0 -1px 0 rgba(3,50,26,0.45)',
+              }}
+            >
+              <span className="pointer-events-none absolute inset-x-0 top-0 h-1/2 bg-linear-to-b from-white/20 to-transparent" />
+              <span className="pointer-events-none absolute inset-0 -translate-x-[110%] bg-linear-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover/badge:translate-x-[110%]" />
+              <DSIcon name="sparkles" size={11} className="relative text-[#08122B]" />
+              <span className="relative text-[10px] font-black uppercase tracking-[0.08em] text-[#08122B]">30 dias grátis</span>
+            </span>
+            <span className="text-[11px] font-semibold text-white/75" style={{ letterSpacing: '0.045em' }}>sem cartão de crédito</span>
+          </div>
+          {/* Headline Syne + palavra-acento em gradiente que brilha (gramática da home) */}
+          <h1 className="font-syne max-w-2xl text-[40px] font-black leading-[0.96] tracking-[-0.03em] text-white min-[380px]:text-[46px] sm:text-6xl lg:text-[80px] [text-shadow:0_4px_32px_rgba(0,0,0,0.5)]">
+            Seu treino pronto hoje, feito para o{' '}
+            <span className="welcome-shimmer bg-linear-to-r from-brand-primary via-brand-mint to-brand-accent bg-clip-text text-transparent [text-shadow:none]">
+              seu corpo.
+            </span>
           </h1>
           <p className="mt-4 max-w-xl text-[15px] font-medium leading-7 text-slate-300 sm:mt-5 sm:text-lg sm:leading-8">
             Em 2 minutos o VFIT entende seu objetivo, rotina, equipamentos e nível para montar um plano que você consegue começar sem enrolar.
