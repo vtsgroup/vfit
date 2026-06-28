@@ -5,9 +5,16 @@ const nextConfig: NextConfig = {
   // Static export para Cloudflare Pages
   output: "export",
 
-  // Imagens: desabilitado no static export (usar R2 CDN + CF Image Resizing)
+  // Imagens: loader custom → Cloudflare Image Transformations (/cdn-cgi/image/).
+  // Gera srcset multi-largura REAL mesmo com output: "export" (default loader
+  // lançaria erro; loader custom é permitido). NÃO reativar `unoptimized: true`:
+  // no Next 15.5 ele é OR'd em toda <Image> e zera o srcSet (ver cf-image-loader.ts).
+  // O loader faz pass-through de SVG / data: / externos / R2 já-transformadas.
   images: {
-    unoptimized: true,
+    loader: "custom",
+    loaderFile: "./src/lib/cf-image-loader.ts",
+    // Imagens-fonte são menores que 4K — dropar 3840 evita upscaling desperdiçado.
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
   },
 
   // Trailing slashes para compatibilidade CF Pages

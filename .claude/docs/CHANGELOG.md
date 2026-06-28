@@ -5,6 +5,22 @@
 
 ---
 
+## [5.1.3] — 2026-06-28 — Imagens responsivas via Cloudflare Transformations + a11y footer
+
+> Otimização de entrega de imagens — Lighthouse "Improve image delivery" (~145 KB só no blog; aplica a TODO o site, incl. uploads R2 do dashboard). Loader custom do `next/image` → `/cdn-cgi/image` (Transformations já **enabled** na zona). + fix de alt redundante no footer. Lighthouse `/blog` já estava 100/100 em todas as categorias; itens eram `Unscored`/informativos.
+
+### Imagens responsivas (loader Cloudflare) — maior ganho real
+- **NOVO `src/lib/cf-image-loader.ts`**: loader custom do `next/image` → `/cdn-cgi/image/width=N,quality=75,format=auto/<src>`. Gera `srcset` multi-largura **real mesmo com `output: 'export'`**. **Pass-through** (não transforma) de SVG, `data:`/`blob:`, URLs já-transformadas e origens externas (replicate/google/fb — CF só redimensiona same-zone). Transforma same-zone: estáticos `vfit.app.br` + R2 `images.vfit.app.br`.
+- **`next.config.ts`**: `images.unoptimized: true` → `images: { loader: 'custom', loaderFile, deviceSizes (sem 3840) }`. ⚠️ Reativar `unoptimized` zera o `srcSet` em toda `<Image>` no Next 15.5.
+- **`footer.tsx`**: logo `alt="VFIT"` → `alt=""` (decorativa; `<span>VFIT</span>` adjacente nomeia o link). Resolve "redundant alt" (WCAG 1.1.1 / H67).
+- **Verificado**: build OK (142 HTML); srcset transformado nos heroes do blog (256→2048); preload do hero do artigo usa `/cdn-cgi/image`; SVG/externos **não** transformados; 526 transforms todos com `format=auto`. Ao vivo: 85 KB → 25 KB AVIF (~70%).
+
+### Infra / Auditoria (Global API, plano Free)
+- Zona `vfit.app.br` já no **teto de performance** do Free (Brotli, Early Hints, HTTP/2+3, 0-RTT, TLS 1.3, Speed Brain, cache aggressive — todos ON; Rocket Loader/Email Obfuscation OFF por design). **Polish + Mirage** bloqueados no Free (`editable=false`) → ligar via API ao assinar o **Pro (~mid-jul/2026)**. Detalhes em `STACK.md`.
+- Reforço: headers (CSP/HSTS/XFO) vivem em `public/_headers` (autoritativo), nunca via Global API.
+
+---
+
 ## [5.1.0] — 2026-06-27 — Páginas legais: fix FAQ/metadata + hero + privacidade/cookies
 
 > Deploy via `cf:deploy --allow-no-whatsapp` (v5.1.0, prod `vfit.app.br` → 6/6 legal pages 200). Correção dos problemas reportados após v5.0.9 (FAQ washed-out, botão branco no hero, páginas não modernizadas). Verificado via workflow de design-review adversarial (6 agents, 3 páginas clean).

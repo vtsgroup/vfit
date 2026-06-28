@@ -313,15 +313,28 @@ migrations/                 # SQL migrations (hyperdrive/ + d1/)
 
 ---
 
-## 🖼️ Cloudflare Image Resizing (Futuro)
+## 🖼️ Cloudflare Image Transformations (ATIVO)
 
 | Campo | Valor |
 |-------|-------|
-| **Status** | ⬜ A habilitar |
-| **Uso** | Otimização on-the-fly de imagens R2 (resize, WebP/AVIF) |
-| **URL Pattern** | `images.vfit.app.br/cdn-cgi/image/width=300,quality=80/path/to/image.jpg` |
-| **Pricing** | $0.50/1000 transformations únicas |
-| **Setup** | Dashboard > Speed > Optimization > Image Resizing > Enable |
+| **Status** | ✅ **Enabled** na zona `vfit.app.br` (Dashboard > Images > Transformations) |
+| **Como o app usa** | Loader custom do `next/image` → `src/lib/cf-image-loader.ts` (`next.config.ts`: `images.loader: 'custom'`). Gera `srcset` multi-largura real **mesmo com `output: 'export'`**. |
+| **URL Pattern** | `vfit.app.br/cdn-cgi/image/width=N,quality=75,format=auto/<source>` |
+| **Escopo (transforma)** | same-zone: estáticos de `vfit.app.br` (ex. `/blog/*.webp`) **+ R2 `images.vfit.app.br`** (uploads do dashboard, on-the-fly em runtime) |
+| **Pass-through (NÃO toca)** | SVG, `data:`/`blob:`, URLs já `/cdn-cgi/image/`, e origens externas (`replicate.delivery`, `googleusercontent.com`, `fbcdn.net`) — a CF só redimensiona same-zone por padrão |
+| **Fora de escopo** | Vídeos = CF Stream / `videos.vfit.app.br` (produto separado, já adaptativo) |
+| **Pricing** | Free tier 5.000 transformations únicas/mês; depois $0.50/1000 |
+
+> ⚠️ **NÃO reativar `images.unoptimized: true`** no `next.config.ts`: no Next 15.5 ele é OR'd em toda `<Image>` e zera o `srcSet`, desligando o resize globalmente. O loader custom **exige** o guard de SVG (com loader custom o caso `.svg → unoptimized` do Next não se aplica).
+
+## ⚡ Auditoria de Performance da Zona (Free) — 2026-06-28
+
+Zone `vfit.app.br` = `f1821903ed0a96fe7aa4b681073ed617` · plano **Free** · auditado via Global API.
+**Free está no teto de performance** — já ligados: Brotli, Early Hints (103), HTTP/2+3, 0-RTT, TLS 1.3+0RTT (min 1.3), SSL strict, Speed Brain, cache aggressive, browser TTL 8d, Always Online, WebSockets, Opportunistic Encryption, Auto-HTTPS-Rewrites.
+- **OFF por design (manter):** Rocket Loader (quebra React/Next), Email Obfuscation (re-ligar = React #418), Auto-Minify (depreciado, Next já minifica).
+- **Bloqueado no Free (`editable=false`) → ligar quando assinar o Pro:** **Polish** (Lossy + WebP/AVIF, cobre imagens fora do `next/image`: OG, `<img>` cru) + **Mirage** (low-qual-first em mobile lento). Flip via API: `PATCH /zones/{id}/settings/polish` `{value:"lossy"}` e `/settings/mirage` `{value:"on"}`.
+
+> Headers de segurança/perf (CSP, HSTS, XFO, Permissions-Policy, `Link:` preconnect) vivem em **`public/_headers`** (autoritativo, versionado, deploy via Pages). **Nunca** setar via Global API — config no repo sobrevive a redeploys e bate com o docs-gate.
 
 > Estratégia completa: ver `.claude/docs/MEDIA-STRATEGY.md`
 

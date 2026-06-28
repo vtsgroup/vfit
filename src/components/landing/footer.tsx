@@ -207,7 +207,7 @@ export function Footer() {
           <div className="col-span-2">
             <Link href="/" className="group inline-flex items-center gap-3">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/favicons/favicon.svg" alt="VFIT" width={48} height={48} className="h-12 w-12 rounded-xl shadow-[0_6px_20px_-6px_rgba(34,197,94,0.5)] transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6" />
+              <img src="/favicons/favicon.svg" alt="" width={48} height={48} className="h-12 w-12 rounded-xl shadow-[0_6px_20px_-6px_rgba(34,197,94,0.5)] transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6" />
               <span className="text-2xl font-black tracking-tight text-white">VFIT</span>
             </Link>
             <p className="mt-5 max-w-xs text-sm leading-relaxed text-white/65">
