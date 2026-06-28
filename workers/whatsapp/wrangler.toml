@@ -71,6 +71,11 @@ invocation_logs = true
 UNIPILE_API_URL = "https://api1.unipile.com:13123/api/v1"
 DEFAULT_GROUP_NAME = "Vfit · Mude Treine Cresça"
 ALLOW_FALLBACK_TOKEN = "0"
+# Stable self-heal anchors (low-sensitivity identifiers — safe in git).
+# These let the worker re-resolve volatile Unipile account/chat IDs after a reconnect.
+UNIPILE_WHATSAPP_ACCOUNT_PHONE = "5521965641822"
+UNIPILE_WHATSAPP_GROUP_PROVIDER_ID = "120363428043637311@g.us"
+SELF_HEAL_ENABLED = "1"
 
 # NÃO coloque IDs reais aqui no Git.
 # Configure no Dashboard (Worker Settings > Variables) OU via secrets.

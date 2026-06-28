@@ -27,6 +27,10 @@ interface Env {
   UNIPILE_WHATSAPP_GROUP_CHAT_ID?: string;
   UNIPILE_WHATSAPP_GROUP_NAME?: string;
   ALLOW_FALLBACK_TOKEN?: string;
+  // Stable self-heal anchors (low-sensitivity identifiers → wrangler [vars])
+  UNIPILE_WHATSAPP_ACCOUNT_PHONE?: string;
+  UNIPILE_WHATSAPP_GROUP_PROVIDER_ID?: string;
+  SELF_HEAL_ENABLED?: string;
 
   // Secrets (classic)
   UNIPILE_API_KEY?: string;
@@ -47,7 +51,7 @@ interface Env {
 type Json = Record<string, unknown>;
 
 const WORKER_NAME = 'vfit-whatsapp';
-const WORKER_VERSION = '1.0.0';
+const WORKER_VERSION = '1.1.0';
 
 function normalizeSecret(val: unknown): string | null {
   if (typeof val !== 'string') return null;
@@ -218,35 +222,184 @@ async function listChats(env: Env, accountId: string): Promise<Array<{ id: strin
     .filter((c) => c.id && c.name);
 }
 
-async function findChatIdByName(env: Env, accountId: string, groupName: string): Promise<string | null> {
-  const items = await listChats(env, accountId);
-  const wanted = groupName.trim().toLowerCase();
+/* ================================================================
+   SELF-HEALING RESOLUTION — resilient to Unipile id rotation / reconnects
+   ----------------------------------------------------------------
+   Unipile chat_id & account_id are CONNECTION-SCOPED: they rotate when the
+   WhatsApp account is reconnected or Unipile re-syncs. The only STABLE anchors
+   are the account PHONE and the group provider_id (WhatsApp JID). We treat the
+   stored chat_id as a fast-path cache; on a 404 ("Chat not found", verified
+   against the live API) we re-resolve ONCE from the stable anchors and retry —
+   never sending to the wrong group/account. No Secrets Store write-back (the
+   binding is read-only and a write token would widen the blast radius); pure
+   runtime re-resolution + a per-isolate warm cache instead.
+   ================================================================ */
 
-  for (const c of items) {
-    const name = c.name.trim().toLowerCase();
-    if (name && name === wanted) return c.id;
-  }
+const MAX_CHAT_PAGES = 5;                 // GET /chats?limit=100 → scan up to 500 chats
+const HEAL_CACHE_TTL_MS = 30 * 60 * 1000; // warm cache TTL (per-isolate, non-durable)
 
-  for (const c of items) {
-    const name = c.name.trim().toLowerCase();
-    if (name && (name.includes(wanted) || wanted.includes(name))) return c.id;
-  }
+type ResolvedTarget = { accountId: string; chatId: string };
+const warmTargetCache = new Map<string, { value: ResolvedTarget; at: number }>(); // key = providerId
+const inflightResolve = new Map<string, Promise<ResolvedTarget>>();                // single-flight, key = providerId
 
-  return null;
+function digitsOnly(s: string): string { return (s || '').replace(/\D/g, ''); }
+
+function isSelfHealEnabled(env: Env): boolean {
+  const raw = (env.SELF_HEAL_ENABLED ?? '1').trim().toLowerCase();
+  return raw !== '0' && raw !== 'false' && raw !== 'no' && raw !== 'off';
 }
 
-async function sendChatMessage(env: Env, chatId: string, text: string): Promise<{ chat_id: string; raw: string }>{
+// POST a message WITHOUT throwing — returns the HTTP status so the caller can classify.
+async function postMessage(env: Env, chatId: string, text: string): Promise<{ ok: boolean; status: number; body: string }> {
   const res = await unipileFetch(env, `/chats/${encodeURIComponent(chatId)}/messages`, {
     method: 'POST',
     body: JSON.stringify({ text }),
   });
+  const body = await res.text().catch(() => '');
+  return { ok: res.ok, status: res.status, body };
+}
 
-  const bodyText = await res.text().catch(() => '');
-  if (!res.ok) {
-    throw new Error(`Unipile send ${res.status}: ${bodyText.slice(0, 240)}`);
+// 404 ("Chat not found") is the authoritative stale-chat signal (verified live).
+// 401/403 (bad key) and 429/5xx (transient/outage) are NON-healable.
+function isStaleChatStatus(status: number, body: string): boolean {
+  if (status === 404) return true;
+  if (status === 400 || status === 422) {
+    return /chat.*(not found|does not exist|unknown)|resource_not_found/i.test(body || '');
+  }
+  return false;
+}
+
+// Resolve the live account id by EXACT phone match among WHATSAPP accounts.
+// HARD invariant: exactly one match, else abort — never auto-pick "first WHATSAPP account".
+async function resolveAccountIdByPhone(env: Env, phone: string): Promise<string> {
+  const res = await unipileFetch(env, `/accounts?limit=100`);
+  const text = await res.text().catch(() => '');
+  if (!res.ok) throw new Error(`Unipile accounts ${res.status}: ${text.slice(0, 180)}`);
+  let parsed: unknown = null;
+  try { parsed = JSON.parse(text); } catch { parsed = null; }
+  const items: Array<Record<string, unknown>> = Array.isArray(parsed)
+    ? parsed as Array<Record<string, unknown>>
+    : (parsed && typeof parsed === 'object' && Array.isArray((parsed as { items?: unknown[] }).items))
+      ? (parsed as { items: Array<Record<string, unknown>> }).items
+      : [];
+  const want = digitsOnly(phone);
+  const matches = items.filter((a) =>
+    String(a?.type || '').toUpperCase() === 'WHATSAPP' && digitsOnly(String(a?.name || '')) === want
+  );
+  if (matches.length !== 1) {
+    throw new Error(`account_resolve_failed: ${matches.length} WHATSAPP account(s) match phone ${want} (need exactly 1)`);
+  }
+  return String(matches[0].id);
+}
+
+// Resolve the live chat id by EXACT provider_id (WhatsApp group JID) — paginated.
+// provider_id is the SOLE authority (group names are not unique → no name fallback).
+async function resolveChatIdByProviderId(env: Env, accountId: string, providerId: string): Promise<string | null> {
+  let cursor = '';
+  for (let page = 0; page < MAX_CHAT_PAGES; page++) {
+    const qs = `account_id=${encodeURIComponent(accountId)}&limit=100${cursor ? `&cursor=${encodeURIComponent(cursor)}` : ''}`;
+    const res = await unipileFetch(env, `/chats?${qs}`);
+    const text = await res.text().catch(() => '');
+    if (!res.ok) throw new Error(`Unipile chats ${res.status}: ${text.slice(0, 180)}`);
+    let parsed: { items?: Array<Record<string, unknown>>; cursor?: string } = {};
+    try { parsed = JSON.parse(text); } catch { parsed = {}; }
+    const items = Array.isArray(parsed.items) ? parsed.items : [];
+    const hit = items.find((c) => String(c?.provider_id || '') === providerId);
+    if (hit) return String(hit.id);
+    cursor = parsed.cursor ? String(parsed.cursor) : '';
+    if (!cursor) {
+      if (items.length === 100) console.warn('whatsapp.resolve: full page with no cursor — pagination may be capped');
+      break;
+    }
+  }
+  return null;
+}
+
+// Single-flight re-resolution from stable anchors, with a short warm cache.
+async function resolveTargetFromAnchors(env: Env, phone: string, providerId: string): Promise<ResolvedTarget> {
+  const cached = warmTargetCache.get(providerId);
+  if (cached && Date.now() - cached.at < HEAL_CACHE_TTL_MS) return cached.value;
+
+  const existing = inflightResolve.get(providerId);
+  if (existing) return existing;
+
+  const p = (async (): Promise<ResolvedTarget> => {
+    const accountId = await resolveAccountIdByPhone(env, phone);
+    const chatId = await resolveChatIdByProviderId(env, accountId, providerId);
+    if (!chatId) throw new Error(`chat_resolve_failed: provider_id ${providerId} not found on account ${accountId}`);
+    const value: ResolvedTarget = { accountId, chatId };
+    warmTargetCache.set(providerId, { value, at: Date.now() });
+    return value;
+  })();
+  inflightResolve.set(providerId, p);
+  try { return await p; } finally { inflightResolve.delete(providerId); }
+}
+
+type ResilientSendOpts = { explicitChatId?: string; accountIdOverride?: string; groupNameOverride?: string; text: string };
+type ResilientSendResult = { chat_id: string; account_id?: string; raw: string; healed: boolean; resolved_via: string };
+
+// Single entry point for /send and /task-notify. Fast path = stored/explicit chat_id;
+// on a stale 404 it self-heals from the stable anchors (DEFAULT group only).
+async function resilientSend(env: Env, opts: ResilientSendOpts): Promise<ResilientSendResult> {
+  const text = opts.text;
+  const phone = (env.UNIPILE_WHATSAPP_ACCOUNT_PHONE || '').trim();
+  const providerId = (env.UNIPILE_WHATSAPP_GROUP_PROVIDER_ID || '').trim();
+  const explicitChatId = (opts.explicitChatId || '').trim();
+  const accountOverride = (opts.accountIdOverride || '').trim();
+
+  // Does this request target the worker's configured/default group?
+  const defaultName = getDefaultGroupName(env).trim().toLowerCase();
+  const ssGroupName = (env.UNIPILE_WHATSAPP_GROUP_NAME || '').trim().toLowerCase();
+  const reqGroup = (opts.groupNameOverride || '').trim().toLowerCase();
+  const targetsDefaultGroup = !explicitChatId && !accountOverride && (
+    !reqGroup || reqGroup === defaultName || (!!ssGroupName && reqGroup === ssGroupName)
+  );
+
+  // Heal is ONLY safe for the default group, via its provider_id anchor.
+  const healEligible = isSelfHealEnabled(env) && targetsDefaultGroup && !!phone && !!providerId;
+
+  // ---- FAST PATH ----
+  const warm = (targetsDefaultGroup && providerId) ? warmTargetCache.get(providerId) : undefined;
+  const warmFresh = warm && Date.now() - warm.at < HEAL_CACHE_TTL_MS ? warm.value : undefined;
+  const chatId = explicitChatId || warmFresh?.chatId || (env.UNIPILE_WHATSAPP_GROUP_CHAT_ID || '').trim();
+
+  if (chatId) {
+    const r = await postMessage(env, chatId, text);
+    if (r.ok) {
+      // Cache ONLY a default-group send resolved from our own anchors/env — never an arbitrary explicit chat_id.
+      if (targetsDefaultGroup && providerId && !explicitChatId) {
+        const accountId = warmFresh?.accountId || (env.UNIPILE_WHATSAPP_ACCOUNT_ID || '').trim();
+        if (accountId) warmTargetCache.set(providerId, { value: { accountId, chatId }, at: Date.now() });
+      }
+      return { chat_id: chatId, raw: r.body, healed: false, resolved_via: 'stored' };
+    }
+    if (!isStaleChatStatus(r.status, r.body)) {
+      throw new Error(`Unipile send ${r.status}: ${r.body.slice(0, 200)}`);
+    }
+    if (!healEligible) {
+      // Explicit chat_id / account override / non-default group / heal disabled → NEVER retarget.
+      throw new Error(`Unipile send ${r.status} (stale id; self-heal não elegível — alvo explícito ou grupo não-default): ${r.body.slice(0, 150)}`);
+    }
+    // ---- HEAL (single attempt) ----
+    const target = await resolveTargetFromAnchors(env, phone, providerId);
+    if (target.chatId === chatId) {
+      throw new Error(`Unipile send ${r.status} mas re-resolução retornou o mesmo chat id (não estava obsoleto): ${r.body.slice(0, 150)}`);
+    }
+    const r2 = await postMessage(env, target.chatId, text);
+    if (!r2.ok) throw new Error(`Unipile send (healed) ${r2.status}: ${r2.body.slice(0, 200)}`);
+    console.log(JSON.stringify({ evt: 'whatsapp.self_heal', old_chat_id: chatId, new_chat_id: target.chatId, account_id: target.accountId, provider_id: providerId }));
+    return { chat_id: target.chatId, account_id: target.accountId, raw: r2.body, healed: true, resolved_via: 'provider_id' };
   }
 
-  return { chat_id: chatId, raw: bodyText };
+  // ---- NO chat id configured → resolve from anchors (default group only) ----
+  if (!healEligible) {
+    throw new Error('Sem chat_id configurado e self-heal indisponível (faltam anchors UNIPILE_WHATSAPP_ACCOUNT_PHONE / UNIPILE_WHATSAPP_GROUP_PROVIDER_ID, ou alvo não-default).');
+  }
+  const target = await resolveTargetFromAnchors(env, phone, providerId);
+  const r3 = await postMessage(env, target.chatId, text);
+  if (!r3.ok) throw new Error(`Unipile send (resolved) ${r3.status}: ${r3.body.slice(0, 200)}`);
+  console.log(JSON.stringify({ evt: 'whatsapp.resolved_cold', new_chat_id: target.chatId, account_id: target.accountId, provider_id: providerId }));
+  return { chat_id: target.chatId, account_id: target.accountId, raw: r3.body, healed: true, resolved_via: 'provider_id' };
 }
 
 function formatBrt(iso: string): string {
@@ -461,6 +614,9 @@ const whatsappWorker = {
               whatsapp_account_id: Boolean(envResolved.UNIPILE_WHATSAPP_ACCOUNT_ID),
               group_chat_id: Boolean(envResolved.UNIPILE_WHATSAPP_GROUP_CHAT_ID),
               default_group_name: getDefaultGroupName(envResolved),
+              account_phone: Boolean(envResolved.UNIPILE_WHATSAPP_ACCOUNT_PHONE),
+              group_provider_id: Boolean(envResolved.UNIPILE_WHATSAPP_GROUP_PROVIDER_ID),
+              self_heal: isSelfHealEnabled(envResolved),
             },
           },
         }, { headers });
@@ -503,27 +659,12 @@ const whatsappWorker = {
         const text = clampText(body?.text || '', 8000);
         if (!text) return json({ success: false, error: 'text é obrigatório' }, { status: 400 });
 
-        const accountId = (body?.account_id || '').trim() || (envResolved.UNIPILE_WHATSAPP_ACCOUNT_ID || '').trim();
-        if (!accountId) {
-          return json({ success: false, error: 'UNIPILE_WHATSAPP_ACCOUNT_ID não configurado (env/secret) ou account_id ausente' }, { status: 400 });
-        }
-
-        const explicitChatId = (body?.chat_id || '').trim();
-        const groupName = (body?.group_name || '').trim() || getDefaultGroupName(envResolved);
-
-        const chatId =
-          explicitChatId
-          || (envResolved.UNIPILE_WHATSAPP_GROUP_CHAT_ID || '').trim()
-          || (await findChatIdByName(envResolved, accountId, groupName));
-
-        if (!chatId) {
-          return json({
-            success: false,
-            error: `Chat do grupo não encontrado (group_name="${groupName}"). Defina UNIPILE_WHATSAPP_GROUP_CHAT_ID ou use chat_id.`
-          }, { status: 400 });
-        }
-
-        const result = await sendChatMessage(envResolved, chatId, text);
+        const result = await resilientSend(envResolved, {
+          text,
+          explicitChatId: typeof body?.chat_id === 'string' ? body.chat_id : undefined,
+          accountIdOverride: typeof body?.account_id === 'string' ? body.account_id : undefined,
+          groupNameOverride: typeof body?.group_name === 'string' ? body.group_name : undefined,
+        });
         return json({ success: true, data: { ...result } });
       }
 
@@ -559,22 +700,7 @@ const whatsappWorker = {
         const linkUrl = body?.link_url ? clampText(body.link_url as string, 2048) : undefined;
 
         const groupNameOverride = body?.group_name ? clampText(body.group_name as string, 140) : undefined;
-        const accountId = (body?.account_id as string || '').trim() || (envResolved.UNIPILE_WHATSAPP_ACCOUNT_ID || '').trim();
-        if (!accountId) {
-          return json({ success: false, error: 'UNIPILE_WHATSAPP_ACCOUNT_ID não configurado (env/secret) ou account_id ausente' }, { status: 400 });
-        }
-
-        const groupName = groupNameOverride || getDefaultGroupName(envResolved);
-        const chatId =
-          (envResolved.UNIPILE_WHATSAPP_GROUP_CHAT_ID || '').trim()
-          || (await findChatIdByName(envResolved, accountId, groupName));
-
-        if (!chatId) {
-          return json({
-            success: false,
-            error: `Chat do grupo não encontrado (group_name="${groupName}"). Defina UNIPILE_WHATSAPP_GROUP_CHAT_ID.`
-          }, { status: 400 });
-        }
+        const accountIdOverride = (body?.account_id as string || '').trim() || undefined;
 
         const message = buildTaskNotifyMessage({
           event,
@@ -592,7 +718,11 @@ const whatsappWorker = {
           linkUrl,
         });
 
-        const result = await sendChatMessage(envResolved, chatId, message);
+        const result = await resilientSend(envResolved, {
+          text: message,
+          accountIdOverride,
+          groupNameOverride,
+        });
 
         return json({
           success: true,
@@ -601,7 +731,8 @@ const whatsappWorker = {
             event,
             started_at: startedAtIso || null,
             ended_at: endedAtIso || null,
-            unipile: result,
+            healed: result.healed,
+            unipile: { chat_id: result.chat_id, raw: result.raw },
           }
         });
       }
