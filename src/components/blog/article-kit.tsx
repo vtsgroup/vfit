@@ -34,7 +34,7 @@ export { lightCard, greenChip, monoLabel, HoverEdge, pillPrimaryClass, PillSweep
 /* ─── Banda clara + coluna de leitura (wrapper de cada artigo) ─── */
 export function ArticleShell({ children }: { children: ReactNode }) {
   return (
-    <section className="relative overflow-hidden bg-bg-landing-light py-10 sm:py-14">
+    <section className="relative overflow-hidden bg-bg-landing-light pb-10 pt-24 sm:pb-14 sm:pt-28">
       {/* atmosfera (igual à home/índice do blog) */}
       <div aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-gray-200" />
       <div
