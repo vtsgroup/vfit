@@ -523,6 +523,25 @@ function buildEndMessage(params: {
   const link = fmtLink(params.linkUrl);
 
   if (status === 'success') {
+    // Detect creative templates: if summaries contain section emojis (🎬 🏆 🧬 📊 etc)
+    // then use them as-is (passthrough mode), else fall back to generic formatting.
+    const isCreativeTemplate = params.summary && params.summary.some(s => /[🎬🏆🧬📊🧪🌐⚡💡🔧🔬]/.test(s));
+
+    if (isCreativeTemplate && params.summary && params.summary.length > 0) {
+      // Creative template mode: use summaries directly with title as header
+      const lines: string[] = [];
+      lines.push(`${params.title}${verLabel ? ` ${verLabel}` : ''}`);
+      lines.push('');
+      for (const summary of params.summary) {
+        lines.push(summary);
+        lines.push('');
+      }
+      if (durStr) lines.push(`⏱️ Deploy time: ${durStr}`);
+      if (link) lines.push(link);
+      return lines.join('\n').trim();
+    }
+
+    // Generic template mode (original behavior)
     // Mudança vem do deploy_message; fallback: parte do title após " — "
     // (cf-deploy envia title "Deploy finalizado — <commit msg>").
     const changeRaw = (params.deployMessage || '').trim()
