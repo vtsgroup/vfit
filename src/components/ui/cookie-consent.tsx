@@ -80,39 +80,23 @@ export function CookieConsentBanner() {
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    // Check if on suppressed route (early exit)
+    // Rota suprimida → não mostra banner (marca mounted p/ evitar re-render à toa).
     if (typeof window !== 'undefined' && shouldSuppressCookieBanner(window.location.pathname)) {
       setMounted(true)
       return
     }
 
-    // Delay mounting until AFTER Lighthouse LCP window (~2.5s)
-    // Uses requestIdleCallback → setTimeout fallback to avoid being detected as LCP element
-    const scheduleMount = () => {
-      const timer = setTimeout(() => {
-        setMounted(true)
-        const stored = getStoredConsent()
-        if (!stored) {
-          // Small extra delay for smooth entrance
-          setTimeout(() => setVisible(true), 300)
-        }
-      }, 2500)
-      return timer
-    }
+    // Aparece logo após a hidratação — NÃO atrasamos mais.
+    // O herói é HTML estático (SSG) e já pintou no FCP, então o LCP fica travado
+    // nele (não no banner). Mostrar cedo faz o Speed Index "assentar" rápido:
+    // o atraso anterior de ~2,8s fazia o banner surgir no meio do trace do
+    // Lighthouse e inflava o Speed Index p/ ~2,2s (derrubava Performance a 95).
+    // O rAF só garante que o 1º frame da página já saiu antes de inserir o banner.
+    setMounted(true)
+    if (getStoredConsent()) return
 
-    let timer: ReturnType<typeof setTimeout>
-    if ('requestIdleCallback' in window) {
-      const idleId = requestIdleCallback(() => {
-        timer = scheduleMount()
-      })
-      return () => {
-        cancelIdleCallback(idleId)
-        clearTimeout(timer)
-      }
-    } else {
-      timer = scheduleMount()
-      return () => clearTimeout(timer)
-    }
+    const raf = requestAnimationFrame(() => setVisible(true))
+    return () => cancelAnimationFrame(raf)
   }, [])
 
   const handleAcceptAll = useCallback(() => {

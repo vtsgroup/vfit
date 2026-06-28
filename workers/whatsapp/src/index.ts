@@ -487,6 +487,18 @@ function liveComponents(summary?: string[]): string {
   return `${parts.slice(0, -1).join(', ')} e ${parts[parts.length - 1]}`;
 }
 
+// Remove o protocolo do link p/ NÃO gerar card de pré-visualização no WhatsApp.
+// Uma URL com http(s):// vira um OG card que "engole" a mensagem e a deixa
+// ilegível; um domínio puro (vfit.app.br) continua clicável, mas sem preview.
+function fmtLink(linkUrl?: string): string | null {
+  const u = (linkUrl || '').trim().replace(/^https?:\/\//i, '').replace(/\/+$/, '');
+  return u ? `🔗 ${u}` : null;
+}
+
+// Tom da notificação: 'dev' (changelog técnico, padrão p/ deploys), 'marketing'
+// (foco em benefício, comemorativo) e 'casual' (papo de time, descontraído).
+type DeployTone = 'dev' | 'marketing' | 'casual';
+
 function buildEndMessage(params: {
   title: string;
   taskId: string;
@@ -499,6 +511,7 @@ function buildEndMessage(params: {
   deployMessage?: string;
   status?: 'success' | 'failed';
   linkUrl?: string;
+  tone?: DeployTone;
 }): string {
   const startedMs = params.startedAtIso ? new Date(params.startedAtIso).getTime() : NaN;
   const endedMs = new Date(params.endedAtIso).getTime();
@@ -506,6 +519,8 @@ function buildEndMessage(params: {
   const status = params.status || 'success';
   const durStr = Number.isFinite(durationMs) ? formatDurationMs(durationMs) : '';
   const verLabel = params.deployVersion || '';
+  const tone: DeployTone = params.tone === 'marketing' || params.tone === 'casual' ? params.tone : 'dev';
+  const link = fmtLink(params.linkUrl);
 
   if (status === 'success') {
     // Mudança vem do deploy_message; fallback: parte do title após " — "
@@ -516,20 +531,37 @@ function buildEndMessage(params: {
         return seg.length > 1 ? seg.slice(1).join(' — ') : '';
       })();
     const items = prettifyChange(changeRaw);
+    const comps = liveComponents(params.summary);
     const lines: string[] = [];
+
     if (items.length) {
-      lines.push(`🚀 *Subiu a ${verLabel || 'nova versão'}!*`);
-      lines.push('');
-      lines.push('_O que mudou:_');
+      // Cabeçalho + rótulo da lista variam por tom; os bullets são os mesmos.
+      if (tone === 'marketing') {
+        lines.push(`🚀 *Novidade no VFIT${verLabel ? ` · ${verLabel}` : ''}!*`, '', '_O que chegou pra você:_');
+      } else if (tone === 'casual') {
+        lines.push(`🎉 *${verLabel || 'Nova versão'} no ar!*`, '', 'ó o que mudou 👇');
+      } else {
+        lines.push(`🚀 *Subiu a ${verLabel || 'nova versão'}!*`, '', '_O que mudou:_');
+      }
       for (const it of items) lines.push(it);
       lines.push('');
-      const statusLine = `✅ tudo verde · ${liveComponents(params.summary)} no ar`;
-      lines.push(durStr ? `${statusLine} · ⏱️ ${durStr}` : statusLine);
+      // Rodapé de status varia por tom.
+      if (tone === 'marketing') {
+        lines.push(durStr ? `Já disponível pra todo mundo 💚 · no ar em ${durStr}` : 'Já disponível pra todo mundo 💚');
+      } else if (tone === 'casual') {
+        lines.push(durStr ? `deu tudo certo em ${durStr}, tá no ar 🤙` : 'deu tudo certo, tá no ar 🤙');
+      } else {
+        const statusLine = `✅ tudo verde · ${comps} no ar`;
+        lines.push(durStr ? `${statusLine} · ⏱️ ${durStr}` : statusLine);
+      }
     } else {
-      const head = verLabel ? `✅ *${verLabel} no ar*` : '✅ *Deploy no ar*';
-      lines.push(durStr ? `${head} · ${durStr}` : head);
+      const headTxt = verLabel ? `${verLabel} no ar` : 'Deploy no ar';
+      if (tone === 'marketing') lines.push(durStr ? `🚀 *Novidade no VFIT!* · ${durStr}` : '🚀 *Novidade no VFIT!*');
+      else if (tone === 'casual') lines.push(durStr ? `🎉 *${headTxt}!* · ${durStr}` : `🎉 *${headTxt}!*`);
+      else lines.push(durStr ? `✅ *${headTxt}* · ${durStr}` : `✅ *${headTxt}*`);
     }
-    if (params.linkUrl) lines.push(`🔗 ${params.linkUrl.trim()}`);
+
+    if (link) lines.push(link);
     return lines.join('\n').trim();
   }
 
@@ -537,7 +569,7 @@ function buildEndMessage(params: {
   const reason = raw.replace(/^Resultado direto:\s*/i, '').trim().slice(0, 240);
   const head = verLabel ? `❌ *Deploy ${verLabel} falhou*` : '❌ *Deploy falhou*';
   const lines = [durStr ? `${head} · ${durStr}` : head, '', reason, '', '👀 confere os logs antes de tentar de novo'];
-  if (params.linkUrl) lines.push(`🔗 ${params.linkUrl.trim()}`);
+  if (link) lines.push(link);
   return lines.join('\n').trim();
 }
 
@@ -556,6 +588,7 @@ function buildTaskNotifyMessage(params: {
   deployMessage?: string;
   status?: 'success' | 'failed';
   linkUrl?: string;
+  tone?: DeployTone;
 }): string {
   const nowIso = new Date().toISOString();
   const startedAtIso = params.startedAtIso || (params.event === 'start' ? nowIso : undefined);
@@ -584,6 +617,7 @@ function buildTaskNotifyMessage(params: {
       deployMessage: params.deployMessage,
       status: params.status,
       linkUrl: params.linkUrl,
+      tone: params.tone,
     });
 }
 
@@ -726,6 +760,7 @@ const whatsappWorker = {
         const deployMessage = body?.deploy_message ? clampText(body.deploy_message as string, 400) : undefined;
         const status = body?.status === 'failed' ? 'failed' : (body?.status === 'success' ? 'success' : undefined);
         const linkUrl = body?.link_url ? clampText(body.link_url as string, 2048) : undefined;
+        const tone = body?.tone === 'marketing' || body?.tone === 'casual' ? (body.tone as 'marketing' | 'casual') : undefined;
 
         const groupNameOverride = body?.group_name ? clampText(body.group_name as string, 140) : undefined;
         const accountIdOverride = (body?.account_id as string || '').trim() || undefined;
@@ -745,6 +780,7 @@ const whatsappWorker = {
           deployMessage,
           status,
           linkUrl,
+          tone,
         });
 
         // Low-noise: suppress 'start' notifications — only the final result is posted to the group.
@@ -798,6 +834,7 @@ const whatsappWorker = {
         const deployMessage = body?.deploy_message ? clampText(body.deploy_message as string, 400) : undefined;
         const status = body?.status === 'failed' ? 'failed' : (body?.status === 'success' ? 'success' : undefined);
         const linkUrl = body?.link_url ? clampText(body.link_url as string, 2048) : undefined;
+        const tone = body?.tone === 'marketing' || body?.tone === 'casual' ? (body.tone as 'marketing' | 'casual') : undefined;
 
         const message = buildTaskNotifyMessage({
           event,
@@ -814,6 +851,7 @@ const whatsappWorker = {
           deployMessage,
           status,
           linkUrl,
+          tone,
         });
 
         return json({
