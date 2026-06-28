@@ -159,6 +159,7 @@ export function Footer() {
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="seu@email.com"
                         aria-label="Seu email"
+                        style={{ backgroundColor: '#ffffff', color: '#0f172a', borderRadius: '9999px' }}
                         className="relative z-10 w-full rounded-full border border-white/30 bg-white px-5 py-4 text-sm text-gray-900 placeholder-slate-400 shadow-[0_8px_20px_-8px_rgba(0,0,0,0.45),inset_0_1px_2px_rgba(15,23,42,0.06),0_0_20px_rgba(34,197,94,0)] transition-all duration-200 group-focus-within/input:border-brand-primary/60 group-focus-within/input:shadow-[0_8px_20px_-8px_rgba(0,0,0,0.45),inset_0_1px_2px_rgba(15,23,42,0.06),0_0_24px_rgba(34,197,94,0.4)] focus:outline-none"
                       />
                     </div>
