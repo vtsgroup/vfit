@@ -108,8 +108,10 @@ export default function WelcomePage() {
           src="/images/hero-1.webp"
           alt=""
           fill
+          sizes="100vw"
           className="object-cover object-[62%_center]"
           priority
+          fetchPriority="high"
         />
         <div className="absolute inset-0 bg-bg-base/84" />
         <div className="absolute inset-0 bg-linear-to-b from-bg-base/15 via-bg-base/70 to-bg-base" />
@@ -250,7 +252,10 @@ export default function WelcomePage() {
                 <span className="rounded-full bg-emerald-300 px-2.5 py-1 text-[10px] font-black text-bg-base">92%</span>
               </div>
               <div className="h-2 overflow-hidden rounded-full bg-white/10">
-                <div className="h-full w-[92%] rounded-full bg-linear-to-r from-emerald-300 to-lime-200 shadow-[0_0_18px_rgba(134,239,172,0.42)]" />
+                <div
+                  className="h-full w-[92%] rounded-full bg-linear-to-r from-emerald-300 to-lime-200 shadow-[0_0_18px_rgba(134,239,172,0.42)]"
+                  style={{ transformOrigin: 'left', animation: 'welcome-fill 1.1s cubic-bezier(0.16,1,0.3,1) 0.55s both' }}
+                />
               </div>
               <p className="mt-3 text-[11px] font-medium leading-5 text-slate-300">Intensidade ajustada para evitar desistência na primeira semana.</p>
             </div>

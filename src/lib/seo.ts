@@ -55,6 +55,8 @@ type SeoConfig = {
   tags?: string[]
   publishedTime?: string
   modifiedTime?: string
+  /** Override robots (default: index/follow). Use NO_INDEX_ROBOTS p/ funil/áreas privadas que ainda querem OG/título bons p/ compartilhamento. */
+  robots?: NonNullable<Metadata['robots']>
 }
 
 export function buildSeoMetadata({
@@ -67,6 +69,7 @@ export function buildSeoMetadata({
   tags,
   publishedTime,
   modifiedTime,
+  robots = INDEX_FOLLOW_ROBOTS,
 }: SeoConfig): Metadata {
   const canonicalUrl = `${SITE_URL}${path}`
   const ogImg = ogImage || DEFAULT_OG_IMAGE
@@ -78,7 +81,7 @@ export function buildSeoMetadata({
     alternates: {
       canonical: canonicalUrl,
     },
-    robots: INDEX_FOLLOW_ROBOTS,
+    robots,
     openGraph: {
       type,
       locale: 'pt_BR',

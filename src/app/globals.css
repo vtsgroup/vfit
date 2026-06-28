@@ -1345,6 +1345,14 @@ select option {
   from { opacity: 0; transform: translateX(-16px); }
   to { opacity: 1; transform: translateX(0); }
 }
+/* Preenche a barra da "Prévia do seu plano" (0 → largura final) — sensação de plano sendo calculado */
+@keyframes welcome-fill {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  [style*="welcome-fill"] { animation: none !important; }
+}
 
 /* DS V3 — Tooltip animations */
 @keyframes tooltip-enter-top {
