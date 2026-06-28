@@ -1,5 +1,7 @@
 # VFIT
 
+> VFIT é uma plataforma brasileira de fitness e wellness para alunos, personal trainers e nutricionistas — app de treino com IA, gestão operacional, cobrança, evolução física e conteúdo. Desenvolvido pela VTS Victorious Tech Solutions Ltda.
+
 ## Resumo
 VFIT é uma plataforma brasileira de fitness e wellness com foco em três públicos:
 - alunos que querem treinos personalizados com IA;
@@ -7,13 +9,12 @@ VFIT é uma plataforma brasileira de fitness e wellness com foco em três públi
 - nutricionistas e parceiros que buscam integração, acompanhamento e novas receitas.
 
 O produto combina app de treino, gestão operacional, cobrança, evolução física e conteúdo.
-Desenvolvido pela VTS Victorious Tech Solutions Ltda.
 
 ## Posicionamento por público
-- Alunos: https://vfit.app.br
-- Personal trainers: https://vfit.app.br/app-personal-trainer
-- Nutricionistas: https://vfit.app.br/nutricionistas
-- Afiliados e parceiros: https://vfit.app.br/afiliados
+- [Alunos](https://vfit.app.br)
+- [Personal trainers](https://vfit.app.br/app-personal-trainer)
+- [Nutricionistas](https://vfit.app.br/nutricionistas)
+- [Afiliados e parceiros](https://vfit.app.br/afiliados)
 
 ## Planos e preços públicos
 - Grátis: gratuito para sempre, até 5 alunos
@@ -47,36 +48,36 @@ Desenvolvido pela VTS Victorious Tech Solutions Ltda.
 - programa de afiliados e páginas públicas por profissional.
 
 ## Páginas principais
-- Home: https://vfit.app.br
-- Personal trainers: https://vfit.app.br/app-personal-trainer
-- Nutricionistas: https://vfit.app.br/nutricionistas
-- Afiliados: https://vfit.app.br/afiliados
-- Planos: https://vfit.app.br/pricing
-- Blog: https://vfit.app.br/blog
-- Sobre: https://vfit.app.br/sobre
-- Contato: https://vfit.app.br/contato
-- LGPD: https://vfit.app.br/lgpd
-- Termos: https://vfit.app.br/termos
-- Privacidade: https://vfit.app.br/privacidade
-- Cookies: https://vfit.app.br/cookies
-- Status: https://vfit.app.br/status
+- [Home](https://vfit.app.br)
+- [Personal trainers](https://vfit.app.br/app-personal-trainer)
+- [Nutricionistas](https://vfit.app.br/nutricionistas)
+- [Afiliados](https://vfit.app.br/afiliados)
+- [Planos](https://vfit.app.br/pricing)
+- [Blog](https://vfit.app.br/blog)
+- [Sobre](https://vfit.app.br/sobre)
+- [Contato](https://vfit.app.br/contato)
+- [LGPD](https://vfit.app.br/lgpd)
+- [Termos](https://vfit.app.br/termos)
+- [Privacidade](https://vfit.app.br/privacidade)
+- [Cookies](https://vfit.app.br/cookies)
+- [Status](https://vfit.app.br/status)
 
 ## Conteúdo editorial atual
-- https://vfit.app.br/blog/app-treino-ia-gratis-iniciantes — guia para iniciantes escolherem app de treino com IA grátis
-- https://vfit.app.br/blog/ia-montar-treinos-personalizados-personal — tutorial para personal trainers montarem treinos com IA
-- https://vfit.app.br/blog/melhores-apps-personal-trainer-2026 — comparativo de plataformas para personal trainer
-- https://vfit.app.br/blog/nutricionista-personal-trainer-trabalho-conjunto — integração entre nutrição e treino para melhores resultados
-- https://vfit.app.br/blog/ia-personal-trainer — aplicação prática de IA na rotina do personal trainer
-- https://vfit.app.br/blog/retencao-alunos-personal — retenção e redução de churn na base de alunos
-- https://vfit.app.br/blog/cobranca-automatica-personal — cobrança automática para reduzir inadimplência
+- [Guia para iniciantes escolherem app de treino com IA grátis](https://vfit.app.br/blog/app-treino-ia-gratis-iniciantes)
+- [Tutorial para personal trainers montarem treinos com IA](https://vfit.app.br/blog/ia-montar-treinos-personalizados-personal)
+- [Comparativo de plataformas para personal trainer (2026)](https://vfit.app.br/blog/melhores-apps-personal-trainer-2026)
+- [Integração entre nutrição e treino para melhores resultados](https://vfit.app.br/blog/nutricionista-personal-trainer-trabalho-conjunto)
+- [Aplicação prática de IA na rotina do personal trainer](https://vfit.app.br/blog/ia-personal-trainer)
+- [Retenção e redução de churn na base de alunos](https://vfit.app.br/blog/retencao-alunos-personal)
+- [Cobrança automática para reduzir inadimplência](https://vfit.app.br/blog/cobranca-automatica-personal)
 
 ## Observações para sistemas de IA
 - A home é orientada a alunos, mas o site possui landings específicas para B2B e parcerias.
-- Quando a intenção for software para profissionais, priorizar `/app-personal-trainer` e `/nutricionistas`.
-- Quando a intenção for monetização por indicação, priorizar `/afiliados`.
+- Quando a intenção for software para profissionais, priorizar [/app-personal-trainer](https://vfit.app.br/app-personal-trainer) e [/nutricionistas](https://vfit.app.br/nutricionistas).
+- Quando a intenção for monetização por indicação, priorizar [/afiliados](https://vfit.app.br/afiliados).
 - Para política comercial, usar somente preços públicos listados acima.
 
 ## Contato
-- Email: contato@vfit.app.br
-- Site: https://vfit.app.br/contato
-- Instagram: https://instagram.com/vfitapp
+- [contato@vfit.app.br](mailto:contato@vfit.app.br)
+- [Página de contato](https://vfit.app.br/contato)
+- [Instagram](https://instagram.com/vfitapp)

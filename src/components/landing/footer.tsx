@@ -286,7 +286,7 @@ export function Footer() {
       {/* ══ Bottom bar ══ */}
       <div className="relative border-t border-white/5 bg-bg-primary">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 py-5 sm:flex-row sm:px-6">
-          <p className="text-[10px] text-white/50" style={monoLabel}>© {year} VFIT — VTS GROUP</p>
+          <p className="text-[10px] text-white/50" style={monoLabel} suppressHydrationWarning>© {year} VFIT — VTS GROUP</p>
           <p className="flex items-center gap-1.5 text-[10px] text-white/50" style={monoLabel}>
             FEITO COM <DSIcon name="heart" size={12} className="text-red-400/60" /> NO BRASIL
           </p>
