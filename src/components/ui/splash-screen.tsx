@@ -25,8 +25,8 @@ import { cn } from '@/lib/utils'
 
 const SPLASH_KEY = 'vfit-splash-v5'
 const ENTER_MS = 1100        // duração da entrada (icon/arcos/wordmark/barra)
-const MIN_VISIBLE = 1300     // 1ª carga: segura até a ENTRADA completar (último arco ~1.28s)
-                            // antes de poder sair — app rápido não corta o logo no meio. Não loopa.
+const MIN_VISIBLE = 3300     // 1ª carga: entrada completa (~1.28s) + ~2s de respiro antes de sair
+                            // (app rápido não corta o logo no meio; pedido do dono: ficar um pouco mais). Não loopa.
 const SAFETY_MS = 4000       // nunca prender o usuário atrás do splash (cap de delay se /auth/me travar)
 
 /* ─── Campo de partículas determinístico (sem Math.random no render → SSR-safe) ─── */

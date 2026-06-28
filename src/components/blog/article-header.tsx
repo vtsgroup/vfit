@@ -1,19 +1,20 @@
 // ============================================
-// article-header.tsx — Header do artigo de blog com breadcrumbs e metadados
+// article-header.tsx — Header do artigo de blog (tema CLARO, ultra moderno)
 // ============================================
 //
 // O que faz:
-//   Renderiza o header de um post de blog: breadcrumbs, categoria colorida,
-//   título, excerpt, metadados (autor, data, leitura) e hero image.
-//   Usa CATEGORY_COLORS de @/data/blog-posts para badge de categoria.
+//   Header do post: breadcrumbs, badge de categoria (gradiente verde + ícone,
+//   gramática do blog-card), título Syne, excerpt, barra de autor em card claro
+//   e hero image com moldura clara. Tema light coerente com a home/índice do blog.
 //
 // Exports principais:
-//   ArticleHeader — header completo do post de blog
+//   ArticleHeader — header completo do post de blog (light)
 import Image from 'next/image'
 import { DSIcon } from '@/components/ui/ds-icon'
 import type { BlogPost } from '@/data/blog-posts'
-import { CATEGORY_COLORS } from '@/data/blog-posts'
+import { CATEGORY_ICON } from '@/data/blog-posts'
 import { Breadcrumbs } from '@/components/shared/breadcrumbs'
+import { badgeStyle, greenChip, lightCard } from '@/components/shared/light-section'
 
 interface ArticleHeaderProps {
   post: BlogPost
@@ -24,6 +25,7 @@ export function ArticleHeader({ post }: ArticleHeaderProps) {
     <header className="space-y-6">
       {/* Breadcrumbs */}
       <Breadcrumbs
+        tone="light"
         items={[
           { label: 'Blog', href: '/blog' },
           { label: post.category, href: '/blog' },
@@ -31,35 +33,33 @@ export function ArticleHeader({ post }: ArticleHeaderProps) {
         ]}
       />
 
-      {/* Category badge */}
+      {/* Category badge — gradiente verde + ícone (gramática do blog-card) */}
       <span
-        className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium ${
-          CATEGORY_COLORS[post.category] || ''
-        }`}
+        className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] uppercase text-[#08122B]"
+        style={badgeStyle}
       >
+        <DSIcon name={CATEGORY_ICON[post.category]} size={11} className="text-[#08122B]" />
         {post.category}
       </span>
 
       {/* Title */}
-      <h1 className="text-3xl font-bold text-white sm:text-4xl leading-tight">
+      <h1 className="font-syne text-[2rem] font-black leading-[1.08] tracking-tight text-gray-950 sm:text-[2.6rem]">
         {post.title}
       </h1>
 
       {/* Subtitle / Excerpt */}
-      <p className="text-lg text-zinc-400 leading-relaxed">
-        {post.excerpt}
-      </p>
+      <p className="text-lg leading-relaxed text-slate-600">{post.excerpt}</p>
 
       {/* Author bar */}
-      <div className="flex items-center gap-4 rounded-xl border border-white/8 bg-white/3 px-5 py-4 backdrop-blur-sm">
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-primary/10 ring-1 ring-brand-primary/20">
-          <DSIcon name="user" size={20} className="text-brand-primary" />
+      <div className="flex items-center gap-4 rounded-2xl px-5 py-4" style={lightCard}>
+        <div className="flex h-10 w-10 items-center justify-center rounded-full text-emerald-600" style={greenChip}>
+          <DSIcon name="user" size={20} />
         </div>
         <div className="flex-1">
-          <p className="text-sm font-medium text-white">{post.author.name}</p>
-          <p className="text-xs text-zinc-500">{post.author.role}</p>
+          <p className="text-sm font-bold text-gray-950">{post.author.name}</p>
+          <p className="text-xs text-slate-500">{post.author.role}</p>
         </div>
-        <div className="flex items-center gap-4 text-xs text-zinc-500">
+        <div className="flex items-center gap-4 text-xs text-slate-500">
           <time dateTime={post.dateISO}>{post.date}</time>
           <span className="flex items-center gap-1">
             <DSIcon name="clock" size={12} />
@@ -69,7 +69,7 @@ export function ArticleHeader({ post }: ArticleHeaderProps) {
       </div>
 
       {/* Hero Image */}
-      <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-white/8 shadow-[0_8px_32px_rgba(0,0,0,0.3)]">
+      <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-slate-200 shadow-[0_18px_50px_-20px_rgba(15,23,42,0.35)]">
         <Image
           src={post.image}
           alt={post.title}
@@ -79,7 +79,7 @@ export function ArticleHeader({ post }: ArticleHeaderProps) {
           priority
           fetchPriority="high"
         />
-        <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/5" />
+        <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-black/5" />
       </div>
     </header>
   )

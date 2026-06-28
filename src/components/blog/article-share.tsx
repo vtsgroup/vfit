@@ -31,9 +31,12 @@ export function ArticleShare({ title, slug }: ArticleShareProps) {
     setTimeout(() => setCopied(false), 2000)
   }
 
+  const iconBtn =
+    'flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-500/40 hover:text-emerald-700 hover:shadow-[0_8px_18px_-8px_rgba(34,197,94,0.45)]'
+
   return (
-    <div className="flex items-center gap-3 rounded-xl border border-white/8 bg-white/3 px-4 py-2.5 backdrop-blur-sm">
-      <span className="flex items-center gap-1.5 text-xs text-zinc-500">
+    <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-[0_1px_2px_rgba(15,23,42,0.04),0_14px_34px_-22px_rgba(15,23,42,0.16)]">
+      <span className="flex items-center gap-1.5 text-xs font-semibold text-slate-500">
         <DSIcon name="externalLink" size={14} />
         Compartilhar
       </span>
@@ -42,7 +45,7 @@ export function ArticleShare({ title, slug }: ArticleShareProps) {
         href={`https://wa.me/?text=${encodedTitle}%20${encodedUrl}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/8 bg-white/3 text-zinc-400 transition-all duration-300 hover:border-emerald-500/30 hover:text-emerald-400 hover:shadow-[0_0_12px_rgba(16,185,129,0.12)]"
+        className={iconBtn}
         aria-label="Compartilhar no WhatsApp"
       >
         <DSIcon name="message" size={14} />
@@ -52,7 +55,7 @@ export function ArticleShare({ title, slug }: ArticleShareProps) {
         href={`https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/8 bg-white/3 text-zinc-400 transition-all duration-300 hover:border-brand-primary/30 hover:text-brand-primary hover:shadow-[0_0_12px_rgba(34,197,94,0.12)]"
+        className={iconBtn}
         aria-label="Compartilhar no Twitter"
       >
         <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor">
@@ -64,7 +67,7 @@ export function ArticleShare({ title, slug }: ArticleShareProps) {
         href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/8 bg-white/3 text-zinc-400 transition-all duration-300 hover:border-brand-primary/30 hover:text-brand-primary hover:shadow-[0_0_12px_rgba(34,197,94,0.12)]"
+        className={iconBtn}
         aria-label="Compartilhar no LinkedIn"
       >
         <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor">
@@ -74,14 +77,14 @@ export function ArticleShare({ title, slug }: ArticleShareProps) {
 
       <button
         onClick={handleCopy}
-        className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/8 bg-white/3 text-zinc-400 transition-all duration-300 hover:border-brand-primary/30 hover:text-brand-primary hover:shadow-[0_0_12px_rgba(16,185,129,0.12)]"
+        className={iconBtn}
         aria-label="Copiar link"
       >
-        <DSIcon name="link" size={14} />
+        <DSIcon name={copied ? 'check' : 'link'} size={14} className={copied ? 'text-emerald-600' : ''} />
       </button>
 
       {copied && (
-        <span className="text-xs text-brand-primary animate-pulse">Link copiado!</span>
+        <span className="text-xs font-semibold text-emerald-700">Link copiado!</span>
       )}
     </div>
   )

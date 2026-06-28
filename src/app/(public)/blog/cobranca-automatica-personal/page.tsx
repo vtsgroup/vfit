@@ -8,6 +8,9 @@
 //   Renderiza ArticleHeader, conteúdo estático do artigo, ArticleShare, ArticleNavigation
 //   e ArticleRelated. Inclui BlogPostingSchema JSON-LD para SEO/AEO.
 //
+//   Tema CLARO ultra moderno (kit article-kit.tsx + light-section.tsx) — coerente
+//   com a home e o índice do blog. SEO/conteúdo inalterados.
+//
 // Exports principais:
 //   metadata — Metadata Next.js para SEO
 //   CobrancaAutomaticaPage — page component (RSC)
@@ -21,6 +24,20 @@ import { ArticleHeader } from '@/components/blog/article-header'
 import { ArticleShare } from '@/components/blog/article-share'
 import { ArticleNavigation } from '@/components/blog/article-navigation'
 import { ArticleRelated } from '@/components/blog/article-related'
+import {
+  ArticleShell,
+  ArticleH2,
+  Callout,
+  SourceList,
+  lightCard,
+  HoverEdge,
+  greenChip,
+  monoLabel,
+  pillPrimaryClass,
+  PillSweep,
+  PillArrow,
+  articleLinkClass,
+} from '@/components/blog/article-kit'
 import { FaqInline } from '@/components/shared/faq-inline'
 import { FAQ_BLOG_COBRANCA } from '@/data/faqs'
 import { TrackedCtaLink } from '@/components/analytics/tracked-cta-link'
@@ -55,11 +72,11 @@ const STEPS_SETUP = [
 ]
 
 const REGUA_LEMBRETES: { day: string; action: string; icon: DSIconName; color: string; bg: string }[] = [
-  { day: 'D-3', action: 'Lembrete amigável de vencimento próximo via push + email', icon: 'bell', color: 'text-brand-primary', bg: 'bg-brand-primary/15' },
-  { day: 'D-0', action: 'Notificação no dia do vencimento com link de pagamento', icon: 'clock', color: 'text-amber-400', bg: 'bg-amber-500/15' },
-  { day: 'D+1', action: 'Aviso de pagamento em atraso — tom empático, não punitivo', icon: 'alertTriangle', color: 'text-orange-400', bg: 'bg-orange-500/15' },
-  { day: 'D+3', action: 'Segundo lembrete com novo link de pagamento gerado', icon: 'send', color: 'text-red-400', bg: 'bg-red-500/15' },
-  { day: 'D+7', action: 'Bloqueio automático do acesso + notificação final ao aluno', icon: 'ban', color: 'text-red-500', bg: 'bg-red-500/15' },
+  { day: 'D-3', action: 'Lembrete amigável de vencimento próximo via push + email', icon: 'bell', color: 'text-emerald-600', bg: 'bg-emerald-500/12' },
+  { day: 'D-0', action: 'Notificação no dia do vencimento com link de pagamento', icon: 'clock', color: 'text-amber-600', bg: 'bg-amber-500/12' },
+  { day: 'D+1', action: 'Aviso de pagamento em atraso — tom empático, não punitivo', icon: 'alertTriangle', color: 'text-orange-600', bg: 'bg-orange-500/12' },
+  { day: 'D+3', action: 'Segundo lembrete com novo link de pagamento gerado', icon: 'send', color: 'text-red-500', bg: 'bg-red-500/12' },
+  { day: 'D+7', action: 'Bloqueio automático do acesso + notificação final ao aluno', icon: 'ban', color: 'text-red-600', bg: 'bg-red-500/15' },
 ]
 
 const RESULTS: { icon: DSIconName; value: string; label: string }[] = [
@@ -83,7 +100,7 @@ export default function CobrancaAutomaticaPage() {
   const related = getRelatedPosts('cobranca-automatica-personal')
 
   return (
-    <article className="mx-auto max-w-3xl space-y-12 px-6 pb-24">
+    <ArticleShell>
       <BlogPostingSchema
         title={post.title}
         description={post.excerpt}
@@ -96,23 +113,23 @@ export default function CobrancaAutomaticaPage() {
       <ArticleHeader post={post} />
 
       {/* ── Introdução ── */}
-      <section className="space-y-5 text-zinc-300 leading-relaxed">
+      <section className="space-y-5 text-[17px] leading-relaxed text-slate-600">
         <p className="text-lg">
-          Cobrar alunos manualmente é um dos maiores ralos de tempo e energia do personal trainer. Entre enviar mensagens, conferir comprovantes e lidar com atrasos, você perde <strong className="text-white">5 a 10 horas por mês</strong> que poderiam ser dedicadas a treinar mais alunos ou investir no seu negócio.
+          Cobrar alunos manualmente é um dos maiores ralos de tempo e energia do personal trainer. Entre enviar mensagens, conferir comprovantes e lidar com atrasos, você perde <strong className="font-semibold text-slate-900">5 a 10 horas por mês</strong> que poderiam ser dedicadas a treinar mais alunos ou investir no seu negócio.
         </p>
         <p>
-          Dados do <a href="https://www.bcb.gov.br/estabilidadefinanceira/pix" target="_blank" rel="noopener noreferrer" className="text-brand-primary underline decoration-brand-primary/30 hover:decoration-brand-primary transition-colors">Banco Central</a> mostram que o PIX já representa <strong className="text-white">mais de 45% das transações digitais no Brasil</strong> (2024), e a tendência de cobranças automatizadas cresce 30% ao ano entre microempreendedores.
+          Dados do <a href="https://www.bcb.gov.br/estabilidadefinanceira/pix" target="_blank" rel="noopener noreferrer" className={articleLinkClass}>Banco Central</a> mostram que o PIX já representa <strong className="font-semibold text-slate-900">mais de 45% das transações digitais no Brasil</strong> (2024), e a tendência de cobranças automatizadas cresce 30% ao ano entre microempreendedores.
         </p>
         <p>
-          A cobrança automática resolve isso de forma definitiva: o sistema gera, envia e confirma pagamentos sem que você precise fazer nada. Neste guia, mostramos <strong className="text-white">como configurar em 5 passos</strong> e qual método funciona melhor para cada perfil de aluno.
+          A cobrança automática resolve isso de forma definitiva: o sistema gera, envia e confirma pagamentos sem que você precise fazer nada. Neste guia, mostramos <strong className="font-semibold text-slate-900">como configurar em 5 passos</strong> e qual método funciona melhor para cada perfil de aluno.
         </p>
         <p>
           Se quiser ver o fluxo completo de operação profissional, acesse a página para{' '}
-          <Link href="/app-personal-trainer" className="text-brand-primary underline decoration-brand-primary/30 hover:decoration-brand-primary transition-colors">
+          <Link href="/app-personal-trainer" className={articleLinkClass}>
             personal trainers
           </Link>
           . Para receita adicional além das cobranças, veja também{' '}
-          <Link href="/afiliados" className="text-brand-primary underline decoration-brand-primary/30 hover:decoration-brand-primary transition-colors">
+          <Link href="/afiliados" className={articleLinkClass}>
             programa de afiliados
           </Link>
           .
@@ -120,69 +137,53 @@ export default function CobrancaAutomaticaPage() {
       </section>
 
       {/* ── Impacto financeiro — Callout ── */}
-      <div className="flex gap-4 rounded-2xl border border-amber-500/20 bg-amber-500/5 p-5">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-500/20">
-          <DSIcon name="trendingUp" size={20} className="text-amber-400" />
-        </div>
-        <div className="space-y-1 text-sm">
-          <p className="font-semibold text-white">Inadimplência custa caro — e é evitável</p>
-          <p className="text-zinc-400">
-            Segundo o <a href="https://sebrae.com.br/sites/PortalSebrae/ufs/mg/artigos/gestao-financeira" target="_blank" rel="noopener noreferrer" className="text-brand-primary underline decoration-brand-primary/30">SEBRAE</a>, 62% dos microempreendedores brasileiros têm dificuldade com gestão de cobranças. Para personal trainers, cada aluno inadimplente representa em média <strong className="text-zinc-200">R$ 360/mês</strong> de receita perdida.
-          </p>
-        </div>
-      </div>
+      <Callout icon="trendingUp" tone="amber" title="Inadimplência custa caro — e é evitável">
+        Segundo o <a href="https://sebrae.com.br/sites/PortalSebrae/ufs/mg/artigos/gestao-financeira" target="_blank" rel="noopener noreferrer" className={articleLinkClass}>SEBRAE</a>, 62% dos microempreendedores brasileiros têm dificuldade com gestão de cobranças. Para personal trainers, cada aluno inadimplente representa em média <strong className="font-semibold text-slate-900">R$ 360/mês</strong> de receita perdida.
+      </Callout>
 
       {/* ── Métodos de pagamento — Cards detalhados ── */}
       <section className="space-y-6">
-        <div className="space-y-2">
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-amber-400" style={{ fontFamily: 'ui-monospace, monospace' }}>/COMPARATIVO</span>
-          <h2 className="text-2xl font-bold text-white sm:text-3xl">PIX vs Cartão vs Boleto</h2>
-        </div>
+        <ArticleH2 eyebrow="/COMPARATIVO">PIX vs Cartão vs Boleto</ArticleH2>
 
         <div className="space-y-4">
           {PAYMENT_METHODS.map((pm) => (
-            <div key={pm.method} className="rounded-2xl border border-white/10 bg-white/3 p-5 sm:p-6">
-              <div className="flex items-center gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-500/15 shrink-0">
-                  <DSIcon name={pm.icon} size={22} className="text-amber-400" />
+            <div key={pm.method} className="group relative overflow-hidden rounded-2xl p-5 transition-all duration-300 hover:-translate-y-0.5 sm:p-6" style={lightCard}>
+              <HoverEdge />
+              <div className="relative flex items-center gap-4">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-emerald-600" style={greenChip}>
+                  <DSIcon name={pm.icon} size={22} />
                 </div>
                 <div className="grow">
                   <div className="flex items-baseline gap-3">
-                    <h3 className="text-lg font-bold text-white">{pm.method}</h3>
-                    <span className="rounded-full bg-amber-500/10 px-2.5 py-0.5 text-[10px] font-bold text-amber-400 uppercase tracking-wider" style={{ fontFamily: 'ui-monospace, monospace' }}>{pm.fee}</span>
+                    <h3 className="font-syne text-lg font-black tracking-tight text-gray-950">{pm.method}</h3>
+                    <span className="rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-emerald-700" style={monoLabel}>{pm.fee}</span>
                   </div>
-                  <p className="text-xs text-zinc-500 mt-0.5">{pm.speed} · {pm.best}</p>
+                  <p className="mt-0.5 text-xs text-slate-500">{pm.speed} · {pm.best}</p>
                 </div>
               </div>
-              <p className="mt-3 text-sm text-zinc-400 leading-relaxed">{pm.detail}</p>
+              <p className="relative mt-3 text-sm leading-relaxed text-slate-600">{pm.detail}</p>
             </div>
           ))}
         </div>
       </section>
 
       {/* ── Alerta taxas ── */}
-      <div className="flex gap-3 rounded-xl border border-amber-500/30 bg-amber-500/5 p-4">
-        <DSIcon name="alertTriangle" className="text-amber-400 mt-0.5 shrink-0" />
-        <div className="text-sm text-zinc-300 space-y-1">
-          <p className="font-semibold text-amber-300">Importante sobre taxas</p>
-          <p>As taxas variam conforme o gateway. O VFIT utiliza o <a href="https://docs.asaas.com/" target="_blank" rel="noopener noreferrer" className="text-brand-primary underline decoration-brand-primary/30">Asaas</a>, que oferece as menores taxas do mercado para personal trainers. PIX a partir de R$ 0,99 por transação.</p>
-        </div>
-      </div>
+      <Callout icon="alertTriangle" tone="amber" title="Importante sobre taxas">
+        As taxas variam conforme o gateway. O VFIT utiliza o <a href="https://docs.asaas.com/" target="_blank" rel="noopener noreferrer" className={articleLinkClass}>Asaas</a>, que oferece as menores taxas do mercado para personal trainers. PIX a partir de R$ 0,99 por transação.
+      </Callout>
 
       {/* ── 5 Passos ── */}
       <section className="space-y-6">
-        <div className="space-y-2">
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-amber-400" style={{ fontFamily: 'ui-monospace, monospace' }}>/SETUP</span>
-          <h2 className="text-2xl font-bold text-white sm:text-3xl">Como configurar em 5 passos</h2>
-        </div>
+        <ArticleH2 eyebrow="/SETUP">Como configurar em 5 passos</ArticleH2>
 
         <div className="space-y-4">
           {STEPS_SETUP.map((s) => (
-            <div key={s.step} className="group flex gap-4 rounded-2xl border border-white/8 bg-white/2 p-5 transition-all hover:border-amber-500/20 hover:bg-amber-500/3">
-              <span className="text-2xl font-black text-amber-500/20 transition-colors group-hover:text-amber-500/35 shrink-0" style={{ fontFamily: 'ui-monospace, monospace' }}>{s.step}</span>
-              <div>
-                <h3 className="font-bold text-white">{s.title}</h3>
-                <p className="text-sm text-zinc-400 mt-1 leading-relaxed">{s.description}</p>
+            <div key={s.step} className="group relative flex gap-4 overflow-hidden rounded-2xl p-5 transition-all duration-300 hover:-translate-y-0.5" style={lightCard}>
+              <HoverEdge />
+              <span className="relative shrink-0 font-black text-emerald-500/25 transition-colors group-hover:text-emerald-500/45" style={{ ...monoLabel, fontSize: '1.6rem' }}>{s.step}</span>
+              <div className="relative">
+                <h3 className="font-syne font-black tracking-tight text-gray-950">{s.title}</h3>
+                <p className="mt-1 text-sm leading-relaxed text-slate-600">{s.description}</p>
               </div>
             </div>
           ))}
@@ -191,24 +192,21 @@ export default function CobrancaAutomaticaPage() {
 
       {/* ── Régua de Lembretes ── */}
       <section className="space-y-6">
-        <div className="space-y-2">
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-amber-400" style={{ fontFamily: 'ui-monospace, monospace' }}>/AUTOMAÇÃO</span>
-          <h2 className="text-2xl font-bold text-white sm:text-3xl">Régua de lembretes automática</h2>
-        </div>
-        <p className="text-zinc-300">O sistema envia notificações automaticamente conforme o status do pagamento:</p>
+        <ArticleH2 eyebrow="/AUTOMAÇÃO">Régua de lembretes automática</ArticleH2>
+        <p className="text-slate-600">O sistema envia notificações automaticamente conforme o status do pagamento:</p>
 
         <div className="relative space-y-0">
           {/* Timeline line */}
-          <div className="absolute left-5 top-5 bottom-5 w-px bg-linear-to-b from-brand-primary/40 via-amber-500/40 to-red-500/40 sm:left-5" />
+          <div className="absolute bottom-5 left-5 top-5 w-px bg-linear-to-b from-emerald-500/40 via-amber-500/40 to-red-500/40" />
 
           {REGUA_LEMBRETES.map((item) => (
             <div key={item.day} className="relative flex items-start gap-4 py-3">
-              <div className={`relative z-10 flex h-10 w-10 items-center justify-center rounded-xl ${item.bg} shrink-0`}>
+              <div className={`relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${item.bg} ring-1 ring-black/5`}>
                 <DSIcon name={item.icon} size={18} className={item.color} />
               </div>
               <div className="pt-1.5">
-                <span className="font-mono text-sm text-white">{item.day}</span>
-                <span className="text-zinc-400 text-sm ml-3">{item.action}</span>
+                <span className="font-mono text-sm font-bold text-gray-950">{item.day}</span>
+                <span className="ml-3 text-sm text-slate-600">{item.action}</span>
               </div>
             </div>
           ))}
@@ -216,34 +214,29 @@ export default function CobrancaAutomaticaPage() {
       </section>
 
       {/* ── Receita previsível ── */}
-      <section className="space-y-5 text-zinc-300 leading-relaxed">
-        <div className="space-y-2">
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-amber-400" style={{ fontFamily: 'ui-monospace, monospace' }}>/FINANÇAS</span>
-          <h2 className="text-2xl font-bold text-white sm:text-3xl">Receita previsível: o superpoder financeiro</h2>
-        </div>
+      <section className="space-y-5 text-[17px] leading-relaxed text-slate-600">
+        <ArticleH2 eyebrow="/FINANÇAS">Receita previsível: o superpoder financeiro</ArticleH2>
         <p>
-          A maior vantagem da cobrança automática não é economizar tempo — é ter <strong className="text-white">previsibilidade de caixa</strong>. Com recorrências ativas, você sabe exatamente quanto vai receber no próximo mês, podendo planejar investimentos, marketing e expansão com segurança.
+          A maior vantagem da cobrança automática não é economizar tempo — é ter <strong className="font-semibold text-slate-900">previsibilidade de caixa</strong>. Com recorrências ativas, você sabe exatamente quanto vai receber no próximo mês, podendo planejar investimentos, marketing e expansão com segurança.
         </p>
         <p>
-          Segundo dados da <a href="https://www.ihrsa.org/publications/the-global-health-fitness-industry-report/" target="_blank" rel="noopener noreferrer" className="text-brand-primary underline decoration-brand-primary/30">IHRSA</a>, profissionais fitness com sistemas de cobrança automatizada têm em média <strong className="text-white">2,3x mais receita anual</strong> que aqueles que cobram manualmente — não porque cobram mais, mas porque perdem menos.
+          Segundo dados da <a href="https://www.ihrsa.org/publications/the-global-health-fitness-industry-report/" target="_blank" rel="noopener noreferrer" className={articleLinkClass}>IHRSA</a>, profissionais fitness com sistemas de cobrança automatizada têm em média <strong className="font-semibold text-slate-900">2,3x mais receita anual</strong> que aqueles que cobram manualmente — não porque cobram mais, mas porque perdem menos.
         </p>
       </section>
 
       {/* ── Resultados ── */}
       <section className="space-y-6">
-        <div className="space-y-2">
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-amber-400" style={{ fontFamily: 'ui-monospace, monospace' }}>/RESULTADOS</span>
-          <h2 className="text-2xl font-bold text-white sm:text-3xl">Resultados esperados</h2>
-        </div>
+        <ArticleH2 eyebrow="/RESULTADOS">Resultados esperados</ArticleH2>
 
         <div className="grid grid-cols-2 gap-4">
           {RESULTS.map((r) => (
-            <div key={r.label} className="rounded-2xl border border-white/8 bg-white/2 p-5 text-center space-y-2">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/15 mx-auto">
-                <DSIcon name={r.icon} size={18} className="text-amber-400" />
+            <div key={r.label} className="group relative space-y-2 overflow-hidden rounded-2xl p-5 text-center transition-all duration-300 hover:-translate-y-0.5" style={lightCard}>
+              <HoverEdge />
+              <div className="relative mx-auto flex h-10 w-10 items-center justify-center rounded-xl text-emerald-600" style={greenChip}>
+                <DSIcon name={r.icon} size={18} />
               </div>
-              <div className="text-2xl font-bold text-white" style={{ fontFamily: 'ui-monospace, monospace' }}>{r.value}</div>
-              <div className="text-xs text-zinc-500">{r.label}</div>
+              <div className="relative text-2xl font-black text-gray-950" style={monoLabel}>{r.value}</div>
+              <div className="relative text-xs text-slate-500">{r.label}</div>
             </div>
           ))}
         </div>
@@ -252,38 +245,27 @@ export default function CobrancaAutomaticaPage() {
       {/* ── FAQ ── */}
       <FaqInline items={FAQ_BLOG_COBRANCA} />
 
-      <section className="rounded-2xl border border-white/8 bg-white/3 p-6 space-y-4">
-        <h2 className="text-xl font-bold text-white">Direcione sua próxima ação</h2>
+      {/* ── ICP switcher ── */}
+      <section className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6" style={{ boxShadow: '0 1px 2px rgba(15,23,42,0.04), 0 18px 40px -24px rgba(15,23,42,0.14)' }}>
+        <h2 className="font-syne text-xl font-black tracking-tight text-gray-950">Direcione sua próxima ação</h2>
         <div className="grid gap-3 sm:grid-cols-3">
-          <TrackedCtaLink href="/app-personal-trainer" cta="Operação profissional" placement="blog_cobranca_legacy_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-amber-500/30">
-            <h3 className="text-sm font-bold text-white">Operação profissional</h3>
-            <p className="mt-1 text-xs text-zinc-400">Gestão + cobrança + IA no mesmo fluxo.</p>
+          <TrackedCtaLink href="/app-personal-trainer" cta="Operação profissional" placement="blog_cobranca_legacy_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-500/30 hover:shadow-[0_14px_30px_-18px_rgba(34,197,94,0.4)]">
+            <h3 className="font-syne text-sm font-black tracking-tight text-gray-950">Operação profissional</h3>
+            <p className="mt-1 text-xs text-slate-500">Gestão + cobrança + IA no mesmo fluxo.</p>
           </TrackedCtaLink>
-          <TrackedCtaLink href="/afiliados" cta="Monetização por indicação" placement="blog_cobranca_legacy_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-amber-500/30">
-            <h3 className="text-sm font-bold text-white">Monetização por indicação</h3>
-            <p className="mt-1 text-xs text-zinc-400">Comissão recorrente para aumentar receita.</p>
+          <TrackedCtaLink href="/afiliados" cta="Monetização por indicação" placement="blog_cobranca_legacy_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-500/30 hover:shadow-[0_14px_30px_-18px_rgba(34,197,94,0.4)]">
+            <h3 className="font-syne text-sm font-black tracking-tight text-gray-950">Monetização por indicação</h3>
+            <p className="mt-1 text-xs text-slate-500">Comissão recorrente para aumentar receita.</p>
           </TrackedCtaLink>
-          <TrackedCtaLink href="/" cta="Experiência do aluno" placement="blog_cobranca_legacy_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-amber-500/30">
-            <h3 className="text-sm font-bold text-white">Experiência do aluno</h3>
-            <p className="mt-1 text-xs text-zinc-400">Veja a home com foco em resultado do aluno.</p>
+          <TrackedCtaLink href="/" cta="Experiência do aluno" placement="blog_cobranca_legacy_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-500/30 hover:shadow-[0_14px_30px_-18px_rgba(34,197,94,0.4)]">
+            <h3 className="font-syne text-sm font-black tracking-tight text-gray-950">Experiência do aluno</h3>
+            <p className="mt-1 text-xs text-slate-500">Veja a home com foco em resultado do aluno.</p>
           </TrackedCtaLink>
         </div>
       </section>
 
       {/* ── Fontes ── */}
-      <section className="rounded-2xl border border-white/8 bg-white/3 p-6">
-        <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-zinc-500" style={{ fontFamily: 'ui-monospace, monospace' }}>Fontes e referências</h3>
-        <ul className="space-y-2">
-          {SOURCES.map((s) => (
-            <li key={s.url} className="flex items-start gap-2 text-sm">
-              <DSIcon name="externalLink" size={14} className="mt-0.5 shrink-0 text-amber-500/60" />
-              <a href={s.url} target="_blank" rel="noopener noreferrer" className="text-zinc-400 underline decoration-white/10 hover:text-amber-400 hover:decoration-amber-400/30 transition-colors">
-                {s.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
+      <SourceList sources={SOURCES} />
 
       {/* Share */}
       <ArticleShare title={post.title} slug={post.slug} />
@@ -292,27 +274,33 @@ export default function CobrancaAutomaticaPage() {
       <ArticleRelated posts={related} />
 
       {/* ── CTA ── */}
-      <section className="text-center rounded-2xl border border-amber-500/30 bg-linear-to-b from-amber-500/10 to-transparent p-8 sm:p-10 space-y-5">
-        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-amber-400" style={{ fontFamily: 'ui-monospace, monospace' }}>/PRÓXIMO PASSO</span>
-        <h2 className="text-2xl font-bold text-white">Quer automatizar suas cobranças?</h2>
-        <p className="text-sm text-zinc-400 max-w-md mx-auto leading-relaxed">
+      <section className="relative overflow-hidden rounded-3xl border border-emerald-500/25 p-8 text-center sm:p-10" style={{ background: 'linear-gradient(180deg, rgba(34,197,94,0.10) 0%, rgba(255,255,255,0) 70%), linear-gradient(180deg, #ffffff 0%, #f3faf5 100%)', boxShadow: '0 1px 2px rgba(15,23,42,0.04), 0 26px 60px -28px rgba(34,197,94,0.4)' }}>
+        <div aria-hidden="true" className="pointer-events-none absolute right-0 top-0 h-48 w-48 translate-x-1/3 -translate-y-1/3 rounded-full bg-brand-primary/10 blur-[90px]" />
+        <span className="relative inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-[10px] uppercase tracking-[0.18em]" style={{ ...monoLabel, background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(236,253,243,0.8) 100%)', border: '1px solid rgba(34,197,94,0.3)' }}>
+          <span className="bg-linear-to-r from-emerald-600 to-emerald-500 bg-clip-text text-transparent">/PRÓXIMO PASSO</span>
+        </span>
+        <h2 className="relative mt-5 font-syne text-2xl font-black tracking-tight text-gray-950 sm:text-3xl">Quer automatizar suas cobranças?</h2>
+        <p className="relative mx-auto mt-3 max-w-md text-sm leading-relaxed text-slate-600">
           Configure cobrança automática com PIX, cartão e boleto em menos de 5 minutos. Integração com Asaas inclusa. Sem taxas de setup.
         </p>
-        <TrackedCtaLink
-          href="/register"
-          cta="Começar agora"
-          placement="blog_cobranca_legacy_cta"
-          pageSegment="blog"
-          event="lp_register_start"
-          className="inline-flex items-center gap-2 rounded-xl bg-amber-500 px-6 py-3 text-sm font-bold text-white hover:bg-amber-600 transition-colors shadow-lg shadow-amber-500/20"
-        >
-          Começar agora
-          <DSIcon name="arrowRight" size={16} />
-        </TrackedCtaLink>
+        <div className="relative mt-6 flex justify-center">
+          <TrackedCtaLink
+            href="/register"
+            cta="Começar agora"
+            placement="blog_cobranca_legacy_cta"
+            pageSegment="blog"
+            event="lp_register_start"
+            className={pillPrimaryClass}
+          >
+            <PillSweep />
+            <span className="relative z-10">Começar agora</span>
+            <PillArrow />
+          </TrackedCtaLink>
+        </div>
       </section>
 
       {/* Navigation */}
       <ArticleNavigation prev={prev} next={next} />
-    </article>
+    </ArticleShell>
   )
 }

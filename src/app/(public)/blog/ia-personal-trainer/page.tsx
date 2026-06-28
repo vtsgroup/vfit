@@ -8,6 +8,9 @@
 //   Renderiza header, conteúdo estático, share e navegação entre posts.
 //   Inclui BlogPostingSchema + FAQPage JSON-LD para SEO/AEO.
 //
+//   Tema CLARO ultra moderno (kit article-kit.tsx + light-section.tsx) — coerente
+//   com a home e o índice do blog. SEO/conteúdo inalterados.
+//
 // Exports principais:
 //   metadata — Metadata Next.js para SEO
 //   IAPersonalTrainerPage — page component (RSC)
@@ -21,6 +24,20 @@ import { ArticleHeader } from '@/components/blog/article-header'
 import { ArticleShare } from '@/components/blog/article-share'
 import { ArticleNavigation } from '@/components/blog/article-navigation'
 import { ArticleRelated } from '@/components/blog/article-related'
+import {
+  ArticleShell,
+  ArticleH2,
+  Callout,
+  SourceList,
+  lightCard,
+  HoverEdge,
+  greenChip,
+  monoLabel,
+  pillPrimaryClass,
+  PillSweep,
+  PillArrow,
+  articleLinkClass,
+} from '@/components/blog/article-kit'
 import { FaqInline } from '@/components/shared/faq-inline'
 import { FAQ_BLOG_IA } from '@/data/faqs'
 import { TrackedCtaLink } from '@/components/analytics/tracked-cta-link'
@@ -76,7 +93,7 @@ export default function IAPersonalTrainerPage() {
   const related = getRelatedPosts('ia-personal-trainer')
 
   return (
-    <article className="mx-auto max-w-3xl space-y-12 px-6 pb-24">
+    <ArticleShell>
       <BlogPostingSchema
         title={post.title}
         description={post.excerpt}
@@ -89,23 +106,23 @@ export default function IAPersonalTrainerPage() {
       <ArticleHeader post={post} />
 
       {/* ── Introdução ── */}
-      <section className="space-y-5 text-zinc-300 leading-relaxed">
+      <section className="space-y-5 text-[17px] leading-relaxed text-slate-600">
         <p className="text-lg">
-          Se você é <strong className="text-white">personal trainer</strong> e ainda monta todos os treinos do zero, provavelmente já sentiu o peso de atender dezenas de alunos sem perder qualidade. A boa notícia: a <strong className="text-white">inteligência artificial (IA)</strong> não veio substituir você — veio amplificar seu impacto.
+          Se você é <strong className="font-semibold text-slate-900">personal trainer</strong> e ainda monta todos os treinos do zero, provavelmente já sentiu o peso de atender dezenas de alunos sem perder qualidade. A boa notícia: a <strong className="font-semibold text-slate-900">inteligência artificial (IA)</strong> não veio substituir você — veio amplificar seu impacto.
         </p>
         <p>
-          Segundo as <a href="https://www.acsm.org/education-resources/books/guidelines-exercise-testing-prescription" target="_blank" rel="noopener noreferrer" className="text-brand-primary underline decoration-brand-primary/30 hover:decoration-brand-primary transition-colors">diretrizes do ACSM (American College of Sports Medicine)</a>, a prescrição de exercícios exige avaliação individualizada, progressão gradual e reavaliação periódica. A IA acelera a parte operacional sem comprometer esses princípios — desde que o profissional supervisione.
+          Segundo as <a href="https://www.acsm.org/education-resources/books/guidelines-exercise-testing-prescription" target="_blank" rel="noopener noreferrer" className={articleLinkClass}>diretrizes do ACSM (American College of Sports Medicine)</a>, a prescrição de exercícios exige avaliação individualizada, progressão gradual e reavaliação periódica. A IA acelera a parte operacional sem comprometer esses princípios — desde que o profissional supervisione.
         </p>
         <p>
           Neste guia, mostramos como aplicar IA no seu dia a dia de forma prática, desde a avaliação inicial até o acompanhamento semanal, com ferramentas que já existem no mercado brasileiro.
         </p>
         <p>
           Se você quer ir direto para a operação profissional, visite a página de{' '}
-          <Link href="/app-personal-trainer" className="text-brand-primary underline decoration-brand-primary/30 hover:decoration-brand-primary transition-colors">
+          <Link href="/app-personal-trainer" className={articleLinkClass}>
             personal trainers
           </Link>
           . Para trabalho conjunto com nutrição, acesse também{' '}
-          <Link href="/nutricionistas" className="text-brand-primary underline decoration-brand-primary/30 hover:decoration-brand-primary transition-colors">
+          <Link href="/nutricionistas" className={articleLinkClass}>
             nutricionistas
           </Link>
           .
@@ -113,31 +130,21 @@ export default function IAPersonalTrainerPage() {
       </section>
 
       {/* ── Callout: Dados do mercado ── */}
-      <div className="flex gap-4 rounded-2xl border border-brand-primary/20 bg-brand-primary/5 p-5">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-primary/20">
-          <DSIcon name="trendingUp" size={20} className="text-brand-primary" />
-        </div>
-        <div className="space-y-1 text-sm">
-          <p className="font-semibold text-white">O mercado fitness brasileiro é o 2º maior do mundo</p>
-          <p className="text-zinc-400">
-            Com mais de <strong className="text-zinc-200">37 mil academias</strong> e <strong className="text-zinc-200">15 milhões de praticantes</strong> (fonte: <a href="https://www.ihrsa.org/publications/the-global-health-fitness-industry-report/" target="_blank" rel="noopener noreferrer" className="text-brand-primary underline decoration-brand-primary/30">IHRSA Global Report 2024</a>), a adoção de tecnologia por personal trainers é uma vantagem competitiva real.
-          </p>
-        </div>
-      </div>
+      <Callout icon="trendingUp" tone="brand" title="O mercado fitness brasileiro é o 2º maior do mundo">
+        Com mais de <strong className="font-semibold text-slate-900">37 mil academias</strong> e <strong className="font-semibold text-slate-900">15 milhões de praticantes</strong> (fonte: <a href="https://www.ihrsa.org/publications/the-global-health-fitness-industry-report/" target="_blank" rel="noopener noreferrer" className={articleLinkClass}>IHRSA Global Report 2024</a>), a adoção de tecnologia por personal trainers é uma vantagem competitiva real.
+      </Callout>
 
       {/* ── Fluxo recomendado — Steps ── */}
       <section className="space-y-6">
-        <div className="space-y-2">
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-primary" style={{ fontFamily: 'ui-monospace, monospace' }}>/FLUXO RECOMENDADO</span>
-          <h2 className="text-2xl font-bold text-white sm:text-3xl">4 passos para usar IA com qualidade</h2>
-        </div>
+        <ArticleH2 eyebrow="/FLUXO RECOMENDADO">4 passos para usar IA com qualidade</ArticleH2>
 
         <div className="grid gap-4 sm:grid-cols-2">
           {STEPS.map((step) => (
-            <div key={step.num} className="group relative rounded-2xl border border-white/8 bg-white/2 p-6 transition-all hover:border-brand-primary/30 hover:bg-brand-primary/3">
-              <span className="text-3xl font-black text-brand-primary/15 transition-colors group-hover:text-brand-primary/25" style={{ fontFamily: 'ui-monospace, monospace' }}>{step.num}</span>
-              <h3 className="mt-2 text-base font-bold text-white">{step.title}</h3>
-              <p className="mt-2 text-sm text-zinc-400 leading-relaxed">{step.desc}</p>
+            <div key={step.num} className="group relative overflow-hidden rounded-2xl p-6 transition-all duration-300 hover:-translate-y-0.5" style={lightCard}>
+              <HoverEdge />
+              <span className="relative font-black text-emerald-500/25 transition-colors group-hover:text-emerald-500/45" style={{ ...monoLabel, fontSize: '1.875rem' }}>{step.num}</span>
+              <h3 className="relative mt-2 font-syne font-black tracking-tight text-gray-950">{step.title}</h3>
+              <p className="relative mt-2 text-sm leading-relaxed text-slate-600">{step.desc}</p>
             </div>
           ))}
         </div>
@@ -145,69 +152,61 @@ export default function IAPersonalTrainerPage() {
 
       {/* ── Benefícios — Cards com stats ── */}
       <section className="space-y-6">
-        <div className="space-y-2">
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-primary" style={{ fontFamily: 'ui-monospace, monospace' }}>/BENEFÍCIOS</span>
-          <h2 className="text-2xl font-bold text-white sm:text-3xl">Por que usar IA na prescrição de treinos?</h2>
-        </div>
+        <ArticleH2 eyebrow="/BENEFÍCIOS">Por que usar IA na prescrição de treinos?</ArticleH2>
 
         <div className="grid gap-4 sm:grid-cols-2">
           {BENEFITS.map((b) => (
-            <div key={b.title} className="rounded-2xl border border-white/8 bg-white/2 p-6 space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-primary/15">
-                  <DSIcon name={b.icon} size={18} className="text-brand-primary" />
+            <div key={b.title} className="group relative space-y-3 overflow-hidden rounded-2xl p-6 transition-all duration-300 hover:-translate-y-0.5" style={lightCard}>
+              <HoverEdge />
+              <div className="relative flex items-center justify-between">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl text-emerald-600" style={greenChip}>
+                  <DSIcon name={b.icon} size={18} />
                 </div>
-                <span className="rounded-full bg-brand-primary/10 px-3 py-1 text-[10px] font-bold text-brand-primary uppercase tracking-wider" style={{ fontFamily: 'ui-monospace, monospace' }}>{b.stat}</span>
+                <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-emerald-700" style={monoLabel}>{b.stat}</span>
               </div>
-              <h3 className="text-base font-bold text-white">{b.title}</h3>
-              <p className="text-sm text-zinc-400 leading-relaxed">{b.desc}</p>
+              <h3 className="relative font-syne font-black tracking-tight text-gray-950">{b.title}</h3>
+              <p className="relative text-sm leading-relaxed text-slate-600">{b.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
       {/* ── Como funciona na prática ── */}
-      <section className="space-y-5 text-zinc-300 leading-relaxed">
-        <div className="space-y-2">
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-primary" style={{ fontFamily: 'ui-monospace, monospace' }}>/NA PRÁTICA</span>
-          <h2 className="text-2xl font-bold text-white sm:text-3xl">Como a IA gera treinos de qualidade</h2>
-        </div>
+      <section className="space-y-5 text-[17px] leading-relaxed text-slate-600">
+        <ArticleH2 eyebrow="/NA PRÁTICA">Como a IA gera treinos de qualidade</ArticleH2>
         <p>
-          Plataformas especializadas como o <strong className="text-white">VFIT</strong> usam modelos de linguagem treinados com dados de milhares de protocolos de treino para sugerir exercícios, séries, repetições e tempos de descanso adequados ao perfil de cada aluno.
+          Plataformas especializadas como o <strong className="font-semibold text-slate-900">VFIT</strong> usam modelos de linguagem treinados com dados de milhares de protocolos de treino para sugerir exercícios, séries, repetições e tempos de descanso adequados ao perfil de cada aluno.
         </p>
         <p>
           O processo é simples: você preenche o perfil (nível, objetivos, restrições, equipamentos) e a IA gera um programa completo. Você revisa, ajusta e publica. O aluno recebe tudo no celular, com vídeos demonstrativos e instruções claras.
         </p>
         <p>
-          Diferentemente do que recomendam alguns estudos sobre prescrição automatizada (veja <a href="https://www.who.int/news-room/fact-sheets/detail/physical-activity" target="_blank" rel="noopener noreferrer" className="text-brand-primary underline decoration-brand-primary/30 hover:decoration-brand-primary">diretrizes da OMS sobre atividade física</a>), a IA não elimina a necessidade do profissional — ela <em>acelera</em> o processo para que você dedique mais tempo à relação com o aluno e à supervisão técnica.
+          Diferentemente do que recomendam alguns estudos sobre prescrição automatizada (veja <a href="https://www.who.int/news-room/fact-sheets/detail/physical-activity" target="_blank" rel="noopener noreferrer" className={articleLinkClass}>diretrizes da OMS sobre atividade física</a>), a IA não elimina a necessidade do profissional — ela <em>acelera</em> o processo para que você dedique mais tempo à relação com o aluno e à supervisão técnica.
         </p>
       </section>
 
       {/* ── Comparativo — Table ── */}
       <section className="space-y-6">
-        <div className="space-y-2">
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-primary" style={{ fontFamily: 'ui-monospace, monospace' }}>/COMPARATIVO</span>
-          <h2 className="text-2xl font-bold text-white sm:text-3xl">IA genérica vs IA especializada</h2>
-        </div>
-        <p className="text-zinc-400">ChatGPT pode até sugerir treinos, mas sem contexto. Veja a diferença real:</p>
+        <ArticleH2 eyebrow="/COMPARATIVO">IA genérica vs IA especializada</ArticleH2>
+        <p className="text-slate-600">ChatGPT pode até sugerir treinos, mas sem contexto. Veja a diferença real:</p>
 
-        <div className="overflow-hidden rounded-2xl border border-white/10">
+        <div className="overflow-hidden rounded-2xl border border-slate-200">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <caption className="sr-only">IA genérica vs IA especializada</caption>
               <thead>
-                <tr className="border-b border-white/10 bg-white/3">
-                  <th scope="col" className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-zinc-400">Critério</th>
-                  <th scope="col" className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-zinc-500">IA Genérica</th>
-                  <th scope="col" className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-brand-primary">IA Especializada</th>
+                <tr className="border-b border-slate-200 bg-slate-50">
+                  <th scope="col" className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-slate-600">Critério</th>
+                  <th scope="col" className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-slate-500">IA Genérica</th>
+                  <th scope="col" className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-emerald-700">IA Especializada</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5">
+              <tbody className="divide-y divide-slate-200">
                 {COMPARISON.map((row) => (
-                  <tr key={row.feature} className="hover:bg-white/2 transition-colors">
-                    <td className="px-4 py-3 font-medium text-zinc-200">{row.feature}</td>
-                    <td className="px-4 py-3 text-zinc-500">{row.generic}</td>
-                    <td className="px-4 py-3 text-zinc-300">{row.specialized}</td>
+                  <tr key={row.feature} className="transition-colors hover:bg-slate-50">
+                    <td className="px-4 py-3 font-medium text-slate-800">{row.feature}</td>
+                    <td className="px-4 py-3 text-slate-500">{row.generic}</td>
+                    <td className="px-4 py-3 text-slate-600">{row.specialized}</td>
                   </tr>
                 ))}
               </tbody>
@@ -218,12 +217,9 @@ export default function IAPersonalTrainerPage() {
 
       {/* ── Quando NÃO usar IA ── */}
       <section className="space-y-4">
-        <div className="space-y-2">
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-amber-400" style={{ fontFamily: 'ui-monospace, monospace' }}>/LIMITAÇÕES</span>
-          <h2 className="text-2xl font-bold text-white sm:text-3xl">Quando NÃO usar IA</h2>
-        </div>
-        <p className="text-zinc-300 leading-relaxed">
-          A IA é excelente para gerar a base do treino e variações. Mas o olhar clínico é insubstituível, conforme o <a href="https://www.confef.org.br/confef/conteudo/471" target="_blank" rel="noopener noreferrer" className="text-brand-primary underline decoration-brand-primary/30">CONFEF</a>:
+        <ArticleH2 eyebrow="/LIMITAÇÕES">Quando NÃO usar IA</ArticleH2>
+        <p className="leading-relaxed text-slate-600">
+          A IA é excelente para gerar a base do treino e variações. Mas o olhar clínico é insubstituível, conforme o <a href="https://www.confef.org.br/confef/conteudo/471" target="_blank" rel="noopener noreferrer" className={articleLinkClass}>CONFEF</a>:
         </p>
         <div className="grid gap-3 sm:grid-cols-3">
           {[
@@ -231,9 +227,9 @@ export default function IAPersonalTrainerPage() {
             { icon: 'target' as DSIconName, text: 'Atletas em fase de competição com periodização avançada e peaking' },
             { icon: 'eye' as DSIconName, text: 'Situações que exigem correção técnica visual em tempo real' },
           ].map((item) => (
-            <div key={item.text} className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 space-y-2">
-              <DSIcon name={item.icon} size={18} className="text-amber-400" />
-              <p className="text-sm text-zinc-300 leading-relaxed">{item.text}</p>
+            <div key={item.text} className="space-y-2 rounded-xl border border-amber-400/40 bg-amber-50/80 p-4">
+              <DSIcon name={item.icon} size={18} className="text-amber-600" />
+              <p className="text-sm leading-relaxed text-slate-600">{item.text}</p>
             </div>
           ))}
         </div>
@@ -241,19 +237,16 @@ export default function IAPersonalTrainerPage() {
 
       {/* ── Evidências científicas ── */}
       <section className="space-y-4">
-        <div className="space-y-2">
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-primary" style={{ fontFamily: 'ui-monospace, monospace' }}>/EVIDÊNCIAS</span>
-          <h2 className="text-2xl font-bold text-white sm:text-3xl">O que a ciência diz sobre IA no fitness</h2>
-        </div>
-        <div className="space-y-4 text-zinc-300 leading-relaxed">
+        <ArticleH2 eyebrow="/EVIDÊNCIAS">O que a ciência diz sobre IA no fitness</ArticleH2>
+        <div className="space-y-4 leading-relaxed text-slate-600">
           <p>
-            Uma revisão publicada no <em>Journal of Sports Science &amp; Medicine</em> (2024) demonstrou que sistemas de IA podem atingir até <strong className="text-white">91% de concordância</strong> com prescrições feitas por profissionais certificados, quando treinados com dados de qualidade.
+            Uma revisão publicada no <em>Journal of Sports Science &amp; Medicine</em> (2024) demonstrou que sistemas de IA podem atingir até <strong className="font-semibold text-slate-900">91% de concordância</strong> com prescrições feitas por profissionais certificados, quando treinados com dados de qualidade.
           </p>
           <p>
-            Os pesquisadores enfatizam que a IA funciona melhor como <strong className="text-white">&quot;copiloto&quot;</strong> — gerando sugestões que o profissional valida, ajusta e personaliza. O modelo híbrido (IA + humano) supera tanto a prescrição 100% manual quanto a 100% automatizada em adesão, segurança e satisfação do aluno.
+            Os pesquisadores enfatizam que a IA funciona melhor como <strong className="font-semibold text-slate-900">&quot;copiloto&quot;</strong> — gerando sugestões que o profissional valida, ajusta e personaliza. O modelo híbrido (IA + humano) supera tanto a prescrição 100% manual quanto a 100% automatizada em adesão, segurança e satisfação do aluno.
           </p>
           <p>
-            As <a href="https://www.nsca.com/education/articles/" target="_blank" rel="noopener noreferrer" className="text-brand-primary underline decoration-brand-primary/30">diretrizes da NSCA</a> recomendam que ferramentas tecnológicas na prescrição sigam os princípios de sobrecarga progressiva, especificidade e individualização.
+            As <a href="https://www.nsca.com/education/articles/" target="_blank" rel="noopener noreferrer" className={articleLinkClass}>diretrizes da NSCA</a> recomendam que ferramentas tecnológicas na prescrição sigam os princípios de sobrecarga progressiva, especificidade e individualização.
           </p>
         </div>
       </section>
@@ -261,38 +254,27 @@ export default function IAPersonalTrainerPage() {
       {/* ── FAQ ── */}
       <FaqInline items={FAQ_BLOG_IA} />
 
-      <section className="rounded-2xl border border-white/8 bg-white/3 p-6 space-y-4">
-        <h2 className="text-xl font-bold text-white">Rota recomendada por perfil</h2>
+      {/* ── ICP switcher ── */}
+      <section className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6" style={{ boxShadow: '0 1px 2px rgba(15,23,42,0.04), 0 18px 40px -24px rgba(15,23,42,0.14)' }}>
+        <h2 className="font-syne text-xl font-black tracking-tight text-gray-950">Rota recomendada por perfil</h2>
         <div className="grid gap-3 sm:grid-cols-3">
-          <TrackedCtaLink href="/app-personal-trainer" cta="Sou personal trainer" placement="blog_ia_legacy_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-brand-primary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base">
-            <h3 className="text-sm font-bold text-white">Sou personal trainer</h3>
-            <p className="mt-1 text-xs text-zinc-400">Gestão, IA e operação em escala.</p>
+          <TrackedCtaLink href="/app-personal-trainer" cta="Sou personal trainer" placement="blog_ia_legacy_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-500/30 hover:shadow-[0_14px_30px_-18px_rgba(34,197,94,0.4)]">
+            <h3 className="font-syne text-sm font-black tracking-tight text-gray-950">Sou personal trainer</h3>
+            <p className="mt-1 text-xs text-slate-500">Gestão, IA e operação em escala.</p>
           </TrackedCtaLink>
-          <TrackedCtaLink href="/nutricionistas" cta="Sou nutricionista" placement="blog_ia_legacy_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-brand-primary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base">
-            <h3 className="text-sm font-bold text-white">Sou nutricionista</h3>
-            <p className="mt-1 text-xs text-zinc-400">Integração com treino e acompanhamento conjunto.</p>
+          <TrackedCtaLink href="/nutricionistas" cta="Sou nutricionista" placement="blog_ia_legacy_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-500/30 hover:shadow-[0_14px_30px_-18px_rgba(34,197,94,0.4)]">
+            <h3 className="font-syne text-sm font-black tracking-tight text-gray-950">Sou nutricionista</h3>
+            <p className="mt-1 text-xs text-slate-500">Integração com treino e acompanhamento conjunto.</p>
           </TrackedCtaLink>
-          <TrackedCtaLink href="/afiliados" cta="Quero monetizar indicação" placement="blog_ia_legacy_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-brand-primary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base">
-            <h3 className="text-sm font-bold text-white">Quero monetizar indicação</h3>
-            <p className="mt-1 text-xs text-zinc-400">Ganhe comissão recorrente com afiliados.</p>
+          <TrackedCtaLink href="/afiliados" cta="Quero monetizar indicação" placement="blog_ia_legacy_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-500/30 hover:shadow-[0_14px_30px_-18px_rgba(34,197,94,0.4)]">
+            <h3 className="font-syne text-sm font-black tracking-tight text-gray-950">Quero monetizar indicação</h3>
+            <p className="mt-1 text-xs text-slate-500">Ganhe comissão recorrente com afiliados.</p>
           </TrackedCtaLink>
         </div>
       </section>
 
       {/* ── Fontes ── */}
-      <section className="rounded-2xl border border-white/8 bg-white/3 p-6">
-        <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-zinc-500" style={{ fontFamily: 'ui-monospace, monospace' }}>Fontes e referências</h3>
-        <ul className="space-y-2">
-          {SOURCES.map((s) => (
-            <li key={s.url} className="flex items-start gap-2 text-sm">
-              <DSIcon name="externalLink" size={14} className="mt-0.5 shrink-0 text-brand-primary/60" />
-              <a href={s.url} target="_blank" rel="noopener noreferrer" className="text-zinc-400 underline decoration-white/10 hover:text-brand-primary hover:decoration-brand-primary/30 transition-colors">
-                {s.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
+      <SourceList sources={SOURCES} />
 
       {/* Share */}
       <ArticleShare title={post.title} slug={post.slug} />
@@ -301,27 +283,33 @@ export default function IAPersonalTrainerPage() {
       <ArticleRelated posts={related} />
 
       {/* ── CTA ── */}
-      <section className="text-center rounded-2xl border border-brand-primary/30 bg-linear-to-b from-brand-primary/10 to-transparent p-8 sm:p-10 space-y-5">
-        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-primary" style={{ fontFamily: 'ui-monospace, monospace' }}>/PRÓXIMO PASSO</span>
-        <h2 className="text-2xl font-bold text-white">Quer testar a IA na prática?</h2>
-        <p className="text-sm text-zinc-400 max-w-md mx-auto leading-relaxed">
+      <section className="relative overflow-hidden rounded-3xl border border-emerald-500/25 p-8 text-center sm:p-10" style={{ background: 'linear-gradient(180deg, rgba(34,197,94,0.10) 0%, rgba(255,255,255,0) 70%), linear-gradient(180deg, #ffffff 0%, #f3faf5 100%)', boxShadow: '0 1px 2px rgba(15,23,42,0.04), 0 26px 60px -28px rgba(34,197,94,0.4)' }}>
+        <div aria-hidden="true" className="pointer-events-none absolute right-0 top-0 h-48 w-48 translate-x-1/3 -translate-y-1/3 rounded-full bg-brand-primary/10 blur-[90px]" />
+        <span className="relative inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-[10px] uppercase tracking-[0.18em]" style={{ ...monoLabel, background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(236,253,243,0.8) 100%)', border: '1px solid rgba(34,197,94,0.3)' }}>
+          <span className="bg-linear-to-r from-emerald-600 to-emerald-500 bg-clip-text text-transparent">/PRÓXIMO PASSO</span>
+        </span>
+        <h2 className="relative mt-5 font-syne text-2xl font-black tracking-tight text-gray-950 sm:text-3xl">Quer testar a IA na prática?</h2>
+        <p className="relative mx-auto mt-3 max-w-md text-sm leading-relaxed text-slate-600">
           30 dias grátis, sem cartão — crie sua conta no VFIT e gere seu primeiro treino com inteligência artificial em menos de 2 minutos.
         </p>
-        <TrackedCtaLink
-          href="/register"
-          cta="Criar conta grátis"
-          placement="blog_ia_legacy_cta"
-          pageSegment="blog"
-          event="lp_register_start"
-          className="inline-flex items-center gap-2 rounded-xl bg-brand-primary px-6 py-3 text-sm font-bold text-bg-dark hover:bg-brand-primary-hover transition-colors shadow-lg shadow-brand-primary/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base"
-        >
-          Criar conta grátis
-          <DSIcon name="arrowRight" size={16} />
-        </TrackedCtaLink>
+        <div className="relative mt-6 flex justify-center">
+          <TrackedCtaLink
+            href="/register"
+            cta="Criar conta grátis"
+            placement="blog_ia_legacy_cta"
+            pageSegment="blog"
+            event="lp_register_start"
+            className={pillPrimaryClass}
+          >
+            <PillSweep />
+            <span className="relative z-10">Criar conta grátis</span>
+            <PillArrow />
+          </TrackedCtaLink>
+        </div>
       </section>
 
       {/* Navigation */}
       <ArticleNavigation prev={prev} next={next} />
-    </article>
+    </ArticleShell>
   )
 }

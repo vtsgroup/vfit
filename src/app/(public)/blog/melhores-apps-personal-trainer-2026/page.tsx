@@ -1,12 +1,23 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { DSIcon } from '@/components/ui/ds-icon'
 import { buildSeoMetadata } from '@/lib/seo'
 import { getPost, getRelatedPosts, BLOG_POSTS } from '@/data/blog-posts'
 import { ArticleHeader } from '@/components/blog/article-header'
 import { ArticleShare } from '@/components/blog/article-share'
 import { ArticleNavigation } from '@/components/blog/article-navigation'
 import { ArticleRelated } from '@/components/blog/article-related'
+import {
+  ArticleShell,
+  ArticleH2,
+  Callout,
+  lightCard,
+  HoverEdge,
+  monoLabel,
+  pillPrimaryClass,
+  PillSweep,
+  PillArrow,
+  articleLinkClass,
+} from '@/components/blog/article-kit'
 import { FaqInline } from '@/components/shared/faq-inline'
 import { articleSchema, faqSchema } from '@/lib/schemas'
 import { TrackedCtaLink } from '@/components/analytics/tracked-cta-link'
@@ -77,38 +88,37 @@ export default function MelhoresAppsPersonalTrainer2026Page() {
   }
 
   return (
-    <article className="mx-auto max-w-3xl space-y-12 px-6 pb-24">
+    <ArticleShell>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(article) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema(faq)) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemList) }} />
 
       <ArticleHeader post={post} />
 
-      <section className="space-y-5 text-zinc-300 leading-relaxed">
+      {/* ── Introdução ── */}
+      <section className="space-y-5 text-[17px] leading-relaxed text-slate-600">
         <p className="text-lg">
-          Buscar o <strong className="text-white">melhor app para personal trainer</strong> em 2026 é, na prática, decidir como sua operação vai crescer. O software certo economiza tempo, reduz inadimplência, melhora a experiência do aluno e evita que seu negócio dependa de planilhas soltas, mensagens perdidas e processos manuais.
+          Buscar o <strong className="font-semibold text-slate-900">melhor app para personal trainer</strong> em 2026 é, na prática, decidir como sua operação vai crescer. O software certo economiza tempo, reduz inadimplência, melhora a experiência do aluno e evita que seu negócio dependa de planilhas soltas, mensagens perdidas e processos manuais.
         </p>
         <p>
           Mais do que perguntar qual plataforma tem mais recursos, o ideal é entender qual combina melhor com sua fase atual. Um personal com 10 alunos tem dores diferentes de quem já atende 80 ou quer vender online.
         </p>
         <p>
           Se você está comparando ferramentas para operação profissional, acesse a página dedicada para{' '}
-          <Link href="/app-personal-trainer" className="text-brand-primary hover:text-brand-primary-hover underline underline-offset-2">
+          <Link href="/app-personal-trainer" className={articleLinkClass}>
             personal trainers
           </Link>
           . Para abordagem interdisciplinar, veja também a página de{' '}
-          <Link href="/nutricionistas" className="text-brand-primary hover:text-brand-primary-hover underline underline-offset-2">
+          <Link href="/nutricionistas" className={articleLinkClass}>
             integração com nutricionistas
           </Link>
           .
         </p>
       </section>
 
+      {/* ── Critérios ── */}
       <section className="space-y-6">
-        <div className="space-y-2">
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-primary">/CRITÉRIOS</span>
-          <h2 className="text-2xl font-bold text-white sm:text-3xl">O que realmente comparar</h2>
-        </div>
+        <ArticleH2 eyebrow="/CRITÉRIOS">O que realmente comparar</ArticleH2>
         <div className="grid gap-4 sm:grid-cols-2">
           {[
             ['Gestão de alunos', 'Cadastro, evolução, comunicação e rotina operacional no mesmo lugar.'],
@@ -116,43 +126,65 @@ export default function MelhoresAppsPersonalTrainer2026Page() {
             ['Cobrança', 'PIX, cartão, recorrência e previsibilidade financeira.'],
             ['Experiência do aluno', 'App claro, motivação, vídeos, gamificação e sensação de acompanhamento.'],
           ].map(([title, desc]) => (
-            <div key={title} className="rounded-2xl border border-white/8 bg-white/2 p-5">
-              <h3 className="text-lg font-bold text-white">{title}</h3>
-              <p className="mt-2 text-sm text-zinc-400">{desc}</p>
+            <div key={title} className="group relative overflow-hidden rounded-2xl p-5 transition-all duration-300 hover:-translate-y-0.5" style={lightCard}>
+              <HoverEdge />
+              <h3 className="relative font-syne text-lg font-black tracking-tight text-gray-950">{title}</h3>
+              <p className="relative mt-2 text-sm text-slate-600">{desc}</p>
             </div>
           ))}
         </div>
       </section>
 
+      {/* ── Comparativo rápido ── */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-bold text-white sm:text-3xl">Comparativo rápido</h2>
-        <div className="overflow-hidden rounded-2xl border border-white/10">
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <caption className="sr-only">Comparativo de apps para personal trainer</caption>
-              <thead>
-                <tr className="border-b border-white/10 bg-white/3">
-                  <th scope="col" className="px-4 py-3 text-left text-zinc-400">Opção</th>
-                  <th scope="col" className="px-4 py-3 text-left text-zinc-500">Força principal</th>
-                  <th scope="col" className="px-4 py-3 text-left text-brand-primary">Melhor para</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/5">
-                {comparison.map(([name, strength, bestFor]) => (
-                  <tr key={name}>
-                    <td className="px-4 py-3 text-zinc-200">{name}</td>
-                    <td className="px-4 py-3 text-zinc-400">{strength}</td>
-                    <td className="px-4 py-3 text-zinc-300">{bestFor}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+        <ArticleH2 eyebrow="/RANKING">Comparativo rápido</ArticleH2>
+        <div className="space-y-4">
+          {comparison.map(([name, strength, bestFor], index) => {
+            const isVfit = name === 'VFIT'
+            return (
+              <div
+                key={name}
+                className="group relative overflow-hidden rounded-2xl p-5 transition-all duration-300 hover:-translate-y-0.5 sm:p-6"
+                style={
+                  isVfit
+                    ? {
+                        background: 'linear-gradient(180deg, rgba(34,197,94,0.10) 0%, rgba(255,255,255,0) 70%), linear-gradient(180deg, #ffffff 0%, #f3faf5 100%)',
+                        border: '1px solid rgba(34,197,94,0.3)',
+                        boxShadow: '0 1px 2px rgba(15,23,42,0.04), 0 22px 50px -28px rgba(34,197,94,0.4)',
+                      }
+                    : lightCard
+                }
+              >
+                <HoverEdge />
+                <div className="relative flex items-start gap-4">
+                  <span
+                    className="shrink-0 font-black"
+                    style={{ ...monoLabel, fontSize: '1.6rem', color: isVfit ? '#16a34a' : undefined }}
+                  >
+                    <span className={isVfit ? '' : 'text-emerald-500/30'}>{String(index + 1).padStart(2, '0')}</span>
+                  </span>
+                  <div className="grow">
+                    <div className="flex items-baseline gap-3">
+                      <h3 className="font-syne text-lg font-black tracking-tight text-gray-950">{name}</h3>
+                      {isVfit && (
+                        <span className="rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-emerald-700" style={monoLabel}>
+                          Recomendado
+                        </span>
+                      )}
+                    </div>
+                    <p className="mt-1 text-sm leading-relaxed text-slate-600">{strength}</p>
+                    <p className="mt-2 text-xs text-slate-500">Melhor para: {bestFor}</p>
+                  </div>
+                </div>
+              </div>
+            )
+          })}
         </div>
       </section>
 
-      <section className="space-y-5 text-zinc-300 leading-relaxed">
-        <h2 className="text-2xl font-bold text-white sm:text-3xl">Quando faz sentido sair da planilha</h2>
+      {/* ── Sair da planilha ── */}
+      <section className="space-y-5 text-[17px] leading-relaxed text-slate-600">
+        <ArticleH2 eyebrow="/VIRADA">Quando faz sentido sair da planilha</ArticleH2>
         <p>
           O ponto de virada costuma acontecer quando você começa a sentir que está administrando demais e treinando de menos. Se cobrança, atualização de treino, acompanhamento e mensagens já consomem boa parte da semana, uma plataforma passa de “legal de ter” para “necessária”.
         </p>
@@ -161,54 +193,61 @@ export default function MelhoresAppsPersonalTrainer2026Page() {
         </p>
       </section>
 
-      <section className="rounded-2xl border border-white/8 bg-white/3 p-6 space-y-4">
-        <h2 className="text-xl font-bold text-white">Direcione seu próximo passo</h2>
+      {/* ── ICP switcher ── */}
+      <section className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6" style={{ boxShadow: '0 1px 2px rgba(15,23,42,0.04), 0 18px 40px -24px rgba(15,23,42,0.14)' }}>
+        <h2 className="font-syne text-xl font-black tracking-tight text-gray-950">Direcione seu próximo passo</h2>
         <div className="grid gap-3 sm:grid-cols-3">
-          <TrackedCtaLink href="/app-personal-trainer" cta="Avaliar solução para personal" placement="blog_comparativo_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-brand-primary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base">
-            <h3 className="text-sm font-bold text-white">Sou personal trainer</h3>
-            <p className="mt-1 text-xs text-zinc-400">Avalie stack de operação e escala.</p>
+          <TrackedCtaLink href="/app-personal-trainer" cta="Avaliar solução para personal" placement="blog_comparativo_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-500/30 hover:shadow-[0_14px_30px_-18px_rgba(34,197,94,0.4)]">
+            <h3 className="font-syne text-sm font-black tracking-tight text-gray-950">Sou personal trainer</h3>
+            <p className="mt-1 text-xs text-slate-500">Avalie stack de operação e escala.</p>
           </TrackedCtaLink>
-          <TrackedCtaLink href="/afiliados" cta="Quero monetizar indicação" placement="blog_comparativo_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-brand-primary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base">
-            <h3 className="text-sm font-bold text-white">Quero monetizar indicação</h3>
-            <p className="mt-1 text-xs text-zinc-400">Ative comissão recorrente por conversão.</p>
+          <TrackedCtaLink href="/afiliados" cta="Quero monetizar indicação" placement="blog_comparativo_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-500/30 hover:shadow-[0_14px_30px_-18px_rgba(34,197,94,0.4)]">
+            <h3 className="font-syne text-sm font-black tracking-tight text-gray-950">Quero monetizar indicação</h3>
+            <p className="mt-1 text-xs text-slate-500">Ative comissão recorrente por conversão.</p>
           </TrackedCtaLink>
-          <TrackedCtaLink href="/" cta="Sou aluno" placement="blog_comparativo_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-brand-primary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base">
-            <h3 className="text-sm font-bold text-white">Sou aluno</h3>
-            <p className="mt-1 text-xs text-zinc-400">Conheça a experiência aluno-first da home.</p>
+          <TrackedCtaLink href="/" cta="Sou aluno" placement="blog_comparativo_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-500/30 hover:shadow-[0_14px_30px_-18px_rgba(34,197,94,0.4)]">
+            <h3 className="font-syne text-sm font-black tracking-tight text-gray-950">Sou aluno</h3>
+            <p className="mt-1 text-xs text-slate-500">Conheça a experiência aluno-first da home.</p>
           </TrackedCtaLink>
         </div>
       </section>
 
-      <section className="rounded-2xl border border-brand-primary/20 bg-brand-primary/5 p-6">
-        <div className="flex items-start gap-4">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-primary/15">
-            <DSIcon name="trophy" size={18} className="text-brand-primary" />
-          </div>
-          <div>
-            <h2 className="text-xl font-bold text-white">Leitura rápida</h2>
-            <p className="mt-2 text-sm text-zinc-300">
-              Se você quer centralizar IA, gestão, cobrança e experiência do aluno, o VFIT tende a fazer mais sentido. Se está só começando e ainda valida sua operação, talvez a prioridade seja migrar de processos manuais para qualquer rotina digital consistente — e depois sofisticar.
-            </p>
-          </div>
-        </div>
-      </section>
+      {/* ── Leitura rápida ── */}
+      <Callout icon="trophy" tone="brand" title="Leitura rápida">
+        Se você quer centralizar IA, gestão, cobrança e experiência do aluno, o VFIT tende a fazer mais sentido. Se está só começando e ainda valida sua operação, talvez a prioridade seja migrar de processos manuais para qualquer rotina digital consistente — e depois sofisticar.
+      </Callout>
 
       <FaqInline items={faq} />
       <ArticleShare title={post.title} slug={post.slug} />
       <ArticleRelated posts={related} />
 
-      <section className="text-center rounded-2xl border border-brand-primary/30 bg-linear-to-b from-brand-primary/10 to-transparent p-8 sm:p-10 space-y-5">
-        <h2 className="text-2xl font-bold text-white">Quer comparar na prática?</h2>
-        <p className="mx-auto max-w-md text-sm text-zinc-400">
+      {/* ── CTA ── */}
+      <section className="relative overflow-hidden rounded-3xl border border-emerald-500/25 p-8 text-center sm:p-10" style={{ background: 'linear-gradient(180deg, rgba(34,197,94,0.10) 0%, rgba(255,255,255,0) 70%), linear-gradient(180deg, #ffffff 0%, #f3faf5 100%)', boxShadow: '0 1px 2px rgba(15,23,42,0.04), 0 26px 60px -28px rgba(34,197,94,0.4)' }}>
+        <div aria-hidden="true" className="pointer-events-none absolute right-0 top-0 h-48 w-48 translate-x-1/3 -translate-y-1/3 rounded-full bg-brand-primary/10 blur-[90px]" />
+        <span className="relative inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-[10px] uppercase tracking-[0.18em]" style={{ ...monoLabel, background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(236,253,243,0.8) 100%)', border: '1px solid rgba(34,197,94,0.3)' }}>
+          <span className="bg-linear-to-r from-emerald-600 to-emerald-500 bg-clip-text text-transparent">/PRÓXIMO PASSO</span>
+        </span>
+        <h2 className="relative mt-5 font-syne text-2xl font-black tracking-tight text-gray-950 sm:text-3xl">Quer comparar na prática?</h2>
+        <p className="relative mx-auto mt-3 max-w-md text-sm leading-relaxed text-slate-600">
           Teste o VFIT 30 dias grátis, sem cartão, e veja como uma operação mais integrada pode melhorar gestão, retenção e receita.
         </p>
-        <TrackedCtaLink href="/app-personal-trainer" cta="Ver solução para personais" placement="blog_melhores_apps_personal_cta" pageSegment="blog" event="lp_cta_primary_click" className="inline-flex items-center gap-2 rounded-xl bg-brand-primary px-6 py-3 text-sm font-bold text-bg-dark hover:bg-brand-primary-hover transition-colors shadow-lg shadow-brand-primary/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base">
-          Ver solução para personais
-          <DSIcon name="arrowRight" size={16} />
-        </TrackedCtaLink>
+        <div className="relative mt-6 flex justify-center">
+          <TrackedCtaLink
+            href="/app-personal-trainer"
+            cta="Ver solução para personais"
+            placement="blog_melhores_apps_personal_cta"
+            pageSegment="blog"
+            event="lp_cta_primary_click"
+            className={pillPrimaryClass}
+          >
+            <PillSweep />
+            <span className="relative z-10">Ver solução para personais</span>
+            <PillArrow />
+          </TrackedCtaLink>
+        </div>
       </section>
 
       <ArticleNavigation prev={prev} next={next} />
-    </article>
+    </ArticleShell>
   )
 }

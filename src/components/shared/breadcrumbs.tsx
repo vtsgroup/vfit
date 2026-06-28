@@ -20,9 +20,17 @@ export interface BreadcrumbItem {
 
 interface BreadcrumbsProps {
   items: BreadcrumbItem[]
+  /** 'dark' (default) usa tokens do tema (fundo escuro); 'light' usa slate p/ bandas claras */
+  tone?: 'dark' | 'light'
 }
 
-export function Breadcrumbs({ items }: BreadcrumbsProps) {
+export function Breadcrumbs({ items, tone = 'dark' }: BreadcrumbsProps) {
+  const isLight = tone === 'light'
+  const navColor = isLight ? 'text-slate-500' : 'text-text-secondary'
+  const homeHover = isLight ? 'hover:text-emerald-700' : 'hover:text-text-primary'
+  const sepColor = isLight ? 'text-slate-300' : 'text-text-secondary/50'
+  const currentColor = isLight ? 'text-slate-600' : 'text-text-secondary'
+  const linkHover = isLight ? 'hover:text-emerald-700' : 'hover:text-text-secondary'
   // Build full path for JSON-LD (Home + items)
   const allItems: BreadcrumbItem[] = [{ label: 'Home', href: '/' }, ...items]
 
@@ -52,8 +60,8 @@ export function Breadcrumbs({ items }: BreadcrumbsProps) {
       />
 
       {/* Visual breadcrumbs */}
-      <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-text-secondary">
-        <Link href="/" className="flex items-center gap-1 transition-colors hover:text-text-primary">
+      <nav aria-label="Breadcrumb" className={`flex items-center gap-1.5 text-xs ${navColor}`}>
+        <Link href="/" className={`flex items-center gap-1 transition-colors ${homeHover}`}>
           <DSIcon name="home" size={14} />
           <span className="sr-only">Home</span>
         </Link>
@@ -63,11 +71,11 @@ export function Breadcrumbs({ items }: BreadcrumbsProps) {
 
           return (
             <span key={i} className="flex items-center gap-1.5">
-              <DSIcon name="chevronRight" size={12} className="text-text-secondary/50" />
+              <DSIcon name="chevronRight" size={12} className={sepColor} />
               {isLast || !item.href ? (
-                <span className="font-medium text-text-secondary">{item.label}</span>
+                <span className={`font-medium ${currentColor}`}>{item.label}</span>
               ) : (
-                <Link href={item.href} className="transition-colors hover:text-text-secondary">
+                <Link href={item.href} className={`transition-colors ${linkHover}`}>
                   {item.label}
                 </Link>
               )}

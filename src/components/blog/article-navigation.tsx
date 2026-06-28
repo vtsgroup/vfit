@@ -21,18 +21,18 @@ interface ArticleNavigationProps {
 export function ArticleNavigation({ prev, next }: ArticleNavigationProps) {
   if (!prev && !next) return null
 
+  const cardClass =
+    'group rounded-2xl border border-slate-200 bg-white p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-500/30 hover:shadow-[0_16px_34px_-20px_rgba(34,197,94,0.45)]'
+
   return (
     <nav className="grid gap-4 sm:grid-cols-2">
       {prev ? (
-        <Link
-          href={`/blog/${prev.slug}`}
-          className="group rounded-2xl border border-white/8 bg-white/3 p-5 backdrop-blur-sm transition-all duration-300 hover:border-brand-primary/20 hover:bg-brand-primary/3 hover:shadow-[0_0_24px_rgba(16,185,129,0.06)]"
-        >
-          <span className="flex items-center gap-1 text-xs text-zinc-500 mb-2">
-            <DSIcon name="arrowLeft" size={12} />
+        <Link href={`/blog/${prev.slug}`} className={cardClass}>
+          <span className="mb-2 flex items-center gap-1 text-xs font-semibold text-slate-500">
+            <DSIcon name="arrowLeft" size={12} className="transition-transform duration-300 group-hover:-translate-x-0.5" />
             Artigo anterior
           </span>
-          <p className="text-sm font-medium text-white group-hover:text-brand-primary transition-colors line-clamp-2">
+          <p className="line-clamp-2 text-sm font-bold text-gray-950 transition-colors group-hover:text-emerald-700">
             {prev.title}
           </p>
         </Link>
@@ -40,15 +40,12 @@ export function ArticleNavigation({ prev, next }: ArticleNavigationProps) {
         <div />
       )}
       {next ? (
-        <Link
-          href={`/blog/${next.slug}`}
-          className="group rounded-2xl border border-white/8 bg-white/3 p-5 text-right backdrop-blur-sm transition-all duration-300 hover:border-brand-primary/20 hover:bg-brand-primary/3 hover:shadow-[0_0_24px_rgba(16,185,129,0.06)]"
-        >
-          <span className="flex items-center justify-end gap-1 text-xs text-zinc-500 mb-2">
+        <Link href={`/blog/${next.slug}`} className={`${cardClass} text-right`}>
+          <span className="mb-2 flex items-center justify-end gap-1 text-xs font-semibold text-slate-500">
             Próximo artigo
-            <DSIcon name="arrowRight" size={12} />
+            <DSIcon name="arrowRight" size={12} className="transition-transform duration-300 group-hover:translate-x-0.5" />
           </span>
-          <p className="text-sm font-medium text-white group-hover:text-brand-primary transition-colors line-clamp-2">
+          <p className="line-clamp-2 text-sm font-bold text-gray-950 transition-colors group-hover:text-emerald-700">
             {next.title}
           </p>
         </Link>

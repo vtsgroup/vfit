@@ -8,6 +8,9 @@
 //   Renderiza header, conteúdo estático, share, navegação e artigos relacionados.
 //   Inclui BlogPostingSchema JSON-LD para SEO/AEO.
 //
+//   Tema CLARO ultra moderno (kit article-kit.tsx + light-section.tsx) — coerente
+//   com a home e o índice do blog. SEO/conteúdo inalterados.
+//
 // Exports principais:
 //   metadata — Metadata Next.js para SEO
 //   RetencaoAlunosPage — page component (RSC)
@@ -21,6 +24,20 @@ import { ArticleHeader } from '@/components/blog/article-header'
 import { ArticleShare } from '@/components/blog/article-share'
 import { ArticleNavigation } from '@/components/blog/article-navigation'
 import { ArticleRelated } from '@/components/blog/article-related'
+import {
+  ArticleShell,
+  ArticleH2,
+  Callout,
+  SourceList,
+  lightCard,
+  HoverEdge,
+  greenChip,
+  monoLabel,
+  pillPrimaryClass,
+  PillSweep,
+  PillArrow,
+  articleLinkClass,
+} from '@/components/blog/article-kit'
 import { FaqInline } from '@/components/shared/faq-inline'
 import { FAQ_BLOG_RETENCAO } from '@/data/faqs'
 import { TrackedCtaLink } from '@/components/analytics/tracked-cta-link'
@@ -106,7 +123,7 @@ export default function RetencaoAlunosPage() {
   const related = getRelatedPosts('retencao-alunos-personal')
 
   return (
-    <article className="mx-auto max-w-3xl space-y-12 px-6 pb-24">
+    <ArticleShell>
       <BlogPostingSchema
         title={post.title}
         description={post.excerpt}
@@ -119,23 +136,23 @@ export default function RetencaoAlunosPage() {
       <ArticleHeader post={post} />
 
       {/* ── Introdução ── */}
-      <section className="space-y-5 text-zinc-300 leading-relaxed">
+      <section className="space-y-5 text-[17px] leading-relaxed text-slate-600">
         <p className="text-lg">
-          A maioria dos personal trainers perde <strong className="text-white">30% a 50% dos alunos</strong> nos primeiros 3 meses. Isso não é falta de competência técnica — é falta de sistema. Os profissionais que retêm por mais tempo têm processos claros de onboarding, acompanhamento e comunicação proativa.
+          A maioria dos personal trainers perde <strong className="font-semibold text-slate-900">30% a 50% dos alunos</strong> nos primeiros 3 meses. Isso não é falta de competência técnica — é falta de sistema. Os profissionais que retêm por mais tempo têm processos claros de onboarding, acompanhamento e comunicação proativa.
         </p>
         <p>
-          Segundo o relatório da <a href="https://www.ihrsa.org/publications/the-global-health-fitness-industry-report/" target="_blank" rel="noopener noreferrer" className="text-brand-primary underline decoration-brand-primary/30 hover:decoration-brand-primary transition-colors">IHRSA (International Health, Racquet &amp; Sportsclub Association)</a>, o custo de adquirir um novo aluno é <strong className="text-white">5 a 7 vezes maior</strong> do que reter um existente. Ou seja, cada aluno que você perde custa caro.
+          Segundo o relatório da <a href="https://www.ihrsa.org/publications/the-global-health-fitness-industry-report/" target="_blank" rel="noopener noreferrer" className={articleLinkClass}>IHRSA (International Health, Racquet &amp; Sportsclub Association)</a>, o custo de adquirir um novo aluno é <strong className="font-semibold text-slate-900">5 a 7 vezes maior</strong> do que reter um existente. Ou seja, cada aluno que você perde custa caro.
         </p>
         <p>
-          Neste artigo, detalhamos as <strong className="text-white">5 alavancas mais eficazes</strong> para reduzir o churn (taxa de cancelamento) e aumentar o LTV (Lifetime Value) de cada aluno, com dados de mercado e aplicações práticas.
+          Neste artigo, detalhamos as <strong className="font-semibold text-slate-900">5 alavancas mais eficazes</strong> para reduzir o churn (taxa de cancelamento) e aumentar o LTV (Lifetime Value) de cada aluno, com dados de mercado e aplicações práticas.
         </p>
         <p>
           Para aplicar essas estratégias na prática com stack completo, veja a página para{' '}
-          <Link href="/app-personal-trainer" className="text-brand-primary underline decoration-brand-primary/30 hover:decoration-brand-primary transition-colors">
+          <Link href="/app-personal-trainer" className={articleLinkClass}>
             personal trainers
           </Link>
           {' '}e, quando fizer sentido clínico, a integração com{' '}
-          <Link href="/nutricionistas" className="text-brand-primary underline decoration-brand-primary/30 hover:decoration-brand-primary transition-colors">
+          <Link href="/nutricionistas" className={articleLinkClass}>
             nutricionistas
           </Link>
           .
@@ -143,75 +160,60 @@ export default function RetencaoAlunosPage() {
       </section>
 
       {/* ── Dados de contexto — Stats cards ── */}
-      <section className="space-y-4">
-        <div className="space-y-2">
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-400" style={{ fontFamily: 'ui-monospace, monospace' }}>/DADOS DE MERCADO</span>
-          <h2 className="text-2xl font-bold text-white sm:text-3xl">Números que todo personal precisa conhecer</h2>
-        </div>
+      <section className="space-y-6">
+        <ArticleH2 eyebrow="/DADOS DE MERCADO">Números que todo personal precisa conhecer</ArticleH2>
 
         <div className="grid gap-4 sm:grid-cols-3">
           {STATS.map((stat) => (
-            <div key={stat.label} className="rounded-2xl border border-white/8 bg-white/2 p-5 text-center space-y-2">
-              <div className="text-3xl font-bold text-emerald-400" style={{ fontFamily: 'ui-monospace, monospace' }}>{stat.value}</div>
-              <p className="text-sm text-zinc-400 leading-relaxed">{stat.label}</p>
-              <p className="text-[10px] text-zinc-600 uppercase tracking-wider">{stat.source}</p>
+            <div key={stat.label} className="group relative space-y-2 overflow-hidden rounded-2xl p-5 text-center transition-all duration-300 hover:-translate-y-0.5" style={lightCard}>
+              <HoverEdge />
+              <div className="relative text-3xl font-black text-emerald-600" style={monoLabel}>{stat.value}</div>
+              <p className="relative text-sm leading-relaxed text-slate-600">{stat.label}</p>
+              <p className="relative text-[10px] uppercase tracking-wider text-slate-400">{stat.source}</p>
             </div>
           ))}
         </div>
       </section>
 
       {/* ── Custo do churn — Callout ── */}
-      <div className="flex gap-4 rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-5">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-500/20">
-          <DSIcon name="alertTriangle" size={20} className="text-emerald-400" />
-        </div>
-        <div className="space-y-1 text-sm">
-          <p className="font-semibold text-white">O custo real do churn</p>
-          <p className="text-zinc-400">
-            Um personal com 30 alunos a R$ 300/mês que perde 10 por trimestre está deixando de faturar <strong className="text-zinc-200">R$ 36 mil/ano</strong>. Se retivesse metade desses alunos com um sistema simples de acompanhamento, o ganho seria de <strong className="text-zinc-200">R$ 18 mil anuais</strong> sem conquistar nenhum aluno novo.
-          </p>
-        </div>
-      </div>
+      <Callout icon="alertTriangle" tone="brand" title="O custo real do churn">
+        Um personal com 30 alunos a R$ 300/mês que perde 10 por trimestre está deixando de faturar <strong className="font-semibold text-slate-900">R$ 36 mil/ano</strong>. Se retivesse metade desses alunos com um sistema simples de acompanhamento, o ganho seria de <strong className="font-semibold text-slate-900">R$ 18 mil anuais</strong> sem conquistar nenhum aluno novo.
+      </Callout>
 
       {/* ── 5 Alavancas ── */}
       <section className="space-y-6">
-        <div className="space-y-2">
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-400" style={{ fontFamily: 'ui-monospace, monospace' }}>/ESTRATÉGIAS</span>
-          <h2 className="text-2xl font-bold text-white sm:text-3xl">As 5 alavancas da retenção</h2>
-        </div>
+        <ArticleH2 eyebrow="/ESTRATÉGIAS">As 5 alavancas da retenção</ArticleH2>
 
         {LEVERS.map((lever) => (
-          <div key={lever.num} className="group rounded-2xl border border-white/10 bg-white/3 p-6 space-y-4 transition-all hover:border-emerald-500/20 hover:bg-emerald-500/3">
-            <div className="flex items-start gap-4">
-              <span className="text-3xl font-black text-emerald-500/15 transition-colors group-hover:text-emerald-500/25 shrink-0" style={{ fontFamily: 'ui-monospace, monospace' }}>{lever.num}</span>
+          <div key={lever.num} className="group relative space-y-4 overflow-hidden rounded-2xl p-6 transition-all duration-300 hover:-translate-y-0.5" style={lightCard}>
+            <HoverEdge />
+            <div className="relative flex items-start gap-4">
+              <span className="shrink-0 font-black text-emerald-500/25 transition-colors group-hover:text-emerald-500/45" style={{ ...monoLabel, fontSize: '1.6rem' }}>{lever.num}</span>
               <div className="space-y-1">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/20">
-                    <DSIcon name={lever.icon} size={16} className="text-emerald-400" />
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg text-emerald-600" style={greenChip}>
+                    <DSIcon name={lever.icon} size={16} />
                   </div>
-                  <h3 className="text-lg font-bold text-white">{lever.title}</h3>
+                  <h3 className="font-syne text-lg font-black tracking-tight text-gray-950">{lever.title}</h3>
                 </div>
               </div>
             </div>
-            <p className="text-zinc-300 leading-relaxed">{lever.content}</p>
+            <p className="relative leading-relaxed text-slate-600">{lever.content}</p>
 
             {/* Dica prática */}
-            <div className="flex gap-2 rounded-xl bg-emerald-500/5 border border-emerald-500/10 p-3">
-              <DSIcon name="zap" size={14} className="text-emerald-400 mt-0.5 shrink-0" />
-              <p className="text-xs text-emerald-300/80 leading-relaxed"><strong className="text-emerald-300">Dica prática:</strong> {lever.tip}</p>
+            <div className="relative flex gap-2 rounded-xl border border-emerald-500/20 bg-emerald-50/70 p-3">
+              <DSIcon name="zap" size={14} className="mt-0.5 shrink-0 text-emerald-600" />
+              <p className="text-xs leading-relaxed text-emerald-800"><strong className="font-semibold text-emerald-900">Dica prática:</strong> {lever.tip}</p>
             </div>
           </div>
         ))}
       </section>
 
       {/* ── Framework de comunicação ── */}
-      <section className="space-y-5 text-zinc-300 leading-relaxed">
-        <div className="space-y-2">
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-400" style={{ fontFamily: 'ui-monospace, monospace' }}>/COMUNICAÇÃO</span>
-          <h2 className="text-2xl font-bold text-white sm:text-3xl">Framework de comunicação proativa</h2>
-        </div>
+      <section className="space-y-5 text-[17px] leading-relaxed text-slate-600">
+        <ArticleH2 eyebrow="/COMUNICAÇÃO">Framework de comunicação proativa</ArticleH2>
         <p>
-          A retenção depende de <strong className="text-white">timing</strong>. Segundo o modelo <a href="https://www.nirandfar.com/hooked/" target="_blank" rel="noopener noreferrer" className="text-brand-primary underline decoration-brand-primary/30">Hook de Nir Eyal</a>, hábitos se formam com gatilhos no momento certo. Para personal trainers, isso significa:
+          A retenção depende de <strong className="font-semibold text-slate-900">timing</strong>. Segundo o modelo <a href="https://www.nirandfar.com/hooked/" target="_blank" rel="noopener noreferrer" className={articleLinkClass}>Hook de Nir Eyal</a>, hábitos se formam com gatilhos no momento certo. Para personal trainers, isso significa:
         </p>
         <div className="grid gap-3 sm:grid-cols-3">
           {[
@@ -219,10 +221,11 @@ export default function RetencaoAlunosPage() {
             { time: '48h', event: 'Sem treinar', action: 'Mensagem empática: "está tudo bem?"' },
             { time: '7 dias', event: 'Primeira semana', action: 'Check-in: "como foi a primeira semana?"' },
           ].map((item) => (
-            <div key={item.time} className="rounded-xl border border-white/8 bg-white/2 p-4 space-y-2">
-              <span className="text-lg font-bold text-emerald-400" style={{ fontFamily: 'ui-monospace, monospace' }}>{item.time}</span>
-              <p className="text-xs text-zinc-500 uppercase tracking-wider">{item.event}</p>
-              <p className="text-sm text-zinc-300">{item.action}</p>
+            <div key={item.time} className="group relative space-y-2 overflow-hidden rounded-xl p-4 transition-all duration-300 hover:-translate-y-0.5" style={lightCard}>
+              <HoverEdge />
+              <span className="relative text-lg font-black text-emerald-600" style={monoLabel}>{item.time}</span>
+              <p className="relative text-xs uppercase tracking-wider text-slate-500">{item.event}</p>
+              <p className="relative text-sm text-slate-600">{item.action}</p>
             </div>
           ))}
         </div>
@@ -230,21 +233,19 @@ export default function RetencaoAlunosPage() {
 
       {/* ── Métricas ── */}
       <section className="space-y-6">
-        <div className="space-y-2">
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-400" style={{ fontFamily: 'ui-monospace, monospace' }}>/MÉTRICAS</span>
-          <h2 className="text-2xl font-bold text-white sm:text-3xl">Métricas que você deve acompanhar</h2>
-        </div>
-        <p className="text-zinc-400">Para saber se suas estratégias estão funcionando, monitore semanalmente:</p>
+        <ArticleH2 eyebrow="/MÉTRICAS">Métricas que você deve acompanhar</ArticleH2>
+        <p className="text-slate-600">Para saber se suas estratégias estão funcionando, monitore semanalmente:</p>
 
         <div className="space-y-3">
           {METRICS.map((m) => (
-            <div key={m.name} className="flex items-center gap-4 rounded-xl border border-white/8 bg-white/2 p-4 transition-all hover:border-emerald-500/15">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10 shrink-0">
-                <DSIcon name={m.icon} size={18} className="text-emerald-400" />
+            <div key={m.name} className="group relative flex items-center gap-4 overflow-hidden rounded-xl p-4 transition-all duration-300 hover:-translate-y-0.5" style={lightCard}>
+              <HoverEdge />
+              <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-emerald-600" style={greenChip}>
+                <DSIcon name={m.icon} size={18} />
               </div>
-              <div>
-                <h4 className="font-bold text-white text-sm">{m.name}</h4>
-                <p className="text-xs text-zinc-500">{m.desc}</p>
+              <div className="relative">
+                <h4 className="font-syne text-sm font-black tracking-tight text-gray-950">{m.name}</h4>
+                <p className="text-xs text-slate-500">{m.desc}</p>
               </div>
             </div>
           ))}
@@ -254,38 +255,27 @@ export default function RetencaoAlunosPage() {
       {/* ── FAQ ── */}
       <FaqInline items={FAQ_BLOG_RETENCAO} />
 
-      <section className="rounded-2xl border border-white/8 bg-white/3 p-6 space-y-4">
-        <h2 className="text-xl font-bold text-white">Próximo passo por perfil</h2>
+      {/* ── ICP switcher ── */}
+      <section className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6" style={{ boxShadow: '0 1px 2px rgba(15,23,42,0.04), 0 18px 40px -24px rgba(15,23,42,0.14)' }}>
+        <h2 className="font-syne text-xl font-black tracking-tight text-gray-950">Próximo passo por perfil</h2>
         <div className="grid gap-3 sm:grid-cols-3">
-          <TrackedCtaLink href="/app-personal-trainer" cta="Escalar operação" placement="blog_retencao_legacy_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-emerald-500/30">
-            <h3 className="text-sm font-bold text-white">Escalar operação</h3>
-            <p className="mt-1 text-xs text-zinc-400">Gestão e retenção com dados em tempo real.</p>
+          <TrackedCtaLink href="/app-personal-trainer" cta="Escalar operação" placement="blog_retencao_legacy_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-500/30 hover:shadow-[0_14px_30px_-18px_rgba(34,197,94,0.4)]">
+            <h3 className="font-syne text-sm font-black tracking-tight text-gray-950">Escalar operação</h3>
+            <p className="mt-1 text-xs text-slate-500">Gestão e retenção com dados em tempo real.</p>
           </TrackedCtaLink>
-          <TrackedCtaLink href="/nutricionistas" cta="Apoio nutricional" placement="blog_retencao_legacy_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-emerald-500/30">
-            <h3 className="text-sm font-bold text-white">Apoio nutricional</h3>
-            <p className="mt-1 text-xs text-zinc-400">Treino + dieta para melhorar adesão do aluno.</p>
+          <TrackedCtaLink href="/nutricionistas" cta="Apoio nutricional" placement="blog_retencao_legacy_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-500/30 hover:shadow-[0_14px_30px_-18px_rgba(34,197,94,0.4)]">
+            <h3 className="font-syne text-sm font-black tracking-tight text-gray-950">Apoio nutricional</h3>
+            <p className="mt-1 text-xs text-slate-500">Treino + dieta para melhorar adesão do aluno.</p>
           </TrackedCtaLink>
-          <TrackedCtaLink href="/afiliados" cta="Monetização adicional" placement="blog_retencao_legacy_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="rounded-xl border border-white/10 bg-white/4 p-4 hover:border-emerald-500/30">
-            <h3 className="text-sm font-bold text-white">Monetização adicional</h3>
-            <p className="mt-1 text-xs text-zinc-400">Comissão recorrente por indicação ativa.</p>
+          <TrackedCtaLink href="/afiliados" cta="Monetização adicional" placement="blog_retencao_legacy_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-500/30 hover:shadow-[0_14px_30px_-18px_rgba(34,197,94,0.4)]">
+            <h3 className="font-syne text-sm font-black tracking-tight text-gray-950">Monetização adicional</h3>
+            <p className="mt-1 text-xs text-slate-500">Comissão recorrente por indicação ativa.</p>
           </TrackedCtaLink>
         </div>
       </section>
 
       {/* ── Fontes ── */}
-      <section className="rounded-2xl border border-white/8 bg-white/3 p-6">
-        <h3 className="mb-4 text-sm font-bold uppercase tracking-wider text-zinc-500" style={{ fontFamily: 'ui-monospace, monospace' }}>Fontes e referências</h3>
-        <ul className="space-y-2">
-          {SOURCES.map((s) => (
-            <li key={s.url} className="flex items-start gap-2 text-sm">
-              <DSIcon name="externalLink" size={14} className="mt-0.5 shrink-0 text-emerald-500/60" />
-              <a href={s.url} target="_blank" rel="noopener noreferrer" className="text-zinc-400 underline decoration-white/10 hover:text-emerald-400 hover:decoration-emerald-400/30 transition-colors">
-                {s.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
+      <SourceList sources={SOURCES} />
 
       {/* Share */}
       <ArticleShare title={post.title} slug={post.slug} />
@@ -294,27 +284,33 @@ export default function RetencaoAlunosPage() {
       <ArticleRelated posts={related} />
 
       {/* ── CTA ── */}
-      <section className="text-center rounded-2xl border border-emerald-500/30 bg-linear-to-b from-emerald-500/10 to-transparent p-8 sm:p-10 space-y-5">
-        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-400" style={{ fontFamily: 'ui-monospace, monospace' }}>/PRÓXIMO PASSO</span>
-        <h2 className="text-2xl font-bold text-white">Quer reter mais alunos?</h2>
-        <p className="text-sm text-zinc-400 max-w-md mx-auto leading-relaxed">
+      <section className="relative overflow-hidden rounded-3xl border border-emerald-500/25 p-8 text-center sm:p-10" style={{ background: 'linear-gradient(180deg, rgba(34,197,94,0.10) 0%, rgba(255,255,255,0) 70%), linear-gradient(180deg, #ffffff 0%, #f3faf5 100%)', boxShadow: '0 1px 2px rgba(15,23,42,0.04), 0 26px 60px -28px rgba(34,197,94,0.4)' }}>
+        <div aria-hidden="true" className="pointer-events-none absolute right-0 top-0 h-48 w-48 translate-x-1/3 -translate-y-1/3 rounded-full bg-brand-primary/10 blur-[90px]" />
+        <span className="relative inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-[10px] uppercase tracking-[0.18em]" style={{ ...monoLabel, background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(236,253,243,0.8) 100%)', border: '1px solid rgba(34,197,94,0.3)' }}>
+          <span className="bg-linear-to-r from-emerald-600 to-emerald-500 bg-clip-text text-transparent">/PRÓXIMO PASSO</span>
+        </span>
+        <h2 className="relative mt-5 font-syne text-2xl font-black tracking-tight text-gray-950 sm:text-3xl">Quer reter mais alunos?</h2>
+        <p className="relative mx-auto mt-3 max-w-md text-sm leading-relaxed text-slate-600">
           O VFIT tem dashboard de retenção, alertas de queda de engajamento, gamificação integrada e cobrança automática. Tudo num só lugar.
         </p>
-        <TrackedCtaLink
-          href="/register"
-          cta="Criar conta grátis"
-          placement="blog_retencao_legacy_cta"
-          pageSegment="blog"
-          event="lp_register_start"
-          className="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-6 py-3 text-sm font-bold text-white hover:bg-emerald-600 transition-colors shadow-lg shadow-emerald-500/20"
-        >
-          Criar conta grátis
-          <DSIcon name="arrowRight" size={16} />
-        </TrackedCtaLink>
+        <div className="relative mt-6 flex justify-center">
+          <TrackedCtaLink
+            href="/register"
+            cta="Criar conta grátis"
+            placement="blog_retencao_legacy_cta"
+            pageSegment="blog"
+            event="lp_register_start"
+            className={pillPrimaryClass}
+          >
+            <PillSweep />
+            <span className="relative z-10">Criar conta grátis</span>
+            <PillArrow />
+          </TrackedCtaLink>
+        </div>
       </section>
 
       {/* Navigation */}
       <ArticleNavigation prev={prev} next={next} />
-    </article>
+    </ArticleShell>
   )
 }
