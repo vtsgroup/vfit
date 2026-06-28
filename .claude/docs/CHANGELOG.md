@@ -5,6 +5,23 @@
 
 ---
 
+## [5.1.4] — 2026-06-28 — Cookie consent no first paint (Speed Index) + WhatsApp deploy notify (link sem preview + tons)
+
+> Deploy `cf:deploy` v5.1.4 (prod `vfit.app.br`). Foco: fechar o **único** gap de score num report **frio (sem cookies)** — a Performance caía a ~95 por **Speed Index ~2,2s**, e a notificação de deploy no grupo ganhou link sem card de preview + 3 tons.
+
+### Cookie consent — Speed Index (causa raiz do 95 em report frio)
+
+- **`cookie-consent.tsx`**: o banner era **adiado de propósito ~2,8s** (`requestIdleCallback` + `setTimeout 2500ms` + `300ms`) "para sair da janela do LCP". Isso **saía pela culatra**: o trace do Lighthouse dura ~5s e o Speed Index integra o tempo todo → banner surgindo no meio do trace inflava o SI p/ ~2,2s (e o backdrop full-screen muda quase o frame inteiro).
+- **Fix (sem mudar o visual)**: mostra o banner **logo após a hidratação** (1 `requestAnimationFrame`). O herói é HTML estático (SSG) e já pintou no FCP → o **LCP fica travado nele**, não no banner; o SI "assenta" cedo. Mesmo banner, mesmas animações, só aparece mais cedo. `fixed` → CLS segue 0.
+- ⚠️ **Não reintroduzir o delay** — atrasar o banner piora o Speed Index, não melhora.
+
+### WhatsApp deploy notify (worker `vfit-whatsapp`)
+
+- **Link sem `https://`**: `🔗 https://vfit.app.br` → `🔗 vfit.app.br`. URL com protocolo gerava um **OG card** que engolia a mensagem; domínio puro continua clicável, sem preview. (`fmtLink()` em `index.ts`.)
+- **3 tons** via `tone` no payload: `dev` (changelog técnico — **padrão** dos deploys), `marketing` (foco em benefício), `casual` (papo de time). Bullets idênticos; muda só cabeçalho/rodapé. Selecionável em `/task-notify` e `/format` (cf-deploy não passa `tone` → usa `dev`).
+
+---
+
 ## [5.1.3] — 2026-06-28 — Imagens responsivas via Cloudflare Transformations + a11y footer
 
 > Otimização de entrega de imagens — Lighthouse "Improve image delivery" (~145 KB só no blog; aplica a TODO o site, incl. uploads R2 do dashboard). Loader custom do `next/image` → `/cdn-cgi/image` (Transformations já **enabled** na zona). + fix de alt redundante no footer. Lighthouse `/blog` já estava 100/100 em todas as categorias; itens eram `Unscored`/informativos.

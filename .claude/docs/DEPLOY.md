@@ -144,8 +144,19 @@ O worker `vfit-whatsapp` (`workers/whatsapp/src/index.ts` → `buildEndMessage`)
 
 - A mensagem do `--msg` (commit) é quebrada em **bullets** (separadores ` + `, `;`, ` & `) e cada item recebe **emoji por tipo** do prefixo conventional: `feat`→✨ `fix`→🐛 `perf`→⚡ `a11y`→♿ `security`→🔒 `docs`→📝 `chore`→🔧 `refactor`→♻️ (etc.).
 - Fim da mensagem: `✅ tudo verde · build, site e API no ar · ⏱️ <dur>` (componentes derivados do summary) + `🔗` link. Falha: `❌ Deploy vX falhou` + motivo + “confere os logs”.
-- **A qualidade da mensagem = qualidade do `--msg`.** Escreva o `--msg` descritivo e em PT-BR (continua conventional commit p/ o git). Ex.: `--msg "fix(a11y): corrige alt redundante no rodapé + perf(img): srcset responsivo"`.
+- **Link sem `https://`** (`fmtLink()`): o worker remove o protocolo → `🔗 vfit.app.br`. Uma URL com `http(s)://` vira **card de pré-visualização (OG)** que engole a mensagem; domínio puro continua clicável, sem preview. **Não** reintroduzir o protocolo no `link_url`.
+- **A qualidade da mensagem = qualidade do `--msg`.** Escreva o `--msg` descritivo e em PT-BR (continua conventional commit p/ o git). Ex.: `--msg "fix(a11y): corrige alt redundante no rodapé; perf(img): srcset responsivo"`.
 - Preview sem enviar: `node scripts/whatsapp-task.mjs preview end --title "..." ...` (usa `/format`).
+
+#### Tons (`tone` no payload de `/task-notify` e `/format`)
+
+Mesmos bullets; muda só cabeçalho + rodapé. cf-deploy **não** envia `tone` → deploys usam `dev`.
+
+- **`dev`** (padrão): `🚀 Subiu a vX!` · `_O que mudou:_` · `✅ tudo verde · build, site e API no ar · ⏱️ <dur>`.
+- **`marketing`**: `🚀 Novidade no VFIT · vX!` · `_O que chegou pra você:_` · `Já disponível pra todo mundo 💚 · no ar em <dur>`.
+- **`casual`**: `🎉 vX no ar!` · `ó o que mudou 👇` · `deu tudo certo em <dur>, tá no ar 🤙`.
+
+Ex. preview: `curl -s .../format -H "Authorization: Bearer $WHATSAPP_NOTIFY_TOKEN" -d '{"event":"end","status":"success","title":"...","deploy_version":"v5.1.4","deploy_message":"...","tone":"marketing"}'`.
 
 ### Variáveis necessárias (já em `.env.local`)
 
