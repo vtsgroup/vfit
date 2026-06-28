@@ -138,6 +138,15 @@ Exemplos: `DEPLOY-2026-04-02-AM`, `HOTFIX-AUTH-2026-04-02-PM`, `MIGRATION-USERS-
 - resultado/motivo/benefício devem ser **complementares, sem repetição**
 - **NÃO** incluir 🤖 ou colchetes no `--actor` (Worker adiciona automaticamente)
 
+### Formato da mensagem de deploy (changelog informal)
+
+O worker `vfit-whatsapp` (`workers/whatsapp/src/index.ts` → `buildEndMessage`) renderiza um **changelog informal** a partir do `--msg` do deploy. O `start` é **suprimido** (só a mensagem final vai pro grupo).
+
+- A mensagem do `--msg` (commit) é quebrada em **bullets** (separadores ` + `, `;`, ` & `) e cada item recebe **emoji por tipo** do prefixo conventional: `feat`→✨ `fix`→🐛 `perf`→⚡ `a11y`→♿ `security`→🔒 `docs`→📝 `chore`→🔧 `refactor`→♻️ (etc.).
+- Fim da mensagem: `✅ tudo verde · build, site e API no ar · ⏱️ <dur>` (componentes derivados do summary) + `🔗` link. Falha: `❌ Deploy vX falhou` + motivo + “confere os logs”.
+- **A qualidade da mensagem = qualidade do `--msg`.** Escreva o `--msg` descritivo e em PT-BR (continua conventional commit p/ o git). Ex.: `--msg "fix(a11y): corrige alt redundante no rodapé + perf(img): srcset responsivo"`.
+- Preview sem enviar: `node scripts/whatsapp-task.mjs preview end --title "..." ...` (usa `/format`).
+
 ### Variáveis necessárias (já em `.env.local`)
 
 ```
