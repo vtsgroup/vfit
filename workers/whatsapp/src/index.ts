@@ -442,6 +442,51 @@ function buildStartMessage(params: {
   ].join('\n').trim();
 }
 
+// Mapa tipo (conventional commit / palavra-chave) → emoji p/ a mensagem informal.
+const CHANGE_TYPE_EMOJI: Record<string, string> = {
+  feat: '✨', fix: '🐛', perf: '⚡', a11y: '♿', security: '🔒', sec: '🔒',
+  docs: '📝', doc: '📝', chore: '🔧', refactor: '♻️', style: '💅',
+  test: '🧪', i18n: '🌐', seo: '🔎', ci: '⚙️', build: '📦', revert: '⏪',
+};
+
+// Transforma a mensagem do deploy (commit) em bullets amigáveis com emoji por tipo.
+// Ex.: "feat(images): imagens responsivas + a11y footer alt"
+//   → ["✨ Imagens responsivas", "♿ Footer alt"]
+function prettifyChange(raw: string): string[] {
+  let s = String(raw || '').trim();
+  if (!s) return [];
+  s = s.replace(/^release:\s*v?\d+\.\d+\.\d+\s*[—–-]\s*/i, '').trim();
+  const parts = s.split(/\s+\+\s+|\s*;\s+|\s+&\s+/).map((p) => p.trim()).filter(Boolean);
+  return parts.slice(0, 8).map((part) => {
+    let emoji = '▫️';
+    let text = part;
+    const conv = part.match(/^([a-zA-Z]+)(?:\([^)]*\))?:\s*(.+)$/);
+    if (conv && CHANGE_TYPE_EMOJI[conv[1].toLowerCase()]) {
+      emoji = CHANGE_TYPE_EMOJI[conv[1].toLowerCase()];
+      text = conv[2].trim();
+    } else {
+      const lead = part.match(/^([a-zA-Z0-9]+)\s+(.+)$/);
+      if (lead && CHANGE_TYPE_EMOJI[lead[1].toLowerCase()]) {
+        emoji = CHANGE_TYPE_EMOJI[lead[1].toLowerCase()];
+        text = lead[2].trim();
+      }
+    }
+    text = text.charAt(0).toUpperCase() + text.slice(1);
+    return `${emoji} ${text}`;
+  });
+}
+
+// Deriva quais componentes ficaram no ar a partir do summary (Build/Pages/Workers).
+function liveComponents(summary?: string[]): string {
+  const txt = (summary || []).join(' | ');
+  const skipped = (name: string) => new RegExp(`${name}:\\s*SKIP`, 'i').test(txt);
+  const parts = ['build'];
+  if (!skipped('Pages')) parts.push('site');
+  if (!skipped('Workers')) parts.push('API');
+  if (parts.length === 1) return parts[0];
+  return `${parts.slice(0, -1).join(', ')} e ${parts[parts.length - 1]}`;
+}
+
 function buildEndMessage(params: {
   title: string;
   taskId: string;
@@ -451,6 +496,7 @@ function buildEndMessage(params: {
   priority?: string;
   summary?: string[];
   deployVersion?: string;
+  deployMessage?: string;
   status?: 'success' | 'failed';
   linkUrl?: string;
 }): string {
@@ -458,18 +504,41 @@ function buildEndMessage(params: {
   const endedMs = new Date(params.endedAtIso).getTime();
   const durationMs = Number.isFinite(startedMs) && Number.isFinite(endedMs) ? endedMs - startedMs : NaN;
   const status = params.status || 'success';
-  const dur = Number.isFinite(durationMs) ? ` · ${formatDurationMs(durationMs)}` : '';
-  const ver = params.deployVersion ? ` ${params.deployVersion}` : '';
+  const durStr = Number.isFinite(durationMs) ? formatDurationMs(durationMs) : '';
+  const verLabel = params.deployVersion || '';
 
   if (status === 'success') {
-    const lines = [`✅ Deploy${ver} no ar${dur}`];
-    if (params.linkUrl) lines.push(`🌐 ${params.linkUrl.trim()}`);
+    // Mudança vem do deploy_message; fallback: parte do title após " — "
+    // (cf-deploy envia title "Deploy finalizado — <commit msg>").
+    const changeRaw = (params.deployMessage || '').trim()
+      || (() => {
+        const seg = params.title.split(/\s+[—–-]\s+/);
+        return seg.length > 1 ? seg.slice(1).join(' — ') : '';
+      })();
+    const items = prettifyChange(changeRaw);
+    const lines: string[] = [];
+    if (items.length) {
+      lines.push(`🚀 *Subiu a ${verLabel || 'nova versão'}!*`);
+      lines.push('');
+      lines.push('_O que mudou:_');
+      for (const it of items) lines.push(it);
+      lines.push('');
+      const statusLine = `✅ tudo verde · ${liveComponents(params.summary)} no ar`;
+      lines.push(durStr ? `${statusLine} · ⏱️ ${durStr}` : statusLine);
+    } else {
+      const head = verLabel ? `✅ *${verLabel} no ar*` : '✅ *Deploy no ar*';
+      lines.push(durStr ? `${head} · ${durStr}` : head);
+    }
+    if (params.linkUrl) lines.push(`🔗 ${params.linkUrl.trim()}`);
     return lines.join('\n').trim();
   }
 
   const raw = params.summary && params.summary.length ? params.summary[0] : 'verifique os logs';
-  const reason = raw.replace(/^Resultado direto:\s*/i, '').trim().slice(0, 200);
-  return [`❌ Deploy${ver} falhou${dur}`, reason].join('\n').trim();
+  const reason = raw.replace(/^Resultado direto:\s*/i, '').trim().slice(0, 240);
+  const head = verLabel ? `❌ *Deploy ${verLabel} falhou*` : '❌ *Deploy falhou*';
+  const lines = [durStr ? `${head} · ${durStr}` : head, '', reason, '', '👀 confere os logs antes de tentar de novo'];
+  if (params.linkUrl) lines.push(`🔗 ${params.linkUrl.trim()}`);
+  return lines.join('\n').trim();
 }
 
 function buildTaskNotifyMessage(params: {
@@ -484,6 +553,7 @@ function buildTaskNotifyMessage(params: {
   details?: string;
   summary?: string[];
   deployVersion?: string;
+  deployMessage?: string;
   status?: 'success' | 'failed';
   linkUrl?: string;
 }): string {
@@ -511,6 +581,7 @@ function buildTaskNotifyMessage(params: {
       priority: params.priority,
       summary: params.summary,
       deployVersion: params.deployVersion,
+      deployMessage: params.deployMessage,
       status: params.status,
       linkUrl: params.linkUrl,
     });
@@ -652,6 +723,7 @@ const whatsappWorker = {
           : undefined;
 
         const deployVersion = body?.deploy_version ? clampText(body.deploy_version as string, 60) : undefined;
+        const deployMessage = body?.deploy_message ? clampText(body.deploy_message as string, 400) : undefined;
         const status = body?.status === 'failed' ? 'failed' : (body?.status === 'success' ? 'success' : undefined);
         const linkUrl = body?.link_url ? clampText(body.link_url as string, 2048) : undefined;
 
@@ -670,6 +742,7 @@ const whatsappWorker = {
           details,
           summary,
           deployVersion,
+          deployMessage,
           status,
           linkUrl,
         });
@@ -722,6 +795,7 @@ const whatsappWorker = {
           ? (body.summary as unknown[]).map((v: unknown) => clampText(String(v || ''), 300)).filter(Boolean).slice(0, 24)
           : undefined;
         const deployVersion = body?.deploy_version ? clampText(body.deploy_version as string, 60) : undefined;
+        const deployMessage = body?.deploy_message ? clampText(body.deploy_message as string, 400) : undefined;
         const status = body?.status === 'failed' ? 'failed' : (body?.status === 'success' ? 'success' : undefined);
         const linkUrl = body?.link_url ? clampText(body.link_url as string, 2048) : undefined;
 
@@ -737,6 +811,7 @@ const whatsappWorker = {
           details,
           summary,
           deployVersion,
+          deployMessage,
           status,
           linkUrl,
         });
