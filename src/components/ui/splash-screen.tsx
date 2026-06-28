@@ -250,9 +250,9 @@ export function SplashScreen({ isReady }: { isReady?: boolean }) {
 
         .vsp-name {
           margin: 36px 0 0; font-family: var(--font-space-grotesk), system-ui, sans-serif;
-          font-size: clamp(34px, 9vw, 48px); font-weight: 700; letter-spacing: .16em;
+          font-size: clamp(34px, 9vw, 48px); font-weight: 900; letter-spacing: .16em;
           text-transform: uppercase; color: #edf4ee; padding-left: .16em; line-height: 1;
-          /* 700 é o peso máximo da Space Grotesk → stroke fino engrossa sem trocar o tipo */
+          /* Space Grotesk vai até 700 real → 900 sintetiza (faux-bold) + stroke engrossa ainda mais */
           -webkit-text-stroke: .6px #edf4ee;
           text-shadow: 0 2px 26px rgba(58,181,74,.28);
           opacity: 0; transform: translateY(14px); will-change: transform, opacity;

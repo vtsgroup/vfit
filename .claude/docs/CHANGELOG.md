@@ -5,6 +5,24 @@
 
 ---
 
+## [5.1.5 → 5.1.6] — 2026-06-28 — Nova abertura cinematográfica (splash) + loaders unificados
+
+> Substitui a experiência de loading do app. Splash de abertura reconstruído a partir do `vfit-splash.html` (aprovado pelo dono); loaders redondo + de anéis aposentados. v5.1.6 só ajusta o peso do wordmark (700 → 900).
+
+### Splash de abertura — `src/components/ui/splash-screen.tsx` (v5)
+
+- Marca V+wifi (favicon `#3ab54a`, = ícone instalado) com **arcos desenhando**, anéis emanando, glow respirando, grid à deriva e campo de partículas (determinístico via mulberry32 → **SSR-safe**, sem `Math.random` no render).
+- **Wordmark "VFIT" em Space Grotesk** (auto-hospedada via `next/font`, sem fetch ao Google), `font-weight: 900` (faux-bold, peso real máx. da família é 700) + `-webkit-text-stroke` → bem **grosso** (escolha do dono).
+- A linha verde virou **barra de loading**: progride enquanto carrega e **completa quando a sessão fica pronta** (`isReady`/`isSessionReady`), aí o splash sai. Mantém API `isReady`, re-entrada por sessão e válvula de segurança (6,5s) — nunca prende o usuário.
+- **Instantâneo, sem delay**: aparece sobre o bg anti-flicker e sai exatamente no app-ready. Borda do gradiente = `#050A12` (= manifest `background_color`) → **handoff TWA/PWA sem emenda**. Tudo composited (transform/opacity); grid e glow ajustados após review adversarial p/ não competir com a hidratação em mobile fraco. `prefers-reduced-motion` respeitado.
+
+### Loaders unificados (`BrandLoader`)
+
+- Aposentados: `Spinner` redondo (full-page), `dashboard/loading.tsx` (3 anéis aninhados — "o horrível"), `AppRouteLoader` (spinner "Preparando seu app…"), `PageLoader`, spinners do `auth/callback`. Todos → **`BrandLoader`** (marca V + halo + barra). Removido `loading-screen-ultra.tsx` (morto).
+- `BrandLoader` ganhou `labelTone` (`mono` microcaps técnica | `soft` frase legível p/ mensagens de rota).
+
+---
+
 ## [5.1.4] — 2026-06-28 — Cookie consent no first paint (Speed Index) + WhatsApp deploy notify (link sem preview + tons)
 
 > Deploy `cf:deploy` v5.1.4 (prod `vfit.app.br`). Foco: fechar o **único** gap de score num report **frio (sem cookies)** — a Performance caía a ~95 por **Speed Index ~2,2s**, e a notificação de deploy no grupo ganhou link sem card de preview + 3 tons.
