@@ -124,7 +124,7 @@
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^4.0.18",
-    "wrangler": "^4.90.0"
+    "wrangler": "^4.105.0"
   },
   "browserslist": [
     "chrome >= 93",

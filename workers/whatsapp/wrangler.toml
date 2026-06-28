@@ -69,7 +69,7 @@ invocation_logs = true
 # =============================================================================
 [vars]
 UNIPILE_API_URL = "https://api1.unipile.com:13123/api/v1"
-DEFAULT_GROUP_NAME = "Logs e Docs: VFIT"
+DEFAULT_GROUP_NAME = "Vfit · Mude Treine Cresça"
 ALLOW_FALLBACK_TOKEN = "0"
 
 # NÃO coloque IDs reais aqui no Git.
