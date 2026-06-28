@@ -31,6 +31,8 @@ export interface BlogPost {
   tags: string[]
   /** Código curto p/ link de compartilhamento — /r/{shortId} → 301 → /blog/{slug} (ver public/_worker.js). NÃO indexado. */
   shortId: string
+  /** Crédito da imagem hero (fonte/fotógrafo). Se ausente, exibe "Divulgação". */
+  imageCredit?: string
 }
 
 export type BlogCategory = 'Tecnologia' | 'Gestão' | 'Financeiro' | 'Fitness' | 'Engajamento' | 'Negócios'

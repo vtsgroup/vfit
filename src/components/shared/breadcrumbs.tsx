@@ -60,22 +60,33 @@ export function Breadcrumbs({ items, tone = 'dark' }: BreadcrumbsProps) {
       />
 
       {/* Visual breadcrumbs */}
-      <nav aria-label="Breadcrumb" className={`flex items-center gap-1.5 text-xs ${navColor}`}>
-        <Link href="/" className={`flex items-center gap-1 transition-colors ${homeHover}`}>
-          <DSIcon name="home" size={14} />
-          <span className="sr-only">Home</span>
+      <nav
+        aria-label="Breadcrumb"
+        className={`flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[13px] font-medium ${navColor}`}
+      >
+        <Link
+          href="/"
+          className={`flex items-center gap-1 rounded-md px-1 py-0.5 transition-colors ${homeHover} ${isLight ? 'hover:bg-emerald-50' : ''}`}
+        >
+          <DSIcon name="home" size={15} />
+          <span className="sr-only">Início</span>
         </Link>
 
         {items.map((item, i) => {
           const isLast = i === items.length - 1
 
           return (
-            <span key={i} className="flex items-center gap-1.5">
-              <DSIcon name="chevronRight" size={12} className={sepColor} />
+            <span key={i} className="flex min-w-0 items-center gap-1.5">
+              <DSIcon name="chevronRight" size={13} className={sepColor} />
               {isLast || !item.href ? (
-                <span className={`font-medium ${currentColor}`}>{item.label}</span>
+                <span className={`max-w-[58vw] truncate font-semibold sm:max-w-xs ${currentColor}`} title={item.label}>
+                  {item.label}
+                </span>
               ) : (
-                <Link href={item.href} className={`transition-colors ${linkHover}`}>
+                <Link
+                  href={item.href}
+                  className={`rounded-md px-1 py-0.5 transition-colors ${linkHover} ${isLight ? 'hover:bg-emerald-50' : ''}`}
+                >
                   {item.label}
                 </Link>
               )}

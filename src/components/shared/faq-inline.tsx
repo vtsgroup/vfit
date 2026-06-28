@@ -26,6 +26,8 @@ interface FaqInlineProps {
   title?: string
   /** Emit JSON-LD FAQPage schema (default: true) */
   schema?: boolean
+  /** id da seção (p/ anchor do índice/ToC) */
+  id?: string
 }
 
 const monoBadge: CSSProperties = {
@@ -33,7 +35,7 @@ const monoBadge: CSSProperties = {
   fontWeight: 700,
 }
 
-export function FaqInline({ items, title = 'Perguntas Frequentes', schema = true }: FaqInlineProps) {
+export function FaqInline({ items, title = 'Perguntas Frequentes', schema = true, id }: FaqInlineProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
 
   const toggle = (i: number) => setOpenIndex(openIndex === i ? null : i)
@@ -53,7 +55,8 @@ export function FaqInline({ items, title = 'Perguntas Frequentes', schema = true
 
   return (
     <section
-      className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-8"
+      id={id}
+      className="scroll-mt-24 rounded-2xl border border-slate-200 bg-white p-5 sm:p-8"
       style={{ boxShadow: '0 1px 2px rgba(15,23,42,0.04), 0 18px 40px -24px rgba(15,23,42,0.14)' }}
     >
       {schema && (

@@ -52,9 +52,9 @@ export function ArticleShell({ children }: { children: ReactNode }) {
 }
 
 /* ─── Eyebrow pill mint + heading Syne (substitui label+h2 escuro) ─── */
-export function ArticleH2({ eyebrow, children }: { eyebrow?: string; children: ReactNode }) {
+export function ArticleH2({ id, eyebrow, children }: { id?: string; eyebrow?: string; children: ReactNode }) {
   return (
-    <div className="space-y-3">
+    <div id={id} className="space-y-3 scroll-mt-24">
       {eyebrow && (
         <span
           className="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-[10px] uppercase tracking-[0.18em]"
@@ -167,6 +167,39 @@ export function KeyTakeaways({ title = 'Resumo rápido', points }: { title?: str
         ))}
       </ul>
     </aside>
+  )
+}
+
+/* ─── Índice / Sumário (anchor links) — UX + SEO (jump links / sitelinks) ─── */
+export function TableOfContents({ items, title = 'Neste artigo' }: { items: { id: string; label: string }[]; title?: string }) {
+  if (!items.length) return null
+  return (
+    <nav
+      aria-label="Índice do artigo"
+      className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6"
+      style={{ boxShadow: '0 1px 2px rgba(15,23,42,0.04), 0 18px 40px -26px rgba(15,23,42,0.14)' }}
+    >
+      <p className="mb-3 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400" style={monoLabel}>
+        <DSIcon name="menu" size={14} className="text-emerald-500" />
+        {title}
+      </p>
+      <ol className="space-y-0.5">
+        {items.map((it, i) => (
+          <li key={it.id}>
+            <a
+              href={`#${it.id}`}
+              className="group flex items-center gap-3 rounded-lg px-2 py-2 text-sm text-slate-600 transition-colors hover:bg-emerald-50/70 hover:text-emerald-700"
+            >
+              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-slate-100 text-[10px] font-bold text-slate-500 transition-colors group-hover:bg-emerald-500 group-hover:text-white" style={monoLabel}>
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <span className="font-medium">{it.label}</span>
+              <DSIcon name="arrowRight" size={13} className="ml-auto shrink-0 text-slate-300 transition-all duration-300 group-hover:translate-x-0.5 group-hover:text-emerald-500" />
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
   )
 }
 

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { DSIcon } from '@/components/ui/ds-icon'
 import { buildSeoMetadata } from '@/lib/seo'
 import { getPost, getRelatedPosts, BLOG_POSTS } from '@/data/blog-posts'
 import { ArticleHeader } from '@/components/blog/article-header'
@@ -11,8 +12,10 @@ import {
   ArticleH2,
   Callout,
   KeyTakeaways,
+  TableOfContents,
   ArticleTable,
   lightCard,
+  greenChip,
   HoverEdge,
   monoLabel,
   pillPrimaryClass,
@@ -67,7 +70,7 @@ export default function AppTreinoIAGratisIniciantesPage() {
   const idx = BLOG_POSTS.findIndex((p) => p.slug === post.slug)
   const prev = idx > 0 ? BLOG_POSTS[idx - 1] : null
   const next = idx < BLOG_POSTS.length - 1 ? BLOG_POSTS[idx + 1] : null
-  const related = getRelatedPosts(post.slug, 3)
+  const related = getRelatedPosts(post.slug, 4)
 
   const article = articleSchema({
     title: post.title,
@@ -91,6 +94,15 @@ export default function AppTreinoIAGratisIniciantesPage() {
           'Para iniciantes, o que mais importa é clareza do plano, facilidade para registrar treinos e sensação real de progresso.',
           'A IA agrega valor em 3 frentes: progressão automática, motivação com gamificação e acompanhamento da evolução.',
           'No VFIT dá para começar grátis, sem cartão, e evoluir para recursos avançados quando fizer sentido.',
+        ]}
+      />
+
+      <TableOfContents
+        items={[
+          { id: 'avaliar', label: 'O que avaliar antes de escolher' },
+          { id: 'comparativo', label: 'App comum vs app com IA' },
+          { id: 'comecar', label: 'Como começar com segurança' },
+          { id: 'faq', label: 'Perguntas frequentes' },
         ]}
       />
 
@@ -137,7 +149,7 @@ export default function AppTreinoIAGratisIniciantesPage() {
       </section>
 
       <section className="space-y-5 text-[17px] leading-relaxed text-slate-600">
-        <ArticleH2>O que um iniciante deve avaliar antes de escolher</ArticleH2>
+        <ArticleH2 id="avaliar">O que um iniciante deve avaliar antes de escolher</ArticleH2>
         <p>
           O melhor app não é necessariamente o mais famoso. Para iniciantes, os critérios mais importantes costumam ser clareza do plano, facilidade para registrar treinos e sensação de progresso. Se o aplicativo exige configurações demais ou entrega linguagem técnica demais, a adesão cai.
         </p>
@@ -147,7 +159,7 @@ export default function AppTreinoIAGratisIniciantesPage() {
       </section>
 
       <section className="space-y-6">
-        <ArticleH2 eyebrow="/COMPARATIVO">App comum vs app com IA</ArticleH2>
+        <ArticleH2 id="comparativo" eyebrow="/COMPARATIVO">App comum vs app com IA</ArticleH2>
         <ArticleTable
           caption="App comum vs app com IA"
           head={['Critério', 'App comum', 'App com IA']}
@@ -166,7 +178,7 @@ export default function AppTreinoIAGratisIniciantesPage() {
       </Callout>
 
       <section className="space-y-5 text-[17px] leading-relaxed text-slate-600">
-        <ArticleH2>Como começar com segurança no VFIT</ArticleH2>
+        <ArticleH2 id="comecar">Como começar com segurança no VFIT</ArticleH2>
         <p>
           No VFIT, o fluxo para iniciantes é direto: você cria a conta, informa objetivo, disponibilidade e contexto de treino, e a plataforma organiza um plano inicial. A partir disso, consegue acompanhar sua frequência, visualizar treinos no celular e ganhar motivação extra com metas e gamificação.
         </p>
@@ -178,18 +190,32 @@ export default function AppTreinoIAGratisIniciantesPage() {
       <section className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6" style={{ boxShadow: '0 1px 2px rgba(15,23,42,0.04), 0 18px 40px -24px rgba(15,23,42,0.14)' }}>
         <h2 className="font-syne text-xl font-black tracking-tight text-gray-950">Próximo passo por perfil</h2>
         <div className="grid gap-3 sm:grid-cols-2">
-          <TrackedCtaLink href="/welcome" cta="Começar como aluno" placement="blog_iniciante_icp_switcher" pageSegment="blog" event="lp_register_start" className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-500/30 hover:shadow-[0_14px_30px_-18px_rgba(34,197,94,0.4)]">
-            <h3 className="font-syne text-sm font-black tracking-tight text-gray-950">Sou aluno</h3>
-            <p className="mt-1 text-xs text-slate-500">Inicie grátis e receba seu plano com IA.</p>
+          <TrackedCtaLink href="/welcome" cta="Começar como aluno" placement="blog_iniciante_icp_switcher" pageSegment="blog" event="lp_register_start" className="group relative flex items-start gap-3 overflow-hidden rounded-xl border border-slate-200 bg-white p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-500/30 hover:shadow-[0_14px_30px_-18px_rgba(34,197,94,0.4)]">
+            <HoverEdge rounded="rounded-xl" />
+            <span className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-emerald-600" style={greenChip}>
+              <DSIcon name="user" size={16} />
+            </span>
+            <div className="relative min-w-0 flex-1">
+              <h3 className="font-syne text-sm font-black tracking-tight text-gray-950">Sou aluno</h3>
+              <p className="mt-1 text-xs text-slate-500">Inicie grátis e receba seu plano com IA.</p>
+            </div>
+            <DSIcon name="arrowUpRight" size={15} className="relative shrink-0 text-slate-300 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-emerald-500" />
           </TrackedCtaLink>
-          <TrackedCtaLink href="/app-personal-trainer" cta="Sou personal trainer" placement="blog_iniciante_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="group relative overflow-hidden rounded-xl border border-slate-200 bg-white p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-500/30 hover:shadow-[0_14px_30px_-18px_rgba(34,197,94,0.4)]">
-            <h3 className="font-syne text-sm font-black tracking-tight text-gray-950">Sou personal trainer</h3>
-            <p className="mt-1 text-xs text-slate-500">Veja operação profissional e gestão completa.</p>
+          <TrackedCtaLink href="/app-personal-trainer" cta="Sou personal trainer" placement="blog_iniciante_icp_switcher" pageSegment="blog" event="lp_cta_secondary_click" className="group relative flex items-start gap-3 overflow-hidden rounded-xl border border-slate-200 bg-white p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-500/30 hover:shadow-[0_14px_30px_-18px_rgba(34,197,94,0.4)]">
+            <HoverEdge rounded="rounded-xl" />
+            <span className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-emerald-600" style={greenChip}>
+              <DSIcon name="dumbbell" size={16} />
+            </span>
+            <div className="relative min-w-0 flex-1">
+              <h3 className="font-syne text-sm font-black tracking-tight text-gray-950">Sou personal trainer</h3>
+              <p className="mt-1 text-xs text-slate-500">Veja operação profissional e gestão completa.</p>
+            </div>
+            <DSIcon name="arrowUpRight" size={15} className="relative shrink-0 text-slate-300 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-emerald-500" />
           </TrackedCtaLink>
         </div>
       </section>
 
-      <FaqInline items={faq} />
+      <FaqInline items={faq} id="faq" />
       <ArticleShare title={post.title} slug={post.slug} />
       <ArticleRelated posts={related} />
 

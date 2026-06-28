@@ -15,7 +15,6 @@ import type { BlogPost } from '@/data/blog-posts'
 import { CATEGORY_ICON } from '@/data/blog-posts'
 import { Breadcrumbs } from '@/components/shared/breadcrumbs'
 import { badgeStyle, lightCard } from '@/components/shared/light-section'
-import { BrandMark } from '@/components/ui/brand-mark'
 
 interface ArticleHeaderProps {
   post: BlogPost
@@ -58,10 +57,13 @@ export function ArticleHeader({ post }: ArticleHeaderProps) {
       >
         <div className="flex items-center gap-3.5">
           <span className="relative shrink-0">
-            <BrandMark
-              size={44}
-              idSuffix="author"
-              className="rounded-[13px] shadow-[0_8px_20px_-8px_rgba(34,197,94,0.6)] ring-1 ring-black/5"
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/favicons/favicon.svg"
+              alt="VFIT"
+              width={44}
+              height={44}
+              className="rounded-[12px] shadow-[0_8px_20px_-8px_rgba(58,181,74,0.55)] ring-1 ring-black/5"
             />
             {/* selo "verificado" sobre o canto do mark */}
             <span
@@ -94,19 +96,26 @@ export function ArticleHeader({ post }: ArticleHeaderProps) {
         </div>
       </div>
 
-      {/* Hero Image */}
-      <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-slate-200 shadow-[0_18px_50px_-20px_rgba(15,23,42,0.35)]">
-        <Image
-          src={post.image}
-          alt={post.title}
-          fill
-          className="object-cover"
-          sizes="(max-width: 768px) 100vw, 768px"
-          priority
-          fetchPriority="high"
-        />
-        <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-black/5" />
-      </div>
+      {/* Hero Image + crédito */}
+      <figure className="space-y-2">
+        <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-slate-200 shadow-[0_18px_50px_-20px_rgba(15,23,42,0.35)]">
+          <Image
+            src={post.image}
+            alt={post.title}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 768px"
+            priority
+            fetchPriority="high"
+          />
+          <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-black/5" />
+          {/* crédito sobreposto, canto inferior direito */}
+          <figcaption className="absolute bottom-2.5 right-2.5 inline-flex items-center gap-1.5 rounded-full bg-black/55 px-2.5 py-1 text-[11px] font-medium text-white/85 backdrop-blur-md">
+            <DSIcon name="camera" size={12} className="opacity-80" />
+            {post.imageCredit ?? 'Divulgação'}
+          </figcaption>
+        </div>
+      </figure>
     </header>
   )
 }

@@ -3,13 +3,13 @@
 // ============================================
 //
 // O que faz:
-//   Barra de compartilhamento com LINK CURTO (vfit.app.br/r/{shortId}) + botões
-//   por rede (WhatsApp, X, LinkedIn) com cor da marca no hover. O link curto é só
-//   um redirect 301 → canônica (ver public/_worker.js) e está em Disallow:/r/,
-//   então NÃO afeta o SEO. Copy-to-clipboard com feedback visual.
+//   Card de compartilhamento com cabeçalho, campo de LINK CURTO copiável
+//   (vfit.app.br/r/{shortId}) e botões por rede (WhatsApp, X, LinkedIn) com cor
+//   da marca no hover. O link curto é só um redirect 301 → canônica
+//   (ver public/_worker.js) e está em Disallow:/r/, então NÃO afeta o SEO.
 //
 // Exports principais:
-//   ArticleShare — barra de compartilhamento social (light)
+//   ArticleShare — card de compartilhamento social (light)
 'use client'
 
 import { DSIcon } from '@/components/ui/ds-icon'
@@ -27,7 +27,7 @@ export function ArticleShare({ title, slug }: ArticleShareProps) {
   const [copied, setCopied] = useState(false)
 
   const shortPath = getShortPath(slug) // ex.: /r/ia-gratis
-  const shortUrl = `${SITE}${shortPath}` // compartilhado: redireciona p/ canônica
+  const shortUrl = `${SITE}${shortPath}`
   const encodedTitle = encodeURIComponent(title)
   const encodedShort = encodeURIComponent(shortUrl)
 
@@ -42,45 +42,45 @@ export function ArticleShare({ title, slug }: ArticleShareProps) {
   }
 
   const net =
-    'flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 transition-all duration-300 hover:-translate-y-0.5'
+    'flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 transition-all duration-300 hover:-translate-y-0.5'
 
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_1px_2px_rgba(15,23,42,0.04),0_14px_34px_-22px_rgba(15,23,42,0.16)] sm:p-5">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        {/* Rótulo + link curto */}
-        <div className="flex min-w-0 items-center gap-3">
-          <span
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-emerald-600"
-            style={{
-              background: 'linear-gradient(180deg, rgba(34,197,94,0.16), rgba(34,197,94,0.05))',
-              border: '1px solid rgba(34,197,94,0.22)',
-            }}
-          >
-            <DSIcon name="share2" size={18} />
-          </span>
-          <div className="min-w-0">
-            <p className="text-sm font-bold text-gray-950">Compartilhar</p>
-            <button
-              onClick={handleCopy}
-              className="group mt-0.5 flex max-w-full items-center gap-1.5 text-left"
-              aria-label="Copiar link curto"
-            >
-              <span className="truncate font-mono text-xs text-slate-500">
-                vfit.app.br<span className="font-semibold text-emerald-700">{shortPath}</span>
-              </span>
-              <span
-                className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-md transition-colors ${
-                  copied ? 'text-emerald-600' : 'text-slate-400 group-hover:text-emerald-700'
-                }`}
-              >
-                <DSIcon name={copied ? 'check' : 'copy'} size={13} />
-              </span>
-              {copied && <span className="text-xs font-semibold text-emerald-700">Copiado!</span>}
-            </button>
-          </div>
+    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04),0_18px_40px_-26px_rgba(15,23,42,0.16)] sm:p-6">
+      {/* Cabeçalho */}
+      <div className="mb-4 flex items-center gap-3">
+        <span
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-emerald-600"
+          style={{ background: 'linear-gradient(180deg, rgba(34,197,94,0.16), rgba(34,197,94,0.05))', border: '1px solid rgba(34,197,94,0.22)' }}
+        >
+          <DSIcon name="share2" size={18} />
+        </span>
+        <div>
+          <p className="text-sm font-bold text-gray-950">Compartilhe este artigo</p>
+          <p className="text-xs text-slate-500">Link curto e direto — sem rastreadores</p>
         </div>
+      </div>
 
-        {/* Botões por rede */}
+      {/* Campo de link curto + redes */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <button
+          onClick={handleCopy}
+          className="group flex min-w-0 flex-1 items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-3 text-left transition-colors hover:border-emerald-500/40 hover:bg-emerald-50/50"
+          aria-label="Copiar link curto"
+        >
+          <DSIcon name="link" size={15} className="shrink-0 text-emerald-600" />
+          <span className="min-w-0 flex-1 truncate font-mono text-[13px] text-slate-600">
+            vfit.app.br<span className="font-semibold text-emerald-700">{shortPath}</span>
+          </span>
+          <span
+            className={`flex shrink-0 items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-bold transition-colors ${
+              copied ? 'bg-emerald-500 text-white' : 'bg-white text-slate-600 ring-1 ring-slate-200 group-hover:text-emerald-700'
+            }`}
+          >
+            <DSIcon name={copied ? 'check' : 'copy'} size={13} />
+            {copied ? 'Copiado!' : 'Copiar'}
+          </span>
+        </button>
+
         <div className="flex items-center gap-2">
           <a
             href={`https://wa.me/?text=${encodedTitle}%20${encodedShort}`}
@@ -89,9 +89,8 @@ export function ArticleShare({ title, slug }: ArticleShareProps) {
             className={`${net} hover:border-whatsapp/40 hover:bg-whatsapp/10 hover:text-[#1ebe5d] hover:shadow-[0_10px_22px_-10px_rgba(37,211,102,0.6)]`}
             aria-label="Compartilhar no WhatsApp"
           >
-            <DSIcon name="message" size={15} />
+            <DSIcon name="message" size={16} />
           </a>
-
           <a
             href={`https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedShort}`}
             target="_blank"
@@ -103,7 +102,6 @@ export function ArticleShare({ title, slug }: ArticleShareProps) {
               <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
             </svg>
           </a>
-
           <a
             href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedShort}`}
             target="_blank"
