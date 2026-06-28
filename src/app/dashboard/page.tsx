@@ -56,6 +56,7 @@ export default function DashboardPage() {
   const router = useRouter()
   const user = useAuthStore((s) => s.user)
   const isHydrated = useAuthStore((s) => s.isHydrated)
+  const isSplashFinished = useAuthStore((s) => s.isSplashFinished)
   const { effectiveType } = useEffectiveUserView()
 
   // Admin é redirecionado para o painel admin (exceto quando simulando personal/student)
@@ -86,16 +87,15 @@ export default function DashboardPage() {
     router.replace('/treinos')
   }, [isHydrated, effectiveType, router])
 
-  // Admin vê loading enquanto redireciona para /dashboard/admin (exceto simulação)
+  // Admin vê loading enquanto redireciona para /dashboard/admin (exceto simulação).
+  // Durante a splash → null (a splash cobre); pós-splash → texto calmo, sem anel girando
+  // (era esse anel que vazava como "loading antigo" por trás da splash).
   if (isHydrated && user?.user_type === 'admin' && effectiveType === 'admin') {
-    return (
+    return isSplashFinished ? (
       <div className="flex min-h-[60vh] items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <div className="h-10 w-10 animate-spin rounded-full border-4 border-brand-primary border-t-transparent" />
-          <p className="text-sm text-text-muted">Redirecionando para o painel admin...</p>
-        </div>
+        <p className="text-sm text-text-muted">Redirecionando para o painel admin...</p>
       </div>
-    )
+    ) : null
   }
 
   const stats = personalStats.data
@@ -106,16 +106,13 @@ export default function DashboardPage() {
   const hour = new Date().getHours()
   const greeting = hour < 12 ? 'Bom dia' : hour < 18 ? 'Boa tarde' : 'Boa noite'
 
-  // Student vê loading enquanto redireciona para /treinos
+  // Student vê loading enquanto redireciona para /treinos (mesmo tratamento: sem anel).
   if (isHydrated && effectiveType === 'student') {
-    return (
+    return isSplashFinished ? (
       <div className="flex min-h-[60vh] items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <div className="h-10 w-10 animate-spin rounded-full border-4 border-brand-primary border-t-transparent" />
-          <p className="text-sm text-text-muted">Redirecionando...</p>
-        </div>
+        <p className="text-sm text-text-muted">Redirecionando...</p>
       </div>
-    )
+    ) : null
   }
 
   if (isHydrated && effectiveType === 'personal' && onboarding.isLoading) {

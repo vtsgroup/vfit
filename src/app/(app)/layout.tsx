@@ -84,6 +84,7 @@ function AppShell({ children }: { children: React.ReactNode }) {
   const queryClient = useQueryClient()
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
   const isHydrated = useAuthStore((s) => s.isHydrated)
+  const isSplashFinished = useAuthStore((s) => s.isSplashFinished)
   const userType = useAuthStore((s) => s.user?.user_type)
   const [fabMenuOpen, setFabMenuOpen] = useState(false)
 
@@ -165,11 +166,27 @@ function AppShell({ children }: { children: React.ReactNode }) {
     pathname !== '/perfil/editar' &&
     pathname !== '/perfil/sobre'
 
-  if (!isHydrated) return <AppRouteLoader message="Preparando seu app..." />
-  if (isRedirectingToWelcome) return <AppRouteLoader message="Abrindo boas-vindas..." />
-  if (isRedirectingToDashboard) return <AppRouteLoader message="Abrindo painel profissional..." />
-  if (isEffectiveStudent && onboardingLoading) return <AppRouteLoader message="Carregando sua experiência..." />
-  if (isRedirectingToOnboarding) return <AppRouteLoader message="Abrindo personalização inicial..." />
+  // Enquanto a splash não terminou, ela é o ÚNICO loading visível (e fica no topo
+  // do z-index). Suprimimos qualquer loader full-page secundário nessa janela para
+  // não vazar um segundo loading por trás/junto da splash. `null` é invisível
+  // porque a splash (opaca) cobre tudo até sair de tela.
+  if (!isSplashFinished) {
+    if (
+      !isHydrated ||
+      isRedirectingToWelcome ||
+      isRedirectingToDashboard ||
+      (isEffectiveStudent && onboardingLoading) ||
+      isRedirectingToOnboarding
+    ) {
+      return null
+    }
+  } else {
+    if (!isHydrated) return <AppRouteLoader message="Preparando seu app..." />
+    if (isRedirectingToWelcome) return <AppRouteLoader message="Abrindo boas-vindas..." />
+    if (isRedirectingToDashboard) return <AppRouteLoader message="Abrindo painel profissional..." />
+    if (isEffectiveStudent && onboardingLoading) return <AppRouteLoader message="Carregando sua experiência..." />
+    if (isRedirectingToOnboarding) return <AppRouteLoader message="Abrindo personalização inicial..." />
+  }
 
   return (
     <OneSignalProvider>

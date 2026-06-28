@@ -19,6 +19,25 @@ import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/stores/auth-store'
 import { useSyncOnboarding } from '@/hooks/use-sync-onboarding'
 
+/**
+ * Tela de transição calma durante hydration/redirect.
+ *
+ * Enquanto a splash não terminou (isSplashFinished=false) ela é o ÚNICO loading
+ * visível e fica no topo do z-index → aqui retornamos `null` (invisível por baixo
+ * da splash opaca). Depois que a splash sai, mostramos só um fundo on-brand com
+ * o texto — SEM anel girando. Era o anel redondo aqui que aparecia como "loading
+ * antigo por de trás" da nova splash.
+ */
+function GateFallback({ label }: { label: string }) {
+  const isSplashFinished = useAuthStore((s) => s.isSplashFinished)
+  if (!isSplashFinished) return null
+  return (
+    <div className="flex min-h-dvh items-center justify-center bg-bg-dark">
+      <p className="text-sm font-medium text-white/40">{label}</p>
+    </div>
+  )
+}
+
 export function DashboardAuthGate({ children }: { children: React.ReactNode }) {
   const router = useRouter()
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
@@ -40,48 +59,14 @@ export function DashboardAuthGate({ children }: { children: React.ReactNode }) {
     }
   }, [isAuthenticated, isHydrated, userType, router])
 
-  // Enquanto não hidratou → tela mínima de loading (sem sidebar/header)
-  if (!isHydrated) {
-    return (
-      <div className="flex min-h-dvh items-center justify-center bg-bg-dark">
-        <div className="flex flex-col items-center gap-4">
-          <div className="relative h-12 w-12">
-            <div className="absolute inset-0 animate-spin rounded-full border-2 border-white/10 border-t-brand-primary" />
-          </div>
-          <p className="text-sm text-white/40 font-medium">Verificando sessão...</p>
-        </div>
-      </div>
-    )
-  }
+  // Enquanto não hidratou → coberto pela splash (null) ou fundo calmo pós-splash
+  if (!isHydrated) return <GateFallback label="Verificando sessão..." />
 
-  // Não autenticado → mostra nada (redirect em andamento)
-  if (!isAuthenticated) {
-    return (
-      <div className="flex min-h-dvh items-center justify-center bg-bg-dark">
-        <div className="flex flex-col items-center gap-4">
-          <div className="relative h-12 w-12">
-            <div className="absolute inset-0 animate-spin rounded-full border-2 border-white/10 border-t-brand-primary" />
-          </div>
-          <p className="text-sm text-white/40 font-medium">Redirecionando...</p>
-        </div>
-      </div>
-    )
-  }
+  // Não autenticado → redirect em andamento
+  if (!isAuthenticated) return <GateFallback label="Redirecionando..." />
 
   // Student autenticado vindo do PWA/start_url não deve ver shell do dashboard.
-  // Mantém uma tela estável até o replace para /treinos concluir.
-  if (userType === 'student') {
-    return (
-      <div className="flex min-h-dvh items-center justify-center bg-bg-dark">
-        <div className="flex flex-col items-center gap-4">
-          <div className="relative h-12 w-12">
-            <div className="absolute inset-0 animate-spin rounded-full border-2 border-white/10 border-t-brand-primary" />
-          </div>
-          <p className="text-sm text-white/40 font-medium">Abrindo app do aluno...</p>
-        </div>
-      </div>
-    )
-  }
+  if (userType === 'student') return <GateFallback label="Abrindo app do aluno..." />
 
   return <>{children}</>
 }

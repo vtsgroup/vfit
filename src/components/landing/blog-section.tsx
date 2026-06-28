@@ -107,14 +107,17 @@ function BlogCard({ post }: { post: BlogPost }) {
       {/* Glow verde no hover */}
       <span className="pointer-events-none absolute -inset-px z-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100 shadow-[0_24px_50px_-18px_rgba(34,197,94,0.5)]" />
 
-      {/* Image */}
+      {/* Image
+          Grid md:3-col dentro de max-w-6xl → card ~349px (não 33vw≈445px+ em telas largas).
+          vw menor (30vw) mantém o candidato 384w no srcset; px fixo (350px) acima de 1152px
+          impede baixar o 640w num slot de ~349px. CF serve o 384w via /cdn-cgi/image. */}
       <div className="relative h-44 overflow-hidden sm:h-48">
         <Image
           src={post.image}
           alt={post.title}
           fill
           className="object-cover transition-transform duration-500 ease-out-expo group-hover:scale-[1.07]"
-          sizes="(max-width: 768px) 100vw, 33vw"
+          sizes="(max-width: 768px) 100vw, (max-width: 1152px) 30vw, 350px"
         />
         {/* Duotone verde sutil no hover */}
         <div className="pointer-events-none absolute inset-0 bg-brand-primary/0 mix-blend-soft-light transition-colors duration-500 group-hover:bg-brand-primary/25" />

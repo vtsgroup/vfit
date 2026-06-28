@@ -66,14 +66,17 @@ export function BlogCard({ post }: BlogCardProps) {
       {/* Hairline superior no hover */}
       <span className="pointer-events-none absolute inset-x-5 top-0 z-30 h-px bg-linear-to-r from-transparent via-brand-primary/70 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
-      {/* Imagem */}
+      {/* Imagem
+          Grid lg:3-col dentro de max-w-5xl → card ~307px (não 33vw≈445px). O px fixo no
+          fim do `sizes` evita baixar o variante 640w num slot de 307px; o CF serve o 384w
+          (loader /cdn-cgi/image). Mantém vw menor antes p/ Next emitir o candidato 384w. */}
       <div className="relative h-44 overflow-hidden sm:h-48">
         <Image
           src={post.image}
           alt={post.title}
           fill
           className="object-cover transition-transform duration-500 ease-out-expo group-hover:scale-[1.07]"
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 310px"
         />
         {/* Duotone verde sutil no hover */}
         <div className="pointer-events-none absolute inset-0 bg-brand-primary/0 mix-blend-soft-light transition-colors duration-500 group-hover:bg-brand-primary/25" />

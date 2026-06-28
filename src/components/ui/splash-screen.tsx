@@ -10,7 +10,7 @@
  * v5 (2026-06-28): porte do splash "vfit-splash.html" (a abertura definitiva).
  *  - Marca V+wifi (favicon) com arcos desenhando, anéis emanando, glow respirando,
  *    grid à deriva + campo de partículas (determinístico, sem Math.random no render → SSR-safe).
- *  - Wordmark "VFIT" em Syne 800 (mais grossa) — fonte já carregada pelo app, sem fetch novo.
+ *  - Wordmark "VFIT" em Space Grotesk 900 (faux-bold + stroke) — fonte já carregada pelo app, sem fetch novo.
  *  - A linha verde virou BARRA DE LOADING real: progride enquanto carrega e COMPLETA quando
  *    a sessão fica pronta (isReady) — aí o splash sai. Nada de spinner redondo.
  *  - Mantém a API `isReady`, a re-entrada por sessão e a válvula de segurança (não prende
@@ -25,8 +25,9 @@ import { cn } from '@/lib/utils'
 
 const SPLASH_KEY = 'vfit-splash-v5'
 const ENTER_MS = 1100        // duração da entrada (icon/arcos/wordmark/barra)
-const MIN_VISIBLE = 620      // tempo mínimo visível (1ª carga) p/ a entrada aparecer
-const SAFETY_MS = 6500       // nunca prender o usuário atrás do splash
+const MIN_VISIBLE = 1300     // 1ª carga: segura até a ENTRADA completar (último arco ~1.28s)
+                            // antes de poder sair — app rápido não corta o logo no meio. Não loopa.
+const SAFETY_MS = 4000       // nunca prender o usuário atrás do splash (cap de delay se /auth/me travar)
 
 /* ─── Campo de partículas determinístico (sem Math.random no render → SSR-safe) ─── */
 function mulberry32(seed: number) {
@@ -87,7 +88,7 @@ function VFITMark({ instant }: { instant: boolean }) {
   )
 }
 
-export function SplashScreen({ isReady }: { isReady?: boolean }) {
+export function SplashScreen({ isReady, onFinished }: { isReady?: boolean; onFinished?: () => void }) {
   const [show, setShow] = useState(false)
   const [instant, setInstant] = useState(false)   // re-entrada na sessão → sem replay da entrada
   const [minDone, setMinDone] = useState(false)
@@ -137,6 +138,13 @@ export function SplashScreen({ isReady }: { isReady?: boolean }) {
     const t = setTimeout(() => setExiting(true), SAFETY_MS)
     return () => clearTimeout(t)
   }, [show, done])
+
+  // ─── Avisa quando a splash terminou (saiu de tela ou foi pulada) ───
+  // Enquanto não terminar, a splash é o ÚNICO loading visível; os loaders
+  // secundários ficam suprimidos até aqui (ver isSplashFinished no store).
+  useEffect(() => {
+    if (done) onFinished?.()
+  }, [done, onFinished])
 
   if (done || !show) return null
 
@@ -192,7 +200,9 @@ export function SplashScreen({ isReady }: { isReady?: boolean }) {
 
       <style>{`
         .vsp-root {
-          position: fixed; inset: 0; z-index: 9999;
+          /* z-index máximo: a splash SEMPRE fica acima de qualquer loader do app
+             (BrandLoader page z-9999, gates z-99999/z-999999) — nada pinta por cima dela */
+          position: fixed; inset: 0; z-index: 2147483646;
           display: flex; align-items: center; justify-content: center;
           overflow: hidden;
           /* borda #050a12 = manifest background_color → handoff TWA/PWA sem emenda */
@@ -201,6 +211,15 @@ export function SplashScreen({ isReady }: { isReady?: boolean }) {
           transition: opacity .6s cubic-bezier(.2,.8,.2,1), transform .6s cubic-bezier(.2,.8,.2,1);
         }
         .vsp-exit { opacity: 0; transform: scale(1.04); pointer-events: none; }
+        /* Na saída: congela as animações decorativas e libera as camadas da GPU.
+           Durante o fade de .6s, partículas/anéis parados são imperceptíveis — e isso
+           devolve GPU/main-thread para a página que está hidratando ATRÁS da splash
+           (elimina o "travamento" no momento mais pesado). Visual idêntico. */
+        .vsp-exit .vsp-grid,
+        .vsp-exit .vsp-dots i,
+        .vsp-exit .vsp-ring,
+        .vsp-exit .vsp-glow,
+        .vsp-exit .vsp-bar-shimmer { animation-play-state: paused; will-change: auto; }
 
         .vsp-bg { position: absolute; inset: 0; pointer-events: none; }
         .vsp-grid {
