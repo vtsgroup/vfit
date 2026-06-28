@@ -18,6 +18,8 @@ import {
   PillSweep,
   PillArrow,
   articleLinkClass,
+  TableOfContents,
+  articleSlug,
 } from '@/components/blog/article-kit'
 import { FaqInline } from '@/components/shared/faq-inline'
 import { articleSchema } from '@/lib/schemas'
@@ -82,6 +84,14 @@ export default function NutricionistaPersonalTrainerTrabalhoConjuntoPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(article) }} />
 
       <ArticleHeader post={post} />
+
+      <TableOfContents
+        items={[
+          { id: articleSlug('Onde as parcerias mais erram'), label: 'Onde as parcerias erram' },
+          { id: articleSlug('Por que essa integração melhora retenção'), label: 'Por que melhora retenção' },
+          { id: 'faq', label: 'Perguntas frequentes' },
+        ]}
+      />
 
       {/* ── Introdução ── */}
       <section className="space-y-5 text-[17px] leading-relaxed text-slate-600">
@@ -178,7 +188,7 @@ export default function NutricionistaPersonalTrainerTrabalhoConjuntoPage() {
         </p>
       </section>
 
-      <FaqInline items={faq} />
+      <FaqInline items={faq} id="faq" />
       <ArticleShare title={post.title} slug={post.slug} />
       <ArticleRelated posts={related} />
 

@@ -51,10 +51,21 @@ export function ArticleShell({ children }: { children: ReactNode }) {
   )
 }
 
+/* ─── Slug p/ anchors (usado por ArticleH2 e pelo ToC — mesma função = match garantido) ─── */
+export function articleSlug(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+}
+
 /* ─── Eyebrow pill mint + heading Syne (substitui label+h2 escuro) ─── */
 export function ArticleH2({ id, eyebrow, children }: { id?: string; eyebrow?: string; children: ReactNode }) {
+  const autoId = id ?? (typeof children === 'string' ? articleSlug(children) : undefined)
   return (
-    <div id={id} className="space-y-3 scroll-mt-24">
+    <div id={autoId} className="space-y-3 scroll-mt-24">
       {eyebrow && (
         <span
           className="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-[10px] uppercase tracking-[0.18em]"

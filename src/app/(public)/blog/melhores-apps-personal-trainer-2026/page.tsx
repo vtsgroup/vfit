@@ -17,6 +17,8 @@ import {
   PillSweep,
   PillArrow,
   articleLinkClass,
+  TableOfContents,
+  articleSlug,
 } from '@/components/blog/article-kit'
 import { FaqInline } from '@/components/shared/faq-inline'
 import { articleSchema } from '@/lib/schemas'
@@ -93,6 +95,15 @@ export default function MelhoresAppsPersonalTrainer2026Page() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemList) }} />
 
       <ArticleHeader post={post} />
+
+      <TableOfContents
+        items={[
+          { id: articleSlug('O que realmente comparar'), label: 'O que realmente comparar' },
+          { id: articleSlug('Comparativo rápido'), label: 'Comparativo rápido' },
+          { id: articleSlug('Quando faz sentido sair da planilha'), label: 'Quando sair da planilha' },
+          { id: 'faq', label: 'Perguntas frequentes' },
+        ]}
+      />
 
       {/* ── Introdução ── */}
       <section className="space-y-5 text-[17px] leading-relaxed text-slate-600">
@@ -216,7 +227,7 @@ export default function MelhoresAppsPersonalTrainer2026Page() {
         Se você quer centralizar IA, gestão, cobrança e experiência do aluno, o VFIT tende a fazer mais sentido. Se está só começando e ainda valida sua operação, talvez a prioridade seja migrar de processos manuais para qualquer rotina digital consistente — e depois sofisticar.
       </Callout>
 
-      <FaqInline items={faq} />
+      <FaqInline items={faq} id="faq" />
       <ArticleShare title={post.title} slug={post.slug} />
       <ArticleRelated posts={related} />
 

@@ -37,6 +37,8 @@ import {
   PillSweep,
   PillArrow,
   articleLinkClass,
+  TableOfContents,
+  articleSlug,
 } from '@/components/blog/article-kit'
 import { FaqInline } from '@/components/shared/faq-inline'
 import { FAQ_BLOG_RETENCAO } from '@/data/faqs'
@@ -134,6 +136,16 @@ export default function RetencaoAlunosPage() {
       />
 
       <ArticleHeader post={post} />
+
+      <TableOfContents
+        items={[
+          { id: articleSlug('Números que todo personal precisa conhecer'), label: 'Números de mercado' },
+          { id: articleSlug('As 5 alavancas da retenção'), label: 'As 5 alavancas da retenção' },
+          { id: articleSlug('Framework de comunicação proativa'), label: 'Comunicação proativa' },
+          { id: articleSlug('Métricas que você deve acompanhar'), label: 'Métricas para acompanhar' },
+          { id: 'faq', label: 'Perguntas frequentes' },
+        ]}
+      />
 
       {/* ── Introdução ── */}
       <section className="space-y-5 text-[17px] leading-relaxed text-slate-600">
@@ -253,7 +265,7 @@ export default function RetencaoAlunosPage() {
       </section>
 
       {/* ── FAQ ── */}
-      <FaqInline items={FAQ_BLOG_RETENCAO} />
+      <FaqInline items={FAQ_BLOG_RETENCAO} id="faq" />
 
       {/* ── ICP switcher ── */}
       <section className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6" style={{ boxShadow: '0 1px 2px rgba(15,23,42,0.04), 0 18px 40px -24px rgba(15,23,42,0.14)' }}>

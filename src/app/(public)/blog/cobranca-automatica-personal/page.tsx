@@ -37,6 +37,8 @@ import {
   PillSweep,
   PillArrow,
   articleLinkClass,
+  TableOfContents,
+  articleSlug,
 } from '@/components/blog/article-kit'
 import { FaqInline } from '@/components/shared/faq-inline'
 import { FAQ_BLOG_COBRANCA } from '@/data/faqs'
@@ -111,6 +113,17 @@ export default function CobrancaAutomaticaPage() {
       />
 
       <ArticleHeader post={post} />
+
+      <TableOfContents
+        items={[
+          { id: articleSlug('PIX vs Cartão vs Boleto'), label: 'PIX vs Cartão vs Boleto' },
+          { id: articleSlug('Como configurar em 5 passos'), label: 'Configurar em 5 passos' },
+          { id: articleSlug('Régua de lembretes automática'), label: 'Régua de lembretes' },
+          { id: articleSlug('Receita previsível: o superpoder financeiro'), label: 'Receita previsível' },
+          { id: articleSlug('Resultados esperados'), label: 'Resultados esperados' },
+          { id: 'faq', label: 'Perguntas frequentes' },
+        ]}
+      />
 
       {/* ── Introdução ── */}
       <section className="space-y-5 text-[17px] leading-relaxed text-slate-600">
@@ -243,7 +256,7 @@ export default function CobrancaAutomaticaPage() {
       </section>
 
       {/* ── FAQ ── */}
-      <FaqInline items={FAQ_BLOG_COBRANCA} />
+      <FaqInline items={FAQ_BLOG_COBRANCA} id="faq" />
 
       {/* ── ICP switcher ── */}
       <section className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6" style={{ boxShadow: '0 1px 2px rgba(15,23,42,0.04), 0 18px 40px -24px rgba(15,23,42,0.14)' }}>

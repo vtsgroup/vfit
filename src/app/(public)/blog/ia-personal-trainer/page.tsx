@@ -38,6 +38,8 @@ import {
   PillSweep,
   PillArrow,
   articleLinkClass,
+  TableOfContents,
+  articleSlug,
 } from '@/components/blog/article-kit'
 import { FaqInline } from '@/components/shared/faq-inline'
 import { FAQ_BLOG_IA } from '@/data/faqs'
@@ -105,6 +107,18 @@ export default function IAPersonalTrainerPage() {
       />
 
       <ArticleHeader post={post} />
+
+      <TableOfContents
+        items={[
+          { id: articleSlug('4 passos para usar IA com qualidade'), label: '4 passos para usar IA' },
+          { id: articleSlug('Por que usar IA na prescrição de treinos?'), label: 'Por que usar IA' },
+          { id: articleSlug('Como a IA gera treinos de qualidade'), label: 'Como a IA gera treinos' },
+          { id: articleSlug('IA genérica vs IA especializada'), label: 'IA genérica vs especializada' },
+          { id: articleSlug('Quando NÃO usar IA'), label: 'Quando NÃO usar IA' },
+          { id: articleSlug('O que a ciência diz sobre IA no fitness'), label: 'O que a ciência diz' },
+          { id: 'faq', label: 'Perguntas frequentes' },
+        ]}
+      />
 
       {/* ── Introdução ── */}
       <section className="space-y-5 text-[17px] leading-relaxed text-slate-600">
@@ -235,7 +249,7 @@ export default function IAPersonalTrainerPage() {
       </section>
 
       {/* ── FAQ ── */}
-      <FaqInline items={FAQ_BLOG_IA} />
+      <FaqInline items={FAQ_BLOG_IA} id="faq" />
 
       {/* ── ICP switcher ── */}
       <section className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6" style={{ boxShadow: '0 1px 2px rgba(15,23,42,0.04), 0 18px 40px -24px rgba(15,23,42,0.14)' }}>

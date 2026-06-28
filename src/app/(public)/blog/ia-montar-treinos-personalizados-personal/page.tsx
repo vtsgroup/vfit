@@ -19,6 +19,8 @@ import {
   PillSweep,
   PillArrow,
   articleLinkClass,
+  TableOfContents,
+  articleSlug,
 } from '@/components/blog/article-kit'
 import { FaqInline } from '@/components/shared/faq-inline'
 import { articleSchema, howToSchema } from '@/lib/schemas'
@@ -85,6 +87,15 @@ export default function IAMontarTreinosPersonalizadosPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema(post.title, steps)) }} />
 
       <ArticleHeader post={post} />
+
+      <TableOfContents
+        items={[
+          { id: articleSlug('Como gerar um treino em menos de 2 minutos'), label: 'Gerar treino em 2 minutos' },
+          { id: articleSlug('Quais dados a IA precisa para acertar mais'), label: 'Quais dados a IA precisa' },
+          { id: articleSlug('IA genérica vs plataforma especializada'), label: 'IA genérica vs especializada' },
+          { id: 'faq', label: 'Perguntas frequentes' },
+        ]}
+      />
 
       {/* ── Introdução ── */}
       <section className="space-y-5 text-[17px] leading-relaxed text-slate-600">
@@ -192,7 +203,7 @@ export default function IAMontarTreinosPersonalizadosPage() {
         </div>
       </section>
 
-      <FaqInline items={faq} />
+      <FaqInline items={faq} id="faq" />
       <ArticleShare title={post.title} slug={post.slug} />
       <ArticleRelated posts={related} />
 
