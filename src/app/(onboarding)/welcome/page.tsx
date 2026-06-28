@@ -14,7 +14,6 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
-import { Button } from '@/components/ui/button'
 import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 import { useAuthStore } from '@/stores/auth-store'
 import { useOnboardingStore } from '@/stores/onboarding-store'
@@ -45,6 +44,27 @@ const CONVERSION_POINTS: { icon: DSIconName; title: string; text: string }[] = [
   { icon: 'shieldCheck', title: 'Tudo liberado', text: 'Sem cartão. 30 dias com acesso completo, de graça.' },
   { icon: 'trophy', title: 'Sem compromisso', text: 'Use tudo por 30 dias. Continua só se quiser.' },
 ] as const
+
+/* CTA primário no estilo do hero da home: pill verde gradiente + shimmer + chip navy com seta */
+function WelcomeCtaPill({ label, icon, onClick, full = false }: { label: string; icon: DSIconName; onClick: () => void; full?: boolean }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`group/cta relative inline-flex h-14 items-center justify-center gap-3 overflow-hidden rounded-full pl-7 pr-2 text-[13px] font-black uppercase tracking-wider text-white transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] [text-shadow:0_1px_2px_rgba(2,44,34,0.5)] ${full ? 'w-full' : ''}`}
+      style={{
+        background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 55%, #15803d 100%)',
+        boxShadow: '0 12px 30px -6px rgba(0,0,0,0.55), 0 6px 22px -4px rgba(34,197,94,0.55), inset 0 1px 0 rgba(255,255,255,0.42), inset 0 -1px 0 rgba(6,78,59,0.5)',
+      }}
+    >
+      <span aria-hidden className="pointer-events-none absolute inset-0 -translate-x-[120%] bg-linear-to-r from-transparent via-white/40 to-transparent transition-transform duration-700 group-hover/cta:translate-x-[120%]" />
+      <DSIcon name={icon} size={17} className="relative z-10" />
+      <span className="relative z-10">{label}</span>
+      <span className="relative z-10 flex h-10 w-10 items-center justify-center rounded-full bg-[#08122B] shadow-[inset_0_1px_0_rgba(255,255,255,0.16)]">
+        <DSIcon name="arrowRight" size={17} className="text-[#4ADE80] transition-transform duration-300 group-hover/cta:translate-x-0.5" />
+      </span>
+    </button>
+  )
+}
 
 export default function WelcomePage() {
   const router = useRouter()
@@ -173,15 +193,12 @@ export default function WelcomePage() {
           </div>
 
           <div className="mt-6 w-full lg:hidden">
-            <Button
+            <WelcomeCtaPill
+              full
               onClick={handlePrimaryStudentFlow}
-              variant="primary"
-              size="lg"
-              className="w-full"
-            >
-              <DSIcon name={hasSavedProgress ? 'play' : 'graduationCap'} size={18} />
-              {hasSavedProgress ? 'Continuar meu plano' : 'Criar meu plano grátis'}
-            </Button>
+              icon={hasSavedProgress ? 'play' : 'graduationCap'}
+              label={hasSavedProgress ? 'Continuar meu plano' : 'Criar meu plano grátis'}
+            />
 
             <div className="mt-2 text-center text-xs text-white/65">
               {hasSavedProgress ? (
@@ -341,10 +358,11 @@ export default function WelcomePage() {
             <Link href="/register/personal?from=welcome" className="text-sm font-semibold text-slate-400 transition-colors hover:text-white">
               Sou Personal
             </Link>
-            <Button onClick={handlePrimaryStudentFlow} size="lg">
-              <DSIcon name={hasSavedProgress ? 'play' : 'sparkles'} size={18} />
-              {hasSavedProgress ? 'Continuar meu plano' : 'Criar meu plano grátis'}
-            </Button>
+            <WelcomeCtaPill
+              onClick={handlePrimaryStudentFlow}
+              icon={hasSavedProgress ? 'play' : 'sparkles'}
+              label={hasSavedProgress ? 'Continuar meu plano' : 'Criar meu plano grátis'}
+            />
           </div>
         </div>
       </div>
