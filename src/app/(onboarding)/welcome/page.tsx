@@ -11,7 +11,7 @@
 
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, type CSSProperties } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
@@ -44,6 +44,47 @@ const CONVERSION_POINTS: { icon: DSIconName; title: string; text: string }[] = [
   { icon: 'shieldCheck', title: 'Tudo liberado', text: 'Sem cartão. 30 dias com acesso completo, de graça.' },
   { icon: 'trophy', title: 'Sem compromisso', text: 'Use tudo por 30 dias. Continua só se quiser.' },
 ] as const
+
+/* ─── Gramática de card senior (vidro + borda-gradiente + chip de ícone com glow) ─── */
+const cardGlass: CSSProperties = {
+  background: 'linear-gradient(160deg, rgba(255,255,255,0.058) 0%, rgba(255,255,255,0.02) 100%)',
+  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), 0 18px 40px -28px rgba(0,0,0,0.72)',
+  backdropFilter: 'blur(18px) saturate(140%)',
+  WebkitBackdropFilter: 'blur(18px) saturate(140%)',
+}
+
+function CardEdge({ radius = 'rounded-2xl' }: { radius?: string }) {
+  return (
+    <>
+      <span
+        aria-hidden="true"
+        className={`pointer-events-none absolute inset-0 ${radius} opacity-55 transition-opacity duration-300 group-hover:opacity-100`}
+        style={{
+          padding: '1px',
+          background: 'linear-gradient(135deg, rgba(52,211,153,0.42) 0%, rgba(132,204,22,0.12) 45%, transparent 72%)',
+          WebkitMask: 'linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)',
+          WebkitMaskComposite: 'xor',
+          maskComposite: 'exclude',
+        }}
+      />
+      <span aria-hidden="true" className="pointer-events-none absolute inset-x-5 top-0 h-px bg-linear-to-r from-transparent via-white/22 to-transparent" />
+    </>
+  )
+}
+
+function IconChip({ icon, size = 18, box = 'h-10 w-10 rounded-2xl' }: { icon: DSIconName; size?: number; box?: string }) {
+  return (
+    <span
+      className={`relative flex shrink-0 items-center justify-center border border-emerald-300/28 text-emerald-200 ${box}`}
+      style={{
+        background: 'linear-gradient(180deg, rgba(52,211,153,0.22) 0%, rgba(34,197,94,0.05) 100%)',
+        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.2), 0 6px 16px -8px rgba(34,197,94,0.55)',
+      }}
+    >
+      <DSIcon name={icon} size={size} className="[filter:drop-shadow(0_0_6px_rgba(52,211,153,0.55))]" />
+    </span>
+  )
+}
 
 /* CTA primário no estilo do hero da home: pill verde gradiente + shimmer + chip navy com seta */
 function WelcomeCtaPill({ label, icon, onClick, full = false }: { label: string; icon: DSIconName; onClick: () => void; full?: boolean }) {
@@ -237,12 +278,13 @@ export default function WelcomePage() {
             </button>
           </div>
 
-          <div className="mt-8 hidden w-full max-w-xl gap-2.5 sm:grid sm:grid-cols-3">
+          <div className="mt-8 hidden w-full max-w-xl gap-3 sm:grid sm:grid-cols-3">
             {CONVERSION_POINTS.map((point) => (
-              <div key={point.title} className="vfit-flow-panel-soft rounded-2xl px-3 py-3">
-                <DSIcon name={point.icon} size={17} className="text-emerald-200" />
-                <p className="mt-2 text-[12px] font-black text-white">{point.title}</p>
-                <p className="mt-1 text-[10px] font-medium leading-4 text-slate-400">{point.text}</p>
+              <div key={point.title} className="group relative overflow-hidden rounded-2xl border border-white/8 p-4 transition-transform duration-300 hover:-translate-y-0.5" style={cardGlass}>
+                <CardEdge />
+                <IconChip icon={point.icon} size={17} box="h-9 w-9 rounded-xl" />
+                <p className="relative mt-3 text-[12px] font-black text-white">{point.title}</p>
+                <p className="relative mt-1 text-[10px] font-medium leading-4 text-slate-400">{point.text}</p>
               </div>
             ))}
           </div>
@@ -272,26 +314,32 @@ export default function WelcomePage() {
                 <p className="text-[11px] font-black uppercase tracking-[0.14em] text-emerald-200">Prévia do seu plano</p>
                 <h2 className="mt-1 text-[22px] font-black leading-tight text-white">A IA transforma respostas em treino.</h2>
               </div>
-              <div className="flex h-13 w-13 shrink-0 items-center justify-center rounded-2xl border border-emerald-300/18 bg-emerald-300/10 text-emerald-200">
-                <DSIcon name="brainCircuit" size={25} />
-              </div>
+              <IconChip icon="brainCircuit" size={24} box="h-13 w-13 rounded-2xl" />
             </div>
 
             <div className="mt-5 space-y-2.5">
               {PLAN_SIGNALS.map((signal, i) => (
                 <div
                   key={signal.label}
-                  className="group rounded-2xl border border-white/9 bg-white/6 p-3 shadow-glass-inset-sm transition-all duration-300 hover:border-emerald-300/24 hover:bg-emerald-300/8"
-                  style={{ animation: `welcome-slide-right 0.5s ease-out ${360 + i * 90}ms both` }}
+                  className="group relative overflow-hidden rounded-2xl border border-white/8 p-3 transition-all duration-300 hover:-translate-y-0.5"
+                  style={{
+                    background: 'linear-gradient(160deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.022) 100%)',
+                    boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08)',
+                    animation: `welcome-slide-right 0.5s ease-out ${360 + i * 90}ms both`,
+                  }}
                 >
-                  <div className="flex items-start gap-3">
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[15px] border border-white/10 bg-white/7 text-emerald-200 transition-transform duration-300 group-hover:scale-105">
-                      <DSIcon name={signal.icon} size={18} />
-                    </span>
+                  <CardEdge />
+                  <div className="relative flex items-center gap-3">
+                    <IconChip icon={signal.icon} size={18} box="h-10 w-10 rounded-[14px]" />
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center justify-between gap-2">
-                        <p className="text-[12px] font-black text-white">{signal.label}</p>
-                        <DSIcon name="check" size={14} className="text-emerald-200" />
+                        <p className="text-[12.5px] font-black text-white">{signal.label}</p>
+                        <span
+                          className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-bg-base"
+                          style={{ background: 'linear-gradient(135deg, #34e565, #16a34a)', boxShadow: '0 2px 8px -1px rgba(34,197,94,0.5), inset 0 1px 0 rgba(255,255,255,0.4)' }}
+                        >
+                          <DSIcon name="check" size={12} />
+                        </span>
                       </div>
                       <p className="mt-0.5 text-[11px] font-medium leading-4 text-slate-400">{signal.value}</p>
                     </div>
@@ -317,26 +365,29 @@ export default function WelcomePage() {
 
           <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
             {RETENTION_LOOP.map((item) => (
-              <div key={item.title} className="vfit-flow-panel-soft rounded-2xl p-3">
-                <div className="flex items-center gap-2">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-[12px] bg-white/8 text-emerald-200">
-                    <DSIcon name={item.icon} size={15} />
-                  </span>
-                  <p className="text-[12px] font-black text-white">{item.title}</p>
+              <div key={item.title} className="group relative overflow-hidden rounded-2xl border border-white/8 p-3.5 transition-transform duration-300 hover:-translate-y-0.5" style={cardGlass}>
+                <CardEdge />
+                <div className="relative flex items-center gap-2.5">
+                  <IconChip icon={item.icon} size={15} box="h-9 w-9 rounded-xl" />
+                  <p className="text-[12.5px] font-black text-white">{item.title}</p>
                 </div>
-                <p className="mt-2 text-[10px] font-medium leading-4 text-slate-400">{item.text}</p>
+                <p className="relative mt-2.5 text-[10px] font-medium leading-4 text-slate-400">{item.text}</p>
               </div>
             ))}
           </div>
 
-          <div className="vfit-flow-panel-soft rounded-3xl p-4">
-            <div className="flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-bg-base">
-                <DSIcon name="messageCircle" size={23} />
-              </div>
+          <div className="group relative overflow-hidden rounded-3xl border border-white/8 p-4 sm:p-5" style={cardGlass}>
+            <CardEdge radius="rounded-3xl" />
+            <div className="relative flex items-center gap-3.5">
+              <span
+                className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-bg-base"
+                style={{ background: 'linear-gradient(135deg, #34e565, #16a34a)', boxShadow: '0 8px 20px -6px rgba(34,197,94,0.55), inset 0 1px 0 rgba(255,255,255,0.4)' }}
+              >
+                <DSIcon name="messageCircle" size={22} />
+              </span>
               <div>
-                <p className="text-sm font-black text-white">“Agora eu sei exatamente o que fazer.”</p>
-                <p className="text-xs text-slate-400">Você sai com direção, tempo e intensidade definidos.</p>
+                <p className="text-sm font-black leading-snug text-white">“Agora eu sei exatamente o que fazer.”</p>
+                <p className="mt-0.5 text-xs leading-5 text-slate-400">Você sai com direção, tempo e intensidade definidos.</p>
               </div>
             </div>
           </div>
