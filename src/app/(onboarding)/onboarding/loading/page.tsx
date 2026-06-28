@@ -4,6 +4,7 @@
  * src/app/(onboarding)/onboarding/loading/page.tsx
  *
  * Loading Screen — Geração do plano com IA
+ * Ultra-modern redesign: Animated logo + mesh gradient + floating orbs
  *
  * Fases animadas: Analisando perfil → Selecionando exercícios → Montando plano → Otimizando
  * Chama POST /api/v1/plans/generate com dados do onboarding
@@ -17,6 +18,13 @@ import { api } from '@/lib/api-client'
 import { useAuthStore } from '@/stores/auth-store'
 import { Button } from '@/components/ui/button'
 import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
+import {
+  AnimatedLogo,
+  FloatingOrbs,
+  MeshGradientBg,
+  AnimatedProgressBar,
+} from '@/components/onboarding/onboarding-animations'
+import { motion } from 'framer-motion'
 
 // ─── Fases do loading ───
 const PHASES: { label: string; icon: DSIconName; duration: number }[] = [
@@ -161,47 +169,87 @@ export default function OnboardingLoadingPage() {
   }
 
   return (
-    <div className="vfit-flow-bg relative flex min-h-dvh flex-col items-center justify-center overflow-hidden px-6 text-white">
+    <div className="relative flex min-h-dvh flex-col items-center justify-center overflow-hidden px-6 text-white bg-slate-950">
+      {/* ─── Mesh Gradient Background ─── */}
+      <MeshGradientBg animate />
+
+      {/* ─── Floating Orbs ─── */}
+      <FloatingOrbs />
+
+      {/* ─── Background grid (subtle) ─── */}
       <div className="vfit-flow-grid pointer-events-none absolute inset-0" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-56 bg-linear-to-b from-white/8 to-transparent" />
-      {/* ─── Pulsing orb with glow effect ─── */}
-      <div className="relative mb-10">
-        <div className="absolute inset-0 h-36 w-36 animate-pulse rounded-[2rem] bg-emerald-300/20 blur-3xl" />
-        <div className="vfit-flow-panel relative flex h-36 w-36 items-center justify-center rounded-[2rem]">
-          <DSIcon name={phase.icon} className="h-14 w-14 text-brand-primary transition-all duration-500" key={phase.icon} />
+
+      {/* ─── Top light gradient ─── */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-56 bg-linear-to-b from-white/5 to-transparent" />
+
+      {/* ─── Content container ─── */}
+      <div className="relative z-10 flex flex-col items-center justify-center gap-0">
+        {/* ─── Animated Logo as Protagonist ─── */}
+        <div className="mb-12">
+          <AnimatedLogo size="md" glowColor="rgba(34, 197, 94, 0.7)">
+            <DSIcon
+              name={phase.icon}
+              className="h-16 w-16 text-brand-primary transition-all duration-500"
+              key={phase.icon}
+            />
+          </AnimatedLogo>
         </div>
+
+        {/* ─── Phase label with animation ─── */}
+        <motion.div
+          key={phase.label}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.5 }}
+          className="mb-3 text-center"
+        >
+          <h2 className="text-3xl font-black leading-tight text-white">
+            {phase.label}
+          </h2>
+        </motion.div>
+
+        <p className="mb-10 max-w-sm text-center text-sm leading-6 text-slate-300">
+          Cruzando seus dados com intensidade, tempo disponível e objetivo principal.
+        </p>
+
+        {/* ─── Progress bar with enhanced animation ─── */}
+        <div className="w-full max-w-xs space-y-3">
+          <AnimatedProgressBar progress={progress} />
+          <motion.div className="flex items-center justify-between text-xs text-slate-400">
+            <motion.span
+              animate={{ opacity: [0.5, 1, 0.5] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              Passo {currentPhase + 1}/{PHASES.length}
+            </motion.span>
+            <motion.span
+              key={Math.round(progress)}
+              initial={{ scale: 1.2, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.3 }}
+              className="font-semibold text-brand-primary"
+            >
+              {Math.round(progress)}%
+            </motion.span>
+          </motion.div>
+        </div>
+
+        {/* ─── Time estimate badge ─── */}
+        <motion.p
+          className="mt-10 flex max-w-xs items-center justify-center gap-2 rounded-2xl backdrop-blur-md border border-emerald-500/20 px-4 py-3 text-center text-xs text-slate-300"
+          style={{
+            background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.5) 100%)',
+            boxShadow: 'inset 0 1px 12px rgba(34, 197, 94, 0.1)',
+          }}
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.3, duration: 0.4 }}
+        >
+          <DSIcon name="clock" className="h-3.5 w-3.5 text-brand-primary" />
+          <span>Tempo estimado: 30-45 segundos</span>
+        </motion.p>
       </div>
-
-      {/* ─── Phase label ─── */}
-      <h2
-        className="mb-3 text-center text-2xl font-black text-white transition-all duration-500"
-        key={phase.label}
-      >
-        {phase.label}
-      </h2>
-      <p className="mb-8 max-w-xs text-center text-sm leading-6 text-slate-400">
-        Cruzando seus dados com intensidade, tempo disponível e objetivo principal.
-      </p>
-
-      {/* ─── Progress bar with step counter ─── */}
-      <div className="w-full max-w-xs space-y-3">
-        <div className="relative h-2 overflow-hidden rounded-full bg-white/10">
-          <div
-            className="h-full rounded-full bg-linear-to-r from-emerald-300 via-brand-primary to-lime-300 shadow-[0_0_18px_rgba(34,197,94,0.42)] transition-all duration-300 ease-out"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-        <div className="flex items-center justify-between text-xs text-slate-400">
-          <span>Passo {currentPhase + 1}/{PHASES.length}</span>
-          <span>{Math.round(progress)}%</span>
-        </div>
-      </div>
-
-      {/* ─── Time estimate ─── */}
-      <p className="vfit-flow-panel-soft mt-12 flex max-w-xs items-center justify-center gap-2 rounded-2xl px-4 py-3 text-center text-xs text-slate-300">
-        <DSIcon name="clock" className="h-3.5 w-3.5" />
-        Tempo estimado: 30-45 segundos
-      </p>
     </div>
   )
 }
