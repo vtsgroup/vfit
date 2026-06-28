@@ -436,25 +436,10 @@ function buildStartMessage(params: {
   details?: string;
   linkUrl?: string;
 }): string {
-  const headline = `⏱️ Iniciando etapa: ${params.title}${params.priority ? ` (${params.priority})` : ''}.`;
-  const actionBlock = params.action ? [`Por que agora: ${params.action.trim()}`] : [];
-  const detailsBlock = params.details ? [`Resultado esperado: ${params.details.trim()}`] : [];
-  const linkBlock = params.linkUrl ? [params.linkUrl.trim()] : [];
-
   return [
-    `[🤖 ${params.actorLabel}]`,
-    '',
-    headline,
-    ...(actionBlock.length ? ['', ...actionBlock] : []),
-    ...(detailsBlock.length ? ['', ...detailsBlock] : []),
-    ...(linkBlock.length ? ['', `Ver: ${linkBlock[0]}`] : []),
-    '',
-    `ID: ${params.taskId}`,
-    `Início (BRT): ${formatBrt(params.startedAtIso)}`,
-  ]
-    .join('\n')
-    .replace(/\n{3,}/g, '\n\n')
-    .trim();
+    `🚀 ${params.title}${params.priority ? ` · ${params.priority}` : ''}`,
+    `${params.taskId} · ${formatBrt(params.startedAtIso)} BRT`,
+  ].join('\n').trim();
 }
 
 function buildEndMessage(params: {
@@ -473,47 +458,18 @@ function buildEndMessage(params: {
   const endedMs = new Date(params.endedAtIso).getTime();
   const durationMs = Number.isFinite(startedMs) && Number.isFinite(endedMs) ? endedMs - startedMs : NaN;
   const status = params.status || 'success';
+  const dur = Number.isFinite(durationMs) ? ` · ${formatDurationMs(durationMs)}` : '';
+  const ver = params.deployVersion ? ` ${params.deployVersion}` : '';
 
-  const defaultSummary = [
-    status === 'success'
-      ? `Resultado direto: ${params.title} concluído com sucesso.`
-      : `Resultado direto: ${params.title} finalizado com pendências.`,
-    'Motivo: garantir continuidade operacional com rastreabilidade no grupo.',
-    'Vantagem prática: decisão rápida com contexto de início, fim e duração.',
-  ];
+  if (status === 'success') {
+    const lines = [`✅ Deploy${ver} no ar${dur}`];
+    if (params.linkUrl) lines.push(`🌐 ${params.linkUrl.trim()}`);
+    return lines.join('\n').trim();
+  }
 
-  const summaryLines = params.summary?.length ? params.summary : defaultSummary;
-  const spacedSummary = summaryLines.length
-    ? summaryLines.flatMap((line, idx) => (idx === 0 ? [line] : ['', line]))
-    : [];
-
-  const statusLine = status === 'success' ? '✅ Finalizado' : '❌ Encerrado com falha';
-  const deployBlock = params.deployVersion ? ['', `Deploy: ${params.deployVersion}.`] : [];
-  const linkBlock = params.linkUrl ? ['', `Ver: ${params.linkUrl.trim()}`] : [];
-
-  return [
-    `[🤖 ${params.actorLabel}]`,
-    '',
-    `${statusLine}: ${params.title}${params.priority ? ` (${params.priority})` : ''}.`,
-    '',
-    ...spacedSummary,
-    ...deployBlock,
-    ...linkBlock,
-    '',
-    `ID: ${params.taskId}`,
-    params.startedAtIso ? `Início (BRT): ${formatBrt(params.startedAtIso)}` : null,
-    `Fim (BRT): ${formatBrt(params.endedAtIso)}`,
-    Number.isFinite(durationMs) ? `Duração: ${formatDurationMs(durationMs)}` : null,
-    `Status: ${status === 'success' ? 'SUCESSO' : 'FALHA'}`,
-    '',
-    status === 'success'
-      ? '👍🏻 Se puder, confirma com um ok aqui no grupo.'
-      : '👍🏻 Se puder, dá um ok aqui na thread quando estiver revisado.',
-  ]
-    .filter((v) => v !== null && v !== undefined)
-    .join('\n')
-    .replace(/\n{3,}/g, '\n\n')
-    .trim();
+  const raw = params.summary && params.summary.length ? params.summary[0] : 'verifique os logs';
+  const reason = raw.replace(/^Resultado direto:\s*/i, '').trim().slice(0, 200);
+  return [`❌ Deploy${ver} falhou${dur}`, reason].join('\n').trim();
 }
 
 function buildTaskNotifyMessage(params: {
@@ -717,6 +673,11 @@ const whatsappWorker = {
           status,
           linkUrl,
         });
+
+        // Low-noise: suppress 'start' notifications — only the final result is posted to the group.
+        if (event === 'start') {
+          return json({ success: true, data: { task_id: taskId, event, skipped: true } });
+        }
 
         const result = await resilientSend(envResolved, {
           text: message,

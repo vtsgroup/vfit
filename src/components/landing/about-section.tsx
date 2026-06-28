@@ -166,7 +166,7 @@ export function AboutSection() {
 
         {/* Heading */}
         <IntersectionReveal animation="blur-in" delay={50}>
-          <h2 className="mb-6 text-center font-black tracking-[-0.02em] text-gray-950" style={{ ...headingFont, fontSize: 'clamp(2.25rem, 5.2vw, 3.75rem)', lineHeight: '0.95' }}>
+          <h2 className="font-syne mb-6 text-balance text-center font-black tracking-[-0.02em] text-gray-950" style={{ fontSize: 'clamp(2.25rem, 5.2vw, 3.75rem)', lineHeight: '0.96' }}>
             FEITO POR QUEM{' '}
             <span className="bg-linear-to-r from-brand-primary via-brand-mint to-brand-accent bg-clip-text text-transparent">ENTENDE</span>
           </h2>
