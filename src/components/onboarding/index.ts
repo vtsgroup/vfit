@@ -24,3 +24,14 @@ export {
   StepSocialProof,
   StepReady,
 } from './steps'
+
+export {
+  AnimatedLogo,
+  FloatingOrbs,
+  MeshGradientBg,
+  GlassCard,
+  AnimatedCounter,
+  AnimatedCheckmark,
+  AnimatedProgressBar,
+  StaggerContainer,
+} from './onboarding-animations'
