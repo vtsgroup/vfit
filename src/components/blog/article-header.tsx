@@ -14,7 +14,8 @@ import { DSIcon } from '@/components/ui/ds-icon'
 import type { BlogPost } from '@/data/blog-posts'
 import { CATEGORY_ICON } from '@/data/blog-posts'
 import { Breadcrumbs } from '@/components/shared/breadcrumbs'
-import { badgeStyle, greenChip, lightCard } from '@/components/shared/light-section'
+import { badgeStyle, lightCard } from '@/components/shared/light-section'
+import { BrandMark } from '@/components/ui/brand-mark'
 
 interface ArticleHeaderProps {
   post: BlogPost
@@ -50,20 +51,45 @@ export function ArticleHeader({ post }: ArticleHeaderProps) {
       {/* Subtitle / Excerpt */}
       <p className="text-lg leading-relaxed text-slate-600">{post.excerpt}</p>
 
-      {/* Author bar */}
-      <div className="flex items-center gap-4 rounded-2xl px-5 py-4" style={lightCard}>
-        <div className="flex h-10 w-10 items-center justify-center rounded-full text-emerald-600" style={greenChip}>
-          <DSIcon name="user" size={20} />
+      {/* Author + meta bar */}
+      <div
+        className="flex flex-col gap-4 rounded-2xl px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5"
+        style={lightCard}
+      >
+        <div className="flex items-center gap-3.5">
+          <span className="relative shrink-0">
+            <BrandMark
+              size={44}
+              idSuffix="author"
+              className="rounded-[13px] shadow-[0_8px_20px_-8px_rgba(34,197,94,0.6)] ring-1 ring-black/5"
+            />
+            {/* selo "verificado" sobre o canto do mark */}
+            <span
+              className="absolute -bottom-1 -right-1 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-white text-emerald-600 shadow-[0_2px_6px_-1px_rgba(15,23,42,0.25)]"
+              aria-hidden="true"
+            >
+              <DSIcon name="shieldCheck" size={11} />
+            </span>
+          </span>
+          <div className="min-w-0">
+            <p className="flex items-center gap-1.5 text-sm font-bold text-gray-950">
+              {post.author.name}
+              <span className="rounded-full bg-emerald-50 px-1.5 py-px text-[9px] font-bold uppercase tracking-wide text-emerald-700 ring-1 ring-emerald-500/20">
+                Oficial
+              </span>
+            </p>
+            <p className="text-xs text-slate-500">{post.author.role}</p>
+          </div>
         </div>
-        <div className="flex-1">
-          <p className="text-sm font-bold text-gray-950">{post.author.name}</p>
-          <p className="text-xs text-slate-500">{post.author.role}</p>
-        </div>
-        <div className="flex items-center gap-4 text-xs text-slate-500">
-          <time dateTime={post.dateISO}>{post.date}</time>
-          <span className="flex items-center gap-1">
-            <DSIcon name="clock" size={12} />
-            {post.readingTime}
+
+        <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200/80 bg-white/70 px-2.5 py-1">
+            <DSIcon name="calendar" size={12} className="text-emerald-600" />
+            <time dateTime={post.dateISO}>{post.date}</time>
+          </span>
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200/80 bg-white/70 px-2.5 py-1">
+            <DSIcon name="clock" size={12} className="text-emerald-600" />
+            {post.readingTime} de leitura
           </span>
         </div>
       </div>

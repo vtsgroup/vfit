@@ -29,6 +29,7 @@ import {
   ArticleH2,
   Callout,
   SourceList,
+  ArticleTable,
   lightCard,
   HoverEdge,
   greenChip,
@@ -190,29 +191,11 @@ export default function IAPersonalTrainerPage() {
         <ArticleH2 eyebrow="/COMPARATIVO">IA genérica vs IA especializada</ArticleH2>
         <p className="text-slate-600">ChatGPT pode até sugerir treinos, mas sem contexto. Veja a diferença real:</p>
 
-        <div className="overflow-hidden rounded-2xl border border-slate-200">
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <caption className="sr-only">IA genérica vs IA especializada</caption>
-              <thead>
-                <tr className="border-b border-slate-200 bg-slate-50">
-                  <th scope="col" className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-slate-600">Critério</th>
-                  <th scope="col" className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-slate-500">IA Genérica</th>
-                  <th scope="col" className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-emerald-700">IA Especializada</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-200">
-                {COMPARISON.map((row) => (
-                  <tr key={row.feature} className="transition-colors hover:bg-slate-50">
-                    <td className="px-4 py-3 font-medium text-slate-800">{row.feature}</td>
-                    <td className="px-4 py-3 text-slate-500">{row.generic}</td>
-                    <td className="px-4 py-3 text-slate-600">{row.specialized}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <ArticleTable
+          caption="IA genérica vs IA especializada"
+          head={['Critério', 'IA Genérica', 'IA Especializada']}
+          rows={COMPARISON.map((row) => [row.feature, row.generic, row.specialized])}
+        />
       </section>
 
       {/* ── Quando NÃO usar IA ── */}

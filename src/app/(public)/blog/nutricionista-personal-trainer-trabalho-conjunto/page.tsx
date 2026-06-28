@@ -20,7 +20,7 @@ import {
   articleLinkClass,
 } from '@/components/blog/article-kit'
 import { FaqInline } from '@/components/shared/faq-inline'
-import { articleSchema, faqSchema } from '@/lib/schemas'
+import { articleSchema } from '@/lib/schemas'
 import { TrackedCtaLink } from '@/components/analytics/tracked-cta-link'
 
 const post = getPost('nutricionista-personal-trainer-trabalho-conjunto')!
@@ -80,7 +80,6 @@ export default function NutricionistaPersonalTrainerTrabalhoConjuntoPage() {
   return (
     <ArticleShell>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(article) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema(faq)) }} />
 
       <ArticleHeader post={post} />
 

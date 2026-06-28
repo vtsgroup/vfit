@@ -10,6 +10,8 @@ import {
   ArticleShell,
   ArticleH2,
   Callout,
+  KeyTakeaways,
+  ArticleTable,
   lightCard,
   HoverEdge,
   monoLabel,
@@ -19,7 +21,7 @@ import {
   articleLinkClass,
 } from '@/components/blog/article-kit'
 import { FaqInline } from '@/components/shared/faq-inline'
-import { articleSchema, faqSchema } from '@/lib/schemas'
+import { articleSchema } from '@/lib/schemas'
 import { TrackedCtaLink } from '@/components/analytics/tracked-cta-link'
 
 const post = getPost('app-treino-ia-gratis-iniciantes')!
@@ -80,9 +82,17 @@ export default function AppTreinoIAGratisIniciantesPage() {
   return (
     <ArticleShell>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(article) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema(faq)) }} />
 
       <ArticleHeader post={post} />
+
+      <KeyTakeaways
+        points={[
+          'Um bom app de treino com IA grátis personaliza o plano pelo seu objetivo, nível e rotina — em vez de entregar uma ficha genérica.',
+          'Para iniciantes, o que mais importa é clareza do plano, facilidade para registrar treinos e sensação real de progresso.',
+          'A IA agrega valor em 3 frentes: progressão automática, motivação com gamificação e acompanhamento da evolução.',
+          'No VFIT dá para começar grátis, sem cartão, e evoluir para recursos avançados quando fizer sentido.',
+        ]}
+      />
 
       <section className="space-y-5 text-[17px] leading-relaxed text-slate-600">
         <p className="text-lg">
@@ -138,28 +148,11 @@ export default function AppTreinoIAGratisIniciantesPage() {
 
       <section className="space-y-6">
         <ArticleH2 eyebrow="/COMPARATIVO">App comum vs app com IA</ArticleH2>
-        <div className="overflow-hidden rounded-2xl border border-slate-200" style={{ boxShadow: '0 1px 2px rgba(15,23,42,0.04), 0 18px 40px -24px rgba(15,23,42,0.14)' }}>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-slate-200 bg-slate-50">
-                  <th className="px-4 py-3 text-left text-slate-600">Critério</th>
-                  <th className="px-4 py-3 text-left text-slate-500">App comum</th>
-                  <th className="px-4 py-3 text-left font-bold text-emerald-700">App com IA</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {comparison.map(([feature, regular, ai]) => (
-                  <tr key={feature}>
-                    <td className="px-4 py-3 text-slate-800">{feature}</td>
-                    <td className="px-4 py-3 text-slate-500">{regular}</td>
-                    <td className="px-4 py-3 text-slate-600">{ai}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <ArticleTable
+          caption="App comum vs app com IA"
+          head={['Critério', 'App comum', 'App com IA']}
+          rows={comparison}
+        />
       </section>
 
       <Callout icon="sparkles" tone="brand" title="Os 5 recursos que mais importam">

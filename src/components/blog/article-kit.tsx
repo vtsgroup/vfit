@@ -130,6 +130,125 @@ export function Callout({
   )
 }
 
+/* ─── Resumo rápido / pontos-chave (answer-first p/ GEO) ─── */
+// Bloco escaneável no topo do artigo. Formato de lista direta → fácil de extrair
+// por motores generativos (ChatGPT/Perplexity) e ótimo p/ featured snippets.
+export function KeyTakeaways({ title = 'Resumo rápido', points }: { title?: string; points: string[] }) {
+  return (
+    <aside
+      className="rounded-2xl border border-emerald-500/20 p-5 sm:p-6"
+      style={{
+        background: 'linear-gradient(180deg, rgba(236,253,243,0.7) 0%, rgba(255,255,255,0.9) 100%)',
+        boxShadow: '0 1px 2px rgba(15,23,42,0.04), 0 18px 44px -26px rgba(34,197,94,0.3)',
+      }}
+    >
+      <div className="mb-4 flex items-center gap-2.5">
+        <span className="flex h-9 w-9 items-center justify-center rounded-xl text-emerald-600" style={greenChip}>
+          <DSIcon name="sparkles" size={18} />
+        </span>
+        <div>
+          <span className="block text-[10px] font-bold uppercase tracking-[0.18em] text-emerald-700/80" style={monoLabel}>
+            TL;DR
+          </span>
+          <h2 className="font-syne text-lg font-black leading-tight tracking-tight text-gray-950">{title}</h2>
+        </div>
+      </div>
+      <ul className="space-y-2.5">
+        {points.map((p, i) => (
+          <li key={i} className="flex items-start gap-2.5 text-[15px] leading-relaxed text-slate-700">
+            <span
+              className="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-white"
+              style={{ background: 'linear-gradient(135deg, #34e565, #16a34a)', boxShadow: '0 2px 6px -1px rgba(34,197,94,0.45), inset 0 1px 0 rgba(255,255,255,0.4)' }}
+            >
+              <DSIcon name="check" size={12} />
+            </span>
+            <span>{p}</span>
+          </li>
+        ))}
+      </ul>
+    </aside>
+  )
+}
+
+/* ─── Tabela comparativa premium (coluna "vencedora" destacada em verde) ─── */
+export function ArticleTable({
+  head,
+  rows,
+  highlight,
+  caption,
+}: {
+  head: string[]
+  rows: string[][]
+  /** índice (0-based) da coluna vencedora — default: última */
+  highlight?: number
+  caption?: string
+}) {
+  const win = highlight ?? head.length - 1
+  return (
+    <div
+      className="overflow-hidden rounded-2xl border border-slate-200 bg-white"
+      style={{ boxShadow: '0 1px 2px rgba(15,23,42,0.04), 0 18px 44px -26px rgba(15,23,42,0.18)' }}
+    >
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          {caption && <caption className="sr-only">{caption}</caption>}
+          <thead>
+            <tr className="border-b border-slate-200" style={{ background: 'linear-gradient(180deg,#f8fafc,#ffffff)' }}>
+              {head.map((h, i) => {
+                const isWin = i === win
+                return (
+                  <th
+                    key={i}
+                    scope="col"
+                    className={`px-4 py-3.5 text-left text-xs font-bold uppercase tracking-wider ${
+                      isWin ? 'text-emerald-700' : i === 0 ? 'text-slate-600' : 'text-slate-400'
+                    } ${isWin ? 'bg-emerald-50/70' : ''}`}
+                  >
+                    <span className="inline-flex items-center gap-1.5">
+                      {isWin && (
+                        <span className="flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 text-white">
+                          <DSIcon name="check" size={10} />
+                        </span>
+                      )}
+                      {h}
+                    </span>
+                  </th>
+                )
+              })}
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row, r) => (
+              <tr key={r} className="border-b border-slate-100 transition-colors last:border-0 hover:bg-slate-50/80">
+                {row.map((cell, c) => {
+                  const isWin = c === win
+                  return (
+                    <td
+                      key={c}
+                      className={`px-4 py-3.5 align-top ${
+                        c === 0 ? 'font-semibold text-slate-800' : isWin ? 'font-medium text-emerald-900' : 'text-slate-500'
+                      } ${isWin ? 'bg-emerald-50/50' : ''}`}
+                    >
+                      {isWin && c !== 0 ? (
+                        <span className="flex items-start gap-1.5">
+                          <DSIcon name="check" size={14} className="mt-0.5 shrink-0 text-emerald-500" />
+                          <span>{cell}</span>
+                        </span>
+                      ) : (
+                        cell
+                      )}
+                    </td>
+                  )
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  )
+}
+
 /* ─── Caixa de fontes / referências (light card) ─── */
 export function SourceList({ sources }: { sources: { label: string; url: string }[] }) {
   return (

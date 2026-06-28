@@ -62,6 +62,7 @@ Disallow: /sw.js
 Disallow: /OneSignalSDKWorker.js
 Disallow: /dashboard/
 Disallow: /api/
+Disallow: /r/
 
 # === Sitemaps ===
 Sitemap: https://vfit.app.br/sitemap.xml

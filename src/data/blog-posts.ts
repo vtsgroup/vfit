@@ -29,6 +29,8 @@ export interface BlogPost {
   modifiedISO: string
   readingTime: string
   tags: string[]
+  /** Código curto p/ link de compartilhamento — /r/{shortId} → 301 → /blog/{slug} (ver public/_worker.js). NÃO indexado. */
+  shortId: string
 }
 
 export type BlogCategory = 'Tecnologia' | 'Gestão' | 'Financeiro' | 'Fitness' | 'Engajamento' | 'Negócios'
@@ -88,6 +90,7 @@ export const BLOG_POSTS: BlogPost[] = [
     modifiedISO: '2026-04-12T09:00:00-03:00',
     readingTime: '9 min',
     tags: ['App de treino com IA', 'Treino para iniciantes', 'Treino personalizado', 'Aplicativo fitness'],
+    shortId: 'ia-gratis',
   },
   {
     slug: 'ia-montar-treinos-personalizados-personal',
@@ -103,6 +106,7 @@ export const BLOG_POSTS: BlogPost[] = [
     modifiedISO: '2026-04-12T10:00:00-03:00',
     readingTime: '8 min',
     tags: ['IA para montar treinos', 'Software para personal trainer', 'Treino personalizado', 'Automação fitness'],
+    shortId: 'ia-treinos',
   },
   {
     slug: 'melhores-apps-personal-trainer-2026',
@@ -118,6 +122,7 @@ export const BLOG_POSTS: BlogPost[] = [
     modifiedISO: '2026-04-12T11:00:00-03:00',
     readingTime: '10 min',
     tags: ['Melhor app para personal trainer', 'Comparativo software fitness', 'Gestão personal trainer', 'Plataforma fitness'],
+    shortId: 'apps-pt',
   },
   {
     slug: 'nutricionista-personal-trainer-trabalho-conjunto',
@@ -133,6 +138,7 @@ export const BLOG_POSTS: BlogPost[] = [
     modifiedISO: '2026-04-12T12:00:00-03:00',
     readingTime: '8 min',
     tags: ['Nutricionista e personal trainer', 'Integração treino e nutrição', 'Parceria fitness', 'Pacientes'],
+    shortId: 'nutri-pt',
   },
   {
     slug: 'ia-personal-trainer',
@@ -148,6 +154,7 @@ export const BLOG_POSTS: BlogPost[] = [
     modifiedISO: '2026-03-03T09:00:00-03:00',
     readingTime: '8 min',
     tags: ['IA', 'Personal Trainer', 'Treino Personalizado', 'Gestão de Alunos', 'Inteligência Artificial'],
+    shortId: 'ia-pt',
   },
   {
     slug: 'retencao-alunos-personal',
@@ -163,6 +170,7 @@ export const BLOG_POSTS: BlogPost[] = [
     modifiedISO: '2026-03-03T09:00:00-03:00',
     readingTime: '10 min',
     tags: ['Retenção de alunos', 'Churn', 'LTV', 'Gestão para personal trainer'],
+    shortId: 'retencao',
   },
   {
     slug: 'cobranca-automatica-personal',
@@ -178,6 +186,7 @@ export const BLOG_POSTS: BlogPost[] = [
     modifiedISO: '2026-03-03T09:00:00-03:00',
     readingTime: '7 min',
     tags: ['Cobrança Automática', 'PIX', 'Financeiro para personal trainer', 'Inadimplência'],
+    shortId: 'cobranca',
   },
 ]
 
@@ -194,4 +203,15 @@ export function getRelatedPosts(currentSlug: string, limit = 2): BlogPost[] {
 /** Get unique categories */
 export function getCategories(): BlogCategory[] {
   return [...new Set(BLOG_POSTS.map((p) => p.category))]
+}
+
+/**
+ * Caminho do link curto de compartilhamento de um post: `/r/{shortId}`.
+ * O `_worker.js` faz 301 → `/blog/{slug}` (canônica). Como é só redirect e
+ * está em `Disallow: /r/`, não compete no índice nem afeta o SEO.
+ * Fallback: se o slug não existir, devolve a própria rota canônica.
+ */
+export function getShortPath(slug: string): string {
+  const post = BLOG_POSTS.find((p) => p.slug === slug)
+  return post ? `/r/${post.shortId}` : `/blog/${slug}`
 }

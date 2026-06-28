@@ -21,7 +21,7 @@ import {
   articleLinkClass,
 } from '@/components/blog/article-kit'
 import { FaqInline } from '@/components/shared/faq-inline'
-import { articleSchema, faqSchema, howToSchema } from '@/lib/schemas'
+import { articleSchema, howToSchema } from '@/lib/schemas'
 import { TrackedCtaLink } from '@/components/analytics/tracked-cta-link'
 
 const post = getPost('ia-montar-treinos-personalizados-personal')!
@@ -82,7 +82,6 @@ export default function IAMontarTreinosPersonalizadosPage() {
   return (
     <ArticleShell>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(article) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema(faq)) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema(post.title, steps)) }} />
 
       <ArticleHeader post={post} />

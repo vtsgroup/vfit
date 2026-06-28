@@ -19,7 +19,7 @@ import {
   articleLinkClass,
 } from '@/components/blog/article-kit'
 import { FaqInline } from '@/components/shared/faq-inline'
-import { articleSchema, faqSchema } from '@/lib/schemas'
+import { articleSchema } from '@/lib/schemas'
 import { TrackedCtaLink } from '@/components/analytics/tracked-cta-link'
 
 const post = getPost('melhores-apps-personal-trainer-2026')!
@@ -90,7 +90,6 @@ export default function MelhoresAppsPersonalTrainer2026Page() {
   return (
     <ArticleShell>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(article) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema(faq)) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemList) }} />
 
       <ArticleHeader post={post} />

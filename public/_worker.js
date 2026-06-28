@@ -43,6 +43,19 @@ const SIMPLE_REWRITES = {
 // Simple 301 redirects
 const PERMANENT_REDIRECTS = {
   '/default-icon': '/icons/icon-192.png',
+
+  // ── Blog short links (/r/{shortId} → 301 → /blog/{slug}) ──
+  // Usados pelo botão "Compartilhar" dos artigos. São APENAS redirects:
+  // a canônica indexável continua sendo /blog/{slug}, /r/* está em
+  // Disallow no robots.txt e o 301 consolida sinais no destino.
+  // Manter em sincronia com `shortId` em src/data/blog-posts.ts.
+  '/r/ia-gratis': '/blog/app-treino-ia-gratis-iniciantes',
+  '/r/ia-treinos': '/blog/ia-montar-treinos-personalizados-personal',
+  '/r/apps-pt': '/blog/melhores-apps-personal-trainer-2026',
+  '/r/nutri-pt': '/blog/nutricionista-personal-trainer-trabalho-conjunto',
+  '/r/ia-pt': '/blog/ia-personal-trainer',
+  '/r/retencao': '/blog/retencao-alunos-personal',
+  '/r/cobranca': '/blog/cobranca-automatica-personal',
 };
 
 function isAssetRequest(pathname) {
