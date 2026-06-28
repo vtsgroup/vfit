@@ -56,6 +56,8 @@ export interface BrandLoaderProps {
   size?: number
   /** legenda opcional sob o mark */
   label?: string
+  /** 'mono' = microcaps técnica (default); 'soft' = frase legível (ex.: "Preparando seu app…") */
+  labelTone?: 'mono' | 'soft'
   className?: string
 }
 
@@ -63,6 +65,7 @@ export function BrandLoader({
   variant = 'page',
   size = 56,
   label,
+  labelTone = 'mono',
   className,
 }: BrandLoaderProps) {
   return (
@@ -107,7 +110,10 @@ export function BrandLoader({
         />
       </div>
 
-      {label && (
+      {label && labelTone === 'soft' && (
+        <p className="text-sm font-semibold text-slate-400">{label}</p>
+      )}
+      {label && labelTone === 'mono' && (
         <p
           className="text-[10px] uppercase text-brand-primary/70"
           style={{

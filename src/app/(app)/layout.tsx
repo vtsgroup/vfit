@@ -22,6 +22,7 @@ import { OneSignalProvider } from '@/components/providers/onesignal-provider'
 import { AuthProvider } from '@/components/providers/auth-provider'
 import { ToastContainer } from '@/components/layout/toast-container'
 import { SplashOrchestrator } from '@/components/layout/splash-orchestrator'
+import { BrandLoader } from '@/components/ui/brand-loader'
 import { useAuthStore } from '@/stores/auth-store'
 import { useB2COnboardingCompleted } from '@/hooks/use-b2c-onboarding'
 import { useEffectiveUserView } from '@/hooks/use-effective-user-view'
@@ -74,16 +75,7 @@ function migrateLocalStorageKeys() {
 }
 
 function AppRouteLoader({ message }: { message: string }) {
-  return (
-    <div className="flex min-h-dvh items-center justify-center bg-[#050A12] px-6">
-      <div className="flex flex-col items-center gap-4 text-center">
-        <div className="relative flex h-14 w-14 items-center justify-center rounded-3xl border border-brand-primary/20 bg-[#0f2010] shadow-[0_18px_50px_rgba(34,197,94,0.10)]">
-          <div className="h-8 w-8 animate-spin rounded-full border-3 border-brand-primary/20 border-t-brand-primary" />
-        </div>
-        <p className="text-sm font-semibold text-slate-400">{message}</p>
-      </div>
-    </div>
-  )
+  return <BrandLoader variant="page" label={message} labelTone="soft" />
 }
 
 function AppShell({ children }: { children: React.ReactNode }) {

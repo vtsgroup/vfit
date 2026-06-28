@@ -19,7 +19,7 @@
 import { useEffect, useRef, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { useAuthStore, type AuthTokens, type PersonalProfile, type StudentProfile } from '@/stores/auth-store'
-import { Spinner } from '@/components/ui/spinner'
+import { BrandLoader } from '@/components/ui/brand-loader'
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://api.vfit.app.br'
 
@@ -155,7 +155,7 @@ function OAuthCallbackContent() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-bg-primary">
       <div className="flex flex-col items-center gap-4 text-center">
-        <Spinner size="lg" />
+        <BrandLoader variant="inline" size={48} />
         <div>
           <h2 className="text-lg font-semibold text-text-primary">Autenticando...</h2>
           <p className="mt-1 text-sm text-text-muted">Aguarde enquanto conectamos sua conta</p>
@@ -170,7 +170,7 @@ export default function OAuthCallbackPage() {
     <Suspense
       fallback={
         <div className="flex min-h-screen items-center justify-center bg-bg-primary">
-          <Spinner size="lg" />
+          <BrandLoader variant="inline" size={48} />
         </div>
       }
     >

@@ -11,6 +11,7 @@
 // ============================================
 
 import { cn } from '@/lib/utils'
+import { BrandLoader } from '@/components/ui/brand-loader'
 
 interface SpinnerProps {
   size?: 'sm' | 'md' | 'lg'
@@ -39,16 +40,9 @@ export function Spinner({ size = 'md', className }: SpinnerProps) {
   )
 }
 
-// Full-page loader
+// Full-page loader → loader on-brand unificado
 export function PageLoader() {
-  return (
-    <div className="flex min-h-[60vh] items-center justify-center">
-      <div className="flex flex-col items-center gap-4">
-        <Spinner size="lg" />
-        <p className="text-sm text-text-muted">Carregando...</p>
-      </div>
-    </div>
-  )
+  return <BrandLoader variant="inline" className="min-h-[60vh]" label="Carregando" />
 }
 
 // Inline skeleton

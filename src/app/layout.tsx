@@ -14,7 +14,7 @@
 //   RootLayout — root layout da aplicação
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
-import { Syne, DM_Sans } from "next/font/google";
+import { Syne, DM_Sans, Space_Grotesk } from "next/font/google";
 import { Providers } from "@/components/providers";
 import { DeferredComponents } from "@/components/layout/deferred-components";
 import { LazyWebVitals } from "@/components/analytics/lazy-web-vitals";
@@ -38,6 +38,14 @@ const dmSans = DM_Sans({
   variable: "--font-dm-sans",
   subsets: ["latin"],
   weight: ["400", "500", "600"],
+  display: "swap",
+});
+
+// Space Grotesk — wordmark do splash de abertura (auto-hospedado pelo next/font, sem fetch ao Google).
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
+  subsets: ["latin"],
+  weight: ["700"],
   display: "swap",
 });
 
@@ -203,7 +211,7 @@ export default function RootLayout({
           `}
         </Script>
       </head>
-      <body className={`${syne.variable} ${dmSans.variable} font-sans antialiased`}>
+      <body className={`${syne.variable} ${dmSans.variable} ${spaceGrotesk.variable} font-sans antialiased`}>
         <SmartAppBanner />
         <SoftwareApplicationSchema />
         <OrganizationSchema />

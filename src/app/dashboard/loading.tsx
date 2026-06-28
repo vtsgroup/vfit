@@ -1,30 +1,17 @@
 /**
  * src/app/dashboard/loading.tsx
  *
- * Dashboard Loading — Dark screen with premium spinner
+ * Dashboard Loading — loader on-brand unificado (BrandLoader)
  *
  * Exports: DashboardLoading
+ *
+ * v2 (2026-06-28): substitui o spinner de 3 anéis aninhados pelo BrandLoader
+ * (marca V + halo + barra). Evita white flash nas transições de rota e fica
+ * coerente com o splash de abertura.
  */
 
-// ============================================
-// Dashboard Loading — Dark screen with premium spinner
-// Prevents white flash during route transitions
-// ============================================
+import { BrandLoader } from '@/components/ui/brand-loader'
 
 export default function DashboardLoading() {
-  return (
-    <div className="flex min-h-[60dvh] items-center justify-center">
-      <div className="flex flex-col items-center gap-4">
-        {/* Premium spinner — green pulsing ring */}
-        <div className="relative h-10 w-10">
-          <div className="absolute inset-0 rounded-full border-2 border-white/6" />
-          <div className="absolute inset-0 animate-spin rounded-full border-2 border-transparent border-t-brand-primary" style={{ animationDuration: '0.8s' }} />
-          <div className="absolute inset-1 rounded-full bg-brand-primary/5 animate-pulse" style={{ animationDuration: '2s' }} />
-        </div>
-        <p className="text-xs font-medium text-white/30 tracking-wide animate-pulse" style={{ animationDuration: '2s' }}>
-          Carregando...
-        </p>
-      </div>
-    </div>
-  )
+  return <BrandLoader variant="inline" className="min-h-[60dvh]" label="Carregando" />
 }
