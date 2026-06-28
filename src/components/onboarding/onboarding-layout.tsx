@@ -22,9 +22,9 @@ function SegmentedProgressBar({ current, total }: { current: number; total: numb
           key={i}
           className={`h-1.5 flex-1 rounded-full transition-all duration-500 ${
             i < current
-              ? 'bg-emerald-300/78 shadow-[0_0_14px_rgba(134,239,172,0.34)]'
+              ? 'bg-linear-to-r from-emerald-400 to-emerald-300 shadow-[0_0_14px_rgba(134,239,172,0.34)]'
               : i === current
-                ? 'bg-emerald-300 shadow-[0_0_18px_rgba(134,239,172,0.38)]'
+                ? 'bg-linear-to-r from-emerald-300 to-lime-200 shadow-[0_0_20px_rgba(134,239,172,0.45)]'
                 : 'bg-white/10'
           }`}
         />

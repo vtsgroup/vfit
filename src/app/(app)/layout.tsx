@@ -74,8 +74,10 @@ function migrateLocalStorageKeys() {
   localStorage.setItem('vfit_keys_migrated', '1')
 }
 
-function AppRouteLoader({ message }: { message: string }) {
-  return <BrandLoader variant="page" label={message} labelTone="soft" />
+// Loader full-page = identidade da splash (marca VFIT animada + barra), sem mensagem.
+// Qualquer transição/boot mostra a mesma cara da abertura — nada de "Carregando sua experiência".
+function AppRouteLoader() {
+  return <BrandLoader variant="page" />
 }
 
 function AppShell({ children }: { children: React.ReactNode }) {
@@ -181,11 +183,11 @@ function AppShell({ children }: { children: React.ReactNode }) {
       return null
     }
   } else {
-    if (!isHydrated) return <AppRouteLoader message="Preparando seu app..." />
-    if (isRedirectingToWelcome) return <AppRouteLoader message="Abrindo boas-vindas..." />
-    if (isRedirectingToDashboard) return <AppRouteLoader message="Abrindo painel profissional..." />
-    if (isEffectiveStudent && onboardingLoading) return <AppRouteLoader message="Carregando sua experiência..." />
-    if (isRedirectingToOnboarding) return <AppRouteLoader message="Abrindo personalização inicial..." />
+    if (!isHydrated) return <AppRouteLoader />
+    if (isRedirectingToWelcome) return <AppRouteLoader />
+    if (isRedirectingToDashboard) return <AppRouteLoader />
+    if (isEffectiveStudent && onboardingLoading) return <AppRouteLoader />
+    if (isRedirectingToOnboarding) return <AppRouteLoader />
   }
 
   return (

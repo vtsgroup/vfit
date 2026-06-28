@@ -101,6 +101,9 @@ export default function WelcomePage() {
       <div className="pointer-events-none absolute inset-x-0 top-0 h-80 bg-linear-to-b from-vfit-primary-500/24 via-sky-300/8 to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-sky-200/45 to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-linear-to-t from-bg-base to-transparent" />
+      {/* atmosfera ultra-moderna: orbs de luz à deriva */}
+      <div aria-hidden="true" className="pointer-events-none absolute -right-24 -top-20 h-[26rem] w-[26rem] rounded-full bg-emerald-400/12 blur-[140px]" />
+      <div aria-hidden="true" className="pointer-events-none absolute -left-28 top-1/3 h-80 w-80 rounded-full bg-sky-400/8 blur-[150px]" />
 
       {/* ─── Background image with overlay ─── */}
       <div className="absolute inset-0 opacity-78">
@@ -212,10 +215,24 @@ export default function WelcomePage() {
           className="mt-9 space-y-4 lg:mt-0"
           style={{ animation: 'welcome-slide-up 0.7s ease-out 0.25s both' }}
         >
-          <div className="vfit-flow-panel overflow-hidden rounded-[32px] p-4 sm:p-5">
-            <div className="flex items-center justify-between gap-3">
+          <div className="vfit-flow-panel relative overflow-hidden rounded-[32px] p-4 sm:p-5">
+            {/* borda-gradiente verde (ultra moderno) */}
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 rounded-[32px]"
+              style={{
+                padding: '1px',
+                background: 'linear-gradient(135deg, rgba(52,211,153,0.55) 0%, rgba(132,204,22,0.18) 42%, transparent 72%)',
+                WebkitMask: 'linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)',
+                WebkitMaskComposite: 'xor',
+                maskComposite: 'exclude',
+              }}
+            />
+            {/* glow de canto */}
+            <span aria-hidden="true" className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-emerald-400/16 blur-[70px]" />
+            <div className="relative flex items-center justify-between gap-3">
               <div>
-                <p className="text-[11px] font-black uppercase text-emerald-200">Prévia do seu plano</p>
+                <p className="text-[11px] font-black uppercase tracking-[0.14em] text-emerald-200">Prévia do seu plano</p>
                 <h2 className="mt-1 text-[22px] font-black leading-tight text-white">A IA transforma respostas em treino.</h2>
               </div>
               <div className="flex h-13 w-13 shrink-0 items-center justify-center rounded-2xl border border-emerald-300/18 bg-emerald-300/10 text-emerald-200">
