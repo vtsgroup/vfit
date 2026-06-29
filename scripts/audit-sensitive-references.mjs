@@ -19,7 +19,7 @@ function parseArgs(argv) {
 const cli = parseArgs(process.argv.slice(2))
 
 const includeExt = new Set(['.md', '.ts', '.tsx', '.mjs', '.json', '.yml', '.yaml', '.toml', '.sh'])
-const ignoreDirs = new Set(['node_modules', '.git', 'dist', '.wrangler', 'out'])
+const ignoreDirs = new Set(['node_modules', '.git', 'dist', '.wrangler', 'out', '.claude'])
 
 const patterns = [
   { name: 'postgres_connection_string_with_credentials', severity: 'P0', regex: /postgres(?:ql)?:\/\/[^\s"']+:[^\s"']+@/gi },
