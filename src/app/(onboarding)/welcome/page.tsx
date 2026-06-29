@@ -184,7 +184,7 @@ export default function WelcomePage() {
           {ORBIT_CHIPS.map((c) => (
             <span
               key={c.label}
-              className={`${c.anim} ${c.pos} absolute z-20 inline-flex items-center gap-2 rounded-2xl border border-emerald-300/25 bg-bg-base/70 px-3 py-2 text-[11.5px] font-black text-emerald-100 shadow-[0_18px_40px_-18px_rgba(0,0,0,0.8)] backdrop-blur-xl`}
+              className={`${c.anim} ${c.pos} absolute z-20 hidden lg:inline-flex items-center gap-2 rounded-2xl border border-emerald-300/25 bg-bg-base/70 px-3 py-2 text-[11.5px] font-black text-emerald-100 shadow-[0_18px_40px_-18px_rgba(0,0,0,0.8)] backdrop-blur-xl`}
             >
               <DSIcon name={c.icon} size={14} className="text-emerald-300 [filter:drop-shadow(0_0_6px_rgba(52,211,153,0.6))]" />
               {c.label}
@@ -302,8 +302,8 @@ export default function WelcomePage() {
           .wl-device { animation: wlTilt 9s ease-in-out 1.1s infinite; will-change: transform; }
         }
         @keyframes wlTilt {
-          0%, 100% { transform: rotateX(7deg) rotateY(-13deg) translateY(0); }
-          50%      { transform: rotateX(5deg) rotateY(-9deg) translateY(-14px); }
+          0%, 100% { transform: rotateX(9deg) rotateY(-17deg) translateY(0) translateZ(0); }
+          50%      { transform: rotateX(6deg) rotateY(-11deg) translateY(-20px) translateZ(36px); }
         }
         .wl-row { animation: wlRise 0.6s cubic-bezier(0.22,1,0.36,1) both; }
         .wl-fill { transform-origin: left; animation: wlFill 1.2s cubic-bezier(0.16,1,0.3,1) 0.9s both; }
