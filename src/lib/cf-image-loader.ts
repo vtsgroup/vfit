@@ -51,6 +51,6 @@ export default function cfImageLoader({ src, width, quality }: ImageLoaderProps)
   }
 
   // 3) Transforma (root-relative + same-zone absolutas, incl. R2).
-  const q = quality || 75
+  const q = quality || 60
   return `/cdn-cgi/image/width=${width},quality=${q},format=auto/${src}`
 }
