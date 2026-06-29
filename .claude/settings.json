@@ -117,14 +117,33 @@
       "Read(//tmp/**)",
       "Read(//private/tmp/**)",
       "Bash(chmod +x /tmp/generate_report.sh)",
-      "Bash(/tmp/generate_report.sh)"
+      "Bash(/tmp/generate_report.sh)",
+      "Bash(rm -rf /Users/macos/Development/apps/vfit-production/.next*)",
+      "Bash(rm -rf /Users/macos/Development/apps/vfit-production/.next && echo*)",
+      "Bash(rm -rf /Users/macos/Development/apps/vfit-production/out*)",
+      "Bash(rm -rf /tmp/*)",
+      "Bash(rm -rf /private/tmp/*)",
+      "Bash(lsof *)",
+      "Bash(kill *)",
+      "Bash(NODE_PATH=* node *)",
+      "Bash(npx playwright *)",
+      "Bash(npx prettier *)",
+      "Bash(node scripts/whatsapp-task.mjs *)",
+      "Bash(curl -s http://localhost:*)",
+      "Bash(curl -sS http://localhost:*)",
+      "Bash(mkdir -p *)"
     ],
     "deny": [
       "Bash(npm run cf:deploy:major)",
       "Bash(npm run wrangler:deploy)",
       "Bash(git push --force *)",
       "Bash(git push -f *)",
-      "Bash(rm -rf *)",
+      "Bash(rm -rf /)",
+      "Bash(rm -rf ~*)",
+      "Bash(rm -rf $HOME*)",
+      "Bash(rm -rf /Users/macos/Development/apps/vfit-production/src*)",
+      "Bash(rm -rf /Users/macos/Development/apps/vfit-production/node_modules*)",
+      "Bash(rm -rf /Users/macos/Development/apps/vfit-production/.env*)",
       "Bash(rm -f .env*)",
       "Write(.env)",
       "Write(.env.local)",
@@ -166,7 +185,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "BRANCH=$(git branch --show-current 2>/dev/null); if [ \"$BRANCH\" = \"main\" ]; then echo '{\"continue\": false, \"stopReason\": \"🔴 Bloqueado: não edite diretamente na branch main. Crie uma feature branch: git checkout -b feat/descricao\"}'; exit 1; fi",
+            "command": "BRANCH=$(git branch --show-current 2>/dev/null); case \"$CLAUDE_FILE_PATH\" in /tmp/*|/private/tmp/*|*/.claude/*) exit 0;; esac; if [ \"$BRANCH\" = \"main\" ]; then echo '{\"continue\": false, \"stopReason\": \"🔴 Bloqueado: não edite código diretamente na main. Crie uma feature branch: git checkout -b feat/descricao\"}'; exit 1; fi",
             "timeout": 5
           }
         ]
