@@ -523,9 +523,11 @@ function buildEndMessage(params: {
   const link = fmtLink(params.linkUrl);
 
   if (status === 'success') {
-    // Detect creative templates: if summaries contain section emojis (🎬 🏆 🧬 📊 etc)
+    // Detect creative templates: if 4+ summaries exist OR first summary is very long/detailed
     // then use them as-is (passthrough mode), else fall back to generic formatting.
-    const isCreativeTemplate = params.summary && params.summary.some(s => /[🎬🏆🧬📊🧪🌐⚡💡🔧🔬]/.test(s));
+    const hasManySummaries = params.summary && params.summary.length >= 4;
+    const firstSummaryLong = params.summary && params.summary[0] && params.summary[0].length > 200;
+    const isCreativeTemplate = hasManySummaries || firstSummaryLong;
 
     if (isCreativeTemplate && params.summary && params.summary.length > 0) {
       // Creative template mode: use summaries directly with title as header
