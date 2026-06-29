@@ -132,7 +132,6 @@
       "Read(.env.local)",
       "Edit(.github/workflows/**)",
       "Write(.github/workflows/**)",
-      "Edit(scripts/cf-deploy.js)",
       "Edit(scripts/deploy-pages.js)"
     ],
     "additionalDirectories": [
@@ -220,6 +219,6 @@
       }
     ]
   },
-  "effortLevel": "high",
+  "effortLevel": "xhigh",
   "fastMode": true
 }

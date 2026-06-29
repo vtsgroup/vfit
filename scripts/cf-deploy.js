@@ -43,7 +43,7 @@ const dryRun = args.includes("--dry-run");
 const noBump = args.includes("--no-bump") || args.includes("--skip-bump");
 const includeWhatsApp = args.includes("--include-whatsapp") || args.includes("--whatsapp");
 const allowNoWhatsApp = args.includes("--allow-no-whatsapp");
-const requireWhatsAppNotify = !dryRun && !allowNoWhatsApp;
+const requireWhatsAppNotify = args.includes("--require-whatsapp") && !dryRun && !allowNoWhatsApp;
 
 // Mensagem de deploy (tudo após --msg ou -m)
 const msgIndex = args.findIndex((a) => a === "--msg" || a === "-m");
@@ -151,7 +151,7 @@ function notifyWhatsAppTask(event, payload, options = {}) {
       return;
     }
     try {
-      const result = execSync(cmd, { stdio: "pipe", encoding: "utf8", timeout: 15000 });
+      const result = execSync(cmd, { stdio: "pipe", encoding: "utf8", timeout: 30000 });
       const parsed = JSON.parse(result);
       if (parsed.success) {
         console.log(`   ✅ ${label} — enviado`);
