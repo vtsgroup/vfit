@@ -327,25 +327,48 @@ try {
 } finally {
   const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
   const taskEndedAtIso = new Date().toISOString();
+
+  // ── Notificação criativa (multilinha) ──
+  // O worker entra em "modo passthrough" quando QUALQUER linha do summary
+  // contém \n. Por isso montamos um bloco em árvore de uma vez só (1 elemento
+  // multilinha) → o WhatsApp recebe um card técnico em vez do genérico cru.
+  const verLabel = version ? `v${version}` : "build";
+  const endTitle =
+    deployStatus === "success"
+      ? deployMsg
+        ? `🚀 VFIT ${verLabel} — ${deployMsg}`
+        : `🚀 VFIT ${verLabel} no ar`
+      : deployMsg
+        ? `Deploy finalizado — ${deployMsg}`
+        : "Deploy finalizado";
+
+  // Árvore de componentes do pipeline (✅ feito / ⏭️ pulado).
+  const treeRow = (connector, label, skipped) =>
+    skipped ? `${connector} ⏭️  ${label} (skip)` : `${connector} ✅ ${label}`;
+  const pipelineBlock = [
+    "✅ *Pipeline completo* — tudo verde",
+    treeRow("├─", "Build Next.js", skipBuild),
+    treeRow("├─", "Cloudflare Pages", skipPages),
+    treeRow("└─", "Cloudflare Workers", skipWorkers),
+  ].join("\n");
+
+  // success → bloco criativo multilinha (dispara passthrough no worker).
+  // failed  → summary[0] vira o "motivo" no template de falha do worker.
+  const endSummary =
+    deployStatus === "success"
+      ? [pipelineBlock, `📦 ${verLabel} · branch main`]
+      : [
+          `Resultado direto: deploy interrompido (${failureReason.slice(0, 180)}).`,
+        ];
+
   notifyWhatsAppTask("end", {
-    title: deployMsg ? `Deploy finalizado — ${deployMsg}` : "Deploy finalizado",
+    title: endTitle,
     task_id: taskId,
     deploy_version: version ? `v${version}` : undefined,
     status: deployStatus,
     started_at: taskStartedAtIso,
     ended_at: taskEndedAtIso,
-    summary: [
-      deployStatus === "success"
-        ? `Resultado direto: deploy ${version ? `v${version}` : "concluído"} executado.`
-        : `Resultado direto: deploy interrompido (${failureReason.slice(0, 180)}).`,
-      "Motivo: manter visibilidade operacional de início e término no grupo.",
-      "Vantagem prática: decisão rápida com status consolidado e duração automática.",
-      version ? `Versão: v${version}` : "Versão: não gerada",
-      skipBuild ? "Build: SKIP" : "Build: OK",
-      skipPages ? "Pages: SKIP" : "Pages: OK",
-      skipWorkers ? "Workers: SKIP" : "Workers: OK",
-      includeWhatsApp ? "WhatsApp worker: ON" : "WhatsApp worker: OFF",
-    ],
+    summary: endSummary,
   }, { required: requireWhatsAppNotify });
 
   console.log("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
