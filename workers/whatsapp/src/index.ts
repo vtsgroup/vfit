@@ -51,7 +51,7 @@ interface Env {
 type Json = Record<string, unknown>;
 
 const WORKER_NAME = 'vfit-whatsapp';
-const WORKER_VERSION = '1.1.0';
+const WORKER_VERSION = '1.2.0';
 
 function normalizeSecret(val: unknown): string | null {
   if (typeof val !== 'string') return null;
@@ -523,22 +523,23 @@ function buildEndMessage(params: {
   const link = fmtLink(params.linkUrl);
 
   if (status === 'success') {
-    // Detect creative templates: if 4+ summaries exist OR first summary is very long/detailed
-    // then use them as-is (passthrough mode), else fall back to generic formatting.
-    const hasManySummaries = params.summary && params.summary.length >= 4;
-    const firstSummaryLong = params.summary && params.summary[0] && params.summary[0].length > 200;
-    const isCreativeTemplate = hasManySummaries || firstSummaryLong;
+    // Detect creative templates by the ONE reliable signal: a multiline summary.
+    // cf-deploy's auto-notification sends only short single-line statuses
+    // ("Build: OK", "Pages: OK"...), so any summary containing a newline is an
+    // intentional rich/creative block → render it verbatim (passthrough mode).
+    const isCreativeTemplate = Array.isArray(params.summary)
+      && params.summary.some((s) => typeof s === 'string' && s.includes('\n'));
 
     if (isCreativeTemplate && params.summary && params.summary.length > 0) {
-      // Creative template mode: use summaries directly with title as header
-      const lines: string[] = [];
-      lines.push(`${params.title}${verLabel ? ` ${verLabel}` : ''}`);
-      lines.push('');
+      // Creative template mode: use summaries directly with title as header.
+      // Avoid duplicating the version if the title already carries it.
+      const titleHasVer = verLabel && params.title.includes(verLabel);
+      const header = titleHasVer || !verLabel ? params.title : `${params.title} ${verLabel}`;
+      const lines: string[] = [header, ''];
       for (const summary of params.summary) {
-        lines.push(summary);
-        lines.push('');
+        lines.push(summary, '');
       }
-      if (durStr) lines.push(`⏱️ Deploy time: ${durStr}`);
+      if (durStr) lines.push(`⏱️ Deploy: ${durStr}`);
       if (link) lines.push(link);
       return lines.join('\n').trim();
     }
