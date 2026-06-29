@@ -20,10 +20,7 @@ import { useAuthStore } from '@/stores/auth-store'
 import {
   GlassCard,
   AnimatedCounter,
-  AnimatedCheckmark,
   StaggerContainer,
-  MeshGradientBg,
-  FloatingOrbs,
 } from '@/components/onboarding/onboarding-animations'
 
 // ─── Types (inline — evita import de workers no frontend) ───
@@ -136,9 +133,8 @@ export default function OnboardingResultPage() {
 
   if (!result) {
     return (
-      <div className="relative flex min-h-dvh flex-col items-center justify-center overflow-hidden px-6 text-center text-white bg-slate-950">
-        <MeshGradientBg animate />
-        <FloatingOrbs />
+      <div className="vfit-energy-bg relative flex min-h-dvh flex-col items-center justify-center overflow-hidden px-6 text-center text-white">
+        <div aria-hidden className="vfit-energy-orb vfit-energy-orb-a absolute -left-20 top-20 h-72 w-72 bg-emerald-400/18 blur-[120px]" />
         <div className="vfit-flow-grid pointer-events-none absolute inset-0" />
         <div className="relative z-10">
           <motion.div
@@ -166,10 +162,10 @@ export default function OnboardingResultPage() {
   const { plan, stats } = result
 
   return (
-    <div className="relative min-h-dvh overflow-hidden pb-40 text-white bg-slate-950">
-      {/* ─── Background Elements ─── */}
-      <MeshGradientBg animate />
-      <FloatingOrbs />
+    <div className="vfit-energy-bg relative min-h-dvh overflow-hidden pb-40 text-white">
+      {/* ─── Orbs vívidos + grid ─── */}
+      <div aria-hidden className="vfit-energy-orb vfit-energy-orb-a absolute -left-24 top-10 h-80 w-80 bg-emerald-400/18 blur-[130px]" />
+      <div aria-hidden className="vfit-energy-orb vfit-energy-orb-b absolute -right-24 top-1/2 h-72 w-72 bg-lime-400/14 blur-[130px]" />
       <div className="vfit-flow-grid pointer-events-none absolute inset-0" />
 
       {/* ─── Top light gradient ─── */}

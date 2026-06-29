@@ -18,12 +18,8 @@ import { api } from '@/lib/api-client'
 import { useAuthStore } from '@/stores/auth-store'
 import { Button } from '@/components/ui/button'
 import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
-import {
-  AnimatedLogo,
-  FloatingOrbs,
-  MeshGradientBg,
-  AnimatedProgressBar,
-} from '@/components/onboarding/onboarding-animations'
+import { AnimatedProgressBar } from '@/components/onboarding/onboarding-animations'
+import { VfitAnimatedMark } from '@/components/ui/vfit-animated-mark'
 import { motion } from 'framer-motion'
 
 // ─── Fases do loading ───
@@ -143,110 +139,87 @@ export default function OnboardingLoadingPage() {
 
   if (error) {
     return (
-      <div className="vfit-flow-bg relative flex min-h-dvh flex-col items-center justify-center overflow-hidden px-6 text-center text-white">
+      <div className="vfit-energy-bg relative flex min-h-dvh flex-col items-center justify-center overflow-hidden px-6 text-center text-white">
         <div className="vfit-flow-grid pointer-events-none absolute inset-0" />
-        <div className="relative mb-6 flex h-20 w-20 items-center justify-center rounded-3xl border border-yellow-300/20 bg-yellow-300/10">
-          <DSIcon name="alertTriangle" className="h-10 w-10 text-yellow-400" />
+        <div className="relative z-10 flex flex-col items-center">
+          <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-3xl border border-amber-300/25 bg-amber-300/10">
+            <DSIcon name="alertTriangle" className="h-10 w-10 text-amber-400" />
+          </div>
+          <h2 className="mb-2 text-xl font-black text-white">{error}</h2>
+          <p className="mb-8 text-sm text-slate-400">Tente novamente em alguns segundos.</p>
+          <Button
+            onClick={() => {
+              setError(null)
+              hasCalled.current = false
+              setIsGenerating(false)
+              generatePlan()
+            }}
+          >
+            Tentar Novamente
+          </Button>
         </div>
-        <h2 className="relative mb-2 text-xl font-bold text-white">
-          {error}
-        </h2>
-        <p className="relative mb-8 text-sm text-slate-400">
-          Tente novamente em alguns segundos.
-        </p>
-        <Button
-          onClick={() => {
-            setError(null)
-            hasCalled.current = false
-            setIsGenerating(false)
-            generatePlan()
-          }}
-        >
-          Tentar Novamente
-        </Button>
       </div>
     )
   }
 
   return (
-    <div className="relative flex min-h-dvh flex-col items-center justify-center overflow-hidden px-6 text-white bg-slate-950">
-      {/* ─── Mesh Gradient Background ─── */}
-      <MeshGradientBg animate />
-
-      {/* ─── Floating Orbs ─── */}
-      <FloatingOrbs />
-
-      {/* ─── Background grid (subtle) ─── */}
+    <div className="vfit-energy-bg relative flex min-h-dvh flex-col items-center justify-center overflow-hidden px-6 text-white">
+      {/* ─── Orbs vívidos à deriva ─── */}
+      <div aria-hidden className="vfit-energy-orb vfit-energy-orb-a absolute -left-24 top-16 h-72 w-72 bg-emerald-400/20 blur-[120px]" />
+      <div aria-hidden className="vfit-energy-orb vfit-energy-orb-b absolute -right-20 bottom-24 h-80 w-80 bg-lime-400/16 blur-[130px]" />
       <div className="vfit-flow-grid pointer-events-none absolute inset-0" />
 
-      {/* ─── Top light gradient ─── */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-56 bg-linear-to-b from-white/5 to-transparent" />
+      {/* ─── Conteúdo ─── */}
+      <div className="relative z-10 flex w-full max-w-sm flex-col items-center text-center">
+        {/* ─── Logo animada da splash — protagonista ─── */}
+        <VfitAnimatedMark size={150} />
 
-      {/* ─── Content container ─── */}
-      <div className="relative z-10 flex flex-col items-center justify-center gap-0">
-        {/* ─── Animated Logo as Protagonist ─── */}
-        <div className="mb-12">
-          <AnimatedLogo size="md" glowColor="rgba(34, 197, 94, 0.7)">
-            <DSIcon
-              name={phase.icon}
-              className="h-16 w-16 text-brand-primary transition-all duration-500"
-              key={phase.icon}
-            />
-          </AnimatedLogo>
-        </div>
-
-        {/* ─── Phase label with animation ─── */}
+        {/* ─── Fase atual ─── */}
         <motion.div
           key={phase.label}
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          transition={{ duration: 0.5 }}
-          className="mb-3 text-center"
+          transition={{ duration: 0.45, ease: 'easeOut' }}
+          className="mt-12"
         >
-          <h2 className="text-3xl font-black leading-tight text-white">
+          <span className="inline-flex items-center gap-2 rounded-full border border-emerald-400/25 bg-emerald-400/10 px-3 py-1 text-[11px] font-black uppercase tracking-wide text-emerald-200 backdrop-blur-sm">
+            <DSIcon name={phase.icon} size={13} />
+            Passo {currentPhase + 1}/{PHASES.length}
+          </span>
+          <h2 className="mt-4 text-[28px] font-black leading-[1.08] text-white sm:text-3xl">
             {phase.label}
           </h2>
         </motion.div>
 
-        <p className="mb-10 max-w-sm text-center text-sm leading-6 text-slate-300">
+        <p className="mt-3 max-w-xs text-sm leading-6 text-slate-300/85">
           Cruzando seus dados com intensidade, tempo disponível e objetivo principal.
         </p>
 
-        {/* ─── Progress bar with enhanced animation ─── */}
-        <div className="w-full max-w-xs space-y-3">
-          <AnimatedProgressBar progress={progress} />
-          <motion.div className="flex items-center justify-between text-xs text-slate-400">
-            <motion.span
-              animate={{ opacity: [0.5, 1, 0.5] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >
-              Passo {currentPhase + 1}/{PHASES.length}
-            </motion.span>
+        {/* ─── Progresso com porcentagem em destaque ─── */}
+        <div className="mt-9 w-full">
+          <div className="mb-2 flex items-end justify-between">
+            <span className="text-[11px] font-bold uppercase tracking-wide text-slate-400">Gerando plano</span>
             <motion.span
               key={Math.round(progress)}
-              initial={{ scale: 1.2, opacity: 0 }}
+              initial={{ scale: 1.25, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.3 }}
-              className="font-semibold text-brand-primary"
+              transition={{ duration: 0.25 }}
+              className="vfit-energy-text text-3xl font-black leading-none"
             >
               {Math.round(progress)}%
             </motion.span>
-          </motion.div>
+          </div>
+          <AnimatedProgressBar progress={progress} />
         </div>
 
-        {/* ─── Time estimate badge ─── */}
+        {/* ─── Tempo estimado ─── */}
         <motion.p
-          className="mt-10 flex max-w-xs items-center justify-center gap-2 rounded-2xl backdrop-blur-md border border-emerald-500/20 px-4 py-3 text-center text-xs text-slate-300"
-          style={{
-            background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.5) 100%)',
-            boxShadow: 'inset 0 1px 12px rgba(34, 197, 94, 0.1)',
-          }}
-          initial={{ opacity: 0, scale: 0.9 }}
+          className="mt-8 inline-flex items-center gap-2 rounded-2xl border border-emerald-400/20 bg-white/[0.04] px-4 py-2.5 text-xs text-slate-300 backdrop-blur-md"
+          initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.3, duration: 0.4 }}
         >
-          <DSIcon name="clock" className="h-3.5 w-3.5 text-brand-primary" />
+          <DSIcon name="clock" className="h-3.5 w-3.5 text-emerald-300" />
           <span>Tempo estimado: 30-45 segundos</span>
         </motion.p>
       </div>

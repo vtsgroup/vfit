@@ -1,0 +1,110 @@
+/**
+ * src/components/ui/vfit-animated-mark.tsx
+ *
+ * VfitAnimatedMark — a MESMA marca animada da SplashScreen, isolada e em LOOP.
+ *
+ * Exports: VfitAnimatedMark
+ * Features: 'use client' · CSS-only (sem JS de animação) · SSR-safe · reduced-motion
+ *
+ * A splash (src/components/ui/splash-screen.tsx) toca a marca UMA vez na abertura.
+ * Aqui a mesma identidade (favicon V+wifi · arcos desenhando · anéis emanando ·
+ * glow respirando) vive em LOOP — pensada pra tela de loading da geração do plano.
+ * "Vibrant Energy": anéis mais rápidos/brilhantes + acento lima + breathe contínuo.
+ */
+
+'use client'
+
+import { type CSSProperties } from 'react'
+import { cn } from '@/lib/utils'
+
+interface VfitAnimatedMarkProps {
+  /** lado do ícone em px (default 132) */
+  size?: number
+  className?: string
+  /** cor do glow/anéis (default verde VFIT) */
+  glow?: string
+}
+
+export function VfitAnimatedMark({ size = 132, glow = 'rgba(74,222,128,0.85)', className }: VfitAnimatedMarkProps) {
+  const radius = Math.round(size * 0.22)
+  return (
+    <div
+      className={cn('vam-root', className)}
+      role="img"
+      aria-label="VFIT"
+      style={{ '--vam-size': `${size}px`, '--vam-glow': glow, '--vam-radius': `${radius}px` } as CSSProperties}
+    >
+      <span aria-hidden className="vam-glow" />
+      <span aria-hidden className="vam-ring vam-ringA" />
+      <span aria-hidden className="vam-ring vam-ringB" />
+      <span aria-hidden className="vam-ring vam-ringC" />
+
+      <span aria-hidden className="vam-icon">
+        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" className="vam-svg">
+          <rect x="0" y="0" width="1024" height="1024" rx="220" ry="220" fill="#3ab54a" />
+          <path
+            fill="#08122b"
+            d="M415.889740,248.989182 C444.136658,251.162689 462.226135,266.718750 473.780396,290.935883 C478.271240,300.348389 480.280060,310.441864 480.046539,320.978149 C479.836151,330.471497 479.935852,339.973877 480.024475,349.471069 C480.117126,359.400116 485.657867,364.938446 495.536621,364.979858 C510.033356,365.040619 524.530701,365.043030 539.027405,364.980530 C549.567200,364.935120 554.928345,359.494904 554.984741,348.860413 C555.039551,338.529510 555.419006,328.177460 554.914124,317.871033 C553.706970,293.228333 574.263855,258.341980 609.192749,250.898941 C613.690857,249.940445 618.413879,249.688309 623.031677,249.696640 C660.177246,249.763702 697.329224,249.611679 734.465027,250.295380 C751.876587,250.615967 769.342102,250.619171 786.619507,254.478531 C815.045715,260.828217 840.351074,286.761261 844.962158,315.533630 C845.508362,318.941742 846.524292,322.320129 846.668030,325.739807 C847.581482,347.470551 839.342529,366.306244 827.454590,383.757996 C805.924194,415.364990 784.163391,446.815247 762.442810,478.292297 C747.624512,499.766724 732.701965,521.169189 717.841797,542.614685 C689.229187,583.907104 660.739197,625.285095 631.982239,666.476624 C613.052307,693.591980 594.302063,720.863403 574.415283,747.269592 C560.512939,765.729492 541.158936,775.888733 517.763977,777.783997 C488.599457,780.146545 465.336060,768.807800 447.714935,746.333801 C434.496277,729.474792 422.524414,711.621826 410.317200,693.989990 C388.729797,662.809753 367.355621,631.481628 345.950073,600.175842 C330.921814,578.196838 316.052917,556.108704 301.000092,534.146606 C276.734528,498.742981 252.245895,463.491516 228.109467,428.000336 C215.301392,409.166809 202.881439,390.063232 190.594421,370.884125 C184.813751,361.860901 181.302887,351.821686 179.794647,341.141754 C179.268707,337.417450 178.047607,333.708038 178.082199,330.000580 C178.509399,284.198364 211.334473,252.452209 253.152405,249.651260 C276.025604,248.119232 299.031708,248.249298 321.978638,248.219376 C353.120789,248.178772 384.263611,248.702927 415.889740,248.989182 z"
+          />
+          <path className="vam-arc vam-arcC" fill="#36ab43" d="M370.515564,426.502441 C387.045929,412.658386 405.914490,404.116943 426.066864,398.232544 C477.557526,383.197540 529.740784,381.604492 582.348755,390.947479 C608.449829,395.582977 633.426025,403.597351 655.868530,418.211456 C674.747253,430.504913 686.869812,446.697479 685.879578,470.490814 C685.533691,478.803284 686.046448,487.165375 685.393616,495.443787 C685.164490,498.349731 683.232300,502.501678 680.959900,503.475189 C678.718262,504.435516 674.160706,503.018066 672.161072,501.065033 C637.042786,466.765015 592.293030,458.276611 546.127869,454.272125 C509.885620,451.128418 473.914978,453.882446 438.593445,463.113312 C417.189056,468.707123 396.675995,476.436615 378.672180,489.645966 C373.730591,493.271667 369.626678,498.040405 364.679199,501.656372 C362.108490,503.535156 357.766052,505.721252 355.615570,504.734802 C353.070312,503.567322 350.688141,499.180664 350.567810,496.098328 C350.107483,484.305664 350.033112,472.438141 350.851746,460.670746 C351.838806,446.482239 360.853149,436.384308 370.515564,426.502441 z" />
+          <path className="vam-arc vam-arcB" fill="#36aa43" d="M617.420288,514.576416 C632.720886,526.339600 634.261902,542.462158 632.441101,559.449646 C631.718872,566.187744 625.874268,568.768433 620.783325,564.344421 C582.381714,530.973083 494.512115,526.111572 440.599457,550.478088 C434.431458,553.265747 428.796631,557.248657 422.971680,560.771729 C420.698761,562.146423 418.699280,563.995605 416.373108,565.255371 C410.957275,568.188477 405.868195,566.295105 405.012817,560.211365 C402.658722,543.468506 403.711823,527.518372 418.403351,515.725952 C431.949219,504.853271 447.566986,498.323517 464.249115,494.529144 C504.381042,485.401093 544.465210,484.816742 584.148193,497.143280 C596.127930,500.864532 607.436462,506.145081 617.420288,514.576416 z" />
+          <path className="vam-arc vam-arcA" fill="#35aa43" d="M570.137695,579.013245 C575.479919,586.342285 574.093933,593.249573 565.719360,597.258057 C559.336670,600.313171 552.394592,602.702759 545.442810,603.970398 C525.609924,607.586731 505.665802,607.618225 485.958008,602.898010 C481.177734,601.753052 476.388580,599.817749 472.177979,597.289246 C462.600616,591.538147 462.568787,581.645752 472.096436,575.768433 C476.136841,573.275940 480.754303,571.234924 485.377960,570.253784 C508.102966,565.431702 530.972107,564.291809 553.588562,570.617737 C559.325867,572.222473 564.461914,575.977295 570.137695,579.013245 z" />
+        </svg>
+      </span>
+
+      <style>{`
+        .vam-root {
+          position: relative;
+          width: var(--vam-size); height: var(--vam-size);
+          display: grid; place-items: center;
+          isolation: isolate;
+        }
+        .vam-glow {
+          position: absolute; inset: -42%;
+          border-radius: 50%;
+          background: radial-gradient(circle, var(--vam-glow), rgba(34,197,94,.14) 46%, transparent 70%);
+          filter: blur(6px); z-index: 0; opacity: .6;
+          will-change: opacity, transform;
+          animation: vamGlow 2.6s ease-in-out infinite;
+        }
+        .vam-ring {
+          position: absolute; width: 100%; height: 100%;
+          border-radius: 50%; z-index: 0;
+          border: 2px solid var(--vam-glow);
+          transform: scale(.7); opacity: 0;
+          will-change: transform, opacity;
+        }
+        .vam-ringA { animation: vamRing 2.8s cubic-bezier(.2,.6,.3,1) 0s   infinite; }
+        .vam-ringB { animation: vamRing 2.8s cubic-bezier(.2,.6,.3,1) .93s infinite; border-color: rgba(190,242,100,.55); }
+        .vam-ringC { animation: vamRing 2.8s cubic-bezier(.2,.6,.3,1) 1.86s infinite; }
+        .vam-icon {
+          position: relative; z-index: 2;
+          width: 100%; height: 100%;
+          border-radius: var(--vam-radius); overflow: hidden;
+          box-shadow: 0 22px 60px -18px var(--vam-glow), inset 0 1px 0 rgba(255,255,255,.18);
+          opacity: 0; transform: scale(.6);
+          backface-visibility: hidden; will-change: transform, opacity;
+          animation: vamIconIn .8s cubic-bezier(.2,.75,.3,1) forwards, vamBreathe 3.4s ease-in-out 1s infinite;
+        }
+        .vam-svg { display: block; width: 100%; height: 100%; }
+        .vam-arc { transform-box: view-box; transform-origin: 512px 600px; opacity: 0; transform: scale(.2); will-change: transform, opacity; }
+        .vam-arcC { animation: vamArcIn .7s cubic-bezier(.2,.8,.2,1) .34s forwards; }
+        .vam-arcB { animation: vamArcIn .7s cubic-bezier(.2,.8,.2,1) .46s forwards; }
+        .vam-arcA { animation: vamArcIn .7s cubic-bezier(.2,.8,.2,1) .58s forwards; }
+
+        @keyframes vamGlow   { 0%,100% { opacity:.45; transform:scale(1) } 50% { opacity:.78; transform:scale(1.06) } }
+        @keyframes vamRing   { 0% { transform:scale(.7); opacity:0 } 12% { opacity:.55 } 100% { transform:scale(1.95); opacity:0 } }
+        @keyframes vamIconIn { 0% { opacity:0; transform:scale(.6) } 62% { opacity:1; transform:scale(1.07) } 100% { opacity:1; transform:scale(1) } }
+        @keyframes vamArcIn  { 0% { opacity:0; transform:scale(.18) } 72% { opacity:1; transform:scale(1.16) } 100% { opacity:1; transform:scale(1) } }
+        @keyframes vamBreathe{ 0%,100% { transform:scale(1) } 50% { transform:scale(1.035) } }
+
+        @media (prefers-reduced-motion: reduce) {
+          .vam-glow { animation: none !important; opacity: .55 !important; }
+          .vam-ring { animation: none !important; opacity: 0 !important; }
+          .vam-icon { animation: none !important; opacity: 1 !important; transform: none !important; }
+          .vam-arc  { animation: none !important; opacity: 1 !important; transform: scale(1) !important; }
+        }
+      `}</style>
+    </div>
+  )
+}

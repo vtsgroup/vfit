@@ -102,8 +102,10 @@ export function OnboardingSignup({ inviteToken }: { inviteToken?: string }) {
   }
 
   return (
-    <div className="vfit-flow-bg relative min-h-dvh w-full overflow-hidden text-white">
+    <div className="vfit-energy-bg relative min-h-dvh w-full overflow-hidden text-white">
       <div className="vfit-flow-grid pointer-events-none absolute inset-0" aria-hidden="true" />
+      <div aria-hidden="true" className="welcome-orb1 pointer-events-none absolute -right-20 top-24 h-72 w-72 rounded-full bg-emerald-400/18 blur-[120px]" />
+      <div aria-hidden="true" className="welcome-orb2 pointer-events-none absolute -left-24 top-1/2 h-72 w-72 rounded-full bg-lime-400/14 blur-[130px]" />
 
       {/* emerald glow bloom behind hero (sky as cool secondary) */}
       <div
@@ -131,7 +133,7 @@ export function OnboardingSignup({ inviteToken }: { inviteToken?: string }) {
           <h1 className="mt-4 text-[26px] leading-[1.12] text-white" style={headingFont}>
             Seu plano está pronto.
             <br />
-            <span className="text-emerald-200">Crie sua conta pra salvar.</span>
+            <span className="vfit-energy-text">Crie sua conta pra salvar.</span>
           </h1>
 
           <p className="mx-auto mt-2.5 max-w-[20rem] text-[14px] leading-relaxed text-slate-400">

@@ -17,33 +17,34 @@ const TONE: Record<ChoiceTone, { rgb: string; text: string }> = {
   slate: { rgb: '203,213,225', text: 'text-slate-200' },
 }
 
-/* Estilos derivados do tom (selecionado vs base) */
+/* Estilos derivados do tom (selecionado vs base) — VIBRANT ENERGY:
+   selecionado mais saturado, glow mais forte, chip de ícone com pop. */
 function toneStyle(rgb: string) {
   return {
     selectedCard: {
-      background: `linear-gradient(135deg, rgba(${rgb},0.15) 0%, rgba(${rgb},0.05) 52%, rgba(5,10,18,0.42) 100%)`,
-      boxShadow: `0 26px 60px -34px rgba(${rgb},0.6), inset 0 1px 0 rgba(255,255,255,0.14), 0 0 0 1px rgba(${rgb},0.45)`,
+      background: `linear-gradient(135deg, rgba(${rgb},0.24) 0%, rgba(${rgb},0.09) 50%, rgba(5,10,18,0.5) 100%)`,
+      boxShadow: `0 28px 64px -28px rgba(${rgb},0.72), inset 0 1px 0 rgba(255,255,255,0.2), 0 0 0 1px rgba(${rgb},0.6)`,
     } as CSSProperties,
     baseCard: {
-      background: 'linear-gradient(160deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.022) 100%)',
-      boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08), 0 14px 32px -26px rgba(0,0,0,0.7)',
+      background: 'linear-gradient(160deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.025) 100%)',
+      boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.09), 0 16px 34px -26px rgba(0,0,0,0.72)',
     } as CSSProperties,
-    border: `linear-gradient(135deg, rgba(${rgb},0.75) 0%, rgba(${rgb},0.30) 45%, transparent 75%)`,
+    border: `linear-gradient(135deg, rgba(${rgb},0.9) 0%, rgba(${rgb},0.4) 42%, transparent 76%)`,
     iconSel: {
-      background: `linear-gradient(180deg, rgba(${rgb},0.24) 0%, rgba(${rgb},0.06) 100%)`,
-      boxShadow: `inset 0 1px 0 rgba(255,255,255,0.2), 0 6px 16px -6px rgba(${rgb},0.55)`,
-      borderColor: `rgba(${rgb},0.32)`,
+      background: `linear-gradient(180deg, rgba(${rgb},0.34) 0%, rgba(${rgb},0.1) 100%)`,
+      boxShadow: `inset 0 1px 0 rgba(255,255,255,0.3), 0 8px 22px -6px rgba(${rgb},0.7)`,
+      borderColor: `rgba(${rgb},0.42)`,
     } as CSSProperties,
     iconBase: {
-      background: 'linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))',
+      background: 'linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.025))',
       boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1)',
     } as CSSProperties,
-    iconGlow: `drop-shadow(0 0 8px rgba(${rgb},0.6))`,
+    iconGlow: `drop-shadow(0 0 11px rgba(${rgb},0.9))`,
     check: {
-      background: `linear-gradient(135deg, rgba(${rgb},1), rgba(${rgb},0.72))`,
-      boxShadow: `0 4px 12px -2px rgba(${rgb},0.6), inset 0 1px 0 rgba(255,255,255,0.45)`,
+      background: `linear-gradient(135deg, rgba(${rgb},1), rgba(${rgb},0.74))`,
+      boxShadow: `0 5px 14px -2px rgba(${rgb},0.7), inset 0 1px 0 rgba(255,255,255,0.5)`,
     } as CSSProperties,
-    mesh: `radial-gradient(circle, rgba(${rgb},0.32) 0%, transparent 70%)`,
+    mesh: `radial-gradient(circle, rgba(${rgb},0.42) 0%, transparent 70%)`,
   }
 }
 
@@ -95,6 +96,7 @@ export function OnboardingChoiceCard({ selected, label, description, icon, mark,
     >
       <GradientBorder image={s.border} radius="rounded-2xl" show={selected ? 'on' : 'hover'} />
       {selected && <span aria-hidden className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full blur-md" style={{ background: s.mesh }} />}
+      {selected && <span aria-hidden className="vfit-energy-beam" />}
 
       <span className="relative z-10 flex items-start justify-between gap-3">
         <span
@@ -135,6 +137,7 @@ export function OnboardingChoiceRow({ selected, label, description, icon, mark, 
     >
       <GradientBorder image={s.border} radius="rounded-[22px]" show={selected ? 'on' : 'hover'} />
       {selected && <span aria-hidden className="pointer-events-none absolute -right-6 -top-8 h-28 w-28 rounded-full blur-md" style={{ background: s.mesh }} />}
+      {selected && <span aria-hidden className="vfit-energy-beam" />}
 
       <span
         className={cn('vfit-choice-row-icon relative z-10 flex h-11 w-11 shrink-0 items-center justify-center rounded-[15px] border transition-all duration-300 group-hover:scale-105 sm:h-12 sm:w-12 sm:rounded-2xl', selected ? `${t.text} border-transparent` : 'border-white/10 text-white/55 group-hover:text-white/80')}
