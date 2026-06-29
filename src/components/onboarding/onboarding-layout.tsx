@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { useOnboardingStore } from '@/stores/onboarding-store'
+import { MeshGradientBg } from '@/components/onboarding/onboarding-animations'
 
 function SegmentedProgressBar({ current, total }: { current: number; total: number }) {
   return (
@@ -86,11 +87,14 @@ export function OnboardingStepLayout({
 
   return (
     <div className="vfit-flow-bg relative flex min-h-dvh flex-col overflow-hidden text-white">
+      {/* Base cinematográfica: mesh gradient animado (mesma assinatura do loading/result).
+          Blobs SVG à deriva sob a atmosfera do fluxo → backdrop "vivo" em cada step. */}
+      <MeshGradientBg className="opacity-50" />
       <div className="vfit-flow-grid pointer-events-none absolute inset-0" />
-      {/* Camada cinematográfica: orbs de aurora à deriva — CSS-only (keyframes welcome-orb1/2),
-          reduced-motion-aware, zero custo de JS. Unifica o aesthetic com a welcome. */}
-      <div aria-hidden="true" className="welcome-orb1 pointer-events-none absolute -right-20 top-20 h-80 w-80 rounded-full bg-emerald-400/12 blur-[120px]" />
-      <div aria-hidden="true" className="welcome-orb2 pointer-events-none absolute -left-24 top-1/2 h-72 w-72 rounded-full bg-lime-400/9 blur-[130px]" />
+      {/* Orbs de aurora à deriva — CSS-only (keyframes welcome-orb1/2), reduced-motion-aware.
+          Acentos verdes em movimento por cima do mesh. */}
+      <div aria-hidden="true" className="welcome-orb1 pointer-events-none absolute -right-20 top-20 h-80 w-80 rounded-full bg-emerald-400/14 blur-[120px]" />
+      <div aria-hidden="true" className="welcome-orb2 pointer-events-none absolute -left-24 top-1/2 h-72 w-72 rounded-full bg-lime-400/10 blur-[130px]" />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-95 bg-linear-to-b from-vfit-primary-500/22 via-sky-400/8 to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-sky-200/45 to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-44 bg-linear-to-t from-bg-base via-bg-base/70 to-transparent" />
