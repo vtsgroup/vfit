@@ -1,33 +1,30 @@
 /**
  * src/app/(onboarding)/welcome/page.tsx
  *
- * Welcome Screen — VFIT (redesign "Cinematic Performance / Editorial").
+ * Welcome Screen — VFIT "BROADCAST" (placar de arena tipográfico / editorial brutalista).
  *
- * Direção: hero editorial ousado — headline gigante (Syne), fundo cinematográfico
- * (aurora + grain + grid + ghost wordmark), e o "device" do PLANO IA flutuando em
- * 3D com chips orbitando. Pegada Vibrant Energy (verde→lima sobre navy).
+ * Direção: a tela é um PLACAR DE TRANSMISSÃO. Tipografia gigante (Syne) como manchete de
+ * arena, aparato de revista em mono (Space Grotesk), numerais outline como peso de placar,
+ * e UMA única superfície sólida de cor — a barra-CTA verde→lima. Sem cards, sem device 3D,
+ * sem aurora difusa: leitura em <2s, hierarquia brutal, conversão no único ponto que brilha.
  *
- * IMPORTANT: animações são CSS-only (sem JS/framer-motion) — o conteúdo aparece
- * mesmo com hidratação lenta (crítico para PWA standalone no iPhone).
+ * IMPORTANT: animações 100% CSS (sem JS/framer-motion) — aparece mesmo com hidratação lenta
+ * (crítico p/ PWA standalone no iPhone). overflow-x-hidden + reduced-motion com estado final
+ * sempre visível. Lógica de auth/onboarding preservada integralmente.
  */
 
 'use client'
 
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
+import { VfitAnimatedMark } from '@/components/ui/vfit-animated-mark'
 import { useAuthStore } from '@/stores/auth-store'
 import { useOnboardingStore } from '@/stores/onboarding-store'
 import { supportsPasskey, getPasskeyEmail, isBiometricAutoUnlockEnabled, isBiometricInCooldown } from '@/hooks/use-passkey'
-import Link from 'next/link'
 
-const TRUST_BADGES: { icon: DSIconName; text: string }[] = [
-  { icon: 'shieldCheck', text: 'Sem cartão' },
-  { icon: 'clock', text: '2 minutos' },
-  { icon: 'lock', text: 'Dados protegidos' },
-]
-
-/* Sinais do plano (device IA) */
+/* Box-score: a IA "ligando" o plano — prova viva, não promessa */
 const PLAN_SIGNALS: { icon: DSIconName; label: string; value: string }[] = [
   { icon: 'target', label: 'Objetivo', value: 'Emagrecer, força ou hipertrofia' },
   { icon: 'dumbbell', label: 'Estrutura', value: 'Casa, academia ou peso corporal' },
@@ -35,11 +32,18 @@ const PLAN_SIGNALS: { icon: DSIconName; label: string; value: string }[] = [
   { icon: 'activity', label: 'Nível', value: 'Intensidade na medida certa' },
 ]
 
-/* Chips que orbitam o device */
-const ORBIT_CHIPS: { icon: DSIconName; label: string; pos: string; anim: string }[] = [
-  { icon: 'clock', label: '45 min', pos: '-left-5 top-16 sm:-left-9', anim: 'wl-float-a' },
-  { icon: 'flame', label: '3x / semana', pos: '-right-4 top-1/3 sm:-right-8', anim: 'wl-float-b' },
-  { icon: 'brainCircuit', label: 'IA adapta', pos: 'bottom-10 -left-4 sm:-left-7', anim: 'wl-float-c' },
+/* Expediente / colofão — ficha técnica do produto */
+const COLOFAO: { k: string; v: string }[] = [
+  { k: 'Hoje', v: 'Treino claro e executável' },
+  { k: 'Amanhã', v: 'Streak pra você voltar' },
+  { k: 'Semana', v: 'Progresso visível' },
+  { k: 'Sempre', v: 'Sem cartão, sem trava' },
+]
+
+const TRUST: { icon: DSIconName; text: string }[] = [
+  { icon: 'shieldCheck', text: 'Sem cartão' },
+  { icon: 'clock', text: '2 min de setup' },
+  { icon: 'lock', text: 'Dados protegidos' },
 ]
 
 export default function WelcomePage() {
@@ -76,256 +80,278 @@ export default function WelcomePage() {
     else handleStart()
   }
 
-  return (
-    <div className="vfit-energy-bg wl-grain relative flex min-h-dvh flex-col overflow-hidden text-white">
-      {/* ─── Atmosfera cinematográfica ─── */}
-      <div className="vfit-flow-grid pointer-events-none absolute inset-0 opacity-70" />
-      <div aria-hidden className="welcome-orb1 pointer-events-none absolute -left-40 -top-28 h-[30rem] w-[30rem] rounded-full bg-emerald-500/20 blur-[150px]" />
-      <div aria-hidden className="welcome-orb2 pointer-events-none absolute -right-32 top-1/4 h-[26rem] w-[26rem] rounded-full bg-lime-400/14 blur-[150px]" />
-      {/* bloom focal atrás do device (foco + drama) */}
-      <div aria-hidden className="pointer-events-none absolute right-[6%] top-[42%] h-[44rem] w-[44rem] -translate-y-1/2 rounded-full bg-emerald-500/16 blur-[150px]" />
-      {/* vinheta cinematográfica nos cantos */}
-      <div aria-hidden className="pointer-events-none absolute inset-0" style={{ background: 'radial-gradient(ellipse 78% 62% at 42% 38%, transparent 32%, rgba(2,6,14,0.62) 100%)' }} />
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-emerald-300/45 to-transparent" />
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-48 bg-linear-to-t from-bg-base via-bg-base/70 to-transparent" />
-      {/* ghost wordmark gigante (profundidade editorial) */}
-      <span aria-hidden className="wl-ghost font-syne pointer-events-none absolute -bottom-10 -left-6 select-none text-[28vw] font-black leading-none tracking-tighter text-white/[0.018] sm:-bottom-24 lg:text-[20vw]">VFIT</span>
+  const ctaLabel = hasSavedProgress ? 'Continuar meu plano' : 'Criar meu plano grátis'
+  const ctaIcon: DSIconName = hasSavedProgress ? 'play' : 'sparkles'
 
-      {/* ─── Top bar minimalista ─── */}
-      <header className="relative z-20 mx-auto flex w-full max-w-7xl items-center justify-between px-5 pt-[calc(env(safe-area-inset-top)+16px)] sm:px-8">
-        <div className="flex items-center gap-2.5">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/favicons/favicon.svg" alt="" width={34} height={34} className="h-8.5 w-8.5 rounded-xl shadow-[0_8px_22px_-8px_rgba(34,197,94,0.7)]" />
-          <span className="font-syne text-lg font-black tracking-tight text-white">VFIT</span>
-        </div>
-        <div className="flex items-center gap-1.5 sm:gap-3">
-          <Link href="/register/personal?from=welcome" className="hidden rounded-full px-3 py-2 text-[13px] font-semibold text-white/60 transition-colors hover:text-white sm:block">
-            Sou Personal
-          </Link>
-          <button onClick={() => router.push('/login')} className="rounded-full border border-white/12 bg-white/[0.05] px-4 py-2 text-[13px] font-bold text-white/85 backdrop-blur-xl transition-all hover:border-emerald-300/40 hover:text-white">
-            Entrar
-          </button>
+  const CtaBar = ({ fixed = false }: { fixed?: boolean }) => (
+    <button
+      onClick={handlePrimaryStudentFlow}
+      aria-label={ctaLabel}
+      className="bc-cta group/cta relative flex h-16 w-full items-center gap-3 overflow-hidden rounded-md pl-5 pr-2 text-[#06210f] outline-none transition-transform duration-200 hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-2 focus-visible:ring-lime-200 focus-visible:ring-offset-2 focus-visible:ring-offset-[#04080f]"
+      style={{ background: 'linear-gradient(135deg,#a3e635 0%,#34e565 48%,#16a34a 100%)' }}
+    >
+      <span aria-hidden className={`bc-cta-sweep ${fixed ? 'bc-cta-sweep--fixed' : ''}`} />
+      <DSIcon name={ctaIcon} size={20} className="relative z-10 shrink-0" />
+      <span className="bc-jumbo-font relative z-10 text-[15px] font-black uppercase tracking-tight sm:text-[18px]">{ctaLabel}</span>
+      <span className="relative z-10 ml-auto flex h-12 shrink-0 items-center gap-2 rounded bg-[#06210f] pl-3 pr-3 text-lime-300">
+        <span className="bc-mono text-[10px] font-bold uppercase tracking-[0.18em] text-lime-200/90">2 min</span>
+        <DSIcon name="arrowRight" size={18} className="transition-transform duration-200 group-hover/cta:translate-x-0.5" />
+      </span>
+    </button>
+  )
+
+  return (
+    <div className="bc-root relative flex min-h-dvh flex-col overflow-x-hidden bg-[#04080f] pb-[140px] text-white lg:pb-0">
+      {/* atmosfera "impressa": grade técnica seca + sheen no topo (sem orbs/aurora) */}
+      <div aria-hidden className="vfit-flow-grid pointer-events-none absolute inset-0 opacity-[0.22]" />
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-lime-300/40 to-transparent" />
+      <div aria-hidden className="pointer-events-none absolute inset-0" style={{ background: 'radial-gradient(120% 80% at 80% -10%, rgba(34,197,94,0.10), transparent 55%)' }} />
+
+      {/* ─── FAIXA 0 · MASTHEAD ─── */}
+      <header
+        className="bc-mast sticky top-0 z-40 border-b border-lime-400/20 bg-[#04080f]/85 backdrop-blur-md"
+        style={{ paddingTop: 'env(safe-area-inset-top)' }}
+      >
+        <div className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between gap-2 px-4 sm:px-7">
+          <i aria-hidden className="bc-hr bc-hr-mast" />
+          <div className="flex min-w-0 items-center gap-2.5">
+            <VfitAnimatedMark size={28} className="shrink-0" />
+            <span className="bc-mono text-[13px] font-bold uppercase tracking-[0.3em] text-white">VFIT</span>
+            <span className="bc-mono hidden truncate text-[10px] uppercase tracking-[0.2em] text-lime-300/70 sm:inline">Nº 01 · Edição Atleta</span>
+          </div>
+          <span className="bc-mono hidden text-[10px] uppercase tracking-[0.32em] text-white/35 lg:block">Edição Jun · 2026</span>
+          <nav className="bc-mono flex items-center gap-1 text-[10px] uppercase tracking-[0.18em] sm:gap-2">
+            <Link href="/register/personal?from=welcome" className="hidden items-center px-2 py-2.5 font-semibold text-white/50 transition-colors hover:text-white sm:flex">Sou Personal</Link>
+            <span aria-hidden className="hidden h-3 w-px bg-white/15 sm:block" />
+            <Link href="/register/personal?type=nutri&from=welcome" className="hidden items-center px-2 py-2.5 font-semibold text-white/50 transition-colors hover:text-white sm:flex">Sou Nutri</Link>
+            <button
+              onClick={() => router.push('/login')}
+              className="flex items-center gap-1 rounded border border-white/15 bg-white/[0.04] px-3 py-2 font-bold text-white/90 transition-colors hover:border-lime-300/50 hover:text-white"
+            >
+              Entrar <span aria-hidden className="text-lime-300">→</span>
+            </button>
+          </nav>
         </div>
       </header>
 
-      {/* ─── HERO ─── */}
-      <main className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col px-5 pb-10 pt-8 sm:px-8 sm:pt-10 lg:grid lg:grid-cols-[1.04fr_0.96fr] lg:items-center lg:gap-10 lg:pt-6">
-        {/* ── Coluna esquerda: copy + CTA ── */}
-        <div className="wl-stagger flex flex-col items-start">
+      <main className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col">
+        {/* ─── FAIXA 1 · A BOMBA ─── */}
+        <section className="bc-bomba relative overflow-hidden px-4 pb-8 pt-9 sm:px-7 sm:pt-12">
+          {/* numeral índice gigante (marca d'água editorial) */}
+          <span aria-hidden className="bc-index bc-jumbo-font">01</span>
+          {/* lombada vertical */}
+          <span aria-hidden className="bc-vert bc-mono hidden text-[10px] uppercase tracking-[0.4em] text-lime-300/45 sm:block">Fitness · IA · Performance</span>
+
           {/* kicker */}
-          <span className="group/k relative inline-flex items-center gap-2.5 overflow-hidden rounded-full border border-emerald-300/25 bg-emerald-400/[0.06] py-1.5 pl-2 pr-4 backdrop-blur-xl">
-            <span className="relative inline-flex items-center gap-1.5 overflow-hidden rounded-full px-2.5 py-1" style={{ background: 'linear-gradient(135deg,#22c55e,#15803d)', boxShadow: '0 4px 16px -3px rgba(34,197,94,0.6), inset 0 1px 0 rgba(255,255,255,0.35)' }}>
-              <span className="pointer-events-none absolute inset-0 -translate-x-[120%] bg-linear-to-r from-transparent via-white/40 to-transparent group-hover/k:translate-x-[120%] [transition:transform_0.7s]" />
-              <DSIcon name="sparkles" size={11} className="relative text-[#08122B]" />
-              <span className="relative text-[10px] font-black uppercase tracking-[0.1em] text-[#08122B]">Plano IA</span>
-            </span>
-            <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-emerald-100/80">30 dias grátis · sem cartão</span>
-          </span>
-
-          {/* headline gigante */}
-          <h1 className="font-syne mt-6 text-[clamp(3.4rem,11vw,7.2rem)] font-black leading-[0.9] tracking-[-0.04em] text-white [text-shadow:0_4px_40px_rgba(0,0,0,0.55)]">
-            Seu treino
-            <br />
-            pronto hoje,
-            <br />
-            <span className="wl-kinetic">no seu corpo.</span>
-          </h1>
-
-          <p className="mt-6 max-w-md text-[15px] font-medium leading-7 text-slate-300/90 sm:text-[17px] sm:leading-8">
-            Em 2 minutos a IA do VFIT lê seu objetivo, rotina, equipamentos e nível —
-            e entrega um plano que você <span className="font-bold text-white">começa sem enrolar</span>.
+          <p className="bc-rise bc-mono relative z-10 mb-5 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em] text-lime-300/90">
+            <span aria-hidden className="bc-livedot inline-block h-2 w-2 rounded-full bg-lime-400" />
+            Plano IA · 30 dias grátis · sem cartão
           </p>
 
-          {/* CTA */}
-          <div className="mt-8 w-full max-w-md">
-            <button
-              onClick={handlePrimaryStudentFlow}
-              className="group/cta relative inline-flex h-16 w-full items-center justify-center gap-3 overflow-hidden rounded-2xl pl-7 pr-3 text-[15px] font-black uppercase tracking-wide text-white transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.99] [text-shadow:0_1px_2px_rgba(2,44,34,0.5)]"
-              style={{ background: 'linear-gradient(135deg,#2BD24E 0%,#16a34a 52%,#15803d 100%)', boxShadow: '0 18px 44px -10px rgba(34,197,94,0.6), inset 0 1px 0 rgba(255,255,255,0.45), inset 0 -2px 0 rgba(6,78,59,0.5)' }}
-            >
-              <span aria-hidden className="pointer-events-none absolute inset-0 -translate-x-[130%] bg-linear-to-r from-transparent via-white/45 to-transparent transition-transform duration-700 group-hover/cta:translate-x-[130%]" />
-              <DSIcon name={hasSavedProgress ? 'play' : 'sparkles'} size={19} className="relative z-10" />
-              <span className="relative z-10">{hasSavedProgress ? 'Continuar meu plano' : 'Criar meu plano grátis'}</span>
-              <span className="relative z-10 ml-auto flex h-11 w-11 items-center justify-center rounded-xl bg-[#08122B]/90 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)]">
-                <DSIcon name="arrowRight" size={18} className="text-[#4ADE80] transition-transform duration-300 group-hover/cta:translate-x-0.5" />
+          {/* manchete-placar */}
+          <h1 className="bc-jumbo bc-jumbo-font relative z-10 font-black uppercase">
+            <span className="bc-line block">Seu treino</span>
+            <span className="bc-line bc-outline block">pronto</span>
+            <span className="bc-line bc-line3 flex flex-wrap items-center gap-x-4 gap-y-2">
+              <span>hoje</span>
+              <span aria-hidden className="bc-clock" title="Setup em ~2 minutos">
+                <span>02</span>
+                <span className="bc-clock-colon">:</span>
+                <span>00</span>
               </span>
-            </button>
-
-            <div className="mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-              <span className="text-[12px] font-medium text-white/55">30 dias grátis · tudo liberado · sem cartão</span>
-              {hasSavedProgress && (
-                <button onClick={handleStart} className="text-[12px] font-semibold text-white/45 underline-offset-2 transition-colors hover:text-white/75 hover:underline">
-                  Recomeçar do início
-                </button>
-              )}
-            </div>
-          </div>
-
-          {/* trust + papéis */}
-          <div className="mt-7 flex flex-wrap items-center gap-2">
-            {TRUST_BADGES.map((b) => (
-              <span key={b.text} className="inline-flex min-h-9 items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-3.5 text-[11.5px] font-bold text-slate-200 backdrop-blur-xl">
-                <DSIcon name={b.icon} size={13} className="text-emerald-300" />
-                {b.text}
-              </span>
-            ))}
-          </div>
-
-          <div className="mt-5 flex items-center gap-3 text-[12.5px] sm:hidden">
-            <Link href="/register/personal?from=welcome" className="font-semibold text-white/60 underline-offset-2 hover:text-white hover:underline">Sou Personal</Link>
-            <span className="text-white/20">•</span>
-            <Link href="/register/personal?type=nutri&from=welcome" className="font-semibold text-white/60 underline-offset-2 hover:text-white hover:underline">Sou Nutricionista</Link>
-          </div>
-        </div>
-
-        {/* ── Coluna direita: DEVICE do plano IA (3D float) ── */}
-        <div className="wl-device-stage relative mt-12 flex justify-center lg:mt-0">
-          {/* chips orbitando */}
-          {ORBIT_CHIPS.map((c) => (
-            <span
-              key={c.label}
-              className={`${c.anim} ${c.pos} absolute z-20 hidden lg:inline-flex items-center gap-2 rounded-2xl border border-emerald-300/25 bg-bg-base/70 px-3 py-2 text-[11.5px] font-black text-emerald-100 shadow-[0_18px_40px_-18px_rgba(0,0,0,0.8)] backdrop-blur-xl`}
-            >
-              <DSIcon name={c.icon} size={14} className="text-emerald-300 [filter:drop-shadow(0_0_6px_rgba(52,211,153,0.6))]" />
-              {c.label}
             </span>
-          ))}
+          </h1>
 
-          <div className="wl-device-tilt relative w-full max-w-md">
-            <div className="wl-device relative overflow-hidden rounded-[28px] border border-white/10 p-5 sm:p-6" style={{ background: 'linear-gradient(160deg, rgba(16,28,52,0.92) 0%, rgba(7,16,32,0.88) 60%, rgba(5,10,18,0.9) 100%)', boxShadow: '0 50px 120px -40px rgba(0,0,0,0.85), 0 0 0 1px rgba(52,211,153,0.08), inset 0 1px 0 rgba(255,255,255,0.12)' }}>
-              {/* borda-gradiente viva */}
-              <span aria-hidden className="pointer-events-none absolute inset-0 rounded-[28px]" style={{ padding: '1px', background: 'linear-gradient(135deg, rgba(52,211,153,0.6) 0%, rgba(132,204,22,0.22) 45%, transparent 72%)', WebkitMask: 'linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude' }} />
-              <span aria-hidden className="vfit-energy-beam rounded-[28px]" />
-              <span aria-hidden className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-emerald-400/18 blur-[60px]" />
+          {/* stat de capa: 30 DIAS */}
+          <div className="bc-rise relative z-10 mt-7 flex items-end gap-4">
+            <span aria-hidden className="bc-thirty bc-jumbo-font font-black leading-none">30</span>
+            <span className="bc-mono pb-1 text-[11px] font-bold uppercase leading-4 tracking-[0.18em] text-white/70">
+              dias grátis<br />
+              <span className="text-lime-300/90">tudo liberado · sem cartão</span>
+            </span>
+          </div>
+        </section>
 
-              {/* header */}
-              <div className="relative flex items-start justify-between gap-3">
-                <div>
-                  <p className="text-[10px] font-black uppercase tracking-[0.16em] text-emerald-300/80">Prévia do seu plano</p>
-                  <h2 className="font-syne mt-1 text-[22px] font-black leading-[1.05] text-white">A IA vira respostas<br />em treino.</h2>
-                </div>
-                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-emerald-300/30 text-emerald-200" style={{ background: 'linear-gradient(180deg, rgba(52,211,153,0.28), rgba(34,197,94,0.06))', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.25), 0 8px 20px -6px rgba(34,197,94,0.6)' }}>
-                  <DSIcon name="brainCircuit" size={24} className="[filter:drop-shadow(0_0_8px_rgba(52,211,153,0.7))]" />
+        {/* ─── FAIXA 2 · DECK / PROVA VIVA ─── */}
+        <section className="bc-deck relative grid grid-cols-2 border-y border-lime-400/15 lg:grid-cols-4">
+          <i aria-hidden className="bc-hr bc-hr-deck" />
+          {PLAN_SIGNALS.map((s, i) => (
+            <div
+              key={s.label}
+              className={`bc-cell relative flex flex-col gap-2.5 border-white/8 px-4 py-5 sm:px-5 sm:py-6 ${i % 2 === 1 ? 'bg-emerald-900/15' : ''} ${i < 2 ? 'border-b' : ''} ${i % 2 === 0 ? 'border-r' : ''} lg:border-b-0`}
+              style={{ animationDelay: `${0.45 + i * 0.12}s` }}
+            >
+              <div className="flex items-center justify-between">
+                <span className="bc-mono text-[11px] font-bold tracking-[0.2em] text-lime-300/60">0{i + 1}</span>
+                <span aria-hidden className="bc-dot relative flex h-4 w-4 items-center justify-center rounded-full" style={{ animationDelay: `${0.7 + i * 0.12}s` }}>
+                  <DSIcon name="check" size={9} className="bc-dot-check text-[#06210f]" style={{ animationDelay: `${0.95 + i * 0.12}s` }} />
                 </span>
               </div>
-
-              {/* sinais */}
-              <div className="relative mt-5 space-y-2">
-                {PLAN_SIGNALS.map((s, i) => (
-                  <div key={s.label} className="wl-row flex items-center gap-3 rounded-2xl border border-white/8 px-3 py-2.5" style={{ background: 'linear-gradient(160deg, rgba(255,255,255,0.05), rgba(255,255,255,0.018))', animationDelay: `${0.5 + i * 0.12}s` }}>
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-emerald-300/20 text-emerald-200" style={{ background: 'linear-gradient(180deg, rgba(52,211,153,0.18), rgba(34,197,94,0.04))' }}>
-                      <DSIcon name={s.icon} size={18} />
-                    </span>
-                    <span className="min-w-0 flex-1">
-                      <span className="block text-[13px] font-black text-white">{s.label}</span>
-                      <span className="block text-[11px] font-medium leading-4 text-slate-400">{s.value}</span>
-                    </span>
-                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-bg-base" style={{ background: 'linear-gradient(135deg,#34e565,#16a34a)', boxShadow: '0 3px 10px -1px rgba(34,197,94,0.6)' }}>
-                      <DSIcon name="check" size={13} />
-                    </span>
-                  </div>
-                ))}
+              <DSIcon name={s.icon} size={20} className="text-emerald-300" />
+              <div>
+                <h2 className="bc-jumbo-font text-[15px] font-extrabold uppercase tracking-tight text-white sm:text-[17px]">{s.label}</h2>
+                <p className="mt-0.5 text-[12px] leading-4 text-slate-400">{s.value}</p>
               </div>
-
-              {/* barra pronto */}
-              <div className="relative mt-4 rounded-2xl border border-emerald-300/18 bg-emerald-400/[0.07] p-4">
-                <div className="mb-2.5 flex items-center justify-between">
-                  <p className="text-[12px] font-black text-emerald-100">Plano pronto pra começar hoje</p>
-                  <span className="rounded-full bg-emerald-300 px-2.5 py-0.5 text-[11px] font-black text-bg-base">92%</span>
-                </div>
-                <div className="h-2.5 overflow-hidden rounded-full bg-white/10">
-                  <div className="wl-fill h-full w-[92%] rounded-full bg-linear-to-r from-emerald-300 via-lime-200 to-emerald-300 shadow-[0_0_18px_rgba(134,239,172,0.5)]" />
-                </div>
-                <p className="mt-3 text-[11px] font-medium leading-5 text-slate-300/90">Intensidade calibrada pra você não desistir na primeira semana.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
-
-      {/* ─── Faixa de prova/benefício (rodapé do hero) ─── */}
-      <div className="relative z-10 mx-auto w-full max-w-7xl px-5 pb-[max(env(safe-area-inset-bottom),20px)] sm:px-8">
-        <div className="wl-band flex flex-wrap items-center justify-center gap-x-7 gap-y-3 rounded-3xl border border-white/8 bg-white/[0.03] px-5 py-4 backdrop-blur-xl sm:justify-between">
-          {[
-            { icon: 'zap' as DSIconName, k: 'Hoje', v: 'Treino claro e executável' },
-            { icon: 'flame' as DSIconName, k: 'Amanhã', v: 'Streak pra você voltar' },
-            { icon: 'chart' as DSIconName, k: 'Semana', v: 'Progresso visível' },
-            { icon: 'trophy' as DSIconName, k: 'Sempre', v: 'Sem cartão, sem trava' },
-          ].map((b) => (
-            <div key={b.k} className="flex items-center gap-3">
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-emerald-300/22 text-emerald-200" style={{ background: 'linear-gradient(180deg, rgba(52,211,153,0.18), rgba(34,197,94,0.04))' }}>
-                <DSIcon name={b.icon} size={17} />
-              </span>
-              <span>
-                <span className="block text-[12.5px] font-black text-white">{b.k}</span>
-                <span className="block text-[11px] font-medium text-slate-400">{b.v}</span>
-              </span>
             </div>
           ))}
-        </div>
+        </section>
+
+        {/* ─── FAIXA 3 · HANDOFF + CTA (inline desktop) ─── */}
+        <section className="relative px-4 py-8 sm:px-7 sm:py-9">
+          <span className="bc-chip bc-mono mb-4 inline-flex items-center gap-2 rounded-sm border border-lime-400/40 bg-lime-400/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-lime-200">
+            <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-lime-400" />
+            Pronto pra hoje
+          </span>
+
+          <div className="hidden lg:block">
+            <CtaBar />
+          </div>
+
+          <p className="bc-mono mt-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] font-medium uppercase tracking-[0.18em] text-white/45">
+            <span className="text-lime-300/70">Sem cartão</span> · Tudo liberado · Cancela quando quiser
+            {hasSavedProgress && (
+              <button onClick={handleStart} className="ml-1 font-bold text-white/55 underline-offset-2 transition-colors hover:text-white hover:underline">
+                · Recomeçar do início
+              </button>
+            )}
+          </p>
+        </section>
+
+        {/* ─── FAIXA 4 · EXPEDIENTE ─── */}
+        <footer className="bc-rise relative mt-auto border-t border-white/10 px-4 py-7 sm:px-7">
+          <div className="grid grid-cols-2 gap-x-5 gap-y-5 lg:grid-cols-4">
+            {COLOFAO.map((c) => (
+              <div key={c.k} className="flex flex-col gap-0.5">
+                <span className="bc-mono text-[10px] font-bold uppercase tracking-[0.22em] text-lime-300/80">{c.k}</span>
+                <span className="text-[12px] leading-4 text-slate-400">{c.v}</span>
+              </div>
+            ))}
+          </div>
+          <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-white/8 pt-5">
+            {TRUST.map((t) => (
+              <span key={t.text} className="bc-mono inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-white/50">
+                <DSIcon name={t.icon} size={13} className="text-emerald-300" />
+                {t.text}
+              </span>
+            ))}
+            <span className="bc-mono ml-auto flex items-center gap-3 text-[10px] uppercase tracking-[0.16em] text-white/40 sm:hidden">
+              <Link href="/register/personal?from=welcome" className="hover:text-white">Sou Personal</Link>
+              <Link href="/register/personal?type=nutri&from=welcome" className="hover:text-white">Sou Nutri</Link>
+            </span>
+          </div>
+        </footer>
+      </main>
+
+      {/* ─── CTA fixo (mobile) — sempre no polegar, acima da safe-area ─── */}
+      <div
+        className="bc-cta-fixed fixed inset-x-0 bottom-0 z-50 border-t border-lime-400/25 bg-[#04080f]/90 px-4 pt-3 backdrop-blur-md lg:hidden"
+        style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 12px)' }}
+      >
+        <CtaBar fixed />
       </div>
 
-      {/* ─── Animações (CSS-only, reduced-motion safe) ─── */}
+      {/* ─── Animações (CSS-only · reduced-motion safe) ─── */}
       <style>{`
-        .wl-grain::after {
-          content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
-          opacity: 0.05; mix-blend-mode: overlay;
-          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-        }
-        @keyframes wlRise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
-        .wl-stagger > * { animation: wlRise 0.75s cubic-bezier(0.22,1,0.36,1) both; }
-        .wl-stagger > *:nth-child(1) { animation-delay: 0.05s; }
-        .wl-stagger > *:nth-child(2) { animation-delay: 0.13s; }
-        .wl-stagger > *:nth-child(3) { animation-delay: 0.21s; }
-        .wl-stagger > *:nth-child(4) { animation-delay: 0.29s; }
-        .wl-stagger > *:nth-child(5) { animation-delay: 0.37s; }
-        .wl-stagger > *:nth-child(6) { animation-delay: 0.45s; }
+        .bc-mono { font-family: var(--font-space-grotesk), 'Space Grotesk', ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+        .bc-jumbo-font { font-family: var(--font-ds-display), var(--font-syne), 'Syne', sans-serif; }
 
-        /* kinetic accent word */
-        .wl-kinetic {
-          background: linear-gradient(100deg, #4ade80 0%, #a3e635 26%, #86efac 52%, #22c55e 100%);
-          background-size: 220% auto;
-          -webkit-background-clip: text; background-clip: text; color: transparent;
-          animation: wlSheen 4.5s linear infinite;
-          text-shadow: none;
-        }
-        @keyframes wlSheen { to { background-position: 220% center; } }
+        /* manchete-placar */
+        .bc-jumbo { font-size: clamp(2.9rem, 15vw, 10.5rem); line-height: 0.84; letter-spacing: -0.045em; text-shadow: 0 6px 40px rgba(0,0,0,0.5); }
+        .bc-line { padding-bottom: 0.04em; }
+        .bc-line, .bc-thirty, .bc-index { clip-path: inset(0 0 -12% 0); }
+        .bc-line { animation: bcSlam 0.85s cubic-bezier(0.22,1,0.36,1) both; }
+        .bc-line:nth-child(1) { animation-delay: 0.08s; }
+        .bc-line:nth-child(2) { animation-delay: 0.20s; }
+        .bc-line:nth-child(3) { animation-delay: 0.32s; }
 
-        /* device: aparição + tilt 3D + float */
-        .wl-device-stage { perspective: 1400px; }
-        .wl-device-tilt {
-          transform-style: preserve-3d;
-          animation: wlDeviceIn 0.9s cubic-bezier(0.22,1,0.36,1) 0.15s both;
-        }
-        @keyframes wlDeviceIn { from { opacity: 0; transform: translateY(34px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
-        @media (min-width: 1024px) {
-          .wl-device { animation: wlTilt 9s ease-in-out 1.1s infinite; will-change: transform; }
-        }
-        @keyframes wlTilt {
-          0%, 100% { transform: rotateX(9deg) rotateY(-17deg) translateY(0) translateZ(0); }
-          50%      { transform: rotateX(6deg) rotateY(-11deg) translateY(-20px) translateZ(36px); }
-        }
-        .wl-row { animation: wlRise 0.6s cubic-bezier(0.22,1,0.36,1) both; }
-        .wl-fill { transform-origin: left; animation: wlFill 1.2s cubic-bezier(0.16,1,0.3,1) 0.9s both; }
-        @keyframes wlFill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+        /* acento lima sólido. NÃO usar -webkit-text-stroke em LETRAS na Syne: os glifos
+           têm contornos internos não-mesclados (N vira "raio", P ganha marca interna).
+           Numerais (30/01) saem limpos vazados — só letras quebram. Sólido = limpo + legível. */
+        .bc-outline { color: #a3e635; text-shadow: 0 6px 34px rgba(132,204,22,0.28); }
 
-        /* chips orbitando */
-        .wl-float-a, .wl-float-b, .wl-float-c { animation: wlChipIn 0.7s cubic-bezier(0.22,1,0.36,1) both; }
-        .wl-float-a { animation: wlChipIn 0.7s cubic-bezier(0.22,1,0.36,1) 0.7s both, wlFloat 5.5s ease-in-out 1.4s infinite; }
-        .wl-float-b { animation: wlChipIn 0.7s cubic-bezier(0.22,1,0.36,1) 0.85s both, wlFloat 6.5s ease-in-out 1.6s infinite reverse; }
-        .wl-float-c { animation: wlChipIn 0.7s cubic-bezier(0.22,1,0.36,1) 1s both, wlFloat 7s ease-in-out 1.8s infinite; }
-        @keyframes wlChipIn { from { opacity: 0; transform: scale(0.7); } to { opacity: 1; transform: scale(1); } }
-        @keyframes wlFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+        /* cronômetro de DURAÇÃO (não conta — só pisca o ':') */
+        .bc-clock {
+          display: inline-flex; align-items: center; gap: 0.06em;
+          font-size: clamp(1.6rem, 6vw, 4rem); line-height: 1;
+          background: #22c55e; color: #06210f; padding: 0.06em 0.22em 0.1em;
+          border-radius: 0.12em; box-shadow: 0 10px 30px -8px rgba(34,197,94,0.7), inset 0 1px 0 rgba(255,255,255,0.3);
+        }
+        .bc-clock-colon { animation: bcBlink 1s steps(1) infinite; }
+        @keyframes bcBlink { 0%,49% { opacity: 1; } 50%,100% { opacity: 0.32; } }
 
-        .wl-band { animation: wlRise 0.8s cubic-bezier(0.22,1,0.36,1) 0.5s both; }
-        .wl-ghost { animation: wlRise 1.2s ease-out 0.2s both; }
+        /* numeral índice marca d'água */
+        .bc-index {
+          position: absolute; top: -3vw; right: -1.5vw; z-index: 0; pointer-events: none; user-select: none;
+          font-size: clamp(11rem, 42vw, 30rem); line-height: 0.78; font-weight: 800;
+          color: rgba(132,204,22,0.07); -webkit-text-stroke: 1.5px rgba(132,204,22,0.22); -webkit-text-fill-color: transparent;
+          animation: bcIndexIn 1s ease-out 0.1s both;
+        }
+        @keyframes bcIndexIn { from { opacity: 0; transform: scale(0.94); } to { opacity: 1; transform: scale(1); } }
+
+        /* lombada vertical */
+        .bc-vert { position: absolute; left: 0.3rem; top: 50%; transform: translateY(-50%) rotate(180deg); writing-mode: vertical-rl; z-index: 0; }
+
+        /* numeral 30 outline */
+        .bc-thirty {
+          font-size: clamp(3rem, 13vw, 7.5rem); letter-spacing: 0.02em;
+          color: #a3e635; -webkit-text-stroke: 2.25px #a3e635; -webkit-text-fill-color: transparent;
+          filter: drop-shadow(0 6px 26px rgba(132,204,22,0.25));
+          animation: bcSlam 0.85s cubic-bezier(0.22,1,0.36,1) 0.42s both;
+        }
+
+        @keyframes bcSlam { from { clip-path: inset(108% 0 -12% 0); } to { clip-path: inset(0 0 -12% 0); } }
+
+        .bc-rise { animation: bcRise 0.7s cubic-bezier(0.22,1,0.36,1) both; }
+        .bc-rise:nth-of-type(1) { animation-delay: 0.05s; }
+        @keyframes bcRise { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+
+        /* hairlines "ligando" (placar acendendo) */
+        .bc-hr { position: absolute; left: 0; right: 0; bottom: -1px; height: 1.5px; transform: scaleX(0); transform-origin: left; background: linear-gradient(90deg, transparent, rgba(132,204,22,0.6), transparent); }
+        .bc-hr-mast { animation: bcRule 0.9s cubic-bezier(0.16,1,0.3,1) 0.1s both; }
+        .bc-hr-deck { top: -1px; bottom: auto; animation: bcRule 0.9s cubic-bezier(0.16,1,0.3,1) 0.35s both; }
+        @keyframes bcRule { to { transform: scaleX(1); } }
+
+        /* live dot na masthead/kicker */
+        .bc-livedot { box-shadow: 0 0 0 0 rgba(163,230,53,0.6); animation: bcPing 2.4s ease-out infinite; }
+        @keyframes bcPing { 0% { box-shadow: 0 0 0 0 rgba(163,230,53,0.5); } 70%,100% { box-shadow: 0 0 0 7px rgba(163,230,53,0); } }
+
+        /* deck: células ligando em cascata */
+        .bc-cell { animation: bcCellIn 0.6s cubic-bezier(0.22,1,0.36,1) both; }
+        @keyframes bcCellIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+        .bc-dot { background: #fbbf24; animation: bcDotArm 0.5s ease-out both; box-shadow: 0 0 0 0 rgba(251,191,36,0.5); }
+        @keyframes bcDotArm { from { background: #fbbf24; box-shadow: 0 0 8px 0 rgba(251,191,36,0.5); } to { background: #22c55e; box-shadow: 0 0 12px 0 rgba(34,197,94,0.75); } }
+        .bc-dot-check { opacity: 0; animation: bcCheckPop 0.4s cubic-bezier(0.22,1,0.36,1) both; }
+        @keyframes bcCheckPop { 0% { opacity: 0; transform: scale(0.3); } 70% { opacity: 1; transform: scale(1.15); } 100% { opacity: 1; transform: scale(1); } }
+
+        /* chip handoff */
+        .bc-chip { animation: bcChipSnap 0.5s cubic-bezier(0.22,1,0.36,1) 1.45s both; }
+        @keyframes bcChipSnap { 0% { opacity: 0; transform: scale(0.85); } 60% { opacity: 1; transform: scale(1.06); } 100% { opacity: 1; transform: scale(1); } }
+
+        /* CTA: sweep mecânico + respiração emissiva (único ponto vivo) */
+        .bc-cta { box-shadow: 0 18px 44px -12px rgba(34,197,94,0.5), inset 0 1px 0 rgba(255,255,255,0.45); animation: bcBreathe 3.4s ease-in-out 1.8s infinite; }
+        @keyframes bcBreathe { 0%,100% { box-shadow: 0 16px 40px -14px rgba(34,197,94,0.45), inset 0 1px 0 rgba(255,255,255,0.45); } 50% { box-shadow: 0 24px 60px -10px rgba(132,204,22,0.7), inset 0 1px 0 rgba(255,255,255,0.5); } }
+        .bc-cta-sweep { position: absolute; inset: 0; z-index: 5; pointer-events: none; background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.5) 50%, transparent 70%); transform: translateX(-130%) skewX(-18deg); animation: bcSweep 3.6s ease-in-out 2s infinite; }
+        .bc-cta-sweep--fixed { animation-delay: 2.4s; }
+        .bc-cta:hover .bc-cta-sweep { animation-duration: 1.1s; }
+        @keyframes bcSweep { 0% { transform: translateX(-130%) skewX(-18deg); } 60%,100% { transform: translateX(260%) skewX(-18deg); } }
+
+        .bc-cta-fixed { animation: bcRise 0.6s cubic-bezier(0.22,1,0.36,1) 1.2s both; }
+
+        @media (max-width: 639px) {
+          .bc-jumbo { font-size: clamp(2.9rem, 16vw, 5rem); }
+          .bc-index { font-size: 58vw; top: -2vw; }
+        }
 
         @media (prefers-reduced-motion: reduce) {
-          .wl-stagger > *, .wl-device-tilt, .wl-device, .wl-row, .wl-fill,
-          .wl-float-a, .wl-float-b, .wl-float-c, .wl-band, .wl-ghost, .wl-kinetic {
-            animation: none !important; opacity: 1 !important; transform: none !important;
+          .bc-line, .bc-thirty, .bc-index, .bc-rise, .bc-hr, .bc-cell, .bc-dot, .bc-dot-check,
+          .bc-chip, .bc-cta, .bc-cta-sweep, .bc-cta-fixed, .bc-clock-colon, .bc-livedot {
+            animation: none !important;
           }
-          .wl-kinetic { color: #86efac !important; }
+          .bc-line, .bc-thirty, .bc-index { clip-path: none !important; }
+          .bc-rise, .bc-cell, .bc-chip, .bc-cta-fixed, .bc-dot-check { opacity: 1 !important; transform: none !important; }
+          .bc-hr { transform: scaleX(1) !important; }
+          .bc-dot { background: #22c55e !important; box-shadow: 0 0 10px 0 rgba(34,197,94,0.6) !important; }
+          .bc-clock-colon { opacity: 1 !important; }
         }
       `}</style>
     </div>
