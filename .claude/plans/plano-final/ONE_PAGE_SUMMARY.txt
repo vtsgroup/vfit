@@ -1,0 +1,65 @@
+═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+                                          VFIT MVP — ONE PAGE SUMMARY (02/07/2026)
+═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+
+SITUAÇÃO ATUAL                     │ BLOQUEADORES                      │ ROADMAP (4 SEMANAS)
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+v5.4.0 (auth + onboarding pronto) │ 3 bugs críticos bloqueiam MVP     │ HOJE (02/07):      Fix 3 bugs → v5.4.1
+60% rotas funcionam               │ 1. Roteamento interno (landing)   │ SEMANA 1 (03-09):  Treinos + Dashboard + Marketplace
+Dados inconsistentes (XP, streak) │ 2. Páginas travadas (/treinos)    │ SEMANA 2 (09-16):  Pagamentos → 🎉 FIRST REVENUE
+Treinos FALTAM (core)             │ 3. Avaliação duplicada            │ SEMANA 3+ (16+):   Scale + Community
+Infra pronta (CF + D1 + R2)        │ Esforço: 5.5h → v5.4.1 today     │ Total esforço: 48.5h human / 7.5h CC
+
+ANÁLISE DE BUGS (11 TOTAL)         │ MVP VIABILIDADE                   │ SUCCESS METRICS (WEEK 4)
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+🔴 3 CRÍTICAS (HOJE):              │ ✅ MVP VIÁVEL com:               │ 50+ usuários → 10+ treinos → 50+ execuções
+  • Roteamento (2h)               │   • Treinos funcionais ✓          │ 20+ DAU → <10% churn → $100+ revenue
+  • Travadas (2h)                 │   • Pagamentos pronto ✓           │ Marketplace listagem ✓
+  • Duplicação (1.5h)             │   • Notificações WhatsApp ✓       │ Dashboard pessoal ✓
+                                  │   • Gamificação (XP+streak) ✓     │ Primeira venda possível ✓
+🟡 2 ALTAS (SEMANA 1):             │                                   │
+  • XP inconsistente (2h)         │ ROADMAP ESFORÇO:                  │ KEY DECISIONS
+  • Streak = 0 (3h)               │ ─────────────────────────────────│ 1. Treinos: MVP básico (CRUD), não ideal
+                                  │ Sprint 0: 5.5h   (bugs)           │ 2. Gamificação: Unificar em Zustand (2h)
+🟢 6 MÉDIOS/BAIXOS (SEMANA 2+):    │ Sprint 1: 36h    (treinos+)       │ 3. Pagamentos: Beta 10-20 users primeiro
+  • Notif duplicada, textos, etc  │ Sprint 2: 9h     (pagamentos)     │ 4. Tech: Não refatore, build on top
+                                  │ TOTAL: 50.5h human / 7.5h CC     │ 5. Focus: Treinos = bloqueador crítico
+
+PARALLELIZATION (WEEK 1)           │ SKILLS PROCESSANDO                │ PRÓXIMAS AÇÕES (24h)
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Track A: Treinos (12h)             │ /ui-ux-pro-max       → Mobile     │ 09:00 Leia IMMEDIATE_ACTION_PLAN (30 min)
+  • Backend CRUD                   │ /plan-ceo-review     → CEO MVP    │ 09:30 Start bug fix #1 (roteamento, 30 min)
+  • Assignment logic               │ /plan-eng-review     → Eng review │ 10:00 Start bug fix #2 (timeout, 2h)
+  • Execution tracking             │ ETA: 2-3 horas                    │ 12:00 Start bug fix #3 (idempotência, 1.5h)
+                                  │ Consolidar depois                 │ 14:00 Test + Deploy v5.4.1
+Track B: Dashboard+Gamifi (11.5h)  │                                   │ 15:00 PR review + merge
+  • XP unified (Zustand)           │ DOCUMENTOS (8 em /Downloads/):    │ 16:00 Smoke test produção
+  • Streak logic + cron            │ 1. README_GUIDE.md ... Nav guide  │
+  • Personal dashboard             │ 2. QUICK_START.txt ... 2 min      │ TOOLS:
+                                  │ 3. EXECUTIVE_SUMMARY.md .... CEO  │ • npm run dev (local)
+Track C: Marketplace+Notifi (12.5h)│ 4. IMMEDIATE_ACTION_PLAN.md . Dev │ • npm run quality:ci
+  • Product CRUD                   │ 5. ARCHITECTURE_WORKOUTS.md ..Impl│ • npm run cf:deploy
+  • Listings UI                    │ 6. MVP_ROADMAP_MONETIZATION.md ..Road│ • Sentry (logging)
+  • WhatsApp triggers              │ 7. BUGS_IMPACT_ANALYSIS.md ... QA │
+  • Asaas + Checkout               │ 8. CONSOLIDATION_REPORT.md .. Sync│ CONFIDENCE: 87%
+                                  │ 9. ONE_PAGE_SUMMARY.txt .. Print  │ Técnico: 95% | Timeline: 85% | Market: 75%
+
+ARCHITECTURE (Treinos)             │ TECH STACK (USE, DON'T CHANGE)    │ RISKS & MITIGATIONS
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Tables: workouts, student_workouts,│ ✅ Auth (OAuth + JWT)            │ Risk: Treinos complexo → Mitigation: MVP first
+         workout_executions,       │ ✅ Onboarding (15 etapas)        │ Risk: Asaas fails → Mitigation: Sandbox test
+         exercise_logs             │ ✅ Design System (BROADCAST)     │ Risk: Churn → Mitigation: Notif+gamifi
+                                  │ ✅ Infra (CF + D1 + R2)          │ Risk: 36h timeline → Mitigation: Parallelize
+APIs: create, list, assign,        │ ✅ WhatsApp Gateway              │ Risk: New bugs → Mitigation: CI/CD gates
+      execute, history             │ ✅ Asaas API                     │
+                                  │ ❌ DON'T REFACTOR THESE          │ FINAL WORD
+Frontend: /dashboard/workouts,     │                                   │
+          /workouts/[id]/execute   │                                   │ You have 2 weeks to revenue.
+                                  │                                   │ 3 bugs = 5.5h
+Tests: Unit + Integration (20 tests)│                                  │ Treinos = 12h
+                                  │                                   │ Payments = 9h
+                                  │                                   │ SHIP. Don't perfect.
+
+═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+TIMELINE: ⏱️  Today-3h → Deploy v5.4.1 | Week 1: 36h → MVP ready | Week 2: 9h → First revenue possible | Week 3+: Scale
+═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════

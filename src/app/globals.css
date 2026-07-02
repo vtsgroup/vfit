@@ -1109,104 +1109,7 @@ select option {
   .vfit-energy-beam::after { animation: none !important; }
 }
 
-/* ─────────────────────────────────────────────
-   LOGIN LIGHT THEME (/login only)
-   Light-mode mirror of .vfit-flow-field + 3D CTA
-   ───────────────────────────────────────────── */
-
-/* Light input — white surface, soft slate border, brand-green focus ring */
-.auth-light-field {
-  border: 1px solid #E2E8F0 !important;
-  background: #ffffff !important;
-  color: #0F172A !important;
-  box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.03);
-}
-
-.auth-light-field::placeholder {
-  color: #94A3B8; /* slate-400 */
-}
-
-.auth-light-field:hover:not(:focus) {
-  border-color: #CBD5E1 !important; /* slate-300 */
-}
-
-.auth-light-field:focus {
-  border-color: #22c55e !important;
-  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.18), inset 0 1px 2px rgba(15, 23, 42, 0.02) !important;
-}
-
-/* Light 3D ENTRAR button — clean green gradient, crisp depth.
-   Overrides the Button component's baked-in disabled wash. */
-.auth-submit-cta-light {
-  background-image: linear-gradient(180deg, #22c55e 0%, #16a34a 100%) !important;
-  color: #ffffff !important;
-  border: 1px solid #15803d !important;
-  text-shadow: 0 1px 2px rgba(2, 44, 34, 0.30);
-  box-shadow: var(--ds-btn-3d-primary, 0 4px 0 #047857, 0 6px 14px rgba(5,150,105,0.35), inset 0 1px 0 rgba(255,255,255,0.2)) !important;
-}
-
-.auth-submit-cta-light:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: var(--ds-btn-3d-primary-hover, 0 5px 0 #047857, 0 8px 20px rgba(5,150,105,0.4), inset 0 1px 0 rgba(255,255,255,0.25)) !important;
-}
-
-.auth-submit-cta-light:active:not(:disabled) {
-  transform: translateY(2px);
-  box-shadow: var(--ds-btn-3d-primary-active, 0 1px 0 #047857, 0 2px 6px rgba(5,150,105,0.2), inset 0 2px 4px rgba(0,0,0,0.1)) !important;
-}
-
-/* Disabled: reads clearly disabled but NOT broken/dead.
-   Beats the Button's disabled:opacity-50 disabled:saturate-50. */
-.auth-submit-cta-light:disabled {
-  background-image: none !important;
-  background-color: #E2E8F0 !important; /* slate-200 */
-  color: #94A3B8 !important;            /* slate-400 */
-  border-color: #E2E8F0 !important;
-  text-shadow: none;
-  box-shadow: none !important;
-  opacity: 1 !important;
-  filter: none !important;
-}
-
-/* ─────────────────────────────────────────────
-   LIGHT PREMIUM — shared surfaces (login · register · forgot)
-   Crisp white cards, soft layered depth, brand-green accents.
-   ───────────────────────────────────────────── */
-
-/* Premium white card — page containers & option tiles */
-.auth-light-card {
-  background: #ffffff;
-  border: 1px solid #E8EDF3;
-  box-shadow:
-    0 1px 2px rgba(15, 23, 42, 0.04),
-    0 14px 38px -16px rgba(15, 23, 42, 0.16);
-}
-
-/* Subtle brand-tinted info / success box on light */
-.auth-light-soft {
-  background: linear-gradient(180deg, #F0FDF4 0%, #F7FEF9 100%);
-  border: 1px solid rgba(34, 197, 94, 0.22);
-}
-
-/* Segmented role switcher track */
-.auth-seg-track {
-  background: #EEF2F7;
-  border: 1px solid #E2E8F0;
-  box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.05);
-}
-
-/* Sliding active thumb for the role switcher */
-.auth-seg-thumb {
-  background: #ffffff;
-  border: 1px solid #E2E8F0;
-  box-shadow:
-    0 1px 2px rgba(15, 23, 42, 0.06),
-    0 6px 16px -8px rgba(34, 197, 94, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* Role-select reveal — adapts form when switching role */
+/* Role-select reveal — adapts form when switching role (register) */
 @keyframes authRoleReveal {
   from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -1215,7 +1118,6 @@ select option {
   animation: authRoleReveal 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 @media (prefers-reduced-motion: reduce) {
-  .auth-seg-thumb { transition: none; }
   .auth-role-reveal { animation: none; }
 }
 

@@ -1,16 +1,16 @@
 /**
  * src/app/(auth)/register/page.tsx
  *
- * Register — UNIFIED signup · Light premium · low friction
+ * Register — UNIFIED signup · VFIT BROADCAST dark · low friction
  *
  * Exports: RegisterPage
  * Hooks: useState, useEffect, useRef, useSearchParams, useRegisterStudent, useRegisterPersonal
  * Features: 'use client' · DSIcon
  *
- * Single page, defaults to "Aluno". A premium segmented switcher lets the user
- * change to "Personal" (full pro fields inline) or "Nutri" (coming soon — no
- * backend registration endpoint yet). Reuses the proven submit logic from the
- * dedicated student/personal flows so auth behavior is unchanged.
+ * Single page, defaults to "Aluno". A dark segmented switcher lets the user
+ * change to "Personal" (full pro fields inline) or "Nutri". Reuses the proven
+ * submit logic from the dedicated student/personal flows so auth behavior is
+ * unchanged. Visual: mesmo sistema do /welcome, /login e onboarding.
  */
 
 'use client'
@@ -19,28 +19,16 @@ import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { DSIcon } from '@/components/ui/ds-icon'
-import { Button } from '@/components/ui/button'
 import { useRegisterStudent, useRegisterPersonal, useRegisterNutritionist } from '@/hooks/use-auth'
 import { GuestGuard, OAuthButtons, Turnstile, type TurnstileRef } from '@/components/auth'
 import { getReferralCode, saveReferralCode, clearReferralCode } from '@/lib/referral-cookie'
 import { ApiClientError } from '@/lib/api-client'
 
-/* ─── Design tokens ─── */
-const headingFont = {
-  fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-  fontWeight: 900,
-  letterSpacing: '-0.01em',
-}
-const monoLabel = {
-  fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
-  fontWeight: 700,
-  letterSpacing: '0',
-}
-
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://api.vfit.app.br'
 
-/* ─── Light input ─── */
-const field = 'auth-light-field h-12 w-full rounded-2xl px-4 text-[14px] transition-all duration-200 focus:outline-none'
+/* ─── Dark input (mesmo token do funil) ─── */
+const field = 'vfit-flow-field h-12 w-full rounded-2xl px-4 text-[14px] transition-all duration-200 focus:outline-none'
+const labelCls = 'bc-mono mb-1.5 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-green-300/70'
 
 const UF_OPTIONS = [
   'AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG',
@@ -259,6 +247,7 @@ export default function RegisterPage() {
 
   const meta = ROLE_META[role]
   const roleIndex = role === 'student' ? 0 : role === 'personal' ? 1 : 2
+  const ctaLabel = role === 'personal' ? 'Criar conta Personal' : role === 'nutri' ? 'Criar conta Nutri' : 'Criar conta e entrar'
 
   return (
     <GuestGuard>
@@ -273,42 +262,41 @@ export default function RegisterPage() {
 
         {/* ─── Header ─── */}
         <div className="mb-4">
-          <div className="flex items-center gap-2 mb-1.5">
-            <DSIcon name="sparkles" size={13} className="text-emerald-600" />
-            <p className="text-[9px] uppercase text-emerald-600" style={monoLabel}>CRIE SUA CONTA · 30 DIAS GRÁTIS</p>
-          </div>
-          <h1 className="text-[1.7rem] text-slate-900 leading-none transition-all" style={headingFont}>
+          <p className="bc-mono mb-1.5 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-green-300/80">
+            <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-green-400" />
+            Crie sua conta · 30 dias grátis
+          </p>
+          <h1 className="font-syne text-[1.7rem] font-black leading-none text-white transition-all">
             {meta.title}
           </h1>
-          <p className="mt-1.5 text-[12.5px] text-slate-500">{meta.subtitle}</p>
+          <p className="mt-1.5 text-[12.5px] text-slate-400">{meta.subtitle}</p>
         </div>
 
-        {/* ─── Role switcher ─── */}
-        <div className="auth-seg-track relative flex rounded-2xl p-1 mb-3">
+        {/* ─── Role switcher — pills segmentadas dark ─── */}
+        <div className="relative mb-3 flex rounded-full border border-white/10 bg-white/4 p-1 shadow-glass-inset-sm">
           <div
-            className="auth-seg-thumb absolute top-1 bottom-1 left-1 rounded-xl"
+            className="absolute bottom-1 left-1 top-1 rounded-full border border-green-400/40 bg-green-400/12 shadow-[0_0_18px_-6px_rgba(34,197,94,0.7)] transition-transform duration-300 ease-out"
             style={{ width: 'calc((100% - 0.5rem) / 3)', transform: `translateX(${roleIndex * 100}%)` }}
             aria-hidden="true"
           />
-          <button type="button" onClick={() => setRole('student')} aria-pressed={role === 'student'}
-            className={`relative z-10 flex flex-1 items-center justify-center gap-1.5 rounded-xl py-2.5 text-[12px] font-bold transition-colors ${role === 'student' ? 'text-slate-900' : 'text-slate-500 hover:text-slate-700'}`}>
-            <DSIcon name="graduationCap" size={15} className={role === 'student' ? 'text-emerald-600' : ''} /> Aluno
-          </button>
-          <button type="button" onClick={() => setRole('personal')} aria-pressed={role === 'personal'}
-            className={`relative z-10 flex flex-1 items-center justify-center gap-1.5 rounded-xl py-2.5 text-[12px] font-bold transition-colors ${role === 'personal' ? 'text-slate-900' : 'text-slate-500 hover:text-slate-700'}`}>
-            <DSIcon name="dumbbell" size={15} className={role === 'personal' ? 'text-emerald-600' : ''} /> Personal
-          </button>
-          <button type="button" onClick={() => setRole('nutri')} aria-pressed={role === 'nutri'}
-            className={`relative z-10 flex flex-1 items-center justify-center gap-1.5 rounded-xl py-2.5 text-[12px] font-bold transition-colors ${role === 'nutri' ? 'text-slate-900' : 'text-slate-500 hover:text-slate-700'}`}>
-            <DSIcon name="apple" size={15} className={role === 'nutri' ? 'text-emerald-600' : ''} /> Nutri
-          </button>
+          {(['student', 'personal', 'nutri'] as const).map((r) => (
+            <button
+              key={r}
+              type="button"
+              onClick={() => setRole(r)}
+              aria-pressed={role === r}
+              className={`relative z-10 flex flex-1 items-center justify-center gap-1.5 rounded-full py-2.5 text-[12px] font-bold transition-colors ${role === r ? 'text-white' : 'text-slate-400 hover:text-slate-200'}`}
+            >
+              <DSIcon name={ROLE_META[r].icon} size={15} className={role === r ? 'text-green-300' : ''} /> {ROLE_META[r].label}
+            </button>
+          ))}
         </div>
 
         {/* ─── Benefit chips ─── */}
         <div className="mb-4 flex flex-wrap gap-1.5">
           {meta.benefits.map((b) => (
-            <span key={b} className="inline-flex items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[9px] uppercase text-emerald-700" style={monoLabel}>
-              <DSIcon name="checkCircle2" size={11} className="text-emerald-500" /> {b}
+            <span key={b} className="bc-mono inline-flex items-center gap-1 rounded-full border border-green-400/30 bg-green-400/10 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.1em] text-green-200">
+              <DSIcon name="checkCircle2" size={11} className="text-green-300" /> {b}
             </span>
           ))}
         </div>
@@ -320,24 +308,24 @@ export default function RegisterPage() {
                 <OAuthButtons compact userType={role} />
                 {/* Divider */}
                 <div className="relative my-3">
-                  <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-slate-200" /></div>
+                  <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-white/10" /></div>
                   <div className="relative flex justify-center">
-                    <span className="rounded-full border border-slate-200 bg-white px-4 py-1.5 text-[9px] uppercase text-slate-400 shadow-sm" style={monoLabel}>OU PREENCHA</span>
+                    <span className="bc-mono rounded-full border border-white/10 bg-[#04080f] px-4 py-1.5 text-[9px] font-bold uppercase tracking-[0.16em] text-white/40">OU PREENCHA</span>
                   </div>
                 </div>
               </>
             ) : (
-              <div className="mb-3 flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-3.5 py-2.5">
-                <DSIcon name="shieldCheck" size={14} className="text-emerald-600 shrink-0" />
-                <span className="text-[11px] text-emerald-700">Conta de nutricionista — ativação por email após o cadastro.</span>
+              <div className="mb-3 flex items-center gap-2 rounded-2xl border border-green-400/20 bg-green-400/6 px-3.5 py-2.5">
+                <DSIcon name="shieldCheck" size={14} className="shrink-0 text-green-300" />
+                <span className="text-[11px] text-green-200">Conta de nutricionista — ativação por email após o cadastro.</span>
               </div>
             )}
 
             <form onSubmit={handleSubmit} className="space-y-3">
               {/* Nome */}
               <div>
-                <label className="flex items-center gap-1.5 text-[10px] uppercase text-slate-500 mb-1.5" style={monoLabel}>
-                  <DSIcon name="user" size={12} className="text-slate-400" /> NOME COMPLETO
+                <label className={labelCls}>
+                  <DSIcon name="user" size={12} className="text-green-300/60" /> NOME COMPLETO
                 </label>
                 <input
                   type="text"
@@ -352,8 +340,8 @@ export default function RegisterPage() {
 
               {/* Email */}
               <div>
-                <label className="flex items-center gap-1.5 text-[10px] uppercase text-slate-500 mb-1.5" style={monoLabel}>
-                  <DSIcon name="mail" size={12} className="text-slate-400" /> EMAIL
+                <label className={labelCls}>
+                  <DSIcon name="mail" size={12} className="text-green-300/60" /> EMAIL
                 </label>
                 <input
                   type="email"
@@ -369,8 +357,8 @@ export default function RegisterPage() {
               {/* ── CPF — personal (Receita) + nutri (local) ── */}
               {(role === 'personal' || role === 'nutri') && (
                 <div>
-                  <label className="flex items-center gap-1.5 text-[10px] uppercase text-slate-500 mb-1.5" style={monoLabel}>
-                    <DSIcon name="fingerprint" size={12} className="text-slate-400" /> CPF
+                  <label className={labelCls}>
+                    <DSIcon name="fingerprint" size={12} className="text-green-300/60" /> CPF
                   </label>
                   <input
                     type="text"
@@ -385,18 +373,18 @@ export default function RegisterPage() {
                     {role === 'personal' ? (
                       <>
                         {cpfChecking && (
-                          <div className="mt-1.5 flex items-center gap-1.5"><DSIcon name="loader" size={13} className="text-emerald-600 animate-spin" /><span className="text-[11px] text-slate-500">Validando CPF…</span></div>
+                          <div className="mt-1.5 flex items-center gap-1.5"><DSIcon name="loader" size={13} className="animate-spin text-green-300" /><span className="text-[11px] text-slate-400">Validando CPF…</span></div>
                         )}
                         {cpfValidated && !cpfChecking && (
-                          <div className="mt-1.5 flex items-center gap-1.5"><DSIcon name="checkCircle2" size={13} className="text-emerald-600" /><span className="text-[11px] text-emerald-700">CPF validado{cpfLookupName ? ` para ${cpfLookupName}` : ''}</span></div>
+                          <div className="mt-1.5 flex items-center gap-1.5"><DSIcon name="checkCircle2" size={13} className="text-green-300" /><span className="text-[11px] text-green-200">CPF validado{cpfLookupName ? ` para ${cpfLookupName}` : ''}</span></div>
                         )}
-                        {cpfError && <p className="mt-1.5 text-[11px] text-red-600">{cpfError}</p>}
+                        {cpfError && <p className="mt-1.5 text-[11px] text-red-400">{cpfError}</p>}
                       </>
                     ) : (
                       form.cpf.length === 14 && (
                         cpfLocalValid
-                          ? <div className="mt-1.5 flex items-center gap-1.5"><DSIcon name="checkCircle2" size={13} className="text-emerald-600" /><span className="text-[11px] text-emerald-700">CPF válido</span></div>
-                          : <p className="mt-1.5 text-[11px] text-red-600">CPF inválido. Verifique os dígitos.</p>
+                          ? <div className="mt-1.5 flex items-center gap-1.5"><DSIcon name="checkCircle2" size={13} className="text-green-300" /><span className="text-[11px] text-green-200">CPF válido</span></div>
+                          : <p className="mt-1.5 text-[11px] text-red-400">CPF inválido. Verifique os dígitos.</p>
                       )
                     )}
                   </div>
@@ -406,8 +394,8 @@ export default function RegisterPage() {
               {/* Birth date — personal only (necessário p/ validação Receita) */}
               {role === 'personal' && (
                 <div>
-                  <label className="flex items-center gap-1.5 text-[10px] uppercase text-slate-500 mb-1.5" style={monoLabel}>
-                    <DSIcon name="calendar" size={12} className="text-slate-400" /> DATA DE NASCIMENTO
+                  <label className={labelCls}>
+                    <DSIcon name="calendar" size={12} className="text-green-300/60" /> DATA DE NASCIMENTO
                   </label>
                   <input
                     type="text"
@@ -424,8 +412,8 @@ export default function RegisterPage() {
 
               {/* Senha */}
               <div>
-                <label className="flex items-center gap-1.5 text-[10px] uppercase text-slate-500 mb-1.5" style={monoLabel}>
-                  <DSIcon name="lock" size={12} className="text-slate-400" /> SENHA
+                <label className={labelCls}>
+                  <DSIcon name="lock" size={12} className="text-green-300/60" /> SENHA
                 </label>
                 <div className="relative">
                   <input
@@ -442,18 +430,18 @@ export default function RegisterPage() {
                     onClick={() => setShowPassword(!showPassword)}
                     aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
                     aria-pressed={showPassword}
-                    className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-lg p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-emerald-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                    className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-full p-2 text-slate-400 transition-colors hover:bg-white/5 hover:text-green-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-400/50"
                   >
                     {showPassword ? <DSIcon name="eyeOff" size={16} /> : <DSIcon name="eye" size={16} />}
                   </button>
                 </div>
                 {form.password && (
-                  <div className="mt-2 flex gap-1">
+                  <div className="mt-2 flex gap-1" aria-hidden>
                     {[1, 2, 3, 4].map((lvl) => (
                       <div key={lvl} className={`h-1 flex-1 rounded-full transition-colors duration-300 ${
                         form.password.length >= lvl * 3
-                          ? form.password.length >= 12 ? 'bg-emerald-500' : form.password.length >= 8 ? 'bg-amber-400' : 'bg-red-400'
-                          : 'bg-slate-200'
+                          ? form.password.length >= 12 ? 'bg-green-400' : form.password.length >= 8 ? 'bg-amber-400' : 'bg-red-400'
+                          : 'bg-white/15'
                       }`} />
                     ))}
                   </div>
@@ -464,8 +452,8 @@ export default function RegisterPage() {
               {role === 'personal' && (
                 <>
                   <div>
-                    <label className="flex items-center gap-1.5 text-[10px] uppercase text-slate-500 mb-1.5" style={monoLabel}>
-                      <DSIcon name="award" size={12} className="text-slate-400" /> CREF
+                    <label className={labelCls}>
+                      <DSIcon name="award" size={12} className="text-green-300/60" /> CREF
                     </label>
                     <input
                       type="text"
@@ -478,18 +466,18 @@ export default function RegisterPage() {
                   </div>
 
                   <div>
-                    <label className="flex items-center gap-1.5 text-[10px] uppercase text-slate-500 mb-1.5" style={monoLabel}>
-                      <DSIcon name="shield" size={12} className="text-slate-400" /> ESTADO DO CREF
+                    <label className={labelCls}>
+                      <DSIcon name="shield" size={12} className="text-green-300/60" /> ESTADO DO CREF
                     </label>
                     <div className="relative">
                       <select
                         value={form.cref_state}
                         onChange={(e) => updateField('cref_state', e.target.value)}
                         required
-                        className={`${field} appearance-none pr-10 ${form.cref_state ? '' : 'text-slate-400'}`}
+                        className={`${field} appearance-none pr-10 ${form.cref_state ? '' : 'text-slate-500'}`}
                       >
-                        <option value="">Selecione o estado</option>
-                        {UF_OPTIONS.map((uf) => <option key={uf} value={uf} className="text-slate-900">{uf}</option>)}
+                        <option value="" className="bg-[#0B1221] text-slate-400">Selecione o estado</option>
+                        {UF_OPTIONS.map((uf) => <option key={uf} value={uf} className="bg-[#0B1221] text-white">{uf}</option>)}
                       </select>
                       <svg className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
@@ -503,8 +491,8 @@ export default function RegisterPage() {
               {role === 'nutri' && (
                 <>
                   <div>
-                    <label className="flex items-center gap-1.5 text-[10px] uppercase text-slate-500 mb-1.5" style={monoLabel}>
-                      <DSIcon name="award" size={12} className="text-slate-400" /> CRN
+                    <label className={labelCls}>
+                      <DSIcon name="award" size={12} className="text-green-300/60" /> CRN
                     </label>
                     <input
                       type="text"
@@ -514,22 +502,22 @@ export default function RegisterPage() {
                       required
                       className={`${field} uppercase`}
                     />
-                    <p className="mt-1 text-[10px] text-slate-400">Registro no Conselho Regional de Nutricionistas</p>
+                    <p className="mt-1 text-[10px] text-slate-500">Registro no Conselho Regional de Nutricionistas</p>
                   </div>
 
                   <div>
-                    <label className="flex items-center gap-1.5 text-[10px] uppercase text-slate-500 mb-1.5" style={monoLabel}>
-                      <DSIcon name="shield" size={12} className="text-slate-400" /> ESTADO DO CRN
+                    <label className={labelCls}>
+                      <DSIcon name="shield" size={12} className="text-green-300/60" /> ESTADO DO CRN
                     </label>
                     <div className="relative">
                       <select
                         value={form.crn_state}
                         onChange={(e) => updateField('crn_state', e.target.value)}
                         required
-                        className={`${field} appearance-none pr-10 ${form.crn_state ? '' : 'text-slate-400'}`}
+                        className={`${field} appearance-none pr-10 ${form.crn_state ? '' : 'text-slate-500'}`}
                       >
-                        <option value="">Selecione o estado</option>
-                        {UF_OPTIONS.map((uf) => <option key={uf} value={uf} className="text-slate-900">{uf}</option>)}
+                        <option value="" className="bg-[#0B1221] text-slate-400">Selecione o estado</option>
+                        {UF_OPTIONS.map((uf) => <option key={uf} value={uf} className="bg-[#0B1221] text-white">{uf}</option>)}
                       </select>
                       <svg className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
@@ -541,16 +529,16 @@ export default function RegisterPage() {
 
               {/* Referral (personal + nutri) */}
               {(role === 'personal' || role === 'nutri') && referralLocked && form.referral_code && (
-                <div className="flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-3.5 py-2.5">
-                  <DSIcon name="gift" size={14} className="text-emerald-600 shrink-0" />
-                  <span className="text-[12px] font-semibold text-emerald-700">Indicação aplicada: {form.referral_code}</span>
+                <div className="flex items-center gap-2 rounded-2xl border border-green-400/25 bg-green-400/8 px-3.5 py-2.5">
+                  <DSIcon name="gift" size={14} className="shrink-0 text-green-300" />
+                  <span className="text-[12px] font-semibold text-green-200">Indicação aplicada: {form.referral_code}</span>
                 </div>
               )}
 
               {/* Phone (optional) */}
               <div>
-                <label className="flex items-center gap-1.5 text-[10px] uppercase text-slate-500 mb-1.5" style={monoLabel}>
-                  <DSIcon name="phone" size={12} className="text-slate-400" /> TELEFONE <span className="text-slate-400 normal-case">(opcional)</span>
+                <label className={labelCls}>
+                  <DSIcon name="phone" size={12} className="text-green-300/60" /> TELEFONE <span className="normal-case tracking-normal text-slate-500">(opcional)</span>
                 </label>
                 <input
                   type="tel"
@@ -563,41 +551,47 @@ export default function RegisterPage() {
               </div>
 
               {/* Terms */}
-              <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-slate-200 bg-white p-3 transition-colors hover:border-emerald-300 hover:bg-emerald-50/40">
+              <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-white/8 bg-white/3 p-3 transition-colors hover:border-green-400/25">
                 <div className="relative mt-0.5">
                   <input type="checkbox" checked={acceptedTerms} onChange={(e) => setAcceptedTerms(e.target.checked)} className="peer sr-only" />
-                  <div className="flex h-4.5 w-4.5 items-center justify-center rounded-md border border-slate-300 bg-white transition-all duration-200 peer-checked:border-emerald-500 peer-checked:bg-emerald-500">
+                  <div className="flex h-4.5 w-4.5 items-center justify-center rounded-md border border-white/20 bg-white/5 transition-all duration-200 peer-checked:border-green-400 peer-checked:bg-green-400">
                     {acceptedTerms && (
-                      <svg className="h-2.5 w-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3.5} aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                      <svg className="h-2.5 w-2.5 text-[#06210f]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3.5} aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
                     )}
                   </div>
                 </div>
-                <span className="text-[11px] leading-relaxed text-slate-500">
+                <span className="text-[11px] normal-case leading-relaxed tracking-normal text-slate-400">
                   Li e aceito os{' '}
-                  <Link href="/termos" target="_blank" rel="noreferrer" className="font-bold text-emerald-600 hover:underline">Termos de Uso</Link>
+                  <Link href="/termos" target="_blank" rel="noreferrer" className="font-bold text-green-300 hover:underline">Termos de Uso</Link>
                   {' '}e a{' '}
-                  <Link href="/privacidade" target="_blank" rel="noreferrer" className="font-bold text-emerald-600 hover:underline">Política de Privacidade</Link>
+                  <Link href="/privacidade" target="_blank" rel="noreferrer" className="font-bold text-green-300 hover:underline">Política de Privacidade</Link>
                 </span>
               </label>
 
-              {/* Submit */}
-              <Button
+              {/* Submit — BROADCAST pill CTA */}
+              <button
                 type="submit"
-                size="lg"
-                disabled={!isValid}
-                loading={register.isPending}
-                className="auth-submit-cta-light w-full uppercase font-black"
+                disabled={!isValid || register.isPending}
+                className="bc-reg-cta group relative flex h-14 w-full items-center justify-center gap-2.5 overflow-hidden rounded-full text-[#06210f] outline-none transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-2 focus-visible:ring-green-200 focus-visible:ring-offset-2 focus-visible:ring-offset-[#04080f] disabled:pointer-events-none disabled:opacity-35 disabled:saturate-[0.4]"
+                style={{ background: 'linear-gradient(135deg,#4ade80 0%,#22c55e 50%,#16a34a 100%)' }}
               >
-                <DSIcon name="sparkles" size={16} />
-                {role === 'personal' ? 'CRIAR CONTA PERSONAL' : role === 'nutri' ? 'CRIAR CONTA NUTRI' : 'CRIAR CONTA E ENTRAR'}
-                <DSIcon name="arrowRight" size={16} />
-              </Button>
+                {isValid && !register.isPending && <span aria-hidden className="bc-reg-sweep" />}
+                {register.isPending ? (
+                  <span aria-hidden className="h-4.5 w-4.5 animate-spin rounded-full border-2 border-[#06210f]/30 border-t-[#06210f]" />
+                ) : (
+                  <DSIcon name="sparkles" size={16} className="relative z-10" />
+                )}
+                <span className="font-syne relative z-10 text-[15px] font-black uppercase tracking-tight">
+                  {register.isPending ? 'Criando conta…' : ctaLabel}
+                </span>
+                {!register.isPending && <DSIcon name="arrowRight" size={16} className="relative z-10 transition-transform duration-200 group-hover:translate-x-0.5" />}
+              </button>
 
               {/* Error */}
               {register.isError && (
-                <div role="alert" className="flex items-center gap-2.5 rounded-2xl border border-red-300 bg-red-50 px-4 py-3">
-                  <DSIcon name="alertCircle" size={16} className="text-red-500 shrink-0" />
-                  <p className="text-[12px] font-medium text-red-600">
+                <div role="alert" className="flex items-center gap-2.5 rounded-2xl border border-red-500/25 bg-red-500/8 px-4 py-3">
+                  <DSIcon name="alertCircle" size={16} className="shrink-0 text-red-400" />
+                  <p className="text-[12px] font-medium text-red-300">
                     {register.error instanceof ApiClientError ? register.error.message : 'Erro ao criar conta. Tente novamente.'}
                   </p>
                 </div>
@@ -607,15 +601,23 @@ export default function RegisterPage() {
 
         {/* Footer */}
         <div className="mt-5 flex items-center justify-between">
-          <p className="text-[13px] text-slate-500">
+          <p className="text-[13px] text-slate-400">
             Já tem conta?{' '}
-            <Link href="/login" className="font-bold text-emerald-600 hover:text-emerald-700 transition-colors">Entrar</Link>
+            <Link href="/login" className="font-bold text-green-300 transition-colors hover:text-green-200">Entrar</Link>
           </p>
-          <span className="flex items-center gap-1.5 text-[9px] text-slate-400" style={monoLabel}>
+          <span className="bc-mono flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-[0.16em] text-white/35">
             <DSIcon name="shield" size={12} /> SSL · LGPD
           </span>
         </div>
       </div>
+
+      <style>{`
+        .bc-reg-cta { box-shadow: 0 16px 40px -14px rgba(34,197,94,0.5), inset 0 1px 0 rgba(255,255,255,0.45); }
+        .bc-reg-sweep { position: absolute; inset: 0; z-index: 5; pointer-events: none; background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.5) 50%, transparent 70%); transform: translateX(-130%) skewX(-18deg); animation: bcRegSweep 3.6s ease-in-out 1.2s infinite; }
+        .bc-reg-cta:hover .bc-reg-sweep { animation-duration: 1.1s; }
+        @keyframes bcRegSweep { 0% { transform: translateX(-130%) skewX(-18deg); } 60%,100% { transform: translateX(260%) skewX(-18deg); } }
+        @media (prefers-reduced-motion: reduce) { .bc-reg-sweep { animation: none !important; } }
+      `}</style>
     </GuestGuard>
   )
 }

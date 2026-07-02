@@ -1,0 +1,114 @@
+VFIT MVP — QUICK START (2 minutos)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+STATUS: v5.4.0
+PROBLEMA: 3 bugs bloqueiam MVP. Treinos faltam.
+SOLUÇÃO: Fix bugs hoje (5h) → Sprint 1 semana 1 (36h) → Ganhar dinheiro semana 2
+
+═══════════════════════════════════════════════════════════════════════════════
+
+3 BUGS CRÍTICOS (FIX HOJE — 5h):
+─────────────────────────────────
+1. Rotas internas servindo landing page
+   → /desafios, /comunidade não funcionam
+   → Fix: Criar 4 placeholder pages (30 min)
+
+2. Páginas travadas em "Carregando..."
+   → /treinos, /nutricao, /progresso stuck
+   → Fix: Adicionar timeout + fallback (2h)
+
+3. Avaliação física duplicada
+   → POST cria 2 registros iguais
+   → Fix: Idempotência + constraint BD (1.5h)
+
+ACTION: git checkout -b fix/critical-bugs-v541
+        (implementar 3 fixes em paralelo)
+        npm run quality:ci
+        git push + PR + deploy
+
+═══════════════════════════════════════════════════════════════════════════════
+
+ROADMAP MVP (4 SEMANAS):
+────────────────────────
+HOJE (02/07):         Fix 3 bugs → Deploy v5.4.1
+SEMANA 1 (03-09/07):  Treinos + Dashboard + Marketplace + Notificações
+SEMANA 2 (09-16/07):  Pagamentos + Checkout → 🎉 FIRST REVENUE
+SEMANA 3+ (16/07+):   Scale + Community + Analytics
+
+═══════════════════════════════════════════════════════════════════════════════
+
+DOCUMENTOS (Em /Downloads/):
+────────────────────────────
+README_GUIDE.md ........................ Leia AQUI primeiro
+EXECUTIVE_SUMMARY.md .................. Visão geral (5 min)
+IMMEDIATE_ACTION_PLAN.md .............. Código prático (30 min)
+CONSOLIDATION_REPORT.md ............... Status integrado (10 min)
+ARCHITECTURE_WORKOUTS.md .............. Spec treinos (45 min)
+MVP_ROADMAP_MONETIZATION.md ........... Roadmap detalhado (20 min)
+BUGS_IMPACT_ANALYSIS.md ............... Triage bugs (10 min)
+CURRENT_STATE_SNAPSHOT.md ............. Tech context (15 min)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+PRÓXIMAS 24 HORAS:
+──────────────────
+09:00 - Leia IMMEDIATE_ACTION_PLAN (30 min)
+09:30 - Comece bug fix #1 (roteamento, 30 min)
+10:00 - Comece bug fix #2 (timeout, 2h)
+12:00 - Comece bug fix #3 (idempotência, 1.5h)
+13:30 - Test local (npm run dev)
+14:00 - npm run quality:ci
+14:30 - PR + code review
+15:00 - Deploy (npm run cf:deploy)
+16:00 - Smoke test em produção
+
+PARALELO:
+- /ui-ux-pro-max (mobile fine-tuning)
+- /plan-ceo-review (CEO plano)
+- /plan-eng-review (eng review)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+SUCCESS = MVP EM 2 SEMANAS:
+───────────────────────────
+WEEK 1:
+✅ Treinos CRUD + execução (você treina, ganha XP)
+✅ Dashboard (vê seus treinos + stats)
+✅ Marketplace (personal vende treinos)
+✅ Notificações WhatsApp (alerts em tempo real)
+✅ Gamificação (XP + streaks funcionam)
+
+WEEK 2:
+✅ Asaas integration (pagamentos)
+✅ Checkout flow (você compra)
+✅ 🎉 PRIMEIRA VENDA POSSÍVEL
+
+═══════════════════════════════════════════════════════════════════════════════
+
+CONFIANÇA: 87%
+──────────
+Técnico: 95% (infra pronto, design pronto, auth pronto)
+Timeline: 85% (assume 0 surprises + equipe focada)
+Market: 75% (personal trainers adotam + usuários ficam)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+RECOMENDAÇÃO FINAL:
+───────────────────
+NÃO PERFECCIONE.
+SHIP MVP em 2 semanas.
+ITERATE com usuários reais.
+SCALE depois.
+
+Você pode estar ganhando dinheiro em 2 semanas. 🚀
+
+═══════════════════════════════════════════════════════════════════════════════
+
+AGORA:
+1. Leia README_GUIDE.md (escolha seu caminho)
+2. Leia IMMEDIATE_ACTION_PLAN.md (saiba o que fazer)
+3. Comece bugs (45 min)
+4. Deploy v5.4.1 (hoje)
+
+═══════════════════════════════════════════════════════════════════════════════
