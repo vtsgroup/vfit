@@ -522,6 +522,8 @@ export interface CreateAssessmentWithPhotosInput extends CreateAssessmentInput {
     type: 'front' | 'back' | 'side_left' | 'side_right' | 'custom'
   }>
   edit_style?: 'none' | 'leaner_man' | 'leaner_woman' | 'muscular_man'
+  /** Chave de idempotência — evita criação duplicada em double-submit */
+  idempotency_key?: string
 }
 
 export function useCreateAssessmentWithPhotos() {
@@ -531,10 +533,14 @@ export function useCreateAssessmentWithPhotos() {
   return useMutation({
     mutationFn: async (data: CreateAssessmentWithPhotosInput) => {
       // 1. Criar assessment sem as fotos
-      const { photos, edit_style, ...dataWithoutPhotos } = data
+      const { photos, edit_style, idempotency_key, ...dataWithoutPhotos } = data
       const createPayload: CreateAssessmentInput = dataWithoutPhotos
 
-      const createRes = await api.post<{ id: string }>('/assessments', createPayload)
+      const createRes = await api.post<{ id: string }>(
+        '/assessments',
+        createPayload,
+        idempotency_key ? { headers: { 'Idempotency-Key': idempotency_key } } : undefined
+      )
       const assessmentId = createRes.data.id
 
       // 2. Upload de fotos se fornecidas

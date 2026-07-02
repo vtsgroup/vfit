@@ -12,7 +12,7 @@
 //   AssessmentWizard — wizard completo de avaliação física
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import Image from 'next/image'
 import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
@@ -37,6 +37,7 @@ type PhotoSlot = 'front' | 'side_left' | 'back'
 export function AssessmentWizard({ studentId, onCancel }: { studentId: string; onCancel: () => void }) {
   const [step, setStep] = useState(0)
   const createAssessment = useCreateAssessmentWithPhotos()
+  const submittingRef = useRef(false)
   const { data: student } = useStudent(studentId)
   const { data: history } = useAssessmentHistory(studentId)
 
@@ -109,6 +110,10 @@ export function AssessmentWizard({ studentId, onCancel }: { studentId: string; o
   }
 
   function submit() {
+    // Guard síncrono contra double-click (isPending só atualiza no próximo render)
+    if (submittingRef.current || createAssessment.isPending) return
+    submittingRef.current = true
+
     const cleanMeasurements = Object.entries(measurements).reduce<Record<string, number>>((acc, [key, value]) => {
       const parsed = toNumber(value)
       if (parsed != null) acc[key] = parsed
@@ -135,6 +140,11 @@ export function AssessmentWizard({ studentId, onCancel }: { studentId: string; o
       age: toNumber(age) ?? undefined,
       skinfolds: Object.keys(cleanSkinfolds).length ? cleanSkinfolds : null,
       photos: Object.entries(photos).map(([type, payload]) => ({ file: payload!.file, type: type as PhotoSlot })),
+      idempotency_key: crypto.randomUUID(),
+    }, {
+      onSettled: () => {
+        submittingRef.current = false
+      },
     })
   }
 

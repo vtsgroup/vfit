@@ -386,6 +386,22 @@ assessments.post('/', async (c) => {
     return c.json({ error: 'Sem permissão' }, 403)
   }
 
+  // Idempotência: cliente envia Idempotency-Key; replay retorna a avaliação já criada
+  const idempotencyKey = c.req.header('Idempotency-Key')
+  const idemKvKey = idempotencyKey ? `idem:assessment:${userId}:${idempotencyKey}` : null
+  if (idemKvKey) {
+    const cached = await c.env.KV_CACHE.get(idemKvKey)
+    if (cached === '__pending__') {
+      return c.json({ success: false, error: { code: 'DUPLICATE_REQUEST', message: 'Avaliação já está sendo processada. Aguarde.' } }, 409)
+    }
+    if (cached) {
+      const existing = await findAssessmentById(c.env, cached)
+      if (existing) return success(existing)
+    }
+    // Marca como em processamento (TTL curto: liberado em caso de falha)
+    await c.env.KV_CACHE.put(idemKvKey, '__pending__', { expirationTtl: 120 })
+  }
+
   // Variável para armazenar dados do student (se existir)
   let student: { full_name: string } | null = null
 
@@ -422,6 +438,25 @@ assessments.post('/', async (c) => {
 
   // Super admin criando avaliação de teste usa seu próprio userId como personal_id
   const personalId = userType === 'super_admin' && !parsed.student_id ? userId : userId
+
+  // Dedup por janela: mesma avaliação (personal+aluno+data) criada nos últimos 60s → retorna existente
+  // (proteção mesmo sem Idempotency-Key; UNIQUE(user_id, DATE) bloquearia personals com vários alunos)
+  if (parsed.student_id) {
+    const { rows: recentRows } = await pgQuery<{ id: string }>(
+      c.env,
+      `SELECT id FROM assessments
+       WHERE personal_id = $1 AND student_id = $2 AND assessment_date = $3 AND created_at > $4
+       ORDER BY created_at DESC LIMIT 1`,
+      [personalId, parsed.student_id, assessmentDate, new Date(Date.now() - 60_000).toISOString()]
+    )
+    if (recentRows[0]) {
+      const existing = await findAssessmentById(c.env, recentRows[0].id)
+      if (existing) {
+        if (idemKvKey) await c.env.KV_CACHE.put(idemKvKey, recentRows[0].id, { expirationTtl: 86_400 }).catch(() => {})
+        return success(existing)
+      }
+    }
+  }
 
   // === Assessment 2.0: Composição Corporal Completa ===
   let bodyComp: BodyCompositionResult | null = null
@@ -540,6 +575,11 @@ assessments.post('/', async (c) => {
     JSON.stringify(bodyComp ? { ...bodyComp, _gender: gender, _activityLevel: parsed.activity_level || 'moderate' } : {}),
     now,
   ])
+
+  // Idempotência: grava o id criado — replays com a mesma key retornam este registro
+  if (idemKvKey) {
+    await c.env.KV_CACHE.put(idemKvKey, id, { expirationTtl: 86_400 }).catch(() => {})
+  }
 
   // === Calcular evolução (comparar com avaliação anterior) ===
   if (parsed.student_id && bodyComp) {

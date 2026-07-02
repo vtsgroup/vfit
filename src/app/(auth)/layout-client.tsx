@@ -1,84 +1,27 @@
 /**
  * src/app/(auth)/layout-client.tsx
  *
- * Auth Layout Client — Ultra-modern split screen
+ * Auth Layout Client — VFIT BROADCAST split screen (dark único)
+ *
+ * Esquerda: painel editorial seco — grade técnica, manchete Syne gigante, box-score
+ * de stats, chips mono e depoimentos em cards dark glass (marquee). Sem fotos, sem
+ * aurora, sem Ken Burns — mesma linguagem do /welcome.
+ * Direita: formulário dark, max width 420px. Separador hairline verde.
  *
  * Exports: AuthLayoutClient
- * Hooks: useState, useEffect, useMemo, useCallback, usePathname
- * Features: 'use client' · DSIcon
  */
-
-// ============================================
-// Auth Layout Client — Ultra-modern split screen
-// Left: Cinematic animated CSS bg (aurora + particles), animated logo, white card testimonials
-// Right: Clean dark form, max width 420px
-// Gradient border separator between panels
-// ============================================
 
 'use client'
 
-import { useState, useEffect, useMemo, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import type { ReactNode } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { DSIcon } from '@/components/ui/ds-icon'
 
-/* ─── Hero images slideshow for left panel ─── */
-const LEFT_PANEL_IMAGES = [
-  '/images/hero-1.webp',
-  '/images/hero-2.webp',
-  '/images/hero-3.webp',
-  '/images/hero-4.webp',
-]
-
-function ImageSlideshow() {
-  const [current, setCurrent] = useState(0)
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => { setMounted(true) }, [])
-
-  const next = useCallback(() => {
-    setCurrent((prev) => (prev + 1) % LEFT_PANEL_IMAGES.length)
-  }, [])
-
-  useEffect(() => {
-    const interval = setInterval(next, 5500)
-    return () => clearInterval(interval)
-  }, [next])
-
-  return (
-    <div className="absolute inset-0">
-      {/* Images with crossfade + Ken Burns zoom */}
-      {mounted && LEFT_PANEL_IMAGES.map((src, i) => (
-        <div
-          key={src}
-          className="absolute inset-0 transition-opacity duration-2000 ease-in-out"
-          style={{ opacity: current === i ? 1 : 0 }}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={src}
-            alt=""
-            className="h-full w-full object-cover"
-            style={{
-              animation: current === i ? 'authKenBurns 12s ease-in-out forwards' : 'none',
-              transformOrigin: ['center center', 'top left', 'bottom right', 'top right'][i],
-            }}
-            loading={i === 0 ? 'eager' : 'lazy'}
-          />
-        </div>
-      ))}
-      {/* Dark overlay to keep text readable */}
-      <div className="absolute inset-0 bg-bg-base/75" />
-      {/* Public/auth green cinematic tint */}
-      <div className="absolute inset-0 bg-linear-to-br from-bg-base/50 via-emerald-500/8 to-bg-base/60" />
-    </div>
-  )
-}
-
 const VFIT_LETTERS = 'VFIT'.split('')
 
-function AnimatedAuthLogo({ size = 'large', theme = 'dark' }: { size?: 'large' | 'small'; theme?: 'light' | 'dark' }) {
+function AnimatedAuthLogo({ size = 'large' }: { size?: 'large' | 'small' }) {
   const [typedCount, setTypedCount] = useState(0)
   const [markIn, setMarkIn] = useState(false)
 
@@ -100,10 +43,9 @@ function AnimatedAuthLogo({ size = 'large', theme = 'dark' }: { size?: 'large' |
   const fontSize = isLarge ? '46px' : '32px'
   const lineH = isLarge ? '54px' : '38px'
   const cursorH = isLarge ? '42px' : '28px'
-  const wordmarkColor = theme === 'light' ? '#0F172A' : 'white'
 
   return (
-    <Link href="/" className="flex items-center gap-2.5 group shrink-0" aria-label="VFIT - Início">
+    <Link href="/" className="group flex shrink-0 items-center gap-2.5" aria-label="VFIT - Início">
       {/* ─── Logomark (official SVG) ─── */}
       <span
         className="relative inline-flex shrink-0 transition-all duration-500 ease-out"
@@ -133,15 +75,8 @@ function AnimatedAuthLogo({ size = 'large', theme = 'dark' }: { size?: 'large' |
       {/* ─── Wordmark with typewriter ─── */}
       <div className="relative flex items-center">
         <span
-          className="inline-flex items-center"
-          style={{
-            fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-            fontWeight: 800,
-            fontSize,
-            letterSpacing: '-0.02em',
-            lineHeight: lineH,
-            color: wordmarkColor,
-          }}
+          className="font-syne inline-flex items-center font-extrabold text-white"
+          style={{ fontSize, letterSpacing: '-0.02em', lineHeight: lineH }}
         >
           {VFIT_LETTERS.map((letter, idx) => (
             <span
@@ -159,7 +94,7 @@ function AnimatedAuthLogo({ size = 'large', theme = 'dark' }: { size?: 'large' |
 
         {/* Typing cursor */}
         <span
-          className="inline-block w-[2.5px] rounded-full bg-brand-primary ml-px transition-opacity duration-300"
+          className="ml-px inline-block w-[2.5px] rounded-full bg-brand-primary transition-opacity duration-300"
           style={{
             height: cursorH,
             opacity: typedCount < VFIT_LETTERS.length ? 1 : 0,
@@ -171,119 +106,12 @@ function AnimatedAuthLogo({ size = 'large', theme = 'dark' }: { size?: 'large' |
   )
 }
 
-/* ─── Feature chip ─── */
+/* ─── Feature chip — aparato mono BROADCAST ─── */
 function FeatureChip({ icon, label }: { icon: React.ReactNode; label: string }) {
   return (
-    <div className="flex items-center gap-1.5 rounded-full border border-white/8 bg-white/4 backdrop-blur-sm px-3 py-1 text-[10px] font-medium text-zinc-300 select-none transition-all hover:border-white/15 hover:bg-white/7">
-      <span className="text-emerald-300/80">{icon}</span>
-      <span style={{ fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace', fontWeight: 700, letterSpacing: '0.1em' }}>
-        {label}
-      </span>
-    </div>
-  )
-}
-
-function seededUnit(seed: number): number {
-  const x = Math.sin(seed * 12.9898) * 43758.5453
-  return x - Math.floor(x)
-}
-
-/* ─── Cinematic CSS Background — smooth aurora + floating particles ─── */
-function CinematicBackground() {
-  // Generate stable particles with useMemo (no re-renders)
-  const particles = useMemo(() =>
-    Array.from({ length: 20 }, (_, i) => ({
-      id: i,
-      size: (2 + seededUnit(i * 7 + 1) * 4).toFixed(4),
-      x: (seededUnit(i * 7 + 2) * 100).toFixed(4),
-      y: (seededUnit(i * 7 + 3) * 100).toFixed(4),
-      duration: (15 + seededUnit(i * 7 + 4) * 25).toFixed(4),
-      delay: (seededUnit(i * 7 + 5) * -20).toFixed(4),
-      opacity: (0.15 + seededUnit(i * 7 + 6) * 0.35).toFixed(4),
-    })),
-  [])
-
-  return (
-    <div className="absolute inset-0 overflow-hidden opacity-60">
-      {/* Base deep dark gradient */}
-      <div className="absolute inset-0 bg-linear-to-br from-bg-base/70 via-bg-surface-1/50 to-bg-base/70" />
-
-      {/* Aurora layer 1 — slow drift, green */}
-      <div
-        className="absolute inset-0 opacity-40"
-        style={{
-          background: 'radial-gradient(ellipse 120% 60% at 20% 80%, rgba(34,197,94,0.15) 0%, transparent 60%)',
-          animation: 'auroraDrift1 25s ease-in-out infinite alternate',
-        }}
-      />
-
-      {/* Aurora layer 2 — slow drift, emerald */}
-      <div
-        className="absolute inset-0 opacity-30"
-        style={{
-          background: 'radial-gradient(ellipse 100% 50% at 80% 30%, rgba(16,185,129,0.12) 0%, transparent 55%)',
-          animation: 'auroraDrift2 30s ease-in-out infinite alternate',
-        }}
-      />
-
-      {/* Aurora layer 3 — subtle brand accent */}
-      <div
-        className="absolute inset-0 opacity-20"
-        style={{
-          background: 'radial-gradient(ellipse 80% 40% at 50% 60%, rgba(34,197,94,0.08) 0%, transparent 50%)',
-          animation: 'auroraDrift3 20s ease-in-out infinite alternate',
-        }}
-      />
-
-      {/* Mesh gradient overlay — organic feel */}
-      <div
-        className="absolute inset-0 opacity-25"
-        style={{
-          background: `
-            radial-gradient(circle at 15% 25%, rgba(34,197,94,0.10) 0%, transparent 40%),
-            radial-gradient(circle at 85% 75%, rgba(16,185,129,0.09) 0%, transparent 35%),
-            radial-gradient(circle at 50% 10%, rgba(52,211,153,0.08) 0%, transparent 45%)
-          `,
-          animation: 'auroraMesh 35s ease-in-out infinite alternate',
-        }}
-      />
-
-      {/* Floating particles */}
-      {particles.map((p) => (
-        <div
-          key={p.id}
-          className="absolute rounded-full bg-emerald-400/60"
-          style={{
-            width: `${p.size}px`,
-            height: `${p.size}px`,
-            left: `${p.x}%`,
-            top: `${p.y}%`,
-            opacity: p.opacity,
-            filter: `blur(${Number(p.size) > 4 ? 1 : 0}px)`,
-            animationName: 'particleFloat',
-            animationDuration: `${p.duration}s`,
-            animationTimingFunction: 'ease-in-out',
-            animationDelay: `${p.delay}s`,
-            animationIterationCount: 'infinite',
-          }}
-        />
-      ))}
-
-      {/* Soft noise texture (subtle grain) */}
-      <div
-        className="absolute inset-0"
-        style={{
-          opacity: 0.035,
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-          backgroundSize: '128px 128px',
-        }}
-      />
-
-      {/* Vignette edges */}
-      <div
-        className="absolute inset-0"
-        style={{ background: 'radial-gradient(ellipse at center, transparent 40%, rgba(5,10,18,0.6) 100%)' }}
-      />
+    <div className="bc-mono flex select-none items-center gap-1.5 rounded-full border border-white/10 bg-white/3 px-3 py-1 text-[10px] font-bold tracking-[0.1em] text-slate-300 transition-all hover:border-green-400/30 hover:bg-green-400/6">
+      <span className="text-green-300/80">{icon}</span>
+      <span>{label}</span>
     </div>
   )
 }
@@ -300,9 +128,9 @@ const AUTH_TESTIMONIALS = [
 function TestimonialCarousel() {
   return (
     <div className="relative -mx-10 xl:-mx-14">
-      {/* Edge fade masks — match dark bg */}
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-14 bg-linear-to-r from-bg-base/90 to-transparent" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-14 bg-linear-to-l from-bg-base/90 to-transparent" />
+      {/* Edge fade masks — match navy bg */}
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-14 bg-linear-to-r from-[#04080f] to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-14 bg-linear-to-l from-[#04080f] to-transparent" />
 
       <div className="overflow-hidden">
         <div
@@ -312,10 +140,10 @@ function TestimonialCarousel() {
           onMouseLeave={(e) => { e.currentTarget.style.animationPlayState = 'running' }}
         >
           {[...AUTH_TESTIMONIALS, ...AUTH_TESTIMONIALS].map((t, i) => (
-            <div key={i} className="shrink-0 w-65 xl:w-70">
-              <div className="h-45 flex flex-col rounded-2xl bg-white p-4 shadow-[0_4px_20px_rgba(34,197,94,0.08),0_1px_6px_rgba(0,0,0,0.06)] transition-shadow duration-300 hover:shadow-[0_8px_30px_rgba(34,197,94,0.18)]">
+            <div key={i} className="w-65 shrink-0 xl:w-70">
+              <div className="flex h-45 flex-col rounded-2xl border border-white/10 bg-white/3 p-4 shadow-glass-inset-sm backdrop-blur-sm transition-colors duration-300 hover:border-green-400/25">
                 {/* Stars + rating */}
-                <div className="flex items-center gap-1.5 mb-2">
+                <div className="mb-2 flex items-center gap-1.5">
                   <div className="flex gap-0.5">
                     {[...Array(5)].map((_, j) => (
                       <svg key={j} className="h-3 w-3 text-amber-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
@@ -323,27 +151,27 @@ function TestimonialCarousel() {
                       </svg>
                     ))}
                   </div>
-                  <span className="text-[10px] font-bold text-amber-500">5.0</span>
+                  <span className="bc-mono text-[10px] font-bold text-amber-400">5.0</span>
                 </div>
 
                 {/* Quote */}
-                <p className="flex-1 text-[12px] text-zinc-600 leading-relaxed line-clamp-4">
+                <p className="line-clamp-4 flex-1 text-[12px] leading-relaxed text-slate-400">
                   &ldquo;{t.text.split(t.highlight)[0]}
-                  <strong className="font-bold text-zinc-900">{t.highlight}</strong>
+                  <strong className="font-bold text-white">{t.highlight}</strong>
                   {t.text.split(t.highlight)[1]}&rdquo;
                 </p>
 
                 {/* Author */}
-                <div className="mt-2 flex items-center gap-2 pt-2.5 border-t border-zinc-100">
-                  <div className="h-7 w-7 rounded-full bg-linear-to-br from-emerald-500 to-green-400 flex items-center justify-center text-[9px] font-bold text-white shadow-sm">
+                <div className="mt-2 flex items-center gap-2 border-t border-white/8 pt-2.5">
+                  <div
+                    className="flex h-7 w-7 items-center justify-center rounded-full text-[9px] font-bold text-[#06210f] shadow-sm"
+                    style={{ background: 'linear-gradient(135deg,#4ade80,#16a34a)' }}
+                  >
                     {t.avatar}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <div className="text-[11px] font-semibold text-zinc-900 truncate">{t.name}</div>
-                    <div
-                      className="text-[8px] text-zinc-500 truncate"
-                      style={{ fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace', fontWeight: 600, letterSpacing: '0.06em' }}
-                    >
+                    <div className="truncate text-[11px] font-semibold text-white">{t.name}</div>
+                    <div className="bc-mono truncate text-[8px] font-semibold tracking-[0.06em] text-slate-500">
                       {t.role.toUpperCase()}
                     </div>
                   </div>
@@ -360,125 +188,70 @@ function TestimonialCarousel() {
 export function AuthLayoutClient({ children }: { children: ReactNode }) {
   const pathname = usePathname()
   const hidesMobileLogo = pathname?.startsWith('/register/student')
-  // Light premium theme — unified across the primary auth pages.
-  // (Sub-flows like /register/personal and /register/student stay dark for now.)
-  // /login stays dark to match the BROADCAST welcome/onboarding funnel that leads into it.
-  const isLightAuth = pathname === '/register' || pathname === '/forgot-password'
 
   return (
     <>
       {/* Keyframes */}
       <style>{`
         @keyframes authCursorBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-        @keyframes logoGlowPulse {
-          0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
-          50% { transform: translate(-50%, -50%) scale(1.4); opacity: 1; }
-        }
-        @keyframes authGridScroll {
-          0% { transform: translate(0, 0); }
-          100% { transform: translate(80px, 80px); }
-        }
-        @keyframes authFloat {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-20px); }
-        }
         @keyframes authMarquee {
           0% { transform: translateX(0); }
           100% { transform: translateX(-50%); }
         }
-
-        /* Ken Burns zoom for slideshow */
-        @keyframes authKenBurns {
-          0% { transform: scale(1); }
-          100% { transform: scale(1.12); }
-        }
-
-        /* Aurora cinematic background */
-        @keyframes auroraDrift1 {
-          0% { transform: translate(0, 0) scale(1); }
-          50% { transform: translate(8%, -5%) scale(1.1); }
-          100% { transform: translate(-5%, 8%) scale(0.95); }
-        }
-        @keyframes auroraDrift2 {
-          0% { transform: translate(0, 0) scale(1); }
-          50% { transform: translate(-10%, 6%) scale(1.15); }
-          100% { transform: translate(6%, -8%) scale(1.05); }
-        }
-        @keyframes auroraDrift3 {
-          0% { transform: translate(0, 0) scale(1); }
-          50% { transform: translate(5%, 10%) scale(1.08); }
-          100% { transform: translate(-8%, -4%) scale(0.92); }
-        }
-        @keyframes auroraMesh {
-          0% { transform: rotate(0deg) scale(1); }
-          100% { transform: rotate(3deg) scale(1.05); }
-        }
-        @keyframes particleFloat {
-          0%, 100% { transform: translate(0, 0) scale(1); opacity: var(--tw-opacity, 0.3); }
-          25% { transform: translate(30px, -40px) scale(1.2); opacity: 0.6; }
-          50% { transform: translate(-20px, -60px) scale(0.8); opacity: 0.15; }
-          75% { transform: translate(40px, -20px) scale(1.1); opacity: 0.5; }
+        @keyframes authLivePing { 0% { box-shadow: 0 0 0 0 rgba(74,222,128,0.5); } 70%,100% { box-shadow: 0 0 0 7px rgba(74,222,128,0); } }
+        .auth-bc-live { animation: authLivePing 2.4s ease-out infinite; }
+        @media (prefers-reduced-motion: reduce) {
+          .auth-bc-live { animation: none !important; }
         }
       `}</style>
 
-      <div className="auth-dark-scope dark flex min-h-screen bg-bg-primary" style={{ colorScheme: 'dark', paddingTop: 'env(safe-area-inset-top, 0px)', paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
-        {/* ─── LEFT PANEL — Cinematic aurora background + image slideshow ─── */}
-        <div className="hidden lg:flex lg:w-[48%] xl:w-1/2 relative overflow-hidden">
-          {/* Image slideshow with crossfade + Ken Burns */}
-          <ImageSlideshow />
+      <div className="auth-dark-scope dark flex min-h-screen bg-[#04080f]" style={{ colorScheme: 'dark', paddingTop: 'env(safe-area-inset-top, 0px)', paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
+        {/* ─── LEFT PANEL — placar editorial BROADCAST ─── */}
+        <div className="relative hidden overflow-hidden lg:flex lg:w-[48%] xl:w-1/2">
+          {/* atmosfera "impressa" seca — grade técnica + bloom verde (sem orbs/aurora) */}
+          <div aria-hidden className="vfit-flow-grid pointer-events-none absolute inset-0 opacity-[0.22]" />
+          <div aria-hidden className="pointer-events-none absolute inset-0" style={{ background: 'radial-gradient(120% 70% at 20% -8%, rgba(34,197,94,0.12), transparent 55%)' }} />
+          <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-green-400/40 to-transparent" />
 
-          {/* Smooth CSS cinematic background (aurora layers on top of images) */}
-          <CinematicBackground />
-
-          {/* Animated grid lines */}
-          <div
-            className="absolute inset-0"
+          {/* numeral índice marca d'água (editorial) */}
+          <span
+            aria-hidden
+            className="font-syne pointer-events-none absolute -right-6 top-[8%] z-0 select-none font-extrabold leading-[0.78]"
             style={{
-              opacity: 0.03,
-              backgroundImage: 'linear-gradient(rgba(34,197,94,0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(34,197,94,0.2) 1px, transparent 1px)',
-              backgroundSize: '80px 80px',
-              animation: 'authGridScroll 20s linear infinite',
+              fontSize: 'clamp(14rem, 26vw, 24rem)',
+              color: 'rgba(34,197,94,0.06)',
+              WebkitTextStroke: '1.5px rgba(34,197,94,0.2)',
+              WebkitTextFillColor: 'transparent',
             }}
-          />
-
-          {/* Floating gradient orbs */}
-          <div
-            className="absolute top-[15%] -left-16 h-72 w-72 rounded-full bg-emerald-500/12 blur-[100px]"
-            style={{ animation: 'authFloat 8s ease-in-out infinite' }}
-          />
-          <div
-            className="absolute bottom-[20%] right-[-5%] h-80 w-80 rounded-full bg-lime-300/10 blur-[120px]"
-            style={{ animation: 'authFloat 10s ease-in-out infinite', animationDelay: '3s' }}
-          />
+          >
+            01
+          </span>
 
           {/* ─── Content ─── */}
-          <div className="relative z-10 flex flex-col justify-between p-10 xl:p-14 w-full">
+          <div className="relative z-10 flex w-full flex-col justify-between p-10 xl:p-14">
             {/* Logo top */}
             <AnimatedAuthLogo size="large" />
 
-            {/* Tagline + features */}
+            {/* Manchete + aparato */}
             <div className="max-w-lg">
-              <p
-                className="text-[10px] uppercase text-emerald-300/90 mb-3"
-                style={{ fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace', fontWeight: 700, letterSpacing: '0.15em' }}
-              >
-                PLATAFORMA #1 PARA PERSONAL TRAINERS
+              <p className="bc-mono mb-4 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em] text-green-300/90">
+                <span aria-hidden className="auth-bc-live inline-block h-2 w-2 rounded-full bg-green-400" />
+                Plataforma Nº 01 · Personal Trainers
               </p>
-              <h2
-                className="text-[2.4rem] xl:text-[2.8rem] text-white leading-[1.08] mb-4"
-                style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', fontWeight: 900, letterSpacing: 0 }}
-              >
-                Treinos, alunos e{' '}
-                <span className="text-transparent bg-clip-text bg-linear-to-r from-emerald-300 via-green-300 to-emerald-500">
+              <h2 className="font-syne mb-4 text-[2.6rem] font-black uppercase leading-[0.95] tracking-tight text-white xl:text-[3.1rem]">
+                Treinos,
+                <br />
+                alunos e{' '}
+                <span className="text-[#22c55e]" style={{ textShadow: '0 6px 34px rgba(34,197,94,0.32)' }}>
                   cobranças
                 </span>
               </h2>
-              <p className="text-zinc-400 leading-relaxed text-[14px] max-w-md mb-6">
+              <p className="mb-6 max-w-md text-[14px] leading-relaxed text-slate-400">
                 Gere treinos com IA, acompanhe evolução e receba pagamentos automaticamente — tudo em uma plataforma.
               </p>
 
               {/* Feature chips — 2 rows */}
-              <div className="flex flex-wrap gap-1.5 mb-6">
+              <div className="mb-6 flex flex-wrap gap-1.5">
                 <FeatureChip icon={<DSIcon name="bot" size={12} />} label="IA GENERATIVA" />
                 <FeatureChip icon={<DSIcon name="creditCard" size={12} />} label="PIX AUTOMÁTICO" />
                 <FeatureChip icon={<DSIcon name="barChart" size={12} />} label="MÉTRICAS" />
@@ -491,81 +264,54 @@ export function AuthLayoutClient({ children }: { children: ReactNode }) {
                 <FeatureChip icon={<DSIcon name="rocket" size={12} />} label="MARKETPLACE" />
               </div>
 
-              {/* Stats */}
-              <div className="flex gap-8">
+              {/* Stats — box-score com hairlines */}
+              <div className="grid max-w-sm grid-cols-3 overflow-hidden rounded-xl border border-green-400/15">
                 {[
                   { value: '2.5k+', label: 'PERSONAIS' },
                   { value: '45k+', label: 'TREINOS' },
                   { value: '98%', label: 'SATISFAÇÃO' },
                 ].map((stat, i) => (
-                  <div key={i}>
-                    <div
-                      className="text-2xl text-white"
-                      style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', fontWeight: 900, letterSpacing: 0 }}
-                    >
-                      {stat.value}
-                    </div>
-                    <div
-                      className="text-[9px] text-zinc-400 mt-0.5"
-                      style={{ fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace', fontWeight: 700, letterSpacing: '0.15em' }}
-                    >
-                      {stat.label}
-                    </div>
+                  <div key={stat.label} className={`flex flex-col gap-1 px-4 py-3.5 ${i === 1 ? 'bg-green-900/15' : ''} ${i < 2 ? 'border-r border-white/8' : ''}`}>
+                    <div className="font-syne text-2xl font-black leading-none text-white tabular-nums">{stat.value}</div>
+                    <div className="bc-mono text-[9px] font-bold tracking-[0.15em] text-slate-400">{stat.label}</div>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Testimonial carousel — white cards like home */}
+            {/* Testimonial carousel — dark glass cards */}
             <TestimonialCarousel />
           </div>
         </div>
 
         {/* ─── GRADIENT BORDER SEPARATOR ─── */}
-        <div className="hidden lg:block relative w-px">
-          <div className="absolute inset-0 bg-linear-to-b from-transparent via-emerald-400/45 to-transparent" />
-          <div className="absolute inset-0 bg-linear-to-b from-transparent via-emerald-400/25 to-transparent blur-[3px]" />
+        <div className="relative hidden w-px lg:block">
+          <div className="absolute inset-0 bg-linear-to-b from-transparent via-green-400/45 to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-b from-transparent via-green-400/25 to-transparent blur-[3px]" />
         </div>
 
         {/* ─── RIGHT PANEL — Form ─── */}
-        <div
-          className={
-            isLightAuth
-              ? 'light flex w-full lg:w-[52%] xl:w-1/2 flex-col relative bg-[#F5F7FA]'
-              : 'flex w-full lg:w-[52%] xl:w-1/2 flex-col relative'
-          }
-          style={isLightAuth ? { colorScheme: 'light' } : undefined}
-        >
+        <div className="relative flex w-full flex-col lg:w-[52%] xl:w-1/2">
           {/* Ambient glow */}
-          {isLightAuth ? (
-            <div className="pointer-events-none absolute inset-0 overflow-hidden">
-              {/* Soft brand-green tint blooms on white (light mode) */}
-              <div className="absolute -top-40 right-[-10%] h-96 w-96 rounded-full blur-[120px]" style={{ background: 'rgba(34,197,94,0.06)' }} />
-              <div className="absolute bottom-[-10%] left-[-5%] h-72 w-72 rounded-full blur-[110px]" style={{ background: 'rgba(34,197,94,0.05)' }} />
-            </div>
-          ) : (
-            <div className="pointer-events-none absolute inset-0 overflow-hidden">
-              <div className="absolute -top-40 right-[-10%] h-96 w-96 rounded-full bg-emerald-500/4 blur-[120px]" />
-              <div className="absolute bottom-[-10%] left-[-5%] h-60 w-60 rounded-full bg-emerald-400/3 blur-[100px]" />
-            </div>
-          )}
+          <div className="pointer-events-none absolute inset-0 overflow-hidden">
+            <div className="absolute -top-40 right-[-10%] h-96 w-96 rounded-full bg-green-500/4 blur-[120px]" />
+            <div className="absolute bottom-[-10%] left-[-5%] h-60 w-60 rounded-full bg-green-400/3 blur-[100px]" />
+          </div>
 
-          {/* Subtle grid on right panel — lightened for white bg on login */}
+          {/* Subtle grid on right panel */}
           <div
             className="pointer-events-none absolute inset-0"
             style={{
-              opacity: isLightAuth ? 0.5 : 0.015,
-              backgroundImage: isLightAuth
-                ? 'linear-gradient(rgba(15,23,42,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(15,23,42,0.025) 1px, transparent 1px)'
-                : 'linear-gradient(rgba(255,255,255,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.15) 1px, transparent 1px)',
+              opacity: 0.015,
+              backgroundImage: 'linear-gradient(rgba(255,255,255,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.15) 1px, transparent 1px)',
               backgroundSize: '60px 60px',
             }}
           />
 
           {/* Mobile header — hidden on student register (has own cover logo) */}
           {!hidesMobileLogo && (
-            <header className="relative z-10 flex items-center justify-center px-5 pt-[max(0.5rem,env(safe-area-inset-top))] pb-1 lg:hidden">
-              <AnimatedAuthLogo size="small" theme={isLightAuth ? 'light' : 'dark'} />
+            <header className="relative z-10 flex items-center justify-center px-5 pb-1 pt-[max(0.5rem,env(safe-area-inset-top))] lg:hidden">
+              <AnimatedAuthLogo size="small" />
             </header>
           )}
 
@@ -577,10 +323,7 @@ export function AuthLayoutClient({ children }: { children: ReactNode }) {
           </main>
 
           {/* Footer */}
-          <footer
-            className={`relative z-10 hidden py-2 text-center text-[9px] sm:block ${isLightAuth ? 'text-slate-400' : 'text-zinc-700'}`}
-            style={{ fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace', fontWeight: 700, letterSpacing: '0.15em' }}
-          >
+          <footer className="bc-mono relative z-10 hidden py-2 text-center text-[9px] font-bold tracking-[0.15em] text-white/25 sm:block">
             © {new Date().getFullYear()} VFIT · TODOS OS DIREITOS RESERVADOS
           </footer>
         </div>

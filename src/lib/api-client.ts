@@ -183,7 +183,12 @@ interface FetchOptions extends Omit<RequestInit, 'body'> {
   auth?: boolean // default true
   /** Skip in-flight deduplication for this request (useful for mutations disguised as GETs) */
   noDedup?: boolean
+  /** Timeout em ms. Default: 5s para GET, 30s para mutações (IA/pagamentos podem demorar) */
+  timeoutMs?: number
 }
+
+const DEFAULT_GET_TIMEOUT_MS = 5_000
+const DEFAULT_MUTATION_TIMEOUT_MS = 30_000
 
 // In-flight GET deduplication: same URL+params → same Promise (never fires twice concurrently)
 const _inFlight = new Map<string, Promise<ApiResponse<unknown>>>()
@@ -234,7 +239,7 @@ async function apiFetchInternal<T = unknown>(
   options: FetchOptions,
   attempt: 0 | 1
 ): Promise<ApiResponse<T>> {
-  const { body, params, auth = true, headers: customHeaders, ...init } = options
+  const { body, params, auth = true, headers: customHeaders, timeoutMs, ...init } = options
   const method = (init.method || 'GET').toUpperCase()
 
   // Normalizar endpoint: adicionar /api/v1 se não presente
@@ -271,12 +276,27 @@ async function apiFetchInternal<T = unknown>(
     }
   }
 
+  // Timeout: evita páginas presas em "Carregando..." quando o backend não responde
+  const effectiveTimeout = timeoutMs ?? (method === 'GET' ? DEFAULT_GET_TIMEOUT_MS : DEFAULT_MUTATION_TIMEOUT_MS)
+  const controller = new AbortController()
+  let timedOut = false
+  const timeoutId = setTimeout(() => {
+    timedOut = true
+    controller.abort()
+  }, effectiveTimeout)
+  const externalSignal = init.signal
+  if (externalSignal) {
+    if (externalSignal.aborted) controller.abort()
+    else externalSignal.addEventListener('abort', () => controller.abort(), { once: true })
+  }
+
   try {
     // Make request
     const res = await fetch(url.toString(), {
       ...init,
       headers,
       body: body ? JSON.stringify(body) : undefined,
+      signal: controller.signal,
     })
 
     // Handle 204 No Content
@@ -328,7 +348,17 @@ async function apiFetchInternal<T = unknown>(
 
     _networkFailureStreak = 0
     return json as ApiResponse<T>
-  } catch (err) {
+  } catch (rawErr) {
+    // Abort causado pelo timeout → erro amigável e identificável (não confundir com abort do caller)
+    const err = timedOut
+      ? new ApiClientError(
+          'Falha ao carregar. Tente novamente.',
+          'TIMEOUT',
+          0,
+          { endpoint: normalizedEndpoint, timeoutMs: effectiveTimeout }
+        )
+      : rawErr
+
     // Log de erro para fase de pré-produção (best-effort)
     if (typeof window !== 'undefined' && !normalizedEndpoint.startsWith('/api/v1/debug')) {
       const e = err as { message?: string; stack?: string }
@@ -360,6 +390,8 @@ async function apiFetchInternal<T = unknown>(
     // Tentar flush ao final para evitar fila local acumulada
     void flushDebugQueue()
     throw err
+  } finally {
+    clearTimeout(timeoutId)
   }
 }
 

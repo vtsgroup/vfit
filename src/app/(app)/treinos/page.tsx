@@ -33,6 +33,7 @@ import { useB2COnboardingCompleted } from '@/hooks/use-b2c-onboarding'
 import { useStudentProfile, useLinkPersonalTrainer } from '@/hooks/use-student-app'
 import { useExercises, useMuscleGroups, type Exercise } from '@/hooks/use-exercises'
 import { useAuthStore } from '@/stores/auth-store'
+import { LoadFailed } from '@/components/ui/load-failed'
 import { FirstWinCommandCenter } from '@/components/treinos/first-win-command-center'
 
 const DIFFICULTY_FILTERS = [
@@ -269,7 +270,7 @@ export default function TreinosPage() {
   const isSuperAdmin = user?.role === 'super_admin'
 
   const [difficulty, setDifficulty] = useState('')
-  const { data: templates, isLoading } = useWorkoutTemplates(
+  const { data: templates, isLoading, isError: templatesError, refetch: refetchTemplates } = useWorkoutTemplates(
     difficulty ? { difficulty } : undefined
   )
   const { data: muscleGroups = [] } = useMuscleGroups()
@@ -988,6 +989,11 @@ export default function TreinosPage() {
         <div className="flex items-center justify-center py-16">
           <DSIcon name="loader" size={24} className="animate-spin text-text-muted" />
         </div>
+      )}
+
+      {/* Error state — timeout/rede */}
+      {!isLoading && templatesError && (
+        <LoadFailed onRetry={() => refetchTemplates()} />
       )}
 
       {/* Templates grid */}

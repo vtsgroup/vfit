@@ -12,6 +12,7 @@ import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
+import { LoadFailed } from '@/components/ui/load-failed'
 import { KPICard, MiniBarChart, ProgressoPageSkeleton } from '@/components/progresso'
 import { useProgressSummary, useProgressChart, useStreak, useTopExercises, useExerciseProgress, type TopExercise } from '@/hooks/use-progress'
 
@@ -81,7 +82,7 @@ export default function ProgressoPage() {
   const [period, setPeriod] = useState<PeriodKey>('week')
   const [offset, setOffset] = useState(0)
 
-  const { data: summary, isLoading: loadingSummary } = useProgressSummary(period, offset)
+  const { data: summary, isLoading: loadingSummary, isError: summaryError, refetch: refetchSummary } = useProgressSummary(period, offset)
   const { data: chart, isLoading: loadingChart } = useProgressChart(period, offset)
   const { data: streak } = useStreak()
   const { data: topExercisesData } = useTopExercises(4)
@@ -187,8 +188,13 @@ export default function ProgressoPage() {
       {/* Loading state — skeleton instead of spinner */}
       {loadingSummary && <ProgressoPageSkeleton />}
 
+      {/* Error state — timeout/rede */}
+      {!loadingSummary && summaryError && (
+        <LoadFailed onRetry={() => refetchSummary()} />
+      )}
+
       {/* Empty state */}
-      {!loadingSummary && !hasData && (
+      {!loadingSummary && !summaryError && !hasData && (
         <div className="glass-card flex flex-col items-center justify-center rounded-3xl p-8 text-center">
           <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/8">
             <DSIcon name="barChart" size={28} className="text-brand-primary" />

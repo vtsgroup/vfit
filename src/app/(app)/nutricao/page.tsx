@@ -18,6 +18,7 @@ import { toast } from '@/stores/app-store'
 import { MacroRingChart } from '@/components/nutrition/macro-ring-chart'
 import { BarcodeScanner } from '@/components/nutrition/barcode-scanner'
 import { FoodCamera } from '@/components/nutrition/food-camera'
+import { LoadFailed } from '@/components/ui/load-failed'
 import {
   useMealsToday,
   useFoodSearch,
@@ -172,7 +173,7 @@ export default function NutricaoPage() {
   const { data: studentProfile } = useStudentProfile()
   const linkNutritionist = useLinkNutritionist()
 
-  const { data: dailyData, isLoading } = useMealsToday(selectedDate)
+  const { data: dailyData, isLoading, isError: mealsError, refetch: refetchMeals } = useMealsToday(selectedDate)
   const trimmedSearchQuery = searchQuery.trim()
   const isTypingSearch = trimmedSearchQuery.length >= 2 && debouncedSearchQuery !== trimmedSearchQuery
   const { data: foods, isLoading: foodsLoading, isFetching: foodsFetching } = useFoodSearch(debouncedSearchQuery)
@@ -452,6 +453,8 @@ export default function NutricaoPage() {
             <div className="flex items-center justify-center py-10">
               <div className="h-6 w-6 animate-spin rounded-full border-2 border-brand-primary border-t-transparent" />
             </div>
+          ) : mealsError ? (
+            <LoadFailed onRetry={() => refetchMeals()} />
           ) : (
             <MacroRingChart
               calories={totals.calories}

@@ -15,7 +15,7 @@
 
 'use client'
 
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useRef } from 'react'
 import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -121,6 +121,7 @@ const SINGLE_MEASURES: { key: keyof Measurements; label: string }[] = [
 
 export default function AssessmentFormV2({ students, onCancel }: AssessmentFormV2Props) {
   const createAssessment = useCreateAssessmentWithPhotos()
+  const submittingRef = useRef(false)
   const { data: protocols } = useAssessmentProtocols()
   const [step, setStep] = useState(0)
 
@@ -218,6 +219,10 @@ export default function AssessmentFormV2({ students, onCancel }: AssessmentFormV
   }
 
   function handleSubmit() {
+    // Guard síncrono contra double-click (isPending só atualiza no próximo render)
+    if (submittingRef.current || createAssessment.isPending) return
+    submittingRef.current = true
+
     // Build clean measurements
     const cleanMeasurements: Measurements = {}
     for (const [key, val] of Object.entries(measurements)) {
@@ -278,9 +283,14 @@ export default function AssessmentFormV2({ students, onCancel }: AssessmentFormV
       activity_level: activityLevel,
       wrist_diameter_cm: wristDiameter ? parseFloat(wristDiameter) : undefined,
       femur_diameter_cm: femurDiameter ? parseFloat(femurDiameter) : undefined,
+      idempotency_key: crypto.randomUUID(),
     }
 
-    createAssessment.mutate(payload)
+    createAssessment.mutate(payload, {
+      onSettled: () => {
+        submittingRef.current = false
+      },
+    })
   }
 
   return (

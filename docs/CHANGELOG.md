@@ -5,7 +5,27 @@
 
 ---
 
-## [Unreleased] — 12/04/2026 — Paridade admin de saques + redirect domínio legado
+## [Unreleased] — 02/07/2026 — v5.4.1: Fix dos 3 bugs críticos que bloqueavam MVP
+
+### 🐛 Bug #1 — Rotas internas servindo landing page
+
+- Criadas 4 placeholder pages "Em Breve" com tema BROADCAST dark: [src/app/(app)/desafios/page.tsx](../src/app/(app)/desafios/page.tsx), [src/app/(app)/comunidade/page.tsx](../src/app/(app)/comunidade/page.tsx), [src/app/(app)/perfil/seguranca/page.tsx](../src/app/(app)/perfil/seguranca/page.tsx), [src/app/(app)/configuracoes/page.tsx](../src/app/(app)/configuracoes/page.tsx).
+
+### 🐛 Bug #2 — Páginas presas em "Carregando..." (/treinos, /nutricao, /progresso)
+
+- Timeout no [src/lib/api-client.ts](../src/lib/api-client.ts): 5s para GET, 30s para mutações (IA/pagamentos), configurável via `timeoutMs`. Abort por timeout vira `ApiClientError` código `TIMEOUT` (encadeia `signal` externo do caller).
+- Novo componente [src/components/ui/load-failed.tsx](../src/components/ui/load-failed.tsx): fallback "Falha ao carregar. Tente novamente." com botão de retry.
+- Fallback de erro + retry ligado nas 3 páginas via `isError`/`refetch` do React Query.
+
+### 🐛 Bug #3 — POST /assessments criava 2 registros (double-submit)
+
+- Guard síncrono via `useRef` + `Idempotency-Key` (crypto.randomUUID) nos forms [assessment-form-v2.tsx](../src/components/assessments/assessment-form-v2.tsx) e [assessment-wizard.tsx](../src/components/assessments/assessment-wizard.tsx).
+- Backend [workers/api/assessments.ts](../workers/api/assessments.ts): replay com mesma key retorna registro existente (KV_CACHE, TTL 24h); requisição em processamento retorna 409; dedup extra por janela de 60s (personal+aluno+data) mesmo sem header.
+- Nota: a constraint `UNIQUE(user_id, DATE(created_at))` sugerida no plano foi substituída pela dedup por janela — a constraint bloquearia personals avaliando vários alunos no mesmo dia.
+
+---
+
+## [Anterior] — 12/04/2026 — Paridade admin de saques + redirect domínio legado
 
 ### 🚀 Release v4.4.7 — Creator billing deprecado (2026-06-09)
 - Cutover inicial do modelo student-first em [workers/api/platform.ts](../workers/api/platform.ts): endpoints de assinatura/cobrança B2B de creator marcados como legados, com resposta de deprecação e bloqueio de novas cobranças de plano para profissionais.
