@@ -47,6 +47,7 @@ import {
 import { sendStudentInvitationEmail } from '@lib/email'
 import { sendEmailWithResend } from '@lib/email-resend'
 import { notifyEvent, notifyNewStudent } from '@lib/onesignal'
+import { sendWhatsAppText } from '@lib/whatsapp'
 
 const students = new Hono<AppContext>()
 
@@ -1344,44 +1345,10 @@ function formatCpf(value: string): string {
   return `${digits.slice(0, 3)}.${digits.slice(3, 6)}.${digits.slice(6, 9)}-${digits.slice(9, 11)}`
 }
 
-function normalizePhoneForMatch(value: string): string {
-  const digits = (value || '').replace(/\D/g, '')
-  if (digits.length <= 11) return digits
-  if (digits.length === 13 && digits.startsWith('55')) return digits.slice(2)
-  return digits
-}
-
 async function sendStudentWelcomeWhatsApp(
   env: Bindings,
   input: { phone: string; fullName: string; personalName: string; invitationUrl: string }
 ): Promise<boolean> {
-  const gatewayUrl = (env.WHATSAPP_GATEWAY_URL || 'https://vfit-whatsapp.vd-b0b.workers.dev').replace(/\/+$/, '')
-  const token = env.WHATSAPP_NOTIFY_TOKEN || env.WHATSAPP_ADMIN_AUTH_TOKEN
-  if (!token) return false
-
-  const targetDigits = normalizePhoneForMatch(input.phone)
-  if (!targetDigits) return false
-
-  const chatsRes = await fetch(`${gatewayUrl}/chats?q=${encodeURIComponent(targetDigits)}`, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  })
-  if (!chatsRes.ok) return false
-
-  const chatsJson = await chatsRes.json() as {
-    data?: {
-      items?: Array<{ id: string; name: string }>
-    }
-  }
-  const items = chatsJson.data?.items || []
-  const chat = items.find((item) => {
-    const nameDigits = normalizePhoneForMatch(item.name)
-    return nameDigits.endsWith(targetDigits) || targetDigits.endsWith(nameDigits)
-  })
-  if (!chat?.id) return false
-
   const text = [
     `Olá ${input.fullName}! 👋`,
     '',
@@ -1390,19 +1357,7 @@ async function sendStudentWelcomeWhatsApp(
     input.invitationUrl,
   ].join('\n')
 
-  const sendRes = await fetch(`${gatewayUrl}/send`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      chat_id: chat.id,
-      text,
-    }),
-  })
-
-  return sendRes.ok
+  return sendWhatsAppText(env, input.phone, text)
 }
 
 function toCsvValue(value: unknown): string {

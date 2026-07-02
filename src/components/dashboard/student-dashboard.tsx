@@ -27,7 +27,7 @@ import {
 } from '@/components/dashboard/charts'
 import { WeeklyProgressRing, StreakRing, XpProgress } from '@/components/dashboard/progress-rings'
 import { PushNotificationPrompt } from '@/components/pwa/push-notification-prompt'
-import { calculateLevel } from '@/components/workouts/gamification-card'
+import { useXPBalance } from '@/hooks/use-xp'
 import { Button } from '@/components/ui/button'
 import { StyledSelect } from '@/components/ui/styled-select'
 import { TrainingHeatmap } from '@/components/student/training-heatmap'
@@ -58,6 +58,7 @@ export function StudentDashboard() {
   const badges = useStudentBadges()
   const heatmap = useStudentTrainingHeatmap(new Date().getFullYear())
   const subscription = useSubscriptionStatus()
+  const xpBalance = useXPBalance()
 
   const pendingPayments = (payments.data?.payments ?? []).filter((p) => p.status === 'pending')
   const activeWorkout = workouts.data?.workouts?.find((w) => w.status === 'active')
@@ -183,6 +184,7 @@ export function StudentDashboard() {
         firstName={firstName}
         profile={p}
         dailyQuote={dailyQuote}
+        level={xpBalance.data?.level ?? null}
       />
 
       {/* ── 2. Treino do dia ────────────────── */}
@@ -280,7 +282,7 @@ export function StudentDashboard() {
       {/* ── 4. Mini KPIs ────────────────── */}
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <StudentMiniKpi label="Streak" value={`${p?.current_streak ?? 0} dias`} icon={<DSIcon name="flame" size={16} className="text-orange-400" />} />
-        <StudentMiniKpi label="XP total" value={`${calculateLevel(p?.total_workouts_completed ?? 0, p?.total_badges ?? 0).xp} XP`} icon={<DSIcon name="flame" size={16} className="text-violet-400" />} />
+        <StudentMiniKpi label="XP total" value={`${xpBalance.data?.total_earned ?? 0} XP`} icon={<DSIcon name="flame" size={16} className="text-violet-400" />} />
         <StudentMiniKpi
           label="Última avaliação"
           value={latestAssessmentDate ? new Date(latestAssessmentDate).toLocaleDateString('pt-BR') : 'Nenhuma'}
@@ -352,9 +354,9 @@ export function StudentDashboard() {
           </div>
           <div className="col-span-2 sm:col-span-1">
             <XpProgress
-              currentXp={calculateLevel(p?.total_workouts_completed ?? 0, p?.total_badges ?? 0).xp}
-              nextLevelXp={calculateLevel(p?.total_workouts_completed ?? 0, p?.total_badges ?? 0).nextLevelXp}
-              level={calculateLevel(p?.total_workouts_completed ?? 0, p?.total_badges ?? 0).level}
+              currentXp={xpBalance.data?.total_earned ?? 0}
+              nextLevelXp={xpBalance.data?.next_level_threshold ?? 100}
+              level={xpBalance.data?.level ?? 1}
             />
           </div>
         </div>
@@ -534,17 +536,15 @@ function StudentHeroCard({
   firstName,
   profile,
   dailyQuote,
+  level,
 }: {
   firstName: string
   profile: StudentProfile | null | undefined
   dailyQuote: string
+  level: number | null
 }) {
   const hour = new Date().getHours()
   const greeting = hour < 12 ? 'Bom dia' : hour < 18 ? 'Boa tarde' : 'Boa noite'
-
-  const levelInfo = profile
-    ? calculateLevel(profile.total_workouts_completed ?? 0, profile.total_badges ?? 0)
-    : null
 
   const streak = profile?.current_streak ?? 0
 
@@ -581,10 +581,10 @@ function StudentHeroCard({
                 <span className="text-xs font-bold text-orange-400">{streak}d</span>
               </div>
             )}
-            {levelInfo && (
+            {level != null && (
               <div className="flex items-center gap-1.5 rounded-full border border-emerald-500/25 bg-emerald-500/12 px-2.5 py-1.5">
                 <DSIcon name="zap" size={13} className="text-emerald-400" />
-                <span className="text-xs font-bold text-emerald-400">Nv {levelInfo.level}</span>
+                <span className="text-xs font-bold text-emerald-400">Nv {level}</span>
               </div>
             )}
           </div>

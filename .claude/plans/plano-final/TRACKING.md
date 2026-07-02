@@ -24,20 +24,21 @@
 - [x] T1.4 XP na conclusão B2C — `completeB2CWorkout` agora credita XP (idempotente), grava `xp_earned`, atualiza meta diária + streak (best-effort)
 - [x] T1.5 Aluno vê treinos atribuídos — seção "Treinos do seu personal" em `(app)/treinos` via `useMyWorkouts`
 - [x] T1.6 Execução no shell do aluno — rota `(app)/treinos/executar?id=` com `WorkoutPlayer` (prop `backHref` nova)
-- [ ] T1.7 Notificação WhatsApp ao atribuir treino (OneSignal `notifyNewWorkout` já existe; WhatsApp pendente → Track C)
+- [x] T1.7 Notificação WhatsApp ao atribuir treino — ✅ coberto por T3.2 (`notifyWorkoutAssigned` em create + duplicate)
 - [ ] T1.8 QA fluxo completo: personal cria → atribui → aluno executa → XP/streak
 
-## Sprint 1 — Track B: Dashboard + Gamificação
+## Sprint 1 — Track B: Dashboard + Gamificação (02/07)
 
-- [ ] T2.1 Dashboard pessoal (próximo treino, streak, XP, stats)
-- [ ] T2.2 Unificar XP (dois sistemas hoje: `xp_transactions` vs `workout_sessions.xp_earned` em gamification.ts)
-- [ ] T2.3 Streak logic + cron diário
+- [x] T2.1 Dashboard pessoal — ✅ já existia (`FirstWinCommandCenter` em `(app)/treinos`: treino de hoje, streak, XP, stats)
+- [x] T2.2 Unificar XP — fonte única `computeLevelProgress` no `xp-service`; `/gamification/profile` lê ledger; badges de streak reais; 3ª fórmula client-side removida (`student-dashboard.tsx` → `useXPBalance`); fix: `xp_balances.level` nunca era atualizado ("Nível 1" eterno)
+- [x] T2.3 Streak em tempo real — decay na leitura em `getOrCreateStreak` (quebra sem depender de treino novo)
+- [ ] T2.4 Cron diário — ❌ Bloqueado: `[triggers] crons` desabilitado no wrangler.toml (limite conta Free) — decisão de negócio; urgência reduzida pelo decay na leitura
 
-## Sprint 1 — Track C: Marketplace + Notificações
+## Sprint 1 — Track C: Marketplace + Notificações (02/07)
 
-- [ ] T3.1 Marketplace listing
-- [ ] T3.2 WhatsApp notifications (treino atribuído, streak atingida)
-- [ ] T3.3 Add to Cart (checkout Sprint 2)
+- [x] T3.1 Marketplace listing — ✅ já existia (`/dashboard/marketplace` + `GET /payments/plans`, dados reais)
+- [x] T3.2 WhatsApp notifications — `lib/whatsapp.ts` novo; treino atribuído (create + duplicate) → push + WhatsApp; streak milestone → evento `streak.milestone` + push + WhatsApp nos 3 pontos de conclusão. ⚠️ Requer secret `WHATSAPP_NOTIFY_TOKEN` no worker da API
+- [x] T3.3 Add to Cart — ⏩ Deferred → S2: "Comprar → checkout" direto já existe; carrinho sem checkout real não agrega
 
 ## Sprint 2 — Monetização
 
@@ -47,7 +48,7 @@
 
 ---
 
-**Progresso:** 10/17 (59%)
+**Progresso:** 15/19 (79%) — pendentes: T1.7 (WhatsApp assign ✅ coberto por T3.2), T1.8 (QA fluxo), T2.4 (cron, bloqueado), T4.x (Sprint 2)
 
 ## Deploys
 

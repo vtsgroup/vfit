@@ -17,6 +17,7 @@
 import { pgQuery, pgQueryOne, generateId } from '@lib/db'
 import { RateLimitError, BadRequestError } from '@lib/errors'
 import { getCached, invalidateCache, cacheKey, CACHE_STRATEGIES } from '@lib/cache'
+import { LEVEL_THRESHOLDS } from '@config/constants'
 import type { Bindings } from '@workers/types'
 
 // ============================================
@@ -92,6 +93,46 @@ export interface XPTransactionResult {
   balanceAfter: number
   balanceUpdated: boolean
   newBalance?: XPBalance
+}
+
+export interface LevelProgress {
+  level: number
+  next_level_threshold: number
+  xp_in_level: number
+  xp_needed: number
+  progress_percent: number
+}
+
+/**
+ * Fonte única do cálculo de nível a partir do XP acumulado (total_earned).
+ * xp_balances.level/next_level_threshold nunca são atualizados pelo ledger —
+ * o valor exibido DEVE vir daqui.
+ */
+export function computeLevelProgress(totalEarned: number): LevelProgress {
+  let level = 1
+  let currentBase = 0
+  let nextThreshold: number = LEVEL_THRESHOLDS[0]
+
+  for (let i = 0; i < LEVEL_THRESHOLDS.length; i++) {
+    if (totalEarned >= LEVEL_THRESHOLDS[i]) {
+      level = i + 2
+      currentBase = LEVEL_THRESHOLDS[i]
+      nextThreshold = LEVEL_THRESHOLDS[i + 1] ?? LEVEL_THRESHOLDS[i] + 1000
+    } else {
+      break
+    }
+  }
+
+  const xpInLevel = totalEarned - currentBase
+  const xpNeeded = nextThreshold - currentBase
+
+  return {
+    level,
+    next_level_threshold: nextThreshold,
+    xp_in_level: xpInLevel,
+    xp_needed: xpNeeded,
+    progress_percent: Math.min(100, Math.round((xpInLevel / xpNeeded) * 100)),
+  }
 }
 
 // ============================================
@@ -488,7 +529,7 @@ export async function debitXP(
  * Get current XP balance for a student (cached via KV)
  */
 export async function getXPBalance(env: Bindings, studentId: string): Promise<XPBalance> {
-  return getCached<XPBalance>(
+  const balance = await getCached<XPBalance>(
     env.KV_CACHE,
     cacheKey('xp:balance', studentId),
     async () => {
@@ -520,6 +561,10 @@ export async function getXPBalance(env: Bindings, studentId: string): Promise<XP
     },
     CACHE_STRATEGIES.xp_balance
   )
+
+  // level/next_level_threshold do banco ficam sempre no default — deriva do total_earned
+  const levelInfo = computeLevelProgress(balance.total_earned)
+  return { ...balance, level: levelInfo.level, next_level_threshold: levelInfo.next_level_threshold }
 }
 
 /**
@@ -864,11 +909,34 @@ export async function getDailyGoalHistory(
 /**
  * Get or create streak record for a student (cached via KV)
  */
+/**
+ * Streak efetiva na leitura: xp_streaks só é reescrita quando o aluno completa
+ * treino, então o valor persistido fica congelado se ele sumir por dias.
+ * Regras: atividade hoje/ontem → intacta; gap de exatamente 2 dias com freeze
+ * disponível → ainda recuperável (mantém valor); senão → 0.
+ */
+function applyStreakDecay(streak: StreakInfo, today: string): StreakInfo {
+  if (!streak.last_activity_date || streak.current_streak === 0) return streak
+
+  const lastActivity = String(streak.last_activity_date).slice(0, 10)
+  const todayMs = new Date(today + 'T00:00:00Z').getTime()
+  const yesterday = new Date(todayMs - 86400000).toISOString().split('T')[0]
+
+  if (lastActivity >= yesterday) return streak
+
+  const dayBeforeYesterday = new Date(todayMs - 2 * 86400000).toISOString().split('T')[0]
+  if (lastActivity === dayBeforeYesterday && streak.freeze_count < streak.max_freezes) {
+    return streak
+  }
+
+  return { ...streak, current_streak: 0 }
+}
+
 export async function getOrCreateStreak(
   env: Bindings,
   studentId: string
 ): Promise<StreakInfo> {
-  return getCached<StreakInfo>(
+  const streak = await getCached<StreakInfo>(
     env.KV_CACHE,
     cacheKey('xp:streak', studentId),
     async () => {
@@ -920,6 +988,8 @@ export async function getOrCreateStreak(
     },
     CACHE_STRATEGIES.xp_streak
   )
+
+  return applyStreakDecay(streak, new Date().toISOString().split('T')[0])
 }
 
 /**

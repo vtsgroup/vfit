@@ -31,6 +31,7 @@ export type NotificationEventType =
   | 'assessment.pdf.ready'
   | 'assessment.completed'
   | 'trial.expiring'
+  | 'streak.milestone'
 
 export interface NotificationEventPayload {
   title: string
@@ -76,6 +77,15 @@ export function resolveNotificationEvent(
         link: '/dashboard/workouts',
         domainType: 'workout',
         emailTemplate: 'invitation',
+      }
+
+    case 'streak.milestone':
+      return {
+        title: `🔥 Sequência de ${input.days} dias!`,
+        message: `Você manteve ${input.days} dias seguidos de treino e ganhou +${input.xpAwarded} XP. Continue assim!`,
+        link: '/treinos',
+        domainType: 'system',
+        emailTemplate: null,
       }
 
     case 'message.new':

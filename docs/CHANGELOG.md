@@ -5,6 +5,34 @@
 
 ---
 
+## [Unreleased] — 02/07/2026 — Sprint 1 Tracks B+C: XP/streak unificados + notificações WhatsApp
+
+### 🐛 Track B — XP divergente entre rotas (3 fórmulas diferentes)
+
+- Nova fonte única de nível: `computeLevelProgress(total_earned)` em [lib/xp-service.ts](../lib/xp-service.ts), baseada em `LEVEL_THRESHOLDS`. `getXPBalance` agora deriva `level`/`next_level_threshold` desse cálculo — as colunas do banco nunca eram atualizadas e o header mostrava "Nível 1" para sempre.
+- `GET /gamification/profile` ([workers/api/gamification.ts](../workers/api/gamification.ts)) parou de somar `workout_sessions.xp_earned` e passou a ler o ledger (`getXPBalance`) — mesma fonte de `/xp/balance`.
+- `GET /gamification/badges`: badges de streak (7/30/100) agora usam `longest_streak` real de `xp_streaks` (antes hard-coded `false`).
+- [student-dashboard.tsx](../src/components/dashboard/student-dashboard.tsx): removida a 3ª fórmula client-side (`calculateLevel` = treinos×50 + badges×100); KPI de XP, `XpProgress` e nível do hero agora vêm de `useXPBalance` (ledger).
+
+### 🐛 Track B — Streak congelada quando o aluno some
+
+- `getOrCreateStreak` em [lib/xp-service.ts](../lib/xp-service.ts) aplica decay na leitura: atividade hoje/ontem → intacta; gap de exatamente 2 dias com freeze disponível → mantém (recuperável); senão → 0. Antes, o valor persistido só era recalculado no próximo treino completado (aluno sumia 5 dias e continuava vendo streak 10).
+
+### ✨ Track C — Notificações WhatsApp
+
+- Novo [lib/whatsapp.ts](../lib/whatsapp.ts): `sendWhatsAppText`/`sendWhatsAppToUser` (resolve `chat_id` via gateway por telefone; best-effort). `sendStudentWelcomeWhatsApp` de [students.ts](../workers/api/students.ts) refatorado para delegar.
+- Treino atribuído (POST `/workouts` com `student_id` e POST `/workouts/:id/duplicate` com `student_id`): aluno recebe push + WhatsApp com nome do personal e do treino (via `waitUntil`, não bloqueia a resposta). O caminho duplicate antes não notificava nada.
+- Streak milestone (3/7/30/100 dias): novo evento `streak.milestone` em [lib/notification-events.ts](../lib/notification-events.ts) + `notifyStreakMilestone` em [lib/onesignal.ts](../lib/onesignal.ts) + [lib/streak-notifications.ts](../lib/streak-notifications.ts) (push + WhatsApp). Disparado nos 3 pontos de conclusão: B2B complete, sessão guiada e B2C complete. Antes nenhuma notificação de milestone existia.
+- ⚠️ Requer secret `WHATSAPP_NOTIFY_TOKEN` (ou `WHATSAPP_ADMIN_AUTH_TOKEN`) no worker da API — sem ele o envio falha silenciosamente (por design).
+
+### 📋 Decisões
+
+- Cron triggers seguem desabilitados no `wrangler.toml` (limite conta Free) — reativação é decisão de negócio; streak agora quebra na leitura, reduzindo a urgência do cron.
+- "Add to Cart" adiado: fluxo atual "Comprar → checkout" já existe no marketplace; carrinho sem checkout real (Sprint 2) não agrega.
+- Marketplace listing já existia completo (`/dashboard/marketplace` + `GET /payments/plans`) — nenhum trabalho necessário.
+
+---
+
 ## [Unreleased] — 02/07/2026 — Sprint 1 Track A: aluno conectado aos treinos do personal + XP no fluxo B2C
 
 ### ✨ Aluno vê e executa treinos atribuídos pelo personal

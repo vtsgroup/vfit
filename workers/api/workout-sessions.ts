@@ -30,6 +30,7 @@ import { success, created, noContent } from '@lib/response'
 import { NotFoundError } from '@lib/errors'
 import { sessionAdvanceSchema, sessionLogSchema } from '@workers/schemas/workout-sessions'
 import { creditXP, updateDailyGoalProgress, updateStreakAndCheckMilestones } from '@lib/xp-service'
+import { notifyStreakMilestones } from '@lib/streak-notifications'
 
 const workoutSessionsRoutes = new Hono<AppContext>()
 
@@ -214,6 +215,10 @@ workoutSessionsRoutes.post('/:id/session/complete', requireType('student'), asyn
     const streakResult = await updateStreakAndCheckMilestones(c.env, studentId)
     milestones = streakResult.newMilestones
   } catch {}
+
+  if (milestones.length > 0) {
+    c.executionCtx?.waitUntil?.(notifyStreakMilestones(c.env, studentId, milestones))
+  }
 
   return created({
     workout_log_id: logId,

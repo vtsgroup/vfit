@@ -45,12 +45,38 @@ import {
   ForbiddenError,
 } from '@lib/errors'
 import { notifyNewWorkout } from '@lib/onesignal'
+import { sendWhatsAppToUser } from '@lib/whatsapp'
+import { notifyStreakMilestones } from '@lib/streak-notifications'
 import { creditXP, updateDailyGoalProgress, updateStreakAndCheckMilestones } from '@lib/xp-service'
 
 const workouts = new Hono<AppContext>()
 
 // Todas rotas requerem auth
 workouts.use('*', authMiddleware)
+
+// Push/in-app + WhatsApp ao atribuir treino a aluno — best-effort
+async function notifyWorkoutAssigned(
+  env: Bindings,
+  studentId: string,
+  personalId: string,
+  workoutName: string
+): Promise<void> {
+  await notifyNewWorkout(env, studentId, workoutName).catch(() => {})
+  try {
+    const personal = await pgQueryOne<{ full_name: string }>(
+      env,
+      'SELECT full_name FROM users WHERE id = $1 LIMIT 1',
+      [personalId]
+    )
+    const text = [
+      '🏋️ Novo treino disponível!',
+      '',
+      `${personal?.full_name || 'Seu personal'} montou o treino "${workoutName}" para você no VFIT.`,
+      'Acesse: https://vfit.app.br/treinos',
+    ].join('\n')
+    await sendWhatsAppToUser(env, studentId, text)
+  } catch { /* best-effort */ }
+}
 
 // ============================================
 // POST /workouts — Criar treino (personal)
@@ -114,9 +140,9 @@ workouts.post('/', requireType('personal'), async (c) => {
     }
   }
 
-  // Notificar aluno via push + in-app (apenas para treinos de aluno, não templates)
+  // Notificar aluno via push + in-app + WhatsApp (apenas para treinos de aluno, não templates)
   if (parsed.student_id && !parsed.is_template) {
-    await notifyNewWorkout(c.env, parsed.student_id, parsed.name).catch(() => {})
+    c.executionCtx?.waitUntil?.(notifyWorkoutAssigned(c.env, parsed.student_id, personalId, parsed.name))
   }
 
   // Retornar workout completo
@@ -858,6 +884,11 @@ workouts.post('/:id/duplicate', requireType('personal'), async (c) => {
     }
   }
 
+  // Atribuição a outro aluno também notifica (push + WhatsApp)
+  if (targetStudentId) {
+    c.executionCtx?.waitUntil?.(notifyWorkoutAssigned(c.env, targetStudentId, personalId, original.name))
+  }
+
   const duplicated = await findWorkoutWithExercises(c.env, newId)
 
   return created(duplicated)
@@ -1103,6 +1134,10 @@ workouts.post('/:id/complete', requireType('student'), async (c) => {
     const streakResult = await updateStreakAndCheckMilestones(c.env, studentId)
     streakMilestones = streakResult.newMilestones
   } catch { /* non-blocking */ }
+
+  if (streakMilestones.length > 0) {
+    c.executionCtx?.waitUntil?.(notifyStreakMilestones(c.env, studentId, streakMilestones))
+  }
 
   return created({
     log_id: logId,
@@ -1624,6 +1659,10 @@ async function completeB2CWorkout(c: Context<AppContext>) {
       streakMilestones = streakResult.newMilestones
     } catch { /* non-blocking */ }
   } catch { /* non-blocking — usuário sem vínculo em students não recebe XP */ }
+
+  if (streakMilestones.length > 0) {
+    c.executionCtx?.waitUntil?.(notifyStreakMilestones(c.env, userId, streakMilestones))
+  }
 
   return created({
     workout_id: workoutId,

@@ -6,7 +6,17 @@
 **Project**: VFIT v5.4.1  
 **Status**: ✅ Production Stable  
 
-## Última sessão (2026-07-02, madrugada) — Sprint 1 Track A (branch `feat/sprint1-track-a-treinos`)
+## Última sessão (2026-07-02, madrugada) — Sprint 1 Tracks A+B+C (branch `feat/sprint1-track-a-treinos`)
+
+### Tracks B+C (commit 2)
+
+- **XP unificado**: `computeLevelProgress(total_earned)` no `lib/xp-service.ts` é a fonte única de nível (fix: `xp_balances.level` nunca era atualizado → "Nível 1" eterno no header). `/gamification/profile` lê o ledger via `getXPBalance`; badges streak 7/30/100 reais via `longest_streak`; `student-dashboard.tsx` trocou `calculateLevel` (treinos×50+badges×100) por `useXPBalance`.
+- **Streak em tempo real**: `getOrCreateStreak` aplica decay na leitura (hoje/ontem → intacta; gap 2d com freeze → mantém; senão → 0). Endpoints `/progress/streak` e `/challenges/streak` seguem com cálculo próprio on-read (unificação de tabela adiada).
+- **WhatsApp**: novo `lib/whatsapp.ts` (`sendWhatsAppText`/`sendWhatsAppToUser`, resolve chat_id por telefone via gateway); `students.ts` delegou. Treino atribuído (create+duplicate) → push+WhatsApp via `waitUntil`. Streak milestone → evento `streak.milestone` + `lib/streak-notifications.ts` nos 3 completion sites. **⚠️ Requer secret `WHATSAPP_NOTIFY_TOKEN` no worker da API.**
+- **Decisões**: cron segue desabilitado (limite CF Free — decisão de negócio); Add to Cart deferred → S2; marketplace listing já existia.
+- `quality:ci` exit 0 (366 testes). TRACKING 15/19 (79%).
+
+### Track A (commit 1)
 
 - **Gap analysis (Explore agent)**: CRUD/assignment/execução de treinos B2B **já existiam** (`workers/api/workouts.ts` 57KB, `workout-sessions.ts`, `/dashboard/workouts`). Dois sistemas paralelos: B2B (`workouts`/`workout_logs`, XP via `xp_transactions`) e B2C (`workout_plans`/`workout_sessions`, sem XP). Gaps reais: aluno não via treinos atribuídos no shell `(app)` e conclusão B2C não creditava XP.
 - **Fix XP B2C**: `completeB2CWorkout` credita XP (`creditXP`, idempotency key `workout_session:{id}:completed`), grava `workout_sessions.xp_earned`, atualiza meta diária + streak — tudo best-effort (aluno sem linha em `students` não quebra). Resposta inclui `summary.xp_earned` + `streak_milestones`.

@@ -276,6 +276,16 @@ export async function notifyAssessmentCompleted(
   await notifyEvent(env as Bindings, personalUserId, 'assessment.completed', { studentName })
 }
 
+/** Notify student about streak milestone reached */
+export async function notifyStreakMilestone(
+  env: Parameters<typeof notify>[0],
+  studentUserId: string,
+  days: number,
+  xpAwarded: number
+) {
+  await notifyEvent(env as Bindings, studentUserId, 'streak.milestone', { days, xpAwarded })
+}
+
 export async function notifyUsersBatch(
   env: Parameters<typeof sendPush>[0],
   userIds: string[],
