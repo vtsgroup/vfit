@@ -1,9 +1,9 @@
 # Auditoria de Referências Sensíveis (Gerado automaticamente)
 
-> Gerado em: 2026-07-02T02:00:19.905Z
+> Gerado em: 2026-07-02T02:28:58.110Z
 
 ## Resumo
-- Total de arquivos analisados: **862**
+- Total de arquivos analisados: **875**
 - Achados P0: **0**
 - Achados P1: **5**
 - Modo fail-on: **P0**
