@@ -13,12 +13,11 @@
 
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
-import { NO_INDEX_ROBOTS } from '@/lib/seo'
 import { AuthLayoutClient } from './layout-client'
 import { AuthPageProviders } from '@/components/providers/auth-page-providers'
 
 export const metadata: Metadata = {
-  robots: NO_INDEX_ROBOTS,
+  robots: 'index, follow',
 }
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
