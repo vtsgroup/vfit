@@ -14,9 +14,8 @@ import { useEffect, useState, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { useOnboardingStore } from '@/stores/onboarding-store'
-import { api } from '@/lib/api-client'
+import { api, ApiClientError } from '@/lib/api-client'
 import { useAuthStore } from '@/stores/auth-store'
-import { Button } from '@/components/ui/button'
 import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 import { VfitAnimatedMark } from '@/components/ui/vfit-animated-mark'
 import { cn } from '@/lib/utils'
@@ -36,6 +35,8 @@ export default function OnboardingLoadingPage() {
   const [currentPhase, setCurrentPhase] = useState(0)
   const [progress, setProgress] = useState(0)
   const [error, setError] = useState<string | null>(null)
+  const [isRateLimited, setIsRateLimited] = useState(false)
+  const [retrySeconds, setRetrySeconds] = useState(30)
   const [isGenerating, setIsGenerating] = useState(false)
   const hasCalled = useRef(false)
 
@@ -104,7 +105,15 @@ export default function OnboardingLoadingPage() {
       setTimeout(() => router.push('/onboarding/result'), 600)
     } catch (err) {
       console.error('[Loading] Plan generation failed:', err)
-      setError('Ops! Algo deu errado. Vamos tentar de novo.')
+      if (err instanceof ApiClientError && err.status === 429) {
+        const match = err.message.match(/(\d+)\s*s/)
+        setRetrySeconds(match ? Number(match[1]) : 30)
+        setIsRateLimited(true)
+        setError('Muita gente criando plano agora')
+      } else {
+        setIsRateLimited(false)
+        setError('Ops! Algo deu errado. Vamos tentar de novo.')
+      }
     } finally {
       setIsGenerating(false)
     }
@@ -114,30 +123,53 @@ export default function OnboardingLoadingPage() {
     generatePlan()
   }, [generatePlan])
 
+  // Countdown regressivo pro retry automático quando é rate limit (429)
+  useEffect(() => {
+    if (!isRateLimited || retrySeconds <= 0) return
+    const t = setTimeout(() => setRetrySeconds((s) => s - 1), 1000)
+    return () => clearTimeout(t)
+  }, [isRateLimited, retrySeconds])
+
   const phase = PHASES[currentPhase] || PHASES[PHASES.length - 1]
   const pct = Math.round(progress)
 
   if (error) {
+    const canRetryNow = !isRateLimited || retrySeconds <= 0
     return (
       <div className="relative flex min-h-dvh flex-col items-center justify-center overflow-x-hidden bg-[#04080f] px-6 text-center text-white">
         <div aria-hidden className="vfit-flow-grid pointer-events-none absolute inset-0 opacity-[0.22]" />
         <div className="relative z-10 flex flex-col items-center">
-          <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-lg border border-amber-300/25 bg-amber-300/10">
-            <DSIcon name="alertTriangle" className="h-8 w-8 text-amber-400" />
+          <div className={`mb-6 flex h-16 w-16 items-center justify-center rounded-full border ${isRateLimited ? 'border-green-400/25 bg-green-400/10' : 'border-amber-300/25 bg-amber-300/10'}`}>
+            <DSIcon name={isRateLimited ? 'clock' : 'alertTriangle'} className={`h-8 w-8 ${isRateLimited ? 'text-green-300' : 'text-amber-400'}`} />
           </div>
           <h2 className="font-syne mb-2 text-2xl font-black text-white">{error}</h2>
-          <p className="bc-mono mb-8 text-[11px] uppercase tracking-[0.16em] text-slate-400">Tente novamente em alguns segundos</p>
-          <Button
+          <p className="bc-mono mb-8 text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400">
+            {isRateLimited
+              ? canRetryNow
+                ? 'Pode tentar de novo'
+                : `Nossa IA está a mil hoje · libera em ${retrySeconds}s`
+              : 'Tente novamente em alguns segundos'}
+          </p>
+          <button
+            type="button"
+            disabled={!canRetryNow}
             onClick={() => {
               setError(null)
+              setIsRateLimited(false)
               hasCalled.current = false
               setIsGenerating(false)
               generatePlan()
             }}
+            className="bc-retry-cta group relative flex h-13 items-center gap-2.5 overflow-hidden rounded-full px-7 text-[#06210f] outline-none transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 disabled:pointer-events-none disabled:opacity-40 disabled:saturate-[0.5]"
+            style={{ background: 'linear-gradient(135deg,#4ade80 0%,#22c55e 50%,#16a34a 100%)' }}
           >
-            Tentar Novamente
-          </Button>
+            <span className="font-syne relative z-10 text-[14px] font-black uppercase tracking-tight">
+              {canRetryNow ? 'Tentar novamente' : `Aguarde ${retrySeconds}s`}
+            </span>
+            {canRetryNow && <DSIcon name="arrowRight" size={16} className="relative z-10" />}
+          </button>
         </div>
+        <style>{`.bc-retry-cta { box-shadow: 0 16px 40px -14px rgba(34,197,94,0.5), inset 0 1px 0 rgba(255,255,255,0.45); }`}</style>
       </div>
     )
   }

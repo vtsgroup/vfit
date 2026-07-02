@@ -362,7 +362,8 @@ export function AuthLayoutClient({ children }: { children: ReactNode }) {
   const hidesMobileLogo = pathname?.startsWith('/register/student')
   // Light premium theme — unified across the primary auth pages.
   // (Sub-flows like /register/personal and /register/student stay dark for now.)
-  const isLightAuth = pathname === '/login' || pathname === '/register' || pathname === '/forgot-password'
+  // /login stays dark to match the BROADCAST welcome/onboarding funnel that leads into it.
+  const isLightAuth = pathname === '/register' || pathname === '/forgot-password'
 
   return (
     <>

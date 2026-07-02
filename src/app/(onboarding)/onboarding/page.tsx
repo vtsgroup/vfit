@@ -131,7 +131,8 @@ const STEPS: StepConfig[] = [
     isValid: (d) => d.preferred_time !== null,
   },
   {
-    title: 'Estamos prontos!',
+    title: 'Sua IA está pronta',
+    subtitle: 'Cruzamos suas 15 respostas num algoritmo que gera um plano sob medida — e ele evolui com você a cada treino.',
     component: StepReady,
     isValid: () => true,
     continueLabel: 'Criar Meu Plano',
