@@ -70,7 +70,7 @@ export function StepSocialProof() {
           <span className="w-20 text-[10px] font-semibold text-white/30 uppercase">
             Outros
           </span>
-          <span className="w-20 text-[10px] font-black text-emerald-200 uppercase">
+          <span className="w-20 text-[10px] font-black text-green-200 uppercase">
             VFIT
           </span>
         </div>
@@ -90,7 +90,7 @@ export function StepSocialProof() {
             </span>
             <span className="flex w-20 justify-center">
               {row.vfit ? (
-                <DSIcon name="check" className="h-4 w-4 text-emerald-200" />
+                <DSIcon name="check" className="h-4 w-4 text-green-200" />
               ) : (
                 <DSIcon name="x" className="h-4 w-4 text-white/15" />
               )}
@@ -101,7 +101,7 @@ export function StepSocialProof() {
 
       {/* Review carousel */}
       <div
-        className={`rounded-[28px] border border-emerald-300/14 bg-emerald-300/8 p-4 shadow-[0_24px_58px_-42px_rgba(34,197,94,0.52),inset_0_1px_0_rgba(255,255,255,0.10)] transition-all delay-300 duration-700 ${
+        className={`rounded-[28px] border border-green-300/14 bg-green-300/8 p-4 shadow-[0_24px_58px_-42px_rgba(34,197,94,0.52),inset_0_1px_0_rgba(255,255,255,0.10)] transition-all delay-300 duration-700 ${
           mounted ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
         }`}
       >
@@ -119,7 +119,7 @@ export function StepSocialProof() {
           &ldquo;{review.text}&rdquo;
         </p>
         <span className="mt-3 inline-flex min-h-7 items-center gap-1.5 rounded-full border border-white/10 bg-white/8 px-3 text-[11px] font-bold text-white/62">
-          <DSIcon name={review.badgeIcon} className="h-3 w-3 text-emerald-200" />
+          <DSIcon name={review.badgeIcon} className="h-3 w-3 text-green-200" />
           {review.badgeText}
         </span>
 
@@ -129,7 +129,7 @@ export function StepSocialProof() {
             <div
               key={i}
               className={`h-1.5 rounded-full transition-all duration-300 ${
-                i === reviewIndex ? 'w-5 bg-emerald-300' : 'w-1.5 bg-white/15'
+                i === reviewIndex ? 'w-5 bg-green-300' : 'w-1.5 bg-white/15'
               }`}
             />
           ))}

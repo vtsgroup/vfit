@@ -1,14 +1,15 @@
 /**
  * src/components/onboarding/onboarding-signup.tsx
  *
- * Signup-at-End — the from=onboarding conversion screen (reverse trial, no-card).
+ * Signup-at-End — conversão from=onboarding no sistema "VFIT BROADCAST".
  *
- * Replaces the old 3-layer paywall. After the quiz shows the AI plan (the reward),
- * this screen creates the account and logs the user in. One promise everywhere:
- * "30 dias grátis · tudo liberado · sem cartão". Google 1-tap primary, email/senha
- * collapsed secondary. Post-signup the useRegisterStudent hook routes to /treinos.
+ * Placar de transmissão: navy seco + grade técnica, manchete Syne uppercase,
+ * recap do plano em box-score, valor em telemetria mono numerada, Google 1-tap
+ * como ação primária (pill branca sobre moldura verde) e email/senha colapsado.
+ * Promessa única: "30 dias grátis · tudo liberado · sem cartão".
  *
- * Self-contained: owns its form state + register mutation. Render inside <GuestGuard>.
+ * Lógica preservada: useRegisterStudent → login automático → /treinos.
+ * Self-contained: form state + mutation próprios. Renderizar dentro de <GuestGuard>.
  */
 
 'use client'
@@ -16,25 +17,12 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
-import { useRegisterStudent } from '@/hooks/use-auth'
-import { Button } from '@/components/ui/button'
-import { OAuthButtons, AuthDivider, Turnstile } from '@/components/auth'
+import { useRegisterStudent, useOAuthRedirect } from '@/hooks/use-auth'
+import { Turnstile } from '@/components/auth'
 import { ApiClientError } from '@/lib/api-client'
+import { useOnboardingStore } from '@/stores/onboarding-store'
 
-/* ─── Design tokens (match register/student) ─── */
-const headingFont = {
-  fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-  fontWeight: 900,
-  letterSpacing: '0',
-}
-const monoLabel = {
-  fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
-  fontWeight: 700,
-  letterSpacing: '0',
-}
-const inputNormal = 'vfit-flow-field h-13 w-full rounded-2xl px-4 text-[15px] transition-all duration-300 focus:outline-none'
-
-/* ─── Goal labels — mirrors the result page so the recap matches what the user saw ─── */
+/* ─── Goal labels — espelha a result page pro recap bater com o que o usuário viu ─── */
 const GOAL_LABELS: Record<string, string> = {
   lose_weight: 'Emagrecer',
   gain_muscle: 'Ganhar massa',
@@ -53,23 +41,33 @@ const VALUE_ROWS: { icon: DSIconName; title: string; desc: string }[] = [
   { icon: 'shieldCheck', title: 'Sem cartão, sem compromisso', desc: 'Acesso total. Continue só se fizer sentido.' },
 ]
 
+const GoogleIcon = () => (
+  <svg className="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4" />
+    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
+    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
+  </svg>
+)
+
 export function OnboardingSignup({ inviteToken }: { inviteToken?: string }) {
   const register = useRegisterStudent()
+  const oauth = useOAuthRedirect()
+  const storeGoal = useOnboardingStore((s) => s.data.goal)
 
   const [form, setForm] = useState({ full_name: '', email: '', password: '' })
   const [showPassword, setShowPassword] = useState(false)
   const [turnstileToken, setTurnstileToken] = useState('')
   const [acceptedTerms, setAcceptedTerms] = useState(false)
 
-  // Recap chip — read the exact plan the user just saw (result page wrote 'vfit_plan')
-  const [recap, setRecap] = useState({ goal: 'Treino IA', days: 3, minutes: 45 })
+  // Recap — o plano exato que o usuário acabou de ver (result page grava 'vfit_plan')
+  const [recap, setRecap] = useState({ days: 3, minutes: 45 })
   useEffect(() => {
     try {
       const raw = sessionStorage.getItem('vfit_plan')
       if (!raw) return
       const p = JSON.parse(raw)
       setRecap({
-        goal: (p?.data?.goal && (GOAL_LABELS[p.data.goal] || p.data.goal)) || 'Treino IA',
         days: p?.stats?.total_days ?? 3,
         minutes: p?.stats?.session_duration_minutes ?? 45,
       })
@@ -77,6 +75,7 @@ export function OnboardingSignup({ inviteToken }: { inviteToken?: string }) {
       /* keep fallback */
     }
   }, [])
+  const goalLabel = (storeGoal && GOAL_LABELS[storeGoal]) || 'Treino IA'
 
   function updateField(field: keyof typeof form, value: string) {
     setForm((prev) => ({ ...prev, [field]: value }))
@@ -101,180 +100,177 @@ export function OnboardingSignup({ inviteToken }: { inviteToken?: string }) {
     })
   }
 
+  const recapCells: { icon: DSIconName; v: string; k: string }[] = [
+    { icon: 'target', v: goalLabel, k: 'Objetivo' },
+    { icon: 'calendar', v: `${recap.days}×/sem`, k: 'Frequência' },
+    { icon: 'clock', v: `${recap.minutes}min`, k: 'Por sessão' },
+  ]
+
   return (
-    <div className="vfit-energy-bg relative min-h-dvh w-full overflow-hidden text-white">
-      <div className="vfit-flow-grid pointer-events-none absolute inset-0" aria-hidden="true" />
-      <div aria-hidden="true" className="welcome-orb1 pointer-events-none absolute -right-20 top-24 h-72 w-72 rounded-full bg-emerald-400/18 blur-[120px]" />
-      <div aria-hidden="true" className="welcome-orb2 pointer-events-none absolute -left-24 top-1/2 h-72 w-72 rounded-full bg-lime-400/14 blur-[130px]" />
+    <div className="relative min-h-dvh overflow-x-hidden bg-[#04080f] text-white">
+      {/* atmosfera "impressa" seca — grade técnica + bloom verde no topo */}
+      <div aria-hidden className="vfit-flow-grid pointer-events-none absolute inset-0 opacity-[0.22]" />
+      <div aria-hidden className="pointer-events-none absolute inset-0" style={{ background: 'radial-gradient(110% 55% at 50% -6%, rgba(34,197,94,0.14), transparent 55%)' }} />
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-green-400/40 to-transparent" />
 
-      {/* emerald glow bloom behind hero (sky as cool secondary) */}
-      <div
-        className="vfit-onb-halo pointer-events-none absolute inset-x-0 top-0 h-[44vh]"
-        aria-hidden="true"
-        style={{ background: 'radial-gradient(ellipse 70% 100% at 50% 0%, rgba(110,231,183,0.18) 0%, rgba(56,189,248,0.06) 45%, transparent 72%)' }}
-      />
+      <div className="bc-su-stagger relative z-10 mx-auto flex min-h-dvh w-full max-w-md flex-col px-6 pb-[max(env(safe-area-inset-bottom),28px)] pt-[calc(env(safe-area-inset-top)+36px)]">
+        {/* ─── kicker ─── */}
+        <p className="bc-mono inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em] text-green-300/90">
+          <span aria-hidden className="bc-su-live h-2 w-2 rounded-full bg-green-400" />
+          Plano Nº 01 · Pronto pra salvar
+        </p>
 
-      <div className="vfit-onb-stagger relative z-10 mx-auto flex min-h-dvh w-full max-w-md flex-col px-5 pb-[max(env(safe-area-inset-bottom),24px)] pt-[calc(env(safe-area-inset-top)+28px)]">
-
-        {/* ═══════════ 1 · HERO — plan is ready ═══════════ */}
-        <header className="text-center">
-          <div className="vfit-onb-pop relative mx-auto mb-5 grid h-16 w-16 place-items-center rounded-2xl bg-emerald-400/12 ring-1 ring-emerald-300/25">
-            <span className="absolute -z-10 h-16 w-16 rounded-2xl bg-emerald-300/20 blur-xl" aria-hidden="true" />
-            <DSIcon name="sparkles" size={30} className="text-emerald-200" />
-          </div>
-
-          <span className="mx-auto inline-flex items-center gap-2 rounded-full border border-emerald-300/18 bg-emerald-300/10 px-3 py-1.5 text-[11px] font-black uppercase tracking-wide text-emerald-100">
-            <span className="grid h-4 w-4 place-items-center rounded-full bg-emerald-400">
-              <DSIcon name="gift" size={11} className="text-bg-base" />
-            </span>
-            30 dias grátis · tudo liberado · sem cartão
+        {/* ─── manchete ─── */}
+        <h1 className="font-syne mt-4 text-[36px] font-black uppercase leading-[0.98] tracking-tight sm:text-[42px]">
+          Seu plano
+          <br />
+          está{' '}
+          <span className="text-[#22c55e]" style={{ textShadow: '0 6px 34px rgba(34,197,94,0.32)' }}>
+            pronto
           </span>
+        </h1>
+        <p className="mt-3 max-w-[21rem] text-sm leading-6 text-slate-300">
+          Crie sua conta pra salvar e começar hoje — <strong className="font-bold text-white">30 dias grátis</strong>, tudo liberado, sem cartão.
+        </p>
 
-          <h1 className="mt-4 text-[26px] leading-[1.12] text-white" style={headingFont}>
-            Seu plano está pronto.
-            <br />
-            <span className="vfit-energy-text">Crie sua conta pra salvar.</span>
-          </h1>
-
-          <p className="mx-auto mt-2.5 max-w-[20rem] text-[14px] leading-relaxed text-slate-400">
-            Montamos seu treino com IA com base nas suas respostas. Salve agora e comece hoje mesmo — sem pagar nada.
-          </p>
-        </header>
-
-        {/* ═══════════ 2 · RECAP CHIP — this is YOUR plan (endowment) ═══════════ */}
-        <div className="vfit-flow-panel-soft mt-6 flex items-stretch divide-x divide-white/8 rounded-2xl px-1 py-3">
-          <div className="flex flex-1 flex-col items-center px-2 text-center">
-            <DSIcon name="target" size={16} className="text-emerald-200" />
-            <span className="mt-1.5 text-[13px] font-black leading-tight text-white">{recap.goal}</span>
-            <span className="text-[9px] uppercase tracking-wide text-slate-500" style={monoLabel}>Objetivo</span>
-          </div>
-          <div className="flex flex-1 flex-col items-center px-2 text-center">
-            <DSIcon name="dumbbell" size={16} className="text-emerald-200" />
-            <span className="mt-1.5 text-[13px] font-black leading-tight text-white">{recap.days}x/sem</span>
-            <span className="text-[9px] uppercase tracking-wide text-slate-500" style={monoLabel}>Frequência</span>
-          </div>
-          <div className="flex flex-1 flex-col items-center px-2 text-center">
-            <DSIcon name="clock" size={16} className="text-emerald-200" />
-            <span className="mt-1.5 text-[13px] font-black leading-tight text-white">{recap.minutes}min</span>
-            <span className="text-[9px] uppercase tracking-wide text-slate-500" style={monoLabel}>Por sessão</span>
-          </div>
+        {/* ─── recap box-score — é o SEU plano ─── */}
+        <div className="mt-6 grid grid-cols-3 overflow-hidden rounded-xl border border-green-400/15">
+          {recapCells.map((s, i) => (
+            <div key={s.k} className={`flex flex-col gap-1.5 px-3 py-4 ${i === 1 ? 'bg-green-900/15' : ''} ${i < 2 ? 'border-r border-white/8' : ''}`}>
+              <DSIcon name={s.icon} size={15} className="text-green-300" />
+              <span className="font-syne text-[13px] font-black leading-tight text-white min-[400px]:text-[14px]">{s.v}</span>
+              <span className="bc-mono text-[9px] font-bold uppercase tracking-[0.12em] text-slate-400">{s.k}</span>
+            </div>
+          ))}
         </div>
 
-        {/* ═══════════ 3 · VALUE STACK — tudo liberado por 30 dias ═══════════ */}
-        <section aria-label="O que você libera" className="vfit-flow-panel-soft mt-4 rounded-3xl px-4 py-4">
-          <p className="mb-3 px-1 text-[10px] font-black uppercase tracking-wide text-emerald-200/70" style={monoLabel}>
-            Tudo liberado por 30 dias
-          </p>
-          <ul className="space-y-2.5">
-            {VALUE_ROWS.map((row) => (
-              <li key={row.title} className="flex items-start gap-3">
-                <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-xl bg-emerald-400/12 ring-1 ring-emerald-300/20">
-                  <DSIcon name={row.icon} size={15} className="text-emerald-200" />
-                </span>
-                <span className="min-w-0">
-                  <span className="flex items-center gap-1.5 text-[13.5px] font-bold leading-tight text-slate-100">
-                    {row.title}
-                    <DSIcon name="check" size={13} className="text-emerald-300" />
-                  </span>
+        {/* ─── telemetria de valor — tudo liberado por 30 dias ─── */}
+        <section aria-label="O que você libera" className="mt-6">
+          <h2 className="bc-mono mb-1 text-[10px] font-bold uppercase tracking-[0.24em] text-green-300/70">Tudo liberado por 30 dias</h2>
+          <div className="border-y border-green-400/15">
+            {VALUE_ROWS.map((row, i) => (
+              <div key={row.title} className={`flex items-start gap-3 py-3 ${i > 0 ? 'border-t border-white/8' : ''}`}>
+                <span className="bc-mono w-6 shrink-0 pt-0.5 text-[11px] font-bold tabular-nums text-green-300/55">{String(i + 1).padStart(2, '0')}</span>
+                <DSIcon name={row.icon} size={17} className="mt-0.5 shrink-0 text-green-300" />
+                <span className="min-w-0 flex-1">
+                  <span className="block text-[13.5px] font-bold leading-tight text-white">{row.title}</span>
                   <span className="mt-0.5 block text-[12px] leading-snug text-slate-400">{row.desc}</span>
                 </span>
-              </li>
+                <span aria-hidden className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[#06210f]" style={{ background: 'linear-gradient(135deg,#4ade80,#16a34a)' }}>
+                  <DSIcon name="check" size={11} />
+                </span>
+              </div>
             ))}
-          </ul>
+          </div>
         </section>
 
-        {/* ═══════════ 4 · PRIMARY ACTION — GOOGLE 1-TAP (single focus) ═══════════ */}
-        <div className="mt-6">
-          <p className="mb-2.5 text-center text-[11px] font-bold uppercase tracking-wide text-slate-400" style={monoLabel}>
-            Crie sua conta — leva 5 segundos
-          </p>
-          <div className="relative">
-            <div className="vfit-onb-pulse pointer-events-none absolute -inset-1.5 rounded-3xl bg-emerald-400/18 blur-lg" aria-hidden="true" />
-            <div className="relative rounded-2xl border border-emerald-300/25 bg-emerald-300/[0.04] p-1.5 shadow-[0_0_40px_rgba(16,185,129,0.22)]">
-              <OAuthButtons compact userType="student" invitationToken={inviteToken || undefined} />
-            </div>
-          </div>
-          <p className="mt-3 flex items-center justify-center gap-1.5 text-center text-[11px] text-slate-500">
-            <DSIcon name="zap" size={12} className="text-emerald-300" />
-            1 toque · sua conta fica pronta e você já entra no app
+        {/* ─── ação primária — Google 1-tap ─── */}
+        <div className="mt-7">
+          <p className="bc-mono mb-3 text-center text-[10px] font-bold uppercase tracking-[0.2em] text-white/45">Crie sua conta · leva 5 segundos</p>
+          <button
+            type="button"
+            onClick={() => oauth.mutate({ provider: 'google', userType: 'student', invitationToken: inviteToken || undefined })}
+            disabled={oauth.isPending}
+            className="bc-su-google group relative flex h-14 w-full items-center justify-center gap-3 overflow-hidden rounded-full bg-white text-[15px] font-bold text-zinc-800 outline-none transition-all duration-200 hover:-translate-y-0.5 hover:bg-zinc-50 active:translate-y-0 focus-visible:ring-2 focus-visible:ring-green-200 focus-visible:ring-offset-2 focus-visible:ring-offset-[#04080f] disabled:pointer-events-none disabled:opacity-60"
+          >
+            {oauth.isPending ? (
+              <span aria-hidden className="h-5 w-5 animate-spin rounded-full border-2 border-zinc-300 border-t-zinc-700" />
+            ) : (
+              <GoogleIcon />
+            )}
+            Continuar com Google
+          </button>
+          <p className="bc-mono mt-3 flex items-center justify-center gap-1.5 text-center text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">
+            <DSIcon name="zap" size={12} className="text-green-300" />1 toque · você já entra no app
           </p>
         </div>
 
-        {/* ═══════════ 5 · EMAIL/SENHA — collapsed secondary ═══════════ */}
-        <details className="vfit-onb-email group mt-5">
-          <summary className="flex cursor-pointer list-none items-center justify-center gap-2 rounded-2xl border border-white/8 bg-white/[0.03] px-4 py-3 text-[13px] font-bold text-slate-300 transition-colors hover:border-emerald-300/20 hover:text-emerald-100 [&::-webkit-details-marker]:hidden">
-            <DSIcon name="mail" size={15} className="text-slate-400" />
+        {/* ─── email/senha — colapsado secundário ─── */}
+        <details className="group mt-5">
+          <summary className="bc-mono flex cursor-pointer list-none items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-5 py-3.5 text-[11px] font-bold uppercase tracking-[0.16em] text-slate-300 transition-colors hover:border-green-400/30 hover:text-white [&::-webkit-details-marker]:hidden">
+            <DSIcon name="mail" size={14} className="text-slate-400" />
             Prefiro email e senha
-            <DSIcon name="arrowRight" size={14} className="text-slate-500 transition-transform duration-300 group-open:rotate-90" />
+            <DSIcon name="arrowRight" size={13} className="text-slate-500 transition-transform duration-300 group-open:rotate-90" />
           </summary>
 
-          <div className="mt-4">
-            <AuthDivider />
+          <div className="mt-5">
+            <div className="mb-4 flex items-center gap-3" aria-hidden>
+              <span className="h-px flex-1 bg-white/10" />
+              <span className="bc-mono text-[9px] font-bold uppercase tracking-[0.2em] text-white/35">ou</span>
+              <span className="h-px flex-1 bg-white/10" />
+            </div>
 
-            <form onSubmit={handleSubmit} className="space-y-3.5">
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="mb-1.5 ml-1 block text-[11px] font-bold uppercase tracking-wide text-slate-400" style={monoLabel}>
+                <label htmlFor="su-name" className="bc-mono mb-1.5 ml-1 block text-[10px] font-bold uppercase tracking-[0.16em] text-green-300/70">
                   Nome completo
                 </label>
                 <input
+                  id="su-name"
                   type="text"
                   placeholder="Seu nome completo"
                   value={form.full_name}
                   onChange={(e) => updateField('full_name', e.target.value)}
                   autoComplete="name"
                   required
-                  className={inputNormal}
+                  className="vfit-flow-field h-13 w-full rounded-2xl px-4 text-[15px] transition-all duration-300 focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="mb-1.5 ml-1 block text-[11px] font-bold uppercase tracking-wide text-slate-400" style={monoLabel}>
+                <label htmlFor="su-email" className="bc-mono mb-1.5 ml-1 block text-[10px] font-bold uppercase tracking-[0.16em] text-green-300/70">
                   Email
                 </label>
                 <input
+                  id="su-email"
                   type="email"
                   placeholder="seu@email.com"
                   value={form.email}
                   onChange={(e) => updateField('email', e.target.value)}
                   autoComplete="email"
                   required
-                  className={inputNormal}
+                  className="vfit-flow-field h-13 w-full rounded-2xl px-4 text-[15px] transition-all duration-300 focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="mb-1.5 ml-1 block text-[11px] font-bold uppercase tracking-wide text-slate-400" style={monoLabel}>
+                <label htmlFor="su-pass" className="bc-mono mb-1.5 ml-1 block text-[10px] font-bold uppercase tracking-[0.16em] text-green-300/70">
                   Senha
                 </label>
                 <div className="relative">
                   <input
+                    id="su-pass"
                     type={showPassword ? 'text' : 'password'}
                     placeholder="Mínimo 8 caracteres"
                     value={form.password}
                     onChange={(e) => updateField('password', e.target.value)}
                     autoComplete="new-password"
                     required
-                    className={`${inputNormal} pr-12`}
+                    className="vfit-flow-field h-13 w-full rounded-2xl px-4 pr-12 text-[15px] transition-all duration-300 focus:outline-none"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
                     aria-pressed={showPassword}
-                    className="absolute right-2 top-1/2 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-xl text-slate-400 transition-colors hover:text-emerald-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300/50"
+                    className="absolute right-2 top-1/2 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full text-slate-400 transition-colors hover:text-green-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-300/50"
                   >
                     {showPassword ? <DSIcon name="eyeOff" size={16} /> : <DSIcon name="eye" size={16} />}
                   </button>
                 </div>
                 {form.password && (
-                  <div className="mt-2 flex gap-1">
+                  <div className="mt-2 flex gap-1" aria-hidden>
                     {[1, 2, 3, 4].map((lvl) => (
                       <div
                         key={lvl}
                         className={`h-1 flex-1 rounded-full transition-colors duration-300 ${
                           form.password.length >= lvl * 3
-                            ? form.password.length >= 12 ? 'bg-emerald-400' : form.password.length >= 8 ? 'bg-amber-400' : 'bg-red-400'
-                            : 'bg-white/20'
+                            ? form.password.length >= 12
+                              ? 'bg-green-400'
+                              : form.password.length >= 8
+                                ? 'bg-amber-400'
+                                : 'bg-red-400'
+                            : 'bg-white/15'
                         }`}
                       />
                     ))}
@@ -282,44 +278,49 @@ export function OnboardingSignup({ inviteToken }: { inviteToken?: string }) {
                 )}
               </div>
 
-              <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-white/8 bg-white/[0.03] px-3.5 py-3 transition-colors hover:border-emerald-300/25">
+              <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-white/8 bg-white/[0.03] px-3.5 py-3 transition-colors hover:border-green-400/25">
                 <span className="relative mt-0.5">
-                  <input
-                    type="checkbox"
-                    checked={acceptedTerms}
-                    onChange={(e) => setAcceptedTerms(e.target.checked)}
-                    className="peer sr-only"
-                  />
-                  <span className="grid h-5 w-5 place-items-center rounded-md border border-slate-600 bg-slate-900/60 transition-all duration-200 peer-checked:border-emerald-400 peer-checked:bg-emerald-400">
-                    {acceptedTerms && <DSIcon name="check" size={13} className="text-bg-base" />}
+                  <input type="checkbox" checked={acceptedTerms} onChange={(e) => setAcceptedTerms(e.target.checked)} className="peer sr-only" />
+                  <span className="grid h-5 w-5 place-items-center rounded-md border border-slate-600 bg-slate-900/60 transition-all duration-200 peer-checked:border-green-400 peer-checked:bg-green-400">
+                    {acceptedTerms && <DSIcon name="check" size={13} className="text-[#06210f]" />}
                   </span>
                 </span>
-                <span className="text-[11.5px] leading-relaxed text-slate-400">
+                <span className="text-[11.5px] normal-case leading-relaxed tracking-normal text-slate-400">
                   Li e aceito os{' '}
-                  <Link href="/termos" target="_blank" rel="noreferrer" className="font-bold text-emerald-200 hover:underline">Termos de Uso</Link>
-                  {' '}e a{' '}
-                  <Link href="/privacidade" target="_blank" rel="noreferrer" className="font-bold text-emerald-200 hover:underline">Política de Privacidade</Link>.
+                  <Link href="/termos" target="_blank" rel="noreferrer" className="font-bold text-green-300 hover:underline">
+                    Termos de Uso
+                  </Link>{' '}
+                  e a{' '}
+                  <Link href="/privacidade" target="_blank" rel="noreferrer" className="font-bold text-green-300 hover:underline">
+                    Política de Privacidade
+                  </Link>
+                  .
                 </span>
               </label>
 
               <Turnstile onVerify={setTurnstileToken} onExpire={() => setTurnstileToken('')} />
 
-              <Button
+              <button
                 type="submit"
-                variant="primary"
-                size="lg"
-                disabled={!formValid}
-                loading={register.isPending}
-                className="w-full font-black uppercase"
+                disabled={!formValid || register.isPending}
+                className="bc-su-cta group relative flex h-14 w-full items-center justify-center gap-2.5 overflow-hidden rounded-full text-[#06210f] outline-none transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-2 focus-visible:ring-green-200 focus-visible:ring-offset-2 focus-visible:ring-offset-[#04080f] disabled:pointer-events-none disabled:opacity-35 disabled:saturate-[0.4]"
+                style={{ background: 'linear-gradient(135deg,#4ade80 0%,#22c55e 50%,#16a34a 100%)' }}
               >
-                <DSIcon name="gift" size={16} />
-                Criar conta · 30 dias grátis
-                <DSIcon name="arrowRight" size={16} />
-              </Button>
+                {formValid && !register.isPending && <span aria-hidden className="bc-su-sweep" />}
+                {register.isPending ? (
+                  <span aria-hidden className="h-4.5 w-4.5 animate-spin rounded-full border-2 border-[#06210f]/30 border-t-[#06210f]" />
+                ) : (
+                  <DSIcon name="gift" size={17} className="relative z-10" />
+                )}
+                <span className="font-syne relative z-10 text-[15px] font-black uppercase tracking-tight">
+                  {register.isPending ? 'Criando conta…' : 'Criar conta · 30 dias grátis'}
+                </span>
+                {!register.isPending && <DSIcon name="arrowRight" size={17} className="relative z-10 transition-transform duration-200 group-hover:translate-x-0.5" />}
+              </button>
 
-              <p className="flex items-center justify-center gap-1.5 text-center text-[11.5px] text-slate-500">
-                <DSIcon name="lock" size={12} className="text-emerald-300/70" />
-                Grátis por 30 dias · cancele quando quiser · sem cartão
+              <p className="bc-mono flex items-center justify-center gap-1.5 text-center text-[10px] font-bold uppercase tracking-[0.14em] text-white/40">
+                <DSIcon name="lock" size={12} className="text-green-300/70" />
+                Grátis por 30 dias · cancele quando quiser
               </p>
 
               {register.isError && (
@@ -334,41 +335,42 @@ export function OnboardingSignup({ inviteToken }: { inviteToken?: string }) {
           </div>
         </details>
 
-        {/* ═══════════ Footer ═══════════ */}
-        <div className="mt-auto pt-6">
-          <div className="flex items-center justify-between">
-            <p className="text-[13px] text-slate-500">
+        {/* ─── footer ─── */}
+        <div className="mt-auto pt-7">
+          <div className="flex items-center justify-between border-t border-white/8 pt-4">
+            <p className="text-[13px] text-slate-400">
               Já tem conta?{' '}
-              <Link href="/login?from=onboarding" className="font-bold text-emerald-200 transition-colors hover:text-emerald-100">
+              <Link href="/login?from=onboarding" className="font-bold text-green-300 transition-colors hover:text-green-200">
                 Entrar
               </Link>
             </p>
-            <span className="flex items-center gap-1.5 text-[9px] text-slate-600" style={monoLabel}>
-              <DSIcon name="shieldCheck" size={12} /> SSL · LGPD
+            <span className="bc-mono flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-[0.16em] text-white/35">
+              <DSIcon name="shieldCheck" size={12} className="text-green-300/70" /> SSL · LGPD
             </span>
           </div>
         </div>
       </div>
 
-      {/* Animations — CSS-only, reduced-motion safe, content visible without JS */}
+      {/* Animações — CSS-only, reduced-motion safe, conteúdo visível sem JS */}
       <style>{`
-        @keyframes vfitOnbRise { 0% { opacity:0; transform:translateY(14px) } 100% { opacity:1; transform:translateY(0) } }
-        @keyframes vfitOnbPop  { 0% { opacity:0; transform:scale(.86) } 100% { opacity:1; transform:scale(1) } }
-        @keyframes vfitOnbHalo { 0%,100% { opacity:.55 } 50% { opacity:.9 } }
-        @keyframes vfitOnbPulse{ 0%,100% { opacity:.5; transform:scale(1) } 50% { opacity:.85; transform:scale(1.04) } }
-        .vfit-onb-stagger > * { animation: vfitOnbRise .5s cubic-bezier(.22,1,.36,1) both }
-        .vfit-onb-stagger > *:nth-child(2){ animation-delay:.06s }
-        .vfit-onb-stagger > *:nth-child(3){ animation-delay:.12s }
-        .vfit-onb-stagger > *:nth-child(4){ animation-delay:.18s }
-        .vfit-onb-stagger > *:nth-child(5){ animation-delay:.24s }
-        .vfit-onb-stagger > *:nth-child(6){ animation-delay:.30s }
-        .vfit-onb-pop  { animation: vfitOnbPop .55s cubic-bezier(.22,1,.36,1) both }
-        .vfit-onb-halo { animation: vfitOnbHalo 6s ease-in-out infinite }
-        .vfit-onb-pulse{ animation: vfitOnbPulse 2.6s ease-in-out infinite }
+        @keyframes bcSuRise { 0% { opacity: 0; transform: translateY(14px); } 100% { opacity: 1; transform: translateY(0); } }
+        .bc-su-stagger > * { animation: bcSuRise 0.5s cubic-bezier(0.22,1,0.36,1) both; }
+        .bc-su-stagger > *:nth-child(2) { animation-delay: 0.06s; }
+        .bc-su-stagger > *:nth-child(3) { animation-delay: 0.12s; }
+        .bc-su-stagger > *:nth-child(4) { animation-delay: 0.18s; }
+        .bc-su-stagger > *:nth-child(5) { animation-delay: 0.24s; }
+        .bc-su-stagger > *:nth-child(6) { animation-delay: 0.30s; }
+        .bc-su-stagger > *:nth-child(7) { animation-delay: 0.36s; }
+        .bc-su-stagger > *:nth-child(8) { animation-delay: 0.42s; }
+        .bc-su-live { box-shadow: 0 0 0 0 rgba(74,222,128,0.6); animation: bcSuPing 2.4s ease-out infinite; }
+        @keyframes bcSuPing { 0% { box-shadow: 0 0 0 0 rgba(74,222,128,0.5); } 70%,100% { box-shadow: 0 0 0 7px rgba(74,222,128,0); } }
+        .bc-su-google { box-shadow: 0 0 0 1px rgba(34,197,94,0.35), 0 18px 44px -14px rgba(34,197,94,0.45), inset 0 1px 0 rgba(255,255,255,0.9); animation: bcSuBreathe 3.4s ease-in-out 1.2s infinite; }
+        @keyframes bcSuBreathe { 0%,100% { box-shadow: 0 0 0 1px rgba(34,197,94,0.35), 0 16px 40px -14px rgba(34,197,94,0.4), inset 0 1px 0 rgba(255,255,255,0.9); } 50% { box-shadow: 0 0 0 1px rgba(34,197,94,0.55), 0 24px 60px -10px rgba(34,197,94,0.65), inset 0 1px 0 rgba(255,255,255,0.9); } }
+        .bc-su-cta { box-shadow: 0 16px 40px -14px rgba(34,197,94,0.5), inset 0 1px 0 rgba(255,255,255,0.45); }
+        .bc-su-sweep { position: absolute; inset: 0; z-index: 5; pointer-events: none; background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.5) 50%, transparent 70%); transform: translateX(-130%) skewX(-18deg); animation: bcSuSweep 3.6s ease-in-out 1.5s infinite; }
+        @keyframes bcSuSweep { 0% { transform: translateX(-130%) skewX(-18deg); } 60%,100% { transform: translateX(260%) skewX(-18deg); } }
         @media (prefers-reduced-motion: reduce) {
-          .vfit-onb-stagger > *, .vfit-onb-pop, .vfit-onb-halo, .vfit-onb-pulse {
-            animation: none !important; opacity: 1 !important; transform: none !important;
-          }
+          .bc-su-stagger > *, .bc-su-live, .bc-su-google, .bc-su-cta, .bc-su-sweep { animation: none !important; opacity: 1 !important; transform: none !important; }
         }
       `}</style>
     </div>

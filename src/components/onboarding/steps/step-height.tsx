@@ -58,10 +58,10 @@ export function StepHeight() {
           value={input}
           onChange={(e) => handleChange(e.target.value)}
           placeholder="170"
-          className="vfit-flow-field h-30 w-46 rounded-[28px] text-center text-5xl font-black text-white outline-none transition-all placeholder:text-white/15"
+          className="vfit-flow-field font-syne h-30 w-46 rounded-[28px] text-center text-5xl font-black text-white outline-none transition-all placeholder:text-white/15"
           autoFocus
         />
-        <span className="absolute right-4 bottom-3 text-sm text-white/30">cm</span>
+        <span className="bc-mono absolute right-4 bottom-3.5 text-[11px] font-bold uppercase tracking-[0.14em] text-green-300/50">cm</span>
       </div>
 
       {/* Slider */}
@@ -84,16 +84,16 @@ export function StepHeight() {
       {/* Conversion + feedback */}
       {height && (
         <div className="flex gap-3">
-          <div className="rounded-[18px] border border-white/10 bg-white/6 px-4 py-2.5 text-center shadow-glass-inset-sm">
-            <p className="text-lg font-bold text-white">{height} cm</p>
-            <p className="text-xs text-white/40">Centímetros</p>
+          <div className="rounded-2xl border border-green-400/15 bg-white/[0.03] px-4 py-2.5 text-center shadow-glass-inset-sm">
+            <p className="font-syne text-lg font-black text-white">{height} cm</p>
+            <p className="bc-mono text-[9px] font-bold uppercase tracking-[0.12em] text-white/40">Centímetros</p>
           </div>
           {ftIn && (
-            <div className="rounded-[18px] border border-white/10 bg-white/6 px-4 py-2.5 text-center shadow-glass-inset-sm">
-              <p className="text-lg font-bold text-white/70">
+            <div className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-center shadow-glass-inset-sm">
+              <p className="font-syne text-lg font-black text-white/70">
                 {ftIn.ft}&apos;{ftIn.inches}&quot;
               </p>
-              <p className="text-xs text-white/40">Pés / pol</p>
+              <p className="bc-mono text-[9px] font-bold uppercase tracking-[0.12em] text-white/40">Pés / pol</p>
             </div>
           )}
         </div>

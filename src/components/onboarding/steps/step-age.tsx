@@ -42,10 +42,10 @@ export function StepAge() {
             value={input}
             onChange={(e) => handleChange(e.target.value)}
             placeholder="25"
-            className="vfit-flow-field h-30 w-42 rounded-[28px] text-center text-5xl font-black text-white outline-none transition-all placeholder:text-white/15"
+            className="vfit-flow-field font-syne h-30 w-42 rounded-[28px] text-center text-5xl font-black text-white outline-none transition-all placeholder:text-white/15"
             autoFocus
           />
-          <span className="absolute right-4 bottom-3 text-sm text-white/30">anos</span>
+          <span className="bc-mono absolute right-4 bottom-3.5 text-[11px] font-bold uppercase tracking-[0.14em] text-green-300/50">anos</span>
         </div>
 
         {/* Validation message */}

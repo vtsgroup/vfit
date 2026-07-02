@@ -40,18 +40,18 @@ export function StepDaysPerWeek() {
         <button
           onClick={decrement}
           disabled={days <= 1}
-          className={`flex h-14 w-14 items-center justify-center rounded-[18px] border transition-all ${
+          className={`flex h-14 w-14 items-center justify-center rounded-full border transition-all ${
             days <= 1
               ? 'border-white/5 text-white/15 cursor-not-allowed'
-              : 'border-white/12 bg-white/6 text-white/76 hover:bg-white/10 active:scale-95'
+              : 'border-green-400/25 bg-green-400/6 text-green-300 hover:border-green-400/50 hover:bg-green-400/10 active:scale-95'
           }`}
         >
           <DSIcon name="minus" className="h-6 w-6" />
         </button>
 
         <div className="flex flex-col items-center">
-          <span className="text-7xl font-black leading-none text-white tabular-nums">{days}</span>
-          <span className="mt-1 text-sm font-medium text-slate-400">
+          <span className="font-syne text-7xl font-black leading-none text-white tabular-nums">{days}</span>
+          <span className="bc-mono mt-2 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400">
             {days === 1 ? 'dia' : 'dias'} por semana
           </span>
         </div>
@@ -59,10 +59,10 @@ export function StepDaysPerWeek() {
         <button
           onClick={increment}
           disabled={days >= 7}
-          className={`flex h-14 w-14 items-center justify-center rounded-[18px] border transition-all ${
+          className={`flex h-14 w-14 items-center justify-center rounded-full border transition-all ${
             days >= 7
               ? 'border-white/5 text-white/15 cursor-not-allowed'
-              : 'border-white/12 bg-white/6 text-white/76 hover:bg-white/10 active:scale-95'
+              : 'border-green-400/25 bg-green-400/6 text-green-300 hover:border-green-400/50 hover:bg-green-400/10 active:scale-95'
           }`}
         >
           <DSIcon name="plus" className="h-6 w-6" />
@@ -75,7 +75,7 @@ export function StepDaysPerWeek() {
             key={i}
             className={`h-2.5 rounded-full transition-all duration-300 ${
               i < days
-                ? 'w-7 bg-emerald-300 shadow-[0_0_14px_rgba(134,239,172,0.28)]'
+                ? 'w-7 bg-green-300 shadow-[0_0_14px_rgba(134,239,172,0.28)]'
                 : 'w-2.5 bg-white/10'
             }`}
           />

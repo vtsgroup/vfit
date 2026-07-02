@@ -149,8 +149,8 @@ export default function OnboardingLoadingPage() {
 
       <div className="relative z-10 flex w-full max-w-md flex-col items-center">
         {/* sinal AO VIVO */}
-        <span className="bc-mono mb-9 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.28em] text-lime-300/90">
-          <span aria-hidden className="bc-live h-2 w-2 rounded-full bg-lime-400" />
+        <span className="bc-mono mb-9 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.28em] text-green-300/90">
+          <span aria-hidden className="bc-live h-2 w-2 rounded-full bg-green-400" />
           Ao vivo · Gerando plano Nº 01
         </span>
 
@@ -165,14 +165,14 @@ export default function OnboardingLoadingPage() {
           transition={{ duration: 0.4, ease: 'easeOut' }}
           className="mt-10 text-center"
         >
-          <span className="bc-mono text-[10px] font-bold uppercase tracking-[0.24em] text-lime-300/70">
+          <span className="bc-mono text-[10px] font-bold uppercase tracking-[0.24em] text-green-300/70">
             Passo {String(currentPhase + 1).padStart(2, '0')}/{String(PHASES.length).padStart(2, '0')}
           </span>
           <h1 className="font-syne mt-2 text-[30px] font-black leading-[1.02] text-white sm:text-4xl">{phase.label}</h1>
         </motion.div>
 
         {/* telemetria — box-score acendendo */}
-        <div className="mt-8 w-full border-y border-lime-400/15">
+        <div className="mt-8 w-full border-y border-green-400/15">
           {PHASES.map((p, i) => {
             const done = i < currentPhase
             const active = i === currentPhase
@@ -185,16 +185,16 @@ export default function OnboardingLoadingPage() {
                   active ? 'opacity-100' : done ? 'opacity-75' : 'opacity-30',
                 )}
               >
-                <span className="bc-mono w-6 text-[11px] font-bold tabular-nums text-lime-300/55">{String(i + 1).padStart(2, '0')}</span>
-                <DSIcon name={p.icon} size={15} className={active ? 'text-lime-300' : 'text-emerald-300/70'} />
+                <span className="bc-mono w-6 text-[11px] font-bold tabular-nums text-green-300/55">{String(i + 1).padStart(2, '0')}</span>
+                <DSIcon name={p.icon} size={15} className={active ? 'text-green-300' : 'text-green-300/70'} />
                 <span className="bc-mono flex-1 text-[11px] font-bold uppercase leading-tight tracking-[0.12em] text-white/85">{p.label}</span>
                 <span aria-hidden className="flex h-5 w-5 items-center justify-center">
                   {done ? (
-                    <span className="flex h-5 w-5 items-center justify-center rounded-full text-[#06210f]" style={{ background: 'linear-gradient(135deg,#a3e635,#16a34a)' }}>
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full text-[#06210f]" style={{ background: 'linear-gradient(135deg,#4ade80,#16a34a)' }}>
                       <DSIcon name="check" size={11} />
                     </span>
                   ) : active ? (
-                    <span className="bc-live h-2.5 w-2.5 rounded-full bg-lime-400" />
+                    <span className="bc-live h-2.5 w-2.5 rounded-full bg-green-400" />
                   ) : (
                     <span className="h-2 w-2 rounded-full bg-white/15" />
                   )}
@@ -213,29 +213,29 @@ export default function OnboardingLoadingPage() {
               initial={{ scale: 1.2, opacity: 0.5 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.2 }}
-              className="font-syne text-4xl font-black leading-none text-lime-300 tabular-nums"
+              className="font-syne text-4xl font-black leading-none text-green-300 tabular-nums"
             >
               {pct}
-              <span className="text-2xl text-lime-300/70">%</span>
+              <span className="text-2xl text-green-300/70">%</span>
             </motion.span>
           </div>
           <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
             <div
-              className="h-full rounded-full bg-linear-to-r from-emerald-400 via-lime-300 to-emerald-400 shadow-[0_0_16px_rgba(163,230,53,0.5)] transition-[width] duration-200 ease-out"
+              className="h-full rounded-full bg-linear-to-r from-green-400 via-green-300 to-green-400 shadow-[0_0_16px_rgba(74,222,128,0.5)] transition-[width] duration-200 ease-out"
               style={{ width: `${progress}%` }}
             />
           </div>
         </div>
 
         <p className="bc-mono mt-7 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.16em] text-white/40">
-          <DSIcon name="clock" size={13} className="text-emerald-300" />
+          <DSIcon name="clock" size={13} className="text-green-300" />
           Setup · 30–45 segundos
         </p>
       </div>
 
       <style>{`
-        .bc-live { box-shadow: 0 0 0 0 rgba(163,230,53,0.6); animation: bcLivePing 1.8s ease-out infinite; }
-        @keyframes bcLivePing { 0% { box-shadow: 0 0 0 0 rgba(163,230,53,0.55); } 70%,100% { box-shadow: 0 0 0 7px rgba(163,230,53,0); } }
+        .bc-live { box-shadow: 0 0 0 0 rgba(74,222,128,0.6); animation: bcLivePing 1.8s ease-out infinite; }
+        @keyframes bcLivePing { 0% { box-shadow: 0 0 0 0 rgba(74,222,128,0.55); } 70%,100% { box-shadow: 0 0 0 7px rgba(74,222,128,0); } }
         @media (prefers-reduced-motion: reduce) { .bc-live { animation: none !important; } }
       `}</style>
     </div>

@@ -80,21 +80,21 @@ export default function WelcomePage() {
     else handleStart()
   }
 
-  const ctaLabel = hasSavedProgress ? 'Continuar meu plano' : 'Criar meu plano grátis'
-  const ctaIcon: DSIconName = hasSavedProgress ? 'play' : 'sparkles'
+  const ctaLabel = hasSavedProgress ? 'Continuar meu plano' : 'Criar plano grátis'
+  const ctaIcon: DSIconName = hasSavedProgress ? 'play' : 'zap'
 
   const CtaBar = ({ fixed = false }: { fixed?: boolean }) => (
     <button
       onClick={handlePrimaryStudentFlow}
       aria-label={ctaLabel}
-      className="bc-cta group/cta relative flex h-16 w-full items-center gap-3 overflow-hidden rounded-md pl-5 pr-2 text-[#06210f] outline-none transition-transform duration-200 hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-2 focus-visible:ring-lime-200 focus-visible:ring-offset-2 focus-visible:ring-offset-[#04080f]"
-      style={{ background: 'linear-gradient(135deg,#a3e635 0%,#34e565 48%,#16a34a 100%)' }}
+      className="bc-cta group/cta relative flex h-16 w-full items-center gap-3 overflow-hidden rounded-2xl pl-5 pr-2 text-[#06210f] outline-none transition-transform duration-200 hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-2 focus-visible:ring-green-200 focus-visible:ring-offset-2 focus-visible:ring-offset-[#04080f]"
+      style={{ background: 'linear-gradient(135deg,#4ade80 0%,#22c55e 50%,#16a34a 100%)' }}
     >
       <span aria-hidden className={`bc-cta-sweep ${fixed ? 'bc-cta-sweep--fixed' : ''}`} />
       <DSIcon name={ctaIcon} size={20} className="relative z-10 shrink-0" />
       <span className="bc-jumbo-font relative z-10 text-[15px] font-black uppercase tracking-tight sm:text-[18px]">{ctaLabel}</span>
-      <span className="relative z-10 ml-auto flex h-12 shrink-0 items-center gap-2 rounded bg-[#06210f] pl-3 pr-3 text-lime-300">
-        <span className="bc-mono text-[10px] font-bold uppercase tracking-[0.18em] text-lime-200/90">2 min</span>
+      <span className="relative z-10 ml-auto flex h-12 shrink-0 items-center gap-2 rounded-full bg-[#052e16]/95 pl-4 pr-3.5 text-green-300 shadow-glass-inset-sm">
+        <span className="bc-mono text-[10px] font-bold uppercase tracking-[0.18em] text-green-200/90">2 min</span>
         <DSIcon name="arrowRight" size={18} className="transition-transform duration-200 group-hover/cta:translate-x-0.5" />
       </span>
     </button>
@@ -104,12 +104,12 @@ export default function WelcomePage() {
     <div className="bc-root relative flex min-h-dvh flex-col overflow-x-hidden bg-[#04080f] pb-[140px] text-white lg:pb-0">
       {/* atmosfera "impressa": grade técnica seca + sheen no topo (sem orbs/aurora) */}
       <div aria-hidden className="vfit-flow-grid pointer-events-none absolute inset-0 opacity-[0.22]" />
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-lime-300/40 to-transparent" />
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-green-300/40 to-transparent" />
       <div aria-hidden className="pointer-events-none absolute inset-0" style={{ background: 'radial-gradient(120% 80% at 80% -10%, rgba(34,197,94,0.10), transparent 55%)' }} />
 
       {/* ─── FAIXA 0 · MASTHEAD ─── */}
       <header
-        className="bc-mast sticky top-0 z-40 border-b border-lime-400/20 bg-[#04080f]/85 backdrop-blur-md"
+        className="bc-mast sticky top-0 z-40 border-b border-green-400/20 bg-[#04080f]/85 backdrop-blur-md"
         style={{ paddingTop: 'env(safe-area-inset-top)' }}
       >
         <div className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between gap-2 px-4 sm:px-7">
@@ -117,18 +117,19 @@ export default function WelcomePage() {
           <div className="flex min-w-0 items-center gap-2.5">
             <VfitAnimatedMark size={28} className="shrink-0" />
             <span className="bc-mono text-[13px] font-bold uppercase tracking-[0.3em] text-white">VFIT</span>
-            <span className="bc-mono hidden truncate text-[10px] uppercase tracking-[0.2em] text-lime-300/70 sm:inline">Nº 01 · Edição Atleta</span>
+            <span className="bc-mono hidden truncate text-[10px] uppercase tracking-[0.2em] text-green-300/70 sm:inline">Nº 01 · Edição Atleta</span>
           </div>
           <span className="bc-mono hidden text-[10px] uppercase tracking-[0.32em] text-white/35 lg:block">Edição Jun · 2026</span>
-          <nav className="bc-mono flex items-center gap-1 text-[10px] uppercase tracking-[0.18em] sm:gap-2">
-            <Link href="/register/personal?from=welcome" className="hidden items-center px-2 py-2.5 font-semibold text-white/50 transition-colors hover:text-white sm:flex">Sou Personal</Link>
-            <span aria-hidden className="hidden h-3 w-px bg-white/15 sm:block" />
-            <Link href="/register/personal?type=nutri&from=welcome" className="hidden items-center px-2 py-2.5 font-semibold text-white/50 transition-colors hover:text-white sm:flex">Sou Nutri</Link>
+          <nav className="bc-mono flex shrink-0 items-center gap-0.5 text-[9px] uppercase tracking-[0.1em] sm:gap-2 sm:text-[10px] sm:tracking-[0.18em]">
+            <Link href="/register/personal?from=welcome" className="flex items-center px-1 py-2.5 font-semibold text-white/50 transition-colors hover:text-white sm:px-2">Sou Personal</Link>
+            <span aria-hidden className="h-3 w-px shrink-0 bg-white/15" />
+            <Link href="/register/personal?type=nutri&from=welcome" className="flex items-center px-1 py-2.5 font-semibold text-white/50 transition-colors hover:text-white sm:px-2">Sou Nutri</Link>
             <button
               onClick={() => router.push('/login')}
-              className="flex items-center gap-1 rounded border border-white/15 bg-white/[0.04] px-3 py-2 font-bold text-white/90 transition-colors hover:border-lime-300/50 hover:text-white"
+              className="group/entrar ml-1 flex items-center gap-1.5 rounded-full border border-green-400/25 bg-green-400/6 px-3.5 py-2 font-bold text-white/90 shadow-glass-inset-sm transition-all duration-200 hover:border-green-400/55 hover:bg-green-400/10 hover:text-white hover:shadow-[0_0_18px_-4px_rgba(34,197,94,0.45)] active:scale-95 sm:ml-1.5 sm:px-4"
             >
-              Entrar <span aria-hidden className="text-lime-300">→</span>
+              Entrar
+              <DSIcon name="arrowRight" size={13} className="text-green-300 transition-transform duration-200 group-hover/entrar:translate-x-0.5" />
             </button>
           </nav>
         </div>
@@ -140,11 +141,11 @@ export default function WelcomePage() {
           {/* numeral índice gigante (marca d'água editorial) */}
           <span aria-hidden className="bc-index bc-jumbo-font">01</span>
           {/* lombada vertical */}
-          <span aria-hidden className="bc-vert bc-mono hidden text-[10px] uppercase tracking-[0.4em] text-lime-300/45 sm:block">Fitness · IA · Performance</span>
+          <span aria-hidden className="bc-vert bc-mono hidden text-[10px] uppercase tracking-[0.4em] text-green-300/45 sm:block">Fitness · IA · Performance</span>
 
           {/* kicker */}
-          <p className="bc-rise bc-mono relative z-10 mb-5 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em] text-lime-300/90">
-            <span aria-hidden className="bc-livedot inline-block h-2 w-2 rounded-full bg-lime-400" />
+          <p className="bc-rise bc-mono relative z-10 mb-5 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em] text-green-300/90">
+            <span aria-hidden className="bc-livedot inline-block h-2 w-2 rounded-full bg-green-400" />
             Plano IA · 30 dias grátis · sem cartão
           </p>
 
@@ -167,27 +168,27 @@ export default function WelcomePage() {
             <span aria-hidden className="bc-thirty bc-jumbo-font font-black leading-none">30</span>
             <span className="bc-mono pb-1 text-[11px] font-bold uppercase leading-4 tracking-[0.18em] text-white/70">
               dias grátis<br />
-              <span className="text-lime-300/90">tudo liberado · sem cartão</span>
+              <span className="text-green-300/90">tudo liberado · sem cartão</span>
             </span>
           </div>
         </section>
 
         {/* ─── FAIXA 2 · DECK / PROVA VIVA ─── */}
-        <section className="bc-deck relative grid grid-cols-2 border-y border-lime-400/15 lg:grid-cols-4">
+        <section className="bc-deck relative grid grid-cols-2 border-y border-green-400/15 lg:grid-cols-4">
           <i aria-hidden className="bc-hr bc-hr-deck" />
           {PLAN_SIGNALS.map((s, i) => (
             <div
               key={s.label}
-              className={`bc-cell relative flex flex-col gap-2.5 border-white/8 px-4 py-5 sm:px-5 sm:py-6 ${i % 2 === 1 ? 'bg-emerald-900/15' : ''} ${i < 2 ? 'border-b' : ''} ${i % 2 === 0 ? 'border-r' : ''} lg:border-b-0`}
+              className={`bc-cell relative flex flex-col gap-2.5 border-white/8 px-4 py-5 sm:px-5 sm:py-6 ${i % 2 === 1 ? 'bg-green-900/15' : ''} ${i < 2 ? 'border-b' : ''} ${i % 2 === 0 ? 'border-r' : ''} lg:border-b-0`}
               style={{ animationDelay: `${0.45 + i * 0.12}s` }}
             >
               <div className="flex items-center justify-between">
-                <span className="bc-mono text-[11px] font-bold tracking-[0.2em] text-lime-300/60">0{i + 1}</span>
+                <span className="bc-mono text-[11px] font-bold tracking-[0.2em] text-green-300/60">0{i + 1}</span>
                 <span aria-hidden className="bc-dot relative flex h-4 w-4 items-center justify-center rounded-full" style={{ animationDelay: `${0.7 + i * 0.12}s` }}>
                   <DSIcon name="check" size={9} className="bc-dot-check text-[#06210f]" style={{ animationDelay: `${0.95 + i * 0.12}s` }} />
                 </span>
               </div>
-              <DSIcon name={s.icon} size={20} className="text-emerald-300" />
+              <DSIcon name={s.icon} size={20} className="text-green-300" />
               <div>
                 <h2 className="bc-jumbo-font text-[15px] font-extrabold uppercase tracking-tight text-white sm:text-[17px]">{s.label}</h2>
                 <p className="mt-0.5 text-[12px] leading-4 text-slate-400">{s.value}</p>
@@ -198,8 +199,8 @@ export default function WelcomePage() {
 
         {/* ─── FAIXA 3 · HANDOFF + CTA (inline desktop) ─── */}
         <section className="relative px-4 py-8 sm:px-7 sm:py-9">
-          <span className="bc-chip bc-mono mb-4 inline-flex items-center gap-2 rounded-sm border border-lime-400/40 bg-lime-400/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-lime-200">
-            <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-lime-400" />
+          <span className="bc-chip bc-mono mb-4 inline-flex items-center gap-2 rounded-sm border border-green-400/40 bg-green-400/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-green-200">
+            <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-green-400" />
             Pronto pra hoje
           </span>
 
@@ -208,7 +209,7 @@ export default function WelcomePage() {
           </div>
 
           <p className="bc-mono mt-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] font-medium uppercase tracking-[0.18em] text-white/45">
-            <span className="text-lime-300/70">Sem cartão</span> · Tudo liberado · Cancela quando quiser
+            <span className="text-green-300/70">Sem cartão</span> · Tudo liberado · Cancela quando quiser
             {hasSavedProgress && (
               <button onClick={handleStart} className="ml-1 font-bold text-white/55 underline-offset-2 transition-colors hover:text-white hover:underline">
                 · Recomeçar do início
@@ -222,7 +223,7 @@ export default function WelcomePage() {
           <div className="grid grid-cols-2 gap-x-5 gap-y-5 lg:grid-cols-4">
             {COLOFAO.map((c) => (
               <div key={c.k} className="flex flex-col gap-0.5">
-                <span className="bc-mono text-[10px] font-bold uppercase tracking-[0.22em] text-lime-300/80">{c.k}</span>
+                <span className="bc-mono text-[10px] font-bold uppercase tracking-[0.22em] text-green-300/80">{c.k}</span>
                 <span className="text-[12px] leading-4 text-slate-400">{c.v}</span>
               </div>
             ))}
@@ -230,21 +231,17 @@ export default function WelcomePage() {
           <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-white/8 pt-5">
             {TRUST.map((t) => (
               <span key={t.text} className="bc-mono inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-white/50">
-                <DSIcon name={t.icon} size={13} className="text-emerald-300" />
+                <DSIcon name={t.icon} size={13} className="text-green-300" />
                 {t.text}
               </span>
             ))}
-            <span className="bc-mono ml-auto flex items-center gap-3 text-[10px] uppercase tracking-[0.16em] text-white/40 sm:hidden">
-              <Link href="/register/personal?from=welcome" className="hover:text-white">Sou Personal</Link>
-              <Link href="/register/personal?type=nutri&from=welcome" className="hover:text-white">Sou Nutri</Link>
-            </span>
           </div>
         </footer>
       </main>
 
       {/* ─── CTA fixo (mobile) — sempre no polegar, acima da safe-area ─── */}
       <div
-        className="bc-cta-fixed fixed inset-x-0 bottom-0 z-50 border-t border-lime-400/25 bg-[#04080f]/90 px-4 pt-3 backdrop-blur-md lg:hidden"
+        className="bc-cta-fixed fixed inset-x-0 bottom-0 z-50 border-t border-green-400/25 bg-[#04080f]/90 px-4 pt-3 backdrop-blur-md lg:hidden"
         style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 12px)' }}
       >
         <CtaBar fixed />
@@ -267,7 +264,7 @@ export default function WelcomePage() {
         /* acento lima sólido. NÃO usar -webkit-text-stroke em LETRAS na Syne: os glifos
            têm contornos internos não-mesclados (N vira "raio", P ganha marca interna).
            Numerais (30/01) saem limpos vazados — só letras quebram. Sólido = limpo + legível. */
-        .bc-outline { color: #a3e635; text-shadow: 0 6px 34px rgba(132,204,22,0.28); }
+        .bc-outline { color: #22c55e; text-shadow: 0 6px 34px rgba(34,197,94,0.32); }
 
         /* cronômetro de DURAÇÃO (não conta — só pisca o ':') */
         .bc-clock {
@@ -283,7 +280,7 @@ export default function WelcomePage() {
         .bc-index {
           position: absolute; top: -3vw; right: -1.5vw; z-index: 0; pointer-events: none; user-select: none;
           font-size: clamp(11rem, 42vw, 30rem); line-height: 0.78; font-weight: 800;
-          color: rgba(132,204,22,0.07); -webkit-text-stroke: 1.5px rgba(132,204,22,0.22); -webkit-text-fill-color: transparent;
+          color: rgba(34,197,94,0.07); -webkit-text-stroke: 1.5px rgba(34,197,94,0.22); -webkit-text-fill-color: transparent;
           animation: bcIndexIn 1s ease-out 0.1s both;
         }
         @keyframes bcIndexIn { from { opacity: 0; transform: scale(0.94); } to { opacity: 1; transform: scale(1); } }
@@ -294,8 +291,8 @@ export default function WelcomePage() {
         /* numeral 30 outline */
         .bc-thirty {
           font-size: clamp(3rem, 13vw, 7.5rem); letter-spacing: 0.02em;
-          color: #a3e635; -webkit-text-stroke: 2.25px #a3e635; -webkit-text-fill-color: transparent;
-          filter: drop-shadow(0 6px 26px rgba(132,204,22,0.25));
+          color: #22c55e; -webkit-text-stroke: 2.25px #22c55e; -webkit-text-fill-color: transparent;
+          filter: drop-shadow(0 6px 26px rgba(34,197,94,0.28));
           animation: bcSlam 0.85s cubic-bezier(0.22,1,0.36,1) 0.42s both;
         }
 
@@ -306,14 +303,14 @@ export default function WelcomePage() {
         @keyframes bcRise { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
 
         /* hairlines "ligando" (placar acendendo) */
-        .bc-hr { position: absolute; left: 0; right: 0; bottom: -1px; height: 1.5px; transform: scaleX(0); transform-origin: left; background: linear-gradient(90deg, transparent, rgba(132,204,22,0.6), transparent); }
+        .bc-hr { position: absolute; left: 0; right: 0; bottom: -1px; height: 1.5px; transform: scaleX(0); transform-origin: left; background: linear-gradient(90deg, transparent, rgba(34,197,94,0.6), transparent); }
         .bc-hr-mast { animation: bcRule 0.9s cubic-bezier(0.16,1,0.3,1) 0.1s both; }
         .bc-hr-deck { top: -1px; bottom: auto; animation: bcRule 0.9s cubic-bezier(0.16,1,0.3,1) 0.35s both; }
         @keyframes bcRule { to { transform: scaleX(1); } }
 
         /* live dot na masthead/kicker */
-        .bc-livedot { box-shadow: 0 0 0 0 rgba(163,230,53,0.6); animation: bcPing 2.4s ease-out infinite; }
-        @keyframes bcPing { 0% { box-shadow: 0 0 0 0 rgba(163,230,53,0.5); } 70%,100% { box-shadow: 0 0 0 7px rgba(163,230,53,0); } }
+        .bc-livedot { box-shadow: 0 0 0 0 rgba(74,222,128,0.6); animation: bcPing 2.4s ease-out infinite; }
+        @keyframes bcPing { 0% { box-shadow: 0 0 0 0 rgba(74,222,128,0.5); } 70%,100% { box-shadow: 0 0 0 7px rgba(74,222,128,0); } }
 
         /* deck: células ligando em cascata */
         .bc-cell { animation: bcCellIn 0.6s cubic-bezier(0.22,1,0.36,1) both; }
@@ -329,7 +326,7 @@ export default function WelcomePage() {
 
         /* CTA: sweep mecânico + respiração emissiva (único ponto vivo) */
         .bc-cta { box-shadow: 0 18px 44px -12px rgba(34,197,94,0.5), inset 0 1px 0 rgba(255,255,255,0.45); animation: bcBreathe 3.4s ease-in-out 1.8s infinite; }
-        @keyframes bcBreathe { 0%,100% { box-shadow: 0 16px 40px -14px rgba(34,197,94,0.45), inset 0 1px 0 rgba(255,255,255,0.45); } 50% { box-shadow: 0 24px 60px -10px rgba(132,204,22,0.7), inset 0 1px 0 rgba(255,255,255,0.5); } }
+        @keyframes bcBreathe { 0%,100% { box-shadow: 0 16px 40px -14px rgba(34,197,94,0.45), inset 0 1px 0 rgba(255,255,255,0.45); } 50% { box-shadow: 0 24px 60px -10px rgba(34,197,94,0.75), inset 0 1px 0 rgba(255,255,255,0.5); } }
         .bc-cta-sweep { position: absolute; inset: 0; z-index: 5; pointer-events: none; background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.5) 50%, transparent 70%); transform: translateX(-130%) skewX(-18deg); animation: bcSweep 3.6s ease-in-out 2s infinite; }
         .bc-cta-sweep--fixed { animation-delay: 2.4s; }
         .bc-cta:hover .bc-cta-sweep { animation-duration: 1.1s; }

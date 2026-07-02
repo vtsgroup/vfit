@@ -291,7 +291,7 @@ export function GlassCard({ children, className = '', delay = 0 }: GlassCardProp
         delay,
         ease: 'easeOut',
       }}
-      className={`backdrop-blur-2xl rounded-3xl border border-emerald-500/20 p-8 ${className}`}
+      className={`backdrop-blur-2xl rounded-3xl border border-green-500/20 p-8 ${className}`}
       style={{
         background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.5) 100%)',
         boxShadow: `
@@ -428,7 +428,7 @@ export function AnimatedProgressBar({
   return (
     <div className={`relative h-2 overflow-hidden rounded-full bg-white/10 ${className}`}>
       <motion.div
-        className="h-full rounded-full bg-linear-to-r from-emerald-300 via-brand-primary to-lime-300"
+        className="h-full rounded-full bg-linear-to-r from-green-300 via-brand-primary to-green-300"
         style={{
           width: `${progress}%`,
           boxShadow: '0 0 18px rgba(34, 197, 94, 0.42)',

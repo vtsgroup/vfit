@@ -126,7 +126,7 @@ export default function OnboardingResultPage() {
     <div className="relative min-h-dvh overflow-x-hidden bg-[#04080f] pb-40 text-white">
       <div aria-hidden className="vfit-flow-grid pointer-events-none absolute inset-0 opacity-[0.22]" />
       <div aria-hidden className="pointer-events-none absolute inset-0" style={{ background: 'radial-gradient(110% 55% at 78% -6%, rgba(34,197,94,0.12), transparent 55%)' }} />
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-lime-300/40 to-transparent" />
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-green-300/40 to-transparent" />
 
       {/* ─── Header / capa ─── */}
       <header className="relative z-10 px-6 pt-[calc(env(safe-area-inset-top)+40px)]">
@@ -135,9 +135,9 @@ export default function OnboardingResultPage() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="bc-mono mb-4 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em] text-lime-300/90"
+            className="bc-mono mb-4 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em] text-green-300/90"
           >
-            <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-lime-400" />
+            <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-green-400" />
             Plano Nº 01 · Gerado pela IA
           </motion.p>
           <motion.h1
@@ -161,7 +161,7 @@ export default function OnboardingResultPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.24 }}
-              className="bc-mono mt-4 inline-flex items-center gap-1.5 rounded-sm border border-lime-400/30 bg-lime-400/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-lime-200"
+              className="bc-mono mt-4 inline-flex items-center gap-1.5 rounded-full border border-green-400/30 bg-green-400/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-green-200"
             >
               <DSIcon name="target" size={12} />
               {GOAL_LABELS[data.goal] || data.goal}
@@ -172,13 +172,13 @@ export default function OnboardingResultPage() {
 
       {/* ─── Stats box-score ─── */}
       <div className="relative z-10 mx-auto mt-7 max-w-md px-6">
-        <div className="grid grid-cols-4 overflow-hidden rounded-lg border border-lime-400/15">
+        <div className="grid grid-cols-4 overflow-hidden rounded-lg border border-green-400/15">
           {statsCards.map((stat, idx) => (
             <div
               key={stat.label}
-              className={`flex flex-col gap-1.5 px-2 py-4 ${idx % 2 === 1 ? 'bg-emerald-900/15' : ''} ${idx < 3 ? 'border-r border-white/8' : ''}`}
+              className={`flex flex-col gap-1.5 px-2 py-4 ${idx % 2 === 1 ? 'bg-green-900/15' : ''} ${idx < 3 ? 'border-r border-white/8' : ''}`}
             >
-              <DSIcon name={stat.icon} size={16} className="text-emerald-300" />
+              <DSIcon name={stat.icon} size={16} className="text-green-300" />
               <AnimatedCounter value={stat.value} delay={0.4 + idx * 0.1} className="font-syne text-xl font-black leading-none text-white tabular-nums" />
               <span className="bc-mono text-[9px] font-bold uppercase leading-tight tracking-[0.1em] text-slate-400">{stat.label}</span>
             </div>
@@ -188,19 +188,19 @@ export default function OnboardingResultPage() {
 
       {/* ─── Treinos ─── */}
       <div className="relative z-10 mx-auto mt-8 max-w-md px-6">
-        <h2 className="bc-mono mb-3 text-[10px] font-bold uppercase tracking-[0.24em] text-lime-300/70">Seus treinos</h2>
+        <h2 className="bc-mono mb-3 text-[10px] font-bold uppercase tracking-[0.24em] text-green-300/70">Seus treinos</h2>
 
         <div className="mb-4 flex gap-2 overflow-x-auto pb-1">
           {plan.days.map((day) => (
             <button
               key={day.day_number}
               onClick={() => setExpandedDay(day.day_number)}
-              className={`bc-mono shrink-0 rounded-sm px-3.5 py-2 text-[11px] font-bold uppercase tracking-[0.12em] transition-all ${
+              className={`bc-mono shrink-0 rounded-full px-4 py-2 text-[11px] font-bold uppercase tracking-[0.12em] transition-all ${
                 expandedDay === day.day_number
                   ? 'text-[#06210f]'
                   : 'border border-white/12 bg-white/[0.03] text-slate-300 hover:border-white/25'
               }`}
-              style={expandedDay === day.day_number ? { background: 'linear-gradient(135deg,#a3e635,#34e565)', boxShadow: '0 8px 20px -8px rgba(34,197,94,0.6)' } : undefined}
+              style={expandedDay === day.day_number ? { background: 'linear-gradient(135deg,#4ade80,#22c55e)', boxShadow: '0 8px 20px -8px rgba(34,197,94,0.6)' } : undefined}
             >
               Dia {String(day.day_number).padStart(2, '0')}
             </button>
@@ -211,8 +211,8 @@ export default function OnboardingResultPage() {
           .filter((d) => d.day_number === expandedDay)
           .map((day) => (
             <motion.div key={day.day_number} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}>
-              <div className="mb-3 flex items-center gap-3 rounded-lg border border-lime-400/15 bg-white/[0.02] p-3">
-                <span className="font-syne flex h-10 w-10 items-center justify-center rounded-md text-lg font-black text-[#06210f]" style={{ background: 'linear-gradient(135deg,#a3e635,#34e565)' }}>
+              <div className="mb-3 flex items-center gap-3 rounded-lg border border-green-400/15 bg-white/[0.02] p-3">
+                <span className="font-syne flex h-10 w-10 items-center justify-center rounded-md text-lg font-black text-[#06210f]" style={{ background: 'linear-gradient(135deg,#4ade80,#22c55e)' }}>
                   {day.day_number}
                 </span>
                 <div className="min-w-0">
@@ -230,8 +230,8 @@ export default function OnboardingResultPage() {
                     transition={{ delay: 0.05 + i * 0.05, duration: 0.3 }}
                     className={`flex items-center gap-3 px-3 py-3 ${i > 0 ? 'border-t border-white/8' : ''}`}
                   >
-                    <span className="bc-mono w-6 shrink-0 text-[11px] font-bold tabular-nums text-lime-300/55">{String(i + 1).padStart(2, '0')}</span>
-                    <DSIcon name={MUSCLE_ICON[ex.muscle_group] || 'dumbbell'} size={18} className="shrink-0 text-emerald-300" />
+                    <span className="bc-mono w-6 shrink-0 text-[11px] font-bold tabular-nums text-green-300/55">{String(i + 1).padStart(2, '0')}</span>
+                    <DSIcon name={MUSCLE_ICON[ex.muscle_group] || 'dumbbell'} size={18} className="shrink-0 text-green-300" />
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-[14px] font-bold text-white">{ex.name}</p>
                       <p className="bc-mono text-[10px] uppercase tracking-[0.1em] text-slate-500">
@@ -265,8 +265,8 @@ export default function OnboardingResultPage() {
 
       {/* ─── Resultados estimados — box-score ─── */}
       <div className="relative z-10 mx-auto mt-6 max-w-md px-6">
-        <div className="rounded-lg border border-lime-400/15 bg-white/[0.02] p-4">
-          <h3 className="bc-mono mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-lime-300/80">
+        <div className="rounded-lg border border-green-400/15 bg-white/[0.02] p-4">
+          <h3 className="bc-mono mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-green-300/80">
             <DSIcon name="target" size={13} />
             Resultados · 4 semanas
           </h3>
@@ -278,7 +278,7 @@ export default function OnboardingResultPage() {
             ].map((item) => (
               <div key={item.label} className="flex items-center justify-between py-2.5">
                 <span className="bc-mono text-[11px] uppercase tracking-[0.12em] text-slate-400">{item.label}</span>
-                <span className="font-syne text-base font-black text-lime-300 tabular-nums">{item.value}</span>
+                <span className="font-syne text-base font-black text-green-300 tabular-nums">{item.value}</span>
               </div>
             ))}
           </div>
@@ -287,7 +287,7 @@ export default function OnboardingResultPage() {
 
       {/* ─── CTA fixo — verde→lima ─── */}
       <div
-        className="fixed inset-x-0 bottom-0 z-30 border-t border-lime-400/25 bg-[#04080f]/92 px-6 pt-4 backdrop-blur-md"
+        className="fixed inset-x-0 bottom-0 z-30 border-t border-green-400/25 bg-[#04080f]/92 px-6 pt-4 backdrop-blur-md"
         style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 16px)' }}
       >
         <div className="mx-auto max-w-md">
@@ -297,21 +297,21 @@ export default function OnboardingResultPage() {
               router.push(isAuth ? '/treinos' : '/register/student?from=onboarding')
             }}
             aria-label={isAuth ? 'Começar agora' : 'Criar conta e salvar meu plano'}
-            className="bc-res-cta group relative flex h-15 w-full items-center gap-3 overflow-hidden rounded-2xl pl-5 pr-2 text-[#06210f] outline-none transition-transform duration-200 hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-2 focus-visible:ring-lime-200 focus-visible:ring-offset-2 focus-visible:ring-offset-[#04080f]"
-            style={{ background: 'linear-gradient(135deg,#22c55e 0%,#16a34a 100%)' }}
+            className="bc-res-cta group relative flex h-15 w-full items-center gap-3 overflow-hidden rounded-full pl-6 pr-2 text-[#06210f] outline-none transition-transform duration-200 hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-2 focus-visible:ring-green-200 focus-visible:ring-offset-2 focus-visible:ring-offset-[#04080f]"
+            style={{ background: 'linear-gradient(135deg,#4ade80 0%,#22c55e 50%,#16a34a 100%)' }}
           >
             <span aria-hidden className="bc-res-sweep" />
             <DSIcon name="sparkles" size={19} className="relative z-10 shrink-0" />
             <span className="font-syne relative z-10 text-[14px] font-black uppercase tracking-tight sm:text-[16px]">
               {isAuth ? 'Começar agora' : 'Criar conta e salvar plano'}
             </span>
-            <span className="relative z-10 ml-auto flex h-11 shrink-0 items-center justify-center rounded bg-[#06210f] px-3 text-lime-300">
+            <span className="relative z-10 ml-auto flex h-11 shrink-0 items-center justify-center rounded-full bg-[#052e16]/95 px-3.5 text-green-300">
               <DSIcon name="arrowRight" size={18} className="transition-transform duration-200 group-hover:translate-x-0.5" />
             </span>
           </button>
           {!isAuth && (
             <p className="bc-mono mt-3 flex items-center justify-center gap-1.5 text-center text-[10px] font-bold uppercase tracking-[0.16em] text-white/45">
-              <DSIcon name="shieldCheck" size={13} className="text-emerald-300" />
+              <DSIcon name="shieldCheck" size={13} className="text-green-300" />
               30 dias grátis · tudo liberado · sem cartão
             </p>
           )}
@@ -320,7 +320,7 @@ export default function OnboardingResultPage() {
 
       <style>{`
         .bc-res-cta { box-shadow: 0 18px 44px -12px rgba(34,197,94,0.5), inset 0 1px 0 rgba(255,255,255,0.45); animation: bcResBreathe 3.4s ease-in-out 1.5s infinite; }
-        @keyframes bcResBreathe { 0%,100% { box-shadow: 0 16px 40px -14px rgba(34,197,94,0.45), inset 0 1px 0 rgba(255,255,255,0.45); } 50% { box-shadow: 0 24px 60px -10px rgba(132,204,22,0.7), inset 0 1px 0 rgba(255,255,255,0.5); } }
+        @keyframes bcResBreathe { 0%,100% { box-shadow: 0 16px 40px -14px rgba(34,197,94,0.45), inset 0 1px 0 rgba(255,255,255,0.45); } 50% { box-shadow: 0 24px 60px -10px rgba(34,197,94,0.7), inset 0 1px 0 rgba(255,255,255,0.5); } }
         .bc-res-sweep { position: absolute; inset: 0; z-index: 5; pointer-events: none; background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.5) 50%, transparent 70%); transform: translateX(-130%) skewX(-18deg); animation: bcResSweep 3.6s ease-in-out 2s infinite; }
         .bc-res-cta:hover .bc-res-sweep { animation-duration: 1.1s; }
         @keyframes bcResSweep { 0% { transform: translateX(-130%) skewX(-18deg); } 60%,100% { transform: translateX(260%) skewX(-18deg); } }
