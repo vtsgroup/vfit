@@ -28,9 +28,11 @@ import { CheckoutPageSkeleton } from '@/components/ui/page-skeletons'
 import {
   usePlanDetail,
   useBuyPlan,
+  usePurchaseStatus,
   categoryLabels,
   difficultyLabels,
   difficultyColors,
+  type BuyPlanResult,
 } from '@/hooks/use-marketplace'
 import { FEES } from '@config/constants'
 
@@ -97,6 +99,17 @@ function CheckoutContent() {
   const { data, isLoading } = usePlanDetail(planId)
   const buyPlan = useBuyPlan()
   const [paymentMethod, setPaymentMethod] = useState<'pix' | 'credit_card' | 'boleto'>('pix')
+  const [cpf, setCpf] = useState('')
+  const [cpfError, setCpfError] = useState('')
+  const [pixData, setPixData] = useState<BuyPlanResult | null>(null)
+  const [copied, setCopied] = useState(false)
+
+  const purchaseStatus = usePurchaseStatus(
+    pixData?.purchase_id ?? null,
+    pixData ? 5000 : undefined
+  )
+  const isConfirmed = purchaseStatus.data?.status === 'completed'
+  const isDelivered = purchaseStatus.data?.delivered === true
 
   const plan = data?.plan
 
@@ -124,7 +137,98 @@ function CheckoutContent() {
 
   async function handleCheckout() {
     if (!planId) return
-    await buyPlan.mutateAsync(planId)
+    const digits = cpf.replace(/\D/g, '')
+    if (digits.length !== 11) {
+      setCpfError('Informe um CPF válido (11 dígitos)')
+      return
+    }
+    setCpfError('')
+    try {
+      const result = await buyPlan.mutateAsync({ planId, cpf: digits })
+      setPixData(result)
+    } catch {
+      // erro já exibido via toast do hook
+    }
+  }
+
+  async function handleCopyPix() {
+    if (!pixData?.pix.copy_paste) return
+    try {
+      await navigator.clipboard.writeText(pixData.pix.copy_paste)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 3000)
+    } catch { /* clipboard indisponível */ }
+  }
+
+  // ─── Tela PIX: QR + aguardando confirmação / sucesso ───
+  if (pixData) {
+    return (
+      <div className="w-full max-w-lg mx-auto space-y-6 pb-12">
+        <GlassCard variant="surface" padding="lg" radius="2xl">
+          {isConfirmed ? (
+            <div className="flex flex-col items-center gap-4 py-6 text-center">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-brand-primary/15">
+                <DSIcon name="checkCircle" size={32} className="text-brand-primary" />
+              </div>
+              <div>
+                <h2 className="text-xl font-black text-text-primary">Compra confirmada!</h2>
+                <p className="mt-1 text-sm text-text-secondary">
+                  {isDelivered
+                    ? `"${plan.title}" já está na sua biblioteca. Bom treino!`
+                    : `Pagamento confirmado! "${plan.title}" será liberado em instantes.`}
+                </p>
+              </div>
+              <div className="flex w-full flex-col gap-2 pt-2">
+                <Button variant="primary" size="lg" className="w-full" onClick={() => router.push('/plano')}>
+                  <DSIcon name="dumbbell" size={16} />
+                  Ver meu plano
+                </Button>
+                <Button variant="outline" className="w-full" onClick={() => router.push('/dashboard/marketplace')}>
+                  Voltar ao marketplace
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center gap-4 text-center">
+              <div>
+                <h2 className="text-xl font-black text-text-primary">Pague com Pix</h2>
+                <p className="mt-1 text-sm text-text-secondary">
+                  Escaneie o QR Code ou copie o código. Total: <strong className="text-text-primary">{formatCurrency(pixData.amount)}</strong>
+                </p>
+              </div>
+
+              <div className="rounded-2xl border border-border-light bg-white p-3">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={`data:image/png;base64,${pixData.pix.qr_code_base64}`}
+                  alt={`QR Code PIX para compra do plano ${plan.title}`}
+                  className="h-56 w-56 rounded-xl bg-white object-contain"
+                />
+              </div>
+
+              <Button variant="outline" className="w-full" onClick={handleCopyPix}>
+                <DSIcon name={copied ? 'check' : 'copy'} size={14} />
+                {copied ? 'Código copiado!' : 'Copiar código Pix'}
+              </Button>
+
+              <div className="flex items-center gap-2 rounded-xl bg-bg-tertiary/50 px-4 py-2.5">
+                <div className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-primary opacity-75" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-brand-primary" />
+                </div>
+                <span className="text-xs text-text-secondary">
+                  Aguardando pagamento — confirmação automática
+                </span>
+              </div>
+
+              <p className="text-[11px] text-text-muted">
+                Após o pagamento, o plano é clonado automaticamente para sua biblioteca.
+              </p>
+            </div>
+          )}
+        </GlassCard>
+      </div>
+    )
   }
 
   return (
@@ -244,17 +348,19 @@ function CheckoutContent() {
               />
               <PaymentMethodCard
                 name="Cartão de Crédito"
-                description="Visa, Master, Elo, Amex — até 12x"
+                description="Em breve — use Pix por enquanto"
                 icon="creditCard"
-                selected={paymentMethod === 'credit_card'}
-                onSelect={() => setPaymentMethod('credit_card')}
+                selected={false}
+                onSelect={() => setPaymentMethod('pix')}
+                badge="EM BREVE"
               />
               <PaymentMethodCard
                 name="Boleto Bancário"
-                description="Compensação em até 3 dias úteis"
+                description="Em breve — use Pix por enquanto"
                 icon="barChart"
-                selected={paymentMethod === 'boleto'}
-                onSelect={() => setPaymentMethod('boleto')}
+                selected={false}
+                onSelect={() => setPaymentMethod('pix')}
+                badge="EM BREVE"
               />
             </div>
           </GlassCard>
@@ -320,6 +426,26 @@ function CheckoutContent() {
                 </span>
               </div>
 
+              {/* CPF (obrigatório no Asaas) */}
+              <div className="mb-4">
+                <label htmlFor="checkout-cpf" className="mb-1.5 block text-xs font-bold text-text-primary">
+                  CPF do titular
+                </label>
+                <input
+                  id="checkout-cpf"
+                  type="text"
+                  inputMode="numeric"
+                  autoComplete="off"
+                  placeholder="000.000.000-00"
+                  value={cpf}
+                  onChange={(e) => setCpf(e.target.value)}
+                  className="h-12 w-full rounded-xl border border-border-light bg-bg-secondary/50 px-4 text-sm text-text-primary placeholder:text-text-muted focus:border-brand-primary/50 focus:outline-none"
+                />
+                {cpfError && (
+                  <p className="mt-1.5 text-xs font-semibold text-error">{cpfError}</p>
+                )}
+              </div>
+
               {/* CTA */}
               <Button
                 variant="primary"
@@ -329,7 +455,7 @@ function CheckoutContent() {
                 onClick={handleCheckout}
               >
                 <DSIcon name="shieldCheck" size={16} />
-                {paymentMethod === 'pix' ? 'Pagar com Pix' : paymentMethod === 'credit_card' ? 'Pagar com cartão' : 'Gerar boleto'}
+                Pagar com Pix
               </Button>
 
               {/* Security */}

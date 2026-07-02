@@ -5,6 +5,23 @@
 
 ---
 
+## [Unreleased] — 02/07/2026 — Sprint 2: checkout PIX real no marketplace + entrega automática
+
+### ✨ Compra de plano agora cobra de verdade (Asaas PIX)
+
+- `POST /payments/plans/:id/buy` ([workers/api/payments.ts](../workers/api/payments.ts)) reescrito no padrão do subscription checkout: Asaas primeiro (customer → cobrança PIX → QR), DB depois (`plan_purchases` com `status='pending'`, `asaas_payment_id`); rollback da cobrança se o DB falhar. Exige CPF (body ou `users.cpf`). Retorna `pix{qr_code_base64, copy_paste, expiration}`. Compra pendente retoma o mesmo PIX (ou regenera se expirado). **Removido o incremento otimista de `total_sales`/`total_revenue`** — antes contava venda sem pagamento.
+- Novo branch `plan_purchase_` no webhook Asaas: `CONFIRMED/RECEIVED` → transição idempotente pending→completed, incrementa vendas, insere linha em `payments` (recipient = criador, `net_amount = creator_share` → **venda aparece no dashboard financeiro do personal**), entrega o plano e notifica criador + comprador. `REFUNDED/DELETED` → `status='refunded'`.
+- Novo [lib/marketplace-delivery.ts](../lib/marketplace-delivery.ts): materializa `plan_content` (shape `{weeks:[{days}]}` do form, ou `{days}` genérico, parser tolerante com coerção de `reps:'8-12'`/`rest:'60s'`) em `workout_plans` B2C do comprador + `workout_plan_days` + `workout_plan_exercises`; marca `delivered=true` + `cloned_workout_ids`. Idempotente.
+- Novo `GET /payments/plans/purchases/:id/status` para polling de confirmação (buyer-only).
+
+### ✨ Frontend checkout
+
+- [use-marketplace.ts](../src/hooks/use-marketplace.ts): `useBuyPlan` agora envia `{cpf}` e retorna o PIX (sem redirect automático); novo `usePurchaseStatus` com `refetchInterval` (padrão do `useSubscriptionStatus`).
+- [checkout/page.tsx](../src/app/dashboard/marketplace/checkout/page.tsx): campo CPF obrigatório, tela de QR PIX + copia-e-cola + polling 5s, tela de sucesso ("plano na sua biblioteca") com CTA para `/plano`. Cartão/boleto marcados "EM BREVE" (PIX-only por enquanto).
+- Testes: [tests/lib/marketplace-delivery.test.ts](../tests/lib/marketplace-delivery.test.ts) cobre o parser (9 casos).
+
+---
+
 ## [Unreleased] — 02/07/2026 — Sprint 1 Tracks B+C: XP/streak unificados + notificações WhatsApp
 
 ### 🐛 Track B — XP divergente entre rotas (3 fórmulas diferentes)

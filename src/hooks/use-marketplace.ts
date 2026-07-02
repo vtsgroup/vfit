@@ -198,24 +198,57 @@ export function useDeletePlan() {
   })
 }
 
-/** Comprar plano */
+export interface BuyPlanResult {
+  purchase_id: string
+  plan_id: string
+  amount: number
+  pix: {
+    qr_code_base64: string
+    copy_paste: string
+    expiration: string
+  }
+  asaas_payment_id: string
+  resumed?: boolean
+}
+
+export interface PurchaseStatusResult {
+  purchase_id: string
+  status: 'pending' | 'completed' | 'refunded'
+  delivered: boolean
+  cloned_plan_id: string | null
+}
+
+/** Comprar plano — cria cobrança PIX real e retorna QR code */
 export function useBuyPlan() {
   const queryClient = useQueryClient()
-  const router = useRouter()
 
   return useMutation({
-    mutationFn: async (planId: string) => {
-      const res = await api.post(`/payments/plans/${planId}/buy`)
+    mutationFn: async ({ planId, cpf }: { planId: string; cpf: string }) => {
+      const res = await api.post<BuyPlanResult>(`/payments/plans/${planId}/buy`, { cpf })
       return res.data
     },
     onSuccess: () => {
-      toast.success('Plano comprado com sucesso!')
       queryClient.invalidateQueries({ queryKey: ['marketplace'] })
-      router.push('/dashboard/marketplace')
     },
     onError: (err: Error) => {
       toast.error(err.message || 'Erro ao comprar plano')
     },
+  })
+}
+
+/** Polling do status da compra (confirmação PIX via webhook) */
+export function usePurchaseStatus(purchaseId: string | null, pollInterval?: number) {
+  const isReady = useAuthStore((s) => s.isAuthenticated && s.isHydrated)
+
+  return useQuery<PurchaseStatusResult>({
+    queryKey: ['marketplace', 'purchase-status', purchaseId],
+    queryFn: async () => {
+      const res = await api.get<PurchaseStatusResult>(`/payments/plans/purchases/${purchaseId}/status`)
+      return res.data
+    },
+    enabled: isReady && !!purchaseId,
+    staleTime: pollInterval ? 0 : 30_000,
+    refetchInterval: isReady && !!purchaseId && pollInterval ? pollInterval : false,
   })
 }
 

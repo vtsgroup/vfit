@@ -6,7 +6,17 @@
 **Project**: VFIT v5.4.1  
 **Status**: ✅ Production Stable  
 
-## Última sessão (2026-07-02, madrugada) — Sprint 1 Tracks A+B+C (branch `feat/sprint1-track-a-treinos`)
+## Última sessão (2026-07-02, madrugada) — Sprints 1+2 completos (branch `feat/sprint1-track-a-treinos`)
+
+> **📋 LEIA PRIMEIRO:** `.claude/plans/plano-final/TRACKING.md` tem o resumo completo da sessão noturna,
+> os 4 commits, as 6 ações que só o usuário pode fazer, e os riscos técnicos. Progresso: 20/23 (87%).
+
+### Sprint 2 — Checkout PIX real no marketplace (commit 4)
+
+- `POST /payments/plans/:id/buy` reescrito (padrão subscription checkout): Asaas primeiro (customer→PIX→QR), `plan_purchases` `status='pending'` depois, rollback da cobrança se DB falhar; CPF obrigatório; retoma PIX pendente; removida contagem otimista de vendas. Antes era compra FAKE (sem cobrança, sem entrega).
+- Webhook branch `plan_purchase_`: pending→completed idempotente (`WHERE status<>'completed'`), conta venda, INSERT em `payments` (recipient=criador, net=creator_share → aparece no `/dashboard/financeiro`), entrega via `lib/marketplace-delivery.ts` (parser tolerante `{weeks}`/`{days}` → clona plano B2C pro comprador), notifica criador+comprador. Refund → `status='refunded'`.
+- Novo `GET /payments/plans/purchases/:id/status` (polling). Frontend: CPF + tela QR + copia-e-cola + polling 5s (`usePurchaseStatus`) + tela sucesso→`/plano`; cartão/boleto "EM BREVE".
+- Testes: 9 casos do parser (`tests/lib/marketplace-delivery.test.ts`) + 15 de XP/streak. Total suite: 390.
 
 ### Tracks B+C (commit 2)
 

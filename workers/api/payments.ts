@@ -38,7 +38,7 @@ import {
   requestPixTransferSchema,
   checkoutPaySchema,
 } from '@workers/schemas/payments'
-import { pgQuery, generateId } from '@lib/db'
+import { pgQuery, pgQueryOne, generateId } from '@lib/db'
 import { success, created, noContent } from '@lib/response'
 import {
   NotFoundError,
@@ -68,6 +68,7 @@ import {
   recordConsultationOrderPaid,
   recordConsultationOrderRefunded,
 } from '@lib/consultation-ledger'
+import { deliverPlanPurchase } from '@lib/marketplace-delivery'
 import type { CreatePaymentInput as AsaasPaymentInput } from '@lib/asaas'
 import { PDFDocument, StandardFonts } from 'pdf-lib'
 
@@ -214,6 +215,106 @@ payments.post('/webhooks/asaas', async (c) => {
             console.log(`[Webhook B2C] Subscription ${subRows[0].id} canceled/refunded`)
           }
         }
+        return c.json({ received: true })
+      }
+
+      // Check marketplace plan purchase
+      if (extRef?.startsWith('plan_purchase_')) {
+        const purchaseId = extRef.replace('plan_purchase_', '')
+        const now = new Date().toISOString()
+
+        if (['CONFIRMED', 'RECEIVED'].includes(event)) {
+          // Idempotente: só transiciona pending → completed uma vez
+          const { rows: purchaseRows } = await pgQuery<{
+            id: string
+            plan_id: string
+            buyer_id: string
+            amount_paid: number
+            creator_share: number
+            platform_share: number
+          }>(
+            c.env,
+            `UPDATE plan_purchases
+             SET status = 'completed', asaas_payment_id = $1, purchased_at = $2
+             WHERE id = $3 AND status <> 'completed'
+             RETURNING id, plan_id, buyer_id, amount_paid::float, creator_share::float, platform_share::float`,
+            [paymentData.id, now, purchaseId]
+          )
+
+          if (purchaseRows.length > 0) {
+            const purchase = purchaseRows[0]
+
+            // Vendas contadas só na confirmação
+            await pgQuery(c.env, `
+              UPDATE workout_plans
+              SET total_sales = total_sales + 1, total_revenue = total_revenue + $1, updated_at = $2
+              WHERE id = $3
+            `, [purchase.amount_paid, now, purchase.plan_id])
+
+            const planRow = await pgQueryOne<{ created_by: string; title: string }>(
+              c.env,
+              'SELECT created_by, title FROM workout_plans WHERE id = $1 LIMIT 1',
+              [purchase.plan_id]
+            )
+
+            // Linha em payments para o financeiro do criador (net = creator_share)
+            if (planRow?.created_by) {
+              const paymentRowId = generateId()
+              await pgQuery(c.env, `
+                INSERT INTO payments (
+                  id, payer_id, recipient_id, amount, commission_amount, platform_fee, net_amount,
+                  payment_method, status, due_date, paid_at, description, asaas_payment_id,
+                  created_at, updated_at
+                ) VALUES ($1, $2, $3, $4, 0, $5, $6, 'pix', 'confirmed', $7, $7, $8, $9, $7, $7)
+                ON CONFLICT (asaas_payment_id) DO NOTHING
+              `, [
+                paymentRowId, purchase.buyer_id, planRow.created_by, purchase.amount_paid,
+                purchase.platform_share, purchase.creator_share,
+                now, `Marketplace: ${planRow.title}`.slice(0, 200), paymentData.id,
+              ]).catch((err) => console.warn('[Webhook Marketplace] payments insert failed:', err))
+
+              await pgQuery(
+                c.env,
+                'UPDATE plan_purchases SET payment_id = $1 WHERE id = $2',
+                [paymentRowId, purchaseId]
+              ).catch(() => {})
+            }
+
+            // Entregar: clonar plano para a biblioteca do comprador
+            const delivery = await deliverPlanPurchase(c.env, purchaseId)
+              .catch((err) => {
+                console.error('[Webhook Marketplace] delivery failed:', err)
+                return { delivered: false, cloned_plan_id: null }
+              })
+
+            // Notificações best-effort
+            if (planRow?.created_by) {
+              const buyerRow = await pgQueryOne<{ full_name: string }>(
+                c.env, 'SELECT full_name FROM users WHERE id = $1 LIMIT 1', [purchase.buyer_id]
+              ).catch(() => null)
+              await notifyPaymentReceived(
+                c.env, planRow.created_by, buyerRow?.full_name || 'Aluno', purchase.amount_paid
+              ).catch(() => {})
+            }
+            await notify(c.env, purchase.buyer_id, {
+              type: 'workout',
+              title: '🎉 Compra confirmada!',
+              message: delivery.delivered
+                ? `"${planRow?.title || 'Seu plano'}" já está na sua biblioteca. Bom treino!`
+                : `Pagamento confirmado! "${planRow?.title || 'Seu plano'}" será liberado em instantes.`,
+              link: '/plano',
+            }).catch(() => {})
+
+            console.log(`[Webhook Marketplace] Purchase ${purchaseId} confirmed (delivered=${delivery.delivered})`)
+          }
+        } else if (['REFUNDED', 'DELETED'].includes(event)) {
+          await pgQuery(c.env, `
+            UPDATE plan_purchases SET status = 'refunded'
+            WHERE id = $1 AND status <> 'refunded'
+          `, [purchaseId])
+          console.log(`[Webhook Marketplace] Purchase ${purchaseId} refunded/deleted`)
+        }
+
         return c.json({ received: true })
       }
 
@@ -2585,6 +2686,7 @@ payments.delete('/plans/:id', requireType('personal'), async (c) => {
 payments.post('/plans/:id/buy', async (c) => {
   const buyerId = c.get('userId')
   const planId = c.req.param('id')
+  const body = await c.req.json().catch(() => ({} as Record<string, unknown>))
 
   const { rows } = await pgQuery<WorkoutPlanRow>(
     c.env,
@@ -2595,40 +2697,155 @@ payments.post('/plans/:id/buy', async (c) => {
 
   const plan = rows[0]
 
-  // Verificar se já comprou
-  const { rows: existingPurchase } = await pgQuery<{ id: string }>(
+  // Verificar compra existente: concluída bloqueia; pendente retoma o mesmo PIX
+  const { rows: existingRows } = await pgQuery<{ id: string; status: string; asaas_payment_id: string | null }>(
     c.env,
-    'SELECT id FROM plan_purchases WHERE plan_id = $1 AND buyer_id = $2 LIMIT 1',
+    'SELECT id, status, asaas_payment_id FROM plan_purchases WHERE plan_id = $1 AND buyer_id = $2 LIMIT 1',
     [planId, buyerId]
   )
-  if (existingPurchase.length > 0) {
+  const existing = existingRows[0]
+  if (existing && existing.status === 'completed') {
     throw new BadRequestError('Você já comprou este plano')
   }
 
-  const creatorShare = Math.round(plan.price_brl * FEES.marketplace_creator_share) / 100
-  const platformShare = plan.price_brl - creatorShare
+  if (existing && existing.status === 'pending' && existing.asaas_payment_id) {
+    try {
+      const qr = await getPixQrCode(c.env, existing.asaas_payment_id)
+      return success({
+        purchase_id: existing.id,
+        plan_id: planId,
+        amount: plan.price_brl,
+        pix: {
+          qr_code_base64: qr.encodedImage,
+          copy_paste: qr.payload,
+          expiration: qr.expirationDate,
+        },
+        asaas_payment_id: existing.asaas_payment_id,
+        resumed: true,
+      })
+    } catch {
+      // Cobrança antiga expirada/cancelada — gera nova abaixo reaproveitando a linha
+    }
+  }
 
-  const purchaseId = generateId()
+  // CPF: obrigatório no Asaas — aceita do body ou do cadastro
+  const buyer = await pgQueryOne<{ email: string; full_name: string; cpf: string | null }>(
+    c.env,
+    'SELECT email, full_name, cpf FROM users WHERE id = $1 LIMIT 1',
+    [buyerId]
+  )
+  if (!buyer) throw new BadRequestError('Usuário não encontrado')
+
+  const cleanCpf = String(body.cpf || buyer.cpf || '').replace(/\D/g, '')
+  if (cleanCpf.length < 11) {
+    throw new BadRequestError('CPF obrigatório para pagamento. Informe seu CPF.')
+  }
+  await pgQuery(c.env, 'UPDATE users SET cpf = $1 WHERE id = $2 AND (cpf IS NULL OR cpf = $1)', [cleanCpf, buyerId])
+
+  const finalPrice = Math.max(Number(plan.price_brl), 5.0) // mínimo Asaas R$5,00
+  const creatorShare = Math.round(finalPrice * FEES.marketplace_creator_share) / 100
+  const platformShare = Math.round((finalPrice - creatorShare) * 100) / 100
+  const purchaseId = existing?.id || generateId()
   const now = new Date().toISOString()
 
-  await pgQuery(c.env, `
-    INSERT INTO plan_purchases (id, plan_id, buyer_id, amount_paid, creator_share, platform_share, purchased_at)
-    VALUES ($1, $2, $3, $4, $5, $6, $7)
-  `, [purchaseId, planId, buyerId, plan.price_brl, creatorShare, platformShare, now])
+  // Asaas primeiro, DB depois — sem registro órfão (padrão subscription checkout)
+  let customer: { id: string }
+  try {
+    customer = await getOrCreateCustomer(c.env, {
+      name: buyer.full_name,
+      email: buyer.email,
+      cpfCnpj: cleanCpf,
+      externalReference: buyerId,
+    })
+  } catch (err) {
+    const msg = err instanceof AsaasApiError ? err.message : 'Erro ao criar cliente no gateway de pagamento'
+    console.error('[Marketplace] getOrCreateCustomer failed:', err)
+    throw new BadRequestError(msg)
+  }
 
-  // Incrementar vendas
-  await pgQuery(c.env, `
-    UPDATE workout_plans
-    SET total_sales = total_sales + 1, total_revenue = total_revenue + $1, updated_at = $2
-    WHERE id = $3
-  `, [plan.price_brl, now, planId])
+  let asaasPayment: { id: string }
+  try {
+    const dueDate = new Date()
+    dueDate.setDate(dueDate.getDate() + 1)
+    asaasPayment = await createAsaasPayment(c.env, {
+      customer: customer.id,
+      billingType: 'PIX',
+      value: finalPrice,
+      dueDate: dueDate.toISOString().split('T')[0],
+      description: `VFIT Marketplace — ${plan.title}`.slice(0, 200),
+      externalReference: `plan_purchase_${purchaseId}`,
+    })
+  } catch (err) {
+    const msg = err instanceof AsaasApiError ? err.message : 'Erro ao gerar cobrança PIX'
+    console.error('[Marketplace] createAsaasPayment failed:', err)
+    throw new BadRequestError(msg)
+  }
 
+  let qrCode: { encodedImage: string; payload: string; expirationDate: string }
+  try {
+    qrCode = await getPixQrCode(c.env, asaasPayment.id)
+  } catch (err) {
+    const msg = err instanceof AsaasApiError ? err.message : 'Erro ao gerar QR Code PIX'
+    console.error('[Marketplace] getPixQrCode failed:', err)
+    throw new BadRequestError(msg)
+  }
+
+  try {
+    if (existing) {
+      await pgQuery(c.env, `
+        UPDATE plan_purchases
+        SET asaas_payment_id = $1, amount_paid = $2, creator_share = $3, platform_share = $4, status = 'pending', purchased_at = $5
+        WHERE id = $6
+      `, [asaasPayment.id, finalPrice, creatorShare, platformShare, now, purchaseId])
+    } else {
+      await pgQuery(c.env, `
+        INSERT INTO plan_purchases (id, plan_id, buyer_id, amount_paid, creator_share, platform_share, status, asaas_payment_id, delivered, purchased_at)
+        VALUES ($1, $2, $3, $4, $5, $6, 'pending', $7, false, $8)
+      `, [purchaseId, planId, buyerId, finalPrice, creatorShare, platformShare, asaasPayment.id, now])
+    }
+  } catch (err) {
+    console.error('[Marketplace] buy DB persist failed:', err)
+    try { await cancelAsaasPayment(c.env, asaasPayment.id) } catch { /* best-effort */ }
+    throw new BadRequestError('Erro ao registrar compra. Tente novamente.')
+  }
+
+  // Vendas/entrega só na confirmação do pagamento (webhook plan_purchase_)
   return created({
     purchase_id: purchaseId,
     plan_id: planId,
-    amount_paid: plan.price_brl,
-    creator_share: creatorShare,
-    platform_share: platformShare,
+    amount: finalPrice,
+    pix: {
+      qr_code_base64: qrCode.encodedImage,
+      copy_paste: qrCode.payload,
+      expiration: qrCode.expirationDate,
+    },
+    asaas_payment_id: asaasPayment.id,
+  })
+})
+
+// GET /plans/purchases/:id/status — polling de confirmação da compra
+payments.get('/plans/purchases/:id/status', async (c) => {
+  const buyerId = c.get('userId')
+  const purchaseId = c.req.param('id')
+
+  const purchase = await pgQueryOne<{
+    id: string
+    status: string
+    delivered: boolean
+    cloned_workout_ids: unknown
+  }>(
+    c.env,
+    'SELECT id, status, delivered, cloned_workout_ids FROM plan_purchases WHERE id = $1 AND buyer_id = $2 LIMIT 1',
+    [purchaseId, buyerId]
+  )
+  if (!purchase) throw new NotFoundError('Compra')
+
+  const clonedIds = Array.isArray(purchase.cloned_workout_ids) ? purchase.cloned_workout_ids : []
+  return success({
+    purchase_id: purchase.id,
+    status: purchase.status,
+    delivered: purchase.delivered,
+    cloned_plan_id: typeof clonedIds[0] === 'string' ? clonedIds[0] : null,
   })
 })
 
