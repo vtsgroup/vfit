@@ -1,73 +1,42 @@
 'use client'
 
+/**
+ * onboarding-choice — cards de escolha "VFIT BROADCAST".
+ * Base seca neutra (hairline branco), SELECIONADO = tinta de placar verde→lima
+ * (anel lima + fill + check), aparato/meta em mono. Disciplina de cor: verde/lima
+ * só no estado selecionado. API preservada (tone aceito por compat, unificado ao lima).
+ */
+
 import type { ButtonHTMLAttributes, CSSProperties, ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 
 type ChoiceTone = 'emerald' | 'sky' | 'violet' | 'amber' | 'rose' | 'slate'
 
-/* Base RGB + classe de texto por tom. Todo o tratamento (borda-gradiente, glow,
-   chip de ícone, check) é derivado do RGB — visual ultra-moderno e coerente. */
-const TONE: Record<ChoiceTone, { rgb: string; text: string }> = {
-  emerald: { rgb: '52,211,153', text: 'text-emerald-200' },
-  sky: { rgb: '56,189,248', text: 'text-sky-200' },
-  violet: { rgb: '167,139,250', text: 'text-violet-200' },
-  amber: { rgb: '251,191,36', text: 'text-amber-200' },
-  rose: { rgb: '251,113,133', text: 'text-rose-200' },
-  slate: { rgb: '203,213,225', text: 'text-slate-200' },
+/* Broadcast: estado base seco vs selecionado (verde→lima). Não usa mais variação
+   por tom — a marca fala em verde/lima concentrado no ponto de escolha. */
+const BASE_CARD: CSSProperties = {
+  background: 'rgba(255,255,255,0.025)',
+  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)',
 }
-
-/* Estilos derivados do tom (selecionado vs base) — VIBRANT ENERGY:
-   selecionado mais saturado, glow mais forte, chip de ícone com pop. */
-function toneStyle(rgb: string) {
-  return {
-    selectedCard: {
-      background: `linear-gradient(135deg, rgba(${rgb},0.24) 0%, rgba(${rgb},0.09) 50%, rgba(5,10,18,0.5) 100%)`,
-      boxShadow: `0 28px 64px -28px rgba(${rgb},0.72), inset 0 1px 0 rgba(255,255,255,0.2), 0 0 0 1px rgba(${rgb},0.6)`,
-    } as CSSProperties,
-    baseCard: {
-      background: 'linear-gradient(160deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.025) 100%)',
-      boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.09), 0 16px 34px -26px rgba(0,0,0,0.72)',
-    } as CSSProperties,
-    border: `linear-gradient(135deg, rgba(${rgb},0.9) 0%, rgba(${rgb},0.4) 42%, transparent 76%)`,
-    iconSel: {
-      background: `linear-gradient(180deg, rgba(${rgb},0.34) 0%, rgba(${rgb},0.1) 100%)`,
-      boxShadow: `inset 0 1px 0 rgba(255,255,255,0.3), 0 8px 22px -6px rgba(${rgb},0.7)`,
-      borderColor: `rgba(${rgb},0.42)`,
-    } as CSSProperties,
-    iconBase: {
-      background: 'linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.025))',
-      boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1)',
-    } as CSSProperties,
-    iconGlow: `drop-shadow(0 0 11px rgba(${rgb},0.9))`,
-    check: {
-      background: `linear-gradient(135deg, rgba(${rgb},1), rgba(${rgb},0.74))`,
-      boxShadow: `0 5px 14px -2px rgba(${rgb},0.7), inset 0 1px 0 rgba(255,255,255,0.5)`,
-    } as CSSProperties,
-    mesh: `radial-gradient(circle, rgba(${rgb},0.42) 0%, transparent 70%)`,
-  }
+const SELECTED_CARD: CSSProperties = {
+  background: 'linear-gradient(135deg, rgba(132,204,22,0.16) 0%, rgba(34,197,94,0.07) 55%, rgba(5,10,18,0.35) 100%)',
+  boxShadow: '0 0 0 1px rgba(163,230,53,0.55), 0 20px 44px -22px rgba(34,197,94,0.55), inset 0 1px 0 rgba(255,255,255,0.12)',
 }
-
-/* Borda-gradiente (técnica mask) — some/aparece por opacidade */
-function GradientBorder({ image, radius, show }: { image: string; radius: string; show: 'always' | 'hover' | 'on'; }) {
-  return (
-    <span
-      aria-hidden
-      className={cn(
-        'pointer-events-none absolute inset-0 transition-opacity duration-300',
-        show === 'on' ? 'opacity-100' : show === 'hover' ? 'opacity-0 group-hover:opacity-100' : 'opacity-100',
-        radius,
-      )}
-      style={{
-        padding: '1px',
-        background: image,
-        WebkitMask: 'linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)',
-        WebkitMaskComposite: 'xor',
-        maskComposite: 'exclude',
-      }}
-    />
-  )
+const ICON_SEL: CSSProperties = {
+  background: 'linear-gradient(180deg, rgba(163,230,53,0.28) 0%, rgba(34,197,94,0.08) 100%)',
+  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.28), 0 8px 22px -8px rgba(34,197,94,0.7)',
+  borderColor: 'rgba(163,230,53,0.45)',
 }
+const ICON_BASE: CSSProperties = {
+  background: 'linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02))',
+  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08)',
+}
+const CHECK_SEL: CSSProperties = {
+  background: 'linear-gradient(135deg,#a3e635,#16a34a)',
+  boxShadow: '0 5px 14px -2px rgba(34,197,94,0.7), inset 0 1px 0 rgba(255,255,255,0.5)',
+}
+const ICON_GLOW = 'drop-shadow(0 0 9px rgba(163,230,53,0.85))'
 
 interface ChoiceBaseProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   selected: boolean
@@ -80,83 +49,73 @@ interface ChoiceBaseProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 /* ─── Card vertical (grid de opções) ─── */
-export function OnboardingChoiceCard({ selected, label, description, icon, mark, meta, tone = 'emerald', className, ...props }: ChoiceBaseProps) {
-  const t = TONE[tone]
-  const s = toneStyle(t.rgb)
+export function OnboardingChoiceCard({ selected, label, description, icon, mark, meta, tone: _tone, className, ...props }: ChoiceBaseProps) {
   return (
     <button
       type="button"
       aria-pressed={selected}
       className={cn(
-        'group relative min-h-34 cursor-pointer overflow-hidden rounded-2xl border border-white/8 p-4 text-left transition-all duration-300 ease-out hover:-translate-y-0.5 active:scale-[0.985]',
+        'group relative min-h-34 cursor-pointer overflow-hidden rounded-xl border p-4 text-left transition-all duration-200 ease-out hover:-translate-y-0.5 active:scale-[0.985]',
+        selected ? 'border-lime-300/40' : 'border-white/10 hover:border-white/20',
         className,
       )}
-      style={selected ? s.selectedCard : s.baseCard}
+      style={selected ? SELECTED_CARD : BASE_CARD}
       {...props}
     >
-      <GradientBorder image={s.border} radius="rounded-2xl" show={selected ? 'on' : 'hover'} />
-      {selected && <span aria-hidden className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full blur-md" style={{ background: s.mesh }} />}
-      {selected && <span aria-hidden className="vfit-energy-beam" />}
-
       <span className="relative z-10 flex items-start justify-between gap-3">
         <span
-          className={cn('flex h-13 w-13 shrink-0 items-center justify-center rounded-2xl border transition-all duration-300 group-hover:scale-105', selected ? `${t.text} border-transparent` : 'border-white/10 text-white/55 group-hover:text-white/80')}
-          style={selected ? s.iconSel : s.iconBase}
+          className={cn('flex h-13 w-13 shrink-0 items-center justify-center rounded-xl border transition-all duration-200 group-hover:scale-105', selected ? 'border-transparent text-lime-200' : 'border-white/10 text-white/55 group-hover:text-white/80')}
+          style={selected ? ICON_SEL : ICON_BASE}
         >
-          {icon ? <DSIcon name={icon} size={24} style={selected ? { filter: s.iconGlow } : undefined} /> : <span className="text-2xl font-black leading-none">{mark}</span>}
+          {icon ? <DSIcon name={icon} size={24} style={selected ? { filter: ICON_GLOW } : undefined} /> : <span className="bc-mono text-2xl font-black leading-none">{mark}</span>}
         </span>
         <span
-          className={cn('flex h-7 w-7 shrink-0 items-center justify-center rounded-full border transition-all duration-300', selected ? 'border-transparent text-bg-base' : 'border-white/12 bg-white/5 text-white/22')}
-          style={selected ? s.check : undefined}
+          className={cn('flex h-7 w-7 shrink-0 items-center justify-center rounded-full border transition-all duration-200', selected ? 'border-transparent text-[#06210f]' : 'border-white/12 bg-white/5 text-white/22')}
+          style={selected ? CHECK_SEL : undefined}
         >
           <DSIcon name="check" size={14} className={selected ? '' : 'opacity-0 transition-opacity group-hover:opacity-40'} />
         </span>
       </span>
 
-      <span className="relative z-10 mt-5 block text-base font-black leading-tight text-white">{label}</span>
+      <span className="font-syne relative z-10 mt-5 block text-base font-black leading-tight text-white">{label}</span>
       {description && <span className="relative z-10 mt-1.5 block text-xs font-medium leading-5 text-slate-300/82">{description}</span>}
-      {meta && <span className="relative z-10 mt-3 inline-flex min-h-7 items-center rounded-full border border-white/10 bg-bg-base/34 px-2.5 text-[10px] font-black uppercase tracking-wide text-slate-300/72">{meta}</span>}
+      {meta && <span className="bc-mono relative z-10 mt-3 inline-flex min-h-6 items-center rounded-sm border border-white/10 bg-white/[0.03] px-2 text-[10px] font-bold uppercase tracking-[0.14em] text-slate-300/72">{meta}</span>}
     </button>
   )
 }
 
 /* ─── Row horizontal (lista de opções — gênero, nível, etc.) ─── */
-export function OnboardingChoiceRow({ selected, label, description, icon, mark, meta, tone = 'emerald', className, ...props }: ChoiceBaseProps) {
-  const t = TONE[tone]
-  const s = toneStyle(t.rgb)
+export function OnboardingChoiceRow({ selected, label, description, icon, mark, meta, tone: _tone, className, ...props }: ChoiceBaseProps) {
   return (
     <button
       type="button"
       aria-pressed={selected}
       className={cn(
-        'vfit-choice-row group relative flex min-h-16 w-full cursor-pointer items-center gap-3.5 overflow-hidden rounded-card-lg border border-white/8 px-4 py-3 text-left transition-all duration-300 ease-out hover:-translate-y-0.5 active:scale-[0.99] sm:min-h-20 sm:rounded-[22px] sm:px-5 sm:py-3.5',
+        'group relative flex min-h-16 w-full cursor-pointer items-center gap-3.5 overflow-hidden rounded-xl border px-4 py-3 text-left transition-all duration-200 ease-out hover:-translate-y-0.5 active:scale-[0.99] sm:min-h-20 sm:px-5 sm:py-3.5',
+        selected ? 'border-lime-300/40' : 'border-white/10 hover:border-white/20',
         className,
       )}
-      style={selected ? s.selectedCard : s.baseCard}
+      style={selected ? SELECTED_CARD : BASE_CARD}
       {...props}
     >
-      <GradientBorder image={s.border} radius="rounded-[22px]" show={selected ? 'on' : 'hover'} />
-      {selected && <span aria-hidden className="pointer-events-none absolute -right-6 -top-8 h-28 w-28 rounded-full blur-md" style={{ background: s.mesh }} />}
-      {selected && <span aria-hidden className="vfit-energy-beam" />}
-
       <span
-        className={cn('vfit-choice-row-icon relative z-10 flex h-11 w-11 shrink-0 items-center justify-center rounded-[15px] border transition-all duration-300 group-hover:scale-105 sm:h-12 sm:w-12 sm:rounded-2xl', selected ? `${t.text} border-transparent` : 'border-white/10 text-white/55 group-hover:text-white/80')}
-        style={selected ? s.iconSel : s.iconBase}
+        className={cn('relative z-10 flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border transition-all duration-200 group-hover:scale-105 sm:h-12 sm:w-12', selected ? 'border-transparent text-lime-200' : 'border-white/10 text-white/55 group-hover:text-white/80')}
+        style={selected ? ICON_SEL : ICON_BASE}
       >
-        {icon ? <DSIcon name={icon} size={22} style={selected ? { filter: s.iconGlow } : undefined} /> : <span className="text-base font-black leading-none sm:text-xl">{mark}</span>}
+        {icon ? <DSIcon name={icon} size={22} style={selected ? { filter: ICON_GLOW } : undefined} /> : <span className="bc-mono text-base font-black leading-none sm:text-xl">{mark}</span>}
       </span>
 
       <span className="relative z-10 min-w-0 flex-1">
-        <span className="flex items-center gap-2">
-          <span className="block text-[15px] font-black leading-tight text-white sm:text-base">{label}</span>
-          {meta && <span className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-slate-300/78">{meta}</span>}
+        <span className="flex flex-wrap items-center gap-2">
+          <span className="font-syne block text-[15px] font-black leading-tight text-white sm:text-base">{label}</span>
+          {meta && <span className="bc-mono rounded-sm border border-white/10 bg-white/5 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-slate-300/78">{meta}</span>}
         </span>
-        {description && <span className="vfit-choice-row-description mt-0.5 block text-[11px] font-medium leading-4 text-slate-300/72 sm:mt-1 sm:text-xs sm:leading-5">{description}</span>}
+        {description && <span className="mt-0.5 block text-[11px] font-medium leading-4 text-slate-300/72 sm:mt-1 sm:text-xs sm:leading-5">{description}</span>}
       </span>
 
       <span
-        className={cn('relative z-10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border transition-all duration-300', selected ? 'border-transparent text-bg-base' : 'border-white/12 bg-white/5 text-white/22')}
-        style={selected ? s.check : undefined}
+        className={cn('relative z-10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border transition-all duration-200', selected ? 'border-transparent text-[#06210f]' : 'border-white/12 bg-white/5 text-white/22')}
+        style={selected ? CHECK_SEL : undefined}
       >
         <DSIcon name="check" size={14} className={selected ? '' : 'opacity-0 transition-opacity group-hover:opacity-40'} />
       </span>
@@ -172,25 +131,22 @@ interface ChipProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   tone?: ChoiceTone
 }
 
-export function OnboardingChoiceChip({ selected, children, icon, tone = 'emerald', className, ...props }: ChipProps) {
-  const t = TONE[tone]
-  const s = toneStyle(t.rgb)
+export function OnboardingChoiceChip({ selected, children, icon, tone: _tone, className, ...props }: ChipProps) {
   return (
     <button
       type="button"
       aria-pressed={selected}
       className={cn(
-        'group relative inline-flex min-h-11 cursor-pointer items-center gap-2 overflow-hidden rounded-full border border-white/8 px-4 text-sm font-bold transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.97]',
-        selected ? 'text-white' : 'text-slate-300',
+        'group relative inline-flex min-h-11 cursor-pointer items-center gap-2 overflow-hidden rounded-full border px-4 text-sm font-bold transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.97]',
+        selected ? 'border-lime-300/40 text-[#06210f]' : 'border-white/10 text-slate-300 hover:border-white/20',
         className,
       )}
-      style={selected ? s.selectedCard : s.baseCard}
+      style={selected ? { background: 'linear-gradient(135deg,#a3e635,#34e565)', boxShadow: '0 8px 22px -8px rgba(34,197,94,0.65), inset 0 1px 0 rgba(255,255,255,0.4)' } : BASE_CARD}
       {...props}
     >
-      <GradientBorder image={s.border} radius="rounded-full" show={selected ? 'on' : 'hover'} />
-      {icon && <DSIcon name={icon} size={16} className={cn('relative', selected ? t.text : 'text-white/54')} style={selected ? { filter: s.iconGlow } : undefined} />}
+      {icon && <DSIcon name={icon} size={16} className="relative" />}
       <span className="relative">{children}</span>
-      {selected && <DSIcon name="check" size={14} className={cn('relative', t.text)} />}
+      {selected && <DSIcon name="check" size={14} className="relative" />}
     </button>
   )
 }
@@ -198,13 +154,10 @@ export function OnboardingChoiceChip({ selected, children, icon, tone = 'emerald
 /* ─── Insight (dica contextual) ─── */
 export function OnboardingInsight({ icon = 'sparkles', children }: { icon?: DSIconName; children: ReactNode }) {
   return (
-    <div
-      className="relative flex items-start gap-3 overflow-hidden rounded-[18px] border border-white/8 px-4 py-3.5"
-      style={{ background: 'linear-gradient(160deg, rgba(52,211,153,0.08) 0%, rgba(255,255,255,0.02) 100%)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08)' }}
-    >
+    <div className="relative flex items-start gap-3 overflow-hidden rounded-lg border border-white/8 border-l-2 border-l-lime-400/60 bg-white/[0.02] px-4 py-3.5">
       <span
-        className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-emerald-300/24 text-emerald-200"
-        style={{ background: 'linear-gradient(180deg, rgba(52,211,153,0.2), rgba(34,197,94,0.05))', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.16)' }}
+        className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-lime-300/24 text-lime-200"
+        style={{ background: 'linear-gradient(180deg, rgba(163,230,53,0.18), rgba(34,197,94,0.05))' }}
       >
         <DSIcon name={icon} size={16} />
       </span>

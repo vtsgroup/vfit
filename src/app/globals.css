@@ -3192,6 +3192,11 @@ html.light {
   .font-dm-sans {
     font-family: var(--font-ds-body);
   }
+  /* BROADCAST — aparato de transmissão/revista (mono). Numerais tabulares p/ placares/cronômetros. */
+  .bc-mono {
+    font-family: var(--font-space-grotesk), 'Space Grotesk', ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+  }
 }
 
 /* Display text styles (Syne) */

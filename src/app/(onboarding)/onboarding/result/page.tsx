@@ -3,11 +3,10 @@
 /**
  * src/app/(onboarding)/onboarding/result/page.tsx
  *
- * Result Page — Plano gerado exibido ao usuário
- * Ultra-modern redesign: Glass card + animated counters + staggered features
- *
- * Mostra: resumo com stats, preview do Dia 1, CTA para paywall/signup
- * Dados vêm do sessionStorage (gravados pela loading page)
+ * Result Page — "VFIT BROADCAST · PLANO Nº 01".
+ * Reveal do plano gerado como capa/placar: título Syne, stats em box-score, treinos
+ * em abas de placar, exercícios em linhas secas, CTA verde→lima. Navy seco, aparato mono.
+ * Dados via sessionStorage (gravados pela loading page).
  */
 
 import { useEffect, useState, useMemo } from 'react'
@@ -17,11 +16,7 @@ import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
 import { useOnboardingStore } from '@/stores/onboarding-store'
 import { useAuthStore } from '@/stores/auth-store'
-import {
-  GlassCard,
-  AnimatedCounter,
-  StaggerContainer,
-} from '@/components/onboarding/onboarding-animations'
+import { AnimatedCounter } from '@/components/onboarding/onboarding-animations'
 
 // ─── Types (inline — evita import de workers no frontend) ───
 interface PlanExercise {
@@ -33,14 +28,12 @@ interface PlanExercise {
   weight_suggestion_kg?: number
   notes?: string
 }
-
 interface PlanDay {
   day_number: number
   name: string
   focus: string
   exercises: PlanExercise[]
 }
-
 interface PlanResult {
   plan: {
     plan_name: string
@@ -58,7 +51,6 @@ interface PlanResult {
   }
 }
 
-// ─── Label maps ───
 const GOAL_LABELS: Record<string, string> = {
   lose_weight: 'Perder Peso',
   gain_muscle: 'Ganhar Massa',
@@ -89,43 +81,23 @@ export default function OnboardingResultPage() {
   const [mounted, setMounted] = useState(false)
   const [expandedDay, setExpandedDay] = useState<number>(1)
 
-  // ─── Load from sessionStorage ───
   useEffect(() => {
     setMounted(true)
     try {
       const stored = sessionStorage.getItem('vfit_plan')
-      if (stored) {
-        setResult(JSON.parse(stored))
-      }
+      if (stored) setResult(JSON.parse(stored))
     } catch {
       // ignore
     }
   }, [])
 
-  // ─── Stats display ───
   const statsCards = useMemo(() => {
     if (!result) return []
     return [
-      {
-        icon: 'calendar' as DSIconName,
-        value: `${result.stats.total_days}x`,
-        label: 'por semana',
-      },
-      {
-        icon: 'dumbbell' as DSIconName,
-        value: String(result.stats.total_exercises),
-        label: 'exercícios',
-      },
-      {
-        icon: 'clock' as DSIconName,
-        value: `${result.stats.session_duration_minutes}min`,
-        label: 'por sessão',
-      },
-      {
-        icon: 'flame' as DSIconName,
-        value: `${result.stats.estimated_weekly_calories}`,
-        label: 'kcal/semana',
-      },
+      { icon: 'calendar' as DSIconName, value: `${result.stats.total_days}×`, label: 'por semana' },
+      { icon: 'dumbbell' as DSIconName, value: String(result.stats.total_exercises), label: 'exercícios' },
+      { icon: 'clock' as DSIconName, value: `${result.stats.session_duration_minutes}min`, label: 'por sessão' },
+      { icon: 'flame' as DSIconName, value: String(result.stats.estimated_weekly_calories), label: 'kcal/semana' },
     ]
   }, [result])
 
@@ -133,326 +105,227 @@ export default function OnboardingResultPage() {
 
   if (!result) {
     return (
-      <div className="vfit-energy-bg relative flex min-h-dvh flex-col items-center justify-center overflow-hidden px-6 text-center text-white">
-        <div aria-hidden className="vfit-energy-orb vfit-energy-orb-a absolute -left-20 top-20 h-72 w-72 bg-emerald-400/18 blur-[120px]" />
-        <div className="vfit-flow-grid pointer-events-none absolute inset-0" />
+      <div className="relative flex min-h-dvh flex-col items-center justify-center overflow-x-hidden bg-[#04080f] px-6 text-center text-white">
+        <div aria-hidden className="vfit-flow-grid pointer-events-none absolute inset-0 opacity-[0.22]" />
         <div className="relative z-10">
-          <motion.div
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ type: 'spring', stiffness: 100, damping: 12 }}
-            className="relative mb-6 flex h-20 w-20 items-center justify-center rounded-3xl border border-amber-300/20 bg-amber-300/10 mx-auto"
-          >
-            <DSIcon name="helpCircle" className="h-10 w-10 text-amber-400" />
-          </motion.div>
-          <h2 className="relative mb-2 text-xl font-bold text-white">
-            Nenhum plano encontrado
-          </h2>
-          <p className="relative mb-8 text-sm text-slate-400">
-            Parece que a geração expirou. Vamos recomeçar?
-          </p>
-          <Button onClick={() => router.push('/onboarding')}>
-            Recomeçar Quiz
-          </Button>
+          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-lg border border-amber-300/20 bg-amber-300/10">
+            <DSIcon name="helpCircle" className="h-8 w-8 text-amber-400" />
+          </div>
+          <h2 className="font-syne mb-2 text-2xl font-black text-white">Nenhum plano encontrado</h2>
+          <p className="bc-mono mb-8 text-[11px] uppercase tracking-[0.16em] text-slate-400">A geração expirou · vamos recomeçar</p>
+          <Button onClick={() => router.push('/onboarding')}>Recomeçar Quiz</Button>
         </div>
       </div>
     )
   }
 
   const { plan, stats } = result
+  const isAuth = useAuthStore.getState().isAuthenticated
 
   return (
-    <div className="vfit-energy-bg relative min-h-dvh overflow-hidden pb-40 text-white">
-      {/* ─── Orbs vívidos + grid ─── */}
-      <div aria-hidden className="vfit-energy-orb vfit-energy-orb-a absolute -left-24 top-10 h-80 w-80 bg-emerald-400/18 blur-[130px]" />
-      <div aria-hidden className="vfit-energy-orb vfit-energy-orb-b absolute -right-24 top-1/2 h-72 w-72 bg-lime-400/14 blur-[130px]" />
-      <div className="vfit-flow-grid pointer-events-none absolute inset-0" />
+    <div className="relative min-h-dvh overflow-x-hidden bg-[#04080f] pb-40 text-white">
+      <div aria-hidden className="vfit-flow-grid pointer-events-none absolute inset-0 opacity-[0.22]" />
+      <div aria-hidden className="pointer-events-none absolute inset-0" style={{ background: 'radial-gradient(110% 55% at 78% -6%, rgba(34,197,94,0.12), transparent 55%)' }} />
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-lime-300/40 to-transparent" />
 
-      {/* ─── Top light gradient ─── */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-linear-to-b from-white/5 to-transparent" />
-
-      {/* ─── Header ─── */}
-      <div className="relative z-10 px-6 pt-[calc(env(safe-area-inset-top)+48px)] pb-8">
+      {/* ─── Header / capa ─── */}
+      <header className="relative z-10 px-6 pt-[calc(env(safe-area-inset-top)+40px)]">
         <div className="mx-auto max-w-md">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.4 }}
-            className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-[11px] font-bold uppercase text-emerald-200 backdrop-blur-sm"
-          >
-            <DSIcon name="sparkles" size={13} />
-            30 Dias Grátis
-          </motion.div>
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1, duration: 0.5 }}
-            className="mb-3 text-4xl font-black leading-tight text-white"
+            transition={{ duration: 0.4 }}
+            className="bc-mono mb-4 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em] text-lime-300/90"
+          >
+            <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-lime-400" />
+            Plano Nº 01 · Gerado pela IA
+          </motion.p>
+          <motion.h1
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.08, duration: 0.5 }}
+            className="font-syne mb-3 text-[34px] font-black uppercase leading-[0.98] tracking-tight text-white sm:text-[42px]"
           >
             {plan.plan_name}
           </motion.h1>
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
+            transition={{ delay: 0.16, duration: 0.5 }}
             className="text-sm leading-6 text-slate-300"
           >
             {plan.description}
           </motion.p>
-
-          {/* ─── Goal badge ─── */}
           {data.goal && (
-            <motion.div
+            <motion.span
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.3, duration: 0.4 }}
-              className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 backdrop-blur-sm"
+              transition={{ delay: 0.24 }}
+              className="bc-mono mt-4 inline-flex items-center gap-1.5 rounded-sm border border-lime-400/30 bg-lime-400/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-lime-200"
             >
-              <DSIcon name="target" className="h-3.5 w-3.5 text-brand-primary" />
-              <span className="text-xs font-medium text-brand-primary">
-                {GOAL_LABELS[data.goal] || data.goal}
-              </span>
-            </motion.div>
+              <DSIcon name="target" size={12} />
+              {GOAL_LABELS[data.goal] || data.goal}
+            </motion.span>
           )}
+        </div>
+      </header>
+
+      {/* ─── Stats box-score ─── */}
+      <div className="relative z-10 mx-auto mt-7 max-w-md px-6">
+        <div className="grid grid-cols-4 overflow-hidden rounded-lg border border-lime-400/15">
+          {statsCards.map((stat, idx) => (
+            <div
+              key={stat.label}
+              className={`flex flex-col gap-1.5 px-2 py-4 ${idx % 2 === 1 ? 'bg-emerald-900/15' : ''} ${idx < 3 ? 'border-r border-white/8' : ''}`}
+            >
+              <DSIcon name={stat.icon} size={16} className="text-emerald-300" />
+              <AnimatedCounter value={stat.value} delay={0.4 + idx * 0.1} className="font-syne text-xl font-black leading-none text-white tabular-nums" />
+              <span className="bc-mono text-[9px] font-bold uppercase leading-tight tracking-[0.1em] text-slate-400">{stat.label}</span>
+            </div>
+          ))}
         </div>
       </div>
 
-      <div className="relative z-10 mx-auto max-w-md space-y-6 px-6">
-        {/* ─── Stats grid with animated counters ─── */}
-        <div className="grid grid-cols-4 gap-2">
-          {statsCards.map((stat, idx) => (
-            <motion.div
-              key={stat.label}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 + idx * 0.1, duration: 0.5 }}
-              className="flex flex-col items-center rounded-2xl backdrop-blur-md border border-emerald-500/20 p-3"
-              style={{
-                background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.3) 0%, rgba(15, 23, 42, 0.4) 100%)',
-              }}
+      {/* ─── Treinos ─── */}
+      <div className="relative z-10 mx-auto mt-8 max-w-md px-6">
+        <h2 className="bc-mono mb-3 text-[10px] font-bold uppercase tracking-[0.24em] text-lime-300/70">Seus treinos</h2>
+
+        <div className="mb-4 flex gap-2 overflow-x-auto pb-1">
+          {plan.days.map((day) => (
+            <button
+              key={day.day_number}
+              onClick={() => setExpandedDay(day.day_number)}
+              className={`bc-mono shrink-0 rounded-sm px-3.5 py-2 text-[11px] font-bold uppercase tracking-[0.12em] transition-all ${
+                expandedDay === day.day_number
+                  ? 'text-[#06210f]'
+                  : 'border border-white/12 bg-white/[0.03] text-slate-300 hover:border-white/25'
+              }`}
+              style={expandedDay === day.day_number ? { background: 'linear-gradient(135deg,#a3e635,#34e565)', boxShadow: '0 8px 20px -8px rgba(34,197,94,0.6)' } : undefined}
             >
-              <DSIcon name={stat.icon} className="h-5 w-5 text-brand-primary mb-1" />
-              <AnimatedCounter
-                value={stat.value}
-                delay={0.5 + idx * 0.1}
-                className="text-lg font-bold text-white"
-              />
-              <span className="text-center text-[10px] leading-tight text-slate-400 mt-1">{stat.label}</span>
-            </motion.div>
+              Dia {String(day.day_number).padStart(2, '0')}
+            </button>
           ))}
         </div>
 
-        {/* ─── Days preview ─── */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.6, duration: 0.5 }}
-        >
-          <h3 className="mb-3 text-sm font-bold text-slate-300 uppercase tracking-wide">
-            Seus Treinos
-          </h3>
+        {plan.days
+          .filter((d) => d.day_number === expandedDay)
+          .map((day) => (
+            <motion.div key={day.day_number} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}>
+              <div className="mb-3 flex items-center gap-3 rounded-lg border border-lime-400/15 bg-white/[0.02] p-3">
+                <span className="font-syne flex h-10 w-10 items-center justify-center rounded-md text-lg font-black text-[#06210f]" style={{ background: 'linear-gradient(135deg,#a3e635,#34e565)' }}>
+                  {day.day_number}
+                </span>
+                <div className="min-w-0">
+                  <p className="font-syne truncate text-[15px] font-black uppercase leading-tight text-white">{day.name}</p>
+                  <p className="bc-mono text-[10px] uppercase tracking-[0.14em] text-slate-400">{day.exercises.length} exercícios · {day.focus}</p>
+                </div>
+              </div>
 
-          {/* Day tabs */}
-          <div className="mb-4 flex gap-2 overflow-x-auto pb-1">
-            {plan.days.map((day, idx) => (
-              <motion.button
-                key={day.day_number}
-                onClick={() => setExpandedDay(day.day_number)}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className={`shrink-0 rounded-xl px-4 py-2 text-sm font-medium transition-all ${
-                  expandedDay === day.day_number
-                    ? 'bg-brand-primary text-slate-950 shadow-[0_0_20px_rgba(34,197,94,0.3)] border border-emerald-400'
-                    : 'border border-emerald-500/20 bg-emerald-500/5 text-slate-300 hover:bg-emerald-500/10'
-                }`}
-              >
-                Dia {day.day_number}
-              </motion.button>
-            ))}
-          </div>
-
-          {/* Expanded day */}
-          {plan.days
-            .filter((d) => d.day_number === expandedDay)
-            .map((day) => (
-              <motion.div
-                key={day.day_number}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4 }}
-                className="space-y-3"
-              >
-                <motion.div
-                  className="mb-4 flex items-center gap-3 rounded-2xl backdrop-blur-md border border-emerald-500/20 p-3"
-                  style={{
-                    background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(15, 23, 42, 0.3) 100%)',
-                  }}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.05 }}
-                >
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-primary/20">
-                    <span className="text-sm font-bold text-brand-primary">{day.day_number}</span>
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold text-white">{day.name}</p>
-                    <p className="text-xs text-slate-400">{day.exercises.length} exercícios</p>
-                  </div>
-                </motion.div>
-
-                <StaggerContainer staggerDelay={0.08}>
-                  {day.exercises.map((ex, i) => (
-                    <div
-                      key={`${day.day_number}-${i}`}
-                      className="flex items-center gap-3 rounded-2xl backdrop-blur-md border border-emerald-500/15 p-3"
-                      style={{
-                        background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.2) 0%, rgba(15, 23, 42, 0.3) 100%)',
-                      }}
-                    >
-                      <DSIcon
-                        name={MUSCLE_ICON[ex.muscle_group] || 'dumbbell'}
-                        className="h-5 w-5 shrink-0 text-brand-primary"
-                      />
-                      <div className="min-w-0 flex-1">
-                        <p className="truncate text-sm font-medium text-white">
-                          {ex.name}
-                        </p>
-                        <p className="text-xs text-slate-500">
-                          {ex.sets}x{ex.reps}
-                          {ex.weight_suggestion_kg ? ` · ${ex.weight_suggestion_kg}kg` : ''}
-                          {ex.rest_seconds ? ` · ${ex.rest_seconds}s desc.` : ''}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </StaggerContainer>
-
-                {/* Exercise notes */}
-                {day.exercises.some((ex) => ex.notes) && (
+              <div className="overflow-hidden rounded-lg border border-white/8">
+                {day.exercises.map((ex, i) => (
                   <motion.div
-                    className="mt-3 rounded-2xl backdrop-blur-md border border-amber-500/20 p-3"
-                    style={{
-                      background: 'linear-gradient(135deg, rgba(217, 119, 6, 0.1) 0%, rgba(15, 23, 42, 0.2) 100%)',
-                    }}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.5 }}
+                    key={`${day.day_number}-${i}`}
+                    initial={{ opacity: 0, x: -8 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.05 + i * 0.05, duration: 0.3 }}
+                    className={`flex items-center gap-3 px-3 py-3 ${i > 0 ? 'border-t border-white/8' : ''}`}
                   >
-                    <p className="mb-2 flex items-center gap-1 text-xs font-medium text-amber-400">
-                      <DSIcon name="lightbulb" className="h-3.5 w-3.5" />
-                      Dicas
-                    </p>
-                    {day.exercises
-                      .filter((ex) => ex.notes)
-                      .map((ex, i) => (
-                        <p key={i} className="text-xs text-slate-400">
-                          • <strong>{ex.name}:</strong> {ex.notes}
-                        </p>
-                      ))}
+                    <span className="bc-mono w-6 shrink-0 text-[11px] font-bold tabular-nums text-lime-300/55">{String(i + 1).padStart(2, '0')}</span>
+                    <DSIcon name={MUSCLE_ICON[ex.muscle_group] || 'dumbbell'} size={18} className="shrink-0 text-emerald-300" />
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-[14px] font-bold text-white">{ex.name}</p>
+                      <p className="bc-mono text-[10px] uppercase tracking-[0.1em] text-slate-500">
+                        {ex.sets}×{ex.reps}
+                        {ex.weight_suggestion_kg ? ` · ${ex.weight_suggestion_kg}kg` : ''}
+                        {ex.rest_seconds ? ` · ${ex.rest_seconds}s desc` : ''}
+                      </p>
+                    </div>
                   </motion.div>
-                )}
-              </motion.div>
-            ))}
-        </motion.div>
+                ))}
+              </div>
 
-        {/* ─── Estimated results ─── */}
-        <GlassCard delay={0.7}>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.75 }}
-          >
-            <h4 className="mb-4 flex items-center gap-2 text-sm font-semibold text-white">
-              <DSIcon name="target" className="h-4 w-4 text-brand-primary" />
-              Resultados Estimados em 4 Semanas
-            </h4>
-            <div className="space-y-3">
-              {[
-                {
-                  label: 'Sessões completadas',
-                  value: stats.total_days * 4,
-                },
-                {
-                  label: 'Calorias queimadas',
-                  value: `${(stats.estimated_weekly_calories * 4).toLocaleString('pt-BR')} kcal`,
-                },
-                {
-                  label: 'Tempo investido',
-                  value: `${Math.round((stats.session_duration_minutes * stats.total_days * 4) / 60)}h`,
-                },
-              ].map((item, idx) => (
-                <motion.div
-                  key={idx}
-                  className="flex items-center justify-between"
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.8 + idx * 0.1 }}
-                >
-                  <span className="text-xs text-slate-400">{item.label}</span>
-                  <span className="text-sm font-semibold text-brand-primary">{item.value}</span>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        </GlassCard>
+              {day.exercises.some((ex) => ex.notes) && (
+                <div className="mt-3 rounded-lg border border-amber-400/20 border-l-2 border-l-amber-400/60 bg-amber-400/[0.04] p-3">
+                  <p className="bc-mono mb-1.5 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-amber-300">
+                    <DSIcon name="lightbulb" size={12} />
+                    Dicas
+                  </p>
+                  {day.exercises
+                    .filter((ex) => ex.notes)
+                    .map((ex, i) => (
+                      <p key={i} className="text-[11px] leading-5 text-slate-400">
+                        • <strong className="text-slate-200">{ex.name}:</strong> {ex.notes}
+                      </p>
+                    ))}
+                </div>
+              )}
+            </motion.div>
+          ))}
       </div>
 
-      {/* ─── Bottom CTA — salvar plano + signup (reverse trial, sem paywall) ─── */}
-      <motion.div
-        className="fixed inset-x-0 bottom-0 z-30 border-t border-emerald-500/20 px-6 pb-8 pt-4 backdrop-blur-2xl"
-        style={{
-          background: 'linear-gradient(to top, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.8) 100%)',
-        }}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1, duration: 0.5 }}
+      {/* ─── Resultados estimados — box-score ─── */}
+      <div className="relative z-10 mx-auto mt-6 max-w-md px-6">
+        <div className="rounded-lg border border-lime-400/15 bg-white/[0.02] p-4">
+          <h3 className="bc-mono mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-lime-300/80">
+            <DSIcon name="target" size={13} />
+            Resultados · 4 semanas
+          </h3>
+          <div className="divide-y divide-white/8">
+            {[
+              { label: 'Sessões completadas', value: String(stats.total_days * 4) },
+              { label: 'Calorias queimadas', value: `${(stats.estimated_weekly_calories * 4).toLocaleString('pt-BR')} kcal` },
+              { label: 'Tempo investido', value: `${Math.round((stats.session_duration_minutes * stats.total_days * 4) / 60)}h` },
+            ].map((item) => (
+              <div key={item.label} className="flex items-center justify-between py-2.5">
+                <span className="bc-mono text-[11px] uppercase tracking-[0.12em] text-slate-400">{item.label}</span>
+                <span className="font-syne text-base font-black text-lime-300 tabular-nums">{item.value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ─── CTA fixo — verde→lima ─── */}
+      <div
+        className="fixed inset-x-0 bottom-0 z-30 border-t border-lime-400/25 bg-[#04080f]/92 px-6 pt-4 backdrop-blur-md"
+        style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 16px)' }}
       >
-        <div className="mx-auto max-w-md space-y-3">
-          {useAuthStore.getState().isAuthenticated ? (
-            /* Já logado — plano pronto, entra direto no app */
-            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-              <Button
-                size="lg"
-                className="w-full bg-brand-primary hover:bg-emerald-500"
-                onClick={() => {
-                  markCompleted()
-                  router.push('/treinos')
-                }}
-              >
-                <DSIcon name="sparkles" size={18} />
-                Começar agora
-                <DSIcon name="arrowRight" size={18} />
-              </Button>
-            </motion.div>
-          ) : (
-            <>
-              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                <Button
-                  size="lg"
-                  className="w-full bg-brand-primary hover:bg-emerald-500"
-                  onClick={() => {
-                    markCompleted()
-                    router.push('/register/student?from=onboarding')
-                  }}
-                >
-                  <DSIcon name="sparkles" size={18} />
-                  Criar conta e salvar meu plano
-                  <DSIcon name="arrowRight" size={18} />
-                </Button>
-              </motion.div>
-              <motion.p
-                className="flex items-center justify-center gap-1.5 text-center text-[11px] font-semibold text-slate-400"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1.1, duration: 0.5 }}
-              >
-                <DSIcon name="shieldCheck" size={13} className="text-emerald-300" />
-                30 dias grátis · tudo liberado · sem cartão
-              </motion.p>
-            </>
+        <div className="mx-auto max-w-md">
+          <button
+            onClick={() => {
+              markCompleted()
+              router.push(isAuth ? '/treinos' : '/register/student?from=onboarding')
+            }}
+            aria-label={isAuth ? 'Começar agora' : 'Criar conta e salvar meu plano'}
+            className="bc-res-cta group relative flex h-15 w-full items-center gap-3 overflow-hidden rounded-2xl pl-5 pr-2 text-[#06210f] outline-none transition-transform duration-200 hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-2 focus-visible:ring-lime-200 focus-visible:ring-offset-2 focus-visible:ring-offset-[#04080f]"
+            style={{ background: 'linear-gradient(135deg,#22c55e 0%,#16a34a 100%)' }}
+          >
+            <span aria-hidden className="bc-res-sweep" />
+            <DSIcon name="sparkles" size={19} className="relative z-10 shrink-0" />
+            <span className="font-syne relative z-10 text-[14px] font-black uppercase tracking-tight sm:text-[16px]">
+              {isAuth ? 'Começar agora' : 'Criar conta e salvar plano'}
+            </span>
+            <span className="relative z-10 ml-auto flex h-11 shrink-0 items-center justify-center rounded bg-[#06210f] px-3 text-lime-300">
+              <DSIcon name="arrowRight" size={18} className="transition-transform duration-200 group-hover:translate-x-0.5" />
+            </span>
+          </button>
+          {!isAuth && (
+            <p className="bc-mono mt-3 flex items-center justify-center gap-1.5 text-center text-[10px] font-bold uppercase tracking-[0.16em] text-white/45">
+              <DSIcon name="shieldCheck" size={13} className="text-emerald-300" />
+              30 dias grátis · tudo liberado · sem cartão
+            </p>
           )}
         </div>
-      </motion.div>
+      </div>
+
+      <style>{`
+        .bc-res-cta { box-shadow: 0 18px 44px -12px rgba(34,197,94,0.5), inset 0 1px 0 rgba(255,255,255,0.45); animation: bcResBreathe 3.4s ease-in-out 1.5s infinite; }
+        @keyframes bcResBreathe { 0%,100% { box-shadow: 0 16px 40px -14px rgba(34,197,94,0.45), inset 0 1px 0 rgba(255,255,255,0.45); } 50% { box-shadow: 0 24px 60px -10px rgba(132,204,22,0.7), inset 0 1px 0 rgba(255,255,255,0.5); } }
+        .bc-res-sweep { position: absolute; inset: 0; z-index: 5; pointer-events: none; background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.5) 50%, transparent 70%); transform: translateX(-130%) skewX(-18deg); animation: bcResSweep 3.6s ease-in-out 2s infinite; }
+        .bc-res-cta:hover .bc-res-sweep { animation-duration: 1.1s; }
+        @keyframes bcResSweep { 0% { transform: translateX(-130%) skewX(-18deg); } 60%,100% { transform: translateX(260%) skewX(-18deg); } }
+        @media (prefers-reduced-motion: reduce) { .bc-res-cta, .bc-res-sweep { animation: none !important; } }
+      `}</style>
     </div>
   )
 }

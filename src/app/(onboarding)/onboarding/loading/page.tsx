@@ -3,32 +3,31 @@
 /**
  * src/app/(onboarding)/onboarding/loading/page.tsx
  *
- * Loading Screen — Geração do plano com IA
- * Ultra-modern redesign: Animated logo + mesh gradient + floating orbs
+ * Loading Screen — "VFIT BROADCAST · TRANSMISSÃO AO VIVO".
+ * A IA montando o plano AO VIVO: marca animada (sinal), telemetria das fases acendendo
+ * em cascata (box-score) e progresso em placar. Navy seco, aparato mono.
  *
- * Fases animadas: Analisando perfil → Selecionando exercícios → Montando plano → Otimizando
- * Chama POST /api/v1/plans/generate com dados do onboarding
- * Redireciona para /onboarding/result quando pronto
+ * Chama POST /api/v1/plans/generate com dados do onboarding → /onboarding/result.
  */
 
 import { useEffect, useState, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
+import { motion } from 'framer-motion'
 import { useOnboardingStore } from '@/stores/onboarding-store'
 import { api } from '@/lib/api-client'
 import { useAuthStore } from '@/stores/auth-store'
 import { Button } from '@/components/ui/button'
 import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
-import { AnimatedProgressBar } from '@/components/onboarding/onboarding-animations'
 import { VfitAnimatedMark } from '@/components/ui/vfit-animated-mark'
-import { motion } from 'framer-motion'
+import { cn } from '@/lib/utils'
 
-// ─── Fases do loading ───
+// ─── Fases (telemetria) ───
 const PHASES: { label: string; icon: DSIconName; duration: number }[] = [
-  { label: 'Analisando seu perfil...', icon: 'search', duration: 2000 },
-  { label: 'Selecionando exercícios ideais...', icon: 'dumbbell', duration: 2500 },
-  { label: 'Montando seu plano personalizado...', icon: 'clipboardList', duration: 2000 },
-  { label: 'Otimizando para resultados máximos...', icon: 'zap', duration: 1500 },
-  { label: 'Quase pronto!', icon: 'sparkles', duration: 1000 },
+  { label: 'Analisando seu perfil', icon: 'search', duration: 2000 },
+  { label: 'Selecionando exercícios', icon: 'dumbbell', duration: 2500 },
+  { label: 'Montando seu plano', icon: 'clipboardList', duration: 2000 },
+  { label: 'Otimizando resultados', icon: 'zap', duration: 1500 },
+  { label: 'Finalizando', icon: 'sparkles', duration: 1000 },
 ]
 
 export default function OnboardingLoadingPage() {
@@ -40,36 +39,25 @@ export default function OnboardingLoadingPage() {
   const [isGenerating, setIsGenerating] = useState(false)
   const hasCalled = useRef(false)
 
-  // ─── Animação das fases ───
   useEffect(() => {
     const timers: NodeJS.Timeout[] = []
     let elapsed = 0
-
     PHASES.forEach((phase, index) => {
-      const timer = setTimeout(() => {
-        setCurrentPhase(index)
-      }, elapsed)
+      const timer = setTimeout(() => setCurrentPhase(index), elapsed)
       timers.push(timer)
       elapsed += phase.duration
     })
-
     return () => timers.forEach(clearTimeout)
   }, [])
 
-  // ─── Progresso suave ───
   useEffect(() => {
     const totalDuration = PHASES.reduce((s, p) => s + p.duration, 0)
     const interval = setInterval(() => {
-      setProgress((prev) => {
-        const next = prev + 100 / (totalDuration / 50)
-        return Math.min(next, 95) // Pausar em 95% até API responder
-      })
+      setProgress((prev) => Math.min(prev + 100 / (totalDuration / 50), 95))
     }, 50)
-
     return () => clearInterval(interval)
   }, [])
 
-  // ─── Chamar API ───
   const generatePlan = useCallback(async () => {
     if (isGenerating || hasCalled.current) return
     hasCalled.current = true
@@ -99,12 +87,10 @@ export default function OnboardingLoadingPage() {
         stats: Record<string, number>
       }>('/plans/generate', payload, { auth: false })
 
-      // Save onboarding data to backend if user is authenticated
       const isAuth = useAuthStore.getState().isAuthenticated
       if (isAuth) {
         try {
           await api.post('/onboarding', payload)
-          // Auto-create self-assessment from onboarding data (fire-and-forget)
           api.post('/self-assessments/from-onboarding', {}).catch((err) => {
             console.warn('[Loading] Failed to create assessment from onboarding:', err)
           })
@@ -113,16 +99,9 @@ export default function OnboardingLoadingPage() {
         }
       }
 
-      // Salvar no sessionStorage para a result page
       sessionStorage.setItem('vfit_plan', JSON.stringify(result.data))
-
-      // Completar progresso
       setProgress(100)
-
-      // Redirecionar após animação
-      setTimeout(() => {
-        router.push('/onboarding/result')
-      }, 600)
+      setTimeout(() => router.push('/onboarding/result'), 600)
     } catch (err) {
       console.error('[Loading] Plan generation failed:', err)
       setError('Ops! Algo deu errado. Vamos tentar de novo.')
@@ -136,17 +115,18 @@ export default function OnboardingLoadingPage() {
   }, [generatePlan])
 
   const phase = PHASES[currentPhase] || PHASES[PHASES.length - 1]
+  const pct = Math.round(progress)
 
   if (error) {
     return (
-      <div className="vfit-energy-bg relative flex min-h-dvh flex-col items-center justify-center overflow-hidden px-6 text-center text-white">
-        <div className="vfit-flow-grid pointer-events-none absolute inset-0" />
+      <div className="relative flex min-h-dvh flex-col items-center justify-center overflow-x-hidden bg-[#04080f] px-6 text-center text-white">
+        <div aria-hidden className="vfit-flow-grid pointer-events-none absolute inset-0 opacity-[0.22]" />
         <div className="relative z-10 flex flex-col items-center">
-          <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-3xl border border-amber-300/25 bg-amber-300/10">
-            <DSIcon name="alertTriangle" className="h-10 w-10 text-amber-400" />
+          <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-lg border border-amber-300/25 bg-amber-300/10">
+            <DSIcon name="alertTriangle" className="h-8 w-8 text-amber-400" />
           </div>
-          <h2 className="mb-2 text-xl font-black text-white">{error}</h2>
-          <p className="mb-8 text-sm text-slate-400">Tente novamente em alguns segundos.</p>
+          <h2 className="font-syne mb-2 text-2xl font-black text-white">{error}</h2>
+          <p className="bc-mono mb-8 text-[11px] uppercase tracking-[0.16em] text-slate-400">Tente novamente em alguns segundos</p>
           <Button
             onClick={() => {
               setError(null)
@@ -163,66 +143,101 @@ export default function OnboardingLoadingPage() {
   }
 
   return (
-    <div className="vfit-energy-bg relative flex min-h-dvh flex-col items-center justify-center overflow-hidden px-6 text-white">
-      {/* ─── Orbs vívidos à deriva ─── */}
-      <div aria-hidden className="vfit-energy-orb vfit-energy-orb-a absolute -left-24 top-16 h-72 w-72 bg-emerald-400/20 blur-[120px]" />
-      <div aria-hidden className="vfit-energy-orb vfit-energy-orb-b absolute -right-20 bottom-24 h-80 w-80 bg-lime-400/16 blur-[130px]" />
-      <div className="vfit-flow-grid pointer-events-none absolute inset-0" />
+    <div className="relative flex min-h-dvh flex-col items-center justify-center overflow-x-hidden bg-[#04080f] px-6 text-white">
+      <div aria-hidden className="vfit-flow-grid pointer-events-none absolute inset-0 opacity-[0.22]" />
+      <div aria-hidden className="pointer-events-none absolute inset-0" style={{ background: 'radial-gradient(90% 60% at 50% 12%, rgba(34,197,94,0.12), transparent 60%)' }} />
 
-      {/* ─── Conteúdo ─── */}
-      <div className="relative z-10 flex w-full max-w-sm flex-col items-center text-center">
-        {/* ─── Logo animada da splash — protagonista ─── */}
-        <VfitAnimatedMark size={150} />
+      <div className="relative z-10 flex w-full max-w-md flex-col items-center">
+        {/* sinal AO VIVO */}
+        <span className="bc-mono mb-9 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.28em] text-lime-300/90">
+          <span aria-hidden className="bc-live h-2 w-2 rounded-full bg-lime-400" />
+          Ao vivo · Gerando plano Nº 01
+        </span>
 
-        {/* ─── Fase atual ─── */}
+        {/* marca animada — protagonista */}
+        <VfitAnimatedMark size={132} />
+
+        {/* fase atual */}
         <motion.div
           key={phase.label}
-          initial={{ opacity: 0, y: 12 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45, ease: 'easeOut' }}
-          className="mt-12"
+          transition={{ duration: 0.4, ease: 'easeOut' }}
+          className="mt-10 text-center"
         >
-          <span className="inline-flex items-center gap-2 rounded-full border border-emerald-400/25 bg-emerald-400/10 px-3 py-1 text-[11px] font-black uppercase tracking-wide text-emerald-200 backdrop-blur-sm">
-            <DSIcon name={phase.icon} size={13} />
-            Passo {currentPhase + 1}/{PHASES.length}
+          <span className="bc-mono text-[10px] font-bold uppercase tracking-[0.24em] text-lime-300/70">
+            Passo {String(currentPhase + 1).padStart(2, '0')}/{String(PHASES.length).padStart(2, '0')}
           </span>
-          <h2 className="mt-4 text-[28px] font-black leading-[1.08] text-white sm:text-3xl">
-            {phase.label}
-          </h2>
+          <h1 className="font-syne mt-2 text-[30px] font-black leading-[1.02] text-white sm:text-4xl">{phase.label}</h1>
         </motion.div>
 
-        <p className="mt-3 max-w-xs text-sm leading-6 text-slate-300/85">
-          Cruzando seus dados com intensidade, tempo disponível e objetivo principal.
-        </p>
-
-        {/* ─── Progresso com porcentagem em destaque ─── */}
-        <div className="mt-9 w-full">
-          <div className="mb-2 flex items-end justify-between">
-            <span className="text-[11px] font-bold uppercase tracking-wide text-slate-400">Gerando plano</span>
-            <motion.span
-              key={Math.round(progress)}
-              initial={{ scale: 1.25, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.25 }}
-              className="vfit-energy-text text-3xl font-black leading-none"
-            >
-              {Math.round(progress)}%
-            </motion.span>
-          </div>
-          <AnimatedProgressBar progress={progress} />
+        {/* telemetria — box-score acendendo */}
+        <div className="mt-8 w-full border-y border-lime-400/15">
+          {PHASES.map((p, i) => {
+            const done = i < currentPhase
+            const active = i === currentPhase
+            return (
+              <div
+                key={p.label}
+                className={cn(
+                  'flex items-center gap-3 py-2.5 transition-opacity duration-300',
+                  i > 0 && 'border-t border-white/8',
+                  active ? 'opacity-100' : done ? 'opacity-75' : 'opacity-30',
+                )}
+              >
+                <span className="bc-mono w-6 text-[11px] font-bold tabular-nums text-lime-300/55">{String(i + 1).padStart(2, '0')}</span>
+                <DSIcon name={p.icon} size={15} className={active ? 'text-lime-300' : 'text-emerald-300/70'} />
+                <span className="bc-mono flex-1 text-[11px] font-bold uppercase leading-tight tracking-[0.12em] text-white/85">{p.label}</span>
+                <span aria-hidden className="flex h-5 w-5 items-center justify-center">
+                  {done ? (
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full text-[#06210f]" style={{ background: 'linear-gradient(135deg,#a3e635,#16a34a)' }}>
+                      <DSIcon name="check" size={11} />
+                    </span>
+                  ) : active ? (
+                    <span className="bc-live h-2.5 w-2.5 rounded-full bg-lime-400" />
+                  ) : (
+                    <span className="h-2 w-2 rounded-full bg-white/15" />
+                  )}
+                </span>
+              </div>
+            )
+          })}
         </div>
 
-        {/* ─── Tempo estimado ─── */}
-        <motion.p
-          className="mt-8 inline-flex items-center gap-2 rounded-2xl border border-emerald-400/20 bg-white/[0.04] px-4 py-2.5 text-xs text-slate-300 backdrop-blur-md"
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.3, duration: 0.4 }}
-        >
-          <DSIcon name="clock" className="h-3.5 w-3.5 text-emerald-300" />
-          <span>Tempo estimado: 30-45 segundos</span>
-        </motion.p>
+        {/* progresso — placar */}
+        <div className="mt-8 w-full">
+          <div className="mb-2 flex items-end justify-between">
+            <span className="bc-mono text-[10px] font-bold uppercase tracking-[0.2em] text-white/45">Progresso</span>
+            <motion.span
+              key={pct}
+              initial={{ scale: 1.2, opacity: 0.5 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.2 }}
+              className="font-syne text-4xl font-black leading-none text-lime-300 tabular-nums"
+            >
+              {pct}
+              <span className="text-2xl text-lime-300/70">%</span>
+            </motion.span>
+          </div>
+          <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
+            <div
+              className="h-full rounded-full bg-linear-to-r from-emerald-400 via-lime-300 to-emerald-400 shadow-[0_0_16px_rgba(163,230,53,0.5)] transition-[width] duration-200 ease-out"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+        </div>
+
+        <p className="bc-mono mt-7 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.16em] text-white/40">
+          <DSIcon name="clock" size={13} className="text-emerald-300" />
+          Setup · 30–45 segundos
+        </p>
       </div>
+
+      <style>{`
+        .bc-live { box-shadow: 0 0 0 0 rgba(163,230,53,0.6); animation: bcLivePing 1.8s ease-out infinite; }
+        @keyframes bcLivePing { 0% { box-shadow: 0 0 0 0 rgba(163,230,53,0.55); } 70%,100% { box-shadow: 0 0 0 7px rgba(163,230,53,0); } }
+        @media (prefers-reduced-motion: reduce) { .bc-live { animation: none !important; } }
+      `}</style>
     </div>
   )
 }

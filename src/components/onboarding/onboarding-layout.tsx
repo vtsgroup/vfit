@@ -1,30 +1,30 @@
 /**
  * src/components/onboarding/onboarding-layout.tsx
  *
- * Onboarding Layout Client — Step container
- * Progress bar segmentada (tracinhos), back button, step counter
- * Slide animation between steps
+ * Onboarding Layout Client — Step container "VFIT BROADCAST".
+ * Placar de transmissão: navy seco + grade técnica, header com leitura NN/TT em mono,
+ * progresso como placar de arena (segmentos lima acendendo), título Syne, footer CTA
+ * verde→lima. Re-skina TODAS as etapas do wizard de uma vez.
  */
 
 'use client'
 
 import { useCallback, useEffect, useState, type ReactNode } from 'react'
 import { useRouter } from 'next/navigation'
-import { Button } from '@/components/ui/button'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { useOnboardingStore } from '@/stores/onboarding-store'
 
-function SegmentedProgressBar({ current, total }: { current: number; total: number }) {
+function BroadcastProgress({ current, total }: { current: number; total: number }) {
   return (
     <div className="flex gap-1" aria-label={`Etapa ${current + 1} de ${total}`}>
       {Array.from({ length: total }, (_, i) => (
         <div
           key={i}
-          className={`h-1.5 flex-1 rounded-full transition-all duration-500 ${
+          className={`h-1 flex-1 rounded-full transition-all duration-500 ${
             i < current
-              ? 'bg-linear-to-r from-emerald-400 to-emerald-300 shadow-[0_0_14px_rgba(134,239,172,0.34)]'
+              ? 'bg-lime-400/80'
               : i === current
-                ? 'bg-linear-to-r from-emerald-300 to-lime-200 shadow-[0_0_20px_rgba(134,239,172,0.45)]'
+                ? 'bg-lime-300 shadow-[0_0_14px_rgba(163,230,53,0.6)]'
                 : 'bg-white/10'
           }`}
         />
@@ -59,6 +59,8 @@ export function OnboardingStepLayout({
   const [direction, setDirection] = useState<'enter' | 'exit'>('enter')
   const [mounted, setMounted] = useState(false)
   const progressPercent = Math.round(((currentStep + 1) / totalSteps) * 100)
+  const nn = String(currentStep + 1).padStart(2, '0')
+  const tt = String(totalSteps).padStart(2, '0')
 
   useEffect(() => {
     setMounted(true)
@@ -85,49 +87,41 @@ export function OnboardingStepLayout({
   }, [canContinue, onContinue])
 
   return (
-    <div className="vfit-energy-bg relative flex min-h-dvh flex-col overflow-hidden text-white">
-      {/* Vibrant Energy: fundo navy+aurora saturado (mesma assinatura do loading/result).
-          Orbs de aurora vívidos à deriva — CSS-only (keyframes welcome-orb1/2), reduced-motion-aware. */}
-      <div className="vfit-flow-grid pointer-events-none absolute inset-0" />
-      <div aria-hidden="true" className="welcome-orb1 pointer-events-none absolute -right-20 top-20 h-80 w-80 rounded-full bg-emerald-400/20 blur-[120px]" />
-      <div aria-hidden="true" className="welcome-orb2 pointer-events-none absolute -left-24 top-1/2 h-72 w-72 rounded-full bg-lime-400/16 blur-[130px]" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-95 bg-linear-to-b from-vfit-primary-500/22 via-sky-400/8 to-transparent" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-sky-200/45 to-transparent" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-44 bg-linear-to-t from-bg-base via-bg-base/70 to-transparent" />
+    <div className="relative flex min-h-dvh flex-col overflow-x-hidden bg-[#04080f] text-white">
+      {/* atmosfera "impressa" seca — grade técnica + sheen no topo (sem orbs/aurora) */}
+      <div aria-hidden className="vfit-flow-grid pointer-events-none absolute inset-0 opacity-[0.22]" />
+      <div aria-hidden className="pointer-events-none absolute inset-0" style={{ background: 'radial-gradient(120% 70% at 82% -8%, rgba(34,197,94,0.10), transparent 55%)' }} />
 
-      <div className="safe-area-top relative z-30 border-b border-white/8 bg-bg-base/72 px-5 pt-3 pb-2.5 shadow-[0_18px_48px_-34px_rgba(2,6,23,0.95)] backdrop-blur-2xl sm:pt-4 sm:pb-3">
+      {/* ─── Header de transmissão ─── */}
+      <header className="safe-area-top relative z-30 border-b border-lime-400/20 bg-[#04080f]/85 px-5 pb-3 pt-3 backdrop-blur-md sm:pt-4">
         <div className="mx-auto w-full max-w-2xl">
-          <div className="mb-3 flex items-center justify-between gap-3 sm:mb-4">
+          <div className="mb-3 flex items-center justify-between gap-3">
             {showBack ? (
               <button
                 onClick={handleBack}
-                className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-[15px] border border-white/12 bg-white/7 text-white/78 shadow-glass-inset-sm transition-all hover:bg-white/12 hover:text-white active:scale-95"
+                className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-md border border-white/15 bg-white/[0.04] text-white/70 transition-colors hover:border-lime-300/50 hover:text-white active:scale-95"
                 aria-label="Voltar"
               >
                 <DSIcon name="chevronLeft" className="h-5 w-5" />
               </button>
             ) : (
-              <div className="h-11 w-11" />
+              <div className="h-10 w-10" />
             )}
 
-            <span className="inline-flex min-h-10 items-center gap-2 rounded-full border border-sky-200/12 bg-sky-300/8 px-3 text-[11px] font-black uppercase text-sky-100 shadow-glass-inset-sm">
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-300 text-[10px] text-bg-base">
-                <DSIcon name="sparkles" size={12} />
-              </span>
-              Plano IA
+            <span className="bc-mono inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-lime-300/80">
+              <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-lime-400" />
+              Plano IA · Leitura {nn}/{tt}
             </span>
 
-            <div className="flex h-11 min-w-11 shrink-0 items-center justify-center rounded-[15px] border border-white/10 bg-white/7 px-2 text-[11px] font-black text-white">
-              {progressPercent}%
-            </div>
+            <span className="bc-mono shrink-0 text-[11px] font-bold tabular-nums text-white/80">{progressPercent}%</span>
           </div>
 
-          <SegmentedProgressBar current={currentStep} total={totalSteps} />
+          <BroadcastProgress current={currentStep} total={totalSteps} />
         </div>
-      </div>
+      </header>
 
       <main
-        className={`relative z-10 mx-auto w-full max-w-2xl flex-1 overflow-y-auto px-5 pt-5 transition-all duration-400 sm:pt-7 ${
+        className={`relative z-10 mx-auto w-full max-w-2xl flex-1 overflow-y-auto px-5 pt-6 transition-all duration-300 sm:pt-8 ${
           !hideFooter ? 'pb-32 sm:pb-36' : 'pb-8'
         } ${
           mounted && direction === 'enter'
@@ -138,32 +132,29 @@ export function OnboardingStepLayout({
         }`}
       >
         <section className="pb-1">
-          <div className="mb-3 flex flex-wrap items-center gap-2 sm:mb-4">
-            <span className="inline-flex min-h-9 items-center gap-2 rounded-full border border-emerald-300/16 bg-emerald-300/8 px-3 text-[11px] font-black uppercase text-emerald-200">
-              <DSIcon name="brainCircuit" size={14} />
-              Leitura {currentStep + 1}
+          <div className="mb-4 flex flex-wrap items-center gap-3">
+            <span className="bc-mono inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-lime-300/70">
+              <DSIcon name="brainCircuit" size={13} className="text-emerald-300" />
+              Leitura {nn}
             </span>
-            <span className="inline-flex min-h-9 items-center gap-2 rounded-full border border-white/10 bg-white/6 px-3 text-[11px] font-bold text-slate-300">
-              <DSIcon name="shieldCheck" size={13} className="text-emerald-200" />
+            <span aria-hidden className="h-3 w-px bg-white/15" />
+            <span className="bc-mono inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-white/45">
+              <DSIcon name="shieldCheck" size={13} className="text-emerald-300" />
               Dados protegidos
             </span>
           </div>
 
           <h1
-            className={`text-[28px] font-black leading-[1.03] text-white transition-all duration-500 min-[380px]:text-[30px] sm:text-4xl ${
-              mounted && direction === 'enter'
-                ? 'translate-y-0 opacity-100'
-                : 'translate-y-4 opacity-0'
+            className={`font-syne text-[30px] font-black leading-[1.02] tracking-tight text-white transition-all duration-500 min-[380px]:text-[34px] sm:text-[42px] ${
+              mounted && direction === 'enter' ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
             }`}
           >
             {title}
           </h1>
           {subtitle && (
             <p
-              className={`mt-2 max-w-lg text-sm font-medium leading-6 text-slate-300 transition-all delay-100 duration-500 sm:mt-3 ${
-                mounted && direction === 'enter'
-                  ? 'translate-y-0 opacity-100'
-                  : 'translate-y-4 opacity-0'
+              className={`mt-2.5 max-w-lg text-sm font-medium leading-6 text-slate-300 transition-all delay-100 duration-500 sm:mt-3 ${
+                mounted && direction === 'enter' ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
               }`}
             >
               {subtitle}
@@ -171,24 +162,35 @@ export function OnboardingStepLayout({
           )}
         </section>
 
-        <section className="mt-5 sm:mt-7">{children}</section>
+        <section className="mt-6 sm:mt-7">{children}</section>
       </main>
 
       {!hideFooter && (
-        <div className="fixed inset-x-0 bottom-0 z-30 safe-area-bottom border-t border-white/8 bg-bg-base/82 px-5 pb-2 pt-2 shadow-[0_-24px_62px_-38px_rgba(2,6,23,0.95)] backdrop-blur-2xl sm:pb-6 sm:pt-4">
+        <div className="safe-area-bottom fixed inset-x-0 bottom-0 z-30 border-t border-lime-400/20 bg-[#04080f]/90 px-5 pb-3 pt-3 backdrop-blur-md sm:pb-6 sm:pt-4">
           <div className="mx-auto max-w-2xl">
-            <Button
-              size="md"
-              className="h-12 w-full sm:h-16"
+            <button
               onClick={handleContinue}
               disabled={!canContinue}
+              aria-label={continueLabel}
+              className="bc-foot-cta group relative flex h-14 w-full items-center justify-center gap-2.5 overflow-hidden rounded-2xl text-[#06210f] outline-none transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-2 focus-visible:ring-lime-200 focus-visible:ring-offset-2 focus-visible:ring-offset-[#04080f] disabled:pointer-events-none disabled:translate-y-0 disabled:opacity-35 disabled:saturate-[0.4] sm:h-16"
+              style={{ background: 'linear-gradient(135deg,#22c55e 0%,#16a34a 100%)' }}
             >
-              {continueLabel}
-              <DSIcon name="arrowRight" size={16} />
-            </Button>
+              {canContinue && <span aria-hidden className="bc-foot-sweep" />}
+              <span className="bc-jumbo-font relative z-10 text-[15px] font-black uppercase tracking-tight sm:text-[17px]">{continueLabel}</span>
+              <DSIcon name="arrowRight" size={18} className="relative z-10 transition-transform duration-200 group-hover:translate-x-0.5" />
+            </button>
           </div>
         </div>
       )}
+
+      <style>{`
+        .bc-jumbo-font { font-family: var(--font-ds-display), var(--font-syne), 'Syne', sans-serif; }
+        .bc-foot-cta { box-shadow: 0 16px 40px -14px rgba(34,197,94,0.5), inset 0 1px 0 rgba(255,255,255,0.45); }
+        .bc-foot-sweep { position: absolute; inset: 0; z-index: 5; pointer-events: none; background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.5) 50%, transparent 70%); transform: translateX(-130%) skewX(-18deg); animation: bcFootSweep 3.6s ease-in-out 1.4s infinite; }
+        .bc-foot-cta:hover .bc-foot-sweep { animation-duration: 1.1s; }
+        @keyframes bcFootSweep { 0% { transform: translateX(-130%) skewX(-18deg); } 60%,100% { transform: translateX(260%) skewX(-18deg); } }
+        @media (prefers-reduced-motion: reduce) { .bc-foot-sweep { animation: none !important; } }
+      `}</style>
     </div>
   )
 }
