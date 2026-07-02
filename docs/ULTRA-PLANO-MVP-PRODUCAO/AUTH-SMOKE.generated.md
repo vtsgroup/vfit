@@ -1,9 +1,9 @@
 # Authenticated Smoke Report (Gerado automaticamente)
 
-> Gerado em: 2026-06-21T22:23:49.458Z
+> Gerado em: 2026-07-02T05:01:26.289Z
 > Base URL: https://api.vfit.app.br
-> test_run_id: run-20260621222349-auth
-> session_id: session-smoke-1782080629
+> test_run_id: run-20260702050126-auth
+> session_id: session-smoke-1782968486
 
 ## Como executar (sem vazar token)
 
