@@ -26,7 +26,7 @@ import { hapticLight } from '@/lib/haptics'
 import { useCurrentPlan, useAutoGeneratePlan, type CurrentPlan, type PlanDay } from '@/hooks/use-plans'
 import { useMealsToday, useNutritionTargets } from '@/hooks/use-vfit-nutrition'
 import { useSelfAssessments, getBMIColor, useAutoAssessmentFromOnboarding } from '@/hooks/use-self-assessments'
-import { useWorkoutLogs } from '@/hooks/use-workouts'
+import { useWorkoutLogs, useMyWorkouts } from '@/hooks/use-workouts'
 import { useDailyGoal, useStreak, useXPBalance } from '@/hooks/use-xp'
 import { useSubscriptionStatus } from '@/hooks/use-vfit-checkout'
 import { useB2COnboardingCompleted } from '@/hooks/use-b2c-onboarding'
@@ -306,6 +306,8 @@ export default function TreinosPage() {
   const { data: subscription } = useSubscriptionStatus()
   const isFree = !subscription?.is_premium
   const { data: logsData } = useWorkoutLogs({ per_page: 1 })
+  const { data: myWorkoutsData } = useMyWorkouts({ status: 'active', per_page: 10 })
+  const assignedWorkouts = myWorkoutsData?.workouts ?? []
   const { data: xpBalance } = useXPBalance()
   const { data: dailyGoal } = useDailyGoal()
   const { data: streak } = useStreak()
@@ -418,6 +420,50 @@ export default function TreinosPage() {
         dailyGoal={dailyGoal}
         workoutCount={workoutCount}
       />
+
+      {/* Treinos atribuídos pelo personal (B2B) */}
+      {assignedWorkouts.length > 0 && (
+        <section className="mb-5">
+          <div className="mb-3">
+            <p className="text-[10px] font-black uppercase tracking-[0.24em] text-emerald-600/85">Meu Personal</p>
+            <h2 className="mt-0.5 text-[17px] font-black tracking-tight text-slate-950">Treinos do seu personal</h2>
+          </div>
+
+          <div className="space-y-3">
+            {assignedWorkouts.map((workout) => (
+              <Link
+                key={workout.id}
+                href={`/treinos/executar?id=${workout.id}`}
+                className="group relative block overflow-hidden rounded-[28px] border border-emerald-100/90 bg-linear-to-br from-white via-emerald-50/40 to-slate-50 p-4 shadow-[0_22px_52px_rgba(15,23,42,0.13)] transition-all duration-300 active:translate-y-px"
+              >
+                <div className="pointer-events-none absolute -left-10 -top-12 h-30 w-30 rounded-full bg-emerald-200/45 blur-2xl" />
+                <div className="relative flex items-center gap-3">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-emerald-200 bg-white text-emerald-600 shadow-[0_8px_18px_rgba(5,150,105,0.14)]">
+                    <DSIcon name="dumbbell" size={21} />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-[15px] font-black leading-tight text-slate-950">{workout.name}</p>
+                    <p className="mt-0.5 truncate text-[12px] font-semibold text-slate-500">
+                      {workout.personal_name ? `Por ${workout.personal_name}` : 'Treino personalizado'}
+                      {' · '}
+                      {workout.exercise_count} exercício{workout.exercise_count === 1 ? '' : 's'}
+                    </p>
+                    {workout.times_completed > 0 && (
+                      <p className="mt-0.5 text-[11px] font-bold text-emerald-700">
+                        Concluído {workout.times_completed}x
+                      </p>
+                    )}
+                  </div>
+                  <span className="flex h-10 items-center gap-1.5 rounded-full border border-emerald-200 bg-white px-3 text-[11px] font-black text-emerald-700 shadow-[0_8px_18px_rgba(5,150,105,0.12)]">
+                    Iniciar
+                    <DSIcon name="play" size={13} />
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* T5.9 — Assessment summary card (pós-onboarding) */}
       {latestAssessment ? (

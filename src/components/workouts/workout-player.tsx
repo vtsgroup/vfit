@@ -29,7 +29,7 @@ import {
 import { WorkoutExecuteSkeleton } from '@/components/ui/page-skeletons'
 import { cacheWorkoutForOffline } from '@/lib/offline-workout'
 
-export function WorkoutPlayer({ workoutId }: { workoutId: string }) {
+export function WorkoutPlayer({ workoutId, backHref = '/dashboard' }: { workoutId: string; backHref?: string }) {
   const { data, isLoading } = useWorkoutSession(workoutId)
   const advance = useAdvanceSession(workoutId)
   const logMutation = useLogSession(workoutId)
@@ -89,7 +89,7 @@ export function WorkoutPlayer({ workoutId }: { workoutId: string }) {
 
   return (
     <div className="mx-auto w-full max-w-3xl space-y-6 px-4 py-4 sm:px-6">
-      <Link href="/dashboard" className="inline-flex items-center gap-2 text-sm text-text-muted hover:text-text-primary">
+      <Link href={backHref} className="inline-flex items-center gap-2 text-sm text-text-muted hover:text-text-primary">
         <DSIcon name="arrowLeft" size={16} />
         Voltar
       </Link>

@@ -1,12 +1,30 @@
 # Session State — VFIT
 
 **Date Created**: 2026-04-01  
-**Last Updated**: 2026-06-09 (Copilot session — Avaliações redesign + fixes)  
-**Current Phase**: Sprint UI Premium — Avaliações concluído  
-**Project**: VFIT v4.5.7  
+**Last Updated**: 2026-07-02 (Sprint 0 MVP — 3 bugs críticos fixados + deploy v5.4.1)  
+**Current Phase**: MVP Sprint 0 concluído → próximo: Sprint 1 (treinos/dashboard/marketplace)  
+**Project**: VFIT v5.4.1  
 **Status**: ✅ Production Stable  
 
-## Última sessão (2026-06-09)
+## Última sessão (2026-07-02, madrugada) — Sprint 1 Track A (branch `feat/sprint1-track-a-treinos`)
+
+- **Gap analysis (Explore agent)**: CRUD/assignment/execução de treinos B2B **já existiam** (`workers/api/workouts.ts` 57KB, `workout-sessions.ts`, `/dashboard/workouts`). Dois sistemas paralelos: B2B (`workouts`/`workout_logs`, XP via `xp_transactions`) e B2C (`workout_plans`/`workout_sessions`, sem XP). Gaps reais: aluno não via treinos atribuídos no shell `(app)` e conclusão B2C não creditava XP.
+- **Fix XP B2C**: `completeB2CWorkout` credita XP (`creditXP`, idempotency key `workout_session:{id}:completed`), grava `workout_sessions.xp_earned`, atualiza meta diária + streak — tudo best-effort (aluno sem linha em `students` não quebra). Resposta inclui `summary.xp_earned` + `streak_milestones`.
+- **Aluno→treinos do personal**: seção "Treinos do seu personal" em `(app)/treinos` (`useMyWorkouts`, só renderiza se houver treinos B2B ativos) + rota nova `(app)/treinos/executar?id=` com `WorkoutPlayer` (prop `backHref` nova, default `/dashboard`).
+- **Tracking**: criado `.claude/plans/plano-final/TRACKING.md` (Sprint 0-2, 10/17). CHANGELOG atualizado (docs gate ok).
+- `quality:ci` exit 0 (366 testes, build ok). **Smoke auth: tokens SMOKE_* expirados** → gerar em `/dashboard/admin/smoke` antes do deploy.
+- Próximo: QA fluxo completo (T1.8), Track B (dashboard/gamificação — unificar XP duplo `gamification.ts` vs `xp.ts`), Track C (marketplace/WhatsApp), deploy v5.5.0 só com confirmação.
+
+## Sessão anterior (2026-07-02) — v5.4.1 deployed
+
+- **Bug #1 (roteamento)**: 4 placeholder pages "Em Breve" BROADCAST dark — `/desafios`, `/comunidade`, `/perfil/seguranca`, `/configuracoes` (antes serviam landing via SPA fallback)
+- **Bug #2 (loading infinito)**: timeout no `src/lib/api-client.ts` (5s GET / 30s mutações, `timeoutMs` configurável, erro `TIMEOUT` tipado) + componente `LoadFailed` com retry em `/treinos`, `/nutricao`, `/progresso`
+- **Bug #3 (avaliação duplicada)**: guard síncrono `useRef` + header `Idempotency-Key` nos 2 forms; backend `workers/api/assessments.ts` com replay via KV_CACHE (TTL 24h), 409 em processamento, dedup janela 60s (personal+aluno+data). Constraint UNIQUE do plano rejeitada (bloquearia multi-aluno/dia)
+- Merge da branch `feat/auth-broadcast-unify` (auth BROADCAST) + PR #3 mergeado em main
+- `quality:ci` exit 0 · Deploy v5.4.1 (--no-bump) em 94.5s · tag `v5.4.1` · smoke test: rotas 200, chunks no ar, API healthy
+- Próximo: PROMPT 2 do `.claude/plans/PROMPT_CLAUDE_CODE.md` (Sprint 1 — 3 tracks paralelos)
+
+## Sessão anterior (2026-06-09)
 - Redesign ultra-premium dark glass das telas `/avaliacoes` e `/avaliacoes/[id]` (v4.5.6)
 - Email super_admin atualizado: `victor.duarte@iapersonal.app.br` → `victor.duarte@vfit.app.br`
 - Fix backend: `GET /assessments/my` agora retorna avaliações onde o super_admin é personal

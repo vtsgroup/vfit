@@ -1473,14 +1473,15 @@ async function completeB2CWorkout(c: Context<AppContext>) {
       total_reps: number | null
       total_volume_kg: string | number | null
       calories_estimated: number | null
+      xp_earned: number | null
     }>(
       c.env,
       supportsClientCompletionId
-        ? `SELECT id, duration_seconds, total_sets, total_reps, total_volume_kg, calories_estimated
+        ? `SELECT id, duration_seconds, total_sets, total_reps, total_volume_kg, calories_estimated, xp_earned
              FROM workout_sessions
             WHERE user_id = $1 AND client_completion_id = $2
             LIMIT 1`
-        : `SELECT id, duration_seconds, total_sets, total_reps, total_volume_kg, calories_estimated
+        : `SELECT id, duration_seconds, total_sets, total_reps, total_volume_kg, calories_estimated, xp_earned
              FROM workout_sessions
             WHERE user_id = $1 AND notes = $2
             LIMIT 1`,
@@ -1500,6 +1501,7 @@ async function completeB2CWorkout(c: Context<AppContext>) {
           estimated_calories: existing.calories_estimated || 0,
           exercises_completed: body.exercises.filter((e) => !e.skipped).length,
           exercises_skipped: body.exercises.filter((e) => e.skipped).length,
+          xp_earned: existing.xp_earned || 0,
         },
         records: [],
       })
@@ -1593,6 +1595,36 @@ async function completeB2CWorkout(c: Context<AppContext>) {
     [body.plan_id, userId]
   )
 
+  // Credit XP + daily goal + streak (best-effort — não bloqueia o registro do treino)
+  let xpEarned = 0
+  let streakMilestones: Array<{ days: number; xpAwarded: number }> = []
+  try {
+    const xpResult = await creditXP(c.env, userId, 'workout_completed', {
+      referenceType: 'workout_session',
+      referenceId: workoutId,
+      idempotencyKey: `workout_session:${workoutId}:completed`,
+      notes: `Treino concluído: ${Math.max(1, Math.round(body.duration_seconds / 60))} minutos`,
+      metadata: {
+        plan_id: body.plan_id,
+        plan_day_id: body.plan_day_id,
+        duration_seconds: body.duration_seconds,
+        total_sets: totalSets,
+      },
+    })
+    xpEarned = xpResult.transaction.amount
+
+    await pgQuery(c.env, 'UPDATE workout_sessions SET xp_earned = $1 WHERE id = $2', [xpEarned, workoutId])
+
+    try {
+      await updateDailyGoalProgress(c.env, userId, xpEarned, true)
+    } catch { /* non-blocking */ }
+
+    try {
+      const streakResult = await updateStreakAndCheckMilestones(c.env, userId)
+      streakMilestones = streakResult.newMilestones
+    } catch { /* non-blocking */ }
+  } catch { /* non-blocking — usuário sem vínculo em students não recebe XP */ }
+
   return created({
     workout_id: workoutId,
     summary: {
@@ -1603,8 +1635,10 @@ async function completeB2CWorkout(c: Context<AppContext>) {
       estimated_calories: estimatedCalories,
       exercises_completed: body.exercises.filter((e) => !e.skipped).length,
       exercises_skipped: body.exercises.filter((e) => e.skipped).length,
+      xp_earned: xpEarned,
     },
     records,
+    streak_milestones: streakMilestones,
   })
 }
 

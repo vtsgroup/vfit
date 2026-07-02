@@ -5,6 +5,21 @@
 
 ---
 
+## [Unreleased] — 02/07/2026 — Sprint 1 Track A: aluno conectado aos treinos do personal + XP no fluxo B2C
+
+### ✨ Aluno vê e executa treinos atribuídos pelo personal
+
+- Nova seção "Treinos do seu personal" em [src/app/(app)/treinos/page.tsx](../src/app/(app)/treinos/page.tsx) via `useMyWorkouts` (`GET /workouts/my`, que já existia mas só era consumido no dashboard web). Renderizada apenas quando o aluno tem treinos B2B ativos.
+- Nova rota [src/app/(app)/treinos/executar/page.tsx](../src/app/(app)/treinos/executar/page.tsx): execução guiada (`WorkoutPlayer`) dentro do shell do aluno, com retorno para `/treinos`.
+- [src/components/workouts/workout-player.tsx](../src/components/workouts/workout-player.tsx): nova prop opcional `backHref` (default `/dashboard`, sem breaking change) para o link "Voltar".
+
+### 🐛 Conclusão de treino B2C não creditava XP/streak/meta diária
+
+- `completeB2CWorkout` em [workers/api/workouts.ts](../workers/api/workouts.ts) agora: credita XP via `creditXP` (idempotency key `workout_session:{id}:completed`), grava `workout_sessions.xp_earned` (antes sempre 0 — corrige também o perfil de `gamification.ts`), atualiza meta diária e streak milestones. Tudo best-effort: usuário sem vínculo em `students` não bloqueia o registro do treino.
+- Resposta de `POST /workouts/b2c/complete` agora inclui `summary.xp_earned` e `streak_milestones` (também no caminho de replay idempotente por `client_completion_id`).
+
+---
+
 ## [Unreleased] — 02/07/2026 — v5.4.1: Fix dos 3 bugs críticos que bloqueavam MVP
 
 ### 🐛 Bug #1 — Rotas internas servindo landing page
