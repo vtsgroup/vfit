@@ -302,3 +302,142 @@ describe('XP Cron — Expiration Handler', () => {
     expect(typeof mod.handleXPExpiration).toBe('function')
   })
 })
+
+// ============================================
+// 5. LEVEL PROGRESS — fonte única de nível
+// ============================================
+describe('computeLevelProgress — fonte única de nível', () => {
+  it('should compute level 1 for 0 XP', async () => {
+    const { computeLevelProgress } = await import('@lib/xp-service')
+    const result = computeLevelProgress(0)
+    expect(result.level).toBe(1)
+    expect(result.next_level_threshold).toBe(100)
+    expect(result.xp_in_level).toBe(0)
+    expect(result.xp_needed).toBe(100)
+    expect(result.progress_percent).toBe(0)
+  })
+
+  it('should stay level 1 just below first threshold', async () => {
+    const { computeLevelProgress } = await import('@lib/xp-service')
+    const result = computeLevelProgress(99)
+    expect(result.level).toBe(1)
+    expect(result.progress_percent).toBe(99)
+  })
+
+  it('should reach level 2 exactly at 100 XP', async () => {
+    const { computeLevelProgress } = await import('@lib/xp-service')
+    const result = computeLevelProgress(100)
+    expect(result.level).toBe(2)
+    expect(result.next_level_threshold).toBe(300)
+    expect(result.xp_in_level).toBe(0)
+    expect(result.xp_needed).toBe(200)
+  })
+
+  it('should reach level 3 at 300 XP', async () => {
+    const { computeLevelProgress } = await import('@lib/xp-service')
+    const result = computeLevelProgress(300)
+    expect(result.level).toBe(3)
+    expect(result.next_level_threshold).toBe(600)
+  })
+
+  it('should compute mid-level progress percent', async () => {
+    const { computeLevelProgress } = await import('@lib/xp-service')
+    const result = computeLevelProgress(200) // nível 2: 100→300, metade
+    expect(result.level).toBe(2)
+    expect(result.progress_percent).toBe(50)
+  })
+
+  it('should handle XP beyond the last threshold without crashing', async () => {
+    const { computeLevelProgress } = await import('@lib/xp-service')
+    const result = computeLevelProgress(1_000_000)
+    expect(result.level).toBeGreaterThan(10)
+    expect(result.progress_percent).toBeLessThanOrEqual(100)
+    expect(result.xp_needed).toBeGreaterThan(0)
+  })
+
+  it('should be consistent with LEVEL_THRESHOLDS from constants', async () => {
+    const { computeLevelProgress } = await import('@lib/xp-service')
+    const { LEVEL_THRESHOLDS } = await import('@config/constants')
+    for (let i = 0; i < Math.min(5, LEVEL_THRESHOLDS.length); i++) {
+      expect(computeLevelProgress(LEVEL_THRESHOLDS[i]).level).toBe(i + 2)
+      expect(computeLevelProgress(LEVEL_THRESHOLDS[i] - 1).level).toBe(i + 1)
+    }
+  })
+})
+
+// ============================================
+// 6. STREAK DECAY — quebra em tempo real na leitura
+// ============================================
+describe('applyStreakDecay — streak efetiva na leitura', () => {
+  const baseStreak = {
+    current_streak: 10,
+    longest_streak: 15,
+    last_activity_date: null as string | null,
+    streak_started_at: '2026-06-20',
+    last_milestone_awarded: 7,
+    freeze_count: 0,
+    max_freezes: 1,
+  }
+  const TODAY = '2026-07-02'
+
+  it('should keep streak untouched when no activity date', async () => {
+    const { applyStreakDecay } = await import('@lib/xp-service')
+    const result = applyStreakDecay({ ...baseStreak, last_activity_date: null }, TODAY)
+    expect(result.current_streak).toBe(10)
+  })
+
+  it('should keep streak when activity was today', async () => {
+    const { applyStreakDecay } = await import('@lib/xp-service')
+    const result = applyStreakDecay({ ...baseStreak, last_activity_date: '2026-07-02' }, TODAY)
+    expect(result.current_streak).toBe(10)
+  })
+
+  it('should keep streak when activity was yesterday', async () => {
+    const { applyStreakDecay } = await import('@lib/xp-service')
+    const result = applyStreakDecay({ ...baseStreak, last_activity_date: '2026-07-01' }, TODAY)
+    expect(result.current_streak).toBe(10)
+  })
+
+  it('should keep streak on 2-day gap when freeze is available (recuperável)', async () => {
+    const { applyStreakDecay } = await import('@lib/xp-service')
+    const result = applyStreakDecay(
+      { ...baseStreak, last_activity_date: '2026-06-30', freeze_count: 0, max_freezes: 1 },
+      TODAY
+    )
+    expect(result.current_streak).toBe(10)
+  })
+
+  it('should zero streak on 2-day gap when no freeze left', async () => {
+    const { applyStreakDecay } = await import('@lib/xp-service')
+    const result = applyStreakDecay(
+      { ...baseStreak, last_activity_date: '2026-06-30', freeze_count: 1, max_freezes: 1 },
+      TODAY
+    )
+    expect(result.current_streak).toBe(0)
+    expect(result.longest_streak).toBe(15)
+  })
+
+  it('should zero streak on long gap regardless of freezes', async () => {
+    const { applyStreakDecay } = await import('@lib/xp-service')
+    const result = applyStreakDecay({ ...baseStreak, last_activity_date: '2026-06-25' }, TODAY)
+    expect(result.current_streak).toBe(0)
+  })
+
+  it('should not touch an already-zero streak', async () => {
+    const { applyStreakDecay } = await import('@lib/xp-service')
+    const result = applyStreakDecay(
+      { ...baseStreak, current_streak: 0, last_activity_date: '2026-06-01' },
+      TODAY
+    )
+    expect(result.current_streak).toBe(0)
+  })
+
+  it('should handle timestamp-style activity dates (slice to date)', async () => {
+    const { applyStreakDecay } = await import('@lib/xp-service')
+    const result = applyStreakDecay(
+      { ...baseStreak, last_activity_date: '2026-07-01T14:30:00.000Z' },
+      TODAY
+    )
+    expect(result.current_streak).toBe(10)
+  })
+})

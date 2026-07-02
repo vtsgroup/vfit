@@ -915,7 +915,7 @@ export async function getDailyGoalHistory(
  * Regras: atividade hoje/ontem → intacta; gap de exatamente 2 dias com freeze
  * disponível → ainda recuperável (mantém valor); senão → 0.
  */
-function applyStreakDecay(streak: StreakInfo, today: string): StreakInfo {
+export function applyStreakDecay(streak: StreakInfo, today: string): StreakInfo {
   if (!streak.last_activity_date || streak.current_streak === 0) return streak
 
   const lastActivity = String(streak.last_activity_date).slice(0, 10)
