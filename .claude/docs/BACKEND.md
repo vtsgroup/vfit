@@ -193,9 +193,9 @@ config/
 
 | Método | Path | Auth | Descrição |
 |---|---|---|---|
-| `POST` | `/` | Personal | Criar treino |
+| `POST` | `/` | Personal | Criar treino (com `student_id`: push + WhatsApp ao aluno via `waitUntil`) |
 | `GET` | `/` | Personal | Listar treinos |
-| `GET` | `/my` | Student | Meus treinos |
+| `GET` | `/my` | Student | Meus treinos (consumido também pela seção "Treinos do seu personal" em `(app)/treinos`) |
 | `GET` | `/history/heatmap?year=YYYY` | Student | Heatmap anual de dias treinados |
 | `GET` | `/history/progress?exercise_id=x&days=180` | Student | Evolução de carga por exercício |
 | `GET` | `/logs` | ✅ | Histórico de logs |
@@ -204,7 +204,9 @@ config/
 | `GET` | `/:id` | ✅ | Detalhes treino |
 | `PATCH` | `/:id` | Personal | Atualizar treino |
 | `DELETE` | `/:id` | Personal | Arquivar treino |
-| `POST` | `/:id/duplicate` | Personal | Duplicar treino |
+| `POST` | `/:id/duplicate` | Personal | Duplicar treino (com `student_id` no body = atribuir: notifica push + WhatsApp) |
+| `POST` | `/b2c/complete` | ✅ | Conclusão B2C (plano IA): grava `workout_sessions`+`exercise_logs`, avança `current_day`, credita XP + meta diária + streak (best-effort, idempotente por `client_completion_id`); resposta inclui `summary.xp_earned` e `streak_milestones` |
+| `GET` | `/b2c/records` | ✅ | Personal records B2C |
 | `POST` | `/:id/exercises` | Personal | Adicionar exercício |
 | `PATCH` | `/:id/exercises/:eid` | Personal | Atualizar exercício |
 | `DELETE` | `/:id/exercises/:eid` | Personal | Remover exercício |
@@ -214,7 +216,7 @@ config/
 | `GET` | `/:id/session` | Student | Obter/criar sessão guiada de treino |
 | `POST` | `/:id/session/advance` | Student | Avançar fase (`exercise/rest/next_preview/completed`) |
 | `POST` | `/:id/session/log` | Student | Registrar log da sessão (sets/reps/carga) |
-| `POST` | `/:id/session/complete` | Student | Finalizar sessão e creditar XP |
+| `POST` | `/:id/session/complete` | Student | Finalizar sessão e creditar XP (+ notificação push/WhatsApp em streak milestone) |
 | `DELETE` | `/:id/session` | Student | Resetar sessão guiada |
 
 ### Exercise Media (`/api/v1/exercises`) — 5 endpoints
@@ -231,17 +233,24 @@ config/
 
 | Método | Path | Auth | Descrição |
 |---|---|---|---|
-| `GET` | `/balance` | Student | Saldo XP atual (cached KV 5m) |
+| `GET` | `/balance` | Student | Saldo XP atual (cached KV 5m; `level`/`next_level_threshold` derivados de `computeLevelProgress(total_earned)` — colunas do banco não são atualizadas) |
 | `GET` | `/history` | Student | Histórico de transações (`?limit=50&offset=0`) |
 | `GET` | `/limits` | Student | Status de limites diários |
 | `GET` | `/goals/today` | Student | Meta diária atual com progresso |
 | `GET` | `/goals/history` | Student | Histórico de metas (`?days=7`, max 30) |
-| `GET` | `/streak` | Student | Streak atual + milestones (cached KV 10m) |
+| `GET` | `/streak` | Student | Streak atual + milestones (cached KV 10m; decay na leitura: quebra em tempo real se aluno pulou dias, exceto gap de 2d com freeze) |
 | `GET` | `/expiring` | Student | XP prestes a expirar (`?days=7`, max 30) |
 | `GET` | `/student/:id/balance` | Personal | Saldo de aluno (ownership check) |
 | `GET` | `/student/:id/streak` | Personal | Streak de aluno (ownership check) |
 | `POST` | `/admin/reverse` | Personal | Reverter transação (`{transaction_id, reason}`) |
 | `POST` | `/admin/expire` | Personal | Trigger manual de expiração XP |
+
+### Gamification (`/api/v1/gamification`) — 2 endpoints
+
+| Método | Path | Auth | Descrição |
+|---|---|---|---|
+| `GET` | `/profile` | ✅ | XP/nível do ledger (`getXPBalance` + `computeLevelProgress` — mesma fonte de `/xp/balance`) + total_workouts/total_records |
+| `GET` | `/badges` | ✅ | Badges (workouts 10/50/100 reais; streak 7/30/100 via `longest_streak` de `xp_streaks`) |
 
 ### Assessments (`/api/v1/assessments`) — 22 endpoints
 
@@ -274,7 +283,7 @@ config/
 
 | Método | Path | Auth | Descrição |
 |---|---|---|---|
-| `POST` | `/webhooks/asaas` | Webhook | Webhook Asaas cobranças |
+| `POST` | `/webhooks/asaas` | Webhook | Webhook Asaas cobranças (branches por externalReference: `vfit_sub_`, `plan_purchase_` → confirma compra + entrega + linha em payments, `consult_order_`, `platform_checkout_`) |
 | `POST` | `/webhooks/asaas/transfer` | Webhook | Webhook Asaas transferências (status) |
 | `POST` | `/webhooks/asaas/transfer-auth` | Webhook | Webhook Asaas autorização transferências |
 | `POST` | `/webhooks/stripe` | Webhook | Webhook Stripe |
@@ -300,7 +309,8 @@ config/
 | `GET` | `/plans/:id` | ✅ | Detalhes plano |
 | `PATCH` | `/plans/:id` | Personal | Atualizar plano |
 | `DELETE` | `/plans/:id` | Personal | Remover plano |
-| `POST` | `/plans/:id/buy` | ✅ | Comprar plano |
+| `POST` | `/plans/:id/buy` | ✅ | Comprar plano — cobrança PIX real Asaas (CPF obrigatório no body ou users.cpf; retorna `pix{qr_code_base64,copy_paste,expiration}`; `plan_purchases` fica `pending` até webhook; retoma PIX pendente) |
+| `GET` | `/plans/purchases/:id/status` | ✅ (buyer) | Polling da compra (`status`, `delivered`, `cloned_plan_id`); self-healing: re-tenta entrega se completed sem delivered |
 
 ### Affiliates (`/api/v1/affiliates`) — 7 endpoints
 

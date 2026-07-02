@@ -937,15 +937,28 @@ migrations/                 # SQL migrations (hyperdrive/ + d1/)
 
 ---
 
-## 🖼️ Cloudflare Image Resizing (Futuro)
+## 🖼️ Cloudflare Image Transformations (ATIVO)
 
 | Campo | Valor |
 |-------|-------|
-| **Status** | ⬜ A habilitar |
-| **Uso** | Otimização on-the-fly de imagens R2 (resize, WebP/AVIF) |
-| **URL Pattern** | `images.vfit.app.br/cdn-cgi/image/width=300,quality=80/path/to/image.jpg` |
-| **Pricing** | $0.50/1000 transformations únicas |
-| **Setup** | Dashboard > Speed > Optimization > Image Resizing > Enable |
+| **Status** | ✅ **Enabled** na zona `vfit.app.br` (Dashboard > Images > Transformations) |
+| **Como o app usa** | Loader custom do `next/image` → `src/lib/cf-image-loader.ts` (`next.config.ts`: `images.loader: 'custom'`). Gera `srcset` multi-largura real **mesmo com `output: 'export'`**. |
+| **URL Pattern** | `vfit.app.br/cdn-cgi/image/width=N,quality=75,format=auto/<source>` |
+| **Escopo (transforma)** | same-zone: estáticos de `vfit.app.br` (ex. `/blog/*.webp`) **+ R2 `images.vfit.app.br`** (uploads do dashboard, on-the-fly em runtime) |
+| **Pass-through (NÃO toca)** | SVG, `data:`/`blob:`, URLs já `/cdn-cgi/image/`, e origens externas (`replicate.delivery`, `googleusercontent.com`, `fbcdn.net`) — a CF só redimensiona same-zone por padrão |
+| **Fora de escopo** | Vídeos = CF Stream / `videos.vfit.app.br` (produto separado, já adaptativo) |
+| **Pricing** | Free tier 5.000 transformations únicas/mês; depois $0.50/1000 |
+
+> ⚠️ **NÃO reativar `images.unoptimized: true`** no `next.config.ts`: no Next 15.5 ele é OR'd em toda `<Image>` e zera o `srcSet`, desligando o resize globalmente. O loader custom **exige** o guard de SVG (com loader custom o caso `.svg → unoptimized` do Next não se aplica).
+
+## ⚡ Auditoria de Performance da Zona (Free) — 2026-06-28
+
+Zone `vfit.app.br` = `f1821903ed0a96fe7aa4b681073ed617` · plano **Free** · auditado via Global API.
+**Free está no teto de performance** — já ligados: Brotli, Early Hints (103), HTTP/2+3, 0-RTT, TLS 1.3+0RTT (min 1.3), SSL strict, Speed Brain, cache aggressive, browser TTL 8d, Always Online, WebSockets, Opportunistic Encryption, Auto-HTTPS-Rewrites.
+- **OFF por design (manter):** Rocket Loader (quebra React/Next), Email Obfuscation (re-ligar = React #418), Auto-Minify (depreciado, Next já minifica).
+- **Bloqueado no Free (`editable=false`) → ligar quando assinar o Pro:** **Polish** (Lossy + WebP/AVIF, cobre imagens fora do `next/image`: OG, `<img>` cru) + **Mirage** (low-qual-first em mobile lento). Flip via API: `PATCH /zones/{id}/settings/polish` `{value:"lossy"}` e `/settings/mirage` `{value:"on"}`.
+
+> Headers de segurança/perf (CSP, HSTS, XFO, Permissions-Policy, `Link:` preconnect) vivem em **`public/_headers`** (autoritativo, versionado, deploy via Pages). **Nunca** setar via Global API — config no repo sobrevive a redeploys e bate com o docs-gate.
 
 > Estratégia completa: ver `.claude/docs/MEDIA-STRATEGY.md`
 
@@ -1280,12 +1293,81 @@ Exemplos: `DEPLOY-2026-04-02-AM`, `HOTFIX-AUTH-2026-04-02-PM`, `MIGRATION-USERS-
 - resultado/motivo/benefício devem ser **complementares, sem repetição**
 - **NÃO** incluir 🤖 ou colchetes no `--actor` (Worker adiciona automaticamente)
 
+### Formato da mensagem de deploy (changelog informal)
+
+O worker `vfit-whatsapp` (`workers/whatsapp/src/index.ts` → `buildEndMessage`) renderiza um **changelog informal** a partir do `--msg` do deploy. O `start` é **suprimido** (só a mensagem final vai pro grupo).
+
+- A mensagem do `--msg` (commit) é quebrada em **bullets** (separadores ` + `, `;`, ` & `) e cada item recebe **emoji por tipo** do prefixo conventional: `feat`→✨ `fix`→🐛 `perf`→⚡ `a11y`→♿ `security`→🔒 `docs`→📝 `chore`→🔧 `refactor`→♻️ (etc.).
+- Fim da mensagem: `✅ tudo verde · build, site e API no ar · ⏱️ <dur>` (componentes derivados do summary) + `🔗` link. Falha: `❌ Deploy vX falhou` + motivo + “confere os logs”.
+- **Link sem `https://`** (`fmtLink()`): o worker remove o protocolo → `🔗 vfit.app.br`. Uma URL com `http(s)://` vira **card de pré-visualização (OG)** que engole a mensagem; domínio puro continua clicável, sem preview. **Não** reintroduzir o protocolo no `link_url`.
+- **A qualidade da mensagem = qualidade do `--msg`.** Escreva o `--msg` descritivo e em PT-BR (continua conventional commit p/ o git). Ex.: `--msg "fix(a11y): corrige alt redundante no rodapé; perf(img): srcset responsivo"`.
+- Preview sem enviar: `node scripts/whatsapp-task.mjs preview end --title "..." ...` (usa `/format`).
+
+#### Tons (`tone` no payload de `/task-notify` e `/format`)
+
+Mesmos bullets; muda só cabeçalho + rodapé. cf-deploy **não** envia `tone` → deploys usam `dev`.
+
+- **`dev`** (padrão): `🚀 Subiu a vX!` · `_O que mudou:_` · `✅ tudo verde · build, site e API no ar · ⏱️ <dur>`.
+- **`marketing`**: `🚀 Novidade no VFIT · vX!` · `_O que chegou pra você:_` · `Já disponível pra todo mundo 💚 · no ar em <dur>`.
+- **`casual`**: `🎉 vX no ar!` · `ó o que mudou 👇` · `deu tudo certo em <dur>, tá no ar 🤙`.
+
+Ex. preview: `curl -s .../format -H "Authorization: Bearer $WHATSAPP_NOTIFY_TOKEN" -d '{"event":"end","status":"success","title":"...","deploy_version":"v5.1.4","deploy_message":"...","tone":"marketing"}'`.
+
 ### Variáveis necessárias (já em `.env.local`)
 
 ```
 WHATSAPP_NOTIFY_URL=https://whatsapp.vfit.app.br/task-notify
 WHATSAPP_NOTIFY_TOKEN=<ADMIN_AUTH_TOKEN>
 ```
+
+---
+
+## ⚠️ Problemas Conhecidos de Deploy (NÃO repetir)
+
+> Documentado em 25/06/2026 após deploy bloqueado. Ler ANTES de tentar `cf:deploy`.
+
+### 1. WhatsApp: "Host desativado por segurança" → deploy aborta no 1º passo
+
+**Sintoma:**
+
+```
+❌ [WhatsApp] task-notify (start) falhou: Host desativado por segurança
+Error: Falha ao enviar notificação obrigatória no grupo WhatsApp
+```
+
+**Causa:** a notificação WhatsApp é `required` no pipeline. O host do gateway
+(`WHATSAPP_NOTIFY_URL` → `whatsapp.vfit.app.br/task-notify`) está desativado/bloqueado
+por segurança. Sem o `start`, o `cf-deploy.js` lança e **não** bumpa/builda/deploya.
+
+**Workaround imediato (exceção documentada — flag já existe no script):**
+
+```bash
+node scripts/cf-deploy.js patch --allow-no-whatsapp     # full deploy, sem notificação
+```
+
+O flag torna a notificação opcional; o resto do pipeline roda normal (bump → build →
+Pages/Workers → git). Enquanto o host estiver desativado, **todo** deploy precisa dele.
+
+**Correção definitiva:** reabilitar/religar o worker do gateway (ver `WHATSAPP-GATEWAY.md`)
+ou liberar o host; depois remover o `--allow-no-whatsapp`.
+
+### 2. Deploy a partir do agente de IA / sandbox NÃO publica no Cloudflare
+
+O ambiente do agente **não alcança a API do Cloudflare** — `wrangler pages deploy`
+falha com `fetch failed` / "A fetch request failed, likely due to a connectivity issue".
+O gateway WhatsApp também é inalcançável daqui.
+
+- ✅ `next build` **funciona** no agente (as fontes Google carregam após alguns `Retrying`).
+- ❌ `wrangler pages/deploy` **não funciona** no agente — exige rede com acesso ao Cloudflare.
+
+**Fluxo recomendado quando o deploy for pedido ao agente:**
+
+1. Agente **commita** as mudanças e **valida o build** (`npm run build`).
+2. **Deploy final roda na máquina do dev:** `node scripts/cf-deploy.js patch --allow-no-whatsapp`
+   (ou `npm run cf:deploy` quando o WhatsApp voltar).
+
+> Não deixar bump/tag pendurado: se um deploy parcial bumpar a versão sem publicar,
+> reverter com `git checkout package.json lib/version.ts public/manifest.json`.
 
 ---
 

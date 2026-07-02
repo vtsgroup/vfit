@@ -5,6 +5,15 @@
 
 ---
 
+## [Unreleased] — 02/07/2026 — Self-review da branch: 3 fixes de robustez no checkout
+
+- **Refund seguro**: `REFUNDED/DELETED` no webhook `plan_purchase_` agora só estorna se o `asaas_payment_id` do evento for o da compra — o `DELETED` de uma cobrança antiga regenerada não rebaixa mais uma compra já paga.
+- **Entrega com retry**: se a clonagem falhar no primeiro webhook, retries do Asaas re-tentam a entrega (compra `completed` sem `delivered`), e o `GET /plans/purchases/:id/status` também re-tenta (self-healing durante o polling do comprador).
+- **Polling finito**: `usePurchaseStatus` para o `refetchInterval` quando a compra atinge `completed`/`refunded`.
+- Docs: `BACKEND.md` atualizado (workouts b2c/duplicate/session, XP balance/streak, seção Gamification nova, marketplace buy/status/webhook) + `sync-ai-docs` regenerado.
+
+---
+
 ## [Unreleased] — 02/07/2026 — Sprint 2: checkout PIX real no marketplace + entrega automática
 
 ### ✨ Compra de plano agora cobra de verdade (Asaas PIX)

@@ -21,7 +21,16 @@ consertar 3 sistemas divergentes de XP, streak congelada, e tornar a compra do m
 | `2f434c92` | Track A: aluno vê/executa treinos do personal + XP no fluxo B2C |
 | `2dbfe642` | Tracks B+C: XP/streak unificados + WhatsApp (treino atribuído, milestones) |
 | `b33e20f7` | Testes: computeLevelProgress + applyStreakDecay (15 casos) |
-| *(próximo)* | Sprint 2: checkout PIX real no marketplace + entrega automática |
+| `effc012c` | Sprint 2: checkout PIX real no marketplace + entrega automática |
+| *(último)* | Self-review da branch: 3 fixes (refund seguro, retry de entrega, polling finito) + BACKEND.md atualizado |
+
+### 🔎 Self-review (`/review-pr` da branch vs main)
+
+Review das 4 dimensões (bugs/segurança/runtime/qualidade) sobre os ~1.470 diffs. 3 issues reais encontrados e **corrigidos**:
+1. 🔴 Webhook refund podia rebaixar compra paga se `DELETED` de cobrança antiga regenerada chegasse depois — agora exige match de `asaas_payment_id`
+2. 🔴 Entrega sem retry: falha transiente na clonagem deixava comprador pago sem plano para sempre — agora re-tenta no retry do webhook E no polling de status (self-healing)
+3. 🟡 Polling do checkout nunca parava após confirmação — agora para em `completed`/`refunded`
+Nenhum issue de segurança (auth ok em todas rotas novas; queries parametrizadas; sem secrets em logs).
 
 ### 🔴 AÇÕES QUE SÓ VOCÊ PODE FAZER (amanhã)
 

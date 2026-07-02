@@ -248,7 +248,12 @@ export function usePurchaseStatus(purchaseId: string | null, pollInterval?: numb
     },
     enabled: isReady && !!purchaseId,
     staleTime: pollInterval ? 0 : 30_000,
-    refetchInterval: isReady && !!purchaseId && pollInterval ? pollInterval : false,
+    refetchInterval: (query) => {
+      if (!isReady || !purchaseId || !pollInterval) return false
+      const status = query.state.data?.status
+      // Para de fazer polling quando a compra atinge estado final
+      return status === 'completed' || status === 'refunded' ? false : pollInterval
+    },
   })
 }
 

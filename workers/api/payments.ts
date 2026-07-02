@@ -241,6 +241,19 @@ payments.post('/webhooks/asaas', async (c) => {
             [paymentData.id, now, purchaseId]
           )
 
+          if (purchaseRows.length === 0) {
+            // Já estava completed (retry do Asaas) — garante a entrega se ela falhou antes
+            const pending = await pgQueryOne<{ id: string }>(
+              c.env,
+              `SELECT id FROM plan_purchases WHERE id = $1 AND status = 'completed' AND delivered = false LIMIT 1`,
+              [purchaseId]
+            ).catch(() => null)
+            if (pending) {
+              await deliverPlanPurchase(c.env, purchaseId)
+                .catch((err) => console.error('[Webhook Marketplace] delivery retry failed:', err))
+            }
+          }
+
           if (purchaseRows.length > 0) {
             const purchase = purchaseRows[0]
 
@@ -308,11 +321,14 @@ payments.post('/webhooks/asaas', async (c) => {
             console.log(`[Webhook Marketplace] Purchase ${purchaseId} confirmed (delivered=${delivery.delivered})`)
           }
         } else if (['REFUNDED', 'DELETED'].includes(event)) {
+          // Só a cobrança atualmente vinculada pode estornar — evita que o DELETED
+          // de uma cobrança antiga regenerada rebaixe uma compra já paga
           await pgQuery(c.env, `
             UPDATE plan_purchases SET status = 'refunded'
             WHERE id = $1 AND status <> 'refunded'
-          `, [purchaseId])
-          console.log(`[Webhook Marketplace] Purchase ${purchaseId} refunded/deleted`)
+              AND (asaas_payment_id = $2 OR asaas_payment_id IS NULL)
+          `, [purchaseId, paymentData.id])
+          console.log(`[Webhook Marketplace] Purchase ${purchaseId} refunded/deleted (charge ${paymentData.id})`)
         }
 
         return c.json({ received: true })
@@ -2828,7 +2844,7 @@ payments.get('/plans/purchases/:id/status', async (c) => {
   const buyerId = c.get('userId')
   const purchaseId = c.req.param('id')
 
-  const purchase = await pgQueryOne<{
+  let purchase = await pgQueryOne<{
     id: string
     status: string
     delivered: boolean
@@ -2839,6 +2855,14 @@ payments.get('/plans/purchases/:id/status', async (c) => {
     [purchaseId, buyerId]
   )
   if (!purchase) throw new NotFoundError('Compra')
+
+  // Self-healing: compra paga mas entrega pendente (falha transiente no webhook)
+  if (purchase.status === 'completed' && !purchase.delivered) {
+    const delivery = await deliverPlanPurchase(c.env, purchaseId).catch(() => null)
+    if (delivery?.delivered) {
+      purchase = { ...purchase, delivered: true, cloned_workout_ids: [delivery.cloned_plan_id] }
+    }
+  }
 
   const clonedIds = Array.isArray(purchase.cloned_workout_ids) ? purchase.cloned_workout_ids : []
   return success({
