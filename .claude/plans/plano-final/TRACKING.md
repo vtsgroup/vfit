@@ -22,7 +22,7 @@ consertar 3 sistemas divergentes de XP, streak congelada, e tornar a compra do m
 | `2dbfe642` | Tracks B+C: XP/streak unificados + WhatsApp (treino atribuído, milestones) |
 | `b33e20f7` | Testes: computeLevelProgress + applyStreakDecay (15 casos) |
 | `effc012c` | Sprint 2: checkout PIX real no marketplace + entrega automática |
-| *(último)* | Self-review da branch: 3 fixes (refund seguro, retry de entrega, polling finito) + BACKEND.md atualizado |
+| `c345c5f6` | Self-review da branch: 3 fixes (refund seguro, retry de entrega, polling finito) + BACKEND.md atualizado |
 
 ### 🔎 Self-review (`/review-pr` da branch vs main)
 
