@@ -202,7 +202,7 @@ interface OAuthUserInfo {
  * - Se não existe → cria user (personal ou student conforme requestedUserType)
  */
 async function handleOAuthLogin(
-  c: { env: Bindings; req: { raw: Request; header: (name: string) => string | undefined }; executionCtx: ExecutionContext },
+  c: { env: Bindings; req: { raw: Request; header: (name: string) => string | undefined }; executionCtx: { waitUntil: (promise: Promise<unknown>) => void } },
   info: OAuthUserInfo
 ): Promise<Response> {
   const env = c.env

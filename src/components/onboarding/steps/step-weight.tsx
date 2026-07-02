@@ -2,8 +2,8 @@
  * src/components/onboarding/steps/step-weight.tsx
  *
  * Onboarding Step 10 — Peso (kg) + cálculo IMC inline
- * Picker nativo mobile: slider de arrasto (coarse) + steppers ±0.5kg (fino) com haptic.
- * Sem teclado — placar Syne no centro, IMC em card com faixa por categoria.
+ * Picker nativo mobile: slider (coarse) + steppers ±0.5kg (fino) com haptic — sem teclado.
+ * IMC em telemetria: zonas segmentadas, só a faixa ativa acende na cor da categoria.
  */
 
 'use client'
@@ -17,44 +17,27 @@ import { hapticLight } from '@/lib/haptics'
 // BMI helpers
 // ============================================
 
-type BMICategory = {
+type BMIZone = {
   label: string
+  from: number
+  to: number
+  hex: string
   icon: DSIconName
   message: string
-  color: string
 }
 
-function getBMICategory(bmi: number): BMICategory {
-  if (bmi < 18.5) {
-    return {
-      label: 'Abaixo do peso',
-      icon: 'wind',
-      message: 'Vamos montar um plano focado em ganho saudável',
-      color: 'text-brand-primary',
-    }
-  }
-  if (bmi < 25) {
-    return {
-      label: 'Peso normal',
-      icon: 'checkCircle',
-      message: 'Ótimo ponto de partida para qualquer objetivo',
-      color: 'text-brand-primary',
-    }
-  }
-  if (bmi < 30) {
-    return {
-      label: 'Sobrepeso',
-      icon: 'activity',
-      message: 'Com consistência, resultados vêm rápido',
-      color: 'text-amber-300',
-    }
-  }
-  return {
-    label: 'Obesidade',
-    icon: 'target',
-    message: 'Cada treino é uma vitória — vamos juntos',
-    color: 'text-orange-400',
-  }
+const BMI_ZONES: BMIZone[] = [
+  { label: 'Abaixo', from: 15, to: 18.5, hex: '#38bdf8', icon: 'wind', message: 'Vamos montar um plano focado em ganho saudável' },
+  { label: 'Normal', from: 18.5, to: 25, hex: '#22c55e', icon: 'checkCircle', message: 'Ótimo ponto de partida para qualquer objetivo' },
+  { label: 'Sobrepeso', from: 25, to: 30, hex: '#fbbf24', icon: 'activity', message: 'Com consistência, resultados vêm rápido' },
+  { label: 'Obesidade', from: 30, to: 40, hex: '#fb923c', icon: 'target', message: 'Cada treino é uma vitória — vamos juntos' },
+]
+
+function getZoneIndex(bmi: number): number {
+  if (bmi < 18.5) return 0
+  if (bmi < 25) return 1
+  if (bmi < 30) return 2
+  return 3
 }
 
 const MIN_KG = 30
@@ -71,7 +54,7 @@ export function StepWeight() {
   const weight = data.weight_kg ?? 70
   const height = data.height_cm
 
-  // Picker nativo: começa em um default válido (70kg) — sem teclado, sem estado inválido
+  // Picker nativo: começa em um default válido — sem teclado, sem estado inválido
   useEffect(() => {
     if (data.weight_kg == null) updateData({ weight_kg: 70 })
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -98,13 +81,13 @@ export function StepWeight() {
     return weight / ((height / 100) ** 2)
   }, [weight, height])
 
-  const bmiInfo = bmi ? getBMICategory(bmi) : null
+  const zone = bmi ? BMI_ZONES[getZoneIndex(bmi)] : null
   const display = weight % 1 === 0 ? String(weight) : weight.toFixed(1)
 
   return (
     <div className="flex flex-col items-center space-y-7">
       {/* Placar: steppers ±0.5 + número Syne */}
-      <div className="flex w-full items-center justify-center gap-5 rounded-[28px] border border-white/10 bg-white/6 px-4 py-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+      <div className="flex w-full items-center justify-center gap-5 rounded-[28px] border border-white/10 bg-white/6 px-4 py-6 shadow-glass-inset-sm">
         <button
           type="button"
           onClick={() => step(-0.5)}
@@ -157,41 +140,63 @@ export function StepWeight() {
         </div>
       </div>
 
-      {/* BMI Card */}
-      {bmi && bmiInfo && (
-        <div className="w-full max-w-xs space-y-3 rounded-2xl border border-white/10 bg-white/6 p-5 shadow-glass-inset-sm">
-          {/* BMI value */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <DSIcon name={bmiInfo.icon} className={`h-6 w-6 ${bmiInfo.color}`} />
+      {/* IMC — telemetria com zona ativa acesa */}
+      {bmi && zone && (
+        <div
+          className="w-full max-w-xs space-y-4 rounded-2xl border bg-white/3 p-5"
+          style={{ borderColor: `${zone.hex}40`, boxShadow: `0 0 34px -14px ${zone.hex}66, inset 0 1px 0 rgba(255,255,255,0.06)` }}
+        >
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5">
+              <span
+                className="grid h-9 w-9 shrink-0 place-items-center rounded-full border"
+                style={{ color: zone.hex, borderColor: `${zone.hex}40`, background: `${zone.hex}1a` }}
+              >
+                <DSIcon name={zone.icon} size={17} />
+              </span>
               <div>
                 <p className="bc-mono text-[9px] font-bold uppercase tracking-[0.14em] text-white/40">Seu IMC</p>
-                <p className={`font-syne text-xl font-black ${bmiInfo.color}`}>
+                <p className="font-syne text-2xl font-black leading-none tabular-nums" style={{ color: zone.hex }}>
                   {bmi.toFixed(1)}
                 </p>
               </div>
             </div>
-            <span className={`bc-mono rounded-full border border-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em] ${bmiInfo.color} bg-white/6`}>
-              {bmiInfo.label}
+            <span
+              className="bc-mono shrink-0 rounded-full border px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em]"
+              style={{ color: zone.hex, borderColor: `${zone.hex}40`, background: `${zone.hex}14` }}
+            >
+              {zone.label}
             </span>
           </div>
 
-          {/* BMI bar visual */}
-          <div className="space-y-1">
-            <div className="relative h-2 w-full overflow-hidden rounded-full bg-white/10">
-              <div
-                className="absolute top-0 left-0 h-full rounded-full bg-linear-to-r from-brand-primary via-green-400 to-orange-400"
-                style={{ width: '100%' }}
-              />
-              {/* Indicator */}
-              <div
-                className="absolute top-0 h-2 w-1 rounded-full bg-white shadow-sm"
-                style={{
-                  left: `${Math.min(Math.max(((bmi - 15) / 25) * 100, 2), 98)}%`,
-                }}
-              />
+          {/* Zonas segmentadas — só a ativa acende */}
+          <div className="space-y-1.5">
+            <div className="flex gap-1">
+              {BMI_ZONES.map((z, i) => {
+                const active = z === zone
+                const pct = active ? Math.min(Math.max(((bmi - z.from) / (z.to - z.from)) * 100, 6), 94) : 0
+                return (
+                  <div
+                    key={z.label}
+                    className="relative h-2 rounded-full transition-all duration-300"
+                    style={{
+                      width: `${((z.to - z.from) / 25) * 100}%`,
+                      background: active ? z.hex : 'rgba(255,255,255,0.08)',
+                      boxShadow: active ? `0 0 12px ${z.hex}80` : 'none',
+                    }}
+                  >
+                    {active && (
+                      <span
+                        aria-hidden
+                        className="absolute -top-1 h-4 w-1.5 -translate-x-1/2 rounded-full bg-white shadow-[0_1px_4px_rgba(0,0,0,0.5)]"
+                        style={{ left: `${pct}%` }}
+                      />
+                    )}
+                  </div>
+                )
+              })}
             </div>
-            <div className="flex justify-between text-[10px] text-white/25">
+            <div className="bc-mono flex justify-between text-[9px] font-bold text-white/25 tabular-nums">
               <span>15</span>
               <span>18.5</span>
               <span>25</span>
@@ -200,19 +205,12 @@ export function StepWeight() {
             </div>
           </div>
 
-          {/* Motivation */}
-          <p className="text-center text-xs text-white/50">
-            {bmiInfo.message}
-          </p>
+          <p className="text-center text-xs leading-5 text-slate-400">{zone.message}</p>
         </div>
       )}
 
       {/* No height hint */}
-      {weight && !height ? (
-        <p className="text-xs text-white/30">
-          Informe sua altura no passo anterior para calcular o IMC
-        </p>
-      ) : null}
+      {weight && !height ? <p className="text-xs text-white/30">Informe sua altura no passo anterior para calcular o IMC</p> : null}
     </div>
   )
 }
