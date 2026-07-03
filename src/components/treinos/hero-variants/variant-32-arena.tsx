@@ -165,7 +165,7 @@ export function HeroArena({
               {/* Ribbon de LED — microcopy corrida, estática */}
               <div className="mt-2.5 overflow-hidden whitespace-nowrap rounded-sm border-y border-white/6 bg-black/50 px-2 py-1.5">
                 <p className="font-mono text-[8px] font-bold uppercase tracking-[0.22em] text-emerald-400/85">
-                  Rodada de hoje // {opponent} // meta {goalPct}% // sequência {streakDays} dias // {xp} XP em jogo //
+                  {`Rodada de hoje // ${opponent} // meta ${goalPct}% // sequência ${streakDays} dias // ${xp} XP em jogo //`}
                 </p>
               </div>
 

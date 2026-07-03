@@ -5,6 +5,16 @@
 
 ---
 
+## [Unreleased] — 03/07/2026 — Redesign da home do aluno: hero Carbono + fusão header/hero + consent LGPD v2
+
+- **Hero Carbono em produção** (`treinos/page.tsx`): `HeroCarbono` substitui `FirstWinCommandCenter` — painel de superesportivo full-bleed (tacômetro da meta diária, readouts XP/streak, barra segmentada do plano, CTA chanfrado, tiles Proteína/Evoluir plano). Escolhido pelo dono em painel de design com 30+ variantes geradas e julgadas por multi-agente.
+- **Fusão total status bar → header → hero**: `StudentHeader` agora desce em gradiente `#050A12 → #0d1117` com trama de carbono idêntica à do hero (3px) e glow emerald contínuo atravessando a emenda; hero nasce exatamente em `#0d1117`. Prop `inline` adicionada para preview.
+- **Moeda XP do header modernizada**: chip âmbar/dourado → emerald (identidade da logo), disco com gradiente emerald e número tabular.
+- **Cookie consent LGPD v2** (`cookie-consent.tsx`): redesign compacto (radius canônico, hairline emerald, zero animação em loop), igualdade de escolha ("Somente necessários" + "Aceitar todos"), foco acessível; **suprimido em PWA/TWA/iOS standalone** — aparece apenas em navegador web.
+- **Showroom dev-only** (`/dev-preview/hero`, `notFound()` em produção): catálogo de variantes de hero com header fundido por seção, fixtures realistas e botão "Rever cookie consent". Variantes mantidas: Carbono (campeão), Placar, Bilhete (candidata a check-in/marketplace), Telemetria v2 (candidata ao treino-ativo), Monocoque, Arena, Paddock, Lounge.
+
+---
+
 ## [Unreleased] — 02/07/2026 — Self-review da branch: 3 fixes de robustez no checkout
 
 - **Refund seguro**: `REFUNDED/DELETED` no webhook `plan_purchase_` agora só estorna se o `asaas_payment_id` do evento for o da compra — o `DELETED` de uma cobrança antiga regenerada não rebaixa mais uma compra já paga.
