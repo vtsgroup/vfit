@@ -78,7 +78,7 @@ function isExcluded(pathname: string): boolean {
   return EXCLUDED_ROUTES.has(pathname) || pathname.startsWith('/treino-ativo')
 }
 
-export function StudentHeader() {
+export function StudentHeader({ inline = false }: { inline?: boolean } = {}) {
   const pathname = usePathname()
   const user = useAuthStore((s) => s.user)
   const [scrolled, setScrolled] = useState(false)
@@ -101,19 +101,28 @@ export function StudentHeader() {
   return (
     <header
       className={cn(
-        'ds3-header fixed left-0 right-0 z-30 backdrop-blur-2xl backdrop-saturate-180 transition-all duration-300',
+        'ds3-header left-0 right-0 z-30 backdrop-blur-2xl backdrop-saturate-180 transition-all duration-300',
         'border-b-0',
-        scrolled && 'ds3-header-scrolled'
+        inline ? 'relative' : 'fixed',
+        !inline && scrolled && 'ds3-header-scrolled'
       )}
       style={{
-        // Dark theme-color top → hero blue, so the header reads as the first slice of the hero.
+        // Fusão em gradiente contínuo: topo = #050A12 (theme-color/status bar) e o
+        // degradê desce até o grafite #0d1117 — exatamente a cor em que o hero
+        // carbono começa. Trama de carbono na MESMA escala do hero (3px) e glow
+        // emerald vazando de baixo (continuação do glow do hero) — a emenda some
+        // porque textura, luz e gradiente atravessam os dois elementos.
         background:
-          'linear-gradient(to bottom, #050A12 0%, #06101f 22%, #07182d 48%, #0a1a31 74%, #0b1d36 100%)',
+          'repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0 1px, transparent 1px 3px), repeating-linear-gradient(-45deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 3px), radial-gradient(circle at 86% 150%, rgba(34,197,94,0.13), transparent 55%), linear-gradient(to bottom, #050A12 0%, #070b11 35%, #0a0e14 65%, #0d1117 100%)',
         backgroundColor: '#050A12',
         borderBottom: 0,
-        boxShadow: '0 1px 0 #0b1d36',
-        top: 'var(--demo-banner-offset, 0px)',
-        paddingTop: 'env(safe-area-inset-top, 0px)',
+        boxShadow: '0 1px 0 #0d1117',
+        ...(inline
+          ? {}
+          : {
+              top: 'var(--demo-banner-offset, 0px)',
+              paddingTop: 'env(safe-area-inset-top, 0px)',
+            }),
       }}
     >
       <div className="relative z-2 flex h-14 items-center justify-between px-4">
@@ -150,17 +159,17 @@ export function StudentHeader() {
         </div>
 
         <div className="flex shrink-0 items-center gap-2">
-          {/* XP chip — digital asset coin, left of notifications */}
+          {/* XP chip — moeda VFIT em emerald, linguagem carbono */}
           <Link
             href="/progresso/streaks"
-            className="flex h-9 items-center gap-1.5 rounded-[13px] border border-amber-200/22 bg-linear-to-b from-white/10 via-amber-300/7 to-slate-950/26 px-2.5 pr-3 text-slate-100 shadow-[0_8px_20px_-14px_rgba(245,158,11,0.56),inset_0_1px_0_rgba(255,251,235,0.16)] transition-all duration-200 hover:border-amber-100/40 hover:from-white/12 hover:via-amber-300/11 active:scale-95"
+            className="flex h-9 items-center gap-1.5 rounded-[13px] border border-emerald-300/22 bg-linear-to-b from-white/9 via-emerald-300/7 to-slate-950/35 px-2.5 pr-3 text-slate-100 shadow-[0_8px_20px_-14px_rgba(16,185,129,0.55),inset_0_1px_0_rgba(255,255,255,0.14)] transition-all duration-200 hover:border-emerald-200/40 hover:from-white/12 hover:via-emerald-300/11 active:scale-95"
             title={`${xpData?.balance ?? 0} XP — Nível ${xpData?.level ?? 1}`}
             aria-label={`${xpData?.balance ?? 0} XP, nível ${xpData?.level ?? 1}`}
           >
-            <span className="relative flex h-6 w-6 items-center justify-center rounded-full bg-linear-to-b from-amber-100 to-amber-500 shadow-[0_0_0_1px_rgba(255,251,235,0.34),0_3px_8px_rgba(180,83,9,0.32)]">
-              <DSIcon name="coin" size={17} className="relative" />
+            <span className="relative flex h-6 w-6 items-center justify-center rounded-full bg-linear-to-b from-emerald-200 via-emerald-400 to-emerald-600 text-emerald-950 shadow-[0_0_0_1px_rgba(255,255,255,0.28),0_3px_8px_rgba(6,95,70,0.42)]">
+              <DSIcon name="coin" size={15} className="relative" />
             </span>
-            <span className="text-[12px] font-black tabular-nums leading-none text-amber-50">{xpData?.balance ?? 0}</span>
+            <span className="text-[12px] font-black tabular-nums leading-none text-emerald-50">{xpData?.balance ?? 0}</span>
           </Link>
 
           <div className="relative">

@@ -6,12 +6,11 @@
  * Exports: CookieConsentBanner
  * Hooks: useState, useEffect, useCallback
  * Features: 'use client' · DSIcon
+ *
+ * Só aparece em navegador web: PWA instalado, TWA (Android) e iOS standalone
+ * são suprimidos — nesses contextos o consentimento já foi dado na web ou o
+ * ambiente não expõe cookies de terceiros configuráveis.
  */
-
-// ============================================
-// Cookie Consent Banner — Enterprise, LGPD Compliant
-// Analytics auto-approved (Cloudflare Analytics = privacy-first)
-// ============================================
 
 'use client'
 
@@ -52,6 +51,28 @@ function storeConsent(prefs: CookiePreferences) {
   }
 }
 
+// ─── Platform Suppression ────────────────────────────
+// PWA instalado (Android/desktop), iOS standalone e TWA não veem o banner.
+function isStandaloneApp(): boolean {
+  if (typeof window === 'undefined') return false
+  try {
+    const displayModeApp =
+      typeof window.matchMedia === 'function' &&
+      (window.matchMedia('(display-mode: standalone)').matches ||
+        window.matchMedia('(display-mode: fullscreen)').matches ||
+        window.matchMedia('(display-mode: minimal-ui)').matches)
+    const iosStandalone =
+      'standalone' in window.navigator &&
+      (window.navigator as Navigator & { standalone?: boolean }).standalone === true
+    const twa =
+      document.referrer.startsWith('android-app://') ||
+      new URLSearchParams(window.location.search).get('utm_source') === 'twa'
+    return displayModeApp || iosStandalone || twa
+  } catch {
+    return false
+  }
+}
+
 // ─── Route Suppression ───────────────────────────────
 // Routes where cookie banner should NOT appear
 const SUPPRESS_COOKIE_BANNER_ROUTES = [
@@ -67,7 +88,7 @@ const SUPPRESS_COOKIE_BANNER_ROUTES = [
 ]
 
 function shouldSuppressCookieBanner(pathname: string): boolean {
-  return SUPPRESS_COOKIE_BANNER_ROUTES.some(route => 
+  return SUPPRESS_COOKIE_BANNER_ROUTES.some(route =>
     pathname === route || pathname.startsWith(route + '/')
   )
 }
@@ -80,18 +101,17 @@ export function CookieConsentBanner() {
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    // Rota suprimida → não mostra banner (marca mounted p/ evitar re-render à toa).
-    if (typeof window !== 'undefined' && shouldSuppressCookieBanner(window.location.pathname)) {
+    // App instalado (PWA/TWA/iOS standalone) ou rota suprimida → não mostra banner.
+    if (
+      typeof window !== 'undefined' &&
+      (isStandaloneApp() || shouldSuppressCookieBanner(window.location.pathname))
+    ) {
       setMounted(true)
       return
     }
 
-    // Aparece logo após a hidratação — NÃO atrasamos mais.
-    // O herói é HTML estático (SSG) e já pintou no FCP, então o LCP fica travado
-    // nele (não no banner). Mostrar cedo faz o Speed Index "assentar" rápido:
-    // o atraso anterior de ~2,8s fazia o banner surgir no meio do trace do
-    // Lighthouse e inflava o Speed Index p/ ~2,2s (derrubava Performance a 95).
-    // O rAF só garante que o 1º frame da página já saiu antes de inserir o banner.
+    // Aparece logo após a hidratação — o rAF garante que o 1º frame da página
+    // já pintou antes de inserir o banner (LCP fica no herói, não aqui).
     setMounted(true)
     if (getStoredConsent()) return
 
@@ -135,263 +155,166 @@ export function CookieConsentBanner() {
   if (!mounted || !visible) return null
 
   return (
-    <>
-      {/* Backdrop blur */}
-      <div className="fixed inset-0 z-9998 bg-black/20 backdrop-blur-[2px] animate-in fade-in duration-300" aria-hidden="true" />
+    <div
+      role="dialog"
+      aria-label="Preferências de cookies"
+      className="vfit-consent-enter fixed inset-x-0 bottom-0 z-9999 p-3 sm:p-5"
+      style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom, 0px))' }}
+    >
+      <style>{`
+        @keyframes vfit-consent-up {
+          0% { opacity: 0; transform: translateY(14px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
+        .vfit-consent-enter {
+          animation: vfit-consent-up 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
+          will-change: transform, opacity;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .vfit-consent-enter { animation: none !important; }
+        }
+      `}</style>
 
-      {/* Banner */}
-      <div
-        className="fixed inset-x-0 bottom-0 z-9999 p-4 sm:p-6 animate-in slide-in-from-bottom duration-500"
-        style={{ paddingBottom: 'calc(1rem + env(safe-area-inset-bottom, 0px))' }}
-      >
-        <style>{`
-          /* Composited animations only (transform/opacity) — no background-position,
-             box-shadow or filter animation. Mesma aparência, sem jank/CLS. */
-          @keyframes shimmer-border-x {
-            0% { transform: translateX(-50%); }
-            100% { transform: translateX(0); }
-          }
-          @keyframes pulse-glow-opacity {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-          }
-          @keyframes fade-scale-in {
-            0% { opacity: 0; transform: scale(0.95); }
-            100% { opacity: 1; transform: scale(1); }
-          }
-          .shimmer-border-subtle {
-            overflow: hidden;
-            border-radius: inherit;
-          }
-          .shimmer-border-subtle::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            width: 200%;
-            background: linear-gradient(
-              90deg,
-              rgba(34, 197, 94, 0.05) 0%,
-              rgba(34, 197, 94, 0.12) 25%,
-              rgba(34, 197, 94, 0.15) 50%,
-              rgba(34, 197, 94, 0.12) 75%,
-              rgba(34, 197, 94, 0.05) 100%
-            );
-            will-change: transform;
-            animation: shimmer-border-x 4s linear infinite;
-          }
-          .icon-container {
-            animation: fade-scale-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-          }
-          .pulse-glow-layer {
-            will-change: opacity;
-            animation: pulse-glow-opacity 4s ease-in-out infinite;
-          }
-          @media (prefers-reduced-motion: reduce) {
-            .icon-container,
-            .pulse-glow-layer,
-            .shimmer-border-subtle::before {
-              animation: none !important;
-            }
-          }
-        `}</style>
-
-        <div className="mx-auto max-w-2xl relative">
-          {/* Visual backdrop — only behind the card */}
+      <div className="mx-auto max-w-md sm:max-w-lg">
+        <div
+          className="relative overflow-hidden rounded-card-lg backdrop-blur-2xl"
+          style={{
+            background: 'rgba(10, 16, 28, 0.88)',
+            border: '1px solid rgba(255, 255, 255, 0.09)',
+            boxShadow:
+              '0 1px 2px rgba(0,0,0,0.4), 0 20px 50px -12px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.08)',
+          }}
+        >
+          {/* Assinatura da marca: hairline emerald no topo, estática */}
           <div
-            className="absolute inset-0 rounded-3xl pointer-events-none"
-            style={{
-              background: 'rgba(8, 23, 42, 0.70)',
-              filter: 'blur(16px)',
-              top: '8px',
-              left: '8px',
-              right: '8px',
-              bottom: '8px'
-            }}
             aria-hidden="true"
+            className="absolute inset-x-0 top-0 h-px"
+            style={{
+              background:
+                'linear-gradient(90deg, transparent 0%, rgba(34,197,94,0.55) 30%, rgba(34,197,94,0.55) 70%, transparent 100%)',
+            }}
           />
 
-          {/* Shimmer border gradient layer */}
-          <div
-            className="absolute inset-0 rounded-3xl pointer-events-none shimmer-border-subtle"
-            style={{
-              padding: '1px'
-            }}
-            aria-hidden="true"
-          />
-
-          {/* Cookie card */}
-          <div
-            className="relative overflow-hidden rounded-3xl backdrop-blur-xl"
-            style={{
-              background: 'rgba(20, 20, 30, 0.25)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              boxShadow: `
-                0 0 40px rgba(0, 0, 0, 0.2),
-                0 24px 48px -12px rgba(0, 0, 0, 0.15),
-                inset 0 1px 1px rgba(255, 255, 255, 0.15)
-              `
-            }}
-          >
-          {/* Header */}
-          <div className="p-5 pb-0 sm:p-6 sm:pb-0">
-            <div className="flex items-start justify-between gap-3">
-              <div className="flex items-center gap-4">
-                {/* Premium Icon Container with Glassmorphism */}
-                <div className="relative shrink-0" style={{ width: '44px', height: '44px' }}>
-                  {/* Glow pulsante (camada composta — anima opacity, não box-shadow) */}
-                  <div
-                    aria-hidden="true"
-                    className="pulse-glow-layer pointer-events-none absolute inset-0 rounded-2xl"
-                    style={{ boxShadow: '0 0 30px rgba(15, 23, 42, 0.3)' }}
-                  />
-                  <div className="icon-container relative flex h-full w-full items-center justify-center overflow-hidden rounded-2xl backdrop-blur-md transition-all duration-300 hover:scale-105 hover:-translate-y-0.5"
-                    style={{
-                      background: '#22c55e',
-                      border: '1.5px solid rgba(34, 197, 94, 0.5)',
-                      boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.1)'
-                    }}
-                  >
-                    {/* Eye Icon - Dark Blue (drop-shadow estático — sem animar filter) */}
-                    <svg className="h-6 w-6" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style={{ filter: 'drop-shadow(0 0 5px rgba(15, 23, 42, 0.3))' }}>
-                      <path fill="#0f1729" d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
-                    </svg>
-                  </div>
-                </div>
-                <div>
-                  <h3 className="text-sm font-bold dark:text-white light:text-slate-900">Cookies & Privacidade</h3>
-                  <p className="text-xs dark:text-zinc-400 light:text-slate-500">LGPD Compliant • v{CONSENT_VERSION}</p>
-                </div>
+          <div className="p-4 sm:p-5">
+            {/* Header */}
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5">
+                <DSIcon name="shieldCheck" size={17} className="shrink-0 text-brand-primary" />
+                <h3 className="text-[13px] font-bold tracking-tight text-white">
+                  Cookies & Privacidade
+                </h3>
+                <span className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-zinc-400">
+                  LGPD
+                </span>
               </div>
               <button
                 onClick={handleRejectOptional}
-                className="rounded-lg p-1.5 dark:text-zinc-600 light:text-slate-400 transition-colors dark:hover:bg-white/5 light:hover:bg-black/5 dark:hover:text-zinc-400 light:hover:text-slate-600"
-                aria-label="Fechar"
+                className="flex h-8 w-8 items-center justify-center rounded-[9px] text-zinc-500 transition-colors hover:bg-white/6 hover:text-zinc-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/40"
+                aria-label="Fechar e manter somente cookies necessários"
               >
-                <DSIcon name="x" size={16} />
+                <DSIcon name="x" size={15} />
               </button>
             </div>
-          </div>
 
-          {/* Body */}
-          <div className="p-5 sm:p-6">
-            <p className="text-sm leading-relaxed dark:text-zinc-400 light:text-slate-500">
-              Usamos cookies <strong className="dark:text-zinc-300 light:text-slate-700">estritamente necessários</strong> para
-              o funcionamento da plataforma. Analytics opera via{' '}
-              <strong className="dark:text-zinc-300 light:text-slate-700">Cloudflare Analytics Engine</strong> (server-side,
-              privacy-first) sem rastreamento pessoal.
+            {/* Body */}
+            <p className="mt-2.5 text-[12.5px] leading-relaxed text-zinc-400">
+              Usamos cookies <strong className="font-semibold text-zinc-200">estritamente necessários</strong> para
+              a plataforma funcionar. Analytics opera via{' '}
+              <strong className="font-semibold text-zinc-200">Cloudflare Analytics Engine</strong>{' '}
+              (server-side, privacy-first), sem rastreamento pessoal.
             </p>
 
             {/* Toggle Details */}
             <button
               onClick={() => setExpanded(!expanded)}
-              className="mt-3 flex items-center gap-1.5 text-xs font-medium text-brand-primary transition-colors hover:text-brand-primary/80"
+              className="mt-2.5 flex min-h-8 items-center gap-1 text-[11.5px] font-semibold text-brand-primary transition-colors hover:text-emerald-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/40 rounded-md"
+              aria-expanded={expanded}
             >
-              {expanded ? <DSIcon name="chevronUp" size={14} /> : <DSIcon name="chevronDown" size={14} />}
-              {expanded ? 'Ocultar detalhes' : 'Personalizar cookies'}
+              <DSIcon name={expanded ? 'chevronUp' : 'chevronDown'} size={13} />
+              {expanded ? 'Ocultar detalhes' : 'Personalizar'}
             </button>
 
             {/* Expanded Details */}
             {expanded && (
-              <div className="mt-4 space-y-3 animate-in fade-in slide-in-from-top-2 duration-300">
+              <div className="mt-3 space-y-2">
                 {/* Essential */}
-                <div className="flex items-center justify-between rounded-xl border dark:border-white/6 light:border-slate-200 dark:bg-white/2 light:bg-slate-50 p-3.5">
+                <div className="flex items-center justify-between rounded-[13px] border border-white/7 bg-white/3 px-3.5 py-3">
                   <div className="flex items-center gap-3">
-                    <DSIcon name="shield" size={16} className="text-emerald-400" />
+                    <DSIcon name="lock" size={15} className="text-emerald-400" />
                     <div>
-                      <p className="text-xs font-semibold dark:text-white light:text-slate-900">Necessários</p>
-                      <p className="text-[10px] dark:text-zinc-400 light:text-slate-500">Autenticação, sessão, segurança</p>
+                      <p className="text-[12px] font-semibold text-white">Necessários</p>
+                      <p className="text-[10.5px] text-zinc-500">Autenticação, sessão, segurança</p>
                     </div>
                   </div>
-                  <div className="flex h-6 w-11 items-center rounded-full bg-emerald-500/20 px-0.5">
-                    <div className="h-5 w-5 translate-x-5 rounded-full bg-emerald-400 shadow-sm" />
-                  </div>
+                  <span className="rounded-full bg-emerald-500/12 px-2.5 py-1 text-[9.5px] font-bold uppercase tracking-wider text-emerald-400">
+                    Sempre ativos
+                  </span>
                 </div>
 
                 {/* Analytics */}
-                <div className="flex items-center justify-between rounded-xl border dark:border-white/6 light:border-slate-200 dark:bg-white/2 light:bg-slate-50 p-3.5">
+                <div className="flex items-center justify-between rounded-[13px] border border-white/7 bg-white/3 px-3.5 py-3">
                   <div className="flex items-center gap-3">
-                    <DSIcon name="barChart" size={16} className="text-brand-primary" />
+                    <DSIcon name="barChart" size={15} className="text-brand-primary" />
                     <div>
-                      <p className="text-xs font-semibold dark:text-white light:text-slate-900">Analytics</p>
-                      <p className="text-[10px] dark:text-zinc-400 light:text-slate-500">Cloudflare Analytics (server-side, sem PII)</p>
+                      <p className="text-[12px] font-semibold text-white">Analytics</p>
+                      <p className="text-[10.5px] text-zinc-500">Server-side, sem PII ·{' '}
+                        <Link href="/cookies" className="text-brand-primary hover:underline">saiba mais</Link>
+                      </p>
                     </div>
                   </div>
                   <button
                     onClick={() => setAnalytics(!analytics)}
-                    className={`flex h-6 w-11 items-center rounded-full px-0.5 transition-colors ${
-                      analytics ? 'bg-brand-primary/20' : 'dark:bg-zinc-800 light:bg-slate-200'
+                    className={`flex h-6.5 w-11.5 shrink-0 items-center rounded-full px-0.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/40 ${
+                      analytics ? 'bg-brand-primary' : 'bg-zinc-700'
                     }`}
                     role="switch"
                     aria-checked={analytics}
+                    aria-label="Permitir analytics"
                   >
-                    <div
-                      className={`h-5 w-5 rounded-full shadow-sm transition-all ${
-                        analytics ? 'translate-x-5 bg-brand-primary' : 'translate-x-0 dark:bg-zinc-600 light:bg-slate-400'
+                    <span
+                      className={`h-5.5 w-5.5 rounded-full bg-white shadow-[0_1px_3px_rgba(0,0,0,0.35)] transition-transform ${
+                        analytics ? 'translate-x-5' : 'translate-x-0'
                       }`}
                     />
                   </button>
                 </div>
-
-                {/* Info callout */}
-                <div className="rounded-xl border border-emerald-500/10 bg-emerald-500/5 p-3">
-                  <p className="text-[10px] leading-relaxed dark:text-zinc-400 light:text-slate-500">
-                    <strong className="text-emerald-400">Nota:</strong> Cloudflare Analytics Engine
-                    opera 100% server-side. Não instala cookies no navegador e não coleta dados
-                    pessoais identificáveis (PII). Detalhes na{' '}
-                    <Link href="/cookies" className="text-brand-primary hover:underline">
-                      Política de Cookies
-                    </Link>.
-                  </p>
-                </div>
               </div>
             )}
 
-            {/* Actions */}
-            <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex gap-2 text-[10px] dark:text-zinc-400 light:text-slate-500">
-                <Link href="/privacidade" className="dark:hover:text-zinc-300 light:hover:text-slate-700">Privacidade</Link>
-                <span>•</span>
-                <Link href="/cookies" className="dark:hover:text-zinc-300 light:hover:text-slate-700">Cookies</Link>
-                <span>•</span>
-                <Link href="/termos" className="dark:hover:text-zinc-300 light:hover:text-slate-700">Termos</Link>
-              </div>
-              <div className="flex gap-2">
-                {expanded && (
-                  <button
-                    onClick={handleSavePreferences}
-                    className="group relative rounded-2xl px-4 py-2.5 text-xs font-bold uppercase tracking-wider transition-all duration-300 hover:-translate-y-0.5 backdrop-blur-lg border overflow-hidden"
-                    style={{
-                      background: 'rgba(34, 197, 94, 0.12)',
-                      borderColor: 'rgba(34, 197, 94, 0.3)',
-                      color: 'rgba(34, 197, 94)',
-                      boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.2), 0 4px 16px rgba(34, 197, 94, 0.1)'
-                    }}
-                  >
-                    <span className="pointer-events-none absolute inset-0 -translate-x-[120%] bg-linear-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-[120%]" />
-                    <span className="relative">Salvar preferências</span>
-                  </button>
-                )}
-                <button
-                  onClick={handleAcceptAll}
-                  className="group/sub relative inline-flex h-12 shrink-0 items-center justify-center gap-2 overflow-hidden rounded-full px-6 text-[12px] font-black uppercase tracking-wider text-[#08122B] transition-all duration-300 hover:-translate-y-px active:scale-[0.98]"
-                  style={{
-                    background: 'linear-gradient(135deg, #34e565 0%, #22c55e 52%, #16a34a 100%)',
-                    boxShadow: '0 10px 26px -8px rgba(34,197,94,0.55), inset 0 1px 0 rgba(255,255,255,0.45)'
-                  }}
-                >
-                  <span className="pointer-events-none absolute inset-0 -translate-x-[120%] bg-linear-to-r from-transparent via-white/40 to-transparent transition-transform duration-700 group-hover/sub:translate-x-[120%]" />
-                  <span className="relative z-10 inline-flex items-center gap-1.5">
-                    Aceitar todos <DSIcon name="arrowRight" size={13} />
-                  </span>
-                </button>
-              </div>
+            {/* Actions — igualdade de escolha (LGPD) */}
+            <div className="mt-4 grid grid-cols-2 gap-2">
+              <button
+                onClick={expanded ? handleSavePreferences : handleRejectOptional}
+                className="flex h-11 items-center justify-center rounded-[13px] border border-white/12 bg-white/5 px-4 text-[12px] font-bold text-zinc-200 transition-all hover:bg-white/9 active:translate-y-px active:scale-[0.985] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/40"
+              >
+                {expanded ? 'Salvar preferências' : 'Somente necessários'}
+              </button>
+              <button
+                onClick={handleAcceptAll}
+                className="flex h-11 items-center justify-center gap-1.5 rounded-[13px] bg-brand-primary px-4 text-[12px] font-black text-white transition-all hover:brightness-105 active:translate-y-px active:scale-[0.985] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300/50"
+                style={{
+                  border: '1px solid rgba(6,78,59,0.7)',
+                  boxShadow:
+                    '0 1px 2px rgba(2,44,34,0.4), 0 8px 20px -6px rgba(6,95,70,0.5), inset 0 1px 0 rgba(255,255,255,0.22)',
+                  textShadow: '0 1px 2px rgba(2,44,34,0.38)',
+                }}
+              >
+                Aceitar todos
+                <DSIcon name="arrowRight" size={13} />
+              </button>
             </div>
-          </div>
+
+            {/* Legal links */}
+            <div className="mt-3 flex items-center justify-center gap-2 text-[10px] text-zinc-500">
+              <Link href="/privacidade" className="transition-colors hover:text-zinc-300">Privacidade</Link>
+              <span aria-hidden="true">·</span>
+              <Link href="/cookies" className="transition-colors hover:text-zinc-300">Cookies</Link>
+              <span aria-hidden="true">·</span>
+              <Link href="/termos" className="transition-colors hover:text-zinc-300">Termos</Link>
+            </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   )
 }
