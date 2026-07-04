@@ -1,9 +1,9 @@
 # Authenticated Smoke Report (Gerado automaticamente)
 
-> Gerado em: 2026-07-02T05:01:26.289Z
+> Gerado em: 2026-07-04T01:29:03.878Z
 > Base URL: https://api.vfit.app.br
-> test_run_id: run-20260702050126-auth
-> session_id: session-smoke-1782968486
+> test_run_id: run-20260704012903-auth
+> session_id: session-smoke-1783128543
 
 ## Como executar (sem vazar token)
 
@@ -23,12 +23,12 @@ Opção 3 — UI (super_admin)
 - Abra `https://vfit.app.br/dashboard/admin/smoke` e gere tokens temporários para colar no terminal usando `read -s`.
 
 ## Configuração de tokens
-- Personal token: ausente
-- Student token: ausente
-- Admin token: ausente
-- Personal préflight: expirado
-- Student préflight: expirado
-- Admin préflight: expirado
+- Personal token: informado
+- Student token: informado
+- Admin token: informado
+- Personal préflight: válido
+- Student préflight: válido
+- Admin préflight: válido
 
 ## Configuração operacional
 - allow_mutations: false
@@ -36,16 +36,23 @@ Opção 3 — UI (super_admin)
 - retries(GET): 1
 
 ## Resumo
-- Passou: **0**
+- Passou: **8**
 - Falhou: **0**
-- Skipped: **3**
+- Skipped: **2**
 
 ## Execuções
 | Fluxo | Método | Rota | Status | HTTP | Latência (ms) | request_id | Observação |
 |---|---|---|---|---:|---:|---|---|
-| Personal: auth/me | GET | /api/v1/auth/me | skipped | - | 0 | - | token não informado para este fluxo |
-| Student: auth/me | GET | /api/v1/auth/me | skipped | - | 0 | - | token não informado para este fluxo |
-| Admin: feedback list | GET | /api/v1/admin/feedback?page=1&per_page=5 | skipped | - | 0 | - | token não informado para este fluxo |
+| Personal: auth/me | GET | /api/v1/auth/me | passed | 200 | 1407.29 | a15a5b5f59705c72-MIA | - |
+| Personal: students list (seed) | GET | /api/v1/students?page=1&per_page=1 | passed | 200 | 679.79 | a15a5b65c9365c72-MIA | - |
+| Personal: seed student_id | GET | /api/v1/students?page=1&per_page=1 | skipped | - | 0 | - | nenhum aluno disponível para smoke autenticado |
+| Student: auth/me | GET | /api/v1/auth/me | passed | 200 | 683.53 | a15a5b6a08245c72-MIA | - |
+| Payments: my list | GET | /api/v1/payments/my?page=1&per_page=5 | passed | 200 | 685.94 | a15a5b6e5f2a5c72-MIA | - |
+| Checkout auth route: pix (expect not-found on fake/isolated payment) | POST | /api/v1/payments/53819dbb-67e9-4e7e-837f-53fc003a6e74/pay | passed | 404 | 530 | a15a5b72af165c72-MIA | - |
+| Checkout auth route: boleto (expect not-found on fake/isolated payment) | POST | /api/v1/payments/53819dbb-67e9-4e7e-837f-53fc003a6e74/pay | passed | 404 | 477.06 | a15a5b75fb215c72-MIA | - |
+| Checkout auth route: credit_card (expect not-found on fake/isolated payment) | POST | /api/v1/payments/53819dbb-67e9-4e7e-837f-53fc003a6e74/pay | passed | 404 | 452.38 | a15a5b78f82a5c72-MIA | - |
+| Admin: feedback list | GET | /api/v1/admin/feedback?page=1&per_page=5 | passed | 200 | 907.96 | a15a5b7bcac55c72-MIA | - |
+| Admin: feedback detail (from user smoke) | GET | /api/v1/admin/feedback/{feedback_id} | skipped | - | 0 | - | mutations desabilitadas; feedback_id não é gerado (SMOKE_ALLOW_MUTATIONS=1 para habilitar) |
 
 ## Evidências de contexto
 - student_id utilizado: (não definido)
