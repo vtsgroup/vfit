@@ -17,6 +17,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { DSIcon } from '@/components/ui/ds-icon'
+import { forceAcquirePromptSlot, releasePromptSlot } from '@/lib/prompt-exclusion'
 
 // ─── Types ───────────────────────────────────────────
 interface CookiePreferences {
@@ -115,8 +116,16 @@ export function CookieConsentBanner() {
     setMounted(true)
     if (getStoredConsent()) return
 
-    const raf = requestAnimationFrame(() => setVisible(true))
-    return () => cancelAnimationFrame(raf)
+    // Consent é obrigação legal: ocupa o slot de prompts incondicionalmente,
+    // suprimindo install/upsell até o usuário decidir (Fase 0 — Experiência 1000).
+    const raf = requestAnimationFrame(() => {
+      forceAcquirePromptSlot('consent')
+      setVisible(true)
+    })
+    return () => {
+      cancelAnimationFrame(raf)
+      releasePromptSlot('consent')
+    }
   }, [])
 
   const handleAcceptAll = useCallback(() => {
@@ -128,6 +137,7 @@ export function CookieConsentBanner() {
     }
     storeConsent(prefs)
     setVisible(false)
+    releasePromptSlot('consent')
   }, [])
 
   const handleSavePreferences = useCallback(() => {
@@ -139,6 +149,7 @@ export function CookieConsentBanner() {
     }
     storeConsent(prefs)
     setVisible(false)
+    releasePromptSlot('consent')
   }, [analytics])
 
   const handleRejectOptional = useCallback(() => {
@@ -150,6 +161,7 @@ export function CookieConsentBanner() {
     }
     storeConsent(prefs)
     setVisible(false)
+    releasePromptSlot('consent')
   }, [])
 
   if (!mounted || !visible) return null

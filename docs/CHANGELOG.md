@@ -5,6 +5,16 @@
 
 ---
 
+## [Unreleased] — 04/07/2026 — Fase 0 Experiência 1000: fim do empilhamento de prompts + fixes
+
+- **Exclusão mútua de prompts** (`src/lib/prompt-exclusion.ts`): máximo 1 prompt visível por vez em todo o app. Consent (legal) sempre entra e suprime os demais; gate iOS, install banner e upsell cedem a vez sem queimar cooldown. Base mínima até o orquestrador completo (Maestro, Fase 1).
+- **Fix upsell por role** (`upgrade-prompt.tsx`): aluno caía no fallback `'trial'` e via features de personal trainer ("Alunos ilimitados"). Agora exclusivo de personal com perfil carregado.
+- **SmartAppBanner removido** (160L): no iOS só redirecionava ao próprio site; no Android competia com o install banner nativo.
+- **Gate de install iOS suavizado** (decisão do dono): full-screen no máximo 1× (era 3) e sempre pulável (era sem saída nas visitas 1-2).
+- **Fusão visual**: gradiente do header segura #050A12 nos primeiros 16% (status bar + header = peça única); hero sobrepõe 2px sob o header (mata hairline de sub-pixel); bottom navbar em linguagem carbono (fibra 3px, hairline emerald, pill ativa chanfrada emerald).
+
+---
+
 ## [Unreleased] — 03/07/2026 — Redesign da home do aluno: hero Carbono + fusão header/hero + consent LGPD v2
 
 - **Hero Carbono em produção** (`treinos/page.tsx`): `HeroCarbono` substitui `FirstWinCommandCenter` — painel de superesportivo full-bleed (tacômetro da meta diária, readouts XP/streak, barra segmentada do plano, CTA chanfrado, tiles Proteína/Evoluir plano). Escolhido pelo dono em painel de design com 30+ variantes geradas e julgadas por multi-agente.

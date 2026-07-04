@@ -15,6 +15,7 @@
 'use client'
 
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react'
+import { tryAcquirePromptSlot, releasePromptSlot } from '@/lib/prompt-exclusion'
 
 // ─── Types ────────────────────────────────────────────────────────────
 
@@ -219,8 +220,16 @@ export function PwaInstallProvider({ children }: { children: ReactNode }) {
     if (installed || !platform) return
     if (wasDismissedRecently()) return
 
-    const timer = setTimeout(() => setShowBanner(true), 4000)
-    return () => clearTimeout(timer)
+    const timer = setTimeout(() => {
+      // Exclusão mútua (Fase 0 — Experiência 1000): consent, gate iOS ou
+      // upsell visíveis suprimem o banner nesta sessão (sem marcar dismiss).
+      if (!tryAcquirePromptSlot('install-banner')) return
+      setShowBanner(true)
+    }, 4000)
+    return () => {
+      clearTimeout(timer)
+      releasePromptSlot('install-banner')
+    }
   }, [platform, installed])
 
   const triggerInstall = useCallback(async () => {
@@ -250,6 +259,7 @@ export function PwaInstallProvider({ children }: { children: ReactNode }) {
   const dismissBanner = useCallback(() => {
     setShowBanner(false)
     markDismissed()
+    releasePromptSlot('install-banner')
   }, [])
 
   const openOverlay = useCallback(() => setShowOverlay(true), [])

@@ -14,6 +14,7 @@ import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 import { Button } from '@/components/ui/button'
 import { useAuthStore } from '@/stores/auth-store'
 import { useScrollLock } from '@/hooks/use-scroll-lock'
+import { tryAcquirePromptSlot, releasePromptSlot } from '@/lib/prompt-exclusion'
 
 // ─── Constants ───
 const STORAGE_KEY_LAST_SHOWN = 'vfit_upgrade_last_shown'
@@ -96,24 +97,35 @@ export function UpgradePrompt() {
 
   useEffect(() => {
     if (!isHydrated || !user) return
-    // Determine plan: personalProfile?.plan_type or 'trial'
-    const plan = personalProfile?.plan_type ?? 'trial'
+    // As features vendidas aqui ("Alunos ilimitados", "Chat com alunos") são
+    // do plano Pro de PERSONAL TRAINER. Aluno (student) não tem personalProfile
+    // e caía no fallback 'trial', vendo um upsell sem sentido — bug corrigido:
+    // só personal com perfil carregado vê este prompt.
+    if (user.user_type !== 'personal' || !personalProfile) return
+    const plan = personalProfile.plan_type ?? 'trial'
     const timer = setTimeout(() => {
-      if (shouldShowUpgradePrompt(plan)) {
-        setShow(true)
-        localStorage.setItem(STORAGE_KEY_LAST_SHOWN, Date.now().toString())
-        sessionStorage.setItem(STORAGE_KEY_SESSION_SHOWN, 'true')
-      }
+      // Exclusão mútua (Fase 0 — Experiência 1000): se consent ou outro
+      // prompt estiver visível, cede a vez sem queimar o cooldown.
+      if (!shouldShowUpgradePrompt(plan)) return
+      if (!tryAcquirePromptSlot('upsell')) return
+      setShow(true)
+      localStorage.setItem(STORAGE_KEY_LAST_SHOWN, Date.now().toString())
+      sessionStorage.setItem(STORAGE_KEY_SESSION_SHOWN, 'true')
     }, SHOW_DELAY_MS)
-    return () => clearTimeout(timer)
+    return () => {
+      clearTimeout(timer)
+      releasePromptSlot('upsell')
+    }
   }, [isHydrated, user, personalProfile])
 
   const handleDismiss = useCallback(() => {
     setShow(false)
+    releasePromptSlot('upsell')
   }, [])
 
   const handleUpgrade = useCallback(() => {
     setShow(false)
+    releasePromptSlot('upsell')
     router.push('/dashboard/plans')
   }, [router])
 

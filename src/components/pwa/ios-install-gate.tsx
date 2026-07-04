@@ -26,6 +26,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { DSIcon } from '@/components/ui/ds-icon'
+import { tryAcquirePromptSlot, releasePromptSlot, isPromptSlotBusy } from '@/lib/prompt-exclusion'
 
 // ─── Constants ────────────────────────────────────────────────────────
 
@@ -38,7 +39,10 @@ const STORAGE = {
 
 const FULL_GATE_DISMISS_HOURS = 2
 const BANNER_DISMISS_HOURS = 4
-const MAX_FULL_GATE_VISITS = 3
+// Suavização aprovada pelo dono (Fase 0 — Experiência 1000): o gate
+// full-screen aparece no máximo 1 vez e é SEMPRE pulável. Depois disso,
+// apenas o mini banner. Impacto no install rate será medido na Fase 1.
+const MAX_FULL_GATE_VISITS = 1
 
 // ─── Detection helpers ────────────────────────────────────────────────
 
@@ -131,22 +135,32 @@ export function IOSInstallGate() {
     setVisitCount(count)
 
     const timer = setTimeout(() => {
+      // Exclusão mútua (Fase 0 — Experiência 1000): consent visível (ou
+      // qualquer outro prompt) suprime o gate nesta sessão — sem queimar
+      // a contagem de visitas.
+      if (isPromptSlotBusy()) return
       if (count < MAX_FULL_GATE_VISITS) {
         if (!wasGateDismissedRecently()) {
+          if (!tryAcquirePromptSlot('ios-gate')) return
           incrementVisitCount()
           setVisitCount(count + 1)
           setMode('full-screen')
         } else if (!wasBannerDismissedRecently()) {
+          if (!tryAcquirePromptSlot('ios-gate')) return
           setMode('banner')
         }
       } else {
         if (!wasBannerDismissedRecently()) {
+          if (!tryAcquirePromptSlot('ios-gate')) return
           setMode('banner')
         }
       }
     }, 1000)
 
-    return () => clearTimeout(timer)
+    return () => {
+      clearTimeout(timer)
+      releasePromptSlot('ios-gate')
+    }
   }, [])
 
   useEffect(() => {
@@ -164,8 +178,9 @@ export function IOSInstallGate() {
   const handleDismissGate = useCallback(() => {
     markGateDismissed()
     setMode('none')
+    releasePromptSlot('ios-gate')
     setTimeout(() => {
-      if (!isMarkedInstalled() && !wasBannerDismissedRecently()) {
+      if (!isMarkedInstalled() && !wasBannerDismissedRecently() && tryAcquirePromptSlot('ios-gate')) {
         setMode('banner')
       }
     }, 30000)
@@ -174,11 +189,13 @@ export function IOSInstallGate() {
   const handleDismissBanner = useCallback(() => {
     markBannerDismissed()
     setMode('none')
+    releasePromptSlot('ios-gate')
   }, [])
 
   const handleMarkedInstalled = useCallback(() => {
     markAsInstalled()
     setMode('none')
+    releasePromptSlot('ios-gate')
   }, [])
 
   if (mode === 'none') return null
@@ -193,7 +210,9 @@ export function IOSInstallGate() {
     )
   }
 
-  const canSkip = visitCount >= 3
+  // Sempre pulável (era visitCount >= 3 — full-screen sem saída nas 2
+  // primeiras visitas). Decisão de funil do dono em 03/07/2026.
+  const canSkip = true
 
   return (
     <IOSFullGate
