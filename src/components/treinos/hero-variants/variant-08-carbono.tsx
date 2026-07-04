@@ -1,8 +1,10 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { hapticLight } from '@/lib/haptics'
+import { notifyMaestroSignal } from '@/lib/prompt-maestro'
 import { type HeroVariantProps, translateMuscles } from './types'
 
 // Fusão total header+hero: o topo da seção é #050A12 (mesma cor do StudentHeader
@@ -72,6 +74,25 @@ export function HeroCarbono({
   const needleDeg = -90 + goalPct * 1.8
   const proteinPct = targets.protein > 0 ? clampPct((totals.protein / targets.protein) * 100) : 0
   const caloriesPct = targets.calories > 0 ? clampPct((totals.calories / targets.calories) * 100) : 0
+
+  // R4 do Maestro: nenhum prompt não-legal antes de o usuário ver o CTA do
+  // treino. O observer dispara o sinal uma única vez quando o CTA entra na tela.
+  const ctaRef = useRef<HTMLAnchorElement | null>(null)
+  useEffect(() => {
+    const el = ctaRef.current
+    if (!el || typeof IntersectionObserver === 'undefined') {
+      notifyMaestroSignal('hero_cta_seen')
+      return
+    }
+    const obs = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) {
+        notifyMaestroSignal('hero_cta_seen')
+        obs.disconnect()
+      }
+    }, { threshold: 0.5 })
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
 
   return (
     // -mt-[2px]: sobrepõe o hero 2px sob o header fixo — mata a hairline de
@@ -187,7 +208,7 @@ export function HeroCarbono({
                 </div>
               </div>
 
-              <Link href="/plano" onClick={() => hapticLight()} className="mt-4 block">
+              <Link ref={ctaRef} href="/plano" onClick={() => hapticLight()} className="mt-4 block">
                 <CtaShell>
                   <DSIcon name="play" size={17} />
                   Começar treino de hoje

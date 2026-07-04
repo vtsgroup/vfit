@@ -17,6 +17,7 @@ export default defineConfig({
       '@config': path.resolve(__dirname, './config'),
       '@lib': path.resolve(__dirname, './lib'),
       '@workers': path.resolve(__dirname, './workers'),
+      '@': path.resolve(__dirname, './src'),
     },
   },
 })
