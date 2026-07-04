@@ -202,9 +202,11 @@ interface BottomNavigationProps {
   fabMenuOpen?: boolean
   /** Callback to toggle FAB menu */
   onFabPress?: () => void
+  /** Render relativo (showroom/preview) em vez de fixed */
+  inline?: boolean
 }
 
-export function BottomNavigation({ notificationCount = 0, fabMenuOpen = false, onFabPress }: BottomNavigationProps) {
+export function BottomNavigation({ notificationCount = 0, fabMenuOpen = false, onFabPress, inline = false }: BottomNavigationProps) {
   const pathname = usePathname()
   const [pwaInfo, setPwaInfo] = useState<{ standalone: boolean; platform: MobilePwaPlatform }>({
     standalone: false,
@@ -244,17 +246,33 @@ export function BottomNavigation({ notificationCount = 0, fabMenuOpen = false, o
     return pathname === tab.href || pathname.startsWith(`${tab.href}/`)
   }
 
+  // Linguagem carbono (fusão com o hero da home): topo reto edge-to-edge —
+  // peça única com a página — fibra na mesma escala do header/hero (3px),
+  // hairline emerald como assinatura e chanfro no indicador ativo.
+  // Sem clip-path no nav: o FAB central transborda o topo e não pode ser cortado.
   return (
     <nav
       aria-label="Navegação principal"
-      className="mobile-bottom-nav fixed -bottom-px left-0 right-0 z-45 rounded-t-[28px] bg-[#050A12] lg:hidden"
+      className={cn(
+        'mobile-bottom-nav left-0 right-0 z-45 bg-[#050A12] lg:hidden',
+        inline ? 'relative' : 'fixed -bottom-px'
+      )}
     >
       <div
-        className="relative z-5 w-full overflow-visible rounded-t-[28px] backdrop-blur-2xl backdrop-saturate-200"
+        className="relative z-5 w-full overflow-visible backdrop-blur-2xl backdrop-saturate-180"
         style={{ paddingBottom: navBottomPadding }}
       >
-        {/* Premium glass background — NEVER blocks touches */}
-        <div className="nav-premium pointer-events-none absolute inset-0 rounded-t-[28px]" />
+        {/* Painel carbono — NEVER blocks touches */}
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              'repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0 1px, transparent 1px 3px), repeating-linear-gradient(-45deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 3px), radial-gradient(circle at 50% -40%, rgba(34,197,94,0.10), transparent 60%), linear-gradient(180deg, rgba(13,17,23,0.97) 0%, rgba(9,12,17,0.985) 55%, rgba(5,10,18,1) 100%)',
+            boxShadow: '0 -6px 28px rgba(0,0,0,0.42), inset 0 1px 0 rgba(255,255,255,0.07)',
+          }}
+        />
+        {/* Hairline emerald — espelha a assinatura do hero */}
+        <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-linear-to-r from-transparent via-emerald-400/45 to-transparent" />
 
         {/* PWA Standalone: solid fill for bottom safe area */}
         {pwaInfo.standalone && (
@@ -328,7 +346,8 @@ export function BottomNavigation({ notificationCount = 0, fabMenuOpen = false, o
                   {isActive && (
                     <motion.div
                       layoutId="mobile-active-pill"
-                      className="absolute inset-0 rounded-[14px] border border-sky-200/18 bg-linear-to-b from-sky-300/15 to-emerald-400/10 shadow-[0_0_24px_rgba(56,189,248,0.16),inset_0_1px_0_rgba(255,255,255,0.12)]"
+                      className="absolute inset-0 border-l-2 border-emerald-400/50 bg-linear-to-b from-emerald-300/14 to-emerald-500/6 shadow-[0_0_22px_rgba(34,197,94,0.18),inset_0_1px_0_rgba(255,255,255,0.10)]"
+                      style={{ clipPath: 'polygon(0 0, calc(100% - 9px) 0, 100% 9px, 100% 100%, 0 100%)' }}
                       initial={{ scale: 0.92, opacity: 0.7 }}
                       animate={{ scale: 1.05, opacity: 1 }}
                       transition={{ type: 'spring', stiffness: 500, damping: 28 }}
@@ -338,7 +357,7 @@ export function BottomNavigation({ notificationCount = 0, fabMenuOpen = false, o
                     'relative z-10 transition-all duration-200',
                     isActive
                       ? 'text-emerald-300 drop-shadow-[0_0_10px_rgba(52,211,153,0.28)]'
-                      : 'text-slate-400 group-hover:text-sky-100'
+                      : 'text-slate-400 group-hover:text-emerald-100'
                   )}>
                     {tab.icon(isActive)}
                   </div>

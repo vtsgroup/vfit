@@ -2,6 +2,7 @@
 
 import { useEffect, type ComponentType } from 'react'
 import { StudentHeader } from '@/components/navigation/student-header'
+import { BottomNavigation } from '@/components/navigation/bottom-navigation'
 import { FirstWinCommandCenter } from '@/components/treinos/first-win-command-center'
 import type { CurrentPlan, PlanDay } from '@/hooks/use-plans'
 import type { StreakResponse, DailyGoalResponse, XPBalance } from '@/hooks/use-xp'
@@ -142,6 +143,11 @@ export function HeroPreviewClient() {
             </div>
           </section>
         ))}
+
+        <section id="navbar">
+          <VariantLabel name="NAV · Bottom navbar carbono" thesis="Fibra 3px, hairline emerald, pill ativa chanfrada, FAB emerald" />
+          <BottomNavigation inline />
+        </section>
       </main>
     </div>
   )

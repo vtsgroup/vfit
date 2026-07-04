@@ -74,7 +74,9 @@ export function HeroCarbono({
   const caloriesPct = targets.calories > 0 ? clampPct((totals.calories / targets.calories) * 100) : 0
 
   return (
-    <section className="-mx-4 -mt-px mb-4 text-white">
+    // -mt-[2px]: sobrepõe o hero 2px sob o header fixo — mata a hairline de
+    // fundo de página que aparece por arredondamento de device-pixel
+    <section className="-mx-4 -mt-[2px] mb-4 text-white">
       <style>{`
         @keyframes vfit-v08-needle { from { transform: rotate(-90deg); } to { transform: rotate(${needleDeg}deg); } }
         @keyframes vfit-v08-sweep { from { transform: translateX(-140%) skewX(-30deg); opacity: 0; } 60% { opacity: 1; } to { transform: translateX(0) skewX(-30deg); opacity: 1; } }

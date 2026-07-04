@@ -113,7 +113,7 @@ export function StudentHeader({ inline = false }: { inline?: boolean } = {}) {
         // emerald vazando de baixo (continuação do glow do hero) — a emenda some
         // porque textura, luz e gradiente atravessam os dois elementos.
         background:
-          'repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0 1px, transparent 1px 3px), repeating-linear-gradient(-45deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 3px), radial-gradient(circle at 86% 150%, rgba(34,197,94,0.13), transparent 55%), linear-gradient(to bottom, #050A12 0%, #070b11 35%, #0a0e14 65%, #0d1117 100%)',
+          'repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0 1px, transparent 1px 3px), repeating-linear-gradient(-45deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 3px), radial-gradient(circle at 86% 150%, rgba(34,197,94,0.13), transparent 55%), linear-gradient(to bottom, #050A12 0%, #050A12 16%, #070b11 44%, #0a0e14 70%, #0d1117 100%)',
         backgroundColor: '#050A12',
         borderBottom: 0,
         boxShadow: '0 1px 0 #0d1117',
