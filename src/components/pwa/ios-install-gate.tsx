@@ -27,6 +27,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { tryAcquirePromptSlot, releasePromptSlot, isPromptSlotBusy } from '@/lib/prompt-exclusion'
+import { IosGateV2 } from '@/components/lab-experiencia/ios-gate-v2'
 
 // ─── Constants ────────────────────────────────────────────────────────
 
@@ -120,7 +121,7 @@ type GateMode = 'none' | 'full-screen' | 'banner'
 
 export function IOSInstallGate() {
   const [mode, setMode] = useState<GateMode>('none')
-  const [visitCount, setVisitCount] = useState(0)
+  const [, setVisitCount] = useState(0)
   const [step, setStep] = useState(0)
 
   useEffect(() => {
@@ -132,7 +133,6 @@ export function IOSInstallGate() {
     if (isMarkedInstalled()) return
 
     const count = getVisitCount()
-    setVisitCount(count)
 
     const timer = setTimeout(() => {
       // Exclusão mútua (Fase 0 — Experiência 1000): consent visível (ou
@@ -143,7 +143,6 @@ export function IOSInstallGate() {
         if (!wasGateDismissedRecently()) {
           if (!tryAcquirePromptSlot('ios-gate')) return
           incrementVisitCount()
-          setVisitCount(count + 1)
           setMode('full-screen')
         } else if (!wasBannerDismissedRecently()) {
           if (!tryAcquirePromptSlot('ios-gate')) return
@@ -219,7 +218,6 @@ export function IOSInstallGate() {
       step={step}
       setStep={setStep}
       canSkip={canSkip}
-      visitCount={visitCount}
       onDismiss={handleDismissGate}
       onInstalled={handleMarkedInstalled}
     />
@@ -232,14 +230,12 @@ function IOSFullGate({
   step,
   setStep,
   canSkip,
-  visitCount,
   onDismiss,
   onInstalled,
 }: {
   step: number
   setStep: (s: number) => void
   canSkip: boolean
-  visitCount: number
   onDismiss: () => void
   onInstalled: () => void
 }) {
@@ -268,7 +264,7 @@ function IOSFullGate({
           paddingBottom: 'max(1rem, env(safe-area-inset-bottom, 0px))',
         }}
       >
-        {canSkip && (
+        {canSkip && step === 1 && (
           <button
             onClick={onDismiss}
             className="absolute right-4 top-4 flex items-center gap-1.5 rounded-full bg-white/5 px-3 py-1.5 text-xs text-zinc-500 transition-colors hover:text-white hover:bg-white/10"
@@ -279,66 +275,9 @@ function IOSFullGate({
         )}
 
         {step === 0 ? (
-          <div className="flex flex-col items-center text-center animate-in fade-in slide-in-from-bottom-4 duration-500">
-            {/* App Icon */}
-            <div className="relative mb-8">
-              <div className="flex h-24 w-24 items-center justify-center rounded-[28px] bg-linear-to-br from-brand-primary to-emerald-600 shadow-2xl shadow-brand-primary/30">
-                <span className="text-2xl font-black text-bg-dark tracking-tight">IA</span>
-              </div>
-              <div className="absolute -inset-3 rounded-[36px] border border-brand-primary/20 animate-pulse" />
-              <div className="absolute -inset-6 rounded-[44px] border border-brand-primary/10" />
-            </div>
-
-            {/* Title — escalating urgency */}
-            <h1 className="text-2xl font-bold text-white tracking-tight">
-              {visitCount <= 1 ? 'Instale o VFIT' : 'Instale para continuar'}
-            </h1>
-            <p className="mt-2 max-w-70 text-sm text-zinc-400 leading-relaxed">
-              {visitCount <= 1
-                ? 'Adicione à tela inicial para ter a experiência completa do app'
-                : 'O app funciona melhor instalado — tela cheia, biometria e offline'}
-            </p>
-
-            {/* Benefits */}
-            <div className="mt-8 w-full max-w-75 space-y-3">
-              {[
-                { icon: <DSIcon name="sparkles" size={20} />, text: 'Tela cheia, sem barra do Safari' },
-                { icon: <DSIcon name="fingerprint" size={20} />, text: 'Login instantâneo com biometria' },
-                { icon: <DSIcon name="wifi" size={20} />, text: 'Funciona offline' },
-                { icon: <DSIcon name="smartphone" size={20} />, text: 'Ícone na tela como app nativo' },
-              ].map((item, i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-3 rounded-xl bg-white/4 border border-white/6 px-4 py-3"
-                >
-                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-primary/10 text-brand-primary shrink-0">
-                    {item.icon}
-                  </div>
-                  <span className="text-[13px] text-zinc-300">{item.text}</span>
-                </div>
-              ))}
-            </div>
-
-            {/* CTA */}
-            <button
-              onClick={() => setStep(1)}
-              className="mt-8 w-full max-w-75 flex items-center justify-center gap-2 rounded-2xl bg-linear-to-r from-brand-primary to-emerald-500 py-4 text-[15px] font-bold text-bg-dark transition-all duration-300 hover:shadow-[0_0_40px_rgba(0,217,142,0.4)] active:scale-[0.98]"
-            >
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-              </svg>
-              Instalar agora — 10 segundos
-            </button>
-
-            {canSkip && (
-              <button
-                onClick={onDismiss}
-                className="mt-4 text-xs text-zinc-600 hover:text-zinc-400 transition-colors"
-              >
-                Continuar no navegador
-              </button>
-            )}
-          </div>
+          // Pôster v2 (workshop Fase 2 — Experiência 1000): uma promessa,
+          // 3 micro-provas, skip sempre visível. Substitui a lista de 4 cards.
+          <IosGateV2 onSkip={onDismiss} onShowInstructions={() => setStep(1)} />
         ) : (
           <div className="flex flex-col items-center text-center animate-in fade-in slide-in-from-right-4 duration-400">
             <h2 className="text-xl font-bold text-white tracking-tight">

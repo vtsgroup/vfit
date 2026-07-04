@@ -5,6 +5,16 @@
 
 ---
 
+## [Unreleased] — 04/07/2026 — Fases 1-3 Experiência 1000: Maestro + upsell Telemetria + navbar Dock
+
+- **Maestro** (`src/lib/prompt-maestro.ts` + `use-prompt-slot.ts`): orquestrador central de prompts — fila com prioridade legal>install>upsell, 1 não-legal/sessão, acomodação de 20s, sinal `hero_cta_seen` (IntersectionObserver no CTA do hero), espaçamento 72h com exceção de momento-de-vitória p/ upsell, consent 3 estados, ledger unificado `vfit-prompt-ledger` com migração one-shot das chaves legadas, kill-switch `vfit-maestro-disabled`, telemetria `prompt_shown/dismissed/converted`. **28 unit tests** (`tests/lib/prompt-maestro.test.ts`); alias `@/`→src no vitest.
+- **Upsell v2 "Leitura de Telemetria"** (`upgrade-prompt.tsx`): substitui o modal de 6 features por leitura HUD do momento (escolha do dono no workshop); timing pelo Maestro; guardas legadas mantidas p/ kill-switch.
+- **Bottom navbar v6 "Dock Flutuante"** (`bottom-navigation.tsx`): dock carbono chanfrado descolado das bordas, célula IA emerald 3D integrada (FAB menu preservado), badge/rotas ocultas/safe-area mantidos.
+- **Install banner v2** (1 linha honesta, sem rating fake) e **gate iOS v2** (pôster com skip sempre visível) integrados preservando toda a lógica de plataforma.
+- Workshop lab em `src/components/lab-experiencia/` + showroom `/dev-preview/prompts` (dev-only).
+
+---
+
 ## [Unreleased] — 04/07/2026 — Fase 0 Experiência 1000: fim do empilhamento de prompts + fixes
 
 - **Exclusão mútua de prompts** (`src/lib/prompt-exclusion.ts`): máximo 1 prompt visível por vez em todo o app. Consent (legal) sempre entra e suprime os demais; gate iOS, install banner e upsell cedem a vez sem queimar cooldown. Base mínima até o orquestrador completo (Maestro, Fase 1).

@@ -16,6 +16,7 @@
 
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react'
 import { tryAcquirePromptSlot, releasePromptSlot } from '@/lib/prompt-exclusion'
+import { InstallBannerV2 } from '@/components/lab-experiencia/install-banner-v2'
 
 // ─── Types ────────────────────────────────────────────────────────────
 
@@ -293,101 +294,22 @@ function InstallBanner() {
   const ctx = usePwaInstall()
   if (!ctx) return null
 
-  const { platform, canNativeInstall, triggerInstall, dismissBanner, browserName } = ctx
+  const { platform, triggerInstall, dismissBanner } = ctx
 
-  // Check global prompt too (React state might be stale on first render)
-  const hasNativePrompt = canNativeInstall || !!(typeof window !== 'undefined' && window.__pwaPrompt)
-
-  const browserLabel = (() => {
-    const map: Record<string, string> = {
-      chrome: 'Chrome', brave: 'Brave', edge: 'Edge', opera: 'Opera',
-      vivaldi: 'Vivaldi', arc: 'Arc', comet: 'Comet', samsung: 'Samsung',
-    }
-    return map[browserName] || ''
-  })()
-
-  const getSubtitle = () => {
-    if (hasNativePrompt) return 'Instale como app nativo no Chrome'
-    if (platform === 'ios') return 'Adicione à tela inicial para acesso rápido'
-    if (platform === 'android') return 'Instale o app direto no seu celular'
-    if (browserLabel) return `Instale como app nativo no ${browserLabel}`
-    return 'Acesse como app nativo no seu dispositivo'
-  }
-
-  const getButtonLabel = () => {
-    if (hasNativePrompt) return 'Instalar Agora'
-    if (platform === 'ios') return 'Como Instalar'
-    if (platform === 'android') return 'Como Instalar'
-    return 'Instalar Agora'
-  }
+  // Visual v2 (workshop Fase 2 — Experiência 1000): 1 linha honesta em
+  // linguagem carbono, sem rating fake. Wrapper mantém posicionamento fixo,
+  // safe-area e a animação de entrada; o triggerInstall preserva toda a
+  // lógica nativa (beforeinstallprompt / overlay de instruções).
+  const v2Platform: 'ios' | 'android' | 'desktop' =
+    platform === 'ios' ? 'ios' : platform === 'android' ? 'android' : 'desktop'
 
   return (
     <div
       className="fixed bottom-0 left-0 right-0 z-9999 p-3 sm:p-4 animate-[banner-slide-up_0.5s_cubic-bezier(0.16,1,0.3,1)]"
       style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom, 0px))' }}
     >
-      <div className="relative mx-auto max-w-sm overflow-hidden rounded-2xl">
-        {/* Ultra glass background */}
-        <div className="absolute inset-0 bg-black/70 backdrop-blur-2xl [-webkit-backdrop-filter:blur(40px)_saturate(180%)] border border-white/10 rounded-2xl" />
-
-        {/* Top accent line */}
-        <div className="absolute top-0 left-4 right-4 h-px bg-linear-to-r from-transparent via-emerald-400/40 to-transparent" />
-
-        {/* Content */}
-        <div className="relative z-10 p-3.5 sm:p-4">
-          {/* Top row: Icon + Text + Close */}
-          <div className="flex items-center gap-3">
-            {/* App icon — VFIT branded */}
-            <div className="shrink-0">
-              <div className="relative flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-emerald-500 to-green-600 shadow-lg shadow-emerald-500/25">
-                <span className="text-sm font-black text-white tracking-tighter">VFIT</span>
-                <div className="absolute inset-0 rounded-xl bg-linear-to-br from-white/20 to-transparent" />
-              </div>
-            </div>
-
-            {/* Text block */}
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2">
-                <h3 className="text-[15px] font-bold text-white tracking-tight">VFIT</h3>
-                <span className="inline-flex items-center rounded-full bg-emerald-500/15 px-1.5 py-px text-[9px] font-bold text-emerald-400 uppercase tracking-wider ring-1 ring-emerald-500/25">
-                  APP
-                </span>
-              </div>
-              <p className="text-[12px] text-zinc-400 leading-snug mt-0.5">{getSubtitle()}</p>
-              {/* Star rating inline */}
-              <div className="flex items-center gap-0.5 mt-1">
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <svg key={i} className="h-2.5 w-2.5 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                ))}
-                <span className="ml-1 text-[10px] text-zinc-500 font-medium">5.0</span>
-              </div>
-            </div>
-
-            {/* Close button */}
-            <button
-              onClick={dismissBanner}
-              className="shrink-0 p-1.5 -mr-1 rounded-lg text-zinc-600 hover:text-white hover:bg-white/10 transition-colors"
-              aria-label="Fechar"
-            >
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-
-          {/* Install CTA button */}
-          <button
-            onClick={triggerInstall}
-            className="mt-3 w-full flex items-center justify-center gap-2 rounded-xl bg-emerald-500 px-4 py-2.5 text-[13px] font-bold text-white transition-all duration-200 hover:bg-emerald-400 active:scale-[0.98] shadow-lg shadow-emerald-500/20"
-          >
-            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-            </svg>
-            {getButtonLabel()}
-          </button>
-        </div>
+      <div className="mx-auto max-w-sm">
+        <InstallBannerV2 platform={v2Platform} onInstall={() => void triggerInstall()} onDismiss={dismissBanner} inline />
       </div>
     </div>
   )

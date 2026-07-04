@@ -18,6 +18,7 @@ import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { DSIcon } from '@/components/ui/ds-icon'
 import { forceAcquirePromptSlot, releasePromptSlot } from '@/lib/prompt-exclusion'
+import { setConsentState } from '@/lib/prompt-maestro'
 
 // ─── Types ───────────────────────────────────────────
 interface CookiePreferences {
@@ -102,22 +103,28 @@ export function CookieConsentBanner() {
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    // App instalado (PWA/TWA/iOS standalone) ou rota suprimida → não mostra banner.
+    // App instalado (PWA/TWA/iOS standalone) ou rota suprimida → não mostra
+    // banner e o Maestro NÃO trava a fila esperando por ele.
     if (
       typeof window !== 'undefined' &&
       (isStandaloneApp() || shouldSuppressCookieBanner(window.location.pathname))
     ) {
       setMounted(true)
+      setConsentState('not-applicable')
       return
     }
 
     // Aparece logo após a hidratação — o rAF garante que o 1º frame da página
     // já pintou antes de inserir o banner (LCP fica no herói, não aqui).
     setMounted(true)
-    if (getStoredConsent()) return
+    if (getStoredConsent()) {
+      setConsentState('resolved')
+      return
+    }
 
     // Consent é obrigação legal: ocupa o slot de prompts incondicionalmente,
-    // suprimindo install/upsell até o usuário decidir (Fase 0 — Experiência 1000).
+    // suprimindo install/upsell até o usuário decidir.
+    setConsentState('pending')
     const raf = requestAnimationFrame(() => {
       forceAcquirePromptSlot('consent')
       setVisible(true)
@@ -138,6 +145,7 @@ export function CookieConsentBanner() {
     storeConsent(prefs)
     setVisible(false)
     releasePromptSlot('consent')
+    setConsentState('resolved')
   }, [])
 
   const handleSavePreferences = useCallback(() => {
@@ -150,6 +158,7 @@ export function CookieConsentBanner() {
     storeConsent(prefs)
     setVisible(false)
     releasePromptSlot('consent')
+    setConsentState('resolved')
   }, [analytics])
 
   const handleRejectOptional = useCallback(() => {
@@ -162,6 +171,7 @@ export function CookieConsentBanner() {
     storeConsent(prefs)
     setVisible(false)
     releasePromptSlot('consent')
+    setConsentState('resolved')
   }, [])
 
   if (!mounted || !visible) return null
