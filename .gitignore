@@ -66,3 +66,7 @@ twa/.gradle/
 twa/releases/*.apk
 twa/releases/*.aab
 gifs/
+
+# Playwright artifacts (traces, videos, screenshots de runs locais)
+test-results/
+playwright-report/

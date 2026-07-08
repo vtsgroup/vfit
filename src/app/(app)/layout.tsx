@@ -168,6 +168,19 @@ function AppShell({ children }: { children: React.ReactNode }) {
     pathname !== '/perfil/editar' &&
     pathname !== '/perfil/sobre'
 
+  // App B2C aterrissou com conteúdo real → destino final do boot, splash pode sair.
+  const setBootResolved = useAuthStore((s) => s.setBootResolved)
+  const isBootContentReady =
+    isHydrated &&
+    (isAuthenticated || isGuest) &&
+    !isRedirectingToWelcome &&
+    !isRedirectingToDashboard &&
+    !(isEffectiveStudent && onboardingLoading) &&
+    !isRedirectingToOnboarding
+  useEffect(() => {
+    if (isBootContentReady) setBootResolved(true)
+  }, [isBootContentReady, setBootResolved])
+
   // Enquanto a splash não terminou, ela é o ÚNICO loading visível (e fica no topo
   // do z-index). Suprimimos qualquer loader full-page secundário nessa janela para
   // não vazar um segundo loading por trás/junto da splash. `null` é invisível

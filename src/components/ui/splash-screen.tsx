@@ -16,6 +16,12 @@
  *  - Mantém a API `isReady`, a re-entrada por sessão e a válvula de segurança (não prende
  *    o usuário atrás do splash se /auth/me travar). Tudo composited (transform/opacity).
  *  - prefers-reduced-motion respeitado (sem animação, estados finais visíveis).
+ *
+ * v6 (2026-07-08, plano splash-boot): splash PRÉ-RENDERIZADA (show inicial true → existe no
+ *  HTML estático e é o primeiro paint do boot). Gating pré-paint via classes no <html>
+ *  (.vsp-standalone / .vsp-instant, setadas pelo boot script do root layout), prop
+ *  `standaloneOnly` para superfícies de funil, válvula CSS sem-JS (~8s, libera a página)
+ *  e MIN_VISIBLE 1600ms (D3). Exit-condition real vem do orquestrador (sessão + boot resolvido).
  */
 
 'use client'
@@ -25,9 +31,26 @@ import { cn } from '@/lib/utils'
 
 const SPLASH_KEY = 'vfit-splash-v5'
 const ENTER_MS = 1100        // duração da entrada (icon/arcos/wordmark/barra)
-const MIN_VISIBLE = 3300     // 1ª carga: entrada completa (~1.28s) + ~2s de respiro antes de sair
-                            // (app rápido não corta o logo no meio; pedido do dono: ficar um pouco mais). Não loopa.
+const MIN_VISIBLE = 1600     // 1ª carga: entrada completa da marca (~1.28s) + respiro curto.
+                            // Decisão D3 (2026-07-08): assinatura completa, saída IMEDIATA quando
+                            // pronto — nada de espera cenográfica; velocidade percebida > cerimônia.
 const SAFETY_MS = 4000       // nunca prender o usuário atrás do splash (cap de delay se /auth/me travar)
+
+/** Contexto standalone/TWA — classe setada pré-paint pelo boot script (src/app/layout.tsx),
+ *  com fallback para matchMedia caso o script não tenha rodado. */
+function isStandaloneDisplay(): boolean {
+  if (typeof window === 'undefined') return false
+  if (document.documentElement.classList.contains('vsp-standalone')) return true
+  try {
+    return (
+      (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) ||
+      ('standalone' in navigator && (navigator as Navigator & { standalone?: boolean }).standalone === true) ||
+      document.referrer.indexOf('android-app://') !== -1
+    )
+  } catch {
+    return false
+  }
+}
 
 /* ─── Campo de partículas determinístico (sem Math.random no render → SSR-safe) ─── */
 function mulberry32(seed: number) {
@@ -88,12 +111,27 @@ function VFITMark({ instant }: { instant: boolean }) {
   )
 }
 
-export function SplashScreen({ isReady, onFinished }: { isReady?: boolean; onFinished?: () => void }) {
-  const [show, setShow] = useState(false)
+export function SplashScreen({
+  isReady,
+  onFinished,
+  standaloneOnly = false,
+}: {
+  isReady?: boolean
+  onFinished?: () => void
+  /** Superfícies de funil (welcome/login): splash só participa em standalone/TWA.
+   *  Em browser comum o CSS pré-paint já a esconde (html sem .vsp-standalone) e
+   *  aqui ela é finalizada imediatamente — funil de conversão intacto. */
+  standaloneOnly?: boolean
+}) {
+  // show inicia TRUE: a splash existe no HTML estático exportado (output:export)
+  // e é o PRIMEIRO PAINT do boot — cobre toda a janela pré-hidratação que antes
+  // aparecia como tela escura (PWA /dashboard) ou welcome vazando (TWA).
+  const [show, setShow] = useState(true)
   const [instant, setInstant] = useState(false)   // re-entrada na sessão → sem replay da entrada
   const [minDone, setMinDone] = useState(false)
   const [exiting, setExiting] = useState(false)
   const [done, setDone] = useState(false)
+  const [hydrated, setHydrated] = useState(false) // vsp-js: cancela o bail CSS sem-JS
   const booted = useRef(false)
   const ready = isReady ?? true
 
@@ -101,6 +139,10 @@ export function SplashScreen({ isReady, onFinished }: { isReady?: boolean; onFin
   useEffect(() => {
     if (booted.current) return
     booted.current = true
+    setHydrated(true)
+
+    // Browser comum em superfície standalone-only → splash não participa
+    if (standaloneOnly && !isStandaloneDisplay()) { setDone(true); return }
 
     let seen = false
     try { seen = typeof window !== 'undefined' && !!sessionStorage.getItem(SPLASH_KEY) } catch { seen = false }
@@ -152,7 +194,12 @@ export function SplashScreen({ isReady, onFinished }: { isReady?: boolean; onFin
 
   return (
     <div
-      className={cn('vsp-root dark', exiting && 'vsp-exit')}
+      className={cn(
+        'vsp-root dark',
+        exiting && 'vsp-exit',
+        hydrated && 'vsp-js',
+        standaloneOnly && 'vsp-sa-only',
+      )}
       style={{ colorScheme: 'dark' }}
       role="status"
       aria-live="polite"
@@ -308,12 +355,27 @@ export function SplashScreen({ isReady, onFinished }: { isReady?: boolean; onFin
         @keyframes vsp-drift { 0%{transform:translate(0,0)} 50%{transform:translate(var(--dx,0),var(--dy,0))} 100%{transform:translate(0,0)} }
         @keyframes vsp-gridDrift { 0%{transform:translate(0,0)} 100%{transform:translate(40px,40px)} }
 
-        /* re-entrada na sessão → mostra estados finais imediatamente (sem replay da entrada) */
-        .vsp-icon.vsp-instant { animation: none; opacity: 1; transform: scale(1); }
-        .vsp-arc.vsp-instant  { animation: none; opacity: 1; transform: scale(1); }
-        .vsp-name.vsp-instant { animation: none; opacity: 1; transform: none; }
-        .vsp-glow.vsp-instant { animation: vsp-glowPulse 5s ease-in-out infinite; opacity: .55; }
-        .vsp-bar-loading.vsp-instant { animation-delay: 0s; }
+        /* re-entrada na sessão → mostra estados finais imediatamente (sem replay da entrada).
+           html.vsp-instant = versão PRÉ-PAINT (classe setada pelo boot script antes da hidratação),
+           .vsp-*.vsp-instant = versão pós-hidratação (estado React). Mesmo efeito visual. */
+        html.vsp-instant .vsp-icon, .vsp-icon.vsp-instant { animation: none; opacity: 1; transform: scale(1); }
+        html.vsp-instant .vsp-arc,  .vsp-arc.vsp-instant  { animation: none; opacity: 1; transform: scale(1); }
+        html.vsp-instant .vsp-name, .vsp-name.vsp-instant { animation: none; opacity: 1; transform: none; }
+        html.vsp-instant .vsp-glow, .vsp-glow.vsp-instant { animation: vsp-glowPulse 5s ease-in-out infinite; opacity: .55; }
+        html.vsp-instant .vsp-bar-loading, .vsp-bar-loading.vsp-instant { animation-delay: 0s; }
+
+        /* Gating pré-paint (classes no <html> setadas pelo boot script em src/app/layout.tsx):
+           superfícies standalone-only (welcome/login) NÃO mostram splash em browser comum —
+           escondida desde o primeiro paint, sem flash, funil de conversão intacto. */
+        html:not(.vsp-standalone) .vsp-root.vsp-sa-only { display: none; }
+
+        /* Válvula CSS sem-JS: se o JS nunca carregar, a splash desvanece sozinha (~8s)
+           e LIBERA a página (visibility+pointer-events, não só opacity — overlay invisível
+           não pode capturar cliques). O React cancela adicionando .vsp-js ao montar.
+           IMPORTANTE: esta regra fica FORA do bloco prefers-reduced-motion abaixo —
+           é acessibilidade de resgate, nunca pode ser desligada. */
+        .vsp-root:not(.vsp-js) { animation: vsp-nojsBail .6s ease 8s forwards; }
+        @keyframes vsp-nojsBail { to { opacity: 0; visibility: hidden; pointer-events: none; } }
 
         @media (prefers-reduced-motion: reduce) {
           .vsp-grid, .vsp-dots i, .vsp-glow, .vsp-ring, .vsp-bar-shimmer { animation: none !important; }
