@@ -1,6 +1,6 @@
 # TRACKING — Plano splash-boot v2 (Boot Experience TWA/PWA)
 
-> **Última atualização:** 2026-07-08 · v5.4.4 → v5.4.5 (pendente deploy)
+> **Última atualização:** 2026-07-08 · v5.4.5 DEPLOYED ✅
 > Plano: `~/.gstack/projects/vtsgroup-vfit/ceo-plans/2026-07-08-splash-boot-experience.md`
 > Origem: /investigate (causa raiz confirmada) + /plan-eng-review (ENG CLEARED, outside voice absorvido)
 
@@ -13,9 +13,9 @@
 - [x] T5 — ✅ Concluído — Mounts `(onboarding)`/`(auth)` + `lib/boot-destination.ts` + unit/paridade (21 casos verdes)
 - [x] T6 — ✅ Concluído — E2E standalone-emulado 12 cenários verdes + build gate `check-splash-export.mjs` no postbuild
 - [x] T7 — ✅ Concluído — TODOS.md (TODO-008, TODO-009) + CHANGELOG 5.4.5 + este TRACKING
-- [ ] T8 — 🔄 Em progresso — Deploy produção (`cf:deploy`) + smoke TWA em dispositivo real
+- [x] T8 — ✅ Concluído — Deploy produção v5.4.5 no ar (76,6s, Pages+Workers+tag) · smoke TWA em dispositivo real: aguardando o dono
 
-**Progresso:** 7/8 (87%)
+**Progresso:** 8/8 (100%)
 
 ## Evidências
 
@@ -34,4 +34,4 @@
 
 | Versão | Data | Commit | Arquivos | Notas |
 |--------|------|--------|----------|-------|
-| 5.4.5 | 2026-07-08 | (pendente) | 16 | splash-boot v2 |
+| 5.4.5 | 2026-07-08 | a1030452 | 21 | splash-boot v2 — validado em produção (vsp-root em /welcome e /dashboard, manifest 5.4.5, API healthy) |
