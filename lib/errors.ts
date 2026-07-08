@@ -80,6 +80,17 @@ export class ConflictError extends AppError {
 }
 
 /**
+ * 403 - Step-up de autenticação necessário (biometria/senha) para a ação sensível.
+ * code STEP_UP_REQUIRED: o frontend detecta e abre o sheet de confirmação de saque.
+ */
+export class StepUpRequiredError extends AppError {
+  constructor(message = 'Confirmação de identidade necessária para autorizar o saque') {
+    super(403, message, 'STEP_UP_REQUIRED')
+    this.name = 'StepUpRequiredError'
+  }
+}
+
+/**
  * 429 - Too Many Requests (rate limit)
  */
 export class RateLimitError extends AppError {

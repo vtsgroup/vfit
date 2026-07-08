@@ -36,6 +36,8 @@ import {
   useActivateAffiliate,
   useRequestWithdrawal,
 } from '@/hooks/use-affiliates'
+import { StepUpSheet } from '@/components/payments/step-up-sheet'
+import { newIdempotencyKey, type StepUpMaterial } from '@/hooks/use-step-up'
 
 function formatCurrency(value: number) {
   const safe = typeof value === 'number' && !isNaN(value) ? value : 0
@@ -721,12 +723,28 @@ function WithdrawTab({ balance }: { balance: number }) {
   const requestWithdrawal = useRequestWithdrawal()
   const [amount, setAmount] = useState('')
   const [pixKey, setPixKey] = useState('')
+  const [pendingWithdrawal, setPendingWithdrawal] = useState<{ amount: number; pixKey: string; idempotencyKey: string } | null>(null)
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     const parsedAmount = parseFloat(amount)
     if (isNaN(parsedAmount) || parsedAmount <= 0) return
-    requestWithdrawal.mutate({ amount: parsedAmount, pix_key: pixKey })
+    // Confirmação de identidade (biometria/senha) antes de mover dinheiro
+    setPendingWithdrawal({ amount: parsedAmount, pixKey: pixKey.trim(), idempotencyKey: newIdempotencyKey() })
+  }
+
+  function handleStepUpConfirm(material: StepUpMaterial) {
+    if (!pendingWithdrawal) return
+    requestWithdrawal.mutate(
+      {
+        amount: pendingWithdrawal.amount,
+        pix_key: pendingWithdrawal.pixKey,
+        idempotencyKey: pendingWithdrawal.idempotencyKey,
+        stepUpHeaders: material.headers,
+        current_password: material.bodyExtra?.current_password,
+      },
+      { onSuccess: () => { setAmount(''); setPixKey(''); setPendingWithdrawal(null) } }
+    )
   }
 
   const parsedAmount = parseFloat(amount)
@@ -793,6 +811,16 @@ function WithdrawTab({ balance }: { balance: number }) {
           Saques são processados em até <strong className="text-text-primary">48h úteis</strong>. O valor mínimo é R$ 10,00.
         </p>
       </div>
+
+      {pendingWithdrawal && (
+        <StepUpSheet
+          amount={pendingWithdrawal.amount}
+          pixKey={pendingWithdrawal.pixKey}
+          purpose="withdraw_affiliate"
+          onConfirm={handleStepUpConfirm}
+          onClose={() => setPendingWithdrawal(null)}
+        />
+      )}
     </div>
   )
 }
