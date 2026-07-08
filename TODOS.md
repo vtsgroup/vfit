@@ -117,3 +117,35 @@ Itens identificados durante reviews e planejamento, capturados com contexto sufi
 **Depends on / blocked by:** Convenção de feature flags do frontend e runbook de rollback da onda Ultra v4.
 
 ---
+
+### TODO-008 — Alinhar `startUrl` do TWA no próximo release da Play Store
+
+**What:** Avaliar mudar `twa/twa-manifest.json` → `startUrl` de `/welcome` para um entry neutro (ex.: `/dashboard`) e regravar/republicar o AAB.
+
+**Why:** Com o fix do boot script (plano splash-boot, D4/E0), o logado é roteado pré-paint a partir do `/welcome` — funciona, mas todo boot logado paga uma carga extra de HTML (`/welcome` → destino). `startUrl` neutro elimina o hop.
+
+**Pros:** Boot ~100–300ms mais rápido em rede lenta; um documento a menos por cold start.
+
+**Cons:** Exige release nativo + review da Play Store (dias); risco de divergir do PWA (`start_url: /dashboard`); ganho é invisível na maioria das redes.
+
+**Context:** Decisão D5 do plan-eng-review de 2026-07-08 (plano splash-boot v2). O fix E0 em `src/app/layout.tsx` tornou esta mudança opcional — capturada para o próximo ciclo de release nativo (appVersion atual do TWA: 4.3.3). Matriz de destino: `src/lib/boot-destination.ts`.
+
+**Depends on / blocked by:** Plano splash-boot v2 validado em produção (smoke TWA em dispositivo real).
+
+---
+
+### TODO-009 — Consolidar os 5 donos de redirect de boot em módulo único
+
+**What:** Refatorar os 5 pontos que executam redirect de boot (boot script pré-paint em `src/app/layout.tsx`, welcome page, `DashboardAuthGate`, `dashboard/page.tsx`, `AppShell` do `(app)/layout.tsx`) para consumirem `src/lib/boot-destination.ts` com um único executor.
+
+**Why:** A matriz de destino existe em 5 cópias com divergências reais (ex.: gate manda anon para `/login`, boot script manda para `/welcome`; script não conhecia `admin` até o fix E0). Cada evolução de roteamento exige tocar 5 lugares.
+
+**Pros:** DRY real — uma matriz, um escritor; elimina a classe de bug "matrizes divergentes" permanentemente.
+
+**Cons:** Blast radius alto em gates de auth estáveis em produção; risco de regressão em fluxos não-boot (logout, troca de tipo, simulação admin).
+
+**Context:** Decisão D6 do plan-eng-review de 2026-07-08. O plano v2 escolheu de propósito NÃO consolidar agora (splash é observer-only; gates intactos). O teste de paridade `tests/unit/boot-destination.test.ts` já trava script ↔ matriz por contrato; a suíte `tests/e2e/splash-boot.spec.ts` (12 cenários) é a rede de proteção para esta refatoração.
+
+**Depends on / blocked by:** Splash-boot v2 shipped + E2E estáveis rodando no CI.
+
+---

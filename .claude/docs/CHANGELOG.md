@@ -5,6 +5,37 @@
 
 ---
 
+## [5.4.4 → 5.4.5] — 2026-07-08 — Boot Experience: splash primeiro no TWA/PWA (plano splash-boot v2)
+
+> Corrige o boot do app instalado: logado via **Welcome vazando** (TWA `startUrl=/welcome`) ou **tela escura** (PWA `/dashboard`) antes da splash. Agora: Abriu → Splash (primeiro paint) → destino. Investigação + plan-eng-review com outside voice; causa raiz provada por evidência de build (`out/*.html` sem `vsp-root`).
+
+### E0 — Boot script pré-paint corrigido (`src/app/layout.tsx`)
+
+- O script inline standalone/TWA **ignorava `/welcome`** (lista `ok`) → logado renderizava o Welcome até o React hidratar. Agora roteia pré-paint: `student→/treinos`, `admin→/dashboard/admin`, demais→`/dashboard` — **logado nunca vê o welcome, nem por 1 frame**.
+- Corrigido branch morto (`p==='/'` retornava antes do `replace`), matriz agora conhece `admin`, e **guest mode** (`vfit_guest_mode`) deixou de ser expulso para `/welcome` no standalone.
+- Script também seta classes pré-paint no `<html>`: `.vsp-standalone` (contexto app) e `.vsp-instant` (re-entrada na sessão, sem replay da entrada).
+
+### E1 — Splash pré-renderizada (`src/components/ui/splash-screen.tsx` v6)
+
+- `show` inicial `true` → splash existe no **HTML estático exportado** e é o primeiro paint (elimina a janela escura entre o splash nativo Android e a hidratação; cobre também iOS/desktop).
+- Prop `standaloneOnly` (welcome/login): em browser comum o CSS pré-paint esconde a splash — **funil de conversão intacto**.
+- **Válvula CSS sem-JS** (~8s): desvanece com `visibility+pointer-events` (não só opacity) e fica **fora** do bloco `prefers-reduced-motion` — JS quebrado nunca prende o usuário.
+- `MIN_VISIBLE 3300→1600ms` (decisão D3): entrada da marca completa, saída imediata quando pronto.
+
+### E3/E4 — Sessão e exit-condition (`use-session-boot.ts`, `auth-store`, orquestrador)
+
+- Validação `/auth/me` extraída do `AuthProvider` para `useSessionBoot()` com **guard por token** (2 mounts → 1 fetch; token mudou → revalida). Roda também em superfícies sem AuthProvider (welcome/login).
+- Novo flag `isBootResolved` no auth-store: splash é **observadora** (D2) — sai só com `isSessionReady && isBootResolved`, marcado por `DashboardAuthGate`, `AppShell` e `BootResolvedMarker` nos layouts `(onboarding)`/`(auth)`. Redirects continuam com os donos atuais; válvula de 4s mantida.
+
+### Testes e gates
+
+- `scripts/check-splash-export.mjs` no `postbuild`: falha o build se `out/welcome.html`/`out/dashboard.html` perderem `vsp-root` (+ `bc-jumbo` no welcome — garantia sem-JS em produção).
+- `tests/e2e/splash-boot.spec.ts`: 12 cenários com **emulação standalone** via `addInitScript` (matchMedia patch) — logado nunca vê welcome (personal/student/admin), anon, guest, funil browser, re-entrada instant, offline, 401→logout→login, válvula sem-JS.
+- `tests/unit/boot-destination.test.ts`: 21 casos — matriz `src/lib/boot-destination.ts` + **teste de paridade** que executa o boot script extraído do TSX contra a matriz (trava as duas cópias por contrato).
+- TODOS novos: TODO-008 (startUrl TWA) e TODO-009 (consolidar 5 donos de redirect).
+
+---
+
 ## [5.1.5 → 5.1.6] — 2026-06-28 — Nova abertura cinematográfica (splash) + loaders unificados
 
 > Substitui a experiência de loading do app. Splash de abertura reconstruído a partir do `vfit-splash.html` (aprovado pelo dono); loaders redondo + de anéis aposentados. v5.1.6 só ajusta o peso do wordmark (700 → 900).

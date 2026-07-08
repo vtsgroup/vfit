@@ -9,6 +9,8 @@ import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import { buildSeoMetadata, NO_INDEX_ROBOTS } from '@/lib/seo'
 import { OnboardingTransition } from '@/components/layout/onboarding-transition'
+import { SplashOrchestrator } from '@/components/layout/splash-orchestrator'
+import { BootResolvedMarker } from '@/components/layout/boot-resolved-marker'
 
 // Funil de onboarding: NOINDEX (não deve ranquear), mas com título + OG decentes
 // para quando o link é compartilhado. Páginas filhas (ex: /welcome) podem sobrescrever.
@@ -23,14 +25,21 @@ export const metadata: Metadata = buildSeoMetadata({
 
 export default function OnboardingLayout({ children }: { children: React.ReactNode }) {
   return (
-    <Suspense
-      fallback={
-        <div className="flex min-h-dvh items-center justify-center bg-bg-primary">
-          <div className="h-8 w-8 animate-spin rounded-full border-2 border-white/10 border-t-brand-primary" />
-        </div>
-      }
-    >
-      <OnboardingTransition>{children}</OnboardingTransition>
-    </Suspense>
+    <>
+      {/* Splash standalone-only: no TWA/PWA o boot em /welcome abre com a splash
+          pré-renderizada; em browser comum ela nem participa (funil intacto).
+          BootResolvedMarker: welcome/onboarding são destinos terminais do boot. */}
+      <SplashOrchestrator standaloneOnly />
+      <BootResolvedMarker />
+      <Suspense
+        fallback={
+          <div className="flex min-h-dvh items-center justify-center bg-bg-primary">
+            <div className="h-8 w-8 animate-spin rounded-full border-2 border-white/10 border-t-brand-primary" />
+          </div>
+        }
+      >
+        <OnboardingTransition>{children}</OnboardingTransition>
+      </Suspense>
+    </>
   )
 }

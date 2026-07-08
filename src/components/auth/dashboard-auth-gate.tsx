@@ -43,6 +43,7 @@ export function DashboardAuthGate({ children }: { children: React.ReactNode }) {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
   const isHydrated = useAuthStore((s) => s.isHydrated)
   const userType = useAuthStore((s) => s.user?.user_type)
+  const setBootResolved = useAuthStore((s) => s.setBootResolved)
 
   // Sincronizar dados do onboarding quiz com backend (se pendentes)
   useSyncOnboarding()
@@ -58,6 +59,12 @@ export function DashboardAuthGate({ children }: { children: React.ReactNode }) {
       router.replace('/treinos')
     }
   }, [isAuthenticated, isHydrated, userType, router])
+
+  // Dashboard é o destino final deste boot → splash pode sair (isBootResolved).
+  // Student em redirect para /treinos NÃO marca — quem marca é o AppShell ao aterrissar.
+  useEffect(() => {
+    if (isHydrated && isAuthenticated && userType !== 'student') setBootResolved(true)
+  }, [isHydrated, isAuthenticated, userType, setBootResolved])
 
   // Enquanto não hidratou → coberto pela splash (null) ou fundo calmo pós-splash
   if (!isHydrated) return <GateFallback label="Verificando sessão..." />

@@ -90,6 +90,11 @@ interface AuthState {
   /** true quando a SplashScreen terminou (saiu de tela). Enquanto false, a splash é o ÚNICO
    *  loading visível — todos os loaders full-page secundários devem ficar suprimidos. */
   isSplashFinished: boolean
+  /** true quando a superfície de boot atual renderizou conteúdo real (dashboard, app B2C,
+   *  welcome anônimo, login). A splash só sai com isSessionReady && isBootResolved — ela é
+   *  OBSERVADORA: nunca navega; segura a tela até o redirect dos gates existentes aterrissar.
+   *  NÃO persistido (reseta a cada carga). */
+  isBootResolved: boolean
 
   // Actions
   setUser: (user: User) => void
@@ -104,6 +109,7 @@ interface AuthState {
   setHydrated: () => void
   setSessionReady: (ready?: boolean) => void
   setSplashFinished: (finished?: boolean) => void
+  setBootResolved: (resolved?: boolean) => void
 
   // Computed helpers
   isPersonal: () => boolean
@@ -133,6 +139,7 @@ export const useAuthStore = create<AuthState>()(
       isHydrated: false,
       isSessionReady: false,
       isSplashFinished: false,
+      isBootResolved: false,
 
       // Actions
       setUser: (user) => set({ user, isAuthenticated: true }),
@@ -191,6 +198,8 @@ export const useAuthStore = create<AuthState>()(
       setSessionReady: (ready = true) => set({ isSessionReady: ready }),
 
       setSplashFinished: (finished = true) => set({ isSplashFinished: finished }),
+
+      setBootResolved: (resolved = true) => set({ isBootResolved: resolved }),
 
       // Computed helpers
       isPersonal: () => get().user?.user_type === 'personal',

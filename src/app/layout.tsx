@@ -162,12 +162,18 @@ export default function RootLayout({
             Anti-flicker script updates it immediately, ThemeProvider manages dynamically.
             This avoids React re-renders resetting the value. */}
         <meta name="theme-color" content="#050A12" />
-        {/* PWA/TWA instant redirect — runs BEFORE React hydration.
-            Detects standalone mode and redirects public pages to /dashboard immediately.
-            This prevents the landing page flash that PWAPublicRedirect (useEffect) causes. */}
+        {/* PWA/TWA boot router — runs BEFORE React hydration (pré-paint).
+            1) Seta classes no <html> para a splash pré-renderizada:
+               .vsp-standalone → contexto standalone/TWA (splash standalone-only aparece)
+               .vsp-instant    → re-entrada na sessão (estados finais, sem replay da entrada)
+            2) Em standalone/TWA, roteia por user_type ANTES do primeiro paint:
+               logado em /welcome ou / → student:/treinos · admin:/dashboard/admin · resto:/dashboard
+               (usuário logado NUNCA vê o welcome — nem por 1 frame)
+               anon guest → /treinos (rotas de boot) · anon comum → /welcome
+            Espelho em TS da matriz: src/lib/boot-destination.ts (manter em paridade). */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var mm=window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches;var ns='standalone'in navigator&&navigator.standalone;var tw=document.referrer.indexOf('android-app://')!==-1;if(!mm&&!ns&&!tw)return;var p=location.pathname;var ok=['/welcome','/onboarding','/register','/reset-password','/verify-email','/auth','/login'];var found=false;for(var i=0;i<ok.length;i++){if(p===ok[i]||p.indexOf(ok[i]+'/')===0){found=true;break}}if(found)return;var ha=false;var ut='';try{var ad=localStorage.getItem('vfit-auth')||localStorage.getItem('personal-ia-auth');if(ad){var ps=JSON.parse(ad);if(ps.state&&ps.state.tokens&&ps.state.tokens.access_token){ha=true;ut=(ps.state.user&&ps.state.user.user_type)||''}}}catch(e){}if(ha){var home=ut==='student'?'/treinos':'/dashboard';if(p==='/'||p===home)return;if(ut==='student'&&p.indexOf('/dashboard')===0){location.replace('/treinos');return}if(p==='/')location.replace(home)}else{location.replace('/welcome')}}catch(e){}})();`,
+            __html: `(function(){try{var d=document.documentElement;var mm=window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches;var ns='standalone'in navigator&&navigator.standalone;var tw=document.referrer.indexOf('android-app://')!==-1;var sa=mm||ns||tw;if(sa)d.classList.add('vsp-standalone');try{if(sessionStorage.getItem('vfit-splash-v5'))d.classList.add('vsp-instant')}catch(e){}if(!sa)return;var p=location.pathname;var ok=['/onboarding','/register','/reset-password','/verify-email','/auth','/login'];for(var i=0;i<ok.length;i++){if(p===ok[i]||p.indexOf(ok[i]+'/')===0)return}var ha=false;var ut='';try{var ad=localStorage.getItem('vfit-auth')||localStorage.getItem('personal-ia-auth');if(ad){var ps=JSON.parse(ad);if(ps.state&&ps.state.tokens&&ps.state.tokens.access_token){ha=true;ut=(ps.state.user&&ps.state.user.user_type)||''}}}catch(e){}var onWelcome=p==='/welcome'||p.indexOf('/welcome/')===0;if(ha){var home=ut==='student'?'/treinos':(ut==='admin'?'/dashboard/admin':'/dashboard');if(ut==='student'&&p.indexOf('/dashboard')===0){location.replace('/treinos');return}if(onWelcome||p==='/'){location.replace(home)}}else{var gm=false;try{gm=localStorage.getItem('vfit_guest_mode')==='true'}catch(e){}if(gm){if(onWelcome||p==='/'||p.indexOf('/dashboard')===0){location.replace('/treinos')}return}if(onWelcome)return;location.replace('/welcome')}}catch(e){}})();`,
           }}
         />
         {/* Theme anti-flicker — lê tema salvo no localStorage antes do React hidratar.
