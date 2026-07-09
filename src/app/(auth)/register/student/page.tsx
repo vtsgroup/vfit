@@ -184,7 +184,11 @@ export default function RegisterStudentPage() {
   return (
     <GuestGuard>
       {fromOnboarding ? (
-        <OnboardingSignup inviteToken={inviteToken} />
+        // Full-bleed: cancela o padding/gutter do <main> do auth layout (mesmo truque do form clássico abaixo)
+        // pra tela "seu plano está pronto" ocupar 100% da largura no mobile, sem bordas laterais.
+        <div className="-mx-5 -mt-2 sm:-mx-8 lg:-mx-14 lg:-mt-4 xl:-mx-20">
+          <OnboardingSignup inviteToken={inviteToken} />
+        </div>
       ) : (
       <>
       <style>{`

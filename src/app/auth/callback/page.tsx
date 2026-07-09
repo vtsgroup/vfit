@@ -20,6 +20,8 @@ import { useEffect, useRef, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { useAuthStore, type AuthTokens, type PersonalProfile, type StudentProfile } from '@/stores/auth-store'
 import { BrandLoader } from '@/components/ui/brand-loader'
+import { persistOnboardingAndPlan } from '@/lib/persist-onboarding'
+import { markBiometricEnrollmentOffer } from '@/hooks/use-passkey'
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://api.vfit.app.br'
 
@@ -126,22 +128,28 @@ function OAuthCallbackContent() {
         const isNew = searchParams.get('is_new') === '1'
         const needsCompletion = searchParams.get('needs_completion') === '1'
 
-        // Student → B2C (/treinos), personal/admin → B2B (/dashboard)
-        let dest = user.user_type === 'student' ? '/treinos' : '/dashboard'
-        if (needsCompletion || isNew) {
-          dest = user.user_type === 'student' ? '/welcome' : '/dashboard/complete-profile'
-        }
-
-        // Se aluno veio do onboarding com plano pago → redirecionar para checkout
         if (user.user_type === 'student') {
+          // Novo student do funil público: persiste quiz + plano já visto e vai direto
+          // ao /treinos — sem reiniciar o funil pelo /welcome (que remostrava loading + criar plano).
+          const persisted = (isNew || needsCompletion) ? await persistOnboardingAndPlan() : false
+          // Oferece biometria full-screen ao aterrissar (paridade com o cadastro por email/senha).
+          if (isNew) markBiometricEnrollmentOffer()
+
+          let dest = '/treinos'
+          // Só cai no /welcome se é novo E não havia funil concluído para persistir.
+          if ((isNew || needsCompletion) && !persisted) dest = '/welcome'
+
           const pendingPlan = typeof window !== 'undefined'
             ? localStorage.getItem('vfit_selected_plan')
             : null
-          if (pendingPlan && pendingPlan !== 'free') {
-            dest = '/perfil/assinatura'
-          }
+          if (pendingPlan && pendingPlan !== 'free') dest = '/perfil/assinatura'
+
+          router.replace(dest)
+          return
         }
 
+        // Personal/admin → B2B
+        const dest = (needsCompletion || isNew) ? '/dashboard/complete-profile' : '/dashboard'
         router.replace(dest)
       } catch (err) {
         console.error('[OAuth Callback] Error:', err)
