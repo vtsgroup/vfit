@@ -5,6 +5,17 @@
 
 ---
 
+## [5.5.6 → 5.5.6-patch] — 2026-07-09 — Hotfix: CORS preflight para `idempotency-key`
+
+**Correção:** Saques PIX ainda falhavam por CORS mesmo após liberar `x-step-up-token` — segundo header customizado bloqueado.
+
+- **Causa raiz:** `Access-Control-Allow-Headers` não incluía `Idempotency-Key` no middleware CORS
+- **Sintoma:** POST `/api/v1/payments/transfers/pix` falhava com "Request header field idempotency-key is not allowed by Access-Control-Allow-Headers"
+- **Fix:** Adicionado `Idempotency-Key` à lista de headers permitidos em `workers/middleware/cors.ts` (soma-se ao `X-Step-Up-Token` já liberado)
+- **Impacto:** Saques PIX e de afiliados (que usam idempotência para evitar double-spend em retries) agora completam o preflight
+
+---
+
 ## [5.5.4 → 5.5.4-patch] — 2026-07-09 — Hotfix: CORS preflight para `x-step-up-token`
 
 **Correção:** Erro CORS ao tentar saques PIX — header `x-step-up-token` bloqueado por preflight.

@@ -44,7 +44,7 @@ function isAllowedOrigin(origin: string | undefined | null): string | null {
 
 // Headers CORS comuns
 const CORS_METHODS = 'GET, POST, PUT, PATCH, DELETE, OPTIONS'
-const CORS_HEADERS = 'Content-Type, Authorization, X-Request-Id, X-Client-Version, X-Step-Up-Token'
+const CORS_HEADERS = 'Content-Type, Authorization, X-Request-Id, X-Client-Version, X-Step-Up-Token, Idempotency-Key'
 const CORS_EXPOSE = 'X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-Request-Id'
 const CORS_MAX_AGE = '86400' // 24 hours preflight cache
 

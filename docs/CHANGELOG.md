@@ -5,14 +5,14 @@
 
 ---
 
-## [Hotfix] — 09/07/2026 — CORS: permitir header `X-Step-Up-Token` em preflight
+## [Hotfix] — 09/07/2026 — CORS: permitir headers `X-Step-Up-Token` e `Idempotency-Key` em preflight
 
-**Correção:** Saques PIX não funcionavam por erro CORS.
+**Correção:** Saques PIX ainda falhavam por CORS após o primeiro hotfix — havia um segundo header customizado bloqueado.
 
-- **Problema:** Browser bloqueava POST `/api/v1/payments/transfers/pix` porque header `x-step-up-token` não estava autorizado no preflight.
-- **Causa:** `Access-Control-Allow-Headers` em `workers/middleware/cors.ts` não incluía `X-Step-Up-Token`.
-- **Solução:** Adicionado `X-Step-Up-Token` à lista de headers permitidos.
-- **Teste:** Saques PIX agora funcionam sem erro CORS.
+- **Problema:** Browser bloqueava POST `/api/v1/payments/transfers/pix` (e `/affiliates/withdraw`) porque `idempotency-key` não estava autorizado no preflight, mesmo após liberar `x-step-up-token`.
+- **Causa:** `Access-Control-Allow-Headers` em `workers/middleware/cors.ts` faltava `Idempotency-Key` — usado pelo cliente para deduplicar retries do mesmo saque (`use-payments.ts`, `use-affiliates.ts`, `use-assessments.ts`).
+- **Solução:** Adicionado `Idempotency-Key` à lista de headers permitidos (junto com `X-Step-Up-Token` do hotfix anterior).
+- **Teste:** Saques PIX e de afiliados agora completam o preflight sem erro CORS.
 
 ---
 
