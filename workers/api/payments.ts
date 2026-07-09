@@ -25,6 +25,7 @@
 import { Hono } from 'hono'
 import type { AppContext, Bindings } from '@workers/types'
 import { authMiddleware, requireType } from '@workers/middleware/auth'
+import { requireStepUp } from '@workers/middleware/step-up'
 import {
   createPaymentSchema,
   createPaymentLinkSchema,
@@ -1804,12 +1805,37 @@ payments.get('/balance', requireType('personal'), async (c) => {
 })
 
 // POST /payments/transfers/pix — Solicitar saque PIX
-payments.post('/transfers/pix', requireType('personal'), async (c) => {
+// requireStepUp: exige biometria (dynamic linking) OU senha antes de mover dinheiro.
+// super_admin NÃO burla o step-up (requireStepUp não copia o bypass de requireType).
+payments.post('/transfers/pix', requireType('personal'), requireStepUp('withdraw_pix'), async (c) => {
   const personalId = c.get('userId')
+  const actorId = c.get('actorUserId') || personalId
   const userRole = c.get('userRole')
   const isSuperAdmin = userRole === 'super_admin'
+  const stepUpMethod = c.get('stepUp')?.method ?? 'unknown'
   const body = await c.req.json()
   const parsed = requestPixTransferSchema.parse(body)
+
+  // ─── Idempotência (anti double-spend): claim-first no banco ANTES de chamar o Asaas ───
+  const idempotencyKey = c.req.header('Idempotency-Key')
+  if (!idempotencyKey) throw new BadRequestError('Idempotency-Key obrigatório para saque')
+  {
+    // Se já existe um transfer com esta chave, devolve o existente (retry seguro).
+    const existing = await pgQueryOne<{
+      id: string; amount: number; fee: number; net_amount: number; pix_key: string; pix_key_type: string; status: string; asaas_transfer_id: string | null
+    }>(
+      c.env,
+      'SELECT id, amount, fee, net_amount, pix_key, pix_key_type, status, asaas_transfer_id FROM pix_transfers WHERE personal_id = $1 AND idempotency_key = $2',
+      [personalId, idempotencyKey]
+    )
+    if (existing) {
+      return created({
+        id: existing.id, amount: existing.amount, fee: existing.fee, net_amount: existing.net_amount,
+        pix_key: existing.pix_key, pix_key_type: existing.pix_key_type, status: existing.status,
+        asaas_transfer_id: existing.asaas_transfer_id, idempotent_replay: true,
+      })
+    }
+  }
 
   const ledgerStatus = await getCreatorConsultationLedgerStatus(c.env, personalId)
   if (ledgerStatus.inconsistentOrders > 0) {
@@ -1818,12 +1844,54 @@ payments.post('/transfers/pix', requireType('personal'), async (c) => {
     )
   }
 
-  // Verificar saldo interno (pagamentos - saques)
+  const id = generateId()
+  const now = new Date().toISOString()
+  const pixKeyType = mapPixKeyType(parsed.pix_key)
+
+  // ─── Claim atômico PRIMEIRO (security-review 2026-07-08 — anti double-spend) ───
+  // O saldo interno é DERIVADO (soma sobre payments/pix_transfers, não uma coluna
+  // única) — não dá pra "guardar" um UPDATE como no saque de afiliado. Fix: reserva
+  // a linha (status 'claiming') ANTES de calcular o saldo, e o cálculo abaixo passa
+  // a CONTAR as claims 'claiming' no total sacado. Assim, se duas requisições
+  // concorrentes (chaves idem distintas) tentam sacar o mesmo saldo, a que reservar
+  // por último enxerga a reserva da primeira (Postgres read-committed: cada SELECT
+  // vê tudo que já commitou) e sua checagem de saldo falha ANTES de chamar o Asaas.
+  const claim = await pgQueryOne<{ id: string }>(c.env, `
+    INSERT INTO pix_transfers (
+      id, personal_id, pix_key, pix_key_type, amount, fee, net_amount, status,
+      idempotency_key, requested_at, created_at, updated_at
+    ) VALUES ($1, $2, $3, $4, $5, 0, $5, 'claiming', $6, $7, $7, $7)
+    ON CONFLICT (personal_id, idempotency_key) WHERE idempotency_key IS NOT NULL DO NOTHING
+    RETURNING id
+  `, [id, personalId, parsed.pix_key, pixKeyType.toLowerCase(), parsed.amount, idempotencyKey, now])
+
+  if (!claim) {
+    // Perdeu a corrida na MESMA idempotency-key (retry) — devolve o registro existente.
+    const winner = await pgQueryOne<{
+      id: string; amount: number; fee: number; net_amount: number; pix_key: string; pix_key_type: string; status: string; asaas_transfer_id: string | null
+    }>(
+      c.env,
+      'SELECT id, amount, fee, net_amount, pix_key, pix_key_type, status, asaas_transfer_id FROM pix_transfers WHERE personal_id = $1 AND idempotency_key = $2',
+      [personalId, idempotencyKey]
+    )
+    return created({
+      id: winner?.id ?? id, amount: parsed.amount, fee: winner?.fee ?? 0, net_amount: winner?.net_amount ?? parsed.amount,
+      pix_key: parsed.pix_key, pix_key_type: pixKeyType, status: winner?.status ?? 'processing',
+      asaas_transfer_id: winner?.asaas_transfer_id ?? null, idempotent_replay: true,
+    })
+  }
+
+  /** Desfaz a claim (delete) — usado em todo caminho de rejeição após reservar. */
+  const releaseClaim = () =>
+    pgQuery(c.env, 'DELETE FROM pix_transfers WHERE id = $1 AND status = $2', [id, 'claiming']).catch(() => {})
+
+  // Verificar saldo interno (pagamentos - saques) INCLUINDO a própria claim + quaisquer
+  // outras 'claiming' já commitadas — fecha a janela de corrida entre chaves distintas.
   const { rows: balanceRows } = await pgQuery<{ total_received: number; total_withdrawn: number }>(
     c.env, `
     SELECT
       COALESCE((SELECT SUM(net_amount) FROM payments WHERE recipient_id = $1 AND status = 'confirmed'), 0)::float as total_received,
-      COALESCE((SELECT SUM(amount) FROM pix_transfers WHERE personal_id = $1 AND status IN ('completed', 'processing', 'pending')), 0)::float as total_withdrawn
+      COALESCE((SELECT SUM(amount) FROM pix_transfers WHERE personal_id = $1 AND status IN ('completed', 'processing', 'pending', 'claiming')), 0)::float as total_withdrawn
   `, [personalId])
 
   const internalAvailable = (balanceRows[0]?.total_received ?? 0) - (balanceRows[0]?.total_withdrawn ?? 0)
@@ -1832,9 +1900,10 @@ payments.post('/transfers/pix', requireType('personal'), async (c) => {
   // O saldo Asaas em tempo real é o saldo disponível para o Victor (super admin)
   // Não precisa validar saldo interno nem saldo Asaas — o Asaas rejeita se não tiver
   if (!isSuperAdmin) {
-    // Personal: validar saldo interno
-    if (parsed.amount > internalAvailable) {
-      throw new BadRequestError(`Saldo insuficiente. Disponível: R$${internalAvailable.toFixed(2)}`)
+    // Personal: validar saldo interno (já inclui a própria claim no total_withdrawn)
+    if (internalAvailable < 0) {
+      await releaseClaim()
+      throw new BadRequestError(`Saldo insuficiente. Disponível: R$${(internalAvailable + parsed.amount).toFixed(2)}`)
     }
 
     // Personal: verificar saldo REAL no Asaas (gateway desconta taxas)
@@ -1842,6 +1911,7 @@ payments.post('/transfers/pix', requireType('personal'), async (c) => {
       try {
         const asaasBal = await getBalance(c.env)
         if (asaasBal && parsed.amount > asaasBal.balance) {
+          await releaseClaim()
           throw new BadRequestError(
             `Saldo Asaas insuficiente. Disponível no Asaas: R$${asaasBal.balance.toFixed(2)}. ` +
             `O Asaas desconta taxas de gateway sobre cada cobrança recebida.`
@@ -1854,15 +1924,11 @@ payments.post('/transfers/pix', requireType('personal'), async (c) => {
     }
   }
 
-  const id = generateId()
-  const now = new Date().toISOString()
-  const pixKeyType = mapPixKeyType(parsed.pix_key)
-
   let asaasTransferId: string | null = null
   let transferStatus = 'pending'
   let fee = 0
 
-  // Criar transferência no Asaas (OBRIGATÓRIO — não salvar sem asaas_transfer_id)
+  // Criar transferência no Asaas (OBRIGATÓRIO — a linha já está claimed com status 'claiming')
   if (c.env.ASAAS_API_KEY) {
     try {
       const transfer = await createPixTransfer(c.env, {
@@ -1879,26 +1945,29 @@ payments.post('/transfers/pix', requireType('personal'), async (c) => {
     } catch (err) {
       const errMsg = err instanceof Error ? err.message : String(err)
       console.error('[Transfers] PIX transfer error:', errMsg)
-      // NÃO salvar como pending sem asaas_transfer_id — isso trava o saldo
+      // Asaas falhou → libera a claim para o usuário poder tentar de novo com uma
+      // NOVA idempotency-key, sem travar o saldo com uma linha órfã 'claiming'.
+      await releaseClaim()
       throw new BadRequestError(
         `Falha ao criar transferência PIX no Asaas: ${errMsg}. Tente novamente em alguns minutos.`
       )
     }
   } else {
+    await releaseClaim()
     throw new BadRequestError('Gateway de pagamento não configurado. Contate o suporte.')
   }
 
   const netAmount = parsed.amount - fee
 
+  // Finaliza a claim com os dados reais do Asaas
   await pgQuery(c.env, `
-    INSERT INTO pix_transfers (
-      id, personal_id, asaas_transfer_id, pix_key, pix_key_type,
-      amount, fee, net_amount, status, requested_at, created_at, updated_at
-    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $10, $10)
-  `, [
-    id, personalId, asaasTransferId, parsed.pix_key, pixKeyType.toLowerCase(),
-    parsed.amount, fee, netAmount, transferStatus, now,
-  ])
+    UPDATE pix_transfers
+    SET asaas_transfer_id = $2, fee = $3, net_amount = $4, status = $5, updated_at = $6
+    WHERE id = $1
+  `, [id, asaasTransferId, fee, netAmount, transferStatus, now])
+
+  // Audit do saque com o método de step-up usado
+  console.log(`[Transfers] withdrawal ${id} authorized via step-up=${stepUpMethod} actor=${actorId} amount=${parsed.amount}`)
 
   // Notificação imediata (push + in-app) sobre o saque criado
   const formatted = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(parsed.amount)

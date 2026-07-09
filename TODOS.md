@@ -149,3 +149,19 @@ Itens identificados durante reviews e planejamento, capturados com contexto sufi
 **Depends on / blocked by:** Splash-boot v2 shipped + E2E estáveis rodando no CI.
 
 ---
+
+### TODO-010 — Separar domínio de JWT: step_up_token não deve ser aceito como access token
+
+**What:** `verifyJWT` (`lib/auth-helpers.ts`) valida qualquer JWT assinado com `JWT_SECRET` e só checa `exp` — não distingue um `step_up_token` (`purpose:'step_up'`) de um access token normal. Adicionar assertion de `type`/`purpose` no `authMiddleware`, ou assinar step-up tokens com um secret dedicado.
+
+**Why:** Achado do `/security-review` de 2026-07-08 (biometria v2, onda 1). O mecanismo é real: um `step_up_token` apresentado como `Authorization: Bearer` passa pelo `authMiddleware` (rotas que só exigem auth, sem `requireType`, ex. `DELETE /passkeys/:id`) com `userId = payload.sub`. Avaliado como **não explorável na prática** (confiança 8/10) porque o único jeito de obter um `step_up_token` é já ter roubado o `access_token` do mesmo lugar — e o `access_token` é estritamente mais poderoso (1h vs 5min, não single-use, passa por `requireType`). Ainda assim, separar os domínios é defense-in-depth correta e barata.
+
+**Pros:** Fecha uma classe de confusão de tipo por completo; baixo esforço (~1h); nenhuma mudança de UX.
+
+**Cons:** Nenhum downside real — é hardening puro.
+
+**Context:** `lib/step-up.ts` (claims do `step_up_token`), `workers/middleware/auth.ts:44-102` (`authMiddleware`), `lib/auth-helpers.ts:132-167` (`verifyJWT`). Ver `~/.gstack/projects/vtsgroup-vfit/ceo-plans/2026-07-08-biometria-v2.md` para o relatório completo do security-review.
+
+**Depends on / blocked by:** Nenhuma — pode ser feito a qualquer momento, independente.
+
+---

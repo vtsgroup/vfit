@@ -60,10 +60,17 @@ export const listSubscriptionsQuerySchema = z.object({
 // PIX TRANSFERS (Saques)
 // ============================================
 
+// Teto de saque: defesa em profundidade (limita o dano de uma sessão comprometida).
+// R$50.000 por transação — super_admin não é limitado pela lógica de saldo, mas o
+// teto de sanidade vale para todos (evita erro de digitação catastrófico).
+const MAX_WITHDRAWAL = 50_000
+
 export const requestPixTransferSchema = z.object({
-  amount: z.number().positive('Valor deve ser positivo'),
+  amount: z.number().positive('Valor deve ser positivo').max(MAX_WITHDRAWAL, `Valor máximo por saque: R$${MAX_WITHDRAWAL}`),
   pix_key: z.string().min(1, 'Chave PIX obrigatória').max(100),
   description: z.string().max(200).optional(),
+  // Step-up: fallback de senha (quem não tem passkey). Não persistido.
+  current_password: z.string().optional(),
 })
 
 export const updatePaymentStatusSchema = z.object({
@@ -142,8 +149,10 @@ export const listCommissionsQuerySchema = z.object({
 })
 
 export const requestWithdrawalSchema = z.object({
-  amount: z.number().positive('Valor deve ser positivo'),
+  amount: z.number().positive('Valor deve ser positivo').max(50_000, 'Valor máximo por saque: R$50000'),
   pix_key: z.string().min(1, 'Chave PIX obrigatória').max(100),
+  // Step-up: fallback de senha (quem não tem passkey). Não persistido.
+  current_password: z.string().optional(),
 })
 
 // ============================================

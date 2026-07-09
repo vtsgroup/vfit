@@ -1,8 +1,8 @@
 'use client'
 
 import { DSIcon } from '@/components/ui/ds-icon'
-import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
+import PasskeySettingsCard from '@/components/settings/passkey-settings-card'
 
 export default function SegurancaPage() {
   const router = useRouter()
@@ -29,24 +29,25 @@ export default function SegurancaPage() {
             Voltar
           </button>
           <h1 className="text-3xl font-black text-white">Segurança da Conta</h1>
-          <p className="mt-2 text-sm text-white/60">Gerencie senha e proteção da conta</p>
+          <p className="mt-2 text-sm text-white/60">Gerencie biometria e proteção da conta</p>
         </div>
 
-        <div className="glass-card flex flex-col items-center justify-center rounded-2xl border border-white/10 p-12 text-center">
-          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-primary/20">
-            <DSIcon name="shieldCheck" size={32} className="text-brand-primary" />
+        {/* Login biométrico + política de app lock (mesmo card do dashboard do personal) */}
+        <PasskeySettingsCard />
+
+        {/* Alteração de senha — via fluxo de recuperação por enquanto */}
+        <div className="mt-4 glass-card rounded-2xl border border-white/10 p-4">
+          <div className="flex items-start gap-3">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-primary/15">
+              <DSIcon name="lock" size={16} className="text-brand-primary" />
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-white">Senha</p>
+              <p className="mt-1 text-xs text-white/60">
+                Para alterar sua senha, use a opção &quot;Esqueci minha senha&quot; na tela de login.
+              </p>
+            </div>
           </div>
-          <h2 className="text-lg font-bold text-white">Em Breve</h2>
-          <p className="mt-3 text-sm text-white/60">
-            Configurações avançadas de segurança estão a caminho. Para alterar sua senha, use a opção &quot;Esqueci minha senha&quot; na tela de login.
-          </p>
-          <Button
-            variant="secondary"
-            className="mt-6"
-            onClick={() => router.back()}
-          >
-            Voltar
-          </Button>
         </div>
       </div>
     </div>

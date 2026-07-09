@@ -20,6 +20,7 @@ import { api, ApiClientError } from '@/lib/api-client'
 import { useAuthStore, type User, type PersonalProfile, type StudentProfile, type NutritionistProfile, type AuthTokens } from '@/stores/auth-store'
 import { toast } from '@/stores/app-store'
 import { trackLandingEvent } from '@/lib/landing-analytics'
+import { markBiometricEnrollmentOffer } from '@/hooks/use-passkey'
 
 // ============================================
 // Types (API responses)
@@ -171,6 +172,8 @@ export function useRegisterPersonal() {
     },
     onSuccess: () => {
       trackLandingEvent('lp_register_complete', { user_type: 'personal' })
+      // Oferecer biometria no 1º login (personal não recebe token no cadastro)
+      markBiometricEnrollmentOffer()
       toast.success('Conta criada!', 'Verifique seu email para ativar sua conta.')
       router.push('/login?registered=true')
     },
@@ -208,6 +211,8 @@ export function useRegisterNutritionist() {
     },
     onSuccess: () => {
       trackLandingEvent('lp_register_complete', { user_type: 'nutritionist' })
+      // Oferecer biometria no 1º login (nutri não recebe token no cadastro)
+      markBiometricEnrollmentOffer()
       toast.success('Conta criada!', 'Verifique seu email para ativar sua conta.')
       router.push('/login?registered=true')
     },
@@ -244,6 +249,8 @@ export function useRegisterStudent() {
     },
     onSuccess: (data) => {
       trackLandingEvent('lp_register_complete', { user_type: 'student' })
+      // Oferecer biometria full-screen ao aterrissar no app (student já vem logado)
+      markBiometricEnrollmentOffer()
       if (data.tokens) {
         // Auto-login com os tokens retornados
         const tokens: AuthTokens = {

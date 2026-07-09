@@ -396,12 +396,24 @@ export function useTransfers(params: { page?: number } = {}) {
   })
 }
 
+/** Saque PIX com step-up (biometria/senha) + idempotência. */
+export interface PixTransferWithStepUp extends RequestPixTransferInput {
+  /** Idempotency-Key estável para o saque (reusar em retry). */
+  idempotencyKey: string
+  /** Header X-Step-Up-Token (caminho biométrico). */
+  stepUpHeaders?: Record<string, string>
+  /** current_password (caminho senha) — mesclado no body. */
+  current_password?: string
+}
+
 export function useRequestPixTransfer() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (data: RequestPixTransferInput) =>
-      api.post('/payments/transfers/pix', data),
+    mutationFn: ({ idempotencyKey, stepUpHeaders, ...data }: PixTransferWithStepUp) =>
+      api.post('/payments/transfers/pix', data, {
+        headers: { 'Idempotency-Key': idempotencyKey, ...(stepUpHeaders || {}) },
+      }),
     onMutate: () => {
       void logClientIssue({
         level: 'info',

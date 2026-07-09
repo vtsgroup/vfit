@@ -18,6 +18,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { formatDate } from '@/lib/utils'
 import { usePasskeys, useRegisterPasskey, useDeletePasskey, supportsPasskey } from '@/hooks/use-passkey'
+import { LockPolicySelector } from './lock-policy-selector'
 
 export default function PasskeySettingsCard() {
   const { data: passkeys, isLoading } = usePasskeys()
@@ -129,6 +130,9 @@ export default function PasskeySettingsCard() {
                 </>
               )}
             </Button>
+
+            {/* Política de recorrência do app lock — só faz sentido com passkey ativo */}
+            {passkeys && passkeys.length > 0 && <LockPolicySelector />}
           </div>
         )}
       </CardContent>

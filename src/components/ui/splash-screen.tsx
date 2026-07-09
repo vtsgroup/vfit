@@ -28,6 +28,7 @@
 
 import { type CSSProperties, useState, useEffect, useRef } from 'react'
 import { cn } from '@/lib/utils'
+import { isStandaloneDisplay } from '@/lib/display-mode'
 
 const SPLASH_KEY = 'vfit-splash-v5'
 const ENTER_MS = 1100        // duração da entrada (icon/arcos/wordmark/barra)
@@ -35,22 +36,6 @@ const MIN_VISIBLE = 1600     // 1ª carga: entrada completa da marca (~1.28s) + 
                             // Decisão D3 (2026-07-08): assinatura completa, saída IMEDIATA quando
                             // pronto — nada de espera cenográfica; velocidade percebida > cerimônia.
 const SAFETY_MS = 4000       // nunca prender o usuário atrás do splash (cap de delay se /auth/me travar)
-
-/** Contexto standalone/TWA — classe setada pré-paint pelo boot script (src/app/layout.tsx),
- *  com fallback para matchMedia caso o script não tenha rodado. */
-function isStandaloneDisplay(): boolean {
-  if (typeof window === 'undefined') return false
-  if (document.documentElement.classList.contains('vsp-standalone')) return true
-  try {
-    return (
-      (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) ||
-      ('standalone' in navigator && (navigator as Navigator & { standalone?: boolean }).standalone === true) ||
-      document.referrer.indexOf('android-app://') !== -1
-    )
-  } catch {
-    return false
-  }
-}
 
 /* ─── Campo de partículas determinístico (sem Math.random no render → SSR-safe) ─── */
 function mulberry32(seed: number) {

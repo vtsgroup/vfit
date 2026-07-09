@@ -30,6 +30,8 @@ import {
   useRequestPixTransfer,
   type PixTransferItem,
 } from '@/hooks/use-payments'
+import { StepUpSheet } from '@/components/payments/step-up-sheet'
+import { newIdempotencyKey, type StepUpMaterial } from '@/hooks/use-step-up'
 
 function formatCurrency(value: number) {
   const safe = typeof value === 'number' && !isNaN(value) ? value : 0
@@ -53,6 +55,9 @@ export default function WithdrawPage() {
   const [amount, setAmount] = useState('')
   const [description, setDescription] = useState('')
   const [showForm, setShowForm] = useState(false)
+  // Step-up: ao submeter, abrimos o sheet de confirmação (biometria/senha). A
+  // Idempotency-Key é fixada quando o sheet abre e reusada em retries do mesmo saque.
+  const [pendingWithdrawal, setPendingWithdrawal] = useState<{ amount: number; pixKey: string; idempotencyKey: string } | null>(null)
 
   const transfers = transfersData?.transfers ?? []
   const balance = balanceData
@@ -61,12 +66,20 @@ export default function WithdrawPage() {
     e.preventDefault()
     const parsedAmount = parseFloat(amount)
     if (isNaN(parsedAmount) || parsedAmount <= 0) return
+    // Abre a confirmação de identidade antes de mover dinheiro
+    setPendingWithdrawal({ amount: parsedAmount, pixKey: pixKey.trim(), idempotencyKey: newIdempotencyKey() })
+  }
 
+  function handleStepUpConfirm(material: StepUpMaterial) {
+    if (!pendingWithdrawal) return
     requestTransfer.mutate(
       {
-        amount: parsedAmount,
-        pix_key: pixKey.trim(),
+        amount: pendingWithdrawal.amount,
+        pix_key: pendingWithdrawal.pixKey,
         description: description.trim() || undefined,
+        idempotencyKey: pendingWithdrawal.idempotencyKey,
+        stepUpHeaders: material.headers,
+        current_password: material.bodyExtra?.current_password,
       },
       {
         onSuccess: () => {
@@ -74,6 +87,7 @@ export default function WithdrawPage() {
           setAmount('')
           setDescription('')
           setShowForm(false)
+          setPendingWithdrawal(null)
         },
       }
     )
@@ -271,6 +285,16 @@ export default function WithdrawPage() {
           )}
         </div>
       </div>
+
+      {pendingWithdrawal && (
+        <StepUpSheet
+          amount={pendingWithdrawal.amount}
+          pixKey={pendingWithdrawal.pixKey}
+          purpose="withdraw_pix"
+          onConfirm={handleStepUpConfirm}
+          onClose={() => setPendingWithdrawal(null)}
+        />
+      )}
     </AuthGuard>
   )
 }

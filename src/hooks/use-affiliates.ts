@@ -184,12 +184,22 @@ export function useActivateAffiliate() {
   })
 }
 
+export interface AffiliateWithdrawalWithStepUp {
+  amount: number
+  pix_key: string
+  idempotencyKey: string
+  stepUpHeaders?: Record<string, string>
+  current_password?: string
+}
+
 export function useRequestWithdrawal() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (data: { amount: number; pix_key: string }) =>
-      api.post('/affiliates/withdraw', data),
+    mutationFn: ({ idempotencyKey, stepUpHeaders, ...data }: AffiliateWithdrawalWithStepUp) =>
+      api.post('/affiliates/withdraw', data, {
+        headers: { 'Idempotency-Key': idempotencyKey, ...(stepUpHeaders || {}) },
+      }),
     onSuccess: () => {
       toast.success('Saque solicitado com sucesso!')
       queryClient.invalidateQueries({ queryKey: ['affiliates'] })

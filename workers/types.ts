@@ -118,6 +118,8 @@ export type Variables = {
   actorUserType?: 'personal' | 'student' | 'nutritionist' | 'admin' | 'super_admin'
   simulationMode?: 'super_admin' | 'personal' | 'student' | 'nutritionist'
   jwtPayload: JWTPayload
+  /** Método que autorizou uma ação sensível (set por requireStepUp) */
+  stepUp?: { method: 'passkey' | 'password' }
 }
 
 // JWT Payload

@@ -95,6 +95,9 @@ interface AuthState {
    *  OBSERVADORA: nunca navega; segura a tela até o redirect dos gates existentes aterrissar.
    *  NÃO persistido (reseta a cada carga). */
   isBootResolved: boolean
+  /** true quando o app deve exibir o lock biométrico no boot (app lock — biometria v2 B3).
+   *  Computado pelo BootLockGate na montagem (standalone/TWA + policy vencida). NÃO persistido. */
+  isUnlockRequired: boolean
 
   // Actions
   setUser: (user: User) => void
@@ -110,6 +113,8 @@ interface AuthState {
   setSessionReady: (ready?: boolean) => void
   setSplashFinished: (finished?: boolean) => void
   setBootResolved: (resolved?: boolean) => void
+  setUnlockRequired: (required?: boolean) => void
+  setUnlocked: () => void
 
   // Computed helpers
   isPersonal: () => boolean
@@ -140,6 +145,7 @@ export const useAuthStore = create<AuthState>()(
       isSessionReady: false,
       isSplashFinished: false,
       isBootResolved: false,
+      isUnlockRequired: false,
 
       // Actions
       setUser: (user) => set({ user, isAuthenticated: true }),
@@ -200,6 +206,10 @@ export const useAuthStore = create<AuthState>()(
       setSplashFinished: (finished = true) => set({ isSplashFinished: finished }),
 
       setBootResolved: (resolved = true) => set({ isBootResolved: resolved }),
+
+      setUnlockRequired: (required = true) => set({ isUnlockRequired: required }),
+
+      setUnlocked: () => set({ isUnlockRequired: false }),
 
       // Computed helpers
       isPersonal: () => get().user?.user_type === 'personal',
