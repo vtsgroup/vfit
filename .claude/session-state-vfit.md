@@ -1,10 +1,22 @@
 # Session State — VFIT
 
 **Date Created**: 2026-04-01  
-**Last Updated**: 2026-07-09 (Fix geração de plano + white-flash · deploy v5.5.1 · AAB TWA 4.4.2 · ASO Play)  
+**Last Updated**: 2026-07-09 (Fix saque PIX + reconciliação DB prod · deploy v5.6.0)  
 **Current Phase**: MVP Sprint 0 concluído → próximo: Sprint 1 (treinos/dashboard/marketplace)  
-**Project**: VFIT v5.5.1 (web) · TWA 4.4.2 (versionCode 442)  
+**Project**: VFIT v5.6.0 (web) · TWA 4.4.2 (versionCode 442)  
 **Status**: ✅ Production Stable  
+
+## Última sessão (2026-07-09, tarde) — Fix saque PIX + reconciliação do banco de prod · deploy v5.6.0 (main)
+
+Saque PIX (`POST /payments/transfers/pix`) dava 500 em cascata. **Causa raiz:** `.env.local` aponta para uma branch Neon **stale** (`ep-lucky-meadow`), não para o prod real (`ep-dark-cherry`, secret `DATABASE_URL` do Worker) — migrations locais nunca chegavam em prod.
+
+- **5 bloqueadores resolvidos em prod:** (1) `idempotency_key`; (2) tabelas `consultation_*`; (3) bug de tipo em 0034/0035 (`creator_id/student_id` TEXT→UUID, pois `users.id` é UUID); (4) CHECK de `pix_transfers.status` sem `claiming`; (5) CHECK de `pix_key_type` sem `evp`.
+- **Reconciliação:** + colunas órfãs `vfit_foods.barcode`, `workout_exercises.custom_video_url`. Diff prod↔referência **zerado**.
+- **Repo:** 0034/0035 corrigidas (UUID); nova migration `2026-07-09_pix_transfers_status_keytype_constraints.sql`; endpoint temp `/internal/db-admin` (introspecção/migração via `env.DATABASE_URL` real) usado e **removido**; secret `MIGRATION_TOKEN` deletado.
+- **Doc:** `.claude/docs/DB-PROD-DIVERGENCE-RUNBOOK.md` — runbook (endpoints, causa raiz, processo correto de migrar prod).
+- **Confirmado end-to-end:** saque real OK (erro tratado com chave inválida; "Saque PIX solicitado com sucesso!" com chave válida).
+
+---
 
 ## Última sessão (2026-07-09, manhã) — Fix plano + white-flash · deploy v5.5.1 · AAB 4.4.2 · ASO (main)
 

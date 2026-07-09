@@ -1,7 +1,7 @@
 # 🗄️ Runbook — Divergência de Banco (Neon) `.env.local` ↔ Produção
 
 > **Incidente:** 2026-07-09 · Saques PIX em produção retornando 500 em cascata.
-> **Status:** ✅ Resolvido · prod reconciliado com o histórico de migrations.
+> **Status:** ✅ Resolvido e **confirmado end-to-end** (saque real OK) · prod reconciliado com o histórico de migrations · deploy `v5.6.0`.
 
 ---
 
@@ -86,4 +86,4 @@ Quando não se tem a URL real, dá pra descobrir o host e migrar **de dentro do 
 - [x] `vfit_foods.barcode`, `workout_exercises.custom_video_url` existem
 - [x] diff de schema prod ↔ referência = 0
 - [x] endpoint temporário `/internal/db-admin` removido; secret `MIGRATION_TOKEN` deletado
-- [ ] **Pendente (produto):** testar um saque PIX real end-to-end (auth + step-up + Asaas)
+- [x] **Confirmado (2026-07-09):** saque PIX testado end-to-end — erro tratado com chave inválida, sucesso ("Saque PIX solicitado com sucesso!") com chave válida

@@ -5,7 +5,7 @@
 
 ---
 
-## [5.5.9 → 5.5.10] — 2026-07-09 — Reconciliação completa do banco de produção + fix de saque PIX
+## [5.5.9 → 5.6.0] — 2026-07-09 — Reconciliação completa do banco de produção + fix de saque PIX
 
 **Correção:** Saque PIX ainda dava 500 mesmo após a `idempotency_key` — cascata de bloqueadores por divergência de banco.
 
@@ -14,7 +14,7 @@
 - **Reconciliação:** também aplicadas colunas órfãs `vfit_foods.barcode` (0032) e `workout_exercises.custom_video_url` (0030). Diff prod↔referência **zerado**.
 - **Repo:** `0034`/`0035` corrigidas (UUID); nova migration `2026-07-09_pix_transfers_status_keytype_constraints.sql`; endpoint temporário `/internal/db-admin` adicionado e **removido** após uso; secret `MIGRATION_TOKEN` deletado.
 - **Doc:** runbook completo em `.claude/docs/DB-PROD-DIVERGENCE-RUNBOOK.md` (endpoints, causa raiz, processo correto de migration em prod).
-- **Pendente (produto):** validar um saque PIX real end-to-end.
+- **Confirmado (2026-07-09):** saque PIX validado end-to-end em produção — erro tratado com chave PIX inválida, "Saque PIX solicitado com sucesso!" com chave válida.
 
 ---
 
