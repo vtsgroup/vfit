@@ -15,6 +15,7 @@
 
 import fs from 'node:fs'
 import path from 'node:path'
+import { buildMemSavingsFooter } from './lib/mem-savings.mjs'
 
 const DEFAULT_GATEWAY_URL = 'https://vfit-whatsapp.vd-b0b.workers.dev'
 
@@ -215,6 +216,12 @@ async function main() {
     }
   }
 
+  // claude-mem savings footer — sent as a dedicated `footer` field; the worker
+  // appends it to the end of every rendered message (creative / generic / failed).
+  // Empty string when there is no fresh snapshot (see scripts/lib/mem-savings.mjs),
+  // in which case the worker omits it. Coexists with the RTK block on its own line.
+  const memFooter = buildMemSavingsFooter()
+
   const action = event === 'start'
     ? (why || undefined)
     : undefined
@@ -236,6 +243,7 @@ async function main() {
     started_at: startedAtIso,
     ended_at: endedAtIso,
     summary,
+    footer: memFooter || undefined,
   }
 
   const json = await postJson(`${gateway}${endpoint}`, token, body)

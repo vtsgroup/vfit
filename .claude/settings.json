@@ -177,6 +177,17 @@
             "statusMessage": "Copilot-Mem pronto (recent:7d)..."
           }
         ]
+      },
+      {
+        "matcher": "startup|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PROJECT_DIR:-.}/scripts/capture-mem-savings.mjs\" 2>/dev/null || true; echo '{\"continue\":true,\"suppressOutput\":true}'",
+            "timeout": 30,
+            "statusMessage": "Capturando economia claude-mem..."
+          }
+        ]
       }
     ],
     "PreToolUse": [

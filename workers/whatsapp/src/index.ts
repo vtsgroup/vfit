@@ -611,12 +611,13 @@ function buildTaskNotifyMessage(params: {
   status?: 'success' | 'failed';
   linkUrl?: string;
   tone?: DeployTone;
+  footer?: string;
 }): string {
   const nowIso = new Date().toISOString();
   const startedAtIso = params.startedAtIso || (params.event === 'start' ? nowIso : undefined);
   const endedAtIso = params.endedAtIso || (params.event === 'end' ? nowIso : undefined);
 
-  return params.event === 'start'
+  const message = params.event === 'start'
     ? buildStartMessage({
       title: params.title,
       taskId: params.taskId,
@@ -641,6 +642,12 @@ function buildTaskNotifyMessage(params: {
       linkUrl: params.linkUrl,
       tone: params.tone,
     });
+
+  // claude-mem savings footer — appended to the end of the rendered message,
+  // uniformly across every template (creative / generic / failed). Purely
+  // additive: does not touch the event/status contract.
+  const footer = params.footer ? params.footer.trim() : '';
+  return footer ? `${message}\n\n${footer}` : message;
 }
 
 async function readJsonBody<T = unknown>(request: Request): Promise<T> {
@@ -783,6 +790,7 @@ const whatsappWorker = {
         const status = body?.status === 'failed' ? 'failed' : (body?.status === 'success' ? 'success' : undefined);
         const linkUrl = body?.link_url ? clampText(body.link_url as string, 2048) : undefined;
         const tone = body?.tone === 'marketing' || body?.tone === 'casual' ? (body.tone as 'marketing' | 'casual') : undefined;
+        const footer = body?.footer ? clampText(body.footer as string, 300) : undefined;
 
         const groupNameOverride = body?.group_name ? clampText(body.group_name as string, 140) : undefined;
         const accountIdOverride = (body?.account_id as string || '').trim() || undefined;
@@ -803,6 +811,7 @@ const whatsappWorker = {
           status,
           linkUrl,
           tone,
+          footer,
         });
 
         // Low-noise: suppress 'start' notifications — only the final result is posted to the group.
@@ -857,6 +866,7 @@ const whatsappWorker = {
         const status = body?.status === 'failed' ? 'failed' : (body?.status === 'success' ? 'success' : undefined);
         const linkUrl = body?.link_url ? clampText(body.link_url as string, 2048) : undefined;
         const tone = body?.tone === 'marketing' || body?.tone === 'casual' ? (body.tone as 'marketing' | 'casual') : undefined;
+        const footer = body?.footer ? clampText(body.footer as string, 300) : undefined;
 
         const message = buildTaskNotifyMessage({
           event,
@@ -874,6 +884,7 @@ const whatsappWorker = {
           status,
           linkUrl,
           tone,
+          footer,
         });
 
         return json({

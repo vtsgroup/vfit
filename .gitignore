@@ -59,6 +59,9 @@ audit_blog.sh
 blog_urls.txt
 .gstack/
 
+# claude-mem savings snapshot (per-session, escrito pelo hook SessionStart)
+.claude/.mem-savings.json
+
 # TWA build artifacts
 twa/app/build/
 twa/build/
