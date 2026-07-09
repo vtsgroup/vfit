@@ -5,6 +5,21 @@
 
 ---
 
+## [Unreleased] — 09/07/2026 — Biometria v2: saque com confirmação biométrica + app lock configurável
+
+**Onda 1 — Segurança** (commit `ccbf49cd`):
+- **Step-up biométrico em saques** com dynamic linking (a assinatura vincula valor + destino) em `/payments/transfers/pix` e `/affiliates/withdraw`.
+- **Idempotência anti double-spend** (`migrations/hyperdrive/2026-07-08_withdrawal_idempotency.sql`, aplicada em prod): coluna `idempotency_key` + índice único parcial em `pix_transfers` e `payments`; handler faz claim-first (`INSERT ON CONFLICT`) antes de chamar o Asaas — retry devolve a transferência existente. **23 unit tests**.
+- `/security-review`: 1 HIGH (double-spend) corrigido; JWT type confusion avaliado não-explorável → TODO defense-in-depth.
+
+**Onda 2 — UX** (commits `c72ec342` + `d68254e0`):
+- **App lock no boot** (`src/components/layout/boot-lock-gate.tsx`): em app instalado (PWA standalone/TWA) pede biometria ao abrir conforme política configurável `always | daily | weekly | off` (default `daily`) — substitui o cooldown fixo de 1h. Reusa o contrato `isBootResolved` do splash-boot v2 (zero frame de conteúdo antes do lock); fail-open offline; válvula "Usar senha". Browser comum não tranca. Módulo puro `src/lib/biometric-lock-policy.ts` (**21 unit tests**). Seletor de política em `passkey-settings-card` e na tela de segurança do aluno.
+- **Enrollment full-screen pós-cadastro** (`passkey-enrollment-step.tsx` + `biometric-enrollment-gate.tsx`): oferta proeminente no 1º momento autenticado — student pós-onboarding, personal/nutri no 1º login (flag `vfit_offer_biometric`). `PasskeyPrompt` agora também montado no app do aluno (`(app)/layout`), antes só existia no dashboard do personal.
+- **9 testes E2E** (`tests/e2e/biometria-v2.spec.ts`): WebAuthn virtual authenticator via CDP + standalone emulado, cobrindo aparência do lock (policy/standalone) e do enrollment.
+- Fix: redirect do lock no modo login via `bootDestination` (student ia para `/dashboard` errado); `isStandaloneDisplay` extraído para `lib/display-mode.ts`.
+
+---
+
 ## [Unreleased] — 04/07/2026 — Fases 1-3 Experiência 1000: Maestro + upsell Telemetria + navbar Dock
 
 - **Maestro** (`src/lib/prompt-maestro.ts` + `use-prompt-slot.ts`): orquestrador central de prompts — fila com prioridade legal>install>upsell, 1 não-legal/sessão, acomodação de 20s, sinal `hero_cta_seen` (IntersectionObserver no CTA do hero), espaçamento 72h com exceção de momento-de-vitória p/ upsell, consent 3 estados, ledger unificado `vfit-prompt-ledger` com migração one-shot das chaves legadas, kill-switch `vfit-maestro-disabled`, telemetria `prompt_shown/dismissed/converted`. **28 unit tests** (`tests/lib/prompt-maestro.test.ts`); alias `@/`→src no vitest.
