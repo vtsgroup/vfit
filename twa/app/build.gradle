@@ -24,8 +24,8 @@ def twaManifest = [
     applicationId: 'br.app.vfit',
     hostName: 'vfit.app.br', // The domain being opened in the TWA.
     launchUrl: '/welcome', // The start path for the TWA. Must be relative to the domain.
-    name: 'VFIT', // The application name.
-    launcherName: 'VFIT', // The name shown on the Android Launcher.
+    name: 'Vfit', // The application name.
+    launcherName: 'Vfit', // The name shown on the Android Launcher.
     themeColor: '#050A12', // The color used for the status bar.
     themeColorDark: '#050A12', // The color used for the dark status bar.
     navigationColor: '#050A12', // The color used for the navigation bar.
@@ -58,7 +58,7 @@ android {
         minSdkVersion 24
         targetSdkVersion 35
         versionCode 441
-        versionName "4.4.0"
+        versionName "4.4.1"
 
         // The name for the application
         resValue "string", "appName", twaManifest.name

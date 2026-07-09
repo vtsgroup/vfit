@@ -1,0 +1,14 @@
+Vfit 4.4.1 — Notas de versão (Google Play)
+
+✅ Correção: geração do plano de treino no onboarding agora sempre conclui — eliminado o erro "Ops! Algo deu errado" que aparecia quando a IA demorava a responder.
+✨ Abertura mais suave: removido o flash branco que aparecia por um instante ao abrir o app pela primeira vez.
+🎨 Ícone e identidade refinados (novo recorte do logo, com mais respiro).
+
+Além de melhorias de estabilidade e desempenho.
+
+---
+Técnico (interno):
+- versionCode 441 · versionName 4.4.1
+- Deadline interno de 22s no POST /plans/generate (fallback template garantido) + timeout por modelo na cascata de IA + cliente com timeout 60s e auto-retry em timeout.
+- Background #050A12 inline no <html> + critical CSS no <head> (elimina FOUC/white-flash de render e swap de documento; resíduo pré-paint do WebView é nativo).
+- Ícone regenerado com glifo reduzido; nome de instalação "Vfit".
