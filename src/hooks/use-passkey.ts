@@ -67,6 +67,34 @@ export function resetPasskeyDismiss(userId: string): void {
   localStorage.removeItem(`passkey_dismissed_${userId}`)
 }
 
+// ============================================
+// Biometric Enrollment Offer (B1 — biometria v2)
+// Flag de intenção setado no cadastro (qualquer papel). Consumido pelo
+// BiometricEnrollmentGate no primeiro momento autenticado no app: student vê ao
+// aterrissar (pós-onboarding); personal/nutri veem no 1º login (não têm token no
+// cadastro). Garante que a oferta full-screen apareça uma vez, no momento certo.
+// ============================================
+
+const ENROLLMENT_OFFER_KEY = 'vfit_offer_biometric'
+
+/** Marca que o usuário acabou de se cadastrar → oferecer biometria full-screen */
+export function markBiometricEnrollmentOffer(): void {
+  if (typeof window === 'undefined') return
+  localStorage.setItem(ENROLLMENT_OFFER_KEY, '1')
+}
+
+/** Há uma oferta de enrollment pendente (cadastro recente)? */
+export function hasBiometricEnrollmentOffer(): boolean {
+  if (typeof window === 'undefined') return false
+  return localStorage.getItem(ENROLLMENT_OFFER_KEY) === '1'
+}
+
+/** Consome a oferta (após ativar ou pular) — não mostra o passo full-screen de novo */
+export function consumeBiometricEnrollmentOffer(): void {
+  if (typeof window === 'undefined') return
+  localStorage.removeItem(ENROLLMENT_OFFER_KEY)
+}
+
 /** Get stored email that has a passkey (for login page) */
 export function getPasskeyEmail(): string | null {
   if (typeof window === 'undefined') return null

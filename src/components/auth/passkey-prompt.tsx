@@ -29,6 +29,7 @@ import {
   setBiometricAutoUnlock,
   setLastBiometricUser,
   setBiometricLastAuth,
+  hasBiometricEnrollmentOffer,
 } from '@/hooks/use-passkey'
 import { useScrollLock } from '@/hooks/use-scroll-lock'
 
@@ -71,7 +72,10 @@ export function PasskeyPrompt() {
       const shouldShow =
         supportsPasskey() &&
         !hasPasskeyRegistered(user.id) &&
-        !isPasskeyDismissed(user.id)
+        !isPasskeyDismissed(user.id) &&
+        // Handoff: enquanto houver oferta pós-cadastro pendente, quem mostra é o
+        // BiometricEnrollmentGate (full-screen) — o modal fica de fora p/ não colidir.
+        !hasBiometricEnrollmentOffer()
 
       setShow(shouldShow)
     }, 2000)

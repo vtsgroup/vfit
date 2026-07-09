@@ -21,7 +21,7 @@ import { PullToRefresh } from '@/components/ui/pull-to-refresh'
 import { OneSignalProvider } from '@/components/providers/onesignal-provider'
 import { AuthProvider } from '@/components/providers/auth-provider'
 import { ToastContainer } from '@/components/layout/toast-container'
-import { PasskeyPrompt } from '@/components/auth'
+import { PasskeyPrompt, BiometricEnrollmentGate } from '@/components/auth'
 import { SplashOrchestrator } from '@/components/layout/splash-orchestrator'
 import { BootLockGate } from '@/components/layout/boot-lock-gate'
 import { BrandLoader } from '@/components/ui/brand-loader'
@@ -247,6 +247,8 @@ function AppShell({ children }: { children: React.ReactNode }) {
         {/* Oferta de biometria pós-login — antes só existia no dashboard do personal,
             então o aluno nunca via. Rede de segurança de mesma UX do PasskeyPrompt. */}
         <PasskeyPrompt />
+        {/* Passo full-screen de enrollment pós-cadastro (student pós-onboarding) */}
+        <BiometricEnrollmentGate />
       </div>
     </OneSignalProvider>
   )
