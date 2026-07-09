@@ -184,6 +184,12 @@ passkey.post('/passkey/register/complete', authMiddleware, async (c) => {
       expectedChallenge,
       expectedOrigin: allowedOrigins,
       expectedRPID: allowedRPIDs,
+      // options pedem userVerification:'preferred' → NÃO exigir UV no complete.
+      // Autenticadores Android/gerenciadores às vezes retornam UV=0 em 'preferred';
+      // o default (true) do verifyRegistrationResponse rejeitava com
+      // "User verification was required, but user could not be verified".
+      // Consistente com login/complete (também false). Fator de posse + UV best-effort.
+      requireUserVerification: false,
     })
 
     if (!verification.verified || !verification.registrationInfo) {

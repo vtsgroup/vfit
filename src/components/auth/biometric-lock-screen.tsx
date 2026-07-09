@@ -180,6 +180,17 @@ export function BiometricLockScreen({ onDismiss, variant = 'login', onUnlocked }
     return () => clearTimeout(timer)
   }, [triggerBiometric])
 
+  // theme-color = navy do splash enquanto o lock vive; restaura ao sair.
+  useEffect(() => {
+    if (typeof document === 'undefined') return
+    const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]:not([media])')
+    const prev = meta?.getAttribute('content') ?? null
+    meta?.setAttribute('content', '#08122B')
+    return () => {
+      if (meta && prev !== null) meta.setAttribute('content', prev)
+    }
+  }, [])
+
   if (!email) return null
 
   // Compute initials for avatar fallback
@@ -201,32 +212,37 @@ export function BiometricLockScreen({ onDismiss, variant = 'login', onUnlocked }
       className="fixed inset-0 z-9999 flex items-center justify-center"
       style={{ colorScheme: 'dark' }}
     >
-      {/* ─── Background ─── */}
-      <div className="absolute inset-0 bg-bg-primary" aria-hidden="true">
-        {/* Aurora blobs */}
-        <div
-          className="absolute inset-0 opacity-40"
-          style={{
-            background:
-              'radial-gradient(ellipse 130% 70% at 30% 70%, rgba(16,185,129,0.15) 0%, transparent 55%)',
-          }}
-        />
-        <div
-          className="absolute inset-0 opacity-25"
-          style={{
-            background:
-              'radial-gradient(ellipse 100% 50% at 75% 35%, rgba(52,211,153,0.12) 0%, transparent 50%)',
-          }}
-        />
-        {/* Vignette */}
+      {/* ─── Fundo splash: gradiente navy + grid verde à deriva + vinheta ─── */}
+      <div
+        className="absolute inset-0"
+        aria-hidden="true"
+        style={{ background: 'radial-gradient(circle at 50% 42%, #0c1a3a 0%, #08122b 55%, #050a12 100%)' }}
+      >
+        <div className="bls-grid" />
         <div
           className="absolute inset-0"
           style={{
             background:
-              'radial-gradient(ellipse at center, transparent 30%, rgba(5,10,18,0.7) 100%)',
+              'radial-gradient(circle at 50% 42%, transparent 42%, rgba(4,9,22,0.65) 100%)',
           }}
         />
       </div>
+
+      <style>{`
+        .bls-grid {
+          position: absolute; inset: -40px; pointer-events: none;
+          background-image:
+            linear-gradient(rgba(58,181,74,.06) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(58,181,74,.06) 1px, transparent 1px);
+          background-size: 40px 40px;
+          -webkit-mask: radial-gradient(circle at 50% 40%, #000 20%, transparent 70%);
+                  mask: radial-gradient(circle at 50% 40%, #000 20%, transparent 70%);
+          will-change: transform;
+          animation: bls-gridDrift 55s linear infinite;
+        }
+        @keyframes bls-gridDrift { 0% { transform: translate(0,0); } 100% { transform: translate(40px,40px); } }
+        @media (prefers-reduced-motion: reduce) { .bls-grid { animation: none !important; } }
+      `}</style>
 
       {/* ─── Content ─── */}
       <div className="relative z-10 flex flex-col items-center gap-8 px-6">
