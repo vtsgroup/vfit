@@ -21,6 +21,7 @@ import { useAuthStore, type User, type PersonalProfile, type StudentProfile, typ
 import { toast } from '@/stores/app-store'
 import { trackLandingEvent } from '@/lib/landing-analytics'
 import { markBiometricEnrollmentOffer } from '@/hooks/use-passkey'
+import { persistOnboardingAndPlan } from '@/lib/persist-onboarding'
 
 // ============================================
 // Types (API responses)
@@ -247,7 +248,7 @@ export function useRegisterStudent() {
       const res = await api.post<RegisterResponse>('/api/v1/auth/register/student', data, { auth: false })
       return res.data
     },
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       trackLandingEvent('lp_register_complete', { user_type: 'student' })
       // Oferecer biometria full-screen ao aterrissar no app (student já vem logado)
       markBiometricEnrollmentOffer()
@@ -260,6 +261,9 @@ export function useRegisterStudent() {
         }
         login({ user: normalizeAuthUser(data.user), tokens, profile: data.student })
         toast.success('Conta criada com sucesso!', 'Bem-vindo ao VFIT!')
+        // Veio do funil? Persiste quiz + plano ANTES de navegar, senão o guard do /treinos
+        // (GET /onboarding completed:false) devolve o usuário ao funil. No-op se não veio.
+        await persistOnboardingAndPlan()
         // Se veio do onboarding com plano → checkout
         // Tenta localStorage primeiro, depois URL params como fallback
         const selectedPlan = typeof window !== 'undefined'
