@@ -15,14 +15,21 @@
 - [x] Testes onda 1: 23 unit novos (dynamic linking + anti double-spend) — 464/464 verde
 - [x] **`/security-review`**: 1 achado HIGH confirmado e corrigido (double-spend), 1 avaliado como não-explorável (JWT type confusion → TODO defense-in-depth)
 - [x] Commit checkpoint onda 1 (`ccbf49cd`)
-- [ ] **Migration de produção** (bloqueia deploy — ver E0 abaixo)
-- [ ] **ONDA 2 — UX**: B1 enrollment + B2 lock policy + B3 splash-lock
-- [ ] Testes onda 2 (unit lock-policy + E2E WebAuthn virtual authenticator)
+- [ ] **Migration de produção** (bloqueia deploy — ver E0 abaixo) — decisão: rodar ANTES do deploy
+- [x] **ONDA 2 — UX**: B1 enrollment + B2 lock policy + B3 app-lock — commits `c72ec342` (core) + `d68254e0` (enrollment full-screen)
+- [x] Testes onda 2: 21 unit (lock-policy) + 9 E2E (`tests/e2e/biometria-v2.spec.ts`, commit `f4c37567`) — **485/485 unit + 9/9 E2E**
 - [ ] Deploy web
 - [ ] Smoke pós-deploy (saque real ou sandbox Asaas)
 - [ ] Build TWA (AAB + APK) + release notes
 
-**Progresso:** 6/12 etapas macro (50%) — onda de segurança 100% fechada.
+**Progresso:** 9/12 etapas macro (75%) — segurança + UX fechadas; falta migration + deploy + TWA.
+
+### Divergência do plano absorvida na execução (B1)
+
+O plano assumiu "tokens no store após o cadastro" para todos os papéis. Na prática **só o student recebe tokens** (`useRegisterStudent` faz `login()`); **personal/nutri vão para `/login?registered=true`** (verificam email). Solução unificada implementada:
+- Flag de intenção `vfit_offer_biometric` no cadastro (qualquer papel) → `BiometricEnrollmentGate` exibe o passo full-screen `PasskeyEnrollmentStep` no 1º momento autenticado: **student** pós-onboarding no app; **personal/nutri** no 1º login no dashboard.
+- `PasskeyPrompt` (modal) montado também no `(app)/layout` (o aluno nunca via a oferta) + guarda de handoff (só um dos dois aparece).
+- B3 extra: `isStandaloneDisplay` extraído p/ `lib/display-mode.ts`; fix do redirect do modo login via `bootDestination` (student ia p/ `/dashboard` errado).
 
 ---
 
