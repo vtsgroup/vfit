@@ -1,0 +1,7 @@
+VFIT 4.4.0 — Notas de versão (Google Play)
+
+🔐 Desbloqueio por biometria: escolha com que frequência confirmar sua identidade ao abrir o app (sempre, diariamente, semanalmente ou nunca).
+🔐 Saques com confirmação por biometria — mais uma camada de segurança para o seu dinheiro.
+✨ Ative a biometria já no cadastro, com um toque.
+
+Além de melhorias de estabilidade e desempenho.

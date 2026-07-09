@@ -24,15 +24,15 @@ def twaManifest = [
     applicationId: 'br.app.vfit',
     hostName: 'vfit.app.br', // The domain being opened in the TWA.
     launchUrl: '/welcome', // The start path for the TWA. Must be relative to the domain.
-    name: 'Vfit', // The application name.
-    launcherName: 'Vfit', // The name shown on the Android Launcher.
-    themeColor: '#050A12', // Status bar — matches bg-primary dark.
-    themeColorDark: '#050A12', // Status bar dark — matches bg-primary dark.
-    navigationColor: '#050A12', // Nav bar — matches bg-primary dark.
-    navigationColorDark: '#050A12', // Nav bar dark — matches bg-primary dark.
-    navigationDividerColor: '#050A12', // Divider — seamless with nav bar.
-    navigationDividerColorDark: '#050A12', // Divider dark — seamless with nav bar.
-    backgroundColor: '#050A12', // Splash screen — matches bg-primary dark.
+    name: 'VFIT', // The application name.
+    launcherName: 'VFIT', // The name shown on the Android Launcher.
+    themeColor: '#050A12', // The color used for the status bar.
+    themeColorDark: '#050A12', // The color used for the dark status bar.
+    navigationColor: '#050A12', // The color used for the navigation bar.
+    navigationColorDark: '#050A12', // The color used for the dark navbar.
+    navigationDividerColor: '#050A12', // The navbar divider color.
+    navigationDividerColorDark: '#050A12', // The dark navbar divider color.
+    backgroundColor: '#050A12', // The color used for the splash screen background.
     enableNotifications: true, // Set to true to enable notification delegation.
     // Every shortcut must include the following fields:
     // - name: String that will show up in the shortcut.
@@ -53,22 +53,12 @@ def twaManifest = [
 android {
     compileSdkVersion 36
     namespace "br.app.vfit"
-
-    signingConfigs {
-        release {
-            storeFile file("../keystore/vfit-release.jks")
-            storePassword System.getenv("KEYSTORE_PASS") ?: ""
-            keyAlias "vfit"
-            keyPassword System.getenv("KEYSTORE_PASS") ?: ""
-        }
-    }
-
     defaultConfig {
         applicationId "br.app.vfit"
         minSdkVersion 24
         targetSdkVersion 35
-        versionCode 433
-        versionName "4.3.3"
+        versionCode 441
+        versionName "4.4.0"
 
         // The name for the application
         resValue "string", "appName", twaManifest.name
@@ -163,7 +153,6 @@ android {
     buildTypes {
         release {
             minifyEnabled true
-            signingConfig signingConfigs.release
         }
     }
     compileOptions {

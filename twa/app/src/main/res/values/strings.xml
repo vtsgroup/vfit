@@ -18,7 +18,7 @@
   
     <string-array name="additional_trusted_origins">
     
-      <item>https://vfit.pages.dev</item>
+      <item>https://https://vfit.pages.dev</item>
     
     </string-array>
   
@@ -48,7 +48,7 @@
           \"relation\": [\"delegate_permission/common.handle_all_urls\"],
           \"target\": {
               \"namespace\": \"web\",
-              \"site\": \"https://vfit.pages.dev\"
+              \"site\": \"https://https://vfit.pages.dev\"
           }
       }]        
     
