@@ -1,10 +1,20 @@
 # Session State — VFIT
 
 **Date Created**: 2026-04-01  
-**Last Updated**: 2026-07-02 (Sprint 0 MVP — 3 bugs críticos fixados + deploy v5.4.1)  
+**Last Updated**: 2026-07-09 (Rodapé de economia claude-mem no WhatsApp + comando whatsapp-say)  
 **Current Phase**: MVP Sprint 0 concluído → próximo: Sprint 1 (treinos/dashboard/marketplace)  
-**Project**: VFIT v5.4.1  
+**Project**: VFIT v5.5.0  
 **Status**: ✅ Production Stable  
+
+## Última sessão (2026-07-09, madrugada) — Rodapé de economia claude-mem + whatsapp-say (main)
+
+Observabilidade de economia nas mensagens de WhatsApp do Developer Agent:
+
+- **Rodapé de economia claude-mem** em toda mensagem `end`: hook `SessionStart` (`scripts/capture-mem-savings.mjs`) captura `%` + work tokens do claude-mem → `.claude/.mem-savings.json` (gitignored); `scripts/lib/mem-savings.mjs` formata (omite sem dado ou snapshot >12h); worker `vfit-whatsapp` anexa `footer` ao fim de qualquer template (deployado).
+- **Fix cf-deploy** (`4610910e`): o pipeline postava sem `footer` — deploys saíam sem economia (caso do v5.5.0). Agora lê o snapshot inline e envia `footer` no `end`.
+- **Comando `whatsapp-say`** (`5b5b26d1`): mensagem personalizada ao grupo via `/send`, para marcos importantes, com rodapé anexado. Regra no `~/.claude/CLAUDE.md` (quando usar, sem ruído).
+- **Doc oficial**: `.claude/docs/MEM-ECONOMY-E-WHATSAPP-FOOTER.md`.
+- Mergeado no `main` (não pushado). Commits base: `45ab2dc8`, `4610910e`, `5b5b26d1`.
 
 ## Última sessão (2026-07-02, madrugada) — Sprints 1+2 completos (branch `feat/sprint1-track-a-treinos`)
 

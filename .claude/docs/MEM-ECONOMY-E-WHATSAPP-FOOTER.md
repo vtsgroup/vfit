@@ -1,7 +1,7 @@
 # MEM-ECONOMY & WHATSAPP FOOTER — VFIT
 
-> **v1.0.0** · 09/07/2026 · Documentação oficial
-> Cobre: (A) como o worker `vfit-whatsapp` renderiza as mensagens; (B) a matemática/economia do claude-mem; (C) o rodapé de economia que une os dois.
+> **v1.1.0** · 09/07/2026 · Documentação oficial
+> Cobre: (A) renderização da mensagem no worker `vfit-whatsapp`; (B) matemática/economia do claude-mem; (C) o rodapé de economia; (D) os três senders e o comando de mensagem personalizada (`whatsapp-say`).
 > Complementa `WHATSAPP-GATEWAY.md` e `WHATSAPP-TEMPLATES.md`.
 
 ---
@@ -14,16 +14,18 @@ Toda mensagem `end` do Developer Agent no grupo do WhatsApp termina com uma linh
 🧠 claude-mem: ~91% economia • ~163k tokens de trabalho indexados nesta sessão (est.)
 ```
 
-O número é capturado por um hook no `SessionStart`, persistido em `.claude/.mem-savings.json`, enviado pelo sender no campo `footer`, e **anexado pelo worker** ao fim de qualquer template. **Só aparece com dado real** (senão a linha é omitida) e é sempre marcado `(est.)`.
+O número é capturado por um hook no `SessionStart`, persistido em `.claude/.mem-savings.json` e usado pelos senders (no campo `footer` ou anexado ao texto), saindo no fim de qualquer template. **Só aparece com dado real** (senão a linha é omitida) e é sempre marcado `(est.)`.
 
 Fluxo:
 
 ```
 SessionStart hook → capture-mem-savings.mjs → .claude/.mem-savings.json
                                                       ↓
-                       whatsapp-task.mjs (lê via helper) → body.footer
+                          lib/mem-savings.mjs (buildMemSavingsFooter)
                                                       ↓
-                       worker vfit-whatsapp → anexa footer ao fim de toda mensagem end
+      ┌─ whatsapp-task.mjs (task)   → body.footer ─┐
+      ├─ cf-deploy.js      (deploy) → body.footer ─┤→ worker vfit-whatsapp
+      └─ whatsapp-say.mjs  (custom) → texto+rodapé ┘   (anexa / inclui no fim)
 ```
 
 ---
@@ -160,7 +162,9 @@ A seleção de observações do claude-mem é **sensível à sessão** (janela d
 |---|---|
 | `scripts/capture-mem-savings.mjs` | hook `SessionStart`: reexecuta o gerador do claude-mem, faz parse da linha `Stats`, grava o snapshot. Nunca bloqueia a sessão. |
 | `scripts/lib/mem-savings.mjs` | helper `readMemSavings()` / `buildMemSavingsFooter()`; formata e aplica as regras de omissão. |
-| `scripts/whatsapp-task.mjs` | envia o valor no campo `footer` do body. |
+| `scripts/whatsapp-task.mjs` | sender de task/deploy — envia o valor no campo `footer` do body. |
+| `scripts/cf-deploy.js` | pipeline de deploy — lê o snapshot inline (`readMemSavingsFooter()`) e envia `footer` no `end`. |
+| `scripts/whatsapp-say.mjs` | mensagem personalizada ao grupo (`/send`) — anexa o rodapé ao próprio texto. |
 | `workers/whatsapp/src/index.ts` | anexa o `footer` ao fim de toda mensagem `end`. |
 | `.claude/settings.json` | registra o hook de captura no `SessionStart`. |
 | `.gitignore` | ignora `.claude/.mem-savings.json`. |
@@ -201,16 +205,48 @@ Formato:
 🧠 claude-mem: ~<percent>% economia • ~<work em k> tokens de trabalho indexados nesta sessão (est.)
 ```
 
-### Integração cliente + worker
+### Integração dos senders + worker
 
-- `whatsapp-task.mjs`: `const memFooter = buildMemSavingsFooter()` → `body.footer = memFooter || undefined`.
-- worker: anexa `footer` ao fim (ver Parte A).
+- `whatsapp-task.mjs` (templates de task/deploy): `body.footer = buildMemSavingsFooter() || undefined`.
+- `cf-deploy.js` (pipeline): lê o snapshot inline (`readMemSavingsFooter()`) e passa `footer` no payload `end` — **sem isso o deploy sai sem o rodapé** (foi o caso do v5.5.0).
+- `whatsapp-say.mjs` (texto livre via `/send`): anexa o rodapé ao próprio texto antes de enviar.
+- worker: para `/task-notify`, anexa `footer` ao fim (ver Parte A); para `/send`, o rodapé já vem embutido no texto.
 
 ### Regra do agente (`~/.claude/CLAUDE.md`)
 
 - Só com dado real; nunca inventar; sempre `(est.)`.
 - Coexiste com o bloco RTK (cada um em sua linha).
 - **Não adicionar a linha à mão** — o pipeline já faz (evita duplicar).
+
+---
+
+## Parte D — Os três senders + mensagem personalizada
+
+Resposta de chat do assistente **não** vai pro grupo. Mensagem só sai quando um sender é chamado explicitamente. Existem três:
+
+| Sender | Quando | Rodapé |
+|---|---|---|
+| `scripts/whatsapp-task.mjs` | notificação de task (`start`/`end`) — `start` é suprimido pelo worker | `footer` no body → worker anexa |
+| `scripts/cf-deploy.js` | pipeline de deploy (posta no `/task-notify` com body próprio) | `footer` no payload `end` |
+| `scripts/whatsapp-say.mjs` | **mensagem personalizada** (texto livre) em marcos importantes | anexado ao texto (via `/send`) |
+
+### whatsapp-say — mensagem personalizada ao grupo
+
+Para resumos sob medida em **marcos relevantes** (deploy concluído, milestone, encerramento com entrega) — não o card genérico. Envia texto livre pelo `/send` do worker e anexa o rodapé de economia.
+
+```bash
+# multilinha via stdin (recomendado)
+printf '%s\n' "✅ <resumo>" "- <ponto>" "- <ponto>" | node scripts/whatsapp-say.mjs --stdin
+
+# texto direto (\n vira quebra de linha)
+node scripts/whatsapp-say.mjs --text "linha 1\nlinha 2"
+
+# conferir sem enviar
+node scripts/whatsapp-say.mjs --preview --stdin
+```
+
+Flags: `--stdin`, `--text`, `--group "<nome>"`, `--no-footer`, `--preview`.
+Regra (no `~/.claude/CLAUDE.md`): usar **só quando há entrega real** — não em toda sessão (evita ruído); `--preview` antes de enviar.
 
 ---
 
@@ -260,8 +296,8 @@ Rodapé de economia claude-mem nas mensagens do grupo
 
 - Worker: `workers/whatsapp/src/index.ts` — `buildEndMessage()`, `buildTaskNotifyMessage()`, handlers `/task-notify` e `/format`.
 - Captura/helper: `scripts/capture-mem-savings.mjs`, `scripts/lib/mem-savings.mjs`.
-- Sender: `scripts/whatsapp-task.mjs`.
+- Senders: `scripts/whatsapp-task.mjs` (task/deploy) · `scripts/cf-deploy.js` (pipeline) · `scripts/whatsapp-say.mjs` (mensagem personalizada).
 - Hook: `.claude/settings.json` (array `SessionStart`).
 - Snapshot: `.claude/.mem-savings.json` (gitignored, por sessão).
 - claude-mem: `~/.claude/plugins/cache/thedotmack/claude-mem/<versão>/scripts/context-generator.cjs` (função de stats `Te`, montagem da linha em `os`).
-- Commit da feature: `45ab2dc8`.
+- Commits: `45ab2dc8` (rodapé base) · `4610910e` (fix cf-deploy) · `5b5b26d1` (whatsapp-say).
