@@ -121,6 +121,28 @@ function runWithInput(cmd, label, input, options = {}) {
   }
 }
 
+// Rodapé de economia do claude-mem — lê o snapshot da sessão (escrito pelo hook
+// SessionStart em .claude/.mem-savings.json). Retorna "" sem dado ou se o
+// snapshot for velho (>12h), pra o worker omitir a linha. Nunca inventa número.
+function readMemSavingsFooter() {
+  try {
+    const p = resolve(process.cwd(), ".claude", ".mem-savings.json");
+    if (!existsSync(p)) return "";
+    const d = JSON.parse(readFileSync(p, "utf8"));
+    const percent = Number(d.percent);
+    const workTokens = Number(d.workTokens);
+    if (!Number.isFinite(percent) || !(workTokens > 0)) return "";
+    if (d.capturedAt) {
+      const t = Date.parse(d.capturedAt);
+      if (Number.isFinite(t) && Date.now() - t > 12 * 60 * 60 * 1000) return "";
+    }
+    const k = workTokens >= 1000 ? `${Math.round(workTokens / 1000)}k` : String(workTokens);
+    return `🧠 claude-mem: ~${percent}% economia • ~${k} tokens de trabalho indexados nesta sessão (est.)`;
+  } catch {
+    return "";
+  }
+}
+
 function notifyWhatsAppTask(event, payload, options = {}) {
   try {
     const url = process.env.WHATSAPP_NOTIFY_URL;
@@ -369,6 +391,7 @@ try {
     started_at: taskStartedAtIso,
     ended_at: taskEndedAtIso,
     summary: endSummary,
+    footer: readMemSavingsFooter() || undefined,
   }, { required: requireWhatsAppNotify });
 
   console.log("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
