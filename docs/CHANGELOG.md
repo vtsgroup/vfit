@@ -5,6 +5,17 @@
 
 ---
 
+## [Hotfix] — 09/07/2026 — CORS: permitir header `X-Step-Up-Token` em preflight
+
+**Correção:** Saques PIX não funcionavam por erro CORS.
+
+- **Problema:** Browser bloqueava POST `/api/v1/payments/transfers/pix` porque header `x-step-up-token` não estava autorizado no preflight.
+- **Causa:** `Access-Control-Allow-Headers` em `workers/middleware/cors.ts` não incluía `X-Step-Up-Token`.
+- **Solução:** Adicionado `X-Step-Up-Token` à lista de headers permitidos.
+- **Teste:** Saques PIX agora funcionam sem erro CORS.
+
+---
+
 ## [Unreleased] — 09/07/2026 — Biometria v2: saque com confirmação biométrica + app lock configurável
 
 **Onda 1 — Segurança** (commit `ccbf49cd`):

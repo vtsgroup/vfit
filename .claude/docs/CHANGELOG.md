@@ -5,6 +5,17 @@
 
 ---
 
+## [5.5.4 → 5.5.4-patch] — 2026-07-09 — Hotfix: CORS preflight para `x-step-up-token`
+
+**Correção:** Erro CORS ao tentar saques PIX — header `x-step-up-token` bloqueado por preflight.
+
+- **Causa raiz:** `Access-Control-Allow-Headers` não incluía `X-Step-Up-Token` no middleware CORS
+- **Sintoma:** POST `/api/v1/payments/transfers/pix` falhava com "Request header field x-step-up-token is not allowed by Access-Control-Allow-Headers"
+- **Fix:** Adicionado `X-Step-Up-Token` à lista de headers permitidos em `workers/middleware/cors.ts`
+- **Impacto:** Saques PIX via sistema de cobrança agora funcionam normalmente
+
+---
+
 ## [5.4.4 → 5.4.5] — 2026-07-08 — Boot Experience: splash primeiro no TWA/PWA (plano splash-boot v2)
 
 > Corrige o boot do app instalado: logado via **Welcome vazando** (TWA `startUrl=/welcome`) ou **tela escura** (PWA `/dashboard`) antes da splash. Agora: Abriu → Splash (primeiro paint) → destino. Investigação + plan-eng-review com outside voice; causa raiz provada por evidência de build (`out/*.html` sem `vsp-root`).
