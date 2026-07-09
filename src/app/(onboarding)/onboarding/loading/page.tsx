@@ -82,11 +82,24 @@ export default function OnboardingLoadingPage() {
         preferred_time: data.preferred_time || 'any',
       }
 
-      const result = await api.post<{
-        plan: Record<string, unknown>
-        source: string
-        stats: Record<string, number>
-      }>('/plans/generate', payload, { auth: false })
+      // Geração de plano pode demorar (IA cold-start): timeout generoso + 1 auto-retry
+      // em timeout transitório antes de mostrar erro. O servidor já responde com template
+      // em ~22s (deadline interno), então isto é cinto de segurança.
+      const postPlan = () =>
+        api.post<{
+          plan: Record<string, unknown>
+          source: string
+          stats: Record<string, number>
+        }>('/plans/generate', payload, { auth: false, timeoutMs: 60_000 })
+
+      let result: Awaited<ReturnType<typeof postPlan>>
+      try {
+        result = await postPlan()
+      } catch (retryErr) {
+        if (!(retryErr instanceof ApiClientError) || retryErr.code !== 'TIMEOUT') throw retryErr
+        await new Promise((r) => setTimeout(r, 1_500))
+        result = await postPlan()
+      }
 
       const isAuth = useAuthStore.getState().isAuthenticated
       if (isAuth) {

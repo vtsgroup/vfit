@@ -1,7 +1,7 @@
 {
   "id": "/",
-  "name": "VFIT",
-  "short_name": "VFIT",
+  "name": "Vfit",
+  "short_name": "Vfit",
   "description": "Treinos com IA — Seu app de treinos com IA. Planos personalizados, progresso real e comunidade.",
   "start_url": "/dashboard",
   "display": "standalone",

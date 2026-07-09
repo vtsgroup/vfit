@@ -218,7 +218,7 @@ export function SplashScreen({
           </div>
         </div>
 
-        <h1 className={cn('vsp-name', instant && 'vsp-instant')}>VFIT</h1>
+        <h1 className={cn('vsp-name', instant && 'vsp-instant')}>Vfit</h1>
 
         {/* barra de loading: progride carregando → completa quando pronto */}
         <div className="vsp-track" aria-hidden="true">
@@ -270,7 +270,7 @@ export function SplashScreen({
         .vsp-vig { z-index: 2; background: radial-gradient(circle at 50% 44%, transparent 42%, rgba(4,9,22,.6) 100%); }
 
         .vsp-wrap { position: relative; z-index: 3; display: flex; flex-direction: column; align-items: center; }
-        .vsp-stage { position: relative; width: 210px; height: 210px; display: grid; place-items: center; }
+        .vsp-stage { position: relative; width: 184px; height: 184px; display: grid; place-items: center; }
 
         .vsp-glow {
           position: absolute; top: 50%; left: 50%; width: 300px; height: 300px; margin: -150px 0 0 -150px;
@@ -288,7 +288,7 @@ export function SplashScreen({
         .vsp-ringB { border: 2px solid rgba(74,200,110,.4);  animation: vsp-ring 3.4s linear 1.9s infinite; }
 
         .vsp-icon {
-          position: relative; z-index: 2; width: 152px; height: 152px; border-radius: 34px; overflow: hidden;
+          position: relative; z-index: 2; width: 128px; height: 128px; border-radius: 28px; overflow: hidden;
           opacity: 0; transform: scale(.6); backface-visibility: hidden; will-change: transform, opacity;
           box-shadow: 0 22px 60px -18px rgba(58,181,74,.5);
           animation: vsp-iconIn .85s cubic-bezier(.2,.75,.3,1) forwards;
@@ -300,9 +300,9 @@ export function SplashScreen({
         .vsp-arcA { animation: vsp-arcIn .7s cubic-bezier(.2,.8,.2,1) .58s forwards; }
 
         .vsp-name {
-          margin: 36px 0 0; font-family: var(--font-space-grotesk), system-ui, sans-serif;
-          font-size: clamp(34px, 9vw, 48px); font-weight: 900; letter-spacing: .16em;
-          text-transform: uppercase; color: #edf4ee; padding-left: .16em; line-height: 1;
+          margin: 32px 0 0; font-family: var(--font-space-grotesk), system-ui, sans-serif;
+          font-size: clamp(32px, 8.4vw, 44px); font-weight: 900; letter-spacing: -.005em;
+          color: #edf4ee; padding-left: 0; line-height: 1;
           /* Space Grotesk vai até 700 real → 900 sintetiza (faux-bold) + stroke engrossa ainda mais */
           -webkit-text-stroke: .6px #edf4ee;
           text-shadow: 0 2px 26px rgba(58,181,74,.28);

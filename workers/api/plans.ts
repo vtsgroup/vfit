@@ -128,16 +128,23 @@ plans.post('/generate', async (c) => {
     // Chamar IA com fallback automático
     // Scale max_tokens by days_per_week to prevent truncation of larger plans
     const dynamicMaxTokens = Math.min(2048 + (input.days_per_week * 1024), 8192)
-    const result = await callWorkersAIWithFallback(
-      c.env,
-      '@cf/meta/llama-4-scout-17b-16e-instruct',
-      prompt,
-      {
-        max_tokens: dynamicMaxTokens,
-        temperature: 0.6,
-        fallbackModel: '@cf/meta/llama-3.3-70b-instruct-fp8-fast',
-      }
-    )
+    // Deadline geral (espelha /auto-generate): garante resposta com template ANTES do
+    // timeout do cliente. Sem isso, IA em cold-start passa dos 30s e o usuário vê erro.
+    const result = await Promise.race([
+      callWorkersAIWithFallback(
+        c.env,
+        '@cf/meta/llama-4-scout-17b-16e-instruct',
+        prompt,
+        {
+          max_tokens: dynamicMaxTokens,
+          temperature: 0.6,
+          fallbackModel: '@cf/meta/llama-3.3-70b-instruct-fp8-fast',
+        }
+      ),
+      new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('AI timeout on generate (22s)')), 22_000)
+      ),
+    ])
 
     // Extrair JSON da resposta (pode vir com markdown wrappers)
     const raw = result.response

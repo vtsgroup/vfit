@@ -47,18 +47,32 @@ export interface AITextGenerationOutput {
  * Zero latência de rede (binding direto no edge).
  * Custo: $0 para primeiros 10k neurons/dia no free tier.
  */
+/** Timeout por chamada de modelo — evita que um modelo lento (cold start) segure
+ *  a cascata além do timeout do cliente. Cada camada falha rápido e passa pra próxima. */
+const DEFAULT_AI_RUN_TIMEOUT_MS = 12_000
+
 export async function callWorkersAI(
   ai: Ai,
   model: string,
-  input: AITextGenerationInput
+  input: AITextGenerationInput,
+  timeoutMs: number = DEFAULT_AI_RUN_TIMEOUT_MS
 ): Promise<string> {
   try {
-    const result = await ai.run(model as Parameters<typeof ai.run>[0], {
+    const runPromise = ai.run(model as Parameters<typeof ai.run>[0], {
       messages: input.messages,
       max_tokens: input.max_tokens || 2048,
       temperature: input.temperature || 0.7,
       top_p: input.top_p || 0.95,
-    }) as unknown as AITextGenerationOutput
+    }) as unknown as Promise<AITextGenerationOutput>
+
+    const result = timeoutMs > 0
+      ? await Promise.race([
+          runPromise,
+          new Promise<never>((_, reject) =>
+            setTimeout(() => reject(new Error(`Workers AI timeout ${timeoutMs}ms (${model})`)), timeoutMs)
+          ),
+        ])
+      : await runPromise
 
     if (typeof result === 'string') return result
     if (result && typeof result === 'object' && 'response' in result) {

@@ -150,7 +150,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" data-scroll-behavior="smooth" suppressHydrationWarning>
+    <html lang="pt-BR" data-scroll-behavior="smooth" suppressHydrationWarning style={{ backgroundColor: "#050A12" }}>
       <head>
         {/* dns-prefetch para terceiros (leve, sem conexão TCP) */}
         <link rel="dns-prefetch" href="https://api.vfit.app.br" />
@@ -185,6 +185,22 @@ export default function RootLayout({
             __html: `(function(){try{var path=location.pathname;var publicRoutes=['/','/afiliados','/app-personal-trainer','/blog','/carreiras','/contato','/cookies','/excluir-conta','/guest','/lgpd','/nutricionistas','/p','/pricing','/privacidade','/sobre','/status','/termos'];var isPublic=false;for(var r=0;r<publicRoutes.length;r++){var route=publicRoutes[r];if(path===route||(route!=='/'&&path.indexOf(route+'/')===0)){isPublic=true;break}}var root=document.documentElement;if(isPublic){root.classList.remove('light','dark');root.style.removeProperty('color-scheme');root.style.removeProperty('background-color');return}var s=localStorage.getItem('vfit-app')||localStorage.getItem('personal-ia-app');var theme='system';var resolved='dark';if(s){var p=JSON.parse(s),st=(p.state||{});theme=st.theme||'system';resolved=st.resolvedTheme||'dark'}var prefersLight=!!(window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches);var isLight=theme==='light'||(theme==='system'&&prefersLight)||(theme!=='light'&&theme!=='dark'&&resolved==='light');root.classList.remove('light','dark');root.classList.add(isLight?'light':'dark');root.style.colorScheme=isLight?'light':'dark';var bg=isLight?'#f7fbfa':'#050A12';var tc='#050A12';root.style.backgroundColor=bg;var setMeta=function(){var m=document.querySelectorAll('meta[name="theme-color"]');for(var i=0;i<m.length;i++)m[i].content=tc};if(isLight){requestAnimationFrame(function(){requestAnimationFrame(setMeta)})}else{setMeta()}}catch(e){var prefersLight=!!(window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches);var root=document.documentElement;root.classList.remove('light','dark');root.classList.add(prefersLight?'light':'dark');root.style.colorScheme=prefersLight?'light':'dark';root.style.backgroundColor=prefersLight?'#f7fbfa':'#050A12'}})();`,
           }}
         />
+
+        {/* Critical CSS para splash screen pré-renderizada — injeta estilos base no primeiro paint
+            para evitar white flash até React hidratar e aplicar o CSS inline do componente.
+            Incluem apenas as propriedades essenciais: posicionamento, background, display. */}
+        <style>{`
+          html{background-color:#050A12}
+          html.light{background-color:#f7fbfa}
+          body{background-color:#050A12}
+          .vsp-root{position:fixed;inset:0;z-index:2147483646;display:flex;align-items:center;justify-content:center;overflow:hidden;background:radial-gradient(circle at 50% 42%,#0c1a3a 0%,#08122b 55%,#050a12 100%);opacity:1;transform:scale(1);transition:opacity .6s cubic-bezier(.2,.8,.2,1),transform .6s cubic-bezier(.2,.8,.2,1)}
+          .vsp-exit{opacity:0;transform:scale(1.04);pointer-events:none}
+          .vsp-bg{position:absolute;inset:0;pointer-events:none}
+          .vsp-wrap{position:relative;z-index:3;display:flex;flex-direction:column;align-items:center}
+          html:not(.vsp-standalone) .vsp-root.vsp-sa-only{display:none}
+          .vsp-root:not(.vsp-js){animation:vsp-nojsBail .6s ease 8s forwards}
+          @keyframes vsp-nojsBail{to{opacity:0;visibility:hidden;pointer-events:none}}
+        `}</style>
 
         {/* Capture beforeinstallprompt — MUST be beforeInteractive so we never miss the event.
             lazyOnload was causing the prompt to be lost when Chrome fired it before the script loaded. */}
