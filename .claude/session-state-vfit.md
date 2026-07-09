@@ -1,10 +1,24 @@
 # Session State — VFIT
 
 **Date Created**: 2026-04-01  
-**Last Updated**: 2026-07-09 (Rodapé de economia claude-mem no WhatsApp + comando whatsapp-say)  
+**Last Updated**: 2026-07-09 (Fix geração de plano + white-flash · deploy v5.5.1 · AAB TWA 4.4.2 · ASO Play)  
 **Current Phase**: MVP Sprint 0 concluído → próximo: Sprint 1 (treinos/dashboard/marketplace)  
-**Project**: VFIT v5.5.0  
+**Project**: VFIT v5.5.1 (web) · TWA 4.4.2 (versionCode 442)  
 **Status**: ✅ Production Stable  
+
+## Última sessão (2026-07-09, manhã) — Fix plano + white-flash · deploy v5.5.1 · AAB 4.4.2 · ASO (main)
+
+Correções web/workers a partir de prints do app em produção (onboarding + boot):
+
+- **Bug geração de plano ("Ops! Algo deu errado")**: root cause = timeout. `POST /plans/generate` sem deadline interno → IA cold-start passava dos 30s do cliente → erro. Fix: `Promise.race` de 22s no `/generate` (espelha `/auto-generate`) → fallback template garantido; `callWorkersAI` com timeout por modelo (12s); cliente com `timeoutMs: 60_000` + 1 auto-retry em TIMEOUT (`loading/page.tsx`). Smoke prod: 200 em ~22.9s, `source: fallback` ✅.
+- **White-flash na 1ª abertura**: `<html style="background-color:#050A12">` inline + critical CSS base (`html`/`body`) no `<head>` do `layout.tsx` (antes do CSS inlined). Resíduo pré-paint do WebView é Android-side (documentado).
+- **Splash**: wordmark "VFIT" → "Vfit" (sem uppercase); ícone do splash menor (respiro).
+- **Ícone app + nome (PWA/TWA)**: glifo V reduzido (source recriado de `favicon.svg` → `AI-logo-ext`/`round-ext`); regenerado icons/favicons/maskable via `generate-all-icons.mjs`. Nome de instalação "VFIT" → "Vfit" (web manifest + twa-manifest).
+- **Deploy v5.5.1** (Pages + Workers, `635a07de`, tag v5.5.1) — site 200, manifest "Vfit", ícones live.
+- **AAB TWA**: 4.4.1/441 rejeitado (441 já usado na Play) → **4.4.2 / versionCode 442** (bubblewrap update+build assinado; aapt2: `442`/`4.4.2`/label `Vfit`). Artefatos em `twa/releases/4.4.2/` (binários gitignored; só notas+idsig versionados). Senha keystore = `KEYSTORE_PASS` no `.env.local`.
+- **ASO Play Store**: `.claude/docs/PLAY-STORE-ASO-ptBR.md` (título 29/30, curta 72/80, completa ~2.3k, novidades 360/500). Launcher continua "Vfit"; título da ficha é separado.
+- Commits na `main` (pushados): `94586f82` (fixes), `635a07de` (deploy v5.5.1), `346e701e` (TWA 4.4.1), `dcf15bf1` (TWA 4.4.2), `efaeeda7` (ASO), + este (mover ASO p/ docs).
+- **Pendente do usuário**: subir `twa/releases/4.4.2/442-app-release-bundle.aab` na Play Console + colar a ficha ASO.
 
 ## Última sessão (2026-07-09, madrugada) — Rodapé de economia claude-mem + whatsapp-say (main)
 

@@ -27,6 +27,7 @@
 | `.claude/docs/ASAAS-INTEGRATION.md` | API de pagamentos Asaas |
 | `.claude/docs/WHATSAPP-GATEWAY.md` | Gateway WhatsApp completo |
 | `.claude/docs/TWA-DOCUMENTATION.md` | TWA: keystore, SHA-256, Play Store |
+| `.claude/docs/PLAY-STORE-ASO-ptBR.md` | Ficha de loja Play (ASO PT-BR): título, descrições, novidades |
 | `.claude/docs/MEDIA-STRATEGY.md` | R2 vs Stream vs Images vs Pages |
 | `.claude/docs/PWA-MEGA-PLAN.md` | Service Worker, manifest, offline |
 
