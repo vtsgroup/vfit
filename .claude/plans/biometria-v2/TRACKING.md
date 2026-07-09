@@ -15,14 +15,16 @@
 - [x] Testes onda 1: 23 unit novos (dynamic linking + anti double-spend) — 464/464 verde
 - [x] **`/security-review`**: 1 achado HIGH confirmado e corrigido (double-spend), 1 avaliado como não-explorável (JWT type confusion → TODO defense-in-depth)
 - [x] Commit checkpoint onda 1 (`ccbf49cd`)
-- [ ] **Migration de produção** (bloqueia deploy — ver E0 abaixo) — decisão: rodar ANTES do deploy
+- [x] **Migration de produção E0** — aplicada em prod (Neon) ✓ — `idempotency_key` + índices únicos parciais em `pix_transfers`/`payments`
 - [x] **ONDA 2 — UX**: B1 enrollment + B2 lock policy + B3 app-lock — commits `c72ec342` (core) + `d68254e0` (enrollment full-screen)
-- [x] Testes onda 2: 21 unit (lock-policy) + 9 E2E (`tests/e2e/biometria-v2.spec.ts`, commit `f4c37567`) — **485/485 unit + 9/9 E2E**
-- [ ] Deploy web
-- [ ] Smoke pós-deploy (saque real ou sandbox Asaas)
-- [ ] Build TWA (AAB + APK) + release notes
+- [x] Testes onda 2: 21 unit (lock-policy) + 9 E2E (`tests/e2e/biometria-v2.spec.ts`, commit `f4c37567`) — **485/485 unit + 9/9 E2E** + `quality:ci` completo ✓
+- [x] **Deploy web v5.5.0** — no ar (`vfit.app.br` HTTP 200, manifest 5.5.0); merge na main + tag `v5.5.0` (`de2d830f`)
+- [x] Smoke pós-deploy **automático** — site 200 · API health 200 · manifest servindo 5.5.0 ✓
+- [ ] Smoke do **saque real** em prod — 1 saque pequeno end-to-end, confirmar UMA transferência no Asaas 🔴 **você**
+- [x] **Build TWA 4.4.0** (versionCode 441) — AAB+APK em `twa/releases/4.4.0/` + release notes; merge na main (`276459e5`)
+- [ ] **Publicar na Play Console** — subir `twa/releases/4.4.0/app-release-bundle.aab` + notas de release 🔴 **você**
 
-**Progresso:** 9/12 etapas macro (75%) — segurança + UX fechadas; falta migration + deploy + TWA.
+**Progresso:** **dev/deploy 100% fechado** — segurança + UX + migration E0 + deploy web v5.5.0 + TWA 4.4.0, tudo na `main`. Só faltam **2 ações suas, ambas fora de código**: (1) smoke do saque real em prod, (2) publish do AAB na Play Console.
 
 ### Divergência do plano absorvida na execução (B1)
 
@@ -33,7 +35,7 @@ O plano assumiu "tokens no store após o cadastro" para todos os papéis. Na pr�
 
 ---
 
-## E0 — Migration de produção (fazer ANTES do deploy) 🔴 precisa de você
+## E0 — Migration de produção ✅ APLICADA EM PROD (2026-07-09)
 
 A onda 1 criou `migrations/hyperdrive/2026-07-08_withdrawal_idempotency.sql` (colunas `idempotency_key` + índices únicos parciais em `pix_transfers` e `payments`). **Sem rodar isso, os saques vão quebrar** (o código já espera essas colunas).
 
