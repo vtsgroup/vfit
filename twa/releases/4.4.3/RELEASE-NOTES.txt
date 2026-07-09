@@ -1,0 +1,15 @@
+Vfit 4.4.3 — Notas de versão (Google Play)
+
+🎨 Novo ícone do app: agora preenche direitinho o formato do launcher, mais bonito e nítido na tela inicial.
+
+Correções recentes que continuam nesta versão:
+✅ Geração do plano de treino com IA sempre conclui (sem o erro "Ops! Algo deu errado").
+✨ Abertura mais rápida e suave.
+
+Bons treinos! 💪
+
+---
+Técnico (interno):
+- versionCode 443 · versionName 4.4.3
+- Fix do ícone maskable/adaptativo: antes o verde ocupava ~62% sobre padding escuro (#050A12) → no launcher aparecia um quadrado verde pequeno flutuando no escuro. Agora o maskable é VERDE #3AB54A full-bleed + glifo V na safe zone (scale 0.90) → preenche a máscara adaptativa (ic_launcher.xml inseta 8.5dp sobre base). Corrigido também twa/store_icon.png (ficha da Play).
+- Ícone regular (rounded, V @ 0.80) inalterado. maskableIconUrl/iconUrl com ?v=4.4.3 para fetch fresco no build.
