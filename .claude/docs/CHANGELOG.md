@@ -5,6 +5,19 @@
 
 ---
 
+## [5.5.8 → 5.5.9] — 2026-07-09 — Migration `idempotency_key` aplicada em prod + remoção da rota temporária
+
+**Correção:** Saques PIX falhavam com 500 `column "idempotency_key" does not exist` mesmo após o fix de CORS.
+
+- **Causa raiz:** a migration `2026-07-08_withdrawal_idempotency.sql` foi aplicada contra uma branch Neon *stale* (via `DATABASE_URL` do `.env.local`), e não contra o banco real que o Worker usa em produção (secret `DATABASE_URL`/`NEON_DATABASE_URL`, consumido direto por `pgQuery` em `lib/db.ts`, sem passar pelo Hyperdrive)
+- **Fix:** rota temporária `POST /internal/run-idempotency-migration` (gated por secret `MIGRATION_TOKEN`) rodou os `ALTER TABLE ... ADD COLUMN idempotency_key` + índices únicos usando o `env.DATABASE_URL` **real** do Worker — garantindo o banco certo
+- **Confirmado:** colunas `idempotency_key` em `pix_transfers` e `payments` + índices `idx_pix_transfers_idem` / `idx_payments_idem` criados
+- **Cleanup:** rota temporária removida do código e secret `MIGRATION_TOKEN` deletado após uso único
+- **Nota:** `MIGRATION_TOKEN` chegou a ser gravado como string vazia numa tentativa anterior (`printf` com var vazia no pipe) — causou 401 fantasma; regravado com valor real de 64 chars
+- **Débito técnico:** `DATABASE_URL` do `.env.local` aponta para branch Neon abandonada — divergência a resolver separadamente
+
+---
+
 ## [5.5.6 → 5.5.6-patch] — 2026-07-09 — Hotfix: CORS preflight para `idempotency-key`
 
 **Correção:** Saques PIX ainda falhavam por CORS mesmo após liberar `x-step-up-token` — segundo header customizado bloqueado.

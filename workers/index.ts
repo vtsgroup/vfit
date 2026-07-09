@@ -510,49 +510,6 @@ app.get('/images/*', async (c) => {
 })
 
 // ============================================
-// TEMP — Migration runner (idempotency_key, 2026-07-08_withdrawal_idempotency.sql)
-// Gated por token de secret dedicado (não JWT). Removido após uso único.
-// ============================================
-app.post('/internal/run-idempotency-migration', async (c) => {
-  const token = c.req.header('x-migration-token')
-  const expected = (c.env as unknown as { MIGRATION_TOKEN?: string }).MIGRATION_TOKEN
-  if (!expected || !token || token !== expected) {
-    return c.json({ success: false, error: 'Unauthorized' }, 401)
-  }
-
-  const statements = [
-    `ALTER TABLE pix_transfers ADD COLUMN IF NOT EXISTS idempotency_key TEXT`,
-    `CREATE UNIQUE INDEX IF NOT EXISTS idx_pix_transfers_idem
-       ON pix_transfers (personal_id, idempotency_key)
-       WHERE idempotency_key IS NOT NULL`,
-    `ALTER TABLE payments ADD COLUMN IF NOT EXISTS idempotency_key TEXT`,
-    `CREATE UNIQUE INDEX IF NOT EXISTS idx_payments_idem
-       ON payments (payer_id, idempotency_key)
-       WHERE idempotency_key IS NOT NULL`,
-  ]
-
-  const applied: string[] = []
-  for (const stmt of statements) {
-    await pgQuery(c.env, stmt, [])
-    applied.push(stmt.trim().split('\n')[0])
-  }
-
-  const { rows: cols } = await pgQuery<{ table_name: string; column_name: string }>(
-    c.env,
-    `SELECT table_name, column_name FROM information_schema.columns
-     WHERE table_name IN ('pix_transfers','payments') AND column_name = 'idempotency_key'`,
-    []
-  )
-  const { rows: idx } = await pgQuery<{ indexname: string; tablename: string }>(
-    c.env,
-    `SELECT indexname, tablename FROM pg_indexes WHERE indexname IN ('idx_pix_transfers_idem','idx_payments_idem')`,
-    []
-  )
-
-  return c.json({ success: true, applied, columns: cols, indexes: idx })
-})
-
-// ============================================
 // AUTH ROUTES (public + protected)
 // ============================================
 app.route('/api/v1/auth', authRoutes)
