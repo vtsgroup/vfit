@@ -5,7 +5,7 @@
 CREATE TABLE IF NOT EXISTS consultation_ledger_events (
   id TEXT PRIMARY KEY,
   order_id TEXT NOT NULL REFERENCES consultation_orders(id) ON DELETE CASCADE,
-  creator_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  creator_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   event_type VARCHAR(30) NOT NULL CHECK (
     event_type IN ('order_paid', 'fee_charged', 'creator_settled', 'refunded', 'security_violation')
   ),

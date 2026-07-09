@@ -5,6 +5,19 @@
 
 ---
 
+## [5.5.9 → 5.5.10] — 2026-07-09 — Reconciliação completa do banco de produção + fix de saque PIX
+
+**Correção:** Saque PIX ainda dava 500 mesmo após a `idempotency_key` — cascata de bloqueadores por divergência de banco.
+
+- **Causa raiz:** o `.env.local` aponta para uma branch Neon **stale** (`ep-lucky-meadow`, parada em 06/04); a produção real é outro endpoint (`ep-dark-cherry`, secret `DATABASE_URL` do Worker). Migrations aplicadas localmente nunca chegavam em prod.
+- **5 bloqueadores resolvidos em prod:** (1) `idempotency_key`; (2) tabelas `consultation_*` (0034/0035); (3) **bug de tipo** nessas migrations — `creator_id/student_id` eram `TEXT` mas `users.id` é `UUID` → corrigido para `UUID` no repo e prod; (4) `pix_transfers.status` CHECK não aceitava `claiming`; (5) `pix_key_type` CHECK não aceitava `evp`.
+- **Reconciliação:** também aplicadas colunas órfãs `vfit_foods.barcode` (0032) e `workout_exercises.custom_video_url` (0030). Diff prod↔referência **zerado**.
+- **Repo:** `0034`/`0035` corrigidas (UUID); nova migration `2026-07-09_pix_transfers_status_keytype_constraints.sql`; endpoint temporário `/internal/db-admin` adicionado e **removido** após uso; secret `MIGRATION_TOKEN` deletado.
+- **Doc:** runbook completo em `.claude/docs/DB-PROD-DIVERGENCE-RUNBOOK.md` (endpoints, causa raiz, processo correto de migration em prod).
+- **Pendente (produto):** validar um saque PIX real end-to-end.
+
+---
+
 ## [5.5.8 → 5.5.9] — 2026-07-09 — Migration `idempotency_key` aplicada em prod + remoção da rota temporária
 
 **Correção:** Saques PIX falhavam com 500 `column "idempotency_key" does not exist` mesmo após o fix de CORS.

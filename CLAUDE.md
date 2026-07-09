@@ -30,6 +30,7 @@
 | `.claude/docs/PLAY-STORE-ASO-ptBR.md` | Ficha de loja Play (ASO PT-BR): título, descrições, novidades |
 | `.claude/docs/MEDIA-STRATEGY.md` | R2 vs Stream vs Images vs Pages |
 | `.claude/docs/PWA-MEGA-PLAN.md` | Service Worker, manifest, offline |
+| `.claude/docs/DB-PROD-DIVERGENCE-RUNBOOK.md` | ⚠️ Neon: `.env.local` ≠ prod (`ep-dark-cherry`). Como migrar prod corretamente |
 
 ## 🎯 Prioridades
 
