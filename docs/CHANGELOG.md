@@ -5,6 +5,17 @@
 
 ---
 
+## [Hotfix] — 09/07/2026 — Migration `idempotency_key` aplicada no banco real de produção
+
+**Correção:** Após os hotfixes de CORS, saque PIX ainda falhava — agora com `500: column "idempotency_key" does not exist`.
+
+- **Causa raiz:** a migration `migrations/hyperdrive/2026-07-08_withdrawal_idempotency.sql` tinha sido rodada contra o `DATABASE_URL` do `.env.local`, que aponta para uma branch Neon **stale/abandonada** (`ep-lucky-meadow-*`, sem atividade desde 06/04/2026). O secret `DATABASE_URL` real do Worker em produção (usado por `pgQuery`, que não passa pelo binding Hyperdrive — ver comentário em `lib/db.ts`) aponta para outro host e nunca recebeu a migration.
+- **Correção anterior estava incorreta:** o registro de 09/07 abaixo ("Idempotência anti double-spend... aplicada em prod") não refletia a realidade — a migration nunca chegou ao banco de produção.
+- **Fix aplicado:** rota temporária `POST /internal/run-idempotency-migration` gated por secret dedicado (`MIGRATION_TOKEN`, não JWT), rodando os mesmos `ALTER TABLE`/`CREATE UNIQUE INDEX` via `pgQuery` com o `env.DATABASE_URL` real do Worker — garante que a migration atinge o banco correto. Executada uma vez, coluna e índices confirmados via `information_schema`/`pg_indexes`, rota removida e secret revogado.
+- **Risco sistêmico identificado:** como `.env.local` diverge do banco de produção há meses, outras migrations rodadas apenas localmente após essa divergência podem também não ter chegado a produção — recomenda-se auditoria.
+
+---
+
 ## [Hotfix] — 09/07/2026 — CORS: permitir headers `X-Step-Up-Token` e `Idempotency-Key` em preflight
 
 **Correção:** Saques PIX ainda falhavam por CORS após o primeiro hotfix — havia um segundo header customizado bloqueado.
