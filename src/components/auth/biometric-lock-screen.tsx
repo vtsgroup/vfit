@@ -30,11 +30,18 @@ import {
   setBiometricLastAuth,
   useLoginWithPasskey,
 } from '@/hooks/use-passkey'
+import { bootDestination } from '@/lib/boot-destination'
+import { logClientIssue } from '@/lib/debug-logger'
 import { toast } from '@/stores/app-store'
 import { cn } from '@/lib/utils'
 
 interface BiometricLockScreenProps {
   onDismiss: () => void
+  /** 'login' (default): tela de entrada nas páginas de auth — sucesso navega para o destino.
+   *  'unlock': app lock no boot (B3) — sucesso só chama onUnlocked (não navega, já está no app). */
+  variant?: 'login' | 'unlock'
+  /** chamado no modo 'unlock' quando o desbloqueio conclui (ou fail-open offline) */
+  onUnlocked?: () => void
 }
 
 interface PasskeyLoginResponse {
@@ -59,9 +66,10 @@ interface PasskeyLoginResponse {
   session_id: string
 }
 
-export function BiometricLockScreen({ onDismiss }: BiometricLockScreenProps) {
+export function BiometricLockScreen({ onDismiss, variant = 'login', onUnlocked }: BiometricLockScreenProps) {
   const router = useRouter()
   const login = useAuthStore((s) => s.login)
+  const logout = useAuthStore((s) => s.logout)
   const loginWithPasskey = useLoginWithPasskey()
   const [status, setStatus] = useState<'idle' | 'prompting' | 'success' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
@@ -109,30 +117,62 @@ export function BiometricLockScreen({ onDismiss }: BiometricLockScreenProps) {
       setStatus('success')
       toast.success('Desbloqueado!')
 
-      // Small delay for visual feedback before redirect
+      // Small delay for visual feedback
       setTimeout(() => {
-        const dest =
-          data.user.user_type === 'admin' || data.user.role === 'admin' || data.user.role === 'super_admin'
-            ? '/dashboard/admin'
-            : '/dashboard'
-        router.push(dest)
+        if (variant === 'unlock') {
+          // Já está no app — só libera o overlay, não navega (evita mandar student p/ rota errada)
+          onUnlocked?.()
+          return
+        }
+        // Modo login: navega para o destino correto por user_type
+        // (student→/treinos, admin→/dashboard/admin, personal/nutri→/dashboard).
+        const effectiveType =
+          data.user.role === 'admin' || data.user.role === 'super_admin' ? 'admin' : data.user.user_type
+        router.push(bootDestination({ authenticated: true, userType: effectiveType }))
       }, 400)
     } catch (err: unknown) {
       const error = err as Error
-      if (
+      const isCancellation =
         error?.name === 'NotAllowedError' ||
         error?.name === 'OperationError' ||
         error?.message?.includes('cancelled') ||
         error?.message?.includes('already pending')
-      ) {
-        // User cancelled — dismiss silently
+
+      // Fail-open offline (só no modo unlock): falha de REDE não deve prender o usuário —
+      // app é offline-first, tokens no store seguem válidos. Deixa entrar + avisa.
+      const isNetworkError =
+        !isCancellation &&
+        ((typeof navigator !== 'undefined' && navigator.onLine === false) ||
+          error?.name === 'TypeError' ||
+          /failed to fetch|networkerror|load failed|network request failed/i.test(error?.message || ''))
+
+      if (variant === 'unlock' && isNetworkError) {
+        void logClientIssue({
+          level: 'warn',
+          source: 'biometric.unlock',
+          message: `Fail-open offline no app lock: ${error?.message || 'sem rede'}`,
+        })
+        toast.info('Sem conexão', 'Biometria pulada')
+        onUnlocked?.()
+        return
+      }
+
+      if (isCancellation) {
+        // Modo login: some com o lock e mostra o form. Modo unlock: não há form atrás —
+        // mantém trancado com opção de tentar de novo / usar senha.
+        if (variant === 'unlock') {
+          setStatus('error')
+          setErrorMsg('Autenticação cancelada')
+          return
+        }
         onDismiss()
         return
       }
+
       setStatus('error')
       setErrorMsg(error?.message || 'Falha na autenticação')
     }
-  }, [email, loginWithPasskey, login, router, onDismiss])
+  }, [email, loginWithPasskey, login, router, onDismiss, variant, onUnlocked])
 
   // Auto-trigger biometric after mount with a small delay
   useEffect(() => {
@@ -315,10 +355,19 @@ export function BiometricLockScreen({ onDismiss }: BiometricLockScreenProps) {
           </div>
         )}
 
-        {/* Use password fallback — always visible except on success */}
+        {/* Use password fallback — always visible except on success.
+            Modo login: mostra o form. Modo unlock: válvula de segurança → logout suave → /login
+            (nunca deixar o usuário preso atrás do lock sem saída). */}
         {status !== 'success' && (
           <button
-            onClick={onDismiss}
+            onClick={() => {
+              if (variant === 'unlock') {
+                logout()
+                router.push('/login')
+              } else {
+                onDismiss()
+              }
+            }}
             className="mt-2 rounded-md text-sm font-medium text-zinc-400 transition-colors hover:text-zinc-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg-primary"
           >
             Usar senha

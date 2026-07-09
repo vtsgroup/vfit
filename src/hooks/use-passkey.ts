@@ -22,6 +22,12 @@ import { api } from '@/lib/api-client'
 import { useAuthStore } from '@/stores/auth-store'
 import { APP_QUERY_CACHE } from '@/lib/query-cache-policy'
 import { toast } from '@/stores/app-store'
+import {
+  type LockPolicy,
+  DEFAULT_LOCK_POLICY,
+  isUnlockDue,
+  isValidLockPolicy,
+} from '@/lib/biometric-lock-policy'
 
 // ============================================
 // Browser Helpers
@@ -133,31 +139,71 @@ export function setBiometricAutoUnlock(enabled: boolean): void {
 }
 
 // ============================================
-// Biometric Auth Cooldown
-// Don't nag if authenticated recently (1h)
+// Biometric Lock Policy (B2 — biometria v2)
+// Janela configurável (always|daily|weekly|off) — substitui o cooldown fixo de 1h.
+// A decisão pura mora em src/lib/biometric-lock-policy.ts; aqui só a persistência.
 // ============================================
 
-const BIOMETRIC_COOLDOWN_MS = 60 * 60 * 1000 // 1 hour
+const LOCK_POLICY_KEY = 'vfit_biometric_lock_policy'
+const LAST_AUTH_KEY = 'vfit_biometric_last_auth_at'
 
 /** Record that user just authenticated via biometric */
 export function setBiometricLastAuth(): void {
   if (typeof window === 'undefined') return
-  localStorage.setItem('vfit_biometric_last_auth_at', Date.now().toString())
+  localStorage.setItem(LAST_AUTH_KEY, Date.now().toString())
 }
 
-/** Check if biometric auth is within cooldown period */
+/** Timestamp (ms) da última autenticação biométrica, ou null se nunca */
+export function getBiometricLastAuthAt(): number | null {
+  if (typeof window === 'undefined') return null
+  const raw = localStorage.getItem(LAST_AUTH_KEY)
+  if (!raw) return null
+  const parsed = parseInt(raw, 10)
+  return Number.isFinite(parsed) ? parsed : null
+}
+
+/** Política de recorrência do lock (default: daily) */
+export function getLockPolicy(): LockPolicy {
+  if (typeof window === 'undefined') return DEFAULT_LOCK_POLICY
+  const raw = localStorage.getItem(LOCK_POLICY_KEY)
+  return isValidLockPolicy(raw) ? raw : DEFAULT_LOCK_POLICY
+}
+
+/** Define a política de recorrência do lock */
+export function setLockPolicy(policy: LockPolicy): void {
+  if (typeof window === 'undefined') return
+  localStorage.setItem(LOCK_POLICY_KEY, policy)
+}
+
+/**
+ * Decide se o desbloqueio biométrico está vencido segundo a policy salva.
+ * `enabled` default = isBiometricAutoUnlockEnabled(); passe `true` para forçar
+ * (ex.: deep-link ?biometric=auto). policy='off' sempre retorna false.
+ */
+export function isBiometricUnlockDue(enabled: boolean = isBiometricAutoUnlockEnabled()): boolean {
+  return isUnlockDue({
+    enabled,
+    lastAuthAt: getBiometricLastAuthAt(),
+    policy: getLockPolicy(),
+    now: Date.now(),
+  })
+}
+
+/**
+ * @deprecated Use `isBiometricUnlockDue()`. Mantido por compat (login/page-ultra).
+ * "Em cooldown" = ainda dentro da janela da policy (não deve pedir biometria).
+ */
 export function isBiometricInCooldown(): boolean {
   if (typeof window === 'undefined') return false
-  const lastAuth = localStorage.getItem('vfit_biometric_last_auth_at')
-  if (!lastAuth) return false
-  const elapsed = Date.now() - parseInt(lastAuth, 10)
-  return elapsed < BIOMETRIC_COOLDOWN_MS
+  const lastAuth = getBiometricLastAuthAt()
+  if (lastAuth == null) return false
+  return !isUnlockDue({ enabled: true, lastAuthAt: lastAuth, policy: getLockPolicy(), now: Date.now() })
 }
 
-/** Clear biometric cooldown (e.g., on logout) */
+/** Clear biometric cooldown / last-auth mark (e.g., on logout) */
 export function clearBiometricCooldown(): void {
   if (typeof window === 'undefined') return
-  localStorage.removeItem('vfit_biometric_last_auth_at')
+  localStorage.removeItem(LAST_AUTH_KEY)
 }
 
 // ============================================

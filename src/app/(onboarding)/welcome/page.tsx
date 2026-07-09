@@ -22,7 +22,7 @@ import { DSIcon, type DSIconName } from '@/components/ui/ds-icon'
 import { VfitAnimatedMark } from '@/components/ui/vfit-animated-mark'
 import { useAuthStore } from '@/stores/auth-store'
 import { useOnboardingStore } from '@/stores/onboarding-store'
-import { supportsPasskey, getPasskeyEmail, isBiometricAutoUnlockEnabled, isBiometricInCooldown } from '@/hooks/use-passkey'
+import { supportsPasskey, getPasskeyEmail, isBiometricUnlockDue } from '@/hooks/use-passkey'
 
 /* Box-score: a IA "ligando" o plano — prova viva, não promessa */
 const PLAN_SIGNALS: { icon: DSIconName; label: string; value: string }[] = [
@@ -64,8 +64,7 @@ export default function WelcomePage() {
       return
     }
     const email = getPasskeyEmail()
-    const autoUnlock = isBiometricAutoUnlockEnabled()
-    if (autoUnlock && email && supportsPasskey() && !isBiometricInCooldown()) {
+    if (email && supportsPasskey() && isBiometricUnlockDue()) {
       router.replace('/login?biometric=auto')
     }
   }, [isHydrated, isAuthenticated, router])
