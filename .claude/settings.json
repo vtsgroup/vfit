@@ -190,18 +190,6 @@
         ]
       }
     ],
-    "PreToolUse": [
-      {
-        "matcher": "Edit|Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "BRANCH=$(git branch --show-current 2>/dev/null); case \"$CLAUDE_FILE_PATH\" in /tmp/*|/private/tmp/*|*/.claude/*) exit 0;; esac; if [ \"$BRANCH\" = \"main\" ]; then echo '{\"continue\": false, \"stopReason\": \"🔴 Bloqueado: não edite código diretamente na main. Crie uma feature branch: git checkout -b feat/descricao\"}'; exit 1; fi",
-            "timeout": 5
-          }
-        ]
-      }
-    ],
     "PostToolUse": [
       {
         "matcher": "Write(src/**/*.ts)|Write(src/**/*.tsx)|Edit(src/**/*.ts)|Edit(src/**/*.tsx)",

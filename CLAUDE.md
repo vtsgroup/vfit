@@ -76,6 +76,7 @@ mem-status                 # Ver status (port 37888)
 7. **NUNCA** deploy sem confirmação do usuário
 8. **PODE ACESSAR** ler/escrever `.env` ou `.env.local`
 9. WhatsApp: toda ação operacional exige start/end (ver `DEPLOY.md`)
+10. **Branch:** edição direta na `main` é permitida (workflow main-based; guard de branch por hook removido em 19/07/2026). Feature branch é opcional — use para isolar trabalho em progresso quando fizer sentido.
 
 ## Skill routing
 
