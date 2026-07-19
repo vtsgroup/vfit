@@ -79,6 +79,16 @@
 
 > **Regra**: Cores vibrantes em light mode → usar como **superfície com texto escuro**, nunca como texto sobre branco.
 
+### 📰 Blog — contraste dos artigos (auditado Lighthouse a11y 100 · 19/07/2026)
+
+Componentes **compartilhados** dos artigos seguem a regra acima. Valores auditados via Lighthouse/axe:
+
+- **TOC** (`components/blog/article-kit.tsx`): eyebrow `text-slate-500`; badges de numeração `text-slate-600` sobre `bg-slate-100`.
+- **FAQ** (`components/shared/faq-inline.tsx`): numeração `#475569` (slate-600) sobre `#f1f5f9`.
+- **Nav prev/next** (`components/blog/article-navigation.tsx`): eyebrows `text-emerald-700` (nunca `-600` sobre branco → só 3.65:1).
+- **Share** (`components/blog/article-share.tsx`): botão de copiar **sem `aria-label`** — o texto visível (URL curta) É o nome acessível (WCAG 2.5.3 Label in Name).
+- **Cookie "Aceitar todos"** (`components/ui/cookie-consent.tsx`): `bg-emerald-700` + texto branco (5.5:1). **Nunca** `bg-brand-primary` com texto branco (~1.9:1) — `text-shadow` não conserta, mascara.
+
 ### ✅ Seguro em Dark Mode (todas ≥ 4.5:1 vs #050A12)
 
 - `brand-primary` 8.71:1 · `success` 7.82:1 · `warning` 9.24:1 · `error` 5.27:1 · `info` 5.39:1 · `ai` 4.68:1 · `whatsapp` 10.0:1

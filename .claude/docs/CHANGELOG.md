@@ -5,6 +5,21 @@
 
 ---
 
+## [5.6.0 → 5.6.1] — 2026-07-19 — Blog: Lighthouse 100 em tudo (acessibilidade + desempenho)
+
+**Melhoria:** Páginas de artigo do blog atingiram **100 / 100 / 100 / 100** no Lighthouse (Desempenho · Acessibilidade · Práticas · SEO), medido em `/blog/ia-montar-treinos-personalizados-personal`.
+
+- **Acessibilidade 97 → 100 (WCAG 2.1 AA):** 5 falhas de `color-contrast` + 1 `label-content-name-mismatch`, todas em componentes **compartilhados** (vale para os 7 artigos de uma vez):
+  - **TOC** (`components/blog/article-kit.tsx`): eyebrow `slate-400 → slate-500` (2.63 → 4.77:1); badges de numeração `slate-500 → slate-600` sobre `bg-slate-100` (4.34 → 6.7:1).
+  - **FAQ** (`components/shared/faq-inline.tsx`): numeração `#64748b → #475569` (slate-600) sobre `#f1f5f9` (4.34 → 6.7:1).
+  - **Nav ant./próx.** (`components/blog/article-navigation.tsx`): eyebrow `emerald-600 → emerald-700` (3.65 → 5.5:1).
+  - **Compartilhar** (`components/blog/article-share.tsx`): removido `aria-label="Copiar link curto"` que conflitava com o texto visível do botão (WCAG 2.5.3 — Label in Name). Sem aria-label, o texto visível (a URL curta) vira o nome acessível.
+  - **Cookie "Aceitar todos"** (`components/ui/cookie-consent.tsx`, **global**): `bg-brand-primary` (#22c55e, ~1.9:1 com branco) → `bg-emerald-700` (#047857, 5.5:1). O `text-shadow` apenas mascarava a falha; a correção real é escurecer a superfície. Afeta o botão em todo o site.
+- **Desempenho 99 → 100:** LCP 1.0s → **0.8s** (score 0.94 → 1.0). O hero (`article-header.tsx`) já usava `priority` + `fetchPriority="high"`; o ganho veio do warm-up do CDN pós-deploy. Demais métricas já eram 100 (FCP 0.3s · TBT 0ms · CLS 0 · SI 0.5s).
+- **Doc:** padrão de cor reforçado em `DESIGN-SYSTEM.md` → seção "❌ NUNCA em Light Mode" (cores vibrantes como **superfície com texto escuro**, nunca como texto sobre branco; usar `emerald-700`/`green-700` quando precisar da cor como texto).
+
+---
+
 ## [5.5.9 → 5.6.0] — 2026-07-09 — Reconciliação completa do banco de produção + fix de saque PIX
 
 **Correção:** Saque PIX ainda dava 500 mesmo após a `idempotency_key` — cascata de bloqueadores por divergência de banco.
