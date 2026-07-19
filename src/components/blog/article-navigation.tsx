@@ -51,7 +51,7 @@ export function ArticleNavigation({ prev, next }: ArticleNavigationProps) {
             <DSIcon name="arrowLeft" size={15} className="transition-transform duration-300 group-hover:-translate-x-0.5" />
           </span>
           <div className="relative min-w-0 flex-1">
-            <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-emerald-600">Anterior</span>
+            <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-emerald-700">Anterior</span>
             <p className="mt-0.5 line-clamp-2 text-sm font-bold text-gray-950 transition-colors group-hover:text-emerald-700">
               {prev.title}
             </p>
@@ -69,7 +69,7 @@ export function ArticleNavigation({ prev, next }: ArticleNavigationProps) {
             <Thumb post={next} />
           </div>
           <div className="relative min-w-0 flex-1">
-            <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-emerald-600">Próximo</span>
+            <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-emerald-700">Próximo</span>
             <p className="mt-0.5 line-clamp-2 text-sm font-bold text-gray-950 transition-colors group-hover:text-emerald-700">
               {next.title}
             </p>

@@ -102,7 +102,7 @@ export function FaqInline({ items, title = 'Perguntas Frequentes', schema = true
                   style={
                     isOpen
                       ? { ...monoBadge, color: '#fff', background: 'linear-gradient(135deg, #34e565, #16a34a)', boxShadow: '0 2px 8px -1px rgba(34,197,94,0.45), inset 0 1px 0 rgba(255,255,255,0.4)' }
-                      : { ...monoBadge, color: '#64748b', background: '#f1f5f9' }
+                      : { ...monoBadge, color: '#475569', background: '#f1f5f9' }
                   }
                 >
                   {String(i + 1).padStart(2, '0')}

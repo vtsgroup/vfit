@@ -65,7 +65,6 @@ export function ArticleShare({ title, slug }: ArticleShareProps) {
         <button
           onClick={handleCopy}
           className="group flex min-w-0 flex-1 items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-3 text-left transition-colors hover:border-emerald-500/40 hover:bg-emerald-50/50"
-          aria-label="Copiar link curto"
         >
           <DSIcon name="link" size={15} className="shrink-0 text-emerald-600" />
           <span className="min-w-0 flex-1 truncate font-mono text-[13px] text-slate-600">

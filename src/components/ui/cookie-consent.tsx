@@ -313,7 +313,7 @@ export function CookieConsentBanner() {
               </button>
               <button
                 onClick={handleAcceptAll}
-                className="flex h-11 items-center justify-center gap-1.5 rounded-[13px] bg-brand-primary px-4 text-[12px] font-black text-white transition-all hover:brightness-105 active:translate-y-px active:scale-[0.985] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300/50"
+                className="flex h-11 items-center justify-center gap-1.5 rounded-[13px] bg-emerald-700 px-4 text-[12px] font-black text-white transition-all hover:brightness-110 active:translate-y-px active:scale-[0.985] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300/50"
                 style={{
                   border: '1px solid rgba(6,78,59,0.7)',
                   boxShadow:

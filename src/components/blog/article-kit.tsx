@@ -190,7 +190,7 @@ export function TableOfContents({ items, title = 'Neste artigo' }: { items: { id
       className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6"
       style={{ boxShadow: '0 1px 2px rgba(15,23,42,0.04), 0 18px 40px -26px rgba(15,23,42,0.14)' }}
     >
-      <p className="mb-3 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400" style={monoLabel}>
+      <p className="mb-3 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500" style={monoLabel}>
         <DSIcon name="menu" size={14} className="text-emerald-500" />
         {title}
       </p>
@@ -201,7 +201,7 @@ export function TableOfContents({ items, title = 'Neste artigo' }: { items: { id
               href={`#${it.id}`}
               className="group flex items-center gap-3 rounded-lg px-2 py-2 text-sm text-slate-600 transition-colors hover:bg-emerald-50/70 hover:text-emerald-700"
             >
-              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-slate-100 text-[10px] font-bold text-slate-500 transition-colors group-hover:bg-emerald-500 group-hover:text-white" style={monoLabel}>
+              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-slate-100 text-[10px] font-bold text-slate-600 transition-colors group-hover:bg-emerald-500 group-hover:text-white" style={monoLabel}>
                 {String(i + 1).padStart(2, '0')}
               </span>
               <span className="font-medium">{it.label}</span>
