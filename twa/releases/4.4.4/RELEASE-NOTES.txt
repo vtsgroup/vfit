@@ -1,0 +1,11 @@
+Vfit 4.4.4 — Notas de versão (Google Play)
+
+⚙️ Atualização técnica: app agora roda com a versão mais recente do Android (16), garantindo compatibilidade e segurança contínuas.
+
+Bons treinos! 💪
+
+---
+Técnico (interno):
+- versionCode 444 · versionName 4.4.4
+- targetSdkVersion 35 → 36 (Android 16), atendendo ao requisito de compliance da Google Play (prazo 30/08/2026).
+- Sem mudanças funcionais nesta versão além do bump de SDK.
