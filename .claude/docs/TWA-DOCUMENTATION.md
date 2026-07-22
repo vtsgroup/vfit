@@ -236,7 +236,7 @@ keytool -list -v -keystore keystore/vfit-release.jks -alias vfit -storepass "$KE
 | `enableNotifications` | `true` | Push via OneSignal |
 | `startUrl` | `/dashboard` | URL inicial após abrir |
 | `minSdkVersion` | `24` | Android 7.0+ |
-| `targetSdkVersion` | `34` | Android 14 |
+| `targetSdkVersion` | `36` | Android 16 |
 | `orientation` | `natural` | Auto-rotação |
 | `locationDelegation` | `true` | Geolocation compartilhado |
 | `playBilling` | `false` | Sem compras in-app |
@@ -632,6 +632,7 @@ jarsigner -verify app-release-bundle.aab
 | 04/03/2026 | 3 | 1.0.1 | Rebuild para novo upload |
 | 04/03/2026 | 4 | 1.0.2 | Versão final publicada em produção |
 | 05/03/2026 | 6 | 1.0.4 | Rebuild para re-review Google (conta review criada) |
+| 22/07/2026 | 444 | 4.4.4 | `targetSdkVersion` 35→36 (Android 16 / API 36) — exigência Google Play (prazo 30/08/2026) |
 
 ---
 

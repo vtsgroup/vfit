@@ -56,9 +56,9 @@ android {
     defaultConfig {
         applicationId "br.app.vfit"
         minSdkVersion 24
-        targetSdkVersion 35
-        versionCode 443
-        versionName "4.4.3"
+        targetSdkVersion 36
+        versionCode 444
+        versionName "4.4.4"
 
         // The name for the application
         resValue "string", "appName", twaManifest.name
