@@ -101,22 +101,24 @@ export function StudentHeader({ inline = false }: { inline?: boolean } = {}) {
   return (
     <header
       className={cn(
-        'ds3-header left-0 right-0 z-30 backdrop-blur-2xl backdrop-saturate-180 transition-all duration-300',
+        'ds3-header left-0 right-0 z-30 transition-all duration-300',
         'border-b-0',
         inline ? 'relative' : 'fixed',
+        'active:brightness-[1.18]',
         !inline && scrolled && 'ds3-header-scrolled'
       )}
       style={{
-        // Fusão em gradiente contínuo: topo = #050A12 (theme-color/status bar) e o
-        // degradê desce até o grafite #0d1117 — exatamente a cor em que o hero
-        // carbono começa. Trama de carbono na MESMA escala do hero (3px) e glow
-        // emerald vazando de baixo (continuação do glow do hero) — a emenda some
-        // porque textura, luz e gradiente atravessam os dois elementos.
+        // Redesign iOS azul+verde (2026-07): header em vidro navy. Topo #050A12
+        // (theme-color/status bar) → desce para o azul #081326 em que o novo hero
+        // aurora começa, sem emenda. Vidro (blur+saturate) + glow verde vazando de
+        // baixo, na linguagem do dock/splash.
         background:
-          'repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0 1px, transparent 1px 3px), repeating-linear-gradient(-45deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 3px), radial-gradient(circle at 86% 150%, rgba(34,197,94,0.13), transparent 55%), linear-gradient(to bottom, #050A12 0%, #050A12 16%, #070b11 44%, #0a0e14 70%, #0d1117 100%)',
+          'radial-gradient(circle at 86% 150%, rgba(62,213,106,0.12), transparent 55%), linear-gradient(180deg, rgba(5,10,22,0.98) 0%, rgba(6,14,30,0.97) 55%, rgba(8,19,38,0.97) 100%)',
         backgroundColor: '#050A12',
+        backdropFilter: 'blur(28px) saturate(1.7)',
+        WebkitBackdropFilter: 'blur(28px) saturate(1.7)',
         borderBottom: 0,
-        boxShadow: '0 1px 0 #0d1117',
+        boxShadow: '0 1px 0 rgba(8,19,38,0.9)',
         ...(inline
           ? {}
           : {
@@ -125,7 +127,7 @@ export function StudentHeader({ inline = false }: { inline?: boolean } = {}) {
             }),
       }}
     >
-      <div className="relative z-2 flex h-14 items-center justify-between px-4">
+      <div className="relative z-2 flex h-[60px] items-center justify-between px-4">
         <div className="flex min-w-0 flex-1 items-center gap-3">
           <div className="flex min-w-0 flex-col justify-center">
             <nav aria-label="Breadcrumb" className="mb-0.5 flex items-center gap-1.5">
