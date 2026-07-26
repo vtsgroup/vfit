@@ -4,7 +4,7 @@
  * Create Payment Page — Avulsa + Recorrente
  *
  * Exports: CreatePaymentPage
- * Hooks: useState, useEffect, useRef, useStudents, useAdminUsers, useAuthStore
+ * Hooks: useState, useEffect, useStudents, useAdminUsers, useAuthStore
  * Features: Auth: useAuthStore · 'use client' · DSIcon
  */
 
@@ -14,7 +14,7 @@
 
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { DSIcon } from '@/components/ui/ds-icon'
@@ -87,15 +87,13 @@ export default function CreatePaymentPage() {
   // Polling: quando PIX gerado, verifica status a cada 5s
   const pixPaymentId = pixResult?.id ?? ''
   const { data: polledPayment } = usePayment(pixPaymentId, { pollingEnabled: !!pixResult })
-  const prevPolledStatus = useRef<string | null>(null)
 
   const polledStatus = polledPayment?.payment?.status
   useEffect(() => {
-    if (!polledStatus) return
-    if (prevPolledStatus.current === 'pending' && polledStatus === 'confirmed') {
-      setPixConfirmed(true)
-    }
-    prevPolledStatus.current = polledStatus
+    // Não exige observar a transição pending → confirmed: se o usuário sai da aba
+    // para pagar, o primeiro poll na volta já pode vir confirmado e a transição
+    // nunca acontece dentro do componente montado.
+    if (polledStatus === 'confirmed') setPixConfirmed(true)
   }, [polledStatus])
 
   const students = studentData?.students ?? []

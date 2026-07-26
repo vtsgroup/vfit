@@ -241,6 +241,12 @@ export function usePayment(id: string, options?: { pollingEnabled?: boolean }) {
     },
     enabled: isReady && !!id,
     ...APP_QUERY_CACHE.detail,
+    // Enquanto aguarda pagamento, o perfil `detail` (staleTime 60s, sem refetch no
+    // foco) atrasa a confirmação: o intervalo não dispara com a aba em background,
+    // e ao voltar nada força o refetch. Durante o polling, sobrescreve os três.
+    ...(options?.pollingEnabled
+      ? { staleTime: 0, refetchOnWindowFocus: true, refetchIntervalInBackground: true }
+      : {}),
     // Polling automático quando status=pending (PIX aguardando pagamento)
     refetchInterval: (query) => {
       if (!options?.pollingEnabled) return false

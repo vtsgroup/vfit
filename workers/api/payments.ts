@@ -40,6 +40,7 @@ import {
   checkoutPaySchema,
 } from '@workers/schemas/payments'
 import { pgQuery, pgQueryOne, generateId } from '@lib/db'
+import { normalizeAsaasEvent, ASAAS_EVENT_STATUS_MAP } from '@lib/asaas-events'
 import { success, created, noContent } from '@lib/response'
 import {
   NotFoundError,
@@ -139,7 +140,9 @@ payments.post('/webhooks/asaas', async (c) => {
   const body = await c.req.json()
 
   try {
-    const event = body.event as string
+    // Normaliza PAYMENT_RECEIVED → RECEIVED: todo este handler compara contra a
+    // forma curta do evento. Ver lib/asaas-events.ts.
+    const event = normalizeAsaasEvent(body.event)
     const paymentData = body.payment
 
     if (!paymentData?.id) {
@@ -461,17 +464,8 @@ payments.post('/webhooks/asaas', async (c) => {
     const payment = rows[0]
     const now = new Date().toISOString()
 
-    // Mapear status Asaas → nosso
-    const statusMap: Record<string, string> = {
-      CONFIRMED: 'confirmed',
-      RECEIVED: 'confirmed',
-      OVERDUE: 'pending',
-      REFUNDED: 'refunded',
-      DELETED: 'cancelled',
-      PAYMENT_CREATED: 'pending',
-    }
-
-    const newStatus = statusMap[event] || payment.status
+    // Mapear evento Asaas (já normalizado) → nosso status
+    const newStatus = ASAAS_EVENT_STATUS_MAP[event] || payment.status
     const paidAt = ['CONFIRMED', 'RECEIVED'].includes(event) ? now : payment.paid_at
 
     // Quando confirmado, buscar netValue real do Asaas (valor após taxas do gateway)
