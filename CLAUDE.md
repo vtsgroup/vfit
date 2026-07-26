@@ -45,25 +45,23 @@ npm run cf:deploy         # Deploy OFICIAL (NUNCA wrangler deploy direto)
 npm run quality:ci        # Gate completo
 ```
 
-## 🧠 Memory System (Copilot-Mem MCP)
+## 🧠 Memória — claude-mem
 
-**Status:** ✅ **ATIVO** — v0.2.0 com 8 categorias VFIT capturadas
+**Status:** ✅ ATIVO — plugin `claude-mem@thedotmack` v13.12.4 (MCP + hook `SessionEnd`).
 
-```bash
-mem-search "VFIT <topic>"  # Buscar contexto de projeto
-mem-open                   # Dashboard em localhost:37888/ui
-mem-restart                # Reiniciar servidor MCP
-mem-status                 # Ver status (port 37888)
-```
+O fluxo de busca em 3 camadas está no `~/.claude/CLAUDE.md` global e vale aqui.
+Regra curta: **`search` → `timeline` → `get_observations`**, nessa ordem, antes de
+sair lendo arquivo. O `search` já mostra o custo em tokens de cada resultado.
 
-**Categorias Capturadas:**
-- Project Overview, Stack Architecture, Structure
-- Database Schema (26 PostgreSQL + 5 D1 tables)
-- API Endpoints (180+ rotas), Auth Flow
-- Critical Rules, Code Conventions, Design System
-- Infrastructure, Deployment & Operations
+O projeto tem histórico denso indexado (payments/Asaas, design system, deploy CF,
+TWA, dashboards). Perguntas de "por que está assim" quase sempre têm resposta na
+memória mais barata que no código.
 
-**Auto-Inject:** Quando pergunta sobre VFIT, sistema busca contexto automaticamente na memória → **30-40% economia de tokens**
+> Histórico: até 26/07/2026 esta seção documentava um "Copilot-Mem MCP" com os
+> comandos `mem-search`/`mem-open`/`mem-restart`/`mem-status` na porta 37888.
+> Nada disso existia — os 4 comandos não estavam no PATH e a porta estava morta.
+> A instrução apontava para ferramenta inexistente, então o agente a ignorava e
+> voltava a ler arquivo no braço. Não recrie comando de memória sem conferir.
 
 ## 🤖 Regras do Agente
 
