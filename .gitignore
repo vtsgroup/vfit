@@ -73,3 +73,6 @@ gifs/
 # Playwright artifacts (traces, videos, screenshots de runs locais)
 test-results/
 playwright-report/
+
+# Arquivo de retomada de sessao — local, efemero, descreve estado da maquina
+.claude/CONTINUATION.md
