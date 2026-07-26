@@ -447,3 +447,31 @@ npm run cf:deploy:minor  # Minor version bump
 **Last Updated**: 2026-04-01 (initial creation)  
 **Next Update**: When Sprint 41 Week 1 complete (Apr 7)
 
+
+---
+
+## 2026-07-26 — Fix: webhook Asaas (v5.6.3)
+
+**Bug:** cobrança PIX presa em `pending`. O handler `POST /payments/webhooks/asaas`
+comparava `body.event` contra a forma curta (`RECEIVED`), mas a Asaas envia o evento
+com prefixo `PAYMENT_`. O `statusMap` dava `undefined`, caía no fallback
+`payment.status` e regravava `pending`, respondendo `200 received:true` — falha
+silenciosa. A forma curta é do campo aninhado `payment.status`, não do `event`.
+
+**Impacto:** 6 branches mortas — cobrança avulsa, assinatura B2C, marketplace,
+consultoria, plano B2B e `OVERDUE`. Junto, comissão de afiliado e push de pagamento.
+Mascarado pelo fallback pull em `GET /payments` (`syncPendingPaymentsStatus`), que
+consulta a Asaas a cada request — por isso o financeiro atualizava e a tela não.
+
+**Fix:** `lib/asaas-events.ts` (`normalizeAsaasEvent` + `ASAAS_EVENT_STATUS_MAP`),
+normalização única no topo do handler. Mais: polling da tela de PIX sobrescrevendo
+`staleTime`/`refetchOnWindowFocus`/`refetchIntervalInBackground` do perfil
+`APP_QUERY_CACHE.detail`, que bloqueava refetch com a aba em background.
+
+**Regressão:** `tests/unit/asaas-webhook-events.test.ts` (8 casos; 5 falham sem o fix).
+**Verificado em produção:** cobrança paga confirmou na tela em <1s. Commit `5d24e130`,
+tag `v5.6.3`.
+
+**Pendências não relacionadas:** WhatsApp do deploy falha com Unipile 404
+(`Chat not found`, chat id morto — falhou também no v5.6.2). `403` em
+`/api/v1/assessments/story-kpis` e `503` em `/dashboard/messages` não investigados.
