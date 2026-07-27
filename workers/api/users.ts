@@ -577,7 +577,7 @@ users.put('/me/photo/upload', async (c) => {
 
   // Upload para R2
   await c.env.R2_IMAGES.put(key, body, {
-    httpMetadata: { contentType },
+    httpMetadata: { contentType, cacheControl: 'public, max-age=31536000, immutable' },
     customMetadata: { userId, uploadedAt: new Date().toISOString() },
   })
 

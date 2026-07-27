@@ -1738,7 +1738,7 @@ workouts.post('/:id/cover-image', requireType('personal'), async (c) => {
     throw new BadRequestError('R2_IMAGES binding ausente')
   }
 
-  await c.env.R2_IMAGES.put(key, body, { httpMetadata: { contentType } })
+  await c.env.R2_IMAGES.put(key, body, { httpMetadata: { contentType, cacheControl: 'public, max-age=31536000, immutable' } })
 
   const base = (c.env.R2_IMAGES_URL || 'https://images.vfit.app.br').replace(/\/+$/, '')
   const coverUrl = `${base}/${key}`
@@ -1819,7 +1819,7 @@ workouts.post('/:id/exercises/:eid/video', requireType('personal'), async (c) =>
     throw new BadRequestError('R2_IMAGES binding ausente')
   }
 
-  await c.env.R2_IMAGES.put(key, body, { httpMetadata: { contentType } })
+  await c.env.R2_IMAGES.put(key, body, { httpMetadata: { contentType, cacheControl: 'public, max-age=31536000, immutable' } })
 
   const base = (c.env.R2_IMAGES_URL || 'https://images.vfit.app.br').replace(/\/+$/, '')
   const videoUrl = `${base}/${key}`

@@ -1424,7 +1424,7 @@ export async function generateAndStoreAssessmentPdf(
   const pdfBytes = await buildAssessmentPdfBytes(row)
 
   await env.R2_IMAGES.put(key, pdfBytes, {
-    httpMetadata: { contentType: 'application/pdf' },
+    httpMetadata: { contentType: 'application/pdf', cacheControl: 'public, max-age=31536000, immutable' },
     customMetadata: { assessment_id: assessmentId, type: 'assessment_pdf', version: '3.0' },
   })
 

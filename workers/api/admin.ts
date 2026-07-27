@@ -451,9 +451,9 @@ adminRoutes.post('/simulation/session', requireAdminOrSuperAdmin, async (c) => {
       targetUserId = actorId
     }
 
-    const target = await pgQueryOne<{ id: string; user_type: 'personal' | 'student'; email: string }>(
+    const target = await pgQueryOne<{ id: string; user_type: 'personal' | 'student'; email: string; role: string | null }>(
       c.env,
-      `SELECT id, user_type, email
+      `SELECT id, user_type, email, role
        FROM users
        WHERE id = $1
        LIMIT 1`,
@@ -472,6 +472,20 @@ adminRoutes.post('/simulation/session', requireAdminOrSuperAdmin, async (c) => {
       [actorId]
     )
     const isSuperAdmin = actor?.role === 'super_admin'
+
+    // SEGURANÇA: nunca simular contas privilegiadas.
+    // `user_type` e `role` são colunas independentes, então a checagem de tipo
+    // abaixo NÃO protege contra alvos com role elevado (um super_admin pode ter
+    // user_type='personal'). Sem esta guarda, um admin gravaria uma sessão
+    // apontando para o id de um super_admin e, em qualquer rota fora de
+    // /api/v1/admin, auth.ts define userId = alvo (auth.ts:90-97). Guards que
+    // resolvem privilégio pelo userId efetivo — config.ts requireSuperAdmin,
+    // que ainda faz c.set('userRole','super_admin') — passariam: escalada
+    // vertical de admin para super_admin.
+    // Auto-simulação segue permitida (super_admin vendo o app como si mesmo).
+    if (targetUserId !== actorId && (target.role === 'admin' || target.role === 'super_admin')) {
+      throw new ForbiddenError('Não é permitido simular contas administrativas')
+    }
 
     if (!isSuperAdmin && target.user_type !== mode) {
       throw new BadRequestError(`target_user_id deve ser do tipo ${mode}`)
@@ -2409,7 +2423,7 @@ adminRoutes.post('/muscle-groups/:id/image', requireSuperAdmin, async (c) => {
 
   if (c.env.R2_IMAGES) {
     // R2 disponível — comportamento original
-    await c.env.R2_IMAGES.put(key, body, { httpMetadata: { contentType } })
+    await c.env.R2_IMAGES.put(key, body, { httpMetadata: { contentType, cacheControl: 'public, max-age=31536000, immutable' } })
     const base = (c.env.R2_IMAGES_URL || 'https://images.vfit.app.br').replace(/\/+$/, '')
     url = `${base}/${key}?v=${versionTag}`
   } else {

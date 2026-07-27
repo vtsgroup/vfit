@@ -37,7 +37,11 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 .env.production.local
-# Keep .env.example tracked
+# Backups de env (ex.: .env.bak.20260726) — contêm segredos em texto plano
+.env.*
+*.bak
+*.bak.*
+# Keep .env.example tracked (negação vem DEPOIS dos padrões acima de propósito)
 !.env.example
 
 # vercel

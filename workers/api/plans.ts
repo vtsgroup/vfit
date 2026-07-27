@@ -19,7 +19,7 @@ import { PROMPTS } from '@lib/ai-prompts'
 import { generatePlanInputSchema, generatedPlanSchema } from '@workers/schemas/plan-generation'
 import type { GeneratedPlan } from '@workers/schemas/plan-generation'
 import { getDefaultPlan } from '@config/default-plans'
-import { authMiddleware } from '@workers/middleware/auth'
+import { authMiddleware, optionalAuth } from '@workers/middleware/auth'
 import { notify } from '@lib/onesignal'
 
 const plans = new Hono<AppContext>()
@@ -90,7 +90,7 @@ async function canGenerateMorePlans(env: Bindings, userId: string): Promise<bool
 // ============================================
 // POST /generate — Gerar plano com IA
 // ============================================
-plans.post('/generate', async (c) => {
+plans.post('/generate', optionalAuth, async (c) => {
   const body = await c.req.json()
   const input = generatePlanInputSchema.parse(body)
 
@@ -228,8 +228,8 @@ plans.post('/generate', async (c) => {
 // ============================================
 // POST /save — Salvar plano gerado na DB
 // ============================================
-plans.post('/save', async (c) => {
-  // Requer userId (vem do auth ou é gerado como guest)
+plans.post('/save', authMiddleware, async (c) => {
+  // Requer userId (populado por authMiddleware)
   const userId = c.get('userId')
   if (!userId) {
     throw new BadRequestError('Usuário não identificado')

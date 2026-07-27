@@ -105,7 +105,11 @@ export function useCurrentPlan() {
 export function useGeneratePlan() {
   return useMutation<GeneratedPlanResult, Error, Record<string, unknown>>({
     mutationFn: async (profile) => {
-      const res = await api.post<GeneratedPlanResult>('/plans/generate', profile, { auth: false })
+      // Envia o Bearer quando houver sessão: ativa o gate de plano grátis no
+      // servidor (optionalAuth) e evita queimar ~60s de inferência de IA num
+      // request que seria rejeitado no /save. Guest segue funcionando: o
+      // api-client omite o header quando não há token.
+      const res = await api.post<GeneratedPlanResult>('/plans/generate', profile)
       return res.data
     },
   })

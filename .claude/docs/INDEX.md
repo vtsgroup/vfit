@@ -4,7 +4,7 @@
 
 ---
 
-## 📋 Documentos Ativos (13)
+## 📋 Documentos Ativos (14)
 
 | Doc | Conteúdo | Público-alvo |
 |-----|----------|--------------|
@@ -21,6 +21,7 @@
 | [PWA-MEGA-PLAN.md](PWA-MEGA-PLAN.md) | Service Worker, manifest, offline | Frontend / PWA |
 | [TWA-DOCUMENTATION.md](TWA-DOCUMENTATION.md) | TWA: keystore, SHA-256, Play Store | Mobile / TWA |
 | [WHATSAPP-GATEWAY.md](WHATSAPP-GATEWAY.md) | Gateway WhatsApp, notificações operacionais | Ops / WhatsApp |
+| [PXPIPE-E-CLAUDE-MEM.md](PXPIPE-E-CLAUDE-MEM.md) | Proxy de compressão pxpipe + memória claude-mem: config, riscos, economia real | Infra / Claude Code |
 
 ---
 

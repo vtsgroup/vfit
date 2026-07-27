@@ -8,9 +8,13 @@ workers_dev = true
 # ============================================
 # Routes (custom domain) — Ativado em 20/02/2026
 # ============================================
+# images.vfit.app.br NÃO tem route aqui de propósito (removido em 26/07/2026).
+# O bucket R2 `vfit-images` já tem esse hostname como custom domain, então o R2
+# serve os objetos direto pelo CDN — sem invocar este Worker (custo por request = 0).
+# Uma Worker route neste hostname TEM PRECEDÊNCIA sobre o custom domain e anula isso.
+# Rollback: re-adicione a linha do images.* abaixo e redeploy.
 routes = [
-  { pattern = "api.vfit.app.br/*", zone_name = "vfit.app.br" },
-  { pattern = "images.vfit.app.br/*", zone_name = "vfit.app.br" }
+  { pattern = "api.vfit.app.br/*", zone_name = "vfit.app.br" }
 ]
 
 # ============================================

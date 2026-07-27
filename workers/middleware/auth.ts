@@ -28,7 +28,7 @@
 import { createMiddleware } from 'hono/factory'
 import type { AppContext } from '../types'
 import { verifyJWT } from '@lib/auth-helpers'
-import { UnauthorizedError } from '@lib/errors'
+import { ServiceUnavailableError, UnauthorizedError } from '@lib/errors'
 
 interface AdminSimulationSession {
   mode: 'super_admin' | 'personal' | 'student' | 'nutritionist'
@@ -63,8 +63,29 @@ export const authMiddleware = createMiddleware<AppContext>(async (c, next) => {
       }
     } catch (kvErr) {
       if (kvErr instanceof UnauthorizedError) throw kvErr
-      // KV unavailable — skip blacklist check (fail open)
-      console.warn('[Auth] KV blacklist check failed (fail open):', (kvErr as Error)?.message)
+
+      // KV indisponível: não há como saber se a sessão foi revogada.
+      // Fail open irrestrito revive tokens já revogados (logout forçado,
+      // credencial vazada) durante a queda; fail closed total derruba o app
+      // inteiro junto com o KV. Meio-termo: leitura segura passa, mutação e
+      // rota privilegiada recusam.
+      const reqPath = new URL(c.req.url).pathname
+      const isSafeRead = c.req.method === 'GET' || c.req.method === 'HEAD'
+      const isPrivileged = reqPath.startsWith('/api/v1/admin')
+        || reqPath.startsWith('/api/v1/config')
+      const failClosed = !isSafeRead || isPrivileged
+
+      console.warn(
+        '[Auth] KV blacklist check failed:',
+        (kvErr as Error)?.message,
+        JSON.stringify({ method: c.req.method, path: reqPath, failClosed })
+      )
+
+      if (failClosed) {
+        throw new ServiceUnavailableError(
+          'Verificação de sessão indisponível. Tente novamente em instantes.'
+        )
+      }
     }
 
     const pathname = new URL(c.req.url).pathname

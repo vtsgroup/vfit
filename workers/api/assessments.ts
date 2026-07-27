@@ -1223,7 +1223,7 @@ assessments.put('/:id/photos/upload', requireType('personal', 'admin', 'super_ad
   }
 
   await c.env.R2_IMAGES.put(key, body, {
-    httpMetadata: { contentType },
+    httpMetadata: { contentType, cacheControl: 'public, max-age=31536000, immutable' },
     customMetadata: { assessment_id: id, type: photoType },
   })
 

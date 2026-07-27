@@ -43,7 +43,11 @@ const CK = {
 // Super Admin middleware
 // ============================================
 const requireSuperAdmin = createMiddleware<AppContext>(async (c, next) => {
-  const userId = c.get('userId')
+  // SEGURANÇA: resolver privilégio pelo ator real do JWT, nunca pelo userId
+  // efetivo. auth.ts aplica simulação em toda rota fora de /api/v1/admin —
+  // incluindo /api/v1/config — então c.get('userId') pode ser o ALVO de uma
+  // sessão de simulação. Usar o alvo aqui concederia o role dele ao ator.
+  const userId = c.get('actorUserId') || c.get('userId')
   const user = await pgQueryOne<{ role: string }>(
     c.env,
     'SELECT role FROM users WHERE id = $1',

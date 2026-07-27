@@ -245,7 +245,7 @@ mediaRoutes.post('/:exerciseId/media/upload', requireType('personal', 'admin', '
     const key = parsedQuery.key || `exercise-media/${exerciseId}/videos/${generateId()}.${ext}`
 
     await c.env.R2_VIDEOS.put(key, body, {
-      httpMetadata: { contentType },
+      httpMetadata: { contentType, cacheControl: 'public, max-age=31536000, immutable' },
       customMetadata: {
         exercise_id: exerciseId,
         uploaded_at: new Date().toISOString(),
@@ -277,7 +277,7 @@ mediaRoutes.post('/:exerciseId/media/upload', requireType('personal', 'admin', '
   }
 
   await c.env.R2_IMAGES.put(key, body, {
-    httpMetadata: { contentType },
+    httpMetadata: { contentType, cacheControl: 'public, max-age=31536000, immutable' },
     customMetadata: {
       exercise_id: exerciseId,
       uploaded_at: new Date().toISOString(),
