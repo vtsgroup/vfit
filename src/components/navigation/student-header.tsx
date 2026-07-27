@@ -102,30 +102,19 @@ export function StudentHeader({ inline = false }: { inline?: boolean } = {}) {
     <header
       className={cn(
         'ds3-header left-0 right-0 z-30 transition-all duration-300',
-        'border-b-0',
         inline ? 'relative' : 'fixed',
-        'active:brightness-[1.18]',
         !inline && scrolled && 'ds3-header-scrolled'
       )}
-      style={{
-        // Redesign iOS azul+verde (2026-07): header em vidro navy. Topo #050A12
-        // (theme-color/status bar) → desce para o azul #081326 em que o novo hero
-        // aurora começa, sem emenda. Vidro (blur+saturate) + glow verde vazando de
-        // baixo, na linguagem do dock/splash.
-        background:
-          'radial-gradient(circle at 86% 150%, rgba(62,213,106,0.12), transparent 55%), linear-gradient(180deg, rgba(5,10,22,0.98) 0%, rgba(6,14,30,0.97) 55%, rgba(8,19,38,0.97) 100%)',
-        backgroundColor: '#050A12',
-        backdropFilter: 'blur(28px) saturate(1.7)',
-        WebkitBackdropFilter: 'blur(28px) saturate(1.7)',
-        borderBottom: 0,
-        boxShadow: '0 1px 0 rgba(8,19,38,0.9)',
-        ...(inline
+      style={
+        // Mesma cor do header do admin/personal: sem overrides, herda 100% do
+        // gradiente definido em .ds3-header (globals.css) — nada de navy custom aqui.
+        inline
           ? {}
           : {
               top: 'var(--demo-banner-offset, 0px)',
               paddingTop: 'env(safe-area-inset-top, 0px)',
-            }),
-      }}
+            }
+      }
     >
       <div className="relative z-2 flex h-[60px] items-center justify-between px-4">
         <div className="flex min-w-0 flex-1 items-center gap-3">

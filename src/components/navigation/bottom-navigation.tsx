@@ -156,19 +156,17 @@ function NavItem({
       aria-current={active ? 'page' : undefined}
       className={cn(
         'group relative flex flex-col items-center gap-[3px] py-0.5 transition-transform duration-150 active:scale-90',
-        active ? 'text-[#4ed06a]' : 'text-[#7e91b0]'
+        active ? 'text-brand-primary' : 'text-slate-400'
       )}
       style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent', transitionTimingFunction: 'cubic-bezier(.34,1.56,.64,1)' }}
     >
       <span
-        className="relative flex h-8 w-[42px] items-center justify-center rounded-[11px] transition-all duration-200"
-        style={
-          active
-            ? { background: 'rgba(62,213,106,.13)', boxShadow: 'inset 0 0 0 1px rgba(78,208,106,.24)' }
-            : undefined
-        }
+        className={cn(
+          'relative flex h-8 w-[42px] items-center justify-center rounded-[11px] transition-all duration-200',
+          active && 'bg-brand-primary/12'
+        )}
       >
-        <span className={active ? 'drop-shadow-[0_0_9px_rgba(78,208,106,.55)]' : ''}>{tab.icon(active)}</span>
+        <span>{tab.icon(active)}</span>
 
         {typeof badge === 'number' && badge > 0 && (
           <motion.span
@@ -239,7 +237,6 @@ export function BottomNavigation({ notificationCount = 0, fabMenuOpen = false, o
   }
 
   const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`)
-  const iaActive = isActive('/ia') || fabMenuOpen
 
   return (
     <nav
@@ -250,16 +247,18 @@ export function BottomNavigation({ notificationCount = 0, fabMenuOpen = false, o
       <div
         className="relative grid w-full max-w-[412px] grid-cols-5 items-end rounded-[32px] px-1.5 py-[9px]"
         style={{
+          // Mesmas cores do dock do admin/personal: gradiente e sombra copiados
+          // 1:1 de .nav-premium (globals.css) — nada de navy custom aqui.
           pointerEvents: 'auto',
-          background: 'linear-gradient(160deg, rgba(19,34,66,0.88), rgba(6,12,27,0.93))',
-          backdropFilter: 'blur(34px) saturate(1.9)',
-          WebkitBackdropFilter: 'blur(34px) saturate(1.9)',
-          border: '1px solid rgba(255,255,255,0.14)',
-          boxShadow: '0 24px 50px -12px rgba(2,6,18,0.85), 0 4px 14px rgba(2,6,18,0.5), inset 0 1px 0 rgba(255,255,255,0.07)',
+          background: 'linear-gradient(180deg, rgba(8,47,73,0.9) 0%, rgba(7,38,66,0.92) 30%, rgba(6,25,43,0.97) 68%, rgba(5,10,18,0.995) 100%)',
+          backdropFilter: 'blur(40px) saturate(200%)',
+          WebkitBackdropFilter: 'blur(40px) saturate(200%)',
+          border: '1px solid rgba(255,255,255,0.06)',
+          boxShadow: '0 -6px 28px rgba(2,6,23,0.34), 0 -10px 38px -26px rgba(56,189,248,0.55), inset 0 1px 0 rgba(125,211,252,0.18)',
         }}
       >
-        {/* Hairline emerald + highlight radial */}
-        <span className="pointer-events-none absolute inset-x-[38px] top-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(78,208,106,0.55), transparent)' }} />
+        {/* Hairline + highlight radial */}
+        <span className="pointer-events-none absolute inset-x-[38px] top-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(34,197,94,0.55), transparent)' }} />
         <span className="pointer-events-none absolute inset-0 rounded-[32px]" style={{ background: 'radial-gradient(120% 90% at 18% 0%, rgba(255,255,255,0.12), transparent 45%)' }} />
 
         {LEFT_TABS.map((tab) => (
@@ -273,27 +272,29 @@ export function BottomNavigation({ notificationCount = 0, fabMenuOpen = false, o
             onFabPress?.()
           }}
           aria-label={fabMenuOpen ? 'Fechar menu IA' : 'Abrir menu IA'}
-          className="relative z-2 flex flex-col items-center gap-1 py-0.5 transition-transform duration-150 active:scale-[0.93]"
+          className="fab-ring relative z-2 flex flex-col items-center gap-1 py-0.5 transition-transform duration-150 active:scale-[0.93]"
           style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent', cursor: 'pointer', background: 'transparent', border: 'none', transitionTimingFunction: 'cubic-bezier(.34,1.56,.64,1)' }}
         >
+          {/* Mesmas cores do FAB "Novo" do admin/personal (linear-gradient verde + fab-pulse) */}
           <motion.span
-            className="relative flex h-14 w-14 items-center justify-center rounded-full"
+            className="relative flex h-13 w-13 items-center justify-center rounded-full"
             style={{
-              marginTop: '-30px',
-              color: '#03210f',
-              background: 'radial-gradient(circle at 32% 26%, #7cf59b, #3ecf67 48%, #17a349 100%)',
-              border: '4px solid rgba(6,12,26,0.96)',
+              marginTop: '-20px',
+              color: '#0a0f0a',
+              background: fabMenuOpen
+                ? 'linear-gradient(135deg, #2ae88d, #1cc770)'
+                : 'linear-gradient(135deg, #3DFCA4, #28e08a)',
               boxShadow: fabMenuOpen
-                ? '0 0 0 1px rgba(94,232,138,0.6), 0 10px 30px -6px rgba(46,224,110,0.75), 0 0 48px rgba(46,224,110,0.5), inset 0 1px 0 rgba(255,255,255,0.5)'
-                : '0 0 0 1px rgba(94,232,138,0.35), 0 10px 26px -6px rgba(46,224,110,0.55), 0 0 36px rgba(46,224,110,0.32), inset 0 1px 0 rgba(255,255,255,0.45)',
+                ? '0 8px 32px rgba(61, 252, 164, 0.45), 0 4px 12px rgba(61, 252, 164, 0.25), 0 0 0 1px rgba(255,255,255,0.12) inset'
+                : undefined,
+              animation: fabMenuOpen ? 'none' : 'fab-pulse 3.2s ease-in-out infinite',
             }}
             animate={{ rotate: fabMenuOpen ? 45 : 0 }}
             transition={{ type: 'spring', stiffness: 300, damping: 20 }}
           >
-            <span className="pointer-events-none absolute -inset-4 rounded-full" style={{ zIndex: -1, background: 'radial-gradient(circle, rgba(62,213,106,0.3), transparent 65%)' }} />
             <AISparkleIcon />
           </motion.span>
-          <span className={cn('text-[10px] font-extrabold leading-none', iaActive ? 'text-[#7ee9a0]' : 'text-[#4ed06a]')}>IA</span>
+          <span className="text-[10px] font-semibold leading-none tracking-wide text-brand-primary">IA</span>
         </button>
 
         {RIGHT_TABS.map((tab) => (
