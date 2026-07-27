@@ -34,7 +34,7 @@ import { useStudentProfile, useLinkPersonalTrainer } from '@/hooks/use-student-a
 import { useExercises, useMuscleGroups, type Exercise } from '@/hooks/use-exercises'
 import { useAuthStore } from '@/stores/auth-store'
 import { LoadFailed } from '@/components/ui/load-failed'
-import { HeroCarbono } from '@/components/treinos/hero-variants/variant-08-carbono'
+import { HeroSplash } from '@/components/treinos/hero-variants/variant-40-splash'
 
 const DIFFICULTY_FILTERS = [
   { value: '', label: 'Todos' },
@@ -409,7 +409,7 @@ export default function TreinosPage() {
   return (
     <div className="min-h-dvh" style={{ background: 'linear-gradient(180deg, #e6ecf5, #f4f7fb 420px)' }}>
     <div className="mx-auto max-w-lg animate-in fade-in-0 slide-in-from-bottom-2 duration-300 px-4 pt-0 pb-4">
-      <HeroCarbono
+      <HeroSplash
         userName={user?.full_name}
         todayDay={todayDay}
         plan={plan}
