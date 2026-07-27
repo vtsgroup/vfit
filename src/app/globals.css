@@ -1844,6 +1844,49 @@ body {
     user-select: text;
     -webkit-touch-callout: default;
   }
+
+  /* Sem zoom (pinch + duplo-toque) no app instalado. Feito via touch-action e NÃO
+     via `user-scalable=no` no viewport: a meta tag é global e mataria o zoom também
+     no browser, onde ele deve continuar existindo (WCAG 1.4.4). */
+  html,
+  body {
+    touch-action: pan-x pan-y;
+  }
+
+  /* Arrastar imagem/link para fora é gesto de browser, não de app nativo. */
+  img,
+  a {
+    -webkit-user-drag: none;
+  }
+}
+
+/* ── Espelho para TWA ──
+   O boot script marca .vsp-standalone quando detecta TWA por referrer android-app://,
+   caso que nem sempre casa com @media (display-mode: standalone). Sem isto, o TWA
+   Android continuaria copiável e com zoom. */
+html.vsp-standalone,
+html.vsp-standalone body {
+  touch-action: pan-x pan-y;
+}
+
+html.vsp-standalone *,
+html.vsp-standalone *::before,
+html.vsp-standalone *::after {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html.vsp-standalone input,
+html.vsp-standalone textarea,
+html.vsp-standalone [contenteditable="true"],
+html.vsp-standalone pre,
+html.vsp-standalone code,
+html.vsp-standalone .selectable {
+  -webkit-user-select: text;
+  user-select: text;
+  -webkit-touch-callout: default;
 }
 
 /* Glass morphism utility */

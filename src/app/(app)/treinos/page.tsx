@@ -34,7 +34,7 @@ import { useStudentProfile, useLinkPersonalTrainer } from '@/hooks/use-student-a
 import { useExercises, useMuscleGroups, type Exercise } from '@/hooks/use-exercises'
 import { useAuthStore } from '@/stores/auth-store'
 import { LoadFailed } from '@/components/ui/load-failed'
-import { HeroSplash } from '@/components/treinos/hero-variants/variant-40-splash'
+import { HeroWorkbench } from '@/components/treinos/hero-variants/variant-41-workbench'
 
 const DIFFICULTY_FILTERS = [
   { value: '', label: 'Todos' },
@@ -409,7 +409,7 @@ export default function TreinosPage() {
   return (
     <div className="min-h-dvh" style={{ background: 'linear-gradient(180deg, #e6ecf5, #f4f7fb 420px)' }}>
     <div className="mx-auto max-w-lg animate-in fade-in-0 slide-in-from-bottom-2 duration-300 px-4 pt-0 pb-4">
-      <HeroSplash
+      <HeroWorkbench
         userName={user?.full_name}
         todayDay={todayDay}
         plan={plan}
@@ -426,8 +426,7 @@ export default function TreinosPage() {
       {assignedWorkouts.length > 0 && (
         <section className="mb-5">
           <div className="mb-3">
-            <p className="text-[10px] font-black uppercase tracking-[0.24em] text-emerald-600/85">Meu Personal</p>
-            <h2 className="mt-0.5 text-[17px] font-black tracking-tight text-slate-950">Treinos do seu personal</h2>
+            <h2 className="text-[17px] font-semibold tracking-tight text-[var(--color-text-primary-cool)]">Treinos do seu personal</h2>
           </div>
 
           <div className="space-y-3">
@@ -435,27 +434,27 @@ export default function TreinosPage() {
               <Link
                 key={workout.id}
                 href={`/treinos/executar?id=${workout.id}`}
-                className="group relative block overflow-hidden rounded-[28px] border border-emerald-100/90 bg-linear-to-br from-white via-emerald-50/40 to-slate-50 p-4 shadow-[0_22px_52px_rgba(15,23,42,0.13)] transition-all duration-300 active:translate-y-px"
+                className="group relative block overflow-hidden rounded-[var(--radius-3xl)] border border-white/8 bg-[var(--color-bg-dark-secondary)] p-4 transition-transform duration-150 ease-out active:scale-[0.99] motion-reduce:transition-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brand-mint)]"
               >
                 <div className="pointer-events-none absolute -left-10 -top-12 h-30 w-30 rounded-full bg-emerald-200/45 blur-2xl" />
                 <div className="relative flex items-center gap-3">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-emerald-200 bg-white text-emerald-600 shadow-[0_8px_18px_rgba(5,150,105,0.14)]">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[var(--radius-lg)] border border-white/10 bg-white/5 text-[var(--color-brand-mint)]">
                     <DSIcon name="dumbbell" size={21} />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-[15px] font-black leading-tight text-slate-950">{workout.name}</p>
-                    <p className="mt-0.5 truncate text-[12px] font-semibold text-slate-500">
+                    <p className="truncate text-[15px] font-semibold leading-tight text-[var(--color-text-primary-cool)]">{workout.name}</p>
+                    <p className="mt-0.5 truncate text-[12px] font-semibold text-[var(--color-text-muted-cool)]">
                       {workout.personal_name ? `Por ${workout.personal_name}` : 'Treino personalizado'}
                       {' · '}
                       {workout.exercise_count} exercício{workout.exercise_count === 1 ? '' : 's'}
                     </p>
                     {workout.times_completed > 0 && (
-                      <p className="mt-0.5 text-[11px] font-bold text-emerald-700">
+                      <p className="mt-0.5 text-[11px] font-bold text-emerald-400 tabular-nums">
                         Concluído {workout.times_completed}x
                       </p>
                     )}
                   </div>
-                  <span className="flex h-10 items-center gap-1.5 rounded-full border border-emerald-200 bg-white px-3 text-[11px] font-black text-emerald-700 shadow-[0_8px_18px_rgba(5,150,105,0.12)]">
+                  <span className="flex h-10 items-center gap-1.5 rounded-full border border-white/10 px-3 text-[11px] font-medium text-[var(--color-brand-mint)]">
                     Iniciar
                     <DSIcon name="play" size={13} />
                   </span>
@@ -469,73 +468,60 @@ export default function TreinosPage() {
       {/* T5.9 — Assessment summary card (pós-onboarding) */}
       {latestAssessment ? (
         <Link href="/avaliacoes" className="group mb-5 block">
-          <div className="relative overflow-hidden rounded-[28px] border border-emerald-100/90 bg-linear-to-br from-white via-emerald-50/40 to-slate-50 p-4 shadow-[0_24px_58px_rgba(15,23,42,0.14)] transition-all duration-300 group-active:translate-y-px">
-            <div className="pointer-events-none absolute -left-10 -top-12 h-32 w-32 rounded-full bg-emerald-200/45 blur-2xl" />
-            <div className="pointer-events-none absolute -right-12 bottom-4 h-36 w-36 rounded-full bg-violet-100/70 blur-3xl" />
-            <div className="relative mb-4 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-violet-200 bg-white text-violet-500 shadow-[0_8px_18px_rgba(124,58,237,0.14)]">
-                  <DSIcon name="clipboardList" size={18} />
-                </div>
-                <div>
-                  <span className="text-[10px] font-black uppercase tracking-[0.24em] text-violet-500/85">
-                    Sua Avaliação
-                  </span>
-                  <p className="mt-0.5 text-[12px] font-semibold text-slate-500">Composição corporal</p>
-                </div>
+          <div className="relative overflow-hidden rounded-[var(--radius-3xl)] border border-white/8 bg-[var(--color-bg-dark-secondary)] p-4 transition-transform duration-150 ease-out group-active:scale-[0.995] motion-reduce:transition-none">
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <div className="min-w-0">
+                <h2 className="text-[15px] font-semibold text-[var(--color-text-primary-cool)]">Sua avaliação</h2>
+                <p className="mt-0.5 text-[12px] text-[var(--color-text-muted-cool)]">Composição corporal</p>
               </div>
-              <div className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white/90 text-slate-400 shadow-[0_6px_16px_rgba(15,23,42,0.08)] transition-colors group-hover:text-emerald-600">
-                <DSIcon name="chevronRight" size={16} />
-              </div>
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/10 text-[var(--color-text-muted-cool)] transition-colors group-hover:border-[var(--color-brand-ring)] group-hover:text-[var(--color-brand-mint)]">
+                <DSIcon name="chevronRight" size={15} />
+              </span>
             </div>
 
-            <div className="relative grid grid-cols-3 divide-x divide-slate-200/80 rounded-3xl border border-white/80 bg-white/75 py-3 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.95),0_10px_22px_rgba(15,23,42,0.06)]">
-              <div className="px-2">
-                <p className="text-[22px] font-black leading-none tracking-tight text-slate-950 tabular-nums">
+            <div className="grid grid-cols-3 gap-2">
+              <div className="rounded-[var(--radius-lg)] bg-white/4 px-2 py-3 text-center">
+                <p className="text-[20px] font-bold leading-none tracking-tight text-[var(--color-text-primary-cool)] tabular-nums">
                   {latestAssessment.weight_kg}
-                  <span className="ml-0.5 text-[10px] font-bold text-slate-400">kg</span>
+                  <span className="ml-0.5 text-[10px] font-medium text-[var(--color-text-muted-cool)]">kg</span>
                 </p>
-                <p className="mt-1 text-[10px] font-semibold text-slate-400">Peso</p>
+                <p className="mt-1.5 text-[11px] text-[var(--color-text-muted-cool)]">Peso</p>
               </div>
-              <div className="px-2">
-                <p className={`text-[22px] font-black leading-none tracking-tight tabular-nums ${getBMIColor(latestAssessment.bmi)}`}>
+              <div className="rounded-[var(--radius-lg)] bg-white/4 px-2 py-3 text-center">
+                <p className={`text-[20px] font-bold leading-none tracking-tight tabular-nums ${getBMIColor(latestAssessment.bmi)}`}>
                   {latestAssessment.bmi}
                 </p>
-                <p className="mt-1 text-[10px] font-semibold text-slate-400">IMC</p>
+                <p className="mt-1.5 text-[11px] text-[var(--color-text-muted-cool)]">IMC</p>
               </div>
-              <div className="px-2">
-                <p className="text-[22px] font-black leading-none tracking-tight text-slate-950 tabular-nums">
+              <div className="rounded-[var(--radius-lg)] bg-white/4 px-2 py-3 text-center">
+                <p className="text-[20px] font-bold leading-none tracking-tight text-[var(--color-text-primary-cool)] tabular-nums">
                   {latestAssessment.body_fat_percentage != null
                     ? `${latestAssessment.body_fat_percentage}%`
                     : '—'}
                 </p>
-                <p className="mt-1 text-[10px] font-semibold text-slate-400">Gordura</p>
+                <p className="mt-1.5 text-[11px] text-[var(--color-text-muted-cool)]">Gordura</p>
               </div>
             </div>
             {latestAssessment.bmi_category && (
-              <div className="relative mt-3 flex justify-center">
-                <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-[11px] font-bold text-amber-700 shadow-[0_4px_12px_rgba(245,158,11,0.12)]">
-                  {latestAssessment.bmi_category}
-                </span>
-              </div>
+              <p className="mt-3 text-center text-[12px] text-[var(--color-text-secondary-cool)]">
+                {latestAssessment.bmi_category}
+              </p>
             )}
           </div>
         </Link>
       ) : (
         <Link href="/avaliacoes/nova" className="group mb-5 block">
-          <div className="relative flex min-h-22 items-center gap-3 overflow-hidden rounded-[28px] border border-violet-100 bg-linear-to-br from-white via-violet-50/40 to-emerald-50/35 p-4 shadow-[0_22px_48px_rgba(15,23,42,0.12)] transition-all duration-300 group-active:translate-y-px">
-            <div className="pointer-events-none absolute -left-8 -top-12 h-28 w-28 rounded-full bg-violet-200/45 blur-2xl" />
-            <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-violet-200 bg-white text-violet-500 shadow-[0_8px_18px_rgba(124,58,237,0.14)]">
-              <DSIcon name="clipboardList" size={21} />
+          <div className="relative flex min-h-22 items-center gap-3 overflow-hidden rounded-[var(--radius-3xl)] border border-white/8 bg-[var(--color-bg-dark-secondary)] p-4 transition-transform duration-150 ease-out group-active:scale-[0.995] motion-reduce:transition-none">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[var(--radius-lg)] border border-white/10 bg-white/5 text-[var(--color-brand-mint)]">
+              <DSIcon name="clipboardList" size={20} />
             </div>
-            <div className="relative flex-1">
-              <p className="text-[10px] font-black uppercase tracking-[0.22em] text-violet-500/85">Avaliação física</p>
-              <p className="mt-1 text-[15px] font-black text-slate-950">Criar avaliação corporal</p>
-              <p className="mt-0.5 text-[12px] font-semibold text-slate-500">Peso, IMC e gordura em um painel inteligente</p>
+            <div className="min-w-0 flex-1">
+              <p className="text-[15px] font-semibold text-[var(--color-text-primary-cool)]">Criar avaliação corporal</p>
+              <p className="mt-0.5 text-[12px] text-[var(--color-text-muted-cool)]">Peso, IMC e gordura em um só painel</p>
             </div>
-            <div className="relative flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white/90 text-slate-400 shadow-[0_6px_16px_rgba(15,23,42,0.08)] transition-colors group-hover:text-emerald-600">
-              <DSIcon name="chevronRight" size={16} />
-            </div>
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/10 text-[var(--color-text-muted-cool)] transition-colors group-hover:border-[var(--color-brand-ring)] group-hover:text-[var(--color-brand-mint)]">
+              <DSIcon name="chevronRight" size={15} />
+            </span>
           </div>
         </Link>
       )}
@@ -543,11 +529,11 @@ export default function TreinosPage() {
       {/* Loja horizontal — suplementos e itens fitness */}
       <section className="mb-5">
         <div className="mb-3 flex items-center justify-between gap-3">
-          <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.24em] text-emerald-600/85">Loja VFIT</p>
-            <h2 className="mt-0.5 text-[17px] font-black tracking-tight text-slate-950">Performance para hoje</h2>
+          <div className="min-w-0">
+            <h2 className="text-[17px] font-semibold tracking-tight text-[var(--color-text-primary-cool)]">Loja VFIT</h2>
+            <p className="mt-0.5 text-[12px] text-[var(--color-text-muted-cool)]">Performance para hoje</p>
           </div>
-          <Link href="/dashboard/marketplace" className="flex h-9 items-center gap-1.5 rounded-full border border-emerald-200 bg-white px-3 text-[11px] font-black text-emerald-700 shadow-[0_8px_18px_rgba(5,150,105,0.12)] active:translate-y-px">
+          <Link href="/dashboard/marketplace" className="flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-white/10 px-3 text-[12px] font-medium text-[var(--color-text-secondary-cool)] transition-colors hover:border-[var(--color-brand-ring)] hover:text-[var(--color-brand-mint)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brand-mint)]">
             Ver loja
             <DSIcon name="chevronRight" size={13} />
           </Link>
@@ -558,21 +544,20 @@ export default function TreinosPage() {
             <Link
               key={product.name}
               href="/dashboard/marketplace"
-              className="group relative min-h-38 w-64 shrink-0 overflow-hidden rounded-[26px] border border-emerald-100/90 bg-linear-to-br from-white via-emerald-50/35 to-slate-50 p-4 shadow-[0_20px_44px_rgba(15,23,42,0.12)] transition-all duration-300 active:translate-y-px"
+              className="group relative min-h-38 w-64 shrink-0 overflow-hidden rounded-[var(--radius-2xl)] border border-white/8 bg-[var(--color-bg-dark-secondary)] p-4 transition-transform duration-150 ease-out hover:border-[var(--color-brand-ring)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brand-mint)] active:scale-[0.99] motion-reduce:transition-none"
             >
-              <div className="pointer-events-none absolute -right-12 -top-10 h-30 w-30 rounded-full bg-emerald-200/45 blur-2xl" />
-              <div className={cn('relative mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-linear-to-br text-white shadow-[0_12px_24px_rgba(15,23,42,0.16)]', product.accent)}>
-                <DSIcon name={product.icon} size={21} />
+              <div className={cn('mb-3 flex h-11 w-11 items-center justify-center rounded-[var(--radius-lg)] bg-linear-to-br text-white', product.accent)}>
+                <DSIcon name={product.icon} size={20} />
               </div>
-              <div className="relative">
-                <div className="mb-2 inline-flex rounded-full border border-emerald-200 bg-white/75 px-2.5 py-1 text-[10px] font-black text-emerald-700">
+              <div className="min-w-0">
+                <div className="mb-2 inline-flex rounded-full border border-white/10 px-2.5 py-0.5 text-[11px] font-medium text-[var(--color-text-secondary-cool)]">
                   {product.tag}
                 </div>
-                <h3 className="text-[16px] font-black leading-tight text-slate-950">{product.name}</h3>
-                <p className="mt-1 line-clamp-2 text-[12px] font-semibold leading-snug text-slate-500">{product.subtitle}</p>
-                <div className="mt-3 flex items-center justify-between">
-                  <span className="text-[17px] font-black text-slate-950">{product.price}</span>
-                  <span className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-emerald-600 shadow-[0_6px_16px_rgba(15,23,42,0.08)] transition-colors group-hover:bg-emerald-50">
+                <h3 className="text-[16px] font-semibold leading-tight text-[var(--color-text-primary-cool)]">{product.name}</h3>
+                <p className="mt-1 line-clamp-2 text-[12px] leading-snug text-[var(--color-text-muted-cool)]">{product.subtitle}</p>
+                <div className="mt-3 flex items-center justify-between gap-2">
+                  <span className="text-[17px] font-semibold tabular-nums text-[var(--color-text-primary-cool)]">{product.price}</span>
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/10 text-[var(--color-text-muted-cool)] transition-colors group-hover:border-[var(--color-brand-ring)] group-hover:text-[var(--color-brand-mint)]">
                     <DSIcon name="shoppingBag" size={16} />
                   </span>
                 </div>
@@ -583,39 +568,38 @@ export default function TreinosPage() {
       </section>
 
       {/* Convite/Vínculo com Personal Trainer */}
-      <details className="group mb-5 overflow-hidden rounded-[28px] border border-emerald-100/90 bg-linear-to-br from-white via-emerald-50/40 to-slate-50 shadow-[0_22px_52px_rgba(15,23,42,0.13)]">
+      <details className="group mb-5 overflow-hidden rounded-[var(--radius-3xl)] border border-white/8 bg-[var(--color-bg-dark-secondary)]">
         <summary className="relative flex cursor-pointer list-none items-start justify-between gap-3 p-4 [&::-webkit-details-marker]:hidden">
           <div className="pointer-events-none absolute -left-10 -top-12 h-30 w-30 rounded-full bg-emerald-200/45 blur-2xl" />
           <div className="relative flex items-start gap-3">
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-emerald-200 bg-white text-emerald-600 shadow-[0_8px_18px_rgba(5,150,105,0.14)]">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[var(--radius-lg)] border border-white/10 bg-white/5 text-[var(--color-brand-mint)]">
               <DSIcon name="userPlus" size={19} />
             </div>
             <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.24em] text-emerald-600/85">Personal Trainer</p>
-              <p className="mt-1 text-[14px] font-black leading-tight text-slate-950">
+              <p className="text-[14px] font-semibold leading-tight text-[var(--color-text-primary-cool)]">
                 Acompanhamento profissional
               </p>
-              <p className="mt-1 text-[12px] font-semibold text-slate-500">
+              <p className="mt-1 text-[12px] font-semibold text-[var(--color-text-muted-cool)]">
                 Vincule um profissional quando quiser revisão humana do plano.
               </p>
             {studentProfile?.personal_name && (
-              <p className="mt-1 text-[12px] font-bold text-emerald-700">
+              <p className="mt-1 text-[12px] font-bold text-emerald-400">
                 Vinculado com: {studentProfile.personal_name}
               </p>
             )}
             </div>
           </div>
           <div className="relative flex items-center gap-2">
-            <span className="rounded-full border border-emerald-200 bg-white/80 px-2.5 py-1 text-[10px] font-black text-emerald-700 shadow-[0_4px_12px_rgba(5,150,105,0.10)]">
+            <span className="rounded-full border border-white/10 px-2.5 py-1 text-[10px] font-medium text-[var(--color-text-muted-cool)]">
               Opcional
             </span>
-            <span className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white/90 text-slate-400 shadow-[0_6px_16px_rgba(15,23,42,0.08)] transition-colors group-open:text-emerald-600">
+            <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-[var(--color-text-muted-cool)] transition-colors group-open:text-[var(--color-brand-mint)]">
               <DSIcon name="chevronRight" size={16} className="transition-transform group-open:rotate-90" />
             </span>
           </div>
         </summary>
 
-        <div className="relative border-t border-emerald-100/90 bg-white/55 p-4 pt-4">
+        <div className="relative border-t border-white/8 bg-white/4 p-4 pt-4">
 
         <div className="mb-3 flex gap-2">
           <Input
@@ -677,10 +661,10 @@ export default function TreinosPage() {
                 width={176}
                 height={176}
                 unoptimized
-                className="h-44 w-44 rounded-2xl border border-emerald-100 bg-white p-2 shadow-[0_14px_32px_rgba(15,23,42,0.10)]"
+                className="h-44 w-44 rounded-[var(--radius-2xl)] border border-white/8 bg-white p-2"
               />
             ) : (
-              <div className="flex h-44 w-44 items-center justify-center rounded-2xl border border-emerald-100 bg-white/80">
+              <div className="flex h-44 w-44 items-center justify-center rounded-[var(--radius-lg)] border border-white/10 bg-white/5">
                 <DSIcon name="loader" size={20} className="animate-spin text-text-muted" />
               </div>
             )}
@@ -691,27 +675,30 @@ export default function TreinosPage() {
 
       {/* T8.9 — Upgrade prompt após 3 treinos no free */}
       {showUpgradePrompt && (
-        <Link href="/perfil/assinatura" className="mb-5 block">
-          <div className="relative overflow-hidden rounded-[28px] border border-amber-100 bg-linear-to-br from-white via-amber-50/60 to-slate-50 p-4 shadow-[0_22px_52px_rgba(15,23,42,0.13)]">
+        <Link
+          href="/perfil/assinatura"
+          className="mb-5 block transition-transform duration-150 ease-out active:scale-[0.99] motion-reduce:transition-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brand-mint)]"
+        >
+          <div className="relative overflow-hidden rounded-[var(--radius-3xl)] border border-white/8 bg-[var(--color-bg-dark-secondary)] p-4">
             <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-amber-200/55 blur-2xl" />
             <div className="relative mb-2 flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-amber-200 bg-white text-amber-500 shadow-[0_10px_22px_rgba(245,158,11,0.16)]">
+              <div className="flex h-11 w-11 items-center justify-center rounded-[var(--radius-lg)] border border-white/10 bg-white/5 text-amber-400">
                 <DSIcon name="sparkles" size={19} />
               </div>
               <div>
-                <span className="text-[10px] font-black uppercase tracking-[0.22em] text-amber-600/90">
+                <span className="text-[12px] font-semibold text-amber-400 tabular-nums">
                   Parabéns! {workoutCount} treinos concluídos
                 </span>
-                <p className="mt-0.5 text-[13px] font-black text-slate-950">
+                <p className="mt-0.5 text-[13px] font-semibold text-[var(--color-text-primary-cool)]">
                   Desbloqueie planos ilimitados com o Premium.
                 </p>
               </div>
             </div>
-            <div className="relative mt-3 flex items-center justify-between rounded-2xl border border-amber-100 bg-white/80 px-3 py-2">
-              <span className="text-[12px] font-bold text-slate-500">
+            <div className="relative mt-3 flex items-center justify-between rounded-[var(--radius-lg)] border border-white/8 bg-white/4 px-3 py-2">
+              <span className="text-[12px] font-bold text-[var(--color-text-muted-cool)]">
                 A partir de R$ 29,90/mês
               </span>
-              <span className="rounded-xl bg-amber-400 px-3 py-1.5 text-[12px] font-black text-slate-950 shadow-[0_6px_14px_rgba(245,158,11,0.18)]">
+              <span className="rounded-[var(--radius-lg)] bg-amber-400 px-3 py-1.5 text-[12px] font-semibold text-slate-950">
                 Ver planos
               </span>
             </div>
@@ -720,19 +707,18 @@ export default function TreinosPage() {
       )}
 
       {/* ── Gamificação VFIT — Hub Redesigned ── */}
-      <details className="group mb-5 overflow-hidden rounded-[28px] border border-emerald-100/90 bg-white shadow-[0_22px_52px_rgba(15,23,42,0.13)]">
+      <details className="group mb-5 overflow-hidden rounded-[var(--radius-3xl)] border border-white/8 bg-[var(--color-bg-dark-secondary)]">
         <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-4 [&::-webkit-details-marker]:hidden">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-emerald-600">Gamificação VFIT</p>
-            <h2 className="mt-0.5 text-[17px] font-black tracking-tight text-slate-950">Streak, XP e metas</h2>
+            <h2 className="text-[17px] font-semibold tracking-tight text-[var(--color-text-primary-cool)]">Streak, XP e metas</h2>
           </div>
-          <div className="flex items-center gap-2 rounded-full border border-emerald-100 bg-emerald-50 px-3 py-1.5">
-            <span className="text-[11px] font-bold text-emerald-700">Nv. {xpBalance?.level ?? 1}</span>
-            <DSIcon name="chevronRight" size={14} className="text-emerald-600 transition-transform group-open:rotate-90" />
+          <div className="flex items-center gap-2 rounded-full border border-white/10 px-3 py-1.5">
+            <span className="text-[11px] font-bold text-emerald-400 tabular-nums">Nv. {xpBalance?.level ?? 1}</span>
+            <DSIcon name="chevronRight" size={14} className="text-[var(--color-text-muted-cool)] transition-transform group-open:rotate-90" />
           </div>
         </summary>
 
-      <div className="relative overflow-hidden bg-linear-to-br from-white via-emerald-50/40 to-slate-50">
+      <div className="relative overflow-hidden">
         <div className="pointer-events-none absolute -left-12 top-8 h-36 w-36 rounded-full bg-emerald-200/45 blur-2xl" />
         <div className="pointer-events-none absolute -right-14 bottom-8 h-40 w-40 rounded-full bg-amber-100/75 blur-3xl" />
         {/* Top accent line */}
@@ -742,29 +728,31 @@ export default function TreinosPage() {
           {/* Header */}
           <div className="relative mb-4 flex items-start justify-between gap-2">
             <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.22em] text-emerald-600/80">Gamificação VFIT</p>
-              <h2 className="mt-0.5 text-[17px] font-black tracking-tight text-slate-950">Streak, XP e metas</h2>
+              <h2 className="text-[17px] font-semibold tracking-tight text-[var(--color-text-primary-cool)]">Streak, XP e metas</h2>
             </div>
-              <Link href="/progresso/streaks" className="flex items-center gap-1.5 rounded-full border border-emerald-200 bg-white/85 px-2.5 py-1 shadow-[0_6px_16px_rgba(5,150,105,0.12)] transition-all hover:bg-emerald-50">
+              <Link
+                href="/progresso/streaks"
+                className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/4 px-2.5 py-1 transition-colors hover:border-[var(--color-brand-ring)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brand-mint)]"
+              >
               <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
-              <span className="text-[10px] font-black text-emerald-700">Nv. {xpBalance?.level ?? 1}</span>
+              <span className="text-[10px] font-semibold text-emerald-400 tabular-nums">Nv. {xpBalance?.level ?? 1}</span>
             </Link>
           </div>
 
           {/* 3 main stat cards */}
           <div className="mb-3 grid grid-cols-3 gap-2">
             {/* XP */}
-            <div className="relative overflow-hidden rounded-2xl border border-emerald-100 bg-white/80 p-3 shadow-[0_10px_22px_rgba(15,23,42,0.06)]">
+            <div className="relative overflow-hidden rounded-[var(--radius-lg)] border border-white/8 bg-white/4 p-3">
               <div className="absolute -right-3 -top-3 h-12 w-12 rounded-full bg-emerald-200/45 blur-xl" />
               <DSIcon name="zap" size={13} className="mb-2 text-emerald-400" />
-              <p className="text-[9px] font-bold uppercase tracking-wider text-emerald-700/65">XP atual</p>
-              <p className="mt-0.5 text-xl font-black leading-none text-emerald-700">{xpBalance?.balance ?? 0}</p>
+              <p className="text-[9px] font-medium text-[var(--color-text-muted-cool)]">XP atual</p>
+              <p className="mt-0.5 text-xl font-bold leading-none text-emerald-400 tabular-nums">{xpBalance?.balance ?? 0}</p>
               <div className="mt-2">
                 <div className="mb-0.5 flex justify-between">
-                  <span className="text-[9px] font-semibold text-slate-400">Nv {xpBalance?.level ?? 1}</span>
-                  <span className="text-[9px] font-semibold text-slate-400">Nv {(xpBalance?.level ?? 1) + 1}</span>
+                  <span className="text-[9px] font-semibold text-[var(--color-text-muted-cool)] tabular-nums">Nv {xpBalance?.level ?? 1}</span>
+                  <span className="text-[9px] font-semibold text-[var(--color-text-muted-cool)] tabular-nums">Nv {(xpBalance?.level ?? 1) + 1}</span>
                 </div>
-                <div className="h-1 overflow-hidden rounded-full bg-slate-200/80">
+                <div className="h-1 overflow-hidden rounded-full bg-white/8">
                   <div
                     className="h-1 rounded-full bg-linear-to-r from-emerald-500 to-emerald-300 transition-all duration-700"
                     style={{ width: `${Math.min(100, ((xpBalance?.balance ?? 0) % 100))}%` }}
@@ -774,50 +762,53 @@ export default function TreinosPage() {
             </div>
 
             {/* Streak */}
-            <div className="relative overflow-hidden rounded-2xl border border-amber-100 bg-white/80 p-3 shadow-[0_10px_22px_rgba(15,23,42,0.06)]">
+            <div className="relative overflow-hidden rounded-[var(--radius-lg)] border border-white/8 bg-white/4 p-3">
               <div className="absolute -right-3 -top-3 h-12 w-12 rounded-full bg-amber-200/50 blur-xl" />
               <DSIcon name="flame" size={13} className="mb-2 text-amber-400" />
-              <p className="text-[9px] font-bold uppercase tracking-wider text-amber-700/65">Streak</p>
+              <p className="text-[9px] font-medium text-[var(--color-text-muted-cool)]">Streak</p>
               <div className="mt-0.5 flex items-end gap-1">
-                <p className="text-xl font-black leading-none text-amber-700">{streak?.current_streak ?? 0}</p>
-                <p className="mb-0.5 text-[10px] font-bold text-amber-600/70">dias</p>
+                <p className="text-xl font-bold leading-none text-amber-400 tabular-nums">{streak?.current_streak ?? 0}</p>
+                <p className="mb-0.5 text-[10px] font-bold text-amber-400/70">dias</p>
               </div>
-              <p className="mt-2 text-[9px] font-semibold text-slate-400">Recorde: {streak?.longest_streak ?? 0} dias</p>
+              <p className="mt-2 text-[9px] font-semibold text-[var(--color-text-muted-cool)] tabular-nums">Recorde: {streak?.longest_streak ?? 0} dias</p>
             </div>
 
             {/* Meta diária */}
-            <div className="relative overflow-hidden rounded-2xl border border-violet-100 bg-white/80 p-3 shadow-[0_10px_22px_rgba(15,23,42,0.06)]">
+            <div className="relative overflow-hidden rounded-[var(--radius-lg)] border border-white/8 bg-white/4 p-3">
               <div className="absolute -right-3 -top-3 h-12 w-12 rounded-full bg-violet-200/45 blur-xl" />
               <DSIcon name="target" size={13} className="mb-2 text-violet-400" />
-              <p className="text-[9px] font-bold uppercase tracking-wider text-violet-700/65">Meta diária</p>
+              <p className="text-[9px] font-medium text-[var(--color-text-muted-cool)]">Meta diária</p>
               <div className="mt-0.5 flex items-end gap-0.5">
-                <p className="text-xl font-black leading-none text-violet-700">{dailyGoal?.earned_xp ?? 0}</p>
-                <p className="mb-0.5 text-[11px] font-bold text-slate-400">/{dailyGoal?.target_xp ?? 0}</p>
+                <p className="text-xl font-bold leading-none text-violet-400 tabular-nums">{dailyGoal?.earned_xp ?? 0}</p>
+                <p className="mb-0.5 text-[11px] font-bold text-[var(--color-text-muted-cool)] tabular-nums">/{dailyGoal?.target_xp ?? 0}</p>
               </div>
-              <p className="mt-2 text-[9px] font-semibold text-slate-400">XP hoje</p>
+              <p className="mt-2 text-[9px] font-semibold text-[var(--color-text-muted-cool)]">XP hoje</p>
             </div>
           </div>
 
           {/* Progress bar */}
-          <div className="relative rounded-2xl border border-emerald-100 bg-white/80 p-3.5 shadow-[0_10px_22px_rgba(15,23,42,0.06)]">
+          <div className="relative rounded-[var(--radius-lg)] border border-white/8 bg-white/4 p-3.5">
             <div className="mb-2.5 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <DSIcon name="trophy" size={13} className="text-emerald-400" />
-                <span className="text-[11px] font-bold text-slate-600">Meta do dia</span>
+                <span className="text-[11px] font-bold text-[var(--color-text-secondary-cool)]">Meta do dia</span>
               </div>
-              <span className="text-[12px] font-black text-emerald-700">{Math.round((dailyGoal?.progress ?? 0) * 100)}%</span>
+              <span className="text-[12px] font-bold text-emerald-400 tabular-nums">{Math.round((dailyGoal?.progress ?? 0) * 100)}%</span>
             </div>
-            <div className="relative h-3 overflow-hidden rounded-full bg-slate-200/80">
+            <div className="relative h-3 overflow-hidden rounded-full bg-white/8">
               <div
-                className="h-full rounded-full bg-linear-to-r from-emerald-500 via-emerald-400 to-teal-300 shadow-[0_6px_16px_rgba(16,185,129,0.28)] transition-all duration-700 ease-out"
+                className="h-full rounded-full bg-linear-to-r from-emerald-500 via-emerald-400 to-teal-300 transition-all duration-700 ease-out"
                 style={{
                   width: `${Math.max(2, Math.min(100, Math.round((dailyGoal?.progress ?? 0) * 100)))}%`,
                 }}
               />
             </div>
             <div className="mt-2 flex items-center justify-between">
-              <span className="text-[10px] font-semibold text-slate-400">{dailyGoal?.workouts_done ?? 0}/{dailyGoal?.workouts_target ?? 0} treinos hoje</span>
-              <Link href="/progresso/streaks" className="text-[10px] font-bold text-emerald-400 transition-colors hover:text-emerald-300">
+              <span className="text-[10px] font-semibold text-[var(--color-text-muted-cool)] tabular-nums">{dailyGoal?.workouts_done ?? 0}/{dailyGoal?.workouts_target ?? 0} treinos hoje</span>
+              <Link
+                href="/progresso/streaks"
+                className="text-[10px] font-bold text-[var(--color-brand-mint)] transition-colors hover:text-emerald-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brand-mint)]"
+              >
                 Ver detalhes →
               </Link>
             </div>
@@ -825,7 +816,7 @@ export default function TreinosPage() {
 
           {/* Weekly activity dots */}
           <div className="mt-3 flex items-center justify-between">
-            <p className="text-[10px] font-bold text-slate-400">Semana</p>
+            <p className="text-[10px] font-bold text-[var(--color-text-muted-cool)]">Semana</p>
             <div className="flex gap-1.5">
               {(['D','S','T','Q','Q','S','S'] as const).map((day, i) => {
                 const todayIdx = new Date().getDay()
@@ -837,14 +828,14 @@ export default function TreinosPage() {
                     <div
                       className={cn(
                         'h-6 w-6 rounded-lg text-[8px] font-bold flex items-center justify-center transition-all',
-                        isToday ? 'text-white' : hasActivity ? 'text-emerald-700' : 'text-slate-400'
+                        isToday ? 'text-white' : hasActivity ? 'text-emerald-400' : 'text-[var(--color-text-muted-cool)]'
                       )}
                       style={
                         isToday
-                          ? { background: 'rgba(16,185,129,0.9)', boxShadow: '0 8px 16px rgba(16,185,129,0.22)' }
+                          ? { background: 'rgba(16,185,129,0.9)' }
                           : hasActivity
                           ? { background: 'rgba(16,185,129,0.12)', border: '1px solid rgba(16,185,129,0.22)' }
-                          : { background: 'rgba(255,255,255,0.8)', border: '1px solid rgba(226,232,240,0.9)' }
+                          : { background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }
                       }
                     >
                       {day}
@@ -864,38 +855,37 @@ export default function TreinosPage() {
       {/* Detalhes do treino de hoje (IA) */}
       <div className="mb-3 flex items-end justify-between gap-3">
         <div>
-          <p className="text-[10px] font-black uppercase tracking-[0.24em] text-emerald-600/85">Treino inteligente</p>
-          <h2 className="mt-0.5 text-[17px] font-black tracking-tight text-slate-950">Detalhes do treino de hoje</h2>
+          <h2 className="text-[17px] font-semibold tracking-tight text-[var(--color-text-primary-cool)]">Detalhes do treino de hoje</h2>
         </div>
       </div>
 
       {todayDay ? (
-        <div className="relative mb-5 overflow-hidden rounded-[28px] border border-emerald-100/90 bg-linear-to-br from-white via-emerald-50/35 to-slate-50 p-4 shadow-[0_22px_52px_rgba(15,23,42,0.13)]">
+        <div className="relative mb-5 overflow-hidden rounded-[var(--radius-3xl)] border border-white/8 bg-[var(--color-bg-dark-secondary)] p-4">
           <div className="pointer-events-none absolute -right-14 -top-14 h-40 w-40 rounded-full bg-emerald-200/45 blur-3xl" />
           <div className="relative mb-4 flex items-center justify-between gap-3">
             <div className="flex min-w-0 items-center gap-3">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-emerald-200 bg-white text-emerald-600 shadow-[0_10px_22px_rgba(5,150,105,0.14)]">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[var(--radius-lg)] border border-white/10 bg-white/5 text-[var(--color-brand-mint)]">
                 <DSIcon name="dumbbell" size={21} />
               </div>
               <div className="min-w-0">
-                <p className="truncate text-[15px] font-black text-slate-950">
+                <p className="truncate text-[15px] font-semibold text-[var(--color-text-primary-cool)]">
                   Dia {plan?.current_day} — {todayDay.name}
                 </p>
-                <p className="mt-0.5 text-[11px] font-semibold text-slate-500">Plano do dia com carga estimada por IA</p>
+                <p className="mt-0.5 text-[11px] font-semibold text-[var(--color-text-muted-cool)]">Plano do dia com carga estimada por IA</p>
               </div>
             </div>
-            <span className="shrink-0 rounded-full border border-emerald-200 bg-white px-3 py-1.5 text-[10px] font-black text-emerald-700 shadow-[0_6px_16px_rgba(5,150,105,0.12)]">
+            <span className="shrink-0 rounded-full border border-white/10 px-3 py-1.5 text-[10px] font-medium text-emerald-400">
               Hoje
             </span>
           </div>
 
-          <div className="relative mb-4 rounded-2xl border border-amber-200 bg-amber-50/90 px-3 py-2.5 text-[11px] font-semibold leading-snug text-amber-800">
+          <div className="relative mb-4 rounded-[var(--radius-lg)] border border-amber-400/20 bg-amber-400/8 px-3 py-2.5 text-[11px] font-semibold leading-snug text-amber-300">
             Carga estimada por IA. Peça para o professor da academia revisar o peso de cada exercício antes de executar.
           </div>
 
           {!!todayMuscles.length && (
             <div className="mb-4">
-              <p className="mb-2 text-[11px] font-black uppercase tracking-[0.18em] text-slate-400">
+              <p className="mb-2 text-[11px] font-semibold text-[var(--color-text-muted-cool)]">
                 Músculos alvo de hoje
               </p>
               <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
@@ -903,7 +893,7 @@ export default function TreinosPage() {
                   <Link
                     key={group.name}
                     href={`/musculos/detalhe?muscle=${encodeURIComponent(group.name)}`}
-                    className="relative z-10 shrink-0 cursor-pointer rounded-2xl border border-emerald-100 bg-white/85 p-2 shadow-[0_8px_18px_rgba(15,23,42,0.07)] transition-colors hover:bg-emerald-50/60"
+                    className="relative z-10 shrink-0 cursor-pointer rounded-[var(--radius-lg)] border border-white/8 bg-white/4 p-2 transition-colors hover:border-[var(--color-brand-ring)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brand-mint)]"
                   >
                     <Image
                       src={group.imageUrl || buildPlaceholderImage(group.name, group.tone)}
@@ -911,9 +901,9 @@ export default function TreinosPage() {
                       width={96}
                       height={80}
                       unoptimized
-                      className="h-20 w-24 rounded-xl object-cover"
+                      className="h-20 w-24 rounded-[var(--radius-lg)] object-cover"
                     />
-                    <p className="mt-1 text-center text-[11px] font-bold text-slate-600">{group.name}</p>
+                    <p className="mt-1 text-center text-[11px] font-bold text-[var(--color-text-secondary-cool)]">{group.name}</p>
                   </Link>
                 ))}
               </div>
@@ -921,7 +911,7 @@ export default function TreinosPage() {
           )}
 
           {isSuperAdmin && (
-            <div className="relative mb-3 rounded-2xl border border-slate-200 bg-white/80 p-2.5 text-[10px] font-semibold text-slate-500">
+            <div className="relative mb-3 rounded-[var(--radius-lg)] border border-white/8 bg-white/4 p-2.5 text-[10px] font-semibold text-[var(--color-text-muted-cool)]">
               Você pode editar imagens de grupos musculares em
               {' '}
               <Link href="/dashboard/admin/muscle-groups" className="font-semibold text-brand-primary">
@@ -948,7 +938,7 @@ export default function TreinosPage() {
               <Link
                 key={ex.id}
                 href={href}
-                className="relative z-10 flex min-h-20 w-full cursor-pointer items-center gap-3 rounded-2xl border border-slate-200/90 bg-white/85 p-2.5 text-left shadow-[0_10px_22px_rgba(15,23,42,0.07)] transition-colors hover:border-emerald-200 hover:bg-emerald-50/45"
+                className="relative z-10 flex min-h-20 w-full cursor-pointer items-center gap-3 rounded-[var(--radius-lg)] border border-white/8 bg-white/4 p-2.5 text-left transition-colors hover:border-[var(--color-brand-ring)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brand-mint)]"
               >
                 <div className="relative shrink-0">
                   <Image
@@ -966,24 +956,24 @@ export default function TreinosPage() {
                       width={24}
                       height={24}
                       unoptimized
-                      className="absolute -right-1 -bottom-1 h-7 w-7 rounded-lg border border-white bg-white object-cover shadow-[0_6px_14px_rgba(15,23,42,0.16)]"
+                      className="absolute -right-1 -bottom-1 h-7 w-7 rounded-lg border border-white bg-white object-cover"
                     />
                   )}
                 </div>
 
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-[13px] font-black text-slate-950">{ex.exercise_name || 'Exercício'}</p>
-                  <p className="text-[10px] font-semibold text-slate-500">
+                  <p className="truncate text-[13px] font-semibold text-[var(--color-text-primary-cool)]">{ex.exercise_name || 'Exercício'}</p>
+                  <p className="text-[10px] font-semibold text-[var(--color-text-muted-cool)]">
                     {ex.sets} séries · {ex.reps} · descanso {ex.rest_seconds}s
                   </p>
-                  <p className="text-[10px] font-bold text-emerald-700">
+                  <p className="text-[10px] font-bold text-emerald-400 tabular-nums">
                     Carga estimada IA: {ex.weight_kg != null ? `${ex.weight_kg} kg` : 'ajustar com professor'}
                   </p>
                   {!!(ex.exercise_id ? exerciseById.get(ex.exercise_id)?.video_url_vertical : null) && (
-                    <p className="text-[10px] font-semibold text-slate-400">Vídeo disponível</p>
+                    <p className="text-[10px] font-semibold text-[var(--color-text-muted-cool)]">Vídeo disponível</p>
                   )}
                 </div>
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-400">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/10 text-[var(--color-text-muted-cool)]">
                   <DSIcon name="chevronRight" size={14} />
                 </span>
               </Link>
@@ -992,12 +982,12 @@ export default function TreinosPage() {
           </div>
         </div>
       ) : (
-        <div className="mb-5 rounded-[28px] border border-emerald-100/90 bg-linear-to-br from-white via-emerald-50/35 to-slate-50 p-5 text-center shadow-[0_22px_52px_rgba(15,23,42,0.13)]">
-          <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl border border-emerald-200 bg-white text-emerald-600 shadow-[0_10px_22px_rgba(5,150,105,0.14)]">
+        <div className="mb-5 rounded-[var(--radius-3xl)] border border-white/8 bg-[var(--color-bg-dark-secondary)] p-5 text-center">
+          <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-[var(--radius-lg)] border border-white/10 bg-white/5 text-[var(--color-brand-mint)]">
             <DSIcon name="dumbbell" size={21} />
           </div>
-          <p className="text-[14px] font-black text-slate-950">Seu treino do dia ainda não foi gerado</p>
-          <p className="mx-auto mt-1 max-w-70 text-[12px] font-semibold leading-snug text-slate-500">
+          <p className="text-[14px] font-semibold text-[var(--color-text-primary-cool)]">Seu treino do dia ainda não foi gerado</p>
+          <p className="mx-auto mt-1 max-w-70 text-[12px] font-semibold leading-snug text-[var(--color-text-muted-cool)]">
             Gere seu plano com IA para ver séries, descanso, carga estimada e músculos alvo.
           </p>
         </div>
@@ -1006,8 +996,7 @@ export default function TreinosPage() {
       {/* Templates section */}
       <div className="mb-3 flex items-end justify-between gap-3">
         <div>
-          <p className="text-[10px] font-black uppercase tracking-[0.24em] text-emerald-600/85">Explorar</p>
-          <h2 className="mt-0.5 text-[17px] font-black tracking-tight text-slate-950">Biblioteca de treinos prontos</h2>
+          <h2 className="text-[17px] font-semibold tracking-tight text-[var(--color-text-primary-cool)]">Biblioteca de treinos prontos</h2>
         </div>
       </div>
 
@@ -1020,11 +1009,12 @@ export default function TreinosPage() {
               hapticLight()
               setDifficulty(f.value)
             }}
-            className={`min-h-10 shrink-0 rounded-full border px-4 py-1.5 text-[12px] font-black transition-all ${
+            className={cn(
+              'min-h-10 shrink-0 rounded-full border px-4 py-1.5 text-[12px] font-semibold transition-transform duration-150 ease-out active:scale-[0.99] motion-reduce:transition-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brand-mint)]',
               difficulty === f.value
-                ? 'border-emerald-500 bg-emerald-500 text-white shadow-[0_8px_18px_rgba(16,185,129,0.20)]'
-                : 'border-slate-200 bg-white text-slate-600 shadow-[0_6px_14px_rgba(15,23,42,0.06)] hover:bg-emerald-50/60'
-            }`}
+                ? 'border-emerald-500 bg-emerald-500 text-white'
+                : 'border-white/10 text-[var(--color-text-secondary-cool)] hover:border-[var(--color-brand-ring)]'
+            )}
           >
             {f.label}
           </button>
@@ -1050,7 +1040,7 @@ export default function TreinosPage() {
             <Link
               key={t.id}
               href={`/treinos/${t.id}`}
-              className="group relative flex min-h-24 items-center gap-3 overflow-hidden rounded-2xl border border-emerald-100/90 bg-linear-to-br from-white via-emerald-50/25 to-slate-50 p-4 shadow-[0_16px_36px_rgba(15,23,42,0.10)] transition-all hover:border-emerald-200"
+              className="group relative flex min-h-24 items-center gap-3 overflow-hidden rounded-[var(--radius-2xl)] border border-white/8 bg-[var(--color-bg-dark-secondary)] p-4 transition-transform duration-150 ease-out active:scale-[0.99] motion-reduce:transition-none hover:border-[var(--color-brand-ring)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brand-mint)]"
             >
               <div className="absolute -right-8 -top-10 h-24 w-24 rounded-full bg-emerald-200/45 blur-2xl transition-opacity group-hover:opacity-80" />
               <Image
@@ -1059,29 +1049,29 @@ export default function TreinosPage() {
                 width={56}
                 height={56}
                 unoptimized
-                className="relative h-16 w-16 shrink-0 rounded-2xl object-cover shadow-[0_10px_22px_rgba(15,23,42,0.12)]"
+                className="relative h-16 w-16 shrink-0 rounded-[var(--radius-lg)] object-cover"
               />
 
               <div className="relative min-w-0 flex-1">
                 <div className="mb-0.5 flex items-center gap-2">
-                  <p className="truncate text-[14px] font-black text-slate-950">{t.name}</p>
-                  <DSIcon name="activity" size={12} className="text-emerald-600" />
+                  <p className="truncate text-[14px] font-semibold text-[var(--color-text-primary-cool)]">{t.name}</p>
+                  <DSIcon name="activity" size={12} className="text-emerald-400" />
                   {t.is_premium && (
                     <DSIcon name="lock" size={12} className="shrink-0 text-yellow-400" />
                   )}
                 </div>
-                <p className="mb-1.5 line-clamp-1 text-[11px] font-semibold text-slate-500">{t.description}</p>
+                <p className="mb-1.5 line-clamp-1 text-[11px] font-semibold text-[var(--color-text-muted-cool)]">{t.description}</p>
                 <div className="flex items-center gap-2">
                   <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${getDifficultyColor(t.difficulty)}`}>
                     {getDifficultyLabel(t.difficulty)}
                   </span>
-                  <span className="text-[10px] font-semibold text-slate-400">
+                  <span className="text-[10px] font-semibold text-[var(--color-text-muted-cool)] tabular-nums">
                     {t.total_days} dias · {t.estimated_duration_min}min
                   </span>
                 </div>
               </div>
 
-              <span className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-400 shadow-[0_6px_16px_rgba(15,23,42,0.08)]">
+              <span className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/10 text-[var(--color-text-muted-cool)]">
                 <DSIcon name="chevronRight" size={16} />
               </span>
             </Link>
@@ -1091,8 +1081,8 @@ export default function TreinosPage() {
 
       {/* Empty */}
       {templates && templates.length === 0 && (
-        <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-[0_14px_30px_rgba(15,23,42,0.08)]">
-          <p className="text-[13px] font-bold text-slate-500">Nenhum treino encontrado para esse filtro.</p>
+        <div className="rounded-[var(--radius-2xl)] border border-white/8 bg-[var(--color-bg-dark-secondary)] p-8 text-center">
+          <p className="text-[13px] font-bold text-[var(--color-text-muted-cool)]">Nenhum treino encontrado para esse filtro.</p>
         </div>
       )}
     </div>

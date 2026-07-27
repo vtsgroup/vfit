@@ -21,6 +21,15 @@ import { BiometricLockScreen } from '@/components/auth/biometric-lock-screen'
 import { isStandaloneDisplay } from '@/lib/display-mode'
 import { hasPasskeyRegistered, getPasskeyEmail, isBiometricUnlockDue } from '@/hooks/use-passkey'
 
+// Guard de MÓDULO (não de render): o gate mora em DOIS layouts irmãos —
+// (app)/layout.tsx e dashboard/layout.tsx. Trocar de route group (ex.: /treinos →
+// /dashboard/settings) desmonta um layout e monta o outro, remontando este componente
+// e disparando o efeito de novo. Com policy 'always' (intervalo 0) isso trancava a
+// cada navegação. Um módulo só é avaliado uma vez por carregamento de documento, então
+// esta flag significa literalmente "já decidi neste abrir do app" — que é o contrato
+// que a política promete ('always' = "Toda vez que abrir", não "toda navegação").
+let lockDecidedThisAppOpen = false
+
 export function BootLockGate() {
   const isHydrated = useAuthStore((s) => s.isHydrated)
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
@@ -34,14 +43,21 @@ export function BootLockGate() {
   // Só tranca em app instalado, com passkey registrado + email salvo (necessários para
   // o login por biometria) e política vencida. isBiometricUnlockDue já checa enabled + off.
   useEffect(() => {
-    if (!isHydrated || !isAuthenticated || !userId) return
+    if (!isHydrated) return
+    if (!isAuthenticated || !userId) {
+      // Logout / troca de conta: rearma para o próximo login decidir de novo.
+      lockDecidedThisAppOpen = false
+      return
+    }
+    if (lockDecidedThisAppOpen) return
+    lockDecidedThisAppOpen = true
     const required =
       isStandaloneDisplay() &&
       hasPasskeyRegistered(userId) &&
       !!getPasskeyEmail() &&
       isBiometricUnlockDue()
     if (required) setUnlockRequired(true)
-    // Computa uma vez por boot (na hidratação). Não reavaliar a cada render.
+    // Computa uma vez por abertura do app. Não reavaliar por render NEM por remount.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isHydrated, isAuthenticated, userId])
 
@@ -55,7 +71,14 @@ export function BootLockGate() {
   return (
     <BiometricLockScreen
       variant="unlock"
-      onDismiss={() => setUnlocked()}
+      // NÃO desbloquear aqui. Em variant="unlock" o componente hoje nunca chama
+      // onDismiss (cancelamento mantém o lock; "Usar senha" faz logout + /login),
+      // então isto é inalcançável — mas "dismiss concede acesso" é uma arma
+      // engatilhada: bastaria alguém remover o early-return do branch de
+      // cancelamento para virar bypass silencioso do lock. Só onUnlocked, que roda
+      // depois da passkey validada, pode liberar. O usuário não fica preso: o botão
+      // "Usar senha" continua sendo a saída.
+      onDismiss={() => {}}
       onUnlocked={() => setUnlocked()}
     />
   )
