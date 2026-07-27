@@ -232,7 +232,7 @@ conclusão muda: o nível `admin` **é** o nível `super_admin`, só que sem aud
 Se contas `admin` forem operadores terceirizados ou suporte, isto é CRÍTICO no seu
 modelo de ameaça. Decisão de negócio, não técnica — precisa da sua resposta.
 
-### 8.2 `plans.ts` — duas rotas sem wiring de auth ◻⚑
+### 8.2 `plans.ts` — duas rotas sem wiring de auth ✅ (commit `95cd102c`)
 
 `POST /plans/generate` (`plans.ts:93`) e `POST /plans/save` (`:231`) não têm
 `authMiddleware` nem `plans.use('*', ...)`; o arquivo só aplica auth por rota **a partir
@@ -248,13 +248,37 @@ reduz o abuso de custo a "precisa rotacionar IP"; o dano principal é o **gate d
 inerte**. Correção: `authMiddleware` nas duas (ou `optionalAuth` em `/generate` se o
 modo guest for pra valer — hoje não existe mecanismo de guest id no código). Esforço S.
 
-### 8.3 Blacklist de token é *fail-open* ◻⚑
+### 8.3 Blacklist de token é *fail-open* ⚠️ PARCIAL (commit `95cd102c`)
 
 `middleware/auth.ts:64-68`: se o `KV_SESSIONS` falhar, o `catch` só faz `console.warn`
 e segue. Todo token revogado volta a valer até o `exp` — logout, "encerrar sessões" e
 revogação pós-incidente param de funcionar exatamente durante instabilidade. É o mesmo
 antipadrão do rate-limit (`rate-limit.ts:94-100`, já na tabela da §1) e os dois compõem.
 Correção: fail-closed (503) + alerta no Sentry. Esforço S.
+
+#### Status em 26/07 22:50 — ⚠️ PARCIAL, leia antes de considerar fechado
+
+Commit `95cd102c`. **Não** virou fail-closed total. Virou um meio-termo:
+
+| Requisição | KV fora do ar | Comportamento |
+|---|---|---|
+| `GET` / `HEAD` (leitura segura) | — | **fail OPEN** — token revogado ainda passa |
+| Qualquer mutação (`POST`/`PATCH`/`DELETE`/…) | — | fail closed → `ServiceUnavailableError` (503) |
+| Qualquer rota sob `/api/v1/admin` ou `/api/v1/config` | — | fail closed → 503, mesmo em `GET` |
+
+Racional: fail-open irrestrito revive token revogado durante a queda; fail-closed total
+derruba o app inteiro junto com o KV. O meio-termo protege escrita e rota privilegiada
+e aceita o risco em leitura comum.
+
+**O que continua em aberto:**
+
+1. **Leitura segura ainda é fail-open.** Com o KV fora, um token já revogado (logout
+   forçado, credencial vazada) continua conseguindo ler dados do usuário via `GET`.
+   Risco aceito conscientemente — não é "resolvido".
+2. **O alerta no Sentry não foi feito.** Só existe `console.warn` estruturado com
+   `{ method, path, failClosed }`. Ninguém é notificado quando o KV cai; alguém
+   precisa estar olhando log. Esta metade do item segue ◻.
+3. O antipadrão gêmeo em `rate-limit.ts:94-100` **não foi tocado** ◻.
 
 ### 8.4 Onde entra nas ondas
 
@@ -285,3 +309,30 @@ Migração da conta Unipile do WhatsApp para `447446970650` (account id
 `UNIPILE_WHATSAPP_GROUP_PROVIDER_ID` estão **hardcoded em `workers/whatsapp/wrangler.toml`**
 (versionado) ◻. Atualizar `.env.local` sozinho não afeta produção. Mover para secret
 em vez de recommitar novos valores.
+
+#### Status em 26/07 22:50 — ⚠️ FUNCIONA, MAS A RECOMENDAÇÃO NÃO FOI SEGUIDA
+
+Commit `95cd102c`. O envio **está funcionando** em produção (smoke test retornou
+`MessageSent` com `healed=false`, ou seja acertou a conta na primeira tentativa,
+sem cair no self-heal).
+
+Como foi feito, e por que diverge do que está escrito acima:
+
+- `UNIPILE_WHATSAPP_ACCOUNT_PHONE` foi **recommitado** no `wrangler.toml` versionado
+  (`5521965641822` → `447446970650`), exatamente o que o parágrafo acima desaconselha.
+  Escolha consciente por pressa de fechar a sessão. Não é segredo (é um número de
+  telefone), então o risco é de higiene/duplicação de fonte da verdade, não de
+  vazamento.
+- `UNIPILE_WHATSAPP_GROUP_PROVIDER_ID` **continua hardcoded** e não foi tocado.
+- Existe um Secret Store paralelo com `SS_UNIPILE_WHATSAPP_ACCOUNT_ID`,
+  `SS_UNIPILE_WHATSAPP_GROUP_CHAT_ID` e afins. Ou seja: **hoje há duas fontes da
+  verdade** para a config do Unipile. Isso é dívida ativa, não decisão de arquitetura.
+
+Fica aberto: consolidar as duas fontes numa só (preferir o Secret Store) e remover
+os valores do `wrangler.toml` versionado.
+
+Armadilha registrada no próprio arquivo: se o `ACCOUNT_PHONE` não corresponder a uma
+conta WHATSAPP conectada no Unipile (`GET /accounts`), o self-heal falha
+**silenciosamente** até o `chat_id` armazenado expirar — e só aí o `/send` quebra, sem
+recuperação. Foi essa a causa raiz do `Unipile 404: Chat not found` que aparecia desde
+o v5.6.2.

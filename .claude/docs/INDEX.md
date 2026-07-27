@@ -1,6 +1,9 @@
 # 📚 VFIT Documentation Index
 
-> **Atualizado:** 02/04/2026 · Toda documentação centralizada em `.claude/docs/`
+> **Atualizado:** 26/07/2026 · Toda documentação centralizada em `.claude/docs/`
+>
+> ⚠️ Retomando o projeto? Comece por **`.claude/CONTINUATION.md`** — tem pendência
+> crítica de segurança em aberto e o estado do que foi entregue em 26/07.
 
 ---
 
@@ -22,6 +25,7 @@
 | [TWA-DOCUMENTATION.md](TWA-DOCUMENTATION.md) | TWA: keystore, SHA-256, Play Store | Mobile / TWA |
 | [WHATSAPP-GATEWAY.md](WHATSAPP-GATEWAY.md) | Gateway WhatsApp, notificações operacionais | Ops / WhatsApp |
 | [PXPIPE-E-CLAUDE-MEM.md](PXPIPE-E-CLAUDE-MEM.md) | Proxy de compressão pxpipe + memória claude-mem: config, riscos, economia real | Infra / Claude Code |
+| [AUDITORIA-2026-07-26-PLANO.md](AUDITORIA-2026-07-26-PLANO.md) | Auditoria completa (6 frentes) + plano de remediação em ondas; §8 = sweep de IDOR/auth. Contém itens ✅, ⚠️ PARCIAL e ◻ | Todos os agentes |
 
 ---
 
